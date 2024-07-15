@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 
 export class funFactService {
-    public apiBaseUrl = "api/Funfact/";
+    public readonly apiBaseUrl = "api/Funfact/";
 
     constructor(private httpClient: HttpClient) {
     }
@@ -21,9 +21,9 @@ export class funFactService {
         const apiUrl: string = this.apiBaseUrl + 'UpdateFunfact';
         return this.httpClient.post(apiUrl, data);
     }
-    public setFunfact(data:any): Observable<any> {
+    public setFunfact(data: any): Observable<any> {
         const apiUrl: string = this.apiBaseUrl + 'SetFunfact';
-        return this.httpClient.post(apiUrl,data);
+        return this.httpClient.post(apiUrl, data);
 
     }
     public getActiveFunfacts(): Observable<any> {
@@ -32,4 +32,3 @@ export class funFactService {
     }
 
 }
-

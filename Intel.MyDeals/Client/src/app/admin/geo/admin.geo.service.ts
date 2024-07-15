@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 
 export class geoService {
-    public apiBaseUrl = "api/Geos/";
+    public readonly apiBaseUrl = "api/Geos/";
 
     constructor(private httpClient: HttpClient) {
     }
@@ -19,4 +19,3 @@ export class geoService {
     }
 
 }
-

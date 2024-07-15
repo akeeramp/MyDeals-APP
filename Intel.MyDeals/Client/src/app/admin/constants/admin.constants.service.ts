@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
     providedIn: 'root'
 })
 export class constantsService {
-    public apiBaseUrl = "api/AdminConstants/v1/";
+    public readonly apiBaseUrl = "api/AdminConstants/v1/";
 
     constructor(private httpClient: HttpClient) { }
 

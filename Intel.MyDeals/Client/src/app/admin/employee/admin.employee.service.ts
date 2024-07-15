@@ -7,13 +7,12 @@ import { Observable } from "rxjs";
 })
 
 export class employeeService {
-    public apiBaseUrl = "api/UserPreferences/";
+    public readonly apiBaseUrl = "api/UserPreferences/";
     constructor(private httpClient: HttpClient) { }
     public setEmployees(data: any): Observable<any> {
         const apiUrl: string = this.apiBaseUrl + 'SetOpUserToken';
         return this.httpClient.post(apiUrl, data);
     }
 }
-
 
 

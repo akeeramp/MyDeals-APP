@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 })
 
 export class manageEmployeeService {
-    public apiBaseUrl = "api/UserPreferences/";
+    public readonly apiBaseUrl = "api/UserPreferences/";
     public usrWwid = 0;
     public usrRole = "UNKNOWN";
     public usrCustomerAdmin = false;
