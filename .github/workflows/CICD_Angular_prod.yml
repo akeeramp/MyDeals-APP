@@ -116,7 +116,7 @@ jobs:
     runs-on: [gasp]
     needs: Deploy-Angular
     container: "amr-registry.caas.intel.com/squirrels/nodelts-alpine-git-cf:latest"
-    timeout-minutes: 2
+    timeout-minutes: 5
     continue-on-error: true
     steps:
        - name:  Squawk for TWC CICD
@@ -133,7 +133,7 @@ jobs:
     runs-on: [gasp]
     needs: Deploy_Latest
     container: "amr-registry.caas.intel.com/squirrels/nodelts-alpine-git-cf:latest"
-    timeout-minutes: 2
+    timeout-minutes: 5
     continue-on-error: true
     steps:
        - name:  Squawk for TWC CICD

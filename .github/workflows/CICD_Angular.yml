@@ -60,4 +60,20 @@ jobs:
          run: |
            ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}'
   
+  RunSquawker-Regular:
+    name: Run Squawker 
+    runs-on: [gasp]
+    needs: Angular_deploy
+    container: "amr-registry.caas.intel.com/squirrels/nodelts-alpine-git-cf:latest"
+    timeout-minutes: 5
+    continue-on-error: true
+    steps:
+       - name:  Squawk for TWC CICD
+         uses: intel-innersource/frameworks.actions.squawker@v3
+         with:
+          squawk_iap: '14464'
+          squawk_team: '3179'
+          application_name: 'MyDeals'
+          repo_url: ${{ github.repositoryUrl }}
+          squawk_environment_name: 'DEV'   
  
