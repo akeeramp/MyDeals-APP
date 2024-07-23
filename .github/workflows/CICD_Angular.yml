@@ -26,6 +26,12 @@ jobs:
     runs-on: [self-hosted, mydeals-runner01]
     needs: Restore-packages
     steps:
+       - name: Replace Handsontable License Key in config file
+         run: |
+           $licenseKey = '${{ secrets.HANDSONTABLE_LICENSE_KEY }}'
+           $configPath = "${{ github.workspace }}/Intel.MyDeals/Client/src/app/shared/config/handsontable.licenseKey.config.ts"
+           (Get-Content -Path $configPath -Raw) -replace 'non-commercial-and-evaluation', $licenseKey | Set-Content -Path $configPath
+         shell: pwsh
        - name: NPM Install 
          run: |
            ./scripts/build_env.ps1 'NPMInstall' 'path' '${{github.workspace}}'
