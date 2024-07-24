@@ -1,6 +1,8 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Cust_Div_Map } from "./admin.customer.model";
+import { Cust_Dropdown_Map } from "../CustomerVendors/admin.customerVendors.model";
 
 @Injectable({
     providedIn: 'root'
@@ -12,15 +14,14 @@ export class customerService {
     constructor(private httpClient: HttpClient) {
     }
 
-    public getCustomers(): Observable<any> {
+    public getCustomers(): Observable<Cust_Div_Map[]> {
         const apiUrl: string = this.apiBaseUrl + 'GetCustomers/false';
-        return this.httpClient.get(apiUrl);
+        return this.httpClient.get<Cust_Div_Map[]>(apiUrl);
     }
 
-    public getMyCustomersNameInfo(): Observable<any> {
+    public getMyCustomersNameInfo(): Observable<Cust_Dropdown_Map[]> {
         const apiUrl: string = this.apiBaseUrl + 'GetMyCustomersNameInfo';
-        return this.httpClient.get(apiUrl);
-
+        return this.httpClient.get<Cust_Dropdown_Map[]>(apiUrl);
     }
 
 }

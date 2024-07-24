@@ -8,6 +8,7 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { Cust_Div_Map } from "./admin.customer.model";
 
 @Component({
     selector: "admin-customer",
@@ -25,7 +26,7 @@ export class adminCustomerComponent implements OnDestroy {
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
     private info = true;
-    private gridResult = [];
+    private gridResult: Cust_Div_Map[] = [];
     private gridData: GridDataResult;
     private color: ThemePalette = 'primary';
     private state: State = {
@@ -66,7 +67,7 @@ export class adminCustomerComponent implements OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
+        const excelState: State = {};
         Object.assign(excelState, this.state)
         excelState.take = this.gridResult.length;
 
@@ -77,11 +78,11 @@ export class adminCustomerComponent implements OnDestroy {
         return result;
     }
 
-    loadCustomer() {
+    loadCustomer(): void {
         //Developer can see the Screen..
         this.customerSvc.getCustomers()
         .pipe(takeUntil(this.destroy$))
-        .subscribe((result: Array<any>) => {
+            .subscribe((result: Array<Cust_Div_Map>) => {
             this.isLoading = false;
             this.gridResult = result;
             this.gridData = process(result, this.state);
@@ -94,14 +95,14 @@ export class adminCustomerComponent implements OnDestroy {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
     }
-    clearFilter() {
+    clearFilter(): void {
         this.state.filter = {
             logic: "and",
             filters: [],
         };
         this.gridData = process(this.gridResult, this.state);
     }
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
@@ -110,11 +111,11 @@ export class adminCustomerComponent implements OnDestroy {
         this.loadCustomer();
 
     }
-    ngOnInit() {
+    ngOnInit(): void {
         this.loadCustomer();
     }
    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
       }

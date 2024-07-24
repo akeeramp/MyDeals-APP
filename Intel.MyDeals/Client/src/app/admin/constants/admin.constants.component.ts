@@ -3,7 +3,7 @@ import { constantsService } from "./admin.constants.service";
 import { Component, OnDestroy } from "@angular/core";
 import { Cnst_Map } from './admin.constants.model';
 import { ThemePalette } from "@angular/material/core";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, AddEvent, EditEvent, RemoveEvent, CancelEvent, SaveEvent, GridComponent } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
@@ -26,19 +26,19 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
     private isLoading = true;
-    private dataSource: any;
-    private gridOptions: any;
+    //private dataSource: any;
+    //private gridOptions: any;
     private allowCustom = true;
     private color: ThemePalette = "primary";
     isDirty = false;
-    public gridResult: Array<any>;
+    public gridResult: Array<Cnst_Map>;
     public type = "numeric";
     public info = true;
     public cnstName: string;
     public description: string;
     public value: string;
     public uiUpdateable = false;
-    public constData: Array<any>;
+    public constData: Array<Cnst_Map>;
     public formGroup: FormGroup;
     public isFormChange = false;
     public isCnstNmEditable = false;
@@ -46,7 +46,7 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
     private adminBannerMessage: string;
     private isDialogVisible = false;
     private isEdit = false;
-    private deleteItem: any;
+    private deleteItem: Cnst_Map;
     public state: State = {
         skip: 0,
         take: 25,
@@ -81,7 +81,7 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
     ];
 
     public gridData: GridDataResult;
-    distinctPrimitive(fieldName: string): any {
+    distinctPrimitive(fieldName: string): Array<string> {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
 
@@ -90,7 +90,7 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
+        const excelState: State = {};
         Object.assign(excelState, this.state)
         excelState.take = this.gridResult.length;
 
@@ -101,7 +101,7 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
         return result;
     }
 
-    clearFilter() {
+    clearFilter(): void {
         this.state.filter = {
             logic: "and",
             filters: [],
@@ -109,11 +109,11 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
         this.gridData = process(this.gridResult, this.state);
     }
 
-    loadConstants() {
+    loadConstants(): void {
         this.constantsSvc.getConstants()
             .pipe(takeUntil(this.destroy$))
             .subscribe(
-                (result: Array<any>) => {
+                (result: Array<Cnst_Map>) => {
                     this.gridResult = result;
                     this.constData = result;
                     this.gridData = process(this.gridResult, this.state);
@@ -129,7 +129,7 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
             ) 
     }
 
-    updateBannerMessage(constant) {
+    updateBannerMessage(constant: Cnst_Map): void {
         if (constant.CNST_NM == 'ADMIN_MESSAGE') {
             this.adminBannerMessage = constant.CNST_VAL_TXT == 'NA'
                 ? "" : constant.CNST_VAL_TXT;
@@ -141,13 +141,13 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
         this.gridData = process(this.gridResult, this.state);
     }
 
-    closeEditor(grid, rowIndex = this.editedRowIndex) {
+    closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex): void {
         grid.closeRow(rowIndex);
         this.editedRowIndex = undefined;
         this.formGroup = undefined;
     }
 
-    addHandler({ sender }) {
+    addHandler({ sender }: AddEvent): void {
         this.isDirty=true;
         this.closeEditor(sender);
         this.isCnstNmEditable = true;
@@ -165,7 +165,7 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
         sender.addRow(this.formGroup);
     }
 
-    editHandler({ sender, rowIndex, dataItem }) {
+    editHandler({ sender, rowIndex, dataItem }: EditEvent): void {
         this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
@@ -183,16 +183,16 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
         sender.editRow(rowIndex, this.formGroup);
     }
 
-    removeHandler({ dataItem }) {
+    removeHandler({ dataItem }: RemoveEvent): void {
         this.deleteItem = dataItem;
         this.isDialogVisible = true;
     }
 
-    close() {
+    close(): void {
         this.isDialogVisible = false;
     }
 
-    deleteRecord() {
+    deleteRecord(): void {
         this.isDialogVisible = false;
         this.constantsSvc.deleteConstants(this.deleteItem)
             .pipe(takeUntil(this.destroy$))
@@ -210,12 +210,12 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
             )
     }
 
-    cancelHandler({ sender, rowIndex }) {
+    cancelHandler({ sender, rowIndex }: CancelEvent): void {
         this.closeEditor(sender, rowIndex);
         this.isCnstNmEditable = false;
     }
 
-    saveHandler({ sender, rowIndex, formGroup, isNew, dataItem }) {
+    saveHandler({ sender, rowIndex, formGroup, isNew, dataItem }: SaveEvent): void {
         this.isCnstNmEditable = false;
         const cnst_map: Cnst_Map = formGroup.value;
         if (!isNew) {
@@ -264,7 +264,7 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
         sender.closeRow(rowIndex);
     }
 
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
@@ -277,12 +277,12 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
         return !this.isDirty;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.loadConstants()
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

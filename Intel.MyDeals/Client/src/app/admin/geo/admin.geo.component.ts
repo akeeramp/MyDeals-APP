@@ -8,6 +8,7 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { GeoDimension } from "./admin.geo.model";
 
 @Component({
     selector: "admin-geo",
@@ -61,9 +62,9 @@ export class geoComponent implements OnDestroy {
         }
     ];
 
-    loadGeo() {
+    loadGeo(): void {
         //Developer can see the Screen..
-        this.geoSvc.getGeos().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+        this.geoSvc.getGeos().pipe(takeUntil(this.destroy$)).subscribe((result: Array<GeoDimension>) => {
             this.isLoading = false;
             this.gridResult = result;
             this.gridData = process(result, this.state);
@@ -77,7 +78,7 @@ export class geoComponent implements OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
+        const excelState: State = {};
         Object.assign(excelState, this.state)
         excelState.take = this.gridResult.length;
 
@@ -93,7 +94,7 @@ export class geoComponent implements OnDestroy {
         this.gridData = process(this.gridResult, this.state);
     }
 
-    clearFilter() {
+    clearFilter(): void {
         this.state.filter = {
             logic: "and",
             filters: [],
@@ -101,13 +102,13 @@ export class geoComponent implements OnDestroy {
         this.gridData = process(this.gridResult, this.state);
     }
 
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
             filters: [],
         };
-        this.geoSvc.getGeos().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+        this.geoSvc.getGeos().pipe(takeUntil(this.destroy$)).subscribe((result: Array<GeoDimension>) => {
             this.isLoading = false;
             this.gridResult = result;
             this.gridData = process(result, this.state);
@@ -116,11 +117,11 @@ export class geoComponent implements OnDestroy {
         });
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.loadGeo();
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

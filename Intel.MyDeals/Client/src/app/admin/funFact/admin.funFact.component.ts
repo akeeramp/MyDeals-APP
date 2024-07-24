@@ -1,10 +1,10 @@
 ﻿import { Component, ViewChild, OnDestroy  } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { funFactService } from "./admin.funFact.service";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, SaveEvent, GridComponent, AddEvent, EditEvent, CancelEvent } from "@progress/kendo-angular-grid";
 import { ThemePalette } from '@angular/material/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { Fun_Facts } from './admin.funFact.model';
+import { Funfact_Map } from './admin.funFact.model';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { process, State, distinct } from "@progress/kendo-data-query";
@@ -13,6 +13,7 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Observable } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { DynamicObj } from "../employee/admin.employee.model";
 
 @Component({
     selector: 'admin-fun-fact',
@@ -29,7 +30,7 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
     private info = true;
-    private gridResult: Array<any>;
+    private gridResult: Array<Funfact_Map>;
     private gridData: GridDataResult;
     private color: ThemePalette = 'primary';
     public formGroup: FormGroup;
@@ -73,11 +74,11 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
         }
     ];
 
-    distinctPrimitive(fieldName: string): any {
+    distinctPrimitive(fieldName: string): Array<string> {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
-    saveHandler({ sender, rowIndex, formGroup, isNew }) {
-        const fun_facts: Fun_Facts = formGroup.value;
+    saveHandler({ sender, rowIndex, formGroup, isNew }: SaveEvent): void {
+        const fun_facts: Funfact_Map = formGroup.value;
         this.isDataValid = this.formGroup.valid;
         if (!this.isDataValid) {
             this.formGroup.markAllAsTouched();
@@ -95,7 +96,7 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
+        const excelState: State = {};
         Object.assign(excelState, this.state)
         excelState.take = this.gridResult.length;
 
@@ -106,12 +107,11 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
         return result;
     }
 
-    insertUpdateOperation(rowIndex, isNew, fun_facts) {
+    insertUpdateOperation(rowIndex: number, isNew: boolean, fun_facts: Funfact_Map): void {
             if (isNew) {
                 this.isLoading = true;
                 this.funFactSvc.setFunfact(fun_facts).pipe(takeUntil(this.destroy$))
-                    .subscribe(
-                    result => {
+                    .subscribe((result: Funfact_Map[]) => {
                         //TO show the new saved record at whatever page currently selected by the user
                         //if already any filters or sorting is applied to the grid then those filters/sorting will get cleared when user try to add a new record and newly added record will be shown in first page in that case
                         this.gridResult.splice(this.state.skip, 0, result[0]);
@@ -127,8 +127,7 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
             } else {
                 this.isLoading = true;
                 this.funFactSvc.updateFunFact(fun_facts).pipe(takeUntil(this.destroy$))
-                    .subscribe(
-                    result => {
+                    .subscribe((result: Funfact_Map[]) => {
                         //getting the index value of the grid result by comparing the edited row FACT_SID to the grid result FACT_SID. so that we can update the user edited/modified data to proper grid result index
                         const index = this.gridResult.findIndex(x => fun_facts.FACT_SID == x.FACT_SID);  
                         this.gridResult[index] = result[0];
@@ -144,9 +143,9 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
         }
     }
     
-    loadFunFacts() {
+    loadFunFacts(): void {
         this.funFactSvc.getFunFactItems().pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<any>) => {
+            .subscribe((result: Array<Funfact_Map>) => {
             this.isLoading = false;
             this.gridResult = result;
             this.gridData = process(result, this.state);
@@ -158,7 +157,7 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
     }
-    clearFilterandSorting() {
+    clearFilterandSorting(): void {
         this.state={
             skip: 0,
             take: 25,
@@ -171,14 +170,14 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
         };
         this.gridData = process(this.gridResult, this.state);
     }
-    clearFilter() {
+    clearFilter(): void {
         this.state.filter = {
             logic: "and",
             filters: [],
         };
         this.gridData = process(this.gridResult, this.state);
     }
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
@@ -187,12 +186,12 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
         this.loadFunFacts();
 
     }
-    closeEditor(grid, rowIndex = this.editedRowIndex) {
+    closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex): void {
         grid.closeRow(rowIndex);
         this.editedRowIndex = undefined;
         this.formGroup = undefined;
     }
-    addHandler({ sender }) {
+    addHandler({ sender }: AddEvent): void {
         this.isDirty=true;
         //if there are any filters or sorting applied on the grid, at this scenario if users try to add new record,
         //then the below line of code clears all the filters and sorting applied so that the newly added data is visible in the first page.
@@ -218,7 +217,7 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
 
         sender.addRow(this.formGroup);
     }
-    editHandler({ sender, rowIndex, dataItem }) {
+    editHandler({ sender, rowIndex, dataItem }: EditEvent): void {
         this.isDirty=true
         this.closeEditor(sender);
         this.isFormChange = false;
@@ -238,7 +237,7 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
         this.editedRowIndex = rowIndex;
         sender.editRow(rowIndex, this.formGroup);
     }
-    toolTipvalidationMsgs(data, isNew=false) {
+    toolTipvalidationMsgs(data: DynamicObj, isNew = false): void {
         //these conditions are added because for the new record, we should not show tool tip error messages if user doesnt touch/make any changes to the input field
         //if this condition is not added tooltip messages will immediately show for the required fields even if other fields are not yet touched when user starts typing any one of the input.
         if (isNew) {
@@ -252,7 +251,7 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
             (data.FACT_ICON.value == "") ? this.fontAwesomeTooltip.open() : this.fontAwesomeTooltip.close();
         }
     }
-    cancelHandler({ sender, rowIndex }) {
+    cancelHandler({ sender, rowIndex }: CancelEvent): void {
         this.closeEditor(sender, rowIndex);
     }
     
@@ -260,12 +259,12 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
         return !this.isDirty;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.loadFunFacts();
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

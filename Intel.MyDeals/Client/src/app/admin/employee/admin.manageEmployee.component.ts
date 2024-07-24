@@ -12,6 +12,8 @@ import { Observable } from "rxjs";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { DynamicObj, ManageUsersInfo, Product } from "./admin.employee.model";
+import { Cust_Div_Map } from "../customer/admin.customer.model";
 
 @Component({
     selector: 'manage-employee',
@@ -33,7 +35,7 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
 
     private isLoading = true;
     public gridData: GridDataResult;
-    private gridResult: Array<any>;
+    private gridResult: Array<ManageUsersInfo>;
     public state: State = {
         skip: 0,
         take: 25,
@@ -50,9 +52,9 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
         }
     };
     public operator = "contains";
-    private renderCust = { data: null, isCustClickable: false };
+    private renderCust: DynamicObj = { data: null, isCustClickable: false };
     private custData;
-    private renderVert = { data: null, isVertClickable: false };
+    private renderVert: DynamicObj = { data: null, isVertClickable: false };
     private vertData;
     private showKendoAlert = false;
 
@@ -90,7 +92,7 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
         "NOTES": "Notes",
     }
 
-    returnZero() {
+    returnZero(): number {
         return 0
     }
 
@@ -111,7 +113,7 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
         wrap: true
     };
 
-    clearFilter() {
+    clearFilter(): void {
         this.state.filter = {
             logic: "and",
             filters: [],
@@ -119,7 +121,7 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
         this.gridData = process(this.gridResult, this.state);
     }
 
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
@@ -132,12 +134,12 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
         e.workbook.sheets[0].title = "Users Export";
     }
 
-    closeKendoAlert() {
+    closeKendoAlert(): void {
         this.showKendoAlert = false;
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
+        const excelState: State = {};
         Object.assign(excelState, this.state)
         excelState.take = this.gridResult.length;
 
@@ -148,13 +150,13 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
         return result;
     }
 
-    openEmployeeCustomers(dataItem) {
+    openEmployeeCustomers(dataItem: ManageUsersInfo): void {
         this.isDirty=true;
         const geosArray = dataItem["USR_GEOS"].split(', ');
         let modal_body;
         this.manageEmployeeSvc.getCustomersFromGeos(geosArray.join())
             .pipe(takeUntil(this.destroy$))
-            .subscribe(response => {
+            .subscribe((response: Cust_Div_Map[]) => {
                 modal_body = response;
                 const selectedIds = [];
                 const selectedCustomers = dataItem["USR_CUST"].replace(/, /g, ",").split(",");
@@ -182,11 +184,11 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
                 this.loggerSvc.error("Unable to get Customer from Geo Data.", '', 'openEmployeeCustomers::getCustomersFromGeos:: ' + JSON.stringify(error));
             });
     }
-    openEmployeeVerticals(dataItem) {
+    openEmployeeVerticals(dataItem: ManageUsersInfo): void {
         this.isDirty=true;
         this.manageEmployeeSvc.getProductCategoriesWithAll()
             .pipe(takeUntil(this.destroy$))
-            .subscribe(response => {
+            .subscribe((response: Product[]) => {
                 const selectedIds = [];
                 const modal_body = response;
                 const selectedVerticals = dataItem["USR_VERTS"].replace(/, /g, ",").split(",");
@@ -215,7 +217,7 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
             });
     }
 
-    customersFormatting(dataItem, usrCusts, usrRole, usrGeos) {
+    customersFormatting(dataItem: ManageUsersInfo, usrCusts: string, usrRole: string, usrGeos: string): DynamicObj {
         this.custData = dataItem;
         const valCusts = dataItem[usrCusts];
         const valRoles = dataItem[usrRole];
@@ -258,7 +260,7 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
         return this.renderCust;
     }
 
-    verticalsFormatting(dataItem, usrVerts, usrRole, usrGeos) {
+    verticalsFormatting(dataItem: ManageUsersInfo, usrVerts: string, usrRole: string, usrGeos: string): DynamicObj {
         this.vertData = dataItem;
         const valVerts = dataItem[usrVerts];
         const valRoles = dataItem[usrRole];
@@ -287,10 +289,10 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
         return this.renderVert;
     }
 
-    loadEmployeeData() {
+    loadEmployeeData(): void {
         this.manageEmployeeSvc.getEmployeeData()
             .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<any>) => {
+            .subscribe((response: Array<ManageUsersInfo>) => {
                 this.gridResult = response;
                 for (let i = 0; i < this.gridResult.length; i++) {
                     if (!this.gridResult[i].USR_CUST) {
@@ -316,11 +318,11 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
         return !this.isDirty;
     }
 
-    ngOnInit() { 
+    ngOnInit(): void { 
         this.loadEmployeeData();
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

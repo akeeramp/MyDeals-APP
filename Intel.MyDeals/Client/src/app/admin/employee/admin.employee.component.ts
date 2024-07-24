@@ -5,6 +5,7 @@ import { logger } from "../../shared/logger/logger";
 import { employeeService } from './admin.employee.service';
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { OpUserTokenParameters } from "./admin.employee.model";
 
 @Component({
     selector: 'employee-dashboard',
@@ -23,8 +24,8 @@ export class EmployeeComponent implements PendingChangesGuard,OnDestroy {
     private isSuper = (<any>window).isSuper;
     private roles: Array<any>;
     isDirty = false;
-    save() {
-        const data = {
+    save(): void {
+        const data: OpUserTokenParameters = {
             "roleTypeId": this.roleTypeId,
             "isDeveloper": this.isDeveloper ? 1 : 0,
             "isTester": this.isTester ? 1 : 0,
@@ -47,7 +48,7 @@ export class EmployeeComponent implements PendingChangesGuard,OnDestroy {
         return !this.isDirty;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.roles = [
             { value: 9, label: "SA" },
             { value: 3, label: "DA" },
@@ -60,7 +61,7 @@ export class EmployeeComponent implements PendingChangesGuard,OnDestroy {
         ]
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

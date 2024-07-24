@@ -43,7 +43,7 @@ export class ManageEmployeeModalComponent implements OnDestroy {
 
     private showKendoAlert;
 
-    isChecked(id) { // Set which geos this user has checked at dialog open
+    isChecked(id: string): boolean { // Set which geos this user has checked at dialog open
         let match = false;
         for (let i = 0; i < this.geoData.length; i++) {
             if (this.geoData[i].id == id) {
@@ -53,7 +53,7 @@ export class ManageEmployeeModalComponent implements OnDestroy {
         return match;
     }
 
-    getCustomerOptions() {
+    getCustomerOptions(): void {
         this.selectOptions = this.data.body;
         if (this.selectedIds.length > 0) { // Safety check for empty list
             const lastSelected = this.selectedIds[this.selectedIds.length - 1];
@@ -69,7 +69,7 @@ export class ManageEmployeeModalComponent implements OnDestroy {
         }
     }
 
-    getProductOptions() {
+    getProductOptions(): void {
         this.selectOptions = this.data.body;
         if (this.selectedIds.length > 0) { // Safety check for empty list
             const lastSelected = this.selectedIds[this.selectedIds.length - 1];
@@ -85,7 +85,7 @@ export class ManageEmployeeModalComponent implements OnDestroy {
         }
     }
 
-    onCustVertChange(value) {
+    onCustVertChange(): void {
         if (this.isCustModal) {
             this.getCustomerOptions();
         }
@@ -95,11 +95,11 @@ export class ManageEmployeeModalComponent implements OnDestroy {
     }
 
 
-    cancel() {
+    cancel(): void {
         this.dialogRef.close();
     }
 
-    ok() {
+    ok(): void {
         // Save the selected customers list here.
         const saveIds = [];
         const saveNames = [];
@@ -150,11 +150,11 @@ export class ManageEmployeeModalComponent implements OnDestroy {
         }
     }
 
-    clear() {
+    clear(): void {
         this.selectedIds = [];
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.isCustModal = (this.title == "Customer Selection") ? true : false;
         for (let i = 0; i < this.geosArray.length; i++) {
             this.geoData.push({ id: this.geosArray[i] });
@@ -170,7 +170,7 @@ export class ManageEmployeeModalComponent implements OnDestroy {
         }
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     } 

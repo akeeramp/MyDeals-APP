@@ -1,6 +1,8 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient, } from '@angular/common/http';
 import { Observable } from "rxjs";
+import { DynamicObj, EmployeeCustomers, ManageUsersInfo, Product } from "./admin.employee.model";
+import { Cust_Div_Map } from "../customer/admin.customer.model";
 
 @Injectable({
     providedIn: 'root'
@@ -25,25 +27,25 @@ export class manageEmployeeService {
         }
     }
 
-    public getEmployeeData(): Observable<any> {
+    public getEmployeeData(): Observable<ManageUsersInfo[]> {
         const apiUrl = this.apiBaseUrl + 'GetManageUserData/';
-        return this.httpClient.get(apiUrl + this.usrWwid); // Passing 0 as a WWID for all users, other services might pass WWID to get specific user records.
+        return this.httpClient.get<ManageUsersInfo[]>(apiUrl + this.usrWwid); // Passing 0 as a WWID for all users, other services might pass WWID to get specific user records.
     }
 
-    public getCustomersFromGeos(geos): Observable<any> {
+    public getCustomersFromGeos(geos: string): Observable<Cust_Div_Map[]> {
         const apiUrl = this.apiBaseUrl + 'GetManageUserDataGetCustomersInGeos/';
-        return this.httpClient.get(apiUrl + geos);
+        return this.httpClient.get<Cust_Div_Map[]>(apiUrl + geos);
     }
-    public setEmployeeData(data): Observable<any> {
+    public setEmployeeData(data: EmployeeCustomers): Observable<DynamicObj> {
         const apiUrl = this.apiBaseUrl + 'SetManageUserData';
         return this.httpClient.post(apiUrl, data);
     }
-    public setEmployeeVerticalData(data): Observable<any> {
+    public setEmployeeVerticalData(data: EmployeeCustomers): Observable<DynamicObj> {
         const apiUrl = this.apiBaseUrl + 'SetEmployeeVerticalData';
         return this.httpClient.post(apiUrl, data);
     }
-    public getProductCategoriesWithAll(): Observable<any> {
+    public getProductCategoriesWithAll(): Observable<Product[]> {
         const apiUrl: string = "api/Products/" + 'GetProductCategoriesWithAll';
-        return this.httpClient.get(apiUrl);
+        return this.httpClient.get<Product[]>(apiUrl);
     }
 }

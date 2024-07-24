@@ -6,3 +6,12 @@ export class Fun_Facts {
     public FACT_SRC: string;
     public ACTV_IND: boolean;
 }
+
+export interface Funfact_Map {
+    ACTV_IND: boolean;
+    FACT_HDR: string;
+    FACT_ICON: string;
+    FACT_SID: number;
+    FACT_SRC: string;
+    FACT_TXT: string;
+}
