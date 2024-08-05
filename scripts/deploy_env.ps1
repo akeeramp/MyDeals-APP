@@ -17,8 +17,8 @@ try {
         [pscustomobject]@{env='DR';DEPLOY_PATH='\\CH2DRMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='CH2DRMYDLW01.amr.corp.intel.com';pool="drmydeals.intel.com";config="PROD"}
         [pscustomobject]@{env='PROD1';DEPLOY_PATH='\\FM1PRDMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYDLW01.amr.corp.intel.com';pool="prdmydeals.intel.com";config="PROD"}
         [pscustomobject]@{env='PROD2';DEPLOY_PATH='\\FM1PRDMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYDLW02.amr.corp.intel.com';pool="prdmydeals.intel.com";config="PROD"}
-        [pscustomobject]@{env='PRODA1';DEPLOY_PATH='\\FM1PRODMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRODMYDLW01.amr.corp.intel.com';pool="prdmydeals.intel.com";config="PROD"}
-        [pscustomobject]@{env='PRODA2';DEPLOY_PATH='\\FM1PRODMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRODMYDLW02.amr.corp.intel.com';pool="prdmydeals.intel.com";config="PROD"}
+        [pscustomobject]@{env='PRODA1';DEPLOY_PATH='\\FM1PRODMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRODMYDLW01.amr.corp.intel.com';pool="prdmydeals.intel.com";config="CIAR"}
+        [pscustomobject]@{env='PRODA2';DEPLOY_PATH='\\FM1PRODMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRODMYDLW02.amr.corp.intel.com';pool="prdmydeals.intel.com";config="CIAR"}
    )
     if ($Operation -eq 'verifyENV'){
         $result = $ENV_DATA | Where env -eq $SERVER;
