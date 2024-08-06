@@ -136,6 +136,7 @@
     <Compile Include="Integration\IntegrationLib.cs" />
     <Compile Include="MeetComp\MeetCompLib.cs" />
     <Compile Include="ManualEngine\ManualEngineLib.cs" />
+    <Compile Include="MuleService\MuleServiceLib.cs" />
     <Compile Include="NotificationsLib\NotificationsLib.cs" />
     <Compile Include="OpDataCollectors\OpDataCollectorLib.cs" />
     <Compile Include="BusinessLogic.cs" />

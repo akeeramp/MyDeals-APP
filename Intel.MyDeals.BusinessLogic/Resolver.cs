@@ -1,4 +1,5 @@
-﻿using Intel.MyDeals.DependencyResolver;
+﻿using Intel.MyDeals.BusinessLogic.MuleService;
+using Intel.MyDeals.DependencyResolver;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using System.ComponentModel.Composition;
@@ -63,6 +64,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IAsyncProcTriggerLib, AsyncProcTriggerLib>();
             registerService.RegisterType<ISdsDealOverrideLib, SdsDealOverrideLib>();
             registerService.RegisterType<IDbAuditToolsLib, DbAuditToolsLib>();
+            registerService.RegisterType<IMuleServiceLib, MuleServiceLib>();
         }
     }
 }
