@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Intel.MyDeals.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IMuleServiceLib
     {
+        VistexDFDataResponseObject GetVistexDealOutBoundData(string packetType, string runMode, VistexDFDataResponseObject responseObj);
     }
 }

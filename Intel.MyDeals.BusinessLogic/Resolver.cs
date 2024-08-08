@@ -1,5 +1,4 @@
-﻿using Intel.MyDeals.BusinessLogic.MuleService;
-using Intel.MyDeals.DependencyResolver;
+﻿using Intel.MyDeals.DependencyResolver;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using System.ComponentModel.Composition;

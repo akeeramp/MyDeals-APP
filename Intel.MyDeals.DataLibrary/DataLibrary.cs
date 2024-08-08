@@ -32,7 +32,9 @@ namespace Intel.MyDeals.DataLibrary
 
                 ["muleKey"] = envConfigs.ContainsKey("muleKey") ? envConfigs["muleKey"] : "",
                 ["muleSecret"] = envConfigs.ContainsKey("muleSecret") ? envConfigs["muleSecret"] : "",
-                ["muleTokenUrl"] = envConfigs.ContainsKey("muleTokenUrl") ? envConfigs["muleTokenUrl"] : ""
+                ["muleTokenUrl"] = envConfigs.ContainsKey("muleTokenUrl") ? envConfigs["muleTokenUrl"] : "",
+                ["muleDealApiUrl"] = envConfigs.ContainsKey("muleDealApiUrl") ? envConfigs["muleDealApiUrl"] : ""
+
             };
         }
 
