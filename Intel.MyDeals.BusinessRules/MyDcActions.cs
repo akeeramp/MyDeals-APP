@@ -1005,13 +1005,14 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             int primedCustValue = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1"? 1: 0;
+            string END_CUSTOMER_RETAIL = r.Dc.GetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL);
 
-            if (primedCustValue == 1 && r.Dc.HasTracker())
+            if (r.Dc.HasTracker() && (string.IsNullOrEmpty(END_CUSTOMER_RETAIL) || primedCustValue == 1))
             {
                 foreach (var s in r.Rule.OpRuleActions[0].Target)
                 {
                     OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-                    de.IsReadOnly = true;
+                    if (de != null) de.IsReadOnly = true;
                 }
             }
         }
