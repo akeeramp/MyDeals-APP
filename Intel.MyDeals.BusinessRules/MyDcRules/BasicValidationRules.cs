@@ -1252,6 +1252,14 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
                 },
+                
+                new MyOpRule
+                {
+                    Title="Check for Major Fast track Changes to Update Tracker",
+                    ActionRule = MyDcActions.MajorFastTrackChangeCheck,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
+                },
 
                 new MyOpRule
                 {

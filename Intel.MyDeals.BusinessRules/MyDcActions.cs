@@ -2131,13 +2131,13 @@ namespace Intel.MyDeals.BusinessRules
 
             AttributeCollection atrbMstr = DataCollections.GetAttributeData();
             List<MyDealsAttribute> onChangeWrongWayItems = atrbMstr != null ? atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE" || a.MJR_MNR_CHG == "MAJOR_DECREASE").ToList() : new List<MyDealsAttribute>();
-
+            
             List<int> onChangeWrongWayIds = r.Dc.DataElements.Where(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).Select(d => d.DcID).ToList();
             List<int> majorFieldNoRedealIds = r.Dc.DataElements
                 .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && (d.AtrbValue.ToString() == WorkFlowStages.Active || d.AtrbValue.ToString() == WorkFlowStages.Won) && !d.HasValueChanged && onChangeWrongWayIds.Contains(d.DcID))
                 .Select(d => d.DcID).ToList();
-
-            if (!majorFieldNoRedealIds.Any()) return; // If there are no "wrong way" major changes to process, bail out.
+ 
+                if (!majorFieldNoRedealIds.Any()) return; // If there are no "wrong way" major changes to process, bail out.
 
             if (majorFieldNoRedealIds.Contains(r.Dc.DcID))
             {
@@ -2174,6 +2174,64 @@ namespace Intel.MyDeals.BusinessRules
                 r.Dc.SetAtrb(AttributeCodes.SDS_DEAL_RULES_OVERRIDE, "0"); // Pull out any SDS rules upon re-deal event - this might force fast track into full track
             }
         }
+
+        public static void MajorFastTrackChangeCheck(params object[] args)
+        {
+            // This rule added in because Kannan said that for wrong way major changes to properly generate a tracker.  The DB is relying on tracker having "*" prior to gen-tracker call.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            AttributeCollection atrbMstr = DataCollections.GetAttributeData();
+             List<MyDealsAttribute> onChangeFastItems = atrbMstr != null ? atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_FASTTRACK").ToList() : new List<MyDealsAttribute>();
+             
+            List<int> onChangeFastTrackIds = r.Dc.DataElements.Where(d => onChangeFastItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).Select(d => d.DcID).ToList();
+
+            List<int> majorFastTrackNoRedealIds = r.Dc.DataElements
+                .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && (d.AtrbValue.ToString() == WorkFlowStages.Active || d.AtrbValue.ToString() == WorkFlowStages.Won) && !d.HasValueChanged && onChangeFastTrackIds.Contains(d.DcID))
+                .Select(d => d.DcID).ToList();
+
+            if (!majorFastTrackNoRedealIds.Any()) return; // If there are no "wrong way" major changes to process, bail out.
+
+            if (majorFastTrackNoRedealIds.Contains(r.Dc.DcID))
+            {
+                foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.TRKR_NBR)) // Get all trackers (Potentially multi-dimensional) for this object and update as needed.
+                {
+                    string tracker = de.AtrbValue.ToString();
+                    // If there is a tracker number, put the WIP version in re-deal visual state.  We do this because we will issue a GEN_TRACKER call to update the tracker.
+                    if (!string.IsNullOrEmpty(tracker) && !tracker.Contains('*'))
+                    {
+                        de.AtrbValue = tracker + "*";
+                    }
+                }
+            }
+
+            if (majorFastTrackNoRedealIds.Contains(r.Dc.DcID))
+            {
+                 
+                // Tack on re-deal messages that are specific to "wrong way" major changes.
+                var reason = "Fast Track Re-deal due to major change by " + OpUserStack.MyOpUserToken.Usr.FullName + " (" + OpUserStack.MyOpUserToken.Usr.WWID + "): ";
+                var reasonDetails = new List<string>();
+                List<IOpDataElement> onChangeWrongWayElements = r.Dc.GetDataElementsWhere(d => onChangeFastItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList();
+
+                foreach (IOpDataElement de in r.Dc.GetDataElementsWhere(d => onChangeFastItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList())
+                {
+                    MyDealsAttribute atrb = onChangeFastItems.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
+                    if (atrb == null) continue;
+
+                    reasonDetails.Add(atrb.DATA_TYPE_CD == "DATETIME" ?
+                        $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy}" // A date change
+                        : atrb.DATA_TYPE_CD == "MONEY" ?
+                            atrb.ATRB_COL_NM != AttributeCodes.INCENTIVE_RATE ?
+                                $"{atrb.ATRB_LBL} changed from ${de.OrigAtrbValue} to ${de.AtrbValue}" // A Money value
+                                : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue}% to {de.AtrbValue}%" // An Incentive Rate percentage
+                            : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}"); // Any other normal value change
+                }
+                r.Dc.AddTimelineComment(reason + string.Join(", ", reasonDetails));
+
+                r.Dc.SetAtrb(AttributeCodes.SDS_DEAL_RULES_OVERRIDE, "0"); // Pull out any SDS rules upon re-deal event - this might force fast track into full track
+            }
+        }
+
 
         private static DateTime GetBackDateValue(OpDataCollector opDataCollector)
         {
