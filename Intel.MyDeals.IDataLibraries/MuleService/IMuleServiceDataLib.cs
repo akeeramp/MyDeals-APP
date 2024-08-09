@@ -11,6 +11,10 @@ namespace Intel.MyDeals.IDataLibrary
     {
         List<VistexQueueObject> GetVistexDealOutBoundData(string packetType, string runMode);
 
-        Dictionary<string, string> PublishToVitexViaMule(string jsonData, string mode, VistexDFDataResponseObject responseObject);
+        Dictionary<string, string> PublishToVistexViaMule(string jsonData, string mode, VistexDFDataResponseObject responseObject);
+
+        void SetVistexDealOutBoundStageV(Guid btchId, string rqstStatus, string BatchMessage);
+
+        void SetVistexDealOutBoundStageD(Guid btchId, string rqstStatus, List<VistexQueueObject> dataRecords);
     }
 }

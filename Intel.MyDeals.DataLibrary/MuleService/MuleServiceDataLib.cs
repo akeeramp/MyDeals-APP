@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Intel.MyDeals.DataAccessLib;
 using static Intel.MyDeals.DataLibrary.JmsDataLib;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
+using System.Data;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -23,6 +24,7 @@ namespace Intel.MyDeals.DataLibrary
         private string muleSecret;
         private string muleTokenUrl;
         private string muleDealApiUrl;
+        private string muleCNSPApiUrl;
 
         public MuleServiceDataLib()
         {
@@ -30,6 +32,7 @@ namespace Intel.MyDeals.DataLibrary
             muleSecret = ConfigurationManager.AppSettings["muleSecret"];
             muleTokenUrl = ConfigurationManager.AppSettings["muleTokenUrl"];
             muleDealApiUrl = ConfigurationManager.AppSettings["muleDealApiUrl"];
+            muleCNSPApiUrl = ConfigurationManager.AppSettings["muleCNSPApiUrl"];
         }
 
         public string GenerateMuletoken()
@@ -77,6 +80,10 @@ namespace Intel.MyDeals.DataLibrary
             {
                 return muleDealApiUrl;
             }
+            else if(mode == "M")
+            {
+                return muleCNSPApiUrl;
+            }
             else
             {
                 return "";
@@ -110,7 +117,7 @@ namespace Intel.MyDeals.DataLibrary
             return lstVistex;
         }
 
-        public Dictionary<string, string> PublishToVitexViaMule(string jsonData, string mode, VistexDFDataResponseObject responseObject)
+        public Dictionary<string, string> PublishToVistexViaMule(string jsonData, string mode, VistexDFDataResponseObject responseObject)
         {
             Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
             //URL Setting - Reading from Key Value Pair 
@@ -164,6 +171,81 @@ namespace Intel.MyDeals.DataLibrary
 
             }
             return responseObjectDictionary;
+        }
+
+        public void SetVistexDealOutBoundStageV(Guid btchId, string rqstStatus, string BatchMessage)
+        {
+            // Add type_int_dictionary here later
+            OpLog.Log("Vistex - SetVistexDealOutBoundStage");
+            try
+            {
+                //Hard Coded PO_Send_Completed
+                in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
+
+                DataRow dr = opDealMessages.NewRow();
+                dr["OBJ_SID"] = 0;
+                dr["RSPN_MSG"] = BatchMessage;
+                dr["RQST_STS"] = "PO_Send_Completed";
+                opDealMessages.Rows.Add(dr);
+
+                var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
+                {
+                    in_btch_id = btchId,
+                    in_dsa_rspn_log = opDealMessages,
+                };
+                DataAccess.ExecuteNonQuery(cmd);
+
+                //Hard Coded PO_Send_Completed
+                in_dsa_rspn_log opDealMessagess = new in_dsa_rspn_log();
+
+                DataRow drr = opDealMessagess.NewRow();
+                drr["OBJ_SID"] = 0;
+                drr["RSPN_MSG"] = BatchMessage;
+                drr["RQST_STS"] = rqstStatus;
+                opDealMessagess.Rows.Add(drr);
+
+                var cmdd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
+                {
+                    in_btch_id = btchId,
+                    in_dsa_rspn_log = opDealMessagess,
+                };
+                DataAccess.ExecuteNonQuery(cmdd);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+            }
+        }
+
+        public void SetVistexDealOutBoundStageD(Guid btchId, string rqstStatus, List<VistexQueueObject> dataRecords)
+        {
+            in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
+
+            foreach (var eachResp in dataRecords)
+            {
+                DataRow dr = opDealMessages.NewRow();
+                dr["OBJ_SID"] = eachResp.DealId;
+                dr["RSPN_MSG"] = null;
+                dr["RQST_STS"] = rqstStatus;
+                opDealMessages.Rows.Add(dr);
+            }
+
+            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
+            {
+                in_btch_id = btchId,
+                in_dsa_rspn_log = opDealMessages
+            };
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //Just save the data and move on - only error will report back below
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+            }
         }
     }
 }

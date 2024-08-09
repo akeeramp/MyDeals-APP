@@ -19,9 +19,9 @@ namespace Intel.MyDeals.Controllers.API
             _muleServiceLib = muleServiceLib;
         }
 
-        [Route("pushdelastovitexvisMule/{packetType}/{runMode}")]
+        [Route("PushDealsToVistexViaMule/{packetType}/{runMode}")]
         [HttpGet]
-        public VistexDFDataResponseObject pushDelasToVitexViaMule(string packetType, string runMode)
+        public VistexDFDataResponseObject PushDealsToVistexViaMule(string packetType, string runMode)
         {
             VistexDFDataResponseObject responseObject = new VistexDFDataResponseObject();
             responseObject.MessageLog = new List<string>();

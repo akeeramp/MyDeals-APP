@@ -24,9 +24,9 @@ namespace Intel.MyDeals.BusinessLogic
         public VistexDFDataResponseObject GetVistexDealOutBoundData(string packetType, string runMode, VistexDFDataResponseObject responseObj) //VTX_OBJ: DEALS
         {
             List<VistexQueueObject> dataRecords = new List<VistexQueueObject>();
+            responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: Initiated ") + Environment.NewLine);
             try
             {
-                responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: Initiated ") + Environment.NewLine);
                 dataRecords = _muleServiceDataLib.GetVistexDealOutBoundData(packetType, runMode);
                 responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: Getting Pending Records  - Success ") + Environment.NewLine);
 
@@ -44,29 +44,27 @@ namespace Intel.MyDeals.BusinessLogic
                     responseObj = sendDealdataToSapPo(jsonData, responseObj, dataRecords, runMode);
                     responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Success ") + Environment.NewLine);
 
-
+                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : responseObj.BatchName;
+                    jsonData = "";
                 }
                 else
                 {
-                    responseObj.BatchName = "VISTEX_DEALS";
+                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "VISTEX_DEALS";
                     responseObj.BatchId = "0";
                     responseObj.BatchMessage = "No data to be Uploaded";
                     responseObj.BatchStatus = "PROCESSED";
                     responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: - No Deal Found - Success ") + Environment.NewLine);
-
                 }
             }
-
             catch (Exception ex)
             {
-                responseObj.BatchName =  "DEALS";
+                responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "DEALS";
                 responseObj.BatchId = "-1";
                 responseObj.BatchMessage = "Exception: " + ex.Message + "\n" + "Innerexception: " + ex.InnerException;
                 responseObj.BatchStatus = "Exception";
                 responseObj.MessageLog.Add("Business Layer - GetVistexStageData: Exception Details -- " + String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, ex.Message) + Environment.NewLine);
                 OpLogPerf.Log($"Thrown from: VistexServiceLib - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
             }
-
             return responseObj;
         }
 
@@ -77,57 +75,99 @@ namespace Intel.MyDeals.BusinessLogic
                 Guid BatchId = dataRecords[0].BatchId;
                 string header = "";
                 string footer = "";
-
-                //Header Construct
-                header = "{\"BatchId\":\"" + BatchId.ToString() + "\"," + "\"Action\":\"Create\",\"SourceSystem\":\"MyDeals\",\"AgreementDetails\":[";
-                //Footer item
-                footer = "]}";
-
+                if (runMode == "M")
+                {
+                    //Header Construct
+                    header = "{\"VistexConsumptionParameters\":{\"SourceSystem\":\"MyDeals\",\"TargetSystem\":\"SAP\",\"Action\":\"POST\",\"BatchId\":\"" + BatchId.ToString() + "\",";
+                    //Footer item
+                    footer = "}}";
+                }
+                else
+                {
+                    //Header Construct
+                    header = "{\"BatchId\":\"" + BatchId.ToString() + "\"," + "\"Action\":\"Create\",\"SourceSystem\":\"MyDeals\",\"AgreementDetails\":[";
+                    //Footer item
+                    footer = "]}";
+                }
+                //Constructing Complete JSON
                 var finalJSON = header + jsonData + footer;
                 responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: ConnectSAPPOandResponse - Initiated ") + Environment.NewLine);
+                //Sending to SAP PO
                 responseObj = ConnectSAPPOandResponse(finalJSON, runMode, BatchId.ToString(), responseObj);
-            }
+                responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: ConnectSAPPOandResponse - Success ") + Environment.NewLine);
 
+                //Update Status
+                if (runMode == "M")
+                {
+                    SetVistexDealOutBoundStageV(BatchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Processing_Complete" : "PO_Error_Rollback", responseObj.BatchMessage);
+                }
+                else
+                {
+                    SetVistexDealOutBoundStageD(BatchId, responseObj.BatchStatus == "PROCESSED" ? runMode == "M" ? "PO_Processing_Complete" : "PO_Send_Completed" : "PO_Error_Rollback", dataRecords);
+                }
+                responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - SetVistexDealOutBoundStage - Status Update Successful") + Environment.NewLine);
+            }
             catch (Exception ex)
             {
                 responseObj.MessageLog.Add("Business Layer - sendDealdataToSapPo: Exception Details -- " + String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, ex.Message) + Environment.NewLine);
                 OpLogPerf.Log($"Thrown from: VistexServiceLib - DEALS - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
             }
-
             return responseObj;
+        }
+
+        public void SetVistexDealOutBoundStageV(Guid btchId, string rqstStatus, string BatchMessage) //VTX_OBJ: Customer, Product, Vertical
+        {
+            _muleServiceDataLib.SetVistexDealOutBoundStageV(btchId, rqstStatus, BatchMessage);
+        }
+
+        public void SetVistexDealOutBoundStageD(Guid btchId, string rqstStatus, List<VistexQueueObject> dataRecords) //VTX_OBJ: Deals
+        {
+            _muleServiceDataLib.SetVistexDealOutBoundStageD(btchId, rqstStatus, dataRecords);
         }
 
         public VistexDFDataResponseObject ConnectSAPPOandResponse(string jsonData, string runMode, string BatchId, VistexDFDataResponseObject responseObj)
         {
-            Dictionary<string, string> sendResponse = new Dictionary<string, string>();
-            sendResponse = _muleServiceDataLib.PublishToVitexViaMule(jsonData, runMode, responseObj);
+            try
+            {
+                Dictionary<string, string> sendResponse = new Dictionary<string, string>();
+                sendResponse = _muleServiceDataLib.PublishToVistexViaMule(jsonData, runMode, responseObj);
 
-            if (sendResponse["Status"].ToLower() == "ok" || sendResponse["Status"].ToLower() == "accepted")
+                if (sendResponse["Status"].ToLower() == "ok" || sendResponse["Status"].ToLower() == "accepted")
+                {
+                    responseObj.RunMode = runMode;
+                    //Batch ID
+                    responseObj.BatchId = BatchId;
+                    //Parsing Response from SAP PO
+                    VistexDFResponse visResponse = JsonConvert.DeserializeObject<VistexDFResponse>(sendResponse["Data"]);
+                    //Assigning Message Body to be Tranferred
+                    responseObj.BatchMessage = runMode == "D" ? "PO_Send_Complete" : string.Empty;
+                    //API Type
+                    responseObj.BatchName = runMode == "D" ? "VISTEX_DEAL" : runMode == "M" ? "CNSMPTN_LD" : "";
+                    //Status of the Call
+                    responseObj.BatchStatus = "PROCESSED";
+                }
+                else
+                {
+                    responseObj.RunMode = runMode;
+                    responseObj.BatchId = BatchId;
+                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "VISTEX_DEAL";
+                    responseObj.BatchMessage = sendResponse["Message"];
+                    responseObj.BatchStatus = "ERROR";
+                }
+                responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - ConnectSAPPOandResponse - Done"));
+            }
+            catch (Exception ex)
             {
                 responseObj.RunMode = runMode;
                 //Batch ID
-                responseObj.BatchId = BatchId;
-                //Parsing Response from SAP PO
-                VistexDFResponse visResponse = JsonConvert.DeserializeObject<VistexDFResponse>(sendResponse["Data"]);
-                //Assigning Message Body to be Tranferred 
-                responseObj.BatchMessage = runMode == "D" ? "PO_Send_Complete" : string.Empty;
-                //API Type                
-                responseObj.BatchName = runMode == "D" ? "VISTEX_DEAL"  : "";
-                //Status of the Call
-                responseObj.BatchStatus = "PROCESSED";
+                responseObj.BatchId = "-1";
+                responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "VISTEX_DEAL";
+                responseObj.BatchMessage = "Exception: " + ex.Message + "\n" + "Innerexception: " + ex.InnerException;
+                responseObj.BatchStatus = "Exception";
+                responseObj.MessageLog.Add("Business Layer - ConnectSAPPOandResponse: Exception Deatils -- " + String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, ex.Message) + Environment.NewLine);                
             }
-            else
-            {
-                responseObj.RunMode = runMode;
-                responseObj.BatchId = BatchId;
-                responseObj.BatchName =  "VISTEX_DEAL";
-                responseObj.BatchMessage = sendResponse["Message"];
-                responseObj.BatchStatus = "ERROR";
-
-            }
-            responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - ConnectSAPPOandResponse - Done"));
-
             return responseObj;
         }
+
     }
 }
