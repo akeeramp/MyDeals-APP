@@ -1468,7 +1468,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (customer.ToUpper() != "ANY")
             {
-                if (isIQRUnified == true)
+                if (isIQRUnified == true && isMyDealsUnified != "1")
                 {
                     EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry, workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId.ToString());
                     if (endCustObj.UnifiedEndCustomerId.ToString() == "0")
