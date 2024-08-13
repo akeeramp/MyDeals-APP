@@ -32,7 +32,7 @@ jobs:
               run: |
                 ./scripts/build_env.ps1 'NPMBuild' 'path' '${{ github.workspace }}'
               env:
-                KENDO_UI_LICENSE: ${{ secrets.KENDO_UI_LICENSE }}
+                KENDO_UI_LICENSE: ${{ vars.KENDO_UI_LICENSE }}
             - name: MS build publish
               run: |
                 ./scripts/build_env.ps1 'MSBuild' '${{ env.MSBUILD_PATH }}' '${{ github.workspace }}'

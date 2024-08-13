@@ -28,7 +28,7 @@ jobs:
     steps:
        - name: Replace Handsontable License Key in config file
          run: |
-           $licenseKey = '${{ secrets.HANDSONTABLE_LICENSE_KEY }}'
+           $licenseKey = '${{ vars.HANDSONTABLE_LICENSE_KEY }}'
            $configPath = "${{ github.workspace }}/Intel.MyDeals/Client/src/app/shared/config/handsontable.licenseKey.config.ts"
            (Get-Content -Path $configPath -Raw) -replace 'non-commercial-and-evaluation', $licenseKey | Set-Content -Path $configPath
          shell: pwsh
@@ -39,7 +39,7 @@ jobs:
          run: |
            ./scripts/build_env.ps1 'NPMBuild' 'path' '${{github.workspace}}'
          env:
-           KENDO_UI_LICENSE: ${{ secrets.KENDO_UI_LICENSE }}
+           KENDO_UI_LICENSE: ${{ vars.KENDO_UI_LICENSE }}
        - name: MS build publish
          run: |
             ./scripts/build_env.ps1 'MSBuild' '${{env.MSBUILD_PATH}}' '${{github.workspace}}'
@@ -58,13 +58,13 @@ jobs:
 
       #  - name:  Remove Client Zip
       #    run: |
-      #      ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}'
+      #      ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ vars.USN }}' '${{ vars.PWD }}' '${{env.SERVER}}'
       #  - name:  Copy Client Zip
       #    run: |
-      #      ./scripts/deploy_env.ps1 'CopyZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}'
+      #      ./scripts/deploy_env.ps1 'CopyZipENV' '${{ vars.USN }}' '${{ vars.PWD }}' '${{env.SERVER}}'
        - name:  Deploy Client App
          run: |
-           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}'
+           ./scripts/deploy_env.ps1 'DeployENV' '${{ vars.USN }}' '${{ vars.PWD }}' '${{env.SERVER}}'
   
   RunSquawker-Regular:
     name: Run Squawker 

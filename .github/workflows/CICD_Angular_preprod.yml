@@ -44,7 +44,7 @@ jobs:
        - name: Verify environement 
          run: |
             echo "RUN Verify command for ${{github.event.inputs.ENV}}"
-             C:\Abhilash\deploy_env.ps1 'verifyENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+             C:\Abhilash\deploy_env.ps1 'verifyENV' '${{ vars.USN }}' '${{ vars.PWD }}' '${{github.event.inputs.ENV}}'
   
   Checkout-Repo:
      if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
@@ -73,7 +73,7 @@ jobs:
     steps:
        - name: Replace Handsontable License Key in config file
          run: |
-           $licenseKey = '${{ secrets.HANDSONTABLE_LICENSE_KEY }}'
+           $licenseKey = '${{ vars.HANDSONTABLE_LICENSE_KEY }}'
            $configPath = "${{ github.workspace }}/Intel.MyDeals/Client/src/app/shared/config/handsontable.licenseKey.config.ts"
            (Get-Content -Path $configPath -Raw) -replace 'non-commercial-and-evaluation', $licenseKey | Set-Content -Path $configPath
          shell: pwsh
@@ -99,23 +99,23 @@ jobs:
       #      ./scripts/build_env.ps1 'ClientZip' '${{github.event.inputs.ENV}}' '${{github.workspace}}'
        - name:  Move Publish Site 
          run: |
-           ./scripts/deploy_env.ps1 'MovePublishENV' '${{ secrets.APIGEE_KEY }}' '${{ secrets.APIGEE_SECRETE }}' '${{github.event.inputs.ENV}}'
+           ./scripts/deploy_env.ps1 'MovePublishENV' '${{ vars.APIGEE_KEY }}' '${{ vars.APIGEE_SECRETE }}' '${{github.event.inputs.ENV}}'
       #  - name:  Remove Client Zip 
       #    run: |
-      #      ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+      #      ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ vars.USN }}' '${{ vars.PWD }}' '${{github.event.inputs.ENV}}'
       #  - name:  Copy Client Zip 
       #    run: |
-      #      ./scripts/deploy_env.ps1 'CopyZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+      #      ./scripts/deploy_env.ps1 'CopyZipENV' '${{ vars.USN }}' '${{ vars.PWD }}' '${{github.event.inputs.ENV}}'
        - name:  Deploy Client App 
          run: |
-           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           ./scripts/deploy_env.ps1 'DeployENV' '${{ vars.USN }}' '${{ vars.PWD }}' '${{github.event.inputs.ENV}}'
        - name:  Copy Publish Site to latest folder
          run: |
-           ./scripts/deploy_env.ps1 'copy_latestENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'  
+           ./scripts/deploy_env.ps1 'copy_latestENV' '${{ vars.USN }}' '${{ vars.PWD }}' '${{ github.event.inputs.ENV }}'  
        - name: Email Build Commit list
          if: ${{ github.event.inputs.Send_Build_Commits }} == 'yes'
          run: |
-            ./scripts/deploy_env.ps1 'build_commit_list' '${{ github.event.inputs.Send_Build_Commits }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'
+            ./scripts/deploy_env.ps1 'build_commit_list' '${{ github.event.inputs.Send_Build_Commits }}' '${{ vars.PWD }}' '${{ github.event.inputs.ENV }}'
 
   Deploy_Latest:
     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes')
@@ -126,17 +126,17 @@ jobs:
     steps:
       #  - name:  Remove Client Zip 
       #    run: |
-      #      C:\Abhilash\deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+      #      C:\Abhilash\deploy_env.ps1 'RemoveZipENV' '${{ vars.USN }}' '${{ vars.PWD }}' '${{github.event.inputs.ENV}}'
        - name:  Move Publish Site 
          run: |
-           C:\Abhilash\deploy_env.ps1 'MovePublish_latest' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           C:\Abhilash\deploy_env.ps1 'MovePublish_latest' '${{ vars.USN }}' '${{ vars.PWD }}' '${{github.event.inputs.ENV}}'
        - name:  Deploy Client App 
          run: |
-           C:\Abhilash\deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           C:\Abhilash\deploy_env.ps1 'DeployENV' '${{ vars.USN }}' '${{ vars.PWD }}' '${{github.event.inputs.ENV}}'
        - name: Email Build Commit list
          if: ${{ github.event.inputs.Send_Build_Commits }} == 'yes'
          run: |
-            C:\Abhilash\deploy_env.ps1 'build_commit_list' '${{  github.event.inputs.Send_Build_Commits }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'
+            C:\Abhilash\deploy_env.ps1 'build_commit_list' '${{  github.event.inputs.Send_Build_Commits }}' '${{ vars.PWD }}' '${{ github.event.inputs.ENV }}'
   
   RunSquawker-Regular:
     name: Run Squawker 
