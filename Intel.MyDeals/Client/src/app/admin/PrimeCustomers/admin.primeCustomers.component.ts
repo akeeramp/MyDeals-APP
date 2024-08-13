@@ -1,9 +1,9 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { primeCustomerService } from "./admin.primeCustomers.service";
 import { Component, ViewChild, OnDestroy } from "@angular/core";
-import { PrimeCust_Map } from "./admin.primeCustomers.model";
+import { Countires, PrimeCust_Map, RplStatusCode } from "./admin.primeCustomers.model";
 import { ThemePalette } from "@angular/material/core";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, GridComponent, AddEvent, EditEvent, CancelEvent, SaveEvent } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
@@ -12,6 +12,7 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { DynamicObj } from "../employee/admin.employee.model";
 
 @Component({
     selector: 'admin-prime-customers',
@@ -35,13 +36,13 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
     private info = true;
-    private gridResult: Array<any>;
+    private gridResult: Array<PrimeCust_Map>;
     private gridData: GridDataResult;
     private color: ThemePalette = 'primary';
-    public distinctPrimeCustNm: Array<any>;
-    public distinctCtryCustNm: Array<any>;
-    public distinctprimeCtry: Array<any>;
-    public distinctRplCd: Array<any> = [];
+    public distinctPrimeCustNm: Array<string>;
+    public distinctCtryCustNm: Array<string>;
+    public distinctprimeCtry: Array<string>;
+    public distinctRplCd: Array<string> = [];
     public rplValue: Array<any>;
     public primeCustData: Array<any>;
     public formGroup: FormGroup;
@@ -49,10 +50,10 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     public isFormChange = false;
     public distinctCountry: Array<any>;
     public errorMsg: Array<string> = [];
-    private errorMessage: string = "";
+    private errorMessage = "";
     public allowCustom = true;
     public editAccess = true;
-    private isNew: boolean; primeCust_map: any; rowIndex: number; saveAction = "Active";
+    private isNew: boolean; primeCust_map: PrimeCust_Map; rowIndex: number; saveAction = "Active";
     isCombExists = false; isDialogVisible = false; cancelConfirm = false;
     public isUnifiedIdEditable = false; isPrimCustNmEditable = false;
     isPrimLvlIdEditable = false; isPrimCustCtryEditable = false; isRplStsDdEditable = false;
@@ -75,7 +76,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         { text: "1000", value: 1000 }
     ];
 
-    distinctPrimitive(fieldName: string): any {
+    distinctPrimitive(fieldName: string): string[] {
         if (fieldName == 'PRIM_CUST_NM') {
             return sortBy(uniq(pluck(this.gridResult, fieldName)));
         } else if (fieldName == 'PRIM_CUST_CTRY') {
@@ -88,7 +89,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
+        const excelState: State = {};
         Object.assign(excelState, this.state)
         excelState.take = this.gridResult.length;
 
@@ -99,13 +100,13 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         return result;
     }
 
-    loadPrimeCustomer() {
+    loadPrimeCustomer(): void {
         //RA alone will have view access
         if ((<any>window).usrRole == "RA" && !(<any>window).isDeveloper) {
             this.editAccess = false;
         }
         //Developer can see the Screen..
-        this.primeCustSvc.GetPrimeCustomerDetails().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+        this.primeCustSvc.GetPrimeCustomerDetails().pipe(takeUntil(this.destroy$)).subscribe((result: Array<PrimeCust_Map>) => {
             this.isLoading = false;
             this.gridResult = result;
             this.gridData = process(result, this.state);
@@ -119,14 +120,14 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         this.gridData = process(this.gridResult, this.state);
     }
 
-    closeEditor(grid, rowIndex = this.editedRowIndex) {
+    closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex): void {
         grid.closeRow(rowIndex);
         this.editedRowIndex = undefined;
         this.formGroup = undefined;
     }
 
-    addHandler({ sender }) {
-        this.isDirty=true;
+    addHandler({ sender }: AddEvent): void {
+        this.isDirty = true;
         this.closeEditor(sender);
         this.isUnifiedIdEditable = true;
         this.isPrimCustNmEditable = true;
@@ -160,8 +161,8 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         sender.addRow(this.formGroup);
     }
 
-    editHandler({ sender, rowIndex, dataItem }) {
-        this.isDirty=true;
+    editHandler({ sender, rowIndex, dataItem }: EditEvent): void {
+        this.isDirty = true;
         this.isRplStsDdEditable = true;
         this.closeEditor(sender);
         this.isFormChange = false;
@@ -183,7 +184,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         sender.editRow(rowIndex, this.formGroup);
     }
 
-    clearFilter() {
+    clearFilter(): void {
         this.state.filter = {
             logic: "and",
             filters: [],
@@ -192,10 +193,10 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     }
 
     //API connections
-    getPrimeCustomersDataSource() {
+    getPrimeCustomersDataSource(): void {
         this.primeCustSvc.getPrimeCustomers()
             .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<any>) => {
+            .subscribe((response: Array<DynamicObj>) => {
                 this.distinctPrimeCustNm = distinct(response, "Value").map(
                     item => item.Value
                 );
@@ -208,16 +209,16 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
 
         this.primeCustSvc.getRplStatusCodes()
             .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<any>) => {
+            .subscribe((response: Array<RplStatusCode>) => {
                 this.distinctRplCd = distinct(response, "RPL_STS_CD").map(
                     item => item.RPL_STS_CD
                 );
             }, function (response) {
-                    this.loggerSvc.error("Unable to get RPL status code.", response, response.statusText);
+                this.loggerSvc.error("Unable to get RPL status code.", response, response.statusText);
             });
         this.primeCustSvc.getCountries()
             .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<any>) => {
+            .subscribe((response: Array<Countires>) => {
                 this.distinctprimeCtry = distinct(response, "CTRY_NM").map(
                     item => item.CTRY_NM
                 );
@@ -226,7 +227,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
             });
     }
 
-    cancelHandler({ sender, rowIndex }) {
+    cancelHandler({ sender, rowIndex }: CancelEvent): void {
         this.closeEditor(sender, rowIndex);
         this.isUnifiedIdEditable = false;
         this.isPrimCustNmEditable = false;
@@ -235,7 +236,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         this.isRplStsDdEditable = false;
     }
 
-    saveConfirmation() {
+    saveConfirmation(): void {
         if (this.isDialogVisible)
             this.isDialogVisible = false;
         if (this.saveAction == "InActive" && !this.isCombExists) {
@@ -251,7 +252,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
             this.isDialogVisible = false;
         }
     }
-    saveCancel() {
+    saveCancel(): void {
         this.isDialogVisible = false;
         this.cancelConfirm = false;
         this.isUnifiedIdEditable = false;
@@ -261,12 +262,12 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         this.isRplStsDdEditable = false;
     }
 
-    IsValidCombination(model: any) {
+    IsValidCombination(model: PrimeCust_Map): boolean {
         let retCond = false;
         const isPrimeIdexist = this.gridResult.filter(x => x.PRIM_CUST_ID === parseInt(model.PRIM_CUST_ID));
-        
+
         this.gridResult.map(
-            (x)=> {
+            (x) => {
                 const x_Prim_Cust_Nm = (x.PRIM_CUST_NM ? x.PRIM_CUST_NM.toLowerCase().trim() : '');
                 const model_Cust_Nm = (model.PRIM_CUST_NM ? model.PRIM_CUST_NM.toLowerCase().trim() : '');
                 const patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
@@ -303,7 +304,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
                     }
                 } else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && isPrimeIdexist.length < 1 && x.PRIM_SID !== model.PRIM_SID && model.PRIM_CUST_ID != null && model.PRIM_CUST_ID != "" && x.IS_ACTV) {
                     if (!this.errorMsg.includes("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active"))
-                            this.errorMsg.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active");
+                        this.errorMsg.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active");
                     retCond = true;
                 }
             }
@@ -334,8 +335,8 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         return retCond;
     }
 
-    insertUpdateOperation(rowIndex, isNew, primeCust_map) {
-        this.isDirty=false;
+    insertUpdateOperation(rowIndex: number, isNew: boolean, primeCust_map: PrimeCust_Map): void {
+        this.isDirty = false;
         if (!this.isCombExists) {
             if (isNew) {
                 this.isLoading = true;
@@ -368,7 +369,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         }
     }
 
-    saveHandler({ sender, rowIndex, formGroup, isNew }) {
+    saveHandler({ sender, rowIndex, formGroup, isNew }: SaveEvent): void {
         const primeCust_map: PrimeCust_Map = formGroup.getRawValue();
         if (primeCust_map.RPL_STS_CD) {
             primeCust_map.RPL_STS_CD = primeCust_map.RPL_STS_CD.join();
@@ -401,7 +402,8 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
                     this.primeCust_map = primeCust_map;
                     this.rowIndex = rowIndex;
                     this.errorMessage = "There may be a chance of deals associated with this combination.\n Are you sure want to deactivate this combination ?";
-                } else { this.isUnifiedIdEditable = false;
+                } else {
+                    this.isUnifiedIdEditable = false;
                     this.isPrimCustNmEditable = false;
                     this.isPrimLvlIdEditable = false;
                     this.isPrimCustCtryEditable = false;
@@ -417,7 +419,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     }
 
 
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
@@ -425,17 +427,17 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         };
         this.loadPrimeCustomer();
     }
-    
+
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.loadPrimeCustomer();
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

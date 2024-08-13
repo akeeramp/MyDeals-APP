@@ -1,6 +1,7 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
+import { AdminQuoteLetter, DownloadQuoteLetterData } from "./admin.quoteLetter.model";
 
 @Injectable({
     providedIn: 'root'
@@ -13,22 +14,22 @@ export class quoteLetterService {
 
     }
 
-    public adminGetTemplates(): Observable<any> {
+    public adminGetTemplates(): Observable<AdminQuoteLetter[]> {
         const apiUrl: string = this.apiBaseUrl + 'AdminGetTemplates';
-        return this.httpClient.get(apiUrl);
+        return this.httpClient.get<AdminQuoteLetter[]>(apiUrl);
     }
 
-    public adminSaveTemplate(template): Observable<any> {
+    public adminSaveTemplate(template: AdminQuoteLetter): Observable<AdminQuoteLetter> {
         const apiUrl: string = this.apiBaseUrl + 'AdminSaveTemplate';
-        return this.httpClient.put(apiUrl, template);
+        return this.httpClient.put<AdminQuoteLetter>(apiUrl, template);
     }
 
-    public adminPreviewQuoteLetterTemplate(template): Observable<any> {
+    public adminPreviewQuoteLetterTemplate(template: AdminQuoteLetter): Observable<any> {
         const apiUrl: string = this.apiBaseUrl + 'GetDealQuoteLetterPreview';
         return this.httpClient.post(apiUrl, template, { responseType: 'blob', observe: "response" })
     }
-    public regenerateQuoteLetter(dealId) {
+    public regenerateQuoteLetter(dealId: string): Observable<DownloadQuoteLetterData[]> {
         const apiUrl: string = this.apiBaseUrl + 'RegenerateQuoteLetter/' + dealId;
-        return this.httpClient.get(apiUrl);
+        return this.httpClient.get<DownloadQuoteLetterData[]>(apiUrl);
     }
 }

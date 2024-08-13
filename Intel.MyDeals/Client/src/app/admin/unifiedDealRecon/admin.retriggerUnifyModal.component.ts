@@ -11,6 +11,8 @@ import { each } from 'underscore';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { END_CUST_OBJ } from "./admin.unifiedDealRecon.model";
+import { Countires } from "../PrimeCustomers/admin.primeCustomers.model";
 
 @Component({
     selector: "retrigger-UCD",
@@ -22,32 +24,32 @@ export class retriggerUnifyModalComponent implements OnDestroy {
     constructor(public dialogRef: MatDialogRef<retriggerUnifyModalComponent>, private loggerSvc: logger, private unifiedDealReconSvc: unifiedDealReconService) { }
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
-    private endCustCountries: any[] = [];
-    private countries: any[];
-    private dealId: string = '';
-    private endCustomer: string = '';
-    private endCustCountry: string = '';
-    private END_CUST_OBJ: any;
-    private isAlert: boolean = false;
-    private alertMsg: string = ''
-    private isError: boolean = false;
-    private isErrorEndCustomer: boolean = false;
-    private isErrorEndCustCountry: boolean = false;
-    private validateDealId: boolean = true;
+    private endCustCountries: string[] = [];
+    private countries: string[];
+    private dealId = '';
+    private endCustomer = '';
+    private endCustCountry = '';
+    private END_CUST_OBJ: END_CUST_OBJ;
+    private isAlert = false;
+    private alertMsg = ''
+    private isError = false;
+    private isErrorEndCustomer = false;
+    private isErrorEndCustCountry = false;
+    private validateDealId = true;
     public formGroup: FormGroup;
-    loadDetails() {
-        this.unifiedDealReconSvc.getCountries().pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    loadDetails(): void {
+        this.unifiedDealReconSvc.getCountries().pipe(takeUntil(this.destroy$)).subscribe((response: Countires[]) => {
             this.endCustCountries = this.countries = response.map(x => x.CTRY_NM);
         }, (error) => {
             this.loggerSvc.error('Failed to get Data', 'Error', error);
         });
     }
 
-    filter(event) {
+    filter(event: string): void {
         this.endCustCountries = event != '' ? this.countries.filter(x => x.toLowerCase().includes(event.toLowerCase())) : this.countries;
     }
 
-    submit(retriggerFormData) {
+    submit(retriggerFormData: any): void {
 
         Object.keys(retriggerFormData.controls).forEach(key => {
             retriggerFormData.controls[key].markAsTouched();
@@ -64,8 +66,8 @@ export class retriggerUnifyModalComponent implements OnDestroy {
             "END_CUSTOMER_COUNTRY": this.endCustCountry
         }
         if (this.isError == false && this.validateDealId == true) {
-            this.unifiedDealReconSvc.ResubmissionDeals(this.dealId, this.END_CUST_OBJ).pipe(takeUntil(this.destroy$)).subscribe((response) => {
-                let result: any = response;
+            this.unifiedDealReconSvc.ResubmissionDeals(this.dealId, this.END_CUST_OBJ).pipe(takeUntil(this.destroy$)).subscribe((response: string) => {
+                const result: string = response;
                 if (result.toString() == "true") {
                     this.alertMsg = "Re-Submission Successfull";
                 }
@@ -80,20 +82,20 @@ export class retriggerUnifyModalComponent implements OnDestroy {
                 }
                 this.isAlert = true;
             },
-                (error) => {
+                () => {
                     this.alertMsg = "Re-Submission Failed";
                     this.isAlert = true;
                 });
         }
     }
 
-    closeWindow() {
+    closeWindow(): void {
         this.dialogRef.close();
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.formGroup = new FormGroup({
-            
+
             DEAL_ID: new FormControl("", Validators.required),
             END_CUSTOMER: new FormControl("", Validators.required),
             END_CUSTOMER_COUNTRY: new FormControl(
@@ -101,17 +103,17 @@ export class retriggerUnifyModalComponent implements OnDestroy {
                 Validators.compose([
                     Validators.required,
                     Validators.pattern("^[0-9]+(,[0-9]+)*$")
-                    
+
                 ]))
-           
+
         });
         this.loadDetails();
     }
-    closeAlert() {
+    closeAlert(): void {
         this.isAlert = false;
         if (this.alertMsg == "Re-Submission Successfull") this.closeWindow();
     }
-    validateEndCustomer() {
+    validateEndCustomer(): void {
 
         if (this.endCustomer == "") {
             this.isErrorEndCustomer = true;
@@ -123,7 +125,7 @@ export class retriggerUnifyModalComponent implements OnDestroy {
 
     validateDealID() {
         this.isError = false;
-        let exactMatch = new RegExp("^[0-9]+(,[0-9]+)*$");
+        const exactMatch = new RegExp("^[0-9]+(,[0-9]+)*$");
 
         if (!exactMatch.test(this.dealId)) {
             this.validateDealId = false;
@@ -135,7 +137,7 @@ export class retriggerUnifyModalComponent implements OnDestroy {
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

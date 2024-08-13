@@ -3,13 +3,16 @@ import { dsaService } from "./admin.vistex.service";
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { MomentService } from "../../shared/moment/moment.service";
-import { GridDataResult,DataStateChangeEvent,PageSizeItem} from "@progress/kendo-angular-grid";
-import { process,State,distinct} from "@progress/kendo-data-query";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, EditEvent, GridComponent, CancelEvent, SaveEvent } from "@progress/kendo-angular-grid";
+import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { each } from 'underscore';
-import { Observable,Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { RequestDetails, VistexLogFilters, VistexLogsInfo, VistexResponseUpdData } from "./admin.vistex.model";
+import { DynamicObj } from "../employee/admin.employee.model";
+
 @Component({
     selector: "vistex-integration-log",
     templateUrl: 'Client/src/app/admin/vistex/admin.vistexIntegrationLog.component.html',
@@ -24,17 +27,19 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
     isDirty = false;
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
-    private requestTypeList =  [];
-    private selectedRequestType = {RQST_TYPE : "VISTEX_DEALS",
-                            RQST_NAME: "VISTEX DEALS"};
-    private spinnerMessageHeader = "Integration Logs"; 
+    private requestTypeList: RequestDetails[] = [];
+    private selectedRequestType = {
+        RQST_TYPE: "VISTEX_DEALS",
+        RQST_NAME: "VISTEX DEALS"
+    };
+    private spinnerMessageHeader = "Integration Logs";
     private spinnerMessageDescription = "Please wait while we loading integration logs..";
     private editedRowData;
-    private VistexStatuses = [];
+    private VistexStatuses: string[] = [];
     private DealIds = "";
     private IsDealIdsValid = true;
     private startDate: Date = new Date(this.momentService.moment().subtract(30, 'days').format("MM/DD/YYYY"));
-    private endDate: Date = new Date(this.momentService.moment().format("MM/DD/YYYY")); 
+    private endDate: Date = new Date(this.momentService.moment().format("MM/DD/YYYY"));
     private isLoading = true;
     private showKendoAlert = false;
     private kendoAlertMsg = "";
@@ -74,24 +79,24 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         },
     ];
     public gridData: GridDataResult;
-    public gridResult: Array<any>;
+    public gridResult: Array<VistexLogsInfo>;
     private senderGrid: any;
-    private rowIndexValue: number = 0;
+    private rowIndexValue = 0;
 
-    ngOnInit(){
-        this.dsaService.getRequestTypeList().pipe(takeUntil(this.destroy$)).subscribe(response => {
+    ngOnInit(): void {
+        this.dsaService.getRequestTypeList().pipe(takeUntil(this.destroy$)).subscribe((response: RequestDetails[]) => {
             this.requestTypeList = response;
-        },function (err) {
-            this.loggerSvc.error("Error in getting Request Types",err,err.statusText)
+        }, function (err) {
+            this.loggerSvc.error("Error in getting Request Types", err, err.statusText)
         });
         this.getData();
     }
 
-    distinctPrimitive(fieldName: string): any {
+    distinctPrimitive(fieldName: string): string[] {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
 
-    clearFilter() {
+    clearFilter(): void {
         this.state.filter = {
             logic: "and",
             filters: [],
@@ -104,11 +109,11 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         this.gridData = process(this.gridResult, this.state);
     }
 
-    getData() {
+    getData(): void {
         this.isDirty = true;
         this.startDate = new Date(this.momentService.moment(this.startDate).format("MM/DD/YYYY"));
-        this.endDate = new Date(this.momentService.moment(this.endDate).format("MM/DD/YYYY"));            
-                    
+        this.endDate = new Date(this.momentService.moment(this.endDate).format("MM/DD/YYYY"));
+
         if (this.momentService.moment(this.startDate, "MM/DD/YYYY", true).isValid() && this.momentService.moment(this.endDate, "MM/DD/YYYY", true).isValid() && this.momentService.moment(this.startDate).isBefore(this.endDate)) {
             if (this.selectedRequestType == undefined || this.selectedRequestType.RQST_TYPE == undefined || this.selectedRequestType.RQST_TYPE == "" || this.selectedRequestType.RQST_TYPE == null) {
                 this.showKendoAlert = true;
@@ -117,41 +122,41 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
                 return;
             }
             this.isLoading = true;
-            const postData = {
+            const postData = <VistexLogFilters>{
                 "Dealmode": this.selectedRequestType.RQST_TYPE,
-                "StartDate": this.momentService.moment(this.startDate).format("MM/DD/YYYY") ,
+                "StartDate": this.momentService.moment(this.startDate).format("MM/DD/YYYY"),
                 "EndDate": this.momentService.moment(this.endDate).format("MM/DD/YYYY")
             }
-            this.dsaService.getVistexLogs(postData).pipe(takeUntil(this.destroy$)).subscribe((response)=> {
+            this.dsaService.getVistexLogs(postData).pipe(takeUntil(this.destroy$)).subscribe((response: VistexLogsInfo[]) => {
                 this.gridResult = response;
-                this.gridData = process(this.gridResult,this.state);
+                this.gridData = process(this.gridResult, this.state);
                 this.isLoading = false;
             }, function (err) {
-                this.loggerSvc.error("Operation failed",err,err.statusText)
+                this.loggerSvc.error("Operation failed", err, err.statusText)
             });
 
-            this.dsaService.getVistexStatuses().pipe(takeUntil(this.destroy$)).subscribe( (response)=> {
+            this.dsaService.getVistexStatuses().pipe(takeUntil(this.destroy$)).subscribe((response: string[]) => {
                 this.VistexStatuses = response;
             }, function (err) {
-                this.loggerSvc.error("Unable to get statuses of vistex",err,err.statusText);
+                this.loggerSvc.error("Unable to get statuses of vistex", err, err.statusText);
             });
         }
         else {
             this.showKendoAlert = true;
             this.kendoAlertMsg = "Please provide valid";
-            this.kendoBoldMsg =  " Start and End Date";
+            this.kendoBoldMsg = " Start and End Date";
             this.startDate = new Date(this.momentService.moment().subtract(30, 'days').format("MM/DD/YYYY"));
             this.endDate = new Date(this.momentService.moment().format("MM/DD/YYYY"));
         }
     }
 
-    editHandler({ sender, rowIndex, dataItem }) {
+    editHandler({ sender, rowIndex, dataItem }: EditEvent): void {
         this.senderGrid = sender;
         this.rowIndexValue = rowIndex;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
-            RQST_SID: new FormControl({value: dataItem.RQST_SID,disabled: true}),
+            RQST_SID: new FormControl({ value: dataItem.RQST_SID, disabled: true }),
             BTCH_ID: new FormControl({ value: dataItem.BTCH_ID, disabled: true }),
             VISTEX_HYBRID_TYPE: new FormControl({ value: dataItem.VISTEX_HYBRID_TYPE, disabled: true }),
             DEAL_ID: new FormControl({ value: dataItem.DEAL_ID, disabled: true }),
@@ -159,36 +164,36 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
             ERR_MSG: new FormControl(dataItem.ERR_MSG),
             INTRFC_RQST_DTM: new FormControl({ value: dataItem.INTRFC_RQST_DTM, disabled: true }),
             INTRFC_RSPN_DTM: new FormControl({ value: dataItem.INTRFC_RSPN_DTM, disabled: true }),
-            CRE_DTM: new FormControl({ value: dataItem.CRE_DTM, disabled: true }),    
+            CRE_DTM: new FormControl({ value: dataItem.CRE_DTM, disabled: true }),
         });
-        this.formGroup.valueChanges.subscribe(() => {     
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
-            this.isDirty=true;
+            this.isDirty = true;
         });
         this.editedRowData = dataItem;
         this.editedRowIndex = rowIndex;
         sender.editRow(rowIndex, this.formGroup);
     }
 
-    closeEditor(grid, rowIndex = this.editedRowIndex) {
-        if(grid)
+    closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex): void {
+        if (grid)
             grid.closeRow(rowIndex);
         this.editedRowIndex = undefined;
         this.formGroup = undefined;
     }
 
-    cancelHandler({ sender, rowIndex }) {
+    cancelHandler({ sender, rowIndex }: CancelEvent): void {
         this.closeEditor(sender, rowIndex);
     }
 
-    closeKendoAlert(){
+    closeKendoAlert(): void {
         this.showKendoAlert = false;
     }
 
-    SendVistexData(){
+    SendVistexData(): void {
         const RegxDealIds = new RegExp(/^[0-9,]+$/);
-        if (this.DealIds != undefined){
-                this.DealIds = this.DealIds.replace(/ /g, "");
+        if (this.DealIds != undefined) {
+            this.DealIds = this.DealIds.replace(/ /g, "");
         }
         this.IsDealIdsValid = this.DealIds != undefined && this.DealIds != '' && RegxDealIds.test(this.DealIds);
         if (this.IsDealIdsValid) {
@@ -196,81 +201,81 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
             dealIdsArray = dealIdsArray.filter(x => x.trim() != "");
             if (dealIdsArray.length > 0) {
                 this.isLoading = true;
-                this.dsaService.sendVistexData(dealIdsArray).pipe(takeUntil(this.destroy$)).subscribe((response)=> {
-                    if (response.data.length > 0) {
-                        this.gridResult = response.data;
-                        this.gridData = process(this.gridResult,this.state);
+                this.dsaService.sendVistexData(dealIdsArray).pipe(takeUntil(this.destroy$)).subscribe((response: VistexLogsInfo[]) => {
+                    if (response.length > 0) {
+                        this.gridResult = response;
+                        this.gridData = process(this.gridResult, this.state);
                         this.isLoading = false;
                         this.DealIds = "";
                         this.loggerSvc.success("Data has been sent!");
                     } else {
                         this.isLoading = false;
-                        this.loggerSvc.error("Unable to send data!","Error");
+                        this.loggerSvc.error("Unable to send data!", "Error");
                     }
-                },  (err)=> {
+                }, (err) => {
                     this.isLoading = false;
-                    this.loggerSvc.error("Unable to send data!",err.statusText);
+                    this.loggerSvc.error("Unable to send data!", err.statusText);
                 });
             } else {
-                this.loggerSvc.warn("There is no Deal ID to send!","Warning");
+                this.loggerSvc.warn("There is no Deal ID to send!", "Warning");
             }
         }
     }
 
-    saveHandler({ sender, rowIndex, formGroup}) {
+    saveHandler({ sender, rowIndex, formGroup }: SaveEvent): void {
         const selectedRow = formGroup.getRawValue();
         //check if row value is changed/updated
-        if (selectedRow.RQST_STS != this.editedRowData.RQST_STS || selectedRow.ERR_MSG != this.editedRowData.ERR_MSG) { 
-            this.UpdateVistexStatus(selectedRow.BTCH_ID,selectedRow.DEAL_ID,selectedRow.RQST_SID,selectedRow.RQST_STS,selectedRow.ERR_MSG);
+        if (selectedRow.RQST_STS != this.editedRowData.RQST_STS || selectedRow.ERR_MSG != this.editedRowData.ERR_MSG) {
+            this.UpdateVistexStatus(selectedRow.BTCH_ID, selectedRow.DEAL_ID, selectedRow.RQST_SID, selectedRow.RQST_STS, selectedRow.ERR_MSG);
         }
         sender.closeRow(rowIndex);
     }
 
-    UpdateVistexStatus(strTransantionId, dealId, rqstSid,rqstStatus,errMsg) {
-        if (errMsg == ''){
+    UpdateVistexStatus(strTransantionId: string, dealId: number, rqstSid: number, rqstStatus: string, errMsg: string): void {
+        if (errMsg == '') {
             errMsg = null;
         }
         this.spinnerMessageDescription = "Please wait while updating the status..";
         this.isLoading = true;
         //create object and pass - postDataObj
-        const postDataObj = {
-            "strTransantionId" : strTransantionId,
-            "strVistexStage" : rqstStatus, 
-            "dealId" : dealId, 
-            "strErrorMessage" : errMsg,
-            "rqstSid": rqstSid 
+        const postDataObj = <VistexResponseUpdData>{
+            "strTransantionId": strTransantionId,
+            "strVistexStage": rqstStatus,
+            "dealId": dealId,
+            "strErrorMessage": errMsg,
+            "rqstSid": rqstSid
         }
-        this.dsaService.updateVistexStatusNew(postDataObj).pipe(takeUntil(this.destroy$)).subscribe( (response)=> {
-            this.isDirty=false;
+        this.dsaService.updateVistexStatusNew(postDataObj).pipe(takeUntil(this.destroy$)).subscribe((response: string) => {
+            this.isDirty = false;
             if (response == strTransantionId) {
                 each(this.gridResult.filter(x => x.RQST_SID === rqstSid), function (dataItem) {
                     dataItem.ERR_MSG = errMsg == null ? '' : errMsg;
                     dataItem.RQST_STS = rqstStatus;
-                    dataItem.BTCH_ID = rqstStatus.toLowerCase() == 'pending' ? '00000000-0000-0000-0000-000000000000': dataItem.BTCH_ID;
-                }); 
-                this.gridData = process(this.gridResult,this.state);                 
-                this.isLoading = false;                  
+                    dataItem.BTCH_ID = rqstStatus.toLowerCase() == 'pending' ? '00000000-0000-0000-0000-000000000000' : dataItem.BTCH_ID;
+                });
+                this.gridData = process(this.gridResult, this.state);
+                this.isLoading = false;
                 this.loggerSvc.success("Status has been updated with the message");
                 this.getData();
             } else {
                 this.isLoading = false;
-                this.loggerSvc.error("Unable to update the status!","Error");
+                this.loggerSvc.error("Unable to update the status!", "Error");
             }
-        }, (response)=> {
+        }, (response) => {
             this.isLoading = false;
-            this.loggerSvc.error("Unable to update the status!",response,response.statusText);
+            this.loggerSvc.error("Unable to update the status!", response, response.statusText);
         });
     }
 
-    onRequestTypeChange(value){
-        this.isDirty=true;
-        if (value == undefined || value == null || value == ""){return;}
+    onRequestTypeChange(value: any): void {
+        this.isDirty = true;
+        if (value == undefined || value == null || value == "") { return; }
         this.selectedRequestType = value;
         this.closeEditor(this.senderGrid, this.rowIndexValue);
         this.getData();
     }
 
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
@@ -279,7 +284,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         this.getData();
     }
 
-    convertToDetailChildArray(parentDataItem) {
+    convertToDetailChildArray(parentDataItem: VistexLogsInfo): DynamicObj[] {
         return [{
             RQST_JSON_DATA: parentDataItem.RQST_JSON_DATA
         }];
@@ -289,12 +294,12 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         caseSensitive: false,
         operator: "contains",
     };
-    
+
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

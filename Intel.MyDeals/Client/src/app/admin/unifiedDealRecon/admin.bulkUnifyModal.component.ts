@@ -1,7 +1,7 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, ViewEncapsulation, Inject, OnDestroy } from "@angular/core";
-import { FileRestrictions } from "@progress/kendo-angular-upload";
+import { FileRestrictions, SuccessEvent } from "@progress/kendo-angular-upload";
 import { ThemePalette } from "@angular/material/core";
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
@@ -11,6 +11,8 @@ import { each } from 'underscore';
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { HandsonLicenseKey } from '../../shared/config/handsontable.licenseKey.config';
+import { DealReconConfigCols, DealReconInvalidRecords } from "./admin.unifiedDealRecon.model";
+import { UnifiedDealsSummary, UnifyDeal } from "../PrimeCustomers/admin.primeCustomers.model";
 
 @Component({
     selector: "bulk-unify-deals",
@@ -35,14 +37,14 @@ export class bulkUnifyModalComponent implements OnDestroy {
     public isBulkUnify = true;
     public screenTitle = "Bulk Unify - Deals";
     public fileURL = "/api/FileAttachments/GetBulkUnifyTemplateFile/BulkUnify";
-    private uploadSaveUrl: any = "/FileAttachments/ExtractBulkUnifyFile";
+    private uploadSaveUrl = "/FileAttachments/ExtractBulkUnifyFile";
     private hotRegisterer = new HotTableRegisterer();
     private hotId = "spreadsheet";
     private hotTable: Handsontable;
     private files: any = [];
-    private uploadSuccess: boolean = false;
-    private isAlert: boolean = false;
-    private alertMsg: string = "";
+    private uploadSuccess = false;
+    private isAlert = false;
+    private alertMsg = "";
     private inValidUnifyDeals = [];
     private validUnifyDeals: any = [];
     private UnifyValidation: any;
@@ -66,7 +68,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
         allowedExtensions: ["xlsx"],
     };
 
-    successEventHandler(e) {
+    successEventHandler(e: SuccessEvent): void {
         this.uploadSuccess = true;
         this.hotSettings.colHeaders = this.getColHeaders();
         this.hotSettings.columns = this.getColumns();
@@ -91,7 +93,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
         }
     }
 
-    generateTableData() {
+    generateTableData(): void {
         this.tableData = [];
         //for Bulk unify files
         if (this.isBulkUnify) {
@@ -131,16 +133,16 @@ export class bulkUnifyModalComponent implements OnDestroy {
 
     }
 
-    setErrorCell(rowInd, colInd) {//setting error cell
+    setErrorCell(rowInd: number, colInd: number): void {//setting error cell
         this.hotTable.setCellMetaObject(rowInd, colInd, { 'className': 'error-product error-cell', comment: { value: '' } });
     }
 
-    validateDealRecon() {
-        let rowMsgs = [];
+    validateDealRecon(): void {
+        const rowMsgs = [];
         if (this.dealReconValidationSummary.inValidRecords.length > 0 && !this.dealReconBackendValidation) {
             for (let i = 0; i < this.dealReconValidationSummary.inValidRecords.length; i++) {
                 let alertMsg = "";
-                let mandatory = [];
+                const mandatory = [];
                 //for finding empty or invalid cells
                 if (this.dealReconValidationSummary.inValidRecords[i].Deal_ID == "0") {
                     mandatory.push("Deal ID");
@@ -326,7 +328,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                 var RPLStsCodepattern = new RegExp("^[A-Za-z\\s,]*$");
                 var isValidRPLSTSCode = RPLStsCodepattern.test(this.dealReconValidationSummary.inValidRecords[i].Rpl_Status_Code);
                 if (!isValidRPLSTSCode) {
-                    alertMsg = alertMsg + '•' +"The RPL Status code contains invalid characters. Please remove spaces and special characters." + '\n';
+                    alertMsg = alertMsg + '•' + "The RPL Status code contains invalid characters. Please remove spaces and special characters." + '\n';
                     this.setErrorCell(i, 9);//rpl status error
                 }
                 else if (this.dealReconValidationSummary.invalidRplStatusCodes && this.dealReconValidationSummary.invalidRplStatusCodes.length > 0) {
@@ -339,7 +341,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                 if (alertMsg != '') {
                     //setting the error messages in error messages cell in hottable
                     this.hotTable.setDataAtCell(i, 10, alertMsg);
-                    let alert = alertMsg.split("\n");//for setting error messages in kendo dialog
+                    const alert = alertMsg.split("\n");//for setting error messages in kendo dialog
                     alert.forEach((row) => {
                         //to remove duplicate and empty messages from displaying in kendo dialog box (revisit the logic - need to modify .split("\n"))
                         if (row != '' && !(rowMsgs.includes(row)))
@@ -369,9 +371,9 @@ export class bulkUnifyModalComponent implements OnDestroy {
         }
     }
 
-    updateDealRecon() {
+    updateDealRecon(): void {
         //dealrecon updation
-        this.unifiedDealSvc.updateDealRecon(this.dealReconValidationSummary.validRecords).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+        this.unifiedDealSvc.updateDealRecon(this.dealReconValidationSummary.validRecords).pipe(takeUntil(this.destroy$)).subscribe((response: DealReconInvalidRecords[]) => {
             if (response == null || response.length == 0) {
                 this.isAlert = true;
                 this.alertMsg = "Updated Successfully"
@@ -400,21 +402,21 @@ export class bulkUnifyModalComponent implements OnDestroy {
                 })
                 this.generateTableData();
             }
-        }, (response) => {
+        }, () => {
             this.loggerSvc.error('Operation failed', '');
         });
 
     }
 
-    ValidateUnifyDeals() {
+    ValidateUnifyDeals(): void {
         //On click of save and validate button
         if (this.isBulkUnify) {
-            let data = []
+            const data: UnifyDeal[] = []
             this.tableData.forEach((row, rowInd) => {
                 for (let i = 0; i < ExcelColumnsConfig.bulkUnifyColumns.length; i++)//removing all the cell comments 
                     this.hotTable.setCellMetaObject(rowInd, i, { 'className': 'normal-cell', comment: { value: '' } });
                 if (!(row.DEAL_END_CUSTOMER_COUNTRY == null && row.DEAL_END_CUSTOMER_RETAIL == null && row.DEAL_ID == null && row.UCD_GLOBAL_ID == null
-                    && row.RPL_STS_CODE == null && row.UCD_COUNTRY  == null  && row.UCD_GLOBAL_NAME == null))
+                    && row.RPL_STS_CODE == null && row.UCD_COUNTRY == null && row.UCD_GLOBAL_NAME == null))
                     data.push(row);
             
             })
@@ -423,7 +425,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                 this.unifiedDealSvc.ValidateUnifyDeals(data).pipe(takeUntil(this.destroy$)).subscribe((response) => {
                     this.UnifyValidation = response;
                     this.generateTableData();
-                }, (response) => {
+                }, () => {
                     this.loggerSvc.error('Operation failed', '');
                 });
             } else {
@@ -441,7 +443,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                 this.unifiedDealSvc.ValidateDealReconRecords(this.dealReconValidationSummary.inValidRecords).pipe(takeUntil(this.destroy$)).subscribe((response) => {
                     this.dealReconValidationSummary = response;
                     this.generateTableData();
-                }, (response) => {
+                }, () => {
                     this.loggerSvc.error('Operation failed', '');
                 });
             } else {
@@ -449,18 +451,18 @@ export class bulkUnifyModalComponent implements OnDestroy {
                 this.alertMsg = "There is no data to validate";
             }
         }
-    };
+    }
 
 
-    validateBulkData() {
+    validateBulkData(): void {
         //validation for bulk unify files
-        let rowMsgs = [];
+        const rowMsgs = [];
         this.validUnifyDeals = this.UnifyValidation.ValidUnifyDeals;
         this.inValidUnifyDeals = this.UnifyValidation.InValidUnifyDeals;
         if (this.inValidUnifyDeals.length > 0) {
             for (let i = 0; i < this.inValidUnifyDeals.length; i++) {
                 let alertMsg = "";
-                let mandatory = [];
+                const mandatory = [];
                 if (this.UnifyValidation.IsEmptyDealAvailable) {
                     if (this.inValidUnifyDeals[i].DEAL_ID == "0") {
                         mandatory.push("Deal ID");
@@ -507,7 +509,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                     alertMsg += '•' + mandatory.join(", ") + " is a mandatory field" + '\n';
 
                 }
-                let validRows = this.inValidUnifyDeals.filter(x => x.DEAL_ID != 0 && x.UCD_GLOBAL_ID != 0 && x.UCD_GLOBAL_NAME != "" && x.UCD_COUNTRY_CUST_ID != 0 && x.UCD_COUNTRY != "");
+                const validRows = this.inValidUnifyDeals.filter(x => x.DEAL_ID != 0 && x.UCD_GLOBAL_ID != 0 && x.UCD_GLOBAL_NAME != "" && x.UCD_COUNTRY_CUST_ID != 0 && x.UCD_COUNTRY != "");
 
                 if (this.UnifyValidation.DuplicateDealCombination.length > 0) {
                     if (this.UnifyValidation.DuplicateDealCombination.includes(this.inValidUnifyDeals[i].DEAL_ID)
@@ -553,8 +555,8 @@ export class bulkUnifyModalComponent implements OnDestroy {
                         alertMsg += '•' + "NULL cannot be used as Unified Customer Name" + '\n';
                         this.setErrorCell(i, 2);
                     }
-                    let patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
-                    let res = patt.test(this.inValidUnifyDeals[i].UCD_GLOBAL_NAME);
+                    const patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
+                    const res = patt.test(this.inValidUnifyDeals[i].UCD_GLOBAL_NAME);
                     if (!res) {
                         alertMsg += '•' + "Unified Customer Name contains invalid characters" + '\n';
                         this.setErrorCell(i, 2);
@@ -583,7 +585,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                 }
 
                 if (this.UnifyValidation.UnifiedCombination.length > 0) {
-                    let index = this.UnifyValidation.UnifiedCombination.findIndex((x) => x.DEAL_ID == this.inValidUnifyDeals[i].DEAL_ID && x.DEAL_END_CUSTOMER_RETAIL == this.inValidUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL
+                    const index = this.UnifyValidation.UnifiedCombination.findIndex((x) => x.DEAL_ID == this.inValidUnifyDeals[i].DEAL_ID && x.DEAL_END_CUSTOMER_RETAIL == this.inValidUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL
                         && x.DEAL_END_CUSTOMER_COUNTRY == this.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY);
 
                     if (index > -1) {
@@ -616,7 +618,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                 }
 
                 if (this.UnifyValidation.InValidCombination.length > 0) {
-                    let index = this.UnifyValidation.InValidCombination.findIndex((x) => x.DEAL_ID == this.inValidUnifyDeals[i].DEAL_ID && x.DEAL_END_CUSTOMER_RETAIL == this.inValidUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL
+                    const index = this.UnifyValidation.InValidCombination.findIndex((x) => x.DEAL_ID == this.inValidUnifyDeals[i].DEAL_ID && x.DEAL_END_CUSTOMER_RETAIL == this.inValidUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL
                         && x.DEAL_END_CUSTOMER_COUNTRY == this.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY);
 
                     if (index > -1) {
@@ -625,8 +627,8 @@ export class bulkUnifyModalComponent implements OnDestroy {
                         this.setErrorCell(i, 6);
                     }
                 }
-                let RPLStsCodepattern = new RegExp("^[A-Za-z\\s,]*$");
-                let isValidRPLSTSCode = RPLStsCodepattern.test(this.inValidUnifyDeals[i].RPL_STS_CODE);
+                const RPLStsCodepattern = new RegExp("^[A-Za-z\\s,]*$");
+                const isValidRPLSTSCode = RPLStsCodepattern.test(this.inValidUnifyDeals[i].RPL_STS_CODE);
                 if (!isValidRPLSTSCode) {
                     alertMsg += '•' + "The RPL Status code contains invalid characters. Please remove spaces and special characters." + '\n';
                     this.setErrorCell(i, 7);
@@ -640,7 +642,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                 if (alertMsg != '') {
                     //setting alert message in hottable column
                     this.hotTable.setDataAtCell(i, 8, alertMsg);
-                    let alert = alertMsg.split("\n");
+                    const alert = alertMsg.split("\n");
                     alert.forEach((row) => {
                         // removing duplicates for kendo alert(revisit the logic - need to modify .split("\n"))
                         if (row != '' && !(rowMsgs.includes(row)))
@@ -667,25 +669,25 @@ export class bulkUnifyModalComponent implements OnDestroy {
         }
     }
 
-    updateBulkUnify() {
+    updateBulkUnify(): void {
         //updation fn
-        this.unifiedDealSvc.updateBulkUnifyDeals(this.UnifyValidation.ValidUnifyDeals).pipe(takeUntil(this.destroy$)).subscribe((response) => {
-            let data = response;
+        this.unifiedDealSvc.updateBulkUnifyDeals(this.UnifyValidation.ValidUnifyDeals).pipe(takeUntil(this.destroy$)).subscribe((response: UnifiedDealsSummary[]) => {
+            const data = response;
             this.unifiedVal = data.length;
             let alertMsg;
             if (data != null && data != undefined) {
-                let warningmsg = " deal(s) got Unified. Please make ensure all other deals associated to the same pricing table having same End customer Combination"
-                let ecapdealdata = data.filter(x => x.COMMENTS == "ECAP Hybrid Deal(s)");
+                const warningmsg = " deal(s) got Unified. Please make ensure all other deals associated to the same pricing table having same End customer Combination"
+                const ecapdealdata = data.filter(x => x.COMMENTS == "ECAP Hybrid Deal(s)");
                 if (ecapdealdata != undefined && ecapdealdata.length > 0) {
                     this.isAlert = true;
                     this.alertMsg = "Following ECAP hybrid " + ecapdealdata[0].Deal_No + warningmsg;
                 }
-                let hybDealdata = data.filter(x => x.COMMENTS == "Voltier Hybrid Deal(s)");
+                const hybDealdata = data.filter(x => x.COMMENTS == "Voltier Hybrid Deal(s)");
                 if (hybDealdata != undefined && hybDealdata.length > 0) {
                     this.isAlert = true;
                     this.alertMsg = "Following Vol_Tier hybrid " + hybDealdata[0].Deal_No + warningmsg;
                 }
-                let dealsHasErrors = data.filter(x => x.COMMENTS == "Deal(s) Cannot be Unified");
+                const dealsHasErrors = data.filter(x => x.COMMENTS == "Deal(s) Cannot be Unified");
                 if (data[0].COMMENTS == "Bulk Unified Deal(s)" && dealsHasErrors != undefined && dealsHasErrors.length == 0) {
                     if (data[0].COMMENTS == "Bulk Unified Deal(s)") {
                         alertMsg = "<b>" + data[0].No_Of_Deals + " Deal(s) are successfully unified</b><br/>"
@@ -722,12 +724,12 @@ export class bulkUnifyModalComponent implements OnDestroy {
             this.validUnifyDeals = [];
             this.inValidUnifyDeals = [];
             if (!this.isAlert) this.closeWindow();
-        }, (response) => {
+        }, () => {
             this.loggerSvc.error('Operation failed', '');
         })
     }
 
-    getColHeaders() {// for getting column headers from config file
+    getColHeaders(): string[] {// for getting column headers from config file
         if (this.isBulkUnify)
             return ExcelColumnsConfig.bulkUnifyColHeaders;
         else {
@@ -735,7 +737,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
         }
     }
 
-    getColumns() {// for getting column meta-data from config file
+    getColumns(): DealReconConfigCols[] {// for getting column meta-data from config file
         if (this.isBulkUnify)
             return ExcelColumnsConfig.bulkUnifyColumns;
         else {
@@ -743,29 +745,29 @@ export class bulkUnifyModalComponent implements OnDestroy {
         }
     }
 
-    onFileUploadError() {
+    onFileUploadError(): void {
         this.files = [];
         this.loggerSvc.error("Unable to upload " + this.files.length + " attachment(s).", "Upload failed");
     }
 
 
-    closeWindow() {
+    closeWindow(): void {
         this.dialogRef.close();
     }
 
-    uploadFile(e) {
-        let element = document.getElementsByClassName('k-upload-selected') as HTMLCollectionOf<HTMLElement>;
+    uploadFile(): void {
+        const element = document.getElementsByClassName('k-upload-selected') as HTMLCollectionOf<HTMLElement>;
         if (element && element.length > 0)
             element[0].click();
     }
 
-    onFileUploadComplete() {
+    onFileUploadComplete(): void {
         if (this.uploadSuccess) {
             this.loggerSvc.success("Successfully uploaded " + this.files.length + " attachment(s).", "Upload successful");
         }
     }
 
-    closeAlert() {
+    closeAlert(): void {
         this.isAlert = false;
         if (this.unifiedVal > 0) {
             this.closeWindow();
@@ -774,7 +776,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
         }
     }
 
-    toggleType(change) {//on toggle change - changing the api for bulk unify and deal recon
+    toggleType(change: boolean): void {//on toggle change - changing the api for bulk unify and deal recon
         this.isBulkUnify = change;
         if (this.isBulkUnify) {
             this.fileURL = "/api/FileAttachments/GetBulkUnifyTemplateFile/BulkUnify";
@@ -788,12 +790,12 @@ export class bulkUnifyModalComponent implements OnDestroy {
         }
     }
 
-    ok() {
+    ok(): void {
         this.dialogRef.close();
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

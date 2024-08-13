@@ -1,7 +1,7 @@
 export class Cust_Map {
     public ACTV_IND: boolean;
     public ATRB_LKUP_DESC:string;
-    public ATRB_LKUP_SID:number;
+	public ATRB_LKUP_SID: any;
     public ATRB_SID:number;
     public BUSNS_ORG_NM:string;
     public CTRY_CD:string;

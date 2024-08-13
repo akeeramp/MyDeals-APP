@@ -5,33 +5,30 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import {
     GridDataResult,
-    DataStateChangeEvent,
-    PageSizeItem,
+    DataStateChangeEvent
 } from "@progress/kendo-angular-grid";
 import {
     process,
-    State,
-    distinct
+    State
 } from "@progress/kendo-data-query";
+import { DownloadQuoteLetterData } from "./admin.quoteLetter.model";
 
 @Component({
     selector: "admin-regeratequoteletter",
     templateUrl: "Client/src/app/admin/quoteLetter/admin.quoteLetterRegeneration.component.html",
     styleUrls: ['Client/src/app/admin/quoteLetter/admin.quoteLetterRegeneration.component.css']
-   
-
 })
 
-export class QuoteLetterRegenerationComponent implements OnDestroy{
+export class QuoteLetterRegenerationComponent implements OnDestroy {
     constructor(private quoteLetterSvc: quoteLetterService, private loggerSvc: logger) { }
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
-    private gridResult: Array<any>;
+    private gridResult: Array<DownloadQuoteLetterData>;
     private gridData: GridDataResult;
     private responseData = [];
     private isLoading = false;
-    private dealId: string = '';
-    private validateDealId: boolean = true;
+    private dealId = '';
+    private validateDealId = true;
     private state: State = {
         skip: 0,
         take: 25,
@@ -43,7 +40,7 @@ export class QuoteLetterRegenerationComponent implements OnDestroy{
         },
     };
     submit() {
-        var dealId = document.getElementById("dealId") as HTMLElement
+        // var dealId = document.getElementById("dealId") as HTMLElement
         if (this.dealId == '') {
             
             this.validateDealID();
@@ -52,7 +49,7 @@ export class QuoteLetterRegenerationComponent implements OnDestroy{
         
         if (this.validateDealId && this.dealId != '') {
             this.isLoading = true;
-            this.quoteLetterSvc.regenerateQuoteLetter(this.dealId).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
+            this.quoteLetterSvc.regenerateQuoteLetter(this.dealId).pipe(takeUntil(this.destroy$)).subscribe((result: DownloadQuoteLetterData[]) => {
 
                 if (result) {
                     this.isLoading = false;
@@ -76,7 +73,7 @@ export class QuoteLetterRegenerationComponent implements OnDestroy{
         this.gridData = process(this.gridResult, this.state);
     }
     validateDealID() {
-        let exactMatch = new RegExp("^[0-9]+(,[0-9]+)*$");
+        const exactMatch = new RegExp("^[0-9]+(,[0-9]+)*$");
         if (!exactMatch.test(this.dealId)) {
 
             this.validateDealId = false;
@@ -86,7 +83,7 @@ export class QuoteLetterRegenerationComponent implements OnDestroy{
         }
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

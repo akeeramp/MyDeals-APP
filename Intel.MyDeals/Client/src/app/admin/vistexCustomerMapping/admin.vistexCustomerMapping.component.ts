@@ -3,7 +3,7 @@ import { vistexCustomerMappingService } from "./admin.vistexCustomerMapping.serv
 import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { Vistex_Cust_Map } from "./admin.vistexCustomerMapping.model";
 import { ThemePalette } from "@angular/material/core";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, GridComponent, CancelEvent, SaveEvent, EditEvent } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
@@ -11,6 +11,8 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { UiDropdownResponseItem } from "../dropdowns/admin.dropdowns.model";
+import { Cust_Map } from "../CustomerVendors/admin.customerVendors.model";
 
 @Component({
     selector: 'admin-vistex-customer-mapping',
@@ -36,13 +38,13 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
     private gridOptions;
     private allowCustom = true;
     private color: ThemePalette = "primary";
-    public gridResult = [];
+    public gridResult: Vistex_Cust_Map[] = [];
     public type = "numeric";
     public info = true;
     public formGroup: FormGroup;
     public isFormChange = false;
     private editedRowIndex: number;
-    public PeriodProfile = [];
+    public PeriodProfile: UiDropdownResponseItem[] = [];
     public ARSettlementLevel = [];
     public TenderARSettlementLevel = [];
     public ARSettlementLevelData = [];
@@ -88,7 +90,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
 
     public gridData: GridDataResult;
 
-    distinctPrimitive(fieldName: string) {
+    distinctPrimitive(fieldName: string): string[] {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
 
@@ -97,7 +99,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
+        const excelState: State = {};
         Object.assign(excelState, this.state)
         excelState.take = this.gridResult.length;
 
@@ -108,7 +110,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
         return result;
     }
 
-    clearFilter() {
+    clearFilter(): void {
         this.state.filter = {
             logic: "and",
             filters: [],
@@ -116,10 +118,10 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
         this.gridData = process(this.gridResult, this.state);
     }
 
-    InitiateDropDowns(formGroup) {
+    InitiateDropDowns(formGroup: FormGroup): void {
         this.customerMapSvc.getDropdown('GetDropdowns/PERIOD_PROFILE')
             .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<any>) => {
+            .subscribe((response: Array<UiDropdownResponseItem>) => {
                 this.PeriodProfile = response;
                 this.PeriodProfileData = response.filter(x => x.CUST_MBR_SID == formGroup.value.CUST_MBR_SID || x.CUST_MBR_SID == 1).map(item => item.DROP_DOWN);
             }, function (response) {
@@ -127,7 +129,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
             });
         this.customerMapSvc.getDropdown('GetDropdownsWithInactives/AR_SETTLEMENT_LVL')
             .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<any>) => {
+            .subscribe((response: Array<UiDropdownResponseItem>) => {
                 this.ARSettlementLevel = response.map(item => item.DROP_DOWN);
                 this.TenderARSettlementLevel = response.filter(x => x.ACTV_IND == true).map(item => item.DROP_DOWN);
                 this.ARSettlementLevelData = response;
@@ -137,7 +139,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
             });
         this.customerMapSvc.getVendorDropDown('GetCustomerVendors/0')
             .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<any>) => {
+            .subscribe((response: Array<Cust_Map>) => {
                 this.SettlementPartnerData = response.filter(x => x.CUST_MBR_SID == formGroup.value.CUST_MBR_SID && x.ACTV_IND == true);
                 this.SettlementPartner = distinct(this.SettlementPartnerData, "BUSNS_ORG_NM").map(
                     item => (item.BUSNS_ORG_NM + " - " + item.VNDR_ID));
@@ -146,10 +148,10 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
             });
     }
 
-    loadCustomerMapping() {
+    loadCustomerMapping(): void {
         this.isLoading = true;
         this.customerMapSvc.getVistexCustomersMapList().pipe(takeUntil(this.destroy$)).subscribe(
-            (result: Array<any>) => {
+            (result: Array<Vistex_Cust_Map>) => {
                 this.gridResult = result;
                 this.gridData = process(this.gridResult, this.state);
                 this.isLoading = false;
@@ -165,7 +167,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
             }
         );
     }
-    IsValidCustomerMapping(model) {
+    IsValidCustomerMapping(model: Vistex_Cust_Map): boolean {
         let retCond = false;
 
         if (model.VISTEX_CUST_FLAG && (model.DFLT_PERD_PRFL == null || model.DFLT_PERD_PRFL == '')) {
@@ -196,14 +198,14 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
         this.gridData = process(this.gridResult, this.state);
     }
 
-    closeEditor(grid, rowIndex = this.editedRowIndex) {
+    closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex): void {
         grid.closeRow(rowIndex);
         this.editedRowIndex = undefined;
         this.formGroup = undefined;
     }
 
-    editHandler({ sender, rowIndex, dataItem }) {
-        this.isDirty=true;
+    editHandler({ sender, rowIndex, dataItem }: EditEvent): void {
+        this.isDirty = true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -227,13 +229,13 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
         sender.editRow(rowIndex, this.formGroup);
     }
 
-    cancelHandler({ sender, rowIndex }) {
+    cancelHandler({ sender, rowIndex }: CancelEvent): void {
         this.closeEditor(sender, rowIndex);
     }
-    saveConfirmation() {
+    saveConfirmation(): void {
         this.isCombExists = false;
     }
-    saveHandler({ sender, rowIndex, formGroup }) {
+    saveHandler({ sender, rowIndex, formGroup }: SaveEvent): void {
         const cust_map: Vistex_Cust_Map = formGroup.getRawValue();
         this.errorMsg = [];
 
@@ -248,7 +250,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
                 this.isLoading = true;
                 this.customerMapSvc.UpdateVistexCustomer(cust_map).pipe(takeUntil(this.destroy$)).subscribe(
                     () => {
-                        this.isDirty=true;
+                        this.isDirty = true;
                         this.gridResult[rowIndex] = cust_map;
                         this.gridResult.push(cust_map);
                         this.loadCustomerMapping();
@@ -263,7 +265,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
         }
         sender.closeRow(rowIndex);
     }
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
@@ -271,17 +273,17 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
         };
         this.loadCustomerMapping()
     }
-    
+
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.loadCustomerMapping();
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

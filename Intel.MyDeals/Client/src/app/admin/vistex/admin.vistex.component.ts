@@ -2,8 +2,8 @@
 import { dsaService } from "./admin.vistex.service";
 import { Component, OnDestroy } from "@angular/core";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
-import { MomentService } from "../../shared/moment/moment.service"; 
-import { Observable,Subject } from "rxjs";
+import { MomentService } from "../../shared/moment/moment.service";
+import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
@@ -12,7 +12,7 @@ import { takeUntil } from "rxjs/operators";
     styleUrls: ['Client/src/app/admin/vistex/admin.vistex.component.css']
 })
 
-export class adminVistexComponent implements PendingChangesGuard,OnDestroy{
+export class adminVistexComponent implements PendingChangesGuard, OnDestroy {
 
     constructor(private loggerSvc: logger, private dsaService: dsaService, private momentService: MomentService) { }
 
@@ -66,12 +66,12 @@ export class adminVistexComponent implements PendingChangesGuard,OnDestroy{
         "N": 'GetVistexDealOutBoundData'
     };
 
-    vistexApiNameChange(value) {
+    vistexApiNameChange(value: string): void {
         this.apiSelectedCD = value;
     }
 
     //run API
-    runApi() {
+    runApi(): void {
         if (this.selectedApiCD == "") {
             this.loggerSvc.info('Please select an API to run Simulator...', "");
         }
@@ -81,13 +81,13 @@ export class adminVistexComponent implements PendingChangesGuard,OnDestroy{
     }
 
     //Call the API
-    callAPI(mode) {
+    callAPI(mode: string): void {
         this.isLoading = true;
         const startTime = this.momentService.moment(new Date()).format('YYYY-MM-DD HH:mm:ss UTC');
 
-        this.dsaService.callAPI(this.apiPair[this.selectedApiCD], mode).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
+        this.dsaService.callAPI(this.apiPair[this.selectedApiCD], mode).pipe(takeUntil(this.destroy$)).subscribe((result) => {
             this.isLoading = false;
-            this.isDirty=false;
+            this.isDirty = false;
             if (this.selectedApiCD == "R" || this.selectedApiCD == "T") {
                 if (result) {
                     this.loggerSvc.success('Transaction was successful...');
@@ -108,15 +108,15 @@ export class adminVistexComponent implements PendingChangesGuard,OnDestroy{
     }
 
 
-    valuechange(){
-        this.isDirty=true;
+    valuechange(): void {
+        this.isDirty = true;
     }
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

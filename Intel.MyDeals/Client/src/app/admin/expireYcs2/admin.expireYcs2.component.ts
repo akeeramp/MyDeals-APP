@@ -5,32 +5,31 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import {
     GridDataResult,
-    DataStateChangeEvent,
-    PageSizeItem,
+    DataStateChangeEvent
 } from "@progress/kendo-angular-grid";
 import {
     process,
-    State,
-    distinct
+    State
 } from "@progress/kendo-data-query";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { DownloadExpireYcs2Data } from "./admin.expireYcs2.model";
 
 @Component({
     selector: "admin-expireycs2",
     templateUrl: "Client/src/app/admin/expireYcs2/admin.expireYcs2.component.html",
     styleUrls: ['Client/src/app/admin/expireYcs2/admin.expireYcs2.component.css']
-   
+
 
 })
 
-export class ExpireYcs2Component implements OnInit,OnDestroy{    
-    constructor(private expireYcs2Svc: expireYcs2Service, private loggerSvc: logger,private formBuilder: FormBuilder) { }
+export class ExpireYcs2Component implements OnInit, OnDestroy {
+    constructor(private expireYcs2Svc: expireYcs2Service, private loggerSvc: logger, private formBuilder: FormBuilder) { }
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
-    private gridResult: Array<any>;
+    private gridResult: Array<DownloadExpireYcs2Data>;
     private gridData: GridDataResult;
     private responseData = [];
-    private isLoading = false;        
+    private isLoading = false;
     private expireYCS2Form: FormGroup;
     private state: State = {
         skip: 0,
@@ -42,26 +41,26 @@ export class ExpireYcs2Component implements OnInit,OnDestroy{
             filters: [],
         },
     };
-     //get method for easy access to the form fields.
+    //get method for easy access to the form fields.
     get formData() { return this.expireYCS2Form.controls; }
-    submit() {                            
+    submit(): void {
         this.expireYCS2Form.patchValue({
             //below line of code removes if any whitespaces or consecutives commas present in the user input
             DEAL_IDS: this.expireYCS2Form.value.DEAL_IDS.replace(/\s/g, '').split(',').filter(x => x).join(',')
         });
         if (this.expireYCS2Form.invalid) {
-            this.loggerSvc.warn("Please fix validation errors","Validation error");                        
+            this.loggerSvc.warn("Please fix validation errors", "Validation error");
             return;
         }
         if (this.expireYCS2Form.valid) {
             this.isLoading = true;
-            this.expireYcs2Svc.expireYcs2(this.expireYCS2Form.value).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
+            this.expireYcs2Svc.expireYcs2(this.expireYCS2Form.value).pipe(takeUntil(this.destroy$)).subscribe((result: DownloadExpireYcs2Data[]) => {
                 if (result) {
                     this.isLoading = false;
                     this.gridResult = result;
                     this.gridData = process(result, this.state);
                     this.responseData.unshift(result);
-                    this.loggerSvc.success("YCS2 is expired successfully for the valid deals.");                                        
+                    this.loggerSvc.success("YCS2 is expired successfully for the valid deals.");
                 } else {
                     this.loggerSvc.error('DANG!! Something went wrong...', '');
                 }
@@ -75,14 +74,14 @@ export class ExpireYcs2Component implements OnInit,OnDestroy{
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
-    }    
-    ngOnInit(){
+    }
+    ngOnInit(): void {
         this.expireYCS2Form = this.formBuilder.group({
-            DEAL_IDS : ["", Validators.required]
+            DEAL_IDS: ["", Validators.required]
         });
-    }    
+    }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

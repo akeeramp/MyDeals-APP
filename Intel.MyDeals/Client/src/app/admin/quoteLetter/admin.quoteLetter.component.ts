@@ -5,6 +5,7 @@ import { saveAs } from 'file-saver';
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { AdminQuoteLetter } from "./admin.quoteLetter.model";
 
 @Component({
     selector: "quote-letter",
@@ -24,45 +25,45 @@ export class QuoteLetterComponent implements PendingChangesGuard, OnDestroy {
 
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
-    private menuItems: Array<any> = [];
-    private menuItemsTemplate: Array<any> = [];
+    private menuItems: Array<AdminQuoteLetter> = [];
+    private menuItemsTemplate: Array<string> = [];
     private isDropdownsLoaded = false;
-    private selectedTemplate: any = null;
+    private selectedTemplate: AdminQuoteLetter = null;
     private headerInfo = "";
     private bodyInfo = "";
 
-    loadAdminTemplate() {
+    loadAdminTemplate(): void {
         this.isLoading = 'false';
         this.quoteLetterSvc.adminGetTemplates()
             .pipe(takeUntil(this.destroy$))
-            .subscribe(response => {
+            .subscribe((response: AdminQuoteLetter[]) => {
                 this.menuItems = [];
                 for (let d = 0; d < response.length; d++) {
                     if (response[d]["OBJ_SET_TYPE_CD"] !== "KIT" || response[d]["PROGRAM_PAYMENT"] !== "FRONTEND") {
                         this.menuItems.push(response[d]);
                     }
                 }
-        
+
                 // For all menu items, set MenuText by concat OBJ_SET_TYPE_CD and PROGRAM_PAYMEN .
                 for (let i = 0; i < this.menuItems.length; i++) {
                     this.menuItems[i].MenuText = this.menuItems[i].OBJ_SET_TYPE_CD + "-" + this.menuItems[i].PROGRAM_PAYMENT;
                     this.menuItemsTemplate.push(this.menuItems[i].MenuText);
                 }
                 this.isDropdownsLoaded = true;
-        
+
             }, function (response) {
                 this.loggerSvc.error("Unable to get template data.", response, response.statusText);
             });
-            
+
     }
 
-    onTemplateChange(selectedItem) {
-        this.isDirty=true;
+    onTemplateChange(selectedItem: AdminQuoteLetter): void {
+        this.isDirty = true;
         this.headerInfo = selectedItem.HDR_INFO;
         this.bodyInfo = selectedItem.BODY_INFO;
     }
 
-    onSaveChangesClick() {
+    onSaveChangesClick(): void {
         this.selectedTemplate.HDR_INFO = this.headerInfo;
         this.selectedTemplate.BODY_INFO = this.bodyInfo;
         this.quoteLetterSvc.adminSaveTemplate(this.selectedTemplate)
@@ -79,11 +80,11 @@ export class QuoteLetterComponent implements PendingChangesGuard, OnDestroy {
 
                 this.loggerSvc.success("Saved " + this.menuItems[selectedItemIndex].MenuText + " content.");
             }, function (response) {
-                    this.loggerSvc.error("Unable to save changes.", response, response.statusText);
+                this.loggerSvc.error("Unable to save changes.", response, response.statusText);
             });
     }
 
-    onGeneratePreviewClick() {
+    onGeneratePreviewClick(): void {
         this.selectedTemplate.HDR_INFO = this.headerInfo;
         this.selectedTemplate.BODY_INFO = this.bodyInfo;
         this.quoteLetterSvc.adminPreviewQuoteLetterTemplate(this.selectedTemplate)
@@ -94,22 +95,22 @@ export class QuoteLetterComponent implements PendingChangesGuard, OnDestroy {
                 saveAs(response.body, filename);
 
                 this.loggerSvc.success("Successfully generated quote letter preview.");
-                
+
             }, function (response) {
                 this.loggerSvc.error("Unable to generate quote letter preview.", response, response.statusText);
             });
-           
-    }  
+
+    }
 
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
     }
-    
-    ngOnInit() {
+
+    ngOnInit(): void {
         this.loadAdminTemplate();
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

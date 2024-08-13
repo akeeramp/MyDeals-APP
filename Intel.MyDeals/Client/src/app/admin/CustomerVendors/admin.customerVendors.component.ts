@@ -1,13 +1,18 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { customerVendorService } from "./admin.customerVendors.service";
 import { Component, ViewChild, OnDestroy } from "@angular/core";
-import { Cust_Map } from "./admin.customerVendors.model";
+import { Cust_Dropdown_Map, Cust_Map, Vendor_Map } from "./admin.customerVendors.model";
 import { ThemePalette } from "@angular/material/core";
 import { sortBy, uniq, pluck, findWhere, indexOf } from 'underscore';
 import {
     GridDataResult,
     DataStateChangeEvent,
     PageSizeItem,
+    AddEvent,
+    EditEvent,
+    CancelEvent,
+    SaveEvent,
+    GridComponent
 } from "@progress/kendo-angular-grid";
 import {
     process,
@@ -40,7 +45,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
     private isLoading = true;
     private errorMsg = "";
     private isCombExists = false;
-    private custsDataSource: any[] = [];
+    /*private custsDataSource: any[] = [];
     private vendorsNamesinfo: any[] = [];
     private vendorsNamesId: any[] = [];
     private selectedCUST_MBR_SID = 1;
@@ -54,21 +59,21 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
     private vendorsIdsOptions: any;
     private gridOptions: any;
     private allowCustom = true;
-    private color: ThemePalette = "primary";
+    private color: ThemePalette = "primary";*/
 
-    public gridResult: Array<any>;
+    public gridResult: Array<Cust_Map>;
     public type = "numeric";
     public info = true;
-    public distinctPartner: Array<any>;
-    public distinctCust: Array<any>;
-    public custData: Array<any>;
-    public distinctCountry: Array<any>;
-    public distinctPartId: Array<any>;
-    public vendorDetails: Array<any>;
+    public distinctPartner: Array<string>;
+    public distinctCust: Array<string>;
+    public custData: Array<Cust_Dropdown_Map>;
+    public distinctCountry: Array<string>;
+    public distinctPartId: Array<number>;
+    public vendorDetails: Array<Vendor_Map>;
     public formGroup: FormGroup;
     public isFormChange = false;
     private editedRowIndex: number;
-    public virtual: any = { itemHeight: 28 };
+    public virtual = { itemHeight: 28 };
     public state: State = {
         skip: 0,
         take: 25,
@@ -104,7 +109,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
 
     public gridData: GridDataResult;
 
-    distinctPrimitive(fieldName: string): any {
+    distinctPrimitive(fieldName: string): Array<string> {
         if (fieldName == 'CUST_NM') {
             return sortBy(uniq(pluck(this.gridResult, fieldName)));
         } else if (fieldName == 'BUSNS_ORG_NM') {
@@ -118,7 +123,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
+        const excelState: State = {};
         Object.assign(excelState, this.state)
         excelState.take = this.gridResult.length;
 
@@ -129,17 +134,17 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
         return result;
     }
 
-    clearFilter() {
+    clearFilter(): void {
         this.state.filter = {
             logic: "and",
             filters: [],
         };
         this.gridData = process(this.gridResult, this.state);
     }
-    getCustomersDataSource() {
+    getCustomersDataSource(): void {
         this.customerVendSvc.getCustomerDropdowns()
             .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<any>) => {
+            .subscribe((response: Array<Cust_Dropdown_Map>) => {
                 this.custData = response;
                 this.distinctCust = distinct(response, "CUST_NM").map(
                     item => item.CUST_NM
@@ -150,8 +155,8 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
             });
     }
 
-    getVendorsInfoDropdown() {
-        this.customerVendSvc.getVendorsData().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
+    getVendorsInfoDropdown(): void {
+        this.customerVendSvc.getVendorsData().pipe(takeUntil(this.destroy$)).subscribe((response: Array<Vendor_Map>) => {
             this.vendorDetails = response;
             this.distinctPartner = sortBy(distinct(response, "BUSNS_ORG_NM").map(
                 item => item.BUSNS_ORG_NM
@@ -164,7 +169,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
             this.loggerSvc.error("Unable to get Dropdown vendors.", response, response.statusText);
         })
     }
-    partnerIDChange(value: any) {
+    partnerIDChange(value: number): void {
         const selPart = findWhere(this.vendorDetails, { VNDR_ID: value });
         if (selPart) {
             this.formGroup.patchValue({
@@ -180,7 +185,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
         }
 
     }
-    partnerNMChange(value: any) {
+    partnerNMChange(value: string): void {
         const selPart = findWhere(this.vendorDetails, { BUSNS_ORG_NM: value });
         if (selPart) {
             this.formGroup.patchValue({
@@ -196,9 +201,9 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
         }
     }
 
-    loadCustomerVendors() {
+    loadCustomerVendors(): void {
         this.customerVendSvc.getCustomerVendors().pipe(takeUntil(this.destroy$)).subscribe(
-            (result: Array<any>) => {
+            (result: Array<Cust_Map>) => {
                 this.gridResult = result;
                 this.distinctCountry = distinct(this.gridResult, "CTRY_CD").map(
                     item => item.CTRY_CD
@@ -217,7 +222,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
         
     }
 
-    IsValidCombination(model: any, isNew: boolean) {
+    IsValidCombination(model: Cust_Map, isNew: boolean): boolean {
         let retCond = false;
         const cond = this.gridResult.filter(
             x => x.BUSNS_ORG_NM.trim() === model.BUSNS_ORG_NM.trim() &&
@@ -263,13 +268,13 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
         this.gridData = process(this.gridResult, this.state);
     }
 
-    closeEditor(grid, rowIndex = this.editedRowIndex) {
+    closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex): void {
         grid.closeRow(rowIndex);
         this.editedRowIndex = undefined;
         this.formGroup = undefined;
     }
 
-    addHandler({ sender }) {
+    addHandler({ sender }: AddEvent): void {
         this.isDirty=true;
         this.closeEditor(sender);
         this.formGroup = new FormGroup({
@@ -300,7 +305,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
         sender.addRow(this.formGroup);
     }
 
-    editHandler({ sender, rowIndex, dataItem }) {
+    editHandler({ sender, rowIndex, dataItem }: EditEvent): void {
         this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
@@ -332,13 +337,13 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
         sender.editRow(rowIndex, this.formGroup);
     }
 
-    cancelHandler({ sender, rowIndex }) {
+    cancelHandler({ sender, rowIndex }: CancelEvent): void {
         this.closeEditor(sender, rowIndex);
     }
-    saveConfirmation() {
+    saveConfirmation(): void {
         this.isCombExists = false;
     }
-    saveHandler({ sender, rowIndex, formGroup, isNew }) {
+    saveHandler({ sender, rowIndex, formGroup, isNew }: SaveEvent): void {
         const cust_map: Cust_Map = formGroup.value;
         const filteredCust = this.custData.filter(x => x.CUST_NM === cust_map.CUST_NM);
         if (filteredCust.length > 0) {
@@ -384,7 +389,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
         }
         sender.closeRow(rowIndex);
     }
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
@@ -397,14 +402,14 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
         return !this.isDirty;
     }
     
-    ngOnInit() {
+    ngOnInit(): void {
         this.getCustomersDataSource();
         this.getVendorsInfoDropdown();
         this.loadCustomerVendors();
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

@@ -1,6 +1,7 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { RequestDetails, VistexLogFilters, VistexLogsInfo, VistexResponseUpdData } from "./admin.vistex.model";
 
 @Injectable({
     providedIn: 'root'
@@ -15,12 +16,12 @@ export class dsaService {
     }
 
 
-    public sendVistexData(lstDealIds): Observable<any> {
+    public sendVistexData(lstDealIds: any[]): Observable<VistexLogsInfo[]> {
         const apiUrl: string = this.apiBaseUrl + 'SendVistexData';
-        return this.httpClient.post(apiUrl, lstDealIds);
+        return this.httpClient.post<VistexLogsInfo[]>(apiUrl, lstDealIds);
     }
 
-    public callAPI(apiName, runMode) {
+    public callAPI(apiName: string, runMode: string): Observable<any> {
         let apiUrl: string;
         if ((runMode == "D") || (runMode == "E")) {
             apiUrl = this.vistexApiBase + apiName + '/VISTEX_DEALS/' + runMode;
@@ -43,28 +44,28 @@ export class dsaService {
 
     }
 
-    public getVistexLogs(postData):Observable<any> {
+    public getVistexLogs(postData: VistexLogFilters): Observable<VistexLogsInfo[]> {
         const apiUrl = this.apiBaseUrl + 'GetVistexLogs';
-        return this.httpClient.post(apiUrl, postData);
+        return this.httpClient.post<VistexLogsInfo[]>(apiUrl, postData);
     }
-    
-    public getVistexStatuses():Observable<any> {
+
+    public getVistexStatuses(): Observable<string[]> {
         const apiUrl = this.apiBaseUrl + 'GetVistexStatuses'
-        return this.httpClient.get(apiUrl );
+        return this.httpClient.get<string[]>(apiUrl);
     }
 
-    public updateVistexStatusNew(postData):Observable<any> {
+    public updateVistexStatusNew(postData: VistexResponseUpdData): Observable<string> {
         const apiUrl = this.apiBaseUrl + 'UpdateVistexStatusNew';
-        return this.httpClient.post(apiUrl, postData );
-    }
-    
-    public getRequestTypeList():Observable<any>{
-        const apiUrl = this.apiBaseUrl + 'GetRequestTypeList';
-        return this.httpClient.get(apiUrl); 
+        return this.httpClient.post<string>(apiUrl, postData);
     }
 
-    public callProfiseeApi(custNm, actv_ind): Observable<any> {
+    public getRequestTypeList(): Observable<RequestDetails[]> {
+        const apiUrl = this.apiBaseUrl + 'GetRequestTypeList';
+        return this.httpClient.get<RequestDetails[]>(apiUrl);
+    }
+
+    public callProfiseeApi(custNm: string, actv_ind: string): Observable<boolean> {
         const apiUrl = this.vistexApiBase + 'CallProfiseeApi/' + custNm + "/" + actv_ind;
-        return this.httpClient.get(apiUrl);
+        return this.httpClient.get<boolean>(apiUrl);
     }
 }

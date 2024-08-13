@@ -10,6 +10,10 @@ import {
     GridDataResult,
     DataStateChangeEvent,
     PageSizeItem,
+    GridComponent,
+    EditEvent,
+    CancelEvent,
+    SaveEvent
 } from "@progress/kendo-angular-grid";
 import {
     process,
@@ -22,6 +26,7 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { UnPrimeAtrbs, UnPrimeDeals } from "../PrimeCustomers/admin.primeCustomers.model";
 
 @Component({
     selector: "admin-unified-dealrecon",
@@ -37,7 +42,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
     private readonly destroy$ = new Subject();
     private isDirty = false;
     private isLoading = true;
-    private gridResult: Array<any>;
+    private gridResult: Array<UnPrimeDeals>;
     private gridData: GridDataResult;
     public distinctUnPrimeCustDealNm: Array<any>;
     public formGroup: FormGroup;
@@ -47,7 +52,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
     private isCombExists = false;
     public editAccess = true;
     private retrigger = ((<any>window).isCustomerAdmin || (<any>window).usrRole == "SA" || (<any>window).isDeveloper) ? true : false;
-    public uploadUnifiedData = (((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).usrRole == "SA" || (<any>window).isDeveloper) ? true: false;
+    public uploadUnifiedData = (((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).usrRole == "SA" || (<any>window).isDeveloper) ? true : false;
     private isNew: boolean;
     public dataItems: any;
     public OBJ_SID: any;
@@ -86,7 +91,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         }
     ];
 
-    distinctPrimitive(fieldName: string): any {
+    distinctPrimitive(fieldName: string): string[] {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
 
@@ -95,7 +100,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
+        const excelState: State = {};
         Object.assign(excelState, this.state)
         excelState.take = this.gridResult.length;
 
@@ -106,32 +111,32 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         return result;
     }
 
-    loadDealReconciliation() {
+    loadDealReconciliation(): void {
         //RA alone will have view access
         if ((<any>window).usrRole == "RA" && !(<any>window).isDeveloper) {
             this.editAccess = false;
         }
-        this.unifiedDealReconSvc.getUnmappedPrimeCustomerDeals().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
-                this.isLoading = false;
-                this.gridResult = result;
-                this.gridData = process(result, this.state);
-            }, (error) => {
-                this.loggerSvc.error('UnMappedPrimeCustomerDeal service', error);
-            });
+        this.unifiedDealReconSvc.getUnmappedPrimeCustomerDeals().pipe(takeUntil(this.destroy$)).subscribe((result: Array<UnPrimeDeals>) => {
+            this.isLoading = false;
+            this.gridResult = result;
+            this.gridData = process(result, this.state);
+        }, (error) => {
+            this.loggerSvc.error('UnMappedPrimeCustomerDeal service', error);
+        });
     }
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
     }
 
-    closeEditor(grid, rowIndex = this.editedRowIndex) {
+    closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex): void {
         grid.closeRow(rowIndex);
         this.editedRowIndex = undefined;
         this.formGroup = undefined;
     }
 
-    editHandler({ sender, rowIndex, dataItem }) {
-        this.isDirty=true;
+    editHandler({ sender, rowIndex, dataItem }: EditEvent): void {
+        this.isDirty = true;
         this.openEndCustomerModal(dataItem, sender, rowIndex)
         this.closeEditor(sender);
         this.isFormChange = false;
@@ -152,7 +157,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         sender.editRow(rowIndex, this.formGroup);
     }
 
-    openEndCustomerModal(dataItem, sender, rowIndex) {
+    openEndCustomerModal(dataItem, sender, rowIndex): void {
         const dialogRef = this.dialog.open(endCustomerRetailModalComponent, {
             panelClass: "admin-end-customer",
             width: '1500px',
@@ -190,7 +195,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
                 }
                 if (endCustomerData.IS_PRIME) {
                     sender.closeRow(rowIndex);
-                    const cust_map: Unified_Deal_Recon = this.formGroup.getRawValue();
+                    const cust_map = this.formGroup.getRawValue();
                     this.unifiedDealReconSvc.UpdateUnPrimeDeals(dataItem.OBJ_SID, this.dataItems).pipe(takeUntil(this.destroy$)).subscribe((response) => {
                         if (response) {
                             this.message = "Deal End Customer Unified successfully";
@@ -219,7 +224,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         });
     }
 
-    clearFilter() {
+    clearFilter(): void {
         this.state.filter = {
             logic: "and",
             filters: [],
@@ -227,23 +232,23 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         this.gridData = process(this.gridResult, this.state);
     }
 
-    cancelHandler({ sender, rowIndex }) {
+    cancelHandler({ sender, rowIndex }: CancelEvent): void {
         this.closeEditor(sender, rowIndex);
     }
 
-    cancelWarning() {
+    cancelWarning(): void {
         this.isWarning = false;
         this.message = "";
     }
 
-    saveHandler({ sender, rowIndex, formGroup, dataItem }) {
+    saveHandler({ sender, rowIndex, formGroup, dataItem }: SaveEvent): void {
         this.isLoading = true;
-        const cust_map: Unified_Deal_Recon = formGroup.getRawValue();
+        const cust_map: UnPrimeDeals = formGroup.getRawValue();
         this.errorMsg = [];
         if (this.dataItems && this.dataItems.IS_PRIME) {
             this.unifiedDealReconSvc.UpdateUnPrimeDeals(dataItem.OBJ_SID, this.dataItems).pipe(takeUntil(this.destroy$)).subscribe(
-                (response) => {
-                    this.isDirty=false;
+                (response: boolean) => {
+                    this.isDirty = false;
                     sender.closeRow(rowIndex);
                     this.refreshGrid();
                     this.loggerSvc.success("Unified Deal Recon updated.");
@@ -257,10 +262,10 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         this.isLoading = false;
     }
 
-    endCustSave(encustData, OBJ_SID) {
-        const cust_map: Unified_Deal_Recon = this.formGroup.getRawValue();
+    endCustSave(encustData: UnPrimeAtrbs, OBJ_SID: number): void {
+        const cust_map: UnPrimeDeals = this.formGroup.getRawValue();
         this.unifiedDealReconSvc.UpdateUnPrimeDeals(OBJ_SID, encustData).pipe(takeUntil(this.destroy$)).subscribe(
-            (response) => {
+            (response: boolean) => {
                 if (response) {
                     this.message = "Deal End Customer Unified successfully";
                 } else {
@@ -279,7 +284,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         );
     }
 
-    OpenBulkUploadUnifyModal() {
+    OpenBulkUploadUnifyModal(): void {
         const dialogRef = this.dialog.open(bulkUnifyModalComponent, {
             height: 'auto',
             panelClass: 'unified-bulk-popup'
@@ -287,7 +292,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         });
     }
 
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
@@ -295,15 +300,15 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         };
         this.loadDealReconciliation();
     }
-     
+
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.loadDealReconciliation();
     }
-    OpenRetriggerUnifyModal() {
+    OpenRetriggerUnifyModal(): void {
         const dialogRef = this.dialog.open(retriggerUnifyModalComponent, {
             height: 'auto',
             panelClass: 'unified-bulk-popup'
@@ -311,7 +316,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         });
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }
