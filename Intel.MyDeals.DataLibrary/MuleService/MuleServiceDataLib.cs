@@ -247,6 +247,32 @@ namespace Intel.MyDeals.DataLibrary
                 OpLogPerf.Log(ex);
             }
         }
+
+        public List<VistexQueueObject> GetVistexDataOutBound(string packetType) //VTX_OBJ: VERTICALS
+        {
+            List<VistexQueueObject> lstVistex = new List<VistexQueueObject>();
+            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
+            {
+                in_rqst_type = packetType
+            };
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
+                int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+                int IDX_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+
+                while (rdr.Read())
+                {
+                    lstVistex.Add(new VistexQueueObject
+                    {
+                        BatchId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(Guid) : rdr.GetFieldValue<Guid>(IDX_BTCH_ID),
+                        DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                        RqstJsonData = (IDX_JSON_DATA < 0 || rdr.IsDBNull(IDX_JSON_DATA)) ? string.Empty : rdr.GetFieldValue<string>(IDX_JSON_DATA)
+                    });
+                }
+            }
+            return lstVistex;
+        }
     }
 }
 

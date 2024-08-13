@@ -140,9 +140,9 @@ namespace Intel.MyDeals.BusinessLogic
                     //Parsing Response from SAP PO
                     VistexDFResponse visResponse = JsonConvert.DeserializeObject<VistexDFResponse>(sendResponse["Data"]);
                     //Assigning Message Body to be Tranferred
-                    responseObj.BatchMessage = runMode == "D" ? "PO_Send_Complete" : string.Empty;
+                    responseObj.BatchMessage = runMode == "D" ? "PO_Send_Complete" : runMode == "V" ? visResponse.Status + ": " + visResponse.Message ?? string.Empty : visResponse.Message ?? string.Empty;
                     //API Type
-                    responseObj.BatchName = runMode == "D" ? "VISTEX_DEAL" : runMode == "M" ? "CNSMPTN_LD" : "";
+                    responseObj.BatchName = runMode == "D" ? "VISTEX_DEAL" : runMode == "M" ? "CNSMPTN_LD" : runMode == "V" ? "PRODUCT_VERTICAL" : "" ;
                     //Status of the Call
                     responseObj.BatchStatus = "PROCESSED";
                 }
@@ -150,7 +150,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     responseObj.RunMode = runMode;
                     responseObj.BatchId = BatchId;
-                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "VISTEX_DEAL";
+                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : runMode == "V" ? "PRODUCT_VERTICAL" : "VISTEX_DEAL";
                     responseObj.BatchMessage = sendResponse["Message"];
                     responseObj.BatchStatus = "ERROR";
                 }
@@ -161,13 +161,71 @@ namespace Intel.MyDeals.BusinessLogic
                 responseObj.RunMode = runMode;
                 //Batch ID
                 responseObj.BatchId = "-1";
-                responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "VISTEX_DEAL";
+                responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : runMode == "V" ? "PRODUCT_VERTICAL" : "VISTEX_DEAL";
                 responseObj.BatchMessage = "Exception: " + ex.Message + "\n" + "Innerexception: " + ex.InnerException;
                 responseObj.BatchStatus = "Exception";
-                responseObj.MessageLog.Add("Business Layer - ConnectSAPPOandResponse: Exception Deatils -- " + String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, ex.Message) + Environment.NewLine);                
+                responseObj.MessageLog.Add("Business Layer - ConnectSAPPOandResponse: Exception Deatils -- " + String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, ex.Message) + Environment.NewLine);
+            }
+            return responseObj;
+        }
+
+        public VistexDFDataResponseObject GetVistexStageData(string runMode, VistexDFDataResponseObject responseObj) //VTX_OBJ: CUSTOMER, PRODUCTS, VERTICAL
+        {
+            responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexStageData: Initiated ") + Environment.NewLine);
+            try
+            {
+                if (runMode == "V")
+                {
+                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexStageData: GetVistexDataOutBound - PROD_VERT_RULES: Initiated ") + Environment.NewLine);
+                    responseObj = GetVistexDataOutBound("PROD_VERT_RULES", responseObj);
+                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexStageData: GetVistexDataOutBound - PROD_VERT_RULES: Done ") + Environment.NewLine);
+                }
+            }
+            catch (Exception ex)
+            {
+                responseObj.BatchName = "PRODUCT_VERTICAL";
+                responseObj.BatchId = "-1";
+                responseObj.BatchMessage = "Exception: " + ex.Message + "\n" + "Innerexception: " + ex.InnerException;
+                responseObj.BatchStatus = "Exception";
+                responseObj.MessageLog.Add("Business Layer - GetVistexStageData: Exception Details -- " + String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, ex.Message) + Environment.NewLine);
+                OpLogPerf.Log($"Thrown from: MuleServiceLib - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
+            }
+            return responseObj;
+        }
+
+        public VistexDFDataResponseObject GetVistexDataOutBound(string packetType, VistexDFDataResponseObject responseObj) //VTX_OBJ: VERTICALS
+        {
+            List<VistexQueueObject> records = new List<VistexQueueObject>();
+            //VistexDFDataResponseObject responseObj = new VistexDFDataResponseObject();
+            records = _muleServiceDataLib.GetVistexDataOutBound(packetType);
+            if (records.Count == 0)
+            {
+                responseObj.BatchName = "PRODUCT_VERTICAL";
+                responseObj.BatchId = "0";
+                responseObj.BatchMessage = "No Vertical to be Uploaded";
+                responseObj.BatchStatus = "PROCESSED";
+            }
+            else
+            {
+                string jsonData = "";
+                Guid batchId = new Guid();
+
+                foreach (VistexQueueObject r in records)
+                {
+                    jsonData = r.RqstJsonData;
+                    batchId = r.BatchId;
+                }
+
+                responseObj = ConnectSAPPOandResponse(jsonData, "V", batchId.ToString(), responseObj);
+                responseObj.BatchName = "PRODUCT_VERTICAL";
+
+                //UpDate Status                
+                SetVistexDealOutBoundStageV(batchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Processing_Complete" : "PO_Error_Rollback", responseObj.BatchMessage);
+
             }
             return responseObj;
         }
 
     }
 }
+

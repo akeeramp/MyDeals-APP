@@ -10,5 +10,7 @@ namespace Intel.MyDeals.IBusinessLogic
     public interface IMuleServiceLib
     {
         VistexDFDataResponseObject GetVistexDealOutBoundData(string packetType, string runMode, VistexDFDataResponseObject responseObj);
+
+        VistexDFDataResponseObject GetVistexStageData(string runMode, VistexDFDataResponseObject responseObj);
     }
 }

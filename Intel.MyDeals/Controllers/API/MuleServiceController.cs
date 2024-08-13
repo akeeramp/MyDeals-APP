@@ -41,5 +41,27 @@ namespace Intel.MyDeals.Controllers.API
 
             return responseObject;
         }
+
+        [Route("GetVistexDFStageData/{runMode}")]
+        [HttpGet]
+        public VistexDFDataResponseObject GetVistexDFStageData(string runMode) //VTX_OBJ: CUSTOMERS, PRODUCTS, VERTICAL
+        {
+            VistexDFDataResponseObject responseObject = new VistexDFDataResponseObject();
+            responseObject.MessageLog = new List<string>();
+            try
+            {
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Controller - GetVistexDFStageData - Called") + Environment.NewLine);
+                responseObject = _muleServiceLib.GetVistexStageData(runMode, responseObject);
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Controller - GetVistexDFStageData - Success") + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                responseObject.BatchMessage = "Exception: " + ex.Message + "\n" + "Innerexception: " + ex.InnerException;
+                responseObject.BatchStatus = "Exception";
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, ex.Message) + Environment.NewLine);
+                OpLogPerf.Log($"Thrown from: VistexServiceController - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
+            }
+            return responseObject;
+        }
     }
 }
