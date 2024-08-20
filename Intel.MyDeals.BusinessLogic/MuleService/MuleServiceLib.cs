@@ -33,10 +33,14 @@ namespace Intel.MyDeals.BusinessLogic
                 // Construct the send JSON from the list of bodies we got
                 if (dataRecords.Count > 0)
                 {
+                    Guid BatchId = Guid.Empty;
                     string jsonData = "";
-                    for (int indx = 0; indx < 1; indx++)
+                    for (int indx = 0; indx < dataRecords.Count; indx++)
                     {
-                        jsonData = jsonData + "," + dataRecords[indx].RqstJsonData;
+                        BatchId = dataRecords[indx].BatchId;
+                        string AppendBatchid = dataRecords[indx].RqstJsonData.Remove(0, 1);
+                        AppendBatchid = "{\"BatchId\":\"" + BatchId.ToString() + "\"," + AppendBatchid;
+                        jsonData = jsonData + "," + AppendBatchid;
                     }
                     jsonData = jsonData.Remove(0, 1);
 
