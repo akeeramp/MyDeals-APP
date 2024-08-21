@@ -24,7 +24,7 @@
 	SqlCommand cmd;
 
 	conn = new SqlConnection(
-		@"Database=MYDEALS;Server=FM7DFROAPP01.amr.corp.intel.com;integrated security=SSPI;"
+		@"Database=MYDEALS;Server=sql3877-fm1-in.amr.corp.intel.com,3181;integrated security=SSPI;"
 		);
 
 	conn.Open();

@@ -754,7 +754,7 @@ namespace Intel.MyDeals.DataLibrary
                 var isNotIqrDeal = true;
                 var cmd = new Procs.dbo.PR_MYDL_CHECK_FOR_IQR_DEALS()
                 {
-                    in_deal_id = dealId
+                    IN_DEAL_ID = dealId
                 };
 
                 using (var rdr = DataAccess.ExecuteReader(cmd))

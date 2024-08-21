@@ -1,8 +1,8 @@
 ﻿
 /*
-File Updated: 6/23/2023 5:40:41 PM
+File Updated: 8/21/2024 3:01:45 PM
 On: MHTIPPIN-MOBL1
-From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
+From: sql3877-fm1-in.amr.corp.intel.com,3181, MYDEALS
 */
 using System;
 using System.Collections.Generic;
@@ -3125,9 +3125,15 @@ namespace Intel.MyDeals.Entities {
 		public const string CUTOFF_DATE = "CUTOFF_DATE";
 		public const string CUTOFF_PCSR_FMLY_AT_L4_DT = "CUTOFF_PCSR_FMLY_AT_L4_DT";
 		public const string DATA_FIX_ACTIONS = "DATA_FIX_ACTIONS";
+		public const string DB_AUDIT_EXCEPTION_USER_LIST = "DB_AUDIT_EXCEPTION_USER_LIST";
+		public const string DB_INDEX_MAINTANANCE = "DB_INDEX_MAINTANANCE";
+		public const string DB_INDEX_MAINTANANCE_tableList = "DB_INDEX_MAINTANANCE_tableList";
 		public const string DB_LOGGING = "DB_LOGGING";
+		public const string DB_SERVER_NODES_JSON = "DB_SERVER_NODES_JSON";
 		public const string DCS_DEAL_NOFILTER = "DCS_DEAL_NOFILTER";
 		public const string DEAL_ATRB_IGNR = "DEAL_ATRB_IGNR";
+		public const string DEFECT_FIX_RUN_DATA = "DEFECT_FIX_RUN_DATA";
+		public const string DEFECT_FIX_RUN_MODE = "DEFECT_FIX_RUN_MODE";
 		public const string DSA_DLAY_RSPN_MIN = "DSA_DLAY_RSPN_MIN";
 		public const string DSA_MAX_JSON_SIZE_MB = "DSA_MAX_JSON_SIZE_MB";
 		public const string DSA_RQST_RSPN_LOG_DAYS = "DSA_RQST_RSPN_LOG_DAYS";
@@ -3148,12 +3154,14 @@ namespace Intel.MyDeals.Entities {
 		public const string iCOST_PRODUCTS = "iCOST_PRODUCTS";
 		public const string IDMS_DEAL_MIGRATION = "IDMS_DEAL_MIGRATION";
 		public const string IQR_Atomic_Lock_Key = "IQR_Atomic_Lock_Key";
+		public const string IQR_Maximum_Process_Objects_Limit = "IQR_Maximum_Process_Objects_Limit";
 		public const string JMSQ_ERROR_REPORT_DAYS_BACK = "JMSQ_ERROR_REPORT_DAYS_BACK";
 		public const string JMSQ_PROCESS_TIMEOUT = "JMSQ_PROCESS_TIMEOUT";
 		public const string LAST_BTCH_RUN = "LAST_BTCH_RUN";
 		public const string LOCKED_OUT_ROLES = "LOCKED_OUT_ROLES";
 		public const string MISC_MIGRATION = "MISC_MIGRATION";
 		public const string MISC_MM_LIST = "MISC_MM_LIST";
+		public const string MyDeals_PreProd_UI_Access = "MyDeals_PreProd_UI_Access";
 		public const string MYDL_1ST_BUILD = "MYDL_1ST_BUILD";
 		public const string NASP_PTL_Deal_Dtl_Load_St_Dt = "NASP_PTL_Deal_Dtl_Load_St_Dt";
 		public const string NEW_ACCOUNT_REVIEWER_APAC = "NEW_ACCOUNT_REVIEWER_APAC";
@@ -3183,8 +3191,10 @@ namespace Intel.MyDeals.Entities {
 		public const string ROLLBACK_MIGRATION = "ROLLBACK_MIGRATION";
 		public const string RPT_MSTR_LOG_DAYS = "RPT_MSTR_LOG_DAYS";
 		public const string SAP_JMS_PROD_EMAIL_DIST = "SAP_JMS_PROD_EMAIL_DIST";
+		public const string SDM_ADMIN = "SDM_ADMIN";
 		public const string SDS_OVERRIDE_DEAL_VALIDATION_ADMINS = "SDS_OVERRIDE_DEAL_VALIDATION_ADMINS";
 		public const string SSD_PRD_CAT_LIST = "SSD_PRD_CAT_LIST";
+		public const string SSIS_CNST_EMP_ID = "SSIS_CNST_EMP_ID";
 		public const string SSPEC_PRD_TYPES = "SSPEC_PRD_TYPES";
 		public const string TENDER_ECAP_KIT_MIGRATION = "TENDER_ECAP_KIT_MIGRATION";
 		public const string TENDER_SEARCH_MAX_VALUE = "TENDER_SEARCH_MAX_VALUE";
