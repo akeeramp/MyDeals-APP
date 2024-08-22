@@ -12,5 +12,7 @@ namespace Intel.MyDeals.IBusinessLogic
         VistexDFDataResponseObject GetVistexDealOutBoundData(string packetType, string runMode, VistexDFDataResponseObject responseObj);
 
         VistexDFDataResponseObject GetVistexStageData(string runMode, VistexDFDataResponseObject responseObj);
+
+        Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket);
     }
 }

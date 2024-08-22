@@ -273,6 +273,41 @@ namespace Intel.MyDeals.DataLibrary
             }
             return lstVistex;
         }
+
+        public bool SaveVistexResponseData(Guid batchId, Dictionary<int, string> dealsMessages) //VTX_OBJ: DEALS
+        {
+            in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
+
+            foreach (var eachResp in dealsMessages)
+            {
+                DataRow dr = opDealMessages.NewRow();
+                dr["OBJ_SID"] = eachResp.Key;
+                dr["RSPN_MSG"] = eachResp.Value;
+                dr["RQST_STS"] = eachResp.Value.StartsWith("S:") ? "PO_Processing_Complete" : (eachResp.Value.StartsWith("E:") ? "PO_Error_Resend" : "PO_Processing_Complete");
+                opDealMessages.Rows.Add(dr);
+            }
+
+            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
+            {
+                in_btch_id = batchId,
+                in_dsa_rspn_log = opDealMessages
+            };
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //Just save the data and move on - only error will report back below
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                return false;
+                //throw;
+            }
+
+            return true;
+        }
     }
 }
 

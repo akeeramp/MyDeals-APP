@@ -230,6 +230,21 @@ namespace Intel.MyDeals.BusinessLogic
             return responseObj;
         }
 
+        public Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket) //VTX_OBJ: DEALS
+        {
+            // Vistex returned response processing - if it saves data to DB, return true, else return false.
+            Guid batchId = new Guid(jsonDataPacket.vistexResponseHeader.BatchId);
+            Dictionary<int, string> dealsMessages = new Dictionary<int, string>();
+
+            // Decide if we want to capture the AgreementId and DealType as part of ErrMessage
+            foreach (VistexResponseMsg.VistexResponseHeader.DealResponse response in jsonDataPacket.vistexResponseHeader.DealResponses)
+            {
+                dealsMessages.Add(response.DealId, response.Status + ": " + response.ErrMessage);
+            }
+
+            return _muleServiceDataLib.SaveVistexResponseData(batchId, dealsMessages);
+        }
+
     }
 }
 

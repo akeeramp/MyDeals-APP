@@ -18,5 +18,8 @@ namespace Intel.MyDeals.IDataLibrary
         void SetVistexDealOutBoundStageD(Guid btchId, string rqstStatus, List<VistexQueueObject> dataRecords);
 
         List<VistexQueueObject> GetVistexDataOutBound(string packetType);
+
+        bool SaveVistexResponseData(Guid batchId, Dictionary<int, string> dealsMessages);
+        
     }
 }

@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
+using Intel.MyDeals.BusinessLogic;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -62,6 +65,24 @@ namespace Intel.MyDeals.Controllers.API
                 OpLogPerf.Log($"Thrown from: VistexServiceController - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
             }
             return responseObject;
+        }
+
+        [HttpPost]
+        [Route("SaveVistexResponseData")]
+        public bool SaveVistexResponseData(JObject jsonDataPacket) //VTX_OBJ: DEALS_RESPONSE
+        {
+            bool saveSuccessful = false;
+            var vistextResponseMessage = JsonConvert.DeserializeObject<VistexResponseMsg>(jsonDataPacket.ToString());
+            try
+            {
+                saveSuccessful = _muleServiceLib.SaveVistexResponseData(vistextResponseMessage);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log($"Vistex JSON payload: {jsonDataPacket.ToString()} | Message: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
+                throw ex;
+            }
+            return saveSuccessful;
         }
     }
 }
