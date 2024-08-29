@@ -10,10 +10,10 @@ import { Cust_Map } from "../CustomerVendors/admin.customerVendors.model";
 })
 
 export class vistexCustomerMappingService {
-    public apiBaseUrl = "api/VistexCustomerMappings/";
-    public customerUrl = "api/Customers/";
-    public dropdownUrl = "api/Dropdown/";
-    public customerVendorApiBaseUrl = "api/CustomerVendor/";
+    public readonly apiBaseUrl = "api/VistexCustomerMappings/";
+    public readonly customerUrl = "api/Customers/";
+    public readonly dropdownUrl = "api/Dropdown/";
+    public readonly customerVendorApiBaseUrl = "api/CustomerVendor/";
 
     constructor(private httpClient: HttpClient) {
     }

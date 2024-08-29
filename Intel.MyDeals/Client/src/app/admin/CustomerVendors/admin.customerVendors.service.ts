@@ -9,8 +9,8 @@ import { Cust_Dropdown_Map, Cust_Map, Vendor_Map } from "./admin.customerVendors
 
 
 export class customerVendorService { 
-    public apiBaseUrl ="api/CustomerVendor/";
-    public dropdownUrl ="api/Customers/";
+    public readonly apiBaseUrl = "api/CustomerVendor/";
+    public readonly dropdownUrl = "api/Customers/";
 
     constructor(private httpClient: HttpClient) {
       

@@ -9,8 +9,8 @@ import { DealRecon, DealReconInvalidRecords, END_CUST_OBJ } from "./admin.unifie
     providedIn: 'root'
 })
 export class unifiedDealReconService {
-    public apiBaseUrl = "api/PrimeCustomers/";
-    public apiUnifyFileUrl = "/FileAttachments/";
+    public readonly apiBaseUrl = "api/PrimeCustomers/";
+    public readonly apiUnifyFileUrl = "/FileAttachments/";
 
     constructor(private httpClient: HttpClient) {
 

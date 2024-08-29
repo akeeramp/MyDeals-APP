@@ -8,9 +8,9 @@ import { RequestDetails, VistexLogFilters, VistexLogsInfo, VistexResponseUpdData
 })
 
 export class dsaService {
-    public apiBaseUrl = "api/DSA/";
-    public vistexApiBase = "api/VistexService/";
-    public tenderApiBase = "api/Integration/";
+    public readonly apiBaseUrl = "api/DSA/";
+    public readonly vistexApiBase = "api/VistexService/";
+    public readonly tenderApiBase = "api/Integration/";
 
     constructor(private httpClient: HttpClient) {
     }

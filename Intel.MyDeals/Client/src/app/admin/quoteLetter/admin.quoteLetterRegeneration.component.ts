@@ -17,6 +17,8 @@ import { DownloadQuoteLetterData } from "./admin.quoteLetter.model";
     selector: "admin-regeratequoteletter",
     templateUrl: "Client/src/app/admin/quoteLetter/admin.quoteLetterRegeneration.component.html",
     styleUrls: ['Client/src/app/admin/quoteLetter/admin.quoteLetterRegeneration.component.css']
+
+
 })
 
 export class QuoteLetterRegenerationComponent implements OnDestroy {
@@ -42,11 +44,11 @@ export class QuoteLetterRegenerationComponent implements OnDestroy {
     submit() {
         // var dealId = document.getElementById("dealId") as HTMLElement
         if (this.dealId == '') {
-            
+
             this.validateDealID();
-            
+
         }
-        
+
         if (this.validateDealId && this.dealId != '') {
             this.isLoading = true;
             this.quoteLetterSvc.regenerateQuoteLetter(this.dealId).pipe(takeUntil(this.destroy$)).subscribe((result: DownloadQuoteLetterData[]) => {

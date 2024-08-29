@@ -8,7 +8,7 @@ import { AdminQuoteLetter, DownloadQuoteLetterData } from "./admin.quoteLetter.m
 })
 
 export class quoteLetterService {
-    public apiBaseUrl = "api/QuoteLetter/";
+    public readonly apiBaseUrl = "api/QuoteLetter/";
 
     constructor(private httpClient: HttpClient) {
 

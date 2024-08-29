@@ -104,7 +104,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                 });
             if (this.UnifyValidation.ValidUnifyDeals.length > 0)
                 this.UnifyValidation.ValidUnifyDeals.forEach((row) => {
-                    if (row.RPL_STS_CODE != undefined) row.RPL_STS_CODE = row.RPL_STS_CODE.toUpperCase();                    
+                    if (row.RPL_STS_CODE != undefined) row.RPL_STS_CODE = row.RPL_STS_CODE.toUpperCase();
                 })
             //setting a delay for hotTable to populate the tabledata
             setTimeout(() => {
@@ -186,7 +186,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                     this.setErrorCell(i, 8);
                 }
                 if (mandatory.length > 0) {
-                    alertMsg += '•' + mandatory.join(", ") + " is a mandatory field" + '\n'; 
+                    alertMsg += '•' + mandatory.join(", ") + " is a mandatory field" + '\n';
                 }
                 //Other Validations
                 if (this.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name != null && this.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name != "") {
@@ -214,8 +214,8 @@ export class bulkUnifyModalComponent implements OnDestroy {
                         alertMsg = alertMsg + '•' + "NULL cannot be used as 'To Be Unified Customer Name'" + '\n';
                         this.setErrorCell(i, 6);
                     }
-                    var patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
-                    var res = patt.test(this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name);
+                    const patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
+                    const res = patt.test(this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name);
                     if (!res) {
                         alertMsg = alertMsg + '•' + "'To Be Unified Customer Name' contains invalid characters" + '\n';
                         this.setErrorCell(i, 6);
@@ -254,7 +254,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                     this.setErrorCell(i, 4);
                     this.setErrorCell(i, 8);
                 }
-                var validRows = this.dealReconValidationSummary.inValidRecords.filter(x => x.Deal_ID != 0 && x.Unified_Customer_ID != 0 && x.Unified_Customer_Name != "" && x.Country_Region_Customer_ID != 0 && x.Unified_Country_Region != "");
+                const validRows = this.dealReconValidationSummary.inValidRecords.filter(x => x.Deal_ID != 0 && x.Unified_Customer_ID != 0 && x.Unified_Customer_Name != "" && x.Country_Region_Customer_ID != 0 && x.Unified_Country_Region != "");
                 if (this.dealReconValidationSummary.duplicateDealCombination && this.dealReconValidationSummary.duplicateDealCombination.length > 0) {//
                     if (this.dealReconValidationSummary.duplicateDealCombination.includes(this.dealReconValidationSummary.inValidRecords[i].Deal_ID)
                         && validRows.filter(x => x.Deal_ID == this.dealReconValidationSummary.inValidRecords[i].Deal_ID
@@ -325,8 +325,8 @@ export class bulkUnifyModalComponent implements OnDestroy {
                         this.setErrorCell(i, 8);//To Be Unified Country/Region error
                     }
                 }
-                var RPLStsCodepattern = new RegExp("^[A-Za-z\\s,]*$");
-                var isValidRPLSTSCode = RPLStsCodepattern.test(this.dealReconValidationSummary.inValidRecords[i].Rpl_Status_Code);
+                const RPLStsCodepattern = new RegExp("^[A-Za-z\\s,]*$");
+                const isValidRPLSTSCode = RPLStsCodepattern.test(this.dealReconValidationSummary.inValidRecords[i].Rpl_Status_Code);
                 if (!isValidRPLSTSCode) {
                     alertMsg = alertMsg + '•' + "The RPL Status code contains invalid characters. Please remove spaces and special characters." + '\n';
                     this.setErrorCell(i, 9);//rpl status error
@@ -337,7 +337,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                         this.setErrorCell(i, 9);//rpl status error
                     }
                 }
-                
+
                 if (alertMsg != '') {
                     //setting the error messages in error messages cell in hottable
                     this.hotTable.setDataAtCell(i, 10, alertMsg);
@@ -367,7 +367,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
             }
         }
         else if (this.dealReconValidationSummary.inValidRecords.length == 0 && this.dealReconValidationSummary.validRecords.length > 0) {
-                this.updateDealRecon()
+            this.updateDealRecon()
         }
     }
 
@@ -418,7 +418,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                 if (!(row.DEAL_END_CUSTOMER_COUNTRY == null && row.DEAL_END_CUSTOMER_RETAIL == null && row.DEAL_ID == null && row.UCD_GLOBAL_ID == null
                     && row.RPL_STS_CODE == null && row.UCD_COUNTRY == null && row.UCD_GLOBAL_NAME == null))
                     data.push(row);
-            
+
             })
             if (data.length > 0) {
                 //validating
@@ -648,7 +648,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
                         if (row != '' && !(rowMsgs.includes(row)))
                             rowMsgs.push(row);
                     })
-                } 
+                }
             }
             if (rowMsgs.length > 0) {
                 // displaying kendo alert if error is found

@@ -8,7 +8,7 @@ import { DownloadExpireYcs2Data, ExpireYcs2_Payload } from "./admin.expireYcs2.m
 })
 
 export class expireYcs2Service {
-    public apiBaseUrl = "api/ExpireYcs2/";
+    public readonly apiBaseUrl = "api/ExpireYcs2/";
 
     constructor(private httpClient: HttpClient) {
 

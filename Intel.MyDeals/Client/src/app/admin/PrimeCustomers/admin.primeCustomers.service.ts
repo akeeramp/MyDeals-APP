@@ -9,8 +9,8 @@ import { DynamicObj } from "../employee/admin.employee.model";
 })
 
 export class primeCustomerService {
-    public apiBaseUrl = "api/PrimeCustomers/";
-    public apiUnifyFileUrl = "/FileAttachments/";
+    public readonly apiBaseUrl = "api/PrimeCustomers/";
+    public readonly apiUnifyFileUrl = "/FileAttachments/";
 
     constructor(private httpClient: HttpClient) {
 
