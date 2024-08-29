@@ -2041,6 +2041,9 @@ namespace Intel.MyDeals.BusinessLogic
                         myDealsData[OpDataElementType.PRC_ST].Data[strategyId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Cancelled);
                         myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Cancelled);
                         myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.PS_WF_STG_CD, WorkFlowStages.Cancelled);
+                        myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementsValue(AttributeCodes.END_DT, workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedEndDate);
+                        myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementsValue(AttributeCodes.REBATE_BILLING_END, workRecordDataFields.recordDetails.quote.quoteLine[i].BillingEndDate);
+
                         break;
                 }
 
