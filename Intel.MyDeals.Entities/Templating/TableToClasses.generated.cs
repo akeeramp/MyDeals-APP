@@ -10990,62 +10990,50 @@ namespace Intel.MyDeals.Entities {
     [DataContract]
     public partial class SDMSummary
     {
+        [DataMember]
+        public System.String CYCLE_NM { set; get; }
 
         [DataMember]
-        public Nullable<System.Int32> APAC_PD { set; get; }
-
-
-        [DataMember]
-        public Nullable<System.Int32> ASMO_PD { set; get; }
-
-
-        [DataMember]
-        public Nullable<System.DateTime> CHG_DTM { set; get; }
-
-
-        [DataMember]
-        public Nullable<System.Int32> CPU_FLR { set; get; }
-
-
-        [DataMember]
-        public System.String CPU_PROCESSOR_NUMBER { set; get; }
-
-
-        [DataMember]
-        public System.String CPU_SKU_NM { set; get; }
-
+        public Nullable<System.DateTime> CURR_STRT_DT { set; get; }
+        
+		[DataMember]
+        public Nullable<System.DateTime> CURR_END_DT { set; get; }
 
         [DataMember]
         public System.String CPU_VRT_NM { set; get; }
 
+        [DataMember]
+        public System.String CPU_PROCESSOR_NUMBER { set; get; }
 
         [DataMember]
-        public Nullable<System.DateTime> CURR_END_DT { set; get; }
-
-
-        [DataMember]
-        public Nullable<System.DateTime> CURR_STRT_DT { set; get; }
-
+        public System.String CPU_SKU_NM { set; get; }
 
         [DataMember]
-        public System.String CYCLE_NM { set; get; }
-
-
-        [DataMember]
-        public Nullable<System.Int32> EMEA_PD { set; get; }
+        public Nullable<System.Int32> CPU_FLR { set; get; }
 
         [DataMember]
-        public System.Object ERROR { set; get; }
+        public Nullable<System.Int32> APAC_PD { set; get; }
 
         [DataMember]
         public Nullable<System.Int32> IJKK_PD { set; get; }
 
         [DataMember]
+        public Nullable<System.Int32> PRC_PD { set; get; }
+
+        [DataMember]
+        public Nullable<System.Int32> EMEA_PD { set; get; }
+
+        [DataMember]
+        public Nullable<System.Int32> ASMO_PD { set; get; }
+
+        [DataMember]
+        public Nullable<System.DateTime> CHG_DTM { set; get; }
+
+        [DataMember]
         public System.String IS_DELETE { set; get; }
 
         [DataMember]
-        public Nullable<System.Int32> PRC_PD { set; get; }
-
+        public System.Object ERROR { set; get; }
 
         /*
         private static List<SDMSummary> SDMSummaryFromReader(SqlDataReader rdr){
@@ -11101,22 +11089,17 @@ namespace Intel.MyDeals.Entities {
     [DataContract]
     public partial class MstrPrdDtlSmry
     {
+        [DataMember]
+        public System.String CPU_VRT_NM { set; get; }
 
         [DataMember]
         public System.String CPU_PROCESSOR_NUMBER { set; get; }
 
-
         [DataMember]
         public System.String CPU_SKU_NM { set; get; }
 
-
-        [DataMember]
-        public System.String CPU_VRT_NM { set; get; }
-
-
         [DataMember]
         public Nullable<System.DateTime> PRODUCT_ACTIVATION_DATE { set; get; }
-
 
         /*
         private static List<MstrPrdDtlSmry> MstrPrdDtlSmryFromReader(SqlDataReader rdr){
