@@ -54,6 +54,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IConsumptionCountryDataLib, ConsumptionCountryDataLib>();
             registerService.RegisterType<IHealthCheckDataLib, HealthCheckDataLib>();
             registerService.RegisterType<IMuleServiceDataLib, MuleServiceDataLib>();
+            registerService.RegisterType<IsdmDataLibrary, sdmDataLibrary>();
         }
     }
 }

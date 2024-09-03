@@ -95,6 +95,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_IS_ADMIN = DB.GetReaderOrdinal(rdr, "IS_ADMIN");
                     int IDX_IS_CUST_ADMIN = DB.GetReaderOrdinal(rdr, "IS_CUST_ADMIN");
                     int IDX_IS_BULKPRICE_ADMIN = DB.GetReaderOrdinal(rdr, "IS_BULKPRICE_ADMIN");
+                    int IDX_IS_SDM_ADMIN = DB.GetReaderOrdinal(rdr, "IS_SDM_ADMIN");
                     int IDX_IS_DEVELOPER = DB.GetReaderOrdinal(rdr, "IS_DEVELOPER");
                     int IDX_IS_FINANCE_ADMIN = DB.GetReaderOrdinal(rdr, "IS_FINANCE_ADMIN");
                     int IDX_IS_SUPER = DB.GetReaderOrdinal(rdr, "IS_SUPER");
@@ -118,6 +119,7 @@ namespace Intel.MyDeals.DataLibrary
                             IS_ADMIN = (IDX_IS_ADMIN < 0 || rdr.IsDBNull(IDX_IS_ADMIN)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_ADMIN),
                             IS_CUST_ADMIN = (IDX_IS_CUST_ADMIN < 0 || rdr.IsDBNull(IDX_IS_CUST_ADMIN)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_CUST_ADMIN),
                             IS_BULKPRICE_ADMIN = (IDX_IS_CUST_ADMIN < 0 || rdr.IsDBNull(IDX_IS_BULKPRICE_ADMIN)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_BULKPRICE_ADMIN),
+                            IS_SDM_ADMIN = (IDX_IS_SDM_ADMIN < 0 || rdr.IsDBNull(IDX_IS_SDM_ADMIN)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_SDM_ADMIN),
                             IS_DEVELOPER = (IDX_IS_DEVELOPER < 0 || rdr.IsDBNull(IDX_IS_DEVELOPER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_DEVELOPER),
                             IS_FINANCE_ADMIN = (IDX_IS_FINANCE_ADMIN < 0 || rdr.IsDBNull(IDX_IS_FINANCE_ADMIN)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_FINANCE_ADMIN),
                             IS_SUPER = (IDX_IS_SUPER < 0 || rdr.IsDBNull(IDX_IS_SUPER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_SUPER),
@@ -229,6 +231,7 @@ namespace Intel.MyDeals.DataLibrary
             opUserToken.Properties[EN.OPUSERTOKEN.IS_DEVELOPER] = tempUserVitalsRole.First().IS_DEVELOPER == 1 ? true : false;
             opUserToken.Properties[EN.OPUSERTOKEN.IS_CUSTOMERADMIN] = tempUserVitalsRole.First().IS_CUST_ADMIN == 1 ? true : false;
             opUserToken.Properties[EN.OPUSERTOKEN.IS_BULKPRICEADMIN] = tempUserVitalsRole.First().IS_BULKPRICE_ADMIN == 1 ? true : false;
+            opUserToken.Properties[EN.OPUSERTOKEN.IS_SDMADMIN] = tempUserVitalsRole.First().IS_SDM_ADMIN == 1 ? true : false;
 
             opUserToken.Role = new OpRoleType
             {

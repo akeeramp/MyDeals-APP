@@ -91,6 +91,7 @@
     <Compile Include="PushDealstoVistex\IPushDealstoVistexLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterLib.cs" />
     <Compile Include="Reporting\IReportingLib.cs" />
+    <Compile Include="SDM\ISDMLib.cs" />
     <Compile Include="SdsDealOverride\ISdsDealOverrideLib.cs" />
     <Compile Include="Tenders\ITendersLib.cs" />
     <Compile Include="Search\ISearchLib.cs" />

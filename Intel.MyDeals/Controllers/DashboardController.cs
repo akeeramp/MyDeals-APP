@@ -14,6 +14,7 @@ namespace Intel.MyDeals.Controllers
             {
                 return RedirectToAction("Snow", "Dashboard");
             }
+
             return View(AppLib.AVM);
         }
 

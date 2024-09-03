@@ -64,6 +64,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<ISdsDealOverrideLib, SdsDealOverrideLib>();
             registerService.RegisterType<IDbAuditToolsLib, DbAuditToolsLib>();
             registerService.RegisterType<IMuleServiceLib, MuleServiceLib>();
+            registerService.RegisterType<ISDMLib, SDMLib>();
         }
     }
 }

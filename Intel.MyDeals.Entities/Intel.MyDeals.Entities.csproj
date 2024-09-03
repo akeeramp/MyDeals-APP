@@ -104,6 +104,8 @@
     <Compile Include="EmployeeCustomers.cs" />
     <Compile Include="EmployeeEmailCustomers.cs" />
     <Compile Include="ExpireYcs2Data.cs" />
+    <Compile Include="GetPrdMstr.cs" />
+    <Compile Include="GetSdmFilter.cs" />
     <Compile Include="Helpers\FixesHelpers.cs" />
     <Compile Include="JMS.cs" />
     <Compile Include="LogPerformanceTime.cs" />
@@ -180,8 +182,13 @@
     <Compile Include="ProductSelectorDrillDownLevels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RetailPullData.cs" />
+    <Compile Include="RpdValidation.cs" />
     <Compile Include="SaveAndValidatePacket.cs" />
     <Compile Include="SavePacket.cs" />
+    <Compile Include="SDMData.cs" />
+    <Compile Include="SdmDropVal.cs" />
+    <Compile Include="SDMMasterProductDetails.cs" />
+    <Compile Include="SDMStageDataResult.cs" />
     <Compile Include="SdsDealOverride.cs" />
     <Compile Include="SearchFilter.cs" />
     <Compile Include="SearchPacket.cs" />
@@ -198,6 +205,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TableTypeParameters\in_t_mydl_btch_step_dtl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TableTypeParameters\in_t_sdm.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TableTypeParameters\T_DEAL_RECON.cs">

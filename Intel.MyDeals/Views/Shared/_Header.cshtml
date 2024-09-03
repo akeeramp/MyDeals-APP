@@ -17,12 +17,12 @@
     var appVer = "UNKNOWN";
     try
     {
-        usrName = ViewBag.UserToken.Usr.FirstName + " " + ViewBag.UserToken.Usr.LastName;
-        usrWwid = ViewBag.UserToken.Usr.WWID;
-        usrEmail = ViewBag.UserToken.Usr.Email;
-        usrRole = ViewBag.UserToken.Role.RoleTypeCd;
-        usrRoleId = ViewBag.UserToken.Role.RoleTypeId;
-        appVer = ViewBag.AppVer;
+        usrName = ViewBag.UserToken != null ? ViewBag.UserToken.Usr.FirstName + " " + ViewBag.UserToken.Usr.LastName : usrName;
+        usrWwid = ViewBag.UserToken != null ? ViewBag.UserToken.Usr.WWID : usrWwid;
+        usrEmail = ViewBag.UserToken != null ? ViewBag.UserToken.Usr.Email : usrEmail;
+        usrRole = ViewBag.UserToken != null ? ViewBag.UserToken.Role.RoleTypeCd : usrRole;
+        usrRoleId = ViewBag.UserToken != null ? ViewBag.UserToken.Role.RoleTypeId : usrRoleId;
+        appVer = ViewBag.UserToken != null ? ViewBag.AppVer: appVer;
 
         foreach (var x in ViewBag.UserVarticals)
         {
@@ -50,6 +50,7 @@
     bool isCustomerAdmin = opUserToken.IsCustomerAdmin();
     bool isBulkPriceAdmin = opUserToken.IsBulkPriceAdmin();
     bool isRealSA = opUserToken.IsRealSA(); // This ensures that user is an SA and not a Customer Admin
+    bool isSdmAdmin = opUserToken.IsSDMAdmin();
 
     if (isSuper)
     {
@@ -115,6 +116,7 @@
     window.isDeveloper = "@isDeveloper" === "True";
     window.isCustomerAdmin = "@isCustomerAdmin" === "True";
     window.isBulkPriceAdmin = "@isBulkPriceAdmin" === "True";
+    window.isSdmAdmin = "@isSdmAdmin" === "True";
     window.isTester = "@isTester" === "True";
     window.isReportingUser = "@isReportingUser" === "True";
     window.env = "@env";

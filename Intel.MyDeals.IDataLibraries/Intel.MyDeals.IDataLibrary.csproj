@@ -76,6 +76,7 @@
     <Compile Include="PushDealstoVistex\IPushDealstoVistexDataLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterDataLib.cs" />
     <Compile Include="Reporting\IReportingDataLib.cs" />
+    <Compile Include="SDM\IsdmDataLibrary.cs" />
     <Compile Include="Search\IAdvancedSearchDataLib.cs" />
     <Compile Include="SdsDealOverride\ISdsDealOverrideDataLib.cs" />
     <Compile Include="UserPreferences\IUserPreferencesDataLib.cs" />

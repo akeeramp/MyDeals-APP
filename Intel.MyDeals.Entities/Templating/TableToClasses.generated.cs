@@ -702,9 +702,10 @@ namespace Intel.MyDeals.Entities {
 	
 	[DataMember]
 	public System.Int32 IS_BULKPRICE_ADMIN {set;get;}
-	
-	
-	[DataMember]
+
+    [DataMember]
+    public System.Int32 IS_SDM_ADMIN { set; get; }
+        [DataMember]
 	public System.Int32 IS_CUST_ADMIN {set;get;}
 	
 	
@@ -10976,4 +10977,169 @@ namespace Intel.MyDeals.Entities {
         [DataMember]
         public int EMP_WWID { get; set; }
     }// End of class BatchJobStepConstants
+
+
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on SOC-PF4130FW
+    /// by akannamb
+    /// at 9/3/2024 1:33:27 PM
+    ///</summary>
+
+    [DataContract]
+    public partial class SDMSummary
+    {
+
+        [DataMember]
+        public Nullable<System.Int32> APAC_PD { set; get; }
+
+
+        [DataMember]
+        public Nullable<System.Int32> ASMO_PD { set; get; }
+
+
+        [DataMember]
+        public Nullable<System.DateTime> CHG_DTM { set; get; }
+
+
+        [DataMember]
+        public Nullable<System.Int32> CPU_FLR { set; get; }
+
+
+        [DataMember]
+        public System.String CPU_PROCESSOR_NUMBER { set; get; }
+
+
+        [DataMember]
+        public System.String CPU_SKU_NM { set; get; }
+
+
+        [DataMember]
+        public System.String CPU_VRT_NM { set; get; }
+
+
+        [DataMember]
+        public Nullable<System.DateTime> CURR_END_DT { set; get; }
+
+
+        [DataMember]
+        public Nullable<System.DateTime> CURR_STRT_DT { set; get; }
+
+
+        [DataMember]
+        public System.String CYCLE_NM { set; get; }
+
+
+        [DataMember]
+        public Nullable<System.Int32> EMEA_PD { set; get; }
+
+        [DataMember]
+        public System.Object ERROR { set; get; }
+
+        [DataMember]
+        public Nullable<System.Int32> IJKK_PD { set; get; }
+
+        [DataMember]
+        public System.String IS_DELETE { set; get; }
+
+        [DataMember]
+        public Nullable<System.Int32> PRC_PD { set; get; }
+
+
+        /*
+        private static List<SDMSummary> SDMSummaryFromReader(SqlDataReader rdr){
+        // This helper method is template generated.
+        // Refer to that template for details to modify this code.
+
+        var ret = new List<SDMSummary>();
+        int IDX_APAC_PD = DB.GetReaderOrdinal(rdr, "APAC_PD");
+        int IDX_ASMO_PD = DB.GetReaderOrdinal(rdr, "ASMO_PD");
+        int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+        int IDX_CPU_FLR = DB.GetReaderOrdinal(rdr, "CPU_FLR");
+        int IDX_CPU_PROCESSOR_NUMBER = DB.GetReaderOrdinal(rdr, "CPU_PROCESSOR_NUMBER");
+        int IDX_CPU_SKU_NM = DB.GetReaderOrdinal(rdr, "CPU_SKU_NM");
+        int IDX_CPU_VRT_NM = DB.GetReaderOrdinal(rdr, "CPU_VRT_NM");
+        int IDX_CURR_END_DT = DB.GetReaderOrdinal(rdr, "CURR_END_DT");
+        int IDX_CURR_STRT_DT = DB.GetReaderOrdinal(rdr, "CURR_STRT_DT");
+        int IDX_CYCLE_NM = DB.GetReaderOrdinal(rdr, "CYCLE_NM");
+        int IDX_EMEA_PD = DB.GetReaderOrdinal(rdr, "EMEA_PD");
+        int IDX_IJKK_PD = DB.GetReaderOrdinal(rdr, "IJKK_PD");
+        int IDX_PRC_PD = DB.GetReaderOrdinal(rdr, "PRC_PD");
+
+        while (rdr.Read()){
+        ret.Add(new SDMSummary {
+        APAC_PD = (IDX_APAC_PD < 0 || rdr.IsDBNull(IDX_APAC_PD)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_APAC_PD),
+        ASMO_PD = (IDX_ASMO_PD < 0 || rdr.IsDBNull(IDX_ASMO_PD)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ASMO_PD),
+        CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_CHG_DTM),
+        CPU_FLR = (IDX_CPU_FLR < 0 || rdr.IsDBNull(IDX_CPU_FLR)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_CPU_FLR),
+        CPU_PROCESSOR_NUMBER = (IDX_CPU_PROCESSOR_NUMBER < 0 || rdr.IsDBNull(IDX_CPU_PROCESSOR_NUMBER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_PROCESSOR_NUMBER),
+        CPU_SKU_NM = (IDX_CPU_SKU_NM < 0 || rdr.IsDBNull(IDX_CPU_SKU_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_SKU_NM),
+        CPU_VRT_NM = (IDX_CPU_VRT_NM < 0 || rdr.IsDBNull(IDX_CPU_VRT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_VRT_NM),
+        CURR_END_DT = (IDX_CURR_END_DT < 0 || rdr.IsDBNull(IDX_CURR_END_DT)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_CURR_END_DT),
+        CURR_STRT_DT = (IDX_CURR_STRT_DT < 0 || rdr.IsDBNull(IDX_CURR_STRT_DT)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_CURR_STRT_DT),
+        CYCLE_NM = (IDX_CYCLE_NM < 0 || rdr.IsDBNull(IDX_CYCLE_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CYCLE_NM),
+        EMEA_PD = (IDX_EMEA_PD < 0 || rdr.IsDBNull(IDX_EMEA_PD)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_EMEA_PD),
+        IJKK_PD = (IDX_IJKK_PD < 0 || rdr.IsDBNull(IDX_IJKK_PD)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_IJKK_PD),
+        PRC_PD = (IDX_PRC_PD < 0 || rdr.IsDBNull(IDX_PRC_PD)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_PRC_PD)
+        });
+        } // while
+        return ret;
+        }
+        */
+
+    } // End of class SDMSummary
+
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on SOC-PF4130FW
+    /// by akannamb
+    /// at 9/3/2024 1:32:33 PM
+    ///</summary>
+
+    [DataContract]
+    public partial class MstrPrdDtlSmry
+    {
+
+        [DataMember]
+        public System.String CPU_PROCESSOR_NUMBER { set; get; }
+
+
+        [DataMember]
+        public System.String CPU_SKU_NM { set; get; }
+
+
+        [DataMember]
+        public System.String CPU_VRT_NM { set; get; }
+
+
+        [DataMember]
+        public Nullable<System.DateTime> PRODUCT_ACTIVATION_DATE { set; get; }
+
+
+        /*
+        private static List<MstrPrdDtlSmry> MstrPrdDtlSmryFromReader(SqlDataReader rdr){
+        // This helper method is template generated.
+        // Refer to that template for details to modify this code.
+
+        var ret = new List<MstrPrdDtlSmry>();
+        int IDX_CPU_PROCESSOR_NUMBER = DB.GetReaderOrdinal(rdr, "CPU_PROCESSOR_NUMBER");
+        int IDX_CPU_SKU_NM = DB.GetReaderOrdinal(rdr, "CPU_SKU_NM");
+        int IDX_CPU_VRT_NM = DB.GetReaderOrdinal(rdr, "CPU_VRT_NM");
+        int IDX_PRODUCT_ACTIVATION_DATE = DB.GetReaderOrdinal(rdr, "PRODUCT_ACTIVATION_DATE");
+
+        while (rdr.Read()){
+        ret.Add(new MstrPrdDtlSmry {
+        CPU_PROCESSOR_NUMBER = (IDX_CPU_PROCESSOR_NUMBER < 0 || rdr.IsDBNull(IDX_CPU_PROCESSOR_NUMBER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_PROCESSOR_NUMBER),
+        CPU_SKU_NM = (IDX_CPU_SKU_NM < 0 || rdr.IsDBNull(IDX_CPU_SKU_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_SKU_NM),
+        CPU_VRT_NM = (IDX_CPU_VRT_NM < 0 || rdr.IsDBNull(IDX_CPU_VRT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_VRT_NM),
+        PRODUCT_ACTIVATION_DATE = (IDX_PRODUCT_ACTIVATION_DATE < 0 || rdr.IsDBNull(IDX_PRODUCT_ACTIVATION_DATE)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_PRODUCT_ACTIVATION_DATE)
+        });
+        } // while
+        return ret;
+        }
+        */
+
+    } // End of class MstrPrdDtlSmry
 }

@@ -38,6 +38,10 @@ namespace Intel.MyDeals.Entities
         {
             return opUserToken != null && opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_BULKPRICEADMIN) && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_BULKPRICEADMIN] ?? false);
         }
+        public static bool IsSDMAdmin(this OpUserToken opUserToken)
+        {
+            return opUserToken != null && opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_SDMADMIN) && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_SDMADMIN] ?? false);
+        }
 
         public static bool IsRealSA(this OpUserToken opUserToken)
         {

@@ -114,6 +114,11 @@ namespace Intel.MyDeals.BusinessLogic
             return _filesDataLib.ExtractBulkUnifyFile(fileData);
         }
 
+        public List<SDMData> ExtractBulkSDM(byte[] fileData)
+        {
+            return _filesDataLib.ExtractBulkSDM(fileData);
+        }
+
         public List<DealRecon> ExtractDealReconFile(byte[] fileData)
         {
             return _filesDataLib.ExtractDealReconFile(fileData);

@@ -21,9 +21,13 @@
 @import '../../app/core/dealPopup/dealPopup.component.css';
 
 /* Intel IT */
+
+
 /* @import '../../../../css/it-mlaf.min.css';    Need to resolve an issue for missing images/fonts when adding to bundle, in the meantime, it should be included in the project's BundleConfig */
 
+
 /* Variables */
+
 :root {
     /* Used in `#horizontal.expanded:has(.contractManagerPlus)` */
     --top-single-row-nav: 85px;
@@ -136,6 +140,7 @@ kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hov
     opacity: 1;
     display: inline-flex !important
 }
+
 
 /*.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],
 .oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"] {
@@ -354,7 +359,9 @@ kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li {
     font-size: 14px !important;
 }
 
+
 /*Updated Grid filter Items*/
+
 .k-grid-header {
     background-color: #E7E7E8;
 }
@@ -382,6 +389,7 @@ kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li {
     color: #0071C5 !important;
     /*Green to test*/
 }
+
 
 /*END Updated Grid filter Items*/
 
@@ -418,7 +426,6 @@ kendo-grid.icon-changes table tr td a.k-plus:before {
 kendo-grid.icon-changes table tr td a.k-minus:before {
     content: "\e001" !important;
 }
-
 
 kendo-grid.approval-tables table tr td {
     padding: 0 5px !important;
@@ -968,7 +975,6 @@ kendo-dialog.the-comp-de kendo-dialog-actions button:last-child.last-child-btn:h
     margin-left: -7px
 }
 
-
 kendo-multiselect.fiend-all li {
     border-radius: .25rem !important
 }
@@ -1006,6 +1012,7 @@ loading-panel-angular.loadpublish .myLoader {
     left: 42%;
 }
 
+
 /* .loadpublish publish-tender loading-panel-angular .ss-loading-panel {
     margin-top: 150px !important;
     margin-left: 347px !important;
@@ -1034,7 +1041,6 @@ kendo-window.dashboard-kendo-window.process-search.k-window kendo-window-titleba
     position: fixed !important;
     height: 100%
 }
-
 
 kendo-dialog.kit-name-popup .k-window {
     width: 600px;
@@ -1122,7 +1128,6 @@ button.dash-popup-okbtn.k-button:hover {
     background-color: #bbb6b614 !important
 }
 
-
 .missing-cap-cost kendo-grid.k-widget.k-grid kendo-grid-list table tbody tr.k-grid-norecords {
     visibility: hidden
 }
@@ -1176,7 +1181,6 @@ kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-footer {
 .add-widget-box mat-dialog-container .modalbody.mat-dialog-content .container.add-widget-container {
     padding: 0 !important
 }
-
 
 kendo-dialog.cm-pop-up .k-window-content {
     padding: 0
@@ -1284,7 +1288,6 @@ kendo-dropdownlist.inputWidth.font-input.backdate_contract_style.k-dropdown.ng-d
     border-bottom: 2px solid #0071c5 !important;
 }
 
-
 .add-widget-box mat-dialog-container {
     padding: 0;
     border-radius: 0
@@ -1325,7 +1328,6 @@ kendo-window#OvrLp.k-wind-design {
     overflow: hidden !important;
 }
 
-
 .grid_text_filter .k-grid-header table thead tr th {
     font-size: 17px !important;
     font-weight: 600;
@@ -1364,7 +1366,6 @@ kendo-window#OvrLp.k-wind-design {
     color: #000 !important;
     opacity: .45 !important;
 }
-
 
 .contract-toggle.k-switch-on .k-switch-handle {
     background-color: #eeeeee !important;
@@ -1428,7 +1429,6 @@ kendo-window#OvrLp.k-wind-design {
     border-right: 0px !important;
     border-left: 0px !important;
 }
-
 
 kendo-upload.contract-correction-upload.k-widget.k-upload {
     border: none !important;
@@ -1553,7 +1553,6 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
 .parent-one pricing-table-editor .row {
     margin-left: 0
 }
-
 
 .mybuttondialog .k-dialog .k-dialog-buttongroup .k-button {
     height: 67px !important;
@@ -1682,7 +1681,9 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     text-align: left !important;
 }
 
+
 /*--------------------Overlapping Deals Dialog CSS--------------------*/
+
 .k-window-maximized kendo-grid.overDealChecking.widthOutDesign.k-widget kendo-grid-list table tbody tr.k-grid-norecords td {
     min-width: 1915px !important;
     border: none !important;
@@ -1711,6 +1712,7 @@ kendo-grid.overDealChecking.widthOutDesign.k-widget kendo-grid-list table tbody 
     justify-content: center;
     background-color: #fff !important;
 }
+
 
 /*-------------------------------------------------------------*/
 
@@ -1895,7 +1897,6 @@ kendo-window.flexOverlapProducts {
     z-index: 0 !important;
 }
 
-
 .managingPerformanceBars .executeVals {
     right: 0% !important;
     text-align: right;
@@ -1924,6 +1925,7 @@ kendo-window.flexOverlapProducts {
 .managingPerformanceBars i.intelicon-show-results-outlined.showMore {
     margin-left: 5px;
 }
+
 
 /*kendo-grid#manageFilterStyle .k-grid-content-locked {
     height: auto !important;
@@ -1974,7 +1976,9 @@ kendo-popup.k-animation-container .k-list-filter input.k-textbox:focus {
     box-shadow: none;
 }
 
+
 /*    summary Wrappers Manage Screen*/
+
 #sum-wrapper {
     height: 100vh;
     overflow: auto;
@@ -2088,7 +2092,6 @@ kendo-grid.raid-style.proselector-raid-style table tr th .k-cell-inner .k-column
     white-space: nowrap !important;
 }
 
-
 kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link .k-column-title {
     text-transform: capitalize;
     color: #1a3e6f;
@@ -2103,6 +2106,7 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link:hove
     background: transparent !important
 }
 
+
 /*kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter {
     color: #808080
 }*/
@@ -2111,7 +2115,6 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
     color: #00aeef !important;
     opacity: 1;
 }
-
 
 #prodGrid .k-grid td {
     border-width: 0 !important;
@@ -2326,7 +2329,6 @@ kendo-dialog.fixing-product-kits .k-dialog-buttongroup button.k-button:hover {
     padding: 0.5rem 0.5rem;
 }
 
-
 mat-button-toggle-group.mat-toggle-employee-role .btn-primary.colors-btn-prime {
     margin-right: 1px !important;
     padding: 10px 16px;
@@ -2487,6 +2489,7 @@ button.warn-custom:hover {
     text-overflow: ellipsis
 }
 
+
 /*#dealDtl {
     padding-left: 5px
 }*/
@@ -2553,8 +2556,6 @@ kendo-dialog#renamedialog {
     background: #00aeef !important;
 }
 
-
-
 .cp-leftnav-treeview.k-treeview .k-in.k-state-selected,
 .cp-leftnav-treeview.k-treeview-leaf.k-state-selected {
     position: relative !important;
@@ -2565,7 +2566,6 @@ kendo-dialog#renamedialog {
     box-shadow: none !important;
     border-radius: 0px !important;
 }
-
 
 .cp-leftnav-treeview.k-treeview .k-in.k-state-hover,
 .cp-leftnav-treeview.k-treeview .k-in:hover,
@@ -2900,4 +2900,25 @@ i.icon-color-pipe {
 
 .paddingReducerExpire .k-content.k-window-content.k-dialog-content {
     padding: 0;
+}
+
+.handsontable td.custom-cell {
+    color: red !important;
+}
+
+.handsontable td.error-cell-rpd {
+    border: solid red 1px !important;
+    color: red !important;
+}
+
+.rpd-excel-export-menu li,
+.rpd-excel-export-menu li:hover .k-state-active,
+.rpd-excel-export-menu li:active .k-state-active {
+    color: #fff !important;
+    font: bold;    
+    font-size: 18px;
+}
+
+kendo-menu.rpd-excel-export-menu ul {
+    background-color: transparent !important;
 }

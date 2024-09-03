@@ -7,7 +7,7 @@ namespace Intel.MyDeals.Controllers
 	{
 		public ActionResult Index()
 		{
-			return View(AppLib.AVM);
+            return View(AppLib.AVM);
 		}
 
     }

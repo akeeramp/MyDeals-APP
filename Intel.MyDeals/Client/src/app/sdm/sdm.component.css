@@ -1,0 +1,322 @@
+
+.custom-cell {
+    color: red !important;
+}
+
+.notesBulk {
+    font-size: 14px;
+    margin-left: 10px;
+    margin-top: 20px !important;
+    padding: 0;
+}
+
+/*.bluebold {
+  color: #0071c5;
+  font-weight: bold;
+}*/
+.redboldBulk {
+    color: red;
+    font-weight: bold;
+}
+
+/* @import '../kendo_grid.css'; */
+
+.k-grid.KendoProductAliasInfo {
+    height: calc(100vh - 200px) !important;
+    margin-right: 10px;
+}
+
+.grid_box_size {
+    padding-left: 14px !important;
+    padding-right: 5px !important;
+    padding-top: 0 !important
+}
+
+.delete-space {
+    margin-left: .16em !important;
+    margin-right: -1em !important
+}
+
+.header-height-align {
+    line-height: 1.1
+}
+
+.remove-space-cancel {
+    margin-left: -1.14em !important
+}
+
+.remove-focus-hightlight:focus {
+    box-shadow: none !important;
+}
+
+kendo-combobox {
+    box-sizing: border-box;
+    border-color: #ced4da;
+    border-radius: .25rem;
+    border-style: solid;
+    border-width: 1px;
+    padding: 3px;
+}
+
+kendo-combobox .k-select {
+    background-color: #e4e7eb;
+    border-color: #e4e7eb;
+    color: #212529;
+    transition: color .2s ease-in-out, background-color .2s ease-in-out, border-color .2s ease-in-out, box-shadow .2s ease-in-out;
+    align-items: center;
+    border-width: 0;
+    border-inline-start-width: 1px;
+    border-style: solid;
+    cursor: pointer;
+    display: flex;
+    flex: 0 0 auto;
+    flex-flow: row nowrap;
+    justify-content: center;
+    outline: 0;
+    padding: .375rem;
+}
+
+kendo-combobox .k-select.k-state-hover, kendo-combobox .k-select:hover {
+    background-color: #ced3db;
+    border-color: #c7cdd5;
+}
+
+.optsdm span.k-dropdown-wrap {
+    font-size: 12px !important;
+    border-radius: unset !important;
+}
+
+.optsdm.errorCode {
+    border: 1px solid red !important;
+}
+
+.sdmgridsall .k-switch-off .k-switch-container {
+    border-color: #b1babf !important;
+    background-color: #b1babf !important;
+}
+
+.sdmgridsall .k-switch-off .k-switch-handle {
+    background-color: white !important;
+}
+
+.sdmgridsall .k-switch-on .k-switch-container {
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important;
+}
+
+.sdmgridsall span.k-column-title {
+    white-space: nowrap !important;
+}
+/*kendo-grid-buttons grid_box_size*/
+.pro-sdm.k - grid - header.headerClass {
+    background - color: #e7e7e8;
+    color: #1a3e6f;
+    font - size: 12px !important;
+}
+
+.pro-sdm .k-grid-toolbar {
+    background-color: #0071c5;
+}
+
+kendo-grid.pro-sdm.k-widget.k-grid table tr th span.k-cell-inner .k-link {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #1a3e6f;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.k-grid.pro-sdm {
+    height: calc(100vh - 200px) !important;
+    margin-right: 10px;
+}
+
+#command-icon {
+    background-color: unset;
+    color: #424141;
+    border: none;
+    box-shadow: none;
+}
+
+#command-icon:hover {
+    color: deepskyblue;
+}
+
+h2.header-bottomsizereduce {
+    font-size: 26px !important;
+    margin-top: 15px !important;
+}
+
+.kendo-grid-buttons.table-left-rightsizefix {
+    padding-left: 14px !important;
+    padding-right: 5px !important;
+    padding-top: 0 !important
+}
+
+.space-remove-btw-two {
+    margin-left: .16em !important;
+    margin-right: -1em !important
+}
+
+.delete-editorspaceremove {
+    margin-left: .16em !important;
+    margin-right: -1em !important
+}
+
+.remove-canceloutline {
+    margin-left: -1.14em !important
+}
+
+kendo-dialog.fix_close .k-window-actions .k-button {
+    background: none !important;
+}
+
+#modalBodyDivUploadSdm .row {
+    margin-left: -5px;
+    width: 733px;
+}
+
+.notes-sdm {
+    margin-left: 5px !important
+}
+
+#sdmurlLink a {
+    color: #0071c5;
+}
+
+.sdm-custom .mat-dialog-container {
+    padding: 0 !important;
+    position: relative;
+    margin-top: -150px;
+    border-radius: 0px !important;
+    overflow: hidden !important;
+    margin-right: 30px !important;
+}
+
+?.sdmLoading .ss-loading-panel.ss-Info {
+    height: auto !important;
+}
+
+#sdmUpload .ss-loading-panel {
+    margin-top: 6%;
+    margin-left: 37%;
+}
+
+#sdmModal .modal-footer {
+    bottom: -59px;
+    width: 100%;
+    background: #E7E7E8;
+    height: 60px;
+    float: left;
+    border: 0.5px solid #003c71;
+}
+
+.modalBlueBody {
+    background-color: #003c71;
+    color: #ffffff;
+}
+
+#sdmModal .custom-header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+#modalTitleUploadsdm {
+    float: left;
+}
+
+#sdmModal .modal-body {
+    overflow: hidden;
+    width: 100%;
+    max-height: 450px;
+    border-bottom: none;
+}
+
+#btnClose.bulk-close-icon {
+    float: right !important;
+    margin-top: 0px !important;
+    background: transparent;
+    padding: 3px !important;
+    font-size: 22px !important;
+    cursor: pointer !important;
+}
+
+.sdmMasteDataLookup {
+    display: flex;
+    justify-content: flex-end;
+    margin-right:30px;
+}
+
+.sdmFilters {
+    display: flex;
+    width: 85vw
+}
+
+.uploadBtn {
+    justify-content: flex-end;
+}
+
+kendo-dialog.rpd-excel-popups .k-dialog {
+    border-radius: 0
+}
+
+kendo-dialog.rpd-excel-popups .k-dialog .k-content {
+    padding: 15px;
+    padding-top: 30px;
+    border-bottom: 1px solid #f4f4f4
+}
+
+kendo-dialog-actions.rpd-excel-actions {
+    padding: 15px;
+    justify-content: flex-end
+}
+
+kendo-dialog-actions.rpd-excel-actions button.k-button.rpd-excel-cancel {
+    background-color: #f0f0f0 !important;
+    color: #111;
+    width: auto !important;
+    max-width: 75px;
+    font-size: 16px;
+    border-radius: 3px !important;
+    padding: 8px !important
+}
+
+kendo-dialog-actions.rpd-excel-actions button.k-button.rpd-excel-ok {
+    background-color: #3c8dbc !important;
+    border-color: #367fa9 !important;
+    font-size: 16px;
+    border-radius: 3px !important;
+    padding: 8px !important;
+    width: auto !important;
+    max-width: 125px;
+    color: #fff
+}
+
+kendo-dialog.rpd-excel-popups .k-dialog .k-content h2,
+kendo-dialog.rpd-excel-popups .k-dialog .k-content p {
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif
+}
+
+kendo-dialog-actions.rpd-excel-actions button.k-button.rpd-excel-ok:hover,
+kendo-dialog-actions.rpd-excel-actions button.k-button.rpd-excel-ok:active {
+    background-color: #3c8dbc !important;
+    border-color: #367fa9 !important;
+    color: #fff !important;
+    box-shadow: none !important
+}
+
+kendo-dialog-actions.rpd-excel-actions button.k-button.rpd-excel-cancel:hover,
+kendo-dialog-actions.rpd-excel-actions button.k-button.rpd-excel-cancel:active {
+    background-color: #f0f0f0 !important;
+    border-color: #f0f0f0 !important;
+    color: #111 !important;
+    box-shadow: none !important
+}

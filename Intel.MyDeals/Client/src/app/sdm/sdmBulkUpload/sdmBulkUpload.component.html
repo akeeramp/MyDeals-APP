@@ -1,0 +1,61 @@
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<loading-panel-angular [show]="isBusy" [header]="'Retail Pull Dollar...'" [isShowFunFact]="false" [description]="'Please wait while Retail Pull Dollar Data uploads...'" [msgType]="'Info'" class="sdmLoading"></loading-panel-angular>
+<div class="row">
+    <div class="col-md-12" style="padding-left: 40px; padding-top: 10px">
+        <h2 class="header-bottomsizereduce">Retail Pull Dollar Data Upload</h2>
+    </div>
+
+</div>
+
+<div>
+    <div class="row sdmUpload" style="margin-left: 10px;">
+        <div class="col-md-4" style="padding-top:20px;">
+            <kendo-upload [saveUrl]="uploadSaveUrl" [batch]="true" [restrictions]="myRestrictions" (success)="successEventHandler($event)" (error)="onFileUploadError($event)" (complete)="onFileUploadComplete()" [multiple]="false" [autoUpload]="false" [(ngModel)]="files"
+                name="files" class="kuploadaction sdm-upload-action-button"></kendo-upload>
+            <span id="urlLink" style="text-align:right;">
+                <a class="text-dwnlod-style" download target="_blank" href={{fileURL}}>Click here to download the template</a>
+            </span>
+        </div>
+        <div class="col-md-2" style="padding-top:30px;">
+            <button class="btn btn-primary" (click)="validateData()">Upload Data</button>
+        </div>
+        <div class="col-md-6 notesBulk " style=" margin-left: auto; margin-right: auto; padding-top:-10px;">
+            <span class="redboldBulk">NOTE:</span><span>
+                &nbsp;Format of the file should be ".xlsx". Your attachment will
+                upload after clicking the "Upload Data" button.
+            </span>
+            <br />
+            <span class="redboldBulk">NOTE:</span><span>
+                &nbsp;Excel will not allow more than 2000 records at a
+                time
+            </span>
+            <br />
+            <span style="margin-left: 0px;text-align:left;">
+                <a style="cursor: pointer;" class="text-dwnlod-style-admin" (click)="openMasterDataModal()">Click here for master data lookup</a>
+            </span>
+        </div>
+    </div>
+    <div class="row" style="margin-left: 10px;">
+        <div *ngIf="isDownloadData" class="col-md-12 sdmDownloadData" style="left: -25px; cursor: pointer;">
+            <a class="text-dwnlod-style" (click)="downloadExcel()">Click here to download the complete data</a>            
+        </div>
+    </div>
+    <div class="row">
+        <div *ngIf="hotEnable" class="col-md-12" style="margin-left: 10px;">
+            <div class="sdmHandsone" style="margin-left: 15px;">
+                <hot-table [hotId]="hotId" [settings]="hotSettings" [data]="data"></hot-table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<kendo-dialog *ngIf="showWarningDialog" id="sdm-kendo-excel-popup">
+    <p class="dialogmsg-sdm-kendo">
+        You are uploading a rather large amount of data with more than 2000 records. If you would like to continue, Re-Upload the file with the limit of 2000 items.
+    </p>
+    <div style="display:flex; padding-right:10px;">
+        <kendo-dialog-actions style="flex-grow:1;">
+            <button kendoButton class="okbtn-sdm-kendostyle" (click)="close()" themeColor="primary">OK</button>
+        </kendo-dialog-actions>
+    </div>
+</kendo-dialog>

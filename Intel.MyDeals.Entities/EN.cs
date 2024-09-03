@@ -21,6 +21,7 @@
             public const string IS_TESTER = "IsTester";
             public const string IS_CUSTOMERADMIN = "IsCustomerAdmin";
             public const string IS_BULKPRICEADMIN = "IsBulkPriceAdminAdmin";
+            public const string IS_SDMADMIN = "IsSDMAdmin";
 
             public const string SUPER_LIST = "UI_SUPER_ADMINISTRATOR_LIST";
             public const string DEVELOPER_LIST = "UI_Developers_List";

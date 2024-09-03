@@ -285,7 +285,12 @@ namespace Intel.MyDeals.DataLibrary
                 strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "To Be Unified Customer ID", "To Be Unified Customer Name", "To Be Country/Region Customer ID", "To Be Unified Country/Region", "RPL Status code"));
                 arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
             }
-            else // (fileType == "BulkPriceUpdate")
+            else if (fileType == "RPDCycleTemplate") {
+                fileAttachmentData.FILE_NM = "RPD_Cycle_Template.xlsx";
+                strTemplateContent = string.Join("\n", string.Join("\t", "Cycle Name *", "Start Date (MM/DD/YYYY) *", "End Date (MM/DD/YYYY) *", "Category Name *", "SKU Name *", "Processor Number *", "CPU_FLR", "APAC_PD", "IJKK_PD", "PRC_PD", "EMEA_PD", "ASMO_PD", "IS_DELETE *"));
+                arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
+            }
+            else// (fileType == "BulkPriceUpdate")
             {
                 fileAttachmentData.FILE_NM = "BulkPriceUpdate.xlsx";
                 strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Deal Description", "ECAP Price", "Ceiling Volume", "Deal Start Date", "Deal End Date", "Billings Start Date", "Billings End Date", "Project Name", "Tracker Effective Date", "Additional Terms"));
@@ -298,6 +303,10 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     excelWorksheet = excelPackage.Workbook.Worksheets.Add("UnifyDeals");
                 }
+                else if (fileType == "RPDCycleTemplate")
+                {
+                    excelWorksheet = excelPackage.Workbook.Worksheets.Add("RPD_Cycle_Template");
+                }
                 else // (fileType == "BulkPriceUpdate") 
                 {
                     excelWorksheet = excelPackage.Workbook.Worksheets.Add("BulkPriceUpdate");
@@ -306,9 +315,20 @@ namespace Intel.MyDeals.DataLibrary
                 double dblMaxWidthOfColumn = 300;
                 for (int iColumnCount = 1; iColumnCount <= arrTemplate[0].Length; iColumnCount++)
                 {
-                    excelWorksheet.Column(iColumnCount).AutoFit();
-                    if (excelWorksheet.Column(iColumnCount).Width > dblMaxWidthOfColumn)
-                        excelWorksheet.Column(iColumnCount).Width = dblMaxWidthOfColumn;
+                    if (fileType == "RPDCycleTemplate") 
+                    {
+                        if(arrTemplate[0][iColumnCount-1] == "Start Date (MM/DD/YYYY) *" || arrTemplate[0][iColumnCount - 1] == "End Date (MM/DD/YYYY) *")
+                        {
+                            excelWorksheet.Column(iColumnCount).Style.Numberformat.Format = "MM/dd/yyyy";
+                        }
+                        excelWorksheet.Column(iColumnCount).Width = 30;
+                    }
+                    else
+                    {
+                        excelWorksheet.Column(iColumnCount).AutoFit();
+                        if (excelWorksheet.Column(iColumnCount).Width > dblMaxWidthOfColumn)
+                            excelWorksheet.Column(iColumnCount).Width = dblMaxWidthOfColumn;
+                    }
                 }
                 excelWorksheet.Row(1).Style.Font.Bold = true;
                 excelWorksheet.View.FreezePanes(2, 1);
@@ -362,6 +382,89 @@ namespace Intel.MyDeals.DataLibrary
                                         RPL_STS_CODE= dealRplStsCode
                                     });
                                 }                                
+                            }
+                        }
+
+                    }
+                }
+            }
+            return lstRtn;
+        }
+
+
+        //sdm file extraction
+        public List<SDMData> ExtractBulkSDM(byte[] fileData)
+        {
+            List<SDMData> lstRtn = new List<SDMData>();
+            using (MemoryStream memStream = new MemoryStream(fileData))
+            {
+                using (ExcelPackage excelPackage = new ExcelPackage(memStream))
+                {
+                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
+
+                    if (worksheet.Dimension != null)
+                    {
+                        // get number of rows and columns in the sheet
+                        int iRows = worksheet.Dimension.Rows;
+                        int iColumns = worksheet.Dimension.Columns;
+
+                        if (iRows >= 2 && iColumns >= 7)
+                        {
+                            // loop through the worksheet rows and columns 
+                            for (int i = 1; i <= iRows; i++)
+                            {
+                                if (i == 1) {
+                                    string[] columnNames = { "Cycle Name *", "Start Date (MM/DD/YYYY) *", "End Date (MM/DD/YYYY) *", "Category Name *", "SKU Name *", "Processor Number *", "CPU_FLR", "APAC_PD", "IJKK_PD", "PRC_PD", "EMEA_PD", "ASMO_PD", "IS_DELETE *" };
+                                    for (int j = 0; j < columnNames.Length; j++)
+                                    {
+                                        if (worksheet.Cells[i, j+1].Value.ToString() != columnNames[j])
+                                        {
+                                            return lstRtn;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    DateTime sdmCURR_STRT_DT;
+                                    DateTime sdmCURR_END_DT;
+                                    string sdmCYCLE_NM = worksheet.Cells[i, 1].Value != null ? worksheet.Cells[i, 1].Value.ToString().TrimEnd() : string.Empty;
+                                    bool rpdStrtDt = worksheet.Cells[i, 2].Value != null && DateTime.TryParse(worksheet.Cells[i, 2].Value.ToString().TrimEnd(), out sdmCURR_STRT_DT) ? DateTime.TryParse(worksheet.Cells[i, 2].Value.ToString().TrimEnd(), out sdmCURR_STRT_DT) : worksheet.Cells[i, 2].Text != null && DateTime.TryParse(worksheet.Cells[i, 2].Text.ToString().TrimEnd(), out sdmCURR_STRT_DT) ? DateTime.TryParse(worksheet.Cells[i, 2].Text.ToString().TrimEnd(), out sdmCURR_STRT_DT) : DateTime.TryParse("", out sdmCURR_STRT_DT);
+                                    bool rpdEndDt = worksheet.Cells[i, 3].Value != null && DateTime.TryParse(worksheet.Cells[i, 3].Value.ToString().TrimEnd(), out sdmCURR_END_DT) ? DateTime.TryParse(worksheet.Cells[i, 3].Value.ToString().TrimEnd(), out sdmCURR_END_DT) : worksheet.Cells[i, 2].Text != null && DateTime.TryParse(worksheet.Cells[i, 3].Text.ToString().TrimEnd(), out sdmCURR_END_DT) ? DateTime.TryParse(worksheet.Cells[i, 3].Text.ToString().TrimEnd(), out sdmCURR_END_DT) : DateTime.TryParse("", out sdmCURR_END_DT);
+                                    string sdmCPU_VRT_NM = worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString().TrimEnd() : string.Empty;
+                                    string sdmCPU_SKU_NM = worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString().TrimEnd() : string.Empty;
+                                    string sdmCPU_PROCESSOR_NUMBER = worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().TrimEnd() : string.Empty;
+                                    int sdmCPU_FLR = 0;
+                                    int sdmAPAC_PD = 0;
+                                    int sdmIJKK_PD = 0;
+                                    int sdmPRC_PD = 0;
+                                    int sdmEMEA_PD = 0;
+                                    int sdmASMO_PD = 0;
+                                    string sdmIS_DELETE = worksheet.Cells[i, 13].Value != null ? worksheet.Cells[i, 13].Value.ToString().TrimEnd() : "N";
+                                    int.TryParse(worksheet.Cells[i, 7].Value != null && !worksheet.Cells[i, 7].Value.ToString().Contains("-") ? worksheet.Cells[i, 7].Value.ToString().Trim() : "0", out sdmCPU_FLR);
+                                    int.TryParse(worksheet.Cells[i, 8].Value != null && !worksheet.Cells[i, 8].Value.ToString().Contains("-") ? worksheet.Cells[i, 8].Value.ToString().Trim() : "0", out sdmAPAC_PD);
+                                    int.TryParse(worksheet.Cells[i, 9].Value != null && !worksheet.Cells[i, 9].Value.ToString().Contains("-") ? worksheet.Cells[i, 9].Value.ToString().Trim() : "0", out sdmIJKK_PD);
+                                    int.TryParse(worksheet.Cells[i, 10].Value != null && !worksheet.Cells[i, 10].Value.ToString().Contains("-") ? worksheet.Cells[i, 10].Value.ToString().Trim() : "0", out sdmPRC_PD);
+                                    int.TryParse(worksheet.Cells[i, 11].Value != null && !worksheet.Cells[i, 11].Value.ToString().Contains("-") ? worksheet.Cells[i, 11].Value.ToString().Trim() : "0", out sdmEMEA_PD);
+                                    int.TryParse(worksheet.Cells[i, 12].Value != null && !worksheet.Cells[i, 12].Value.ToString().Contains("-") ? worksheet.Cells[i, 12].Value.ToString().Trim() : "0", out sdmASMO_PD);
+
+                                    if (!(sdmCYCLE_NM == "" && sdmCPU_VRT_NM == "" && sdmCPU_SKU_NM == "" && sdmCPU_PROCESSOR_NUMBER == ""))
+                                        lstRtn.Add(new SDMData
+                                        {
+                                            CYCLE_NM = sdmCYCLE_NM,
+                                            CURR_STRT_DT = sdmCURR_STRT_DT,
+                                            CURR_END_DT = sdmCURR_END_DT,
+                                            CPU_VRT_NM = sdmCPU_VRT_NM,
+                                            CPU_SKU_NM = sdmCPU_SKU_NM,
+                                            CPU_PROCESSOR_NUMBER = sdmCPU_PROCESSOR_NUMBER,
+                                            CPU_FLR = sdmCPU_FLR,
+                                            APAC_PD = sdmAPAC_PD,
+                                            IJKK_PD = sdmIJKK_PD,
+                                            PRC_PD = sdmPRC_PD,
+                                            EMEA_PD = sdmEMEA_PD,
+                                            ASMO_PD = sdmASMO_PD,
+                                            IS_DELETE = sdmIS_DELETE
+                                        });
+                                }
                             }
                         }
 

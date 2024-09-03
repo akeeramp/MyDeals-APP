@@ -147,4 +147,9 @@ export class HeaderComponent {
         return (this.isRealSA() || this.isDeveloper() || allowedUserRole.includes(this.getUserRole()) || (this.getUserRole() == 'GA' && this.isSuper()));
     }
 
+    isSdmUser(): boolean {
+        const allowedUserRole = ['RA'];
+        return (this.isDeveloper() || (allowedUserRole.includes(this.getUserRole()) && (<any> window).isSdmAdmin));
+    }
+
 }

@@ -7242,7 +7242,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
         }
 
-   
+
 
 
 
@@ -7272,6 +7272,191 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
         }
 
+        ///<summary>
+        /// ID: 244508250
+        /// Modified: 9/2/2024 11:17:09 AM
+        /// Parameters: 4
+        ///</summary>
+        public partial class PR_MYDL_GET_SDM_DROPDOWN : SP
+        {
+            public PR_MYDL_GET_SDM_DROPDOWN()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_SDM_DROPDOWN]";
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+            public String WhereClause
+            {
+                set { SetParmeter("WhereClause", value); }
+                get { return (String)GetParameter("WhereClause"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Boolean isStgTbl
+            {
+                set { SetParmeter("isStgTbl", value); }
+                get { return (Boolean)GetParameter("isStgTbl"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(100)
+            /// Mode: IN
+            /// Max Length: 100
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+            public String ColNm
+            {
+                set { SetParmeter("ColNm", value); }
+                get { return (String)GetParameter("ColNm"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public Boolean isAddRow
+            {
+                set { SetParmeter("isAddRow", value); }
+                get { return (Boolean)GetParameter("isAddRow"); }
+            }
+        }
+
+        ///<summary>
+        /// ID: 228508193
+        /// Modified: 9/2/2024 11:17:09 AM
+        /// Parameters: 4
+        ///</summary>
+        public partial class PR_MYDL_GET_SDM_NEW_PRD_LKP : SP
+        {
+            public PR_MYDL_GET_SDM_NEW_PRD_LKP()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_SDM_NEW_PRD_LKP]";
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+            public String in_fltr_cond
+            {
+                set { SetParmeter("in_fltr_cond", value); }
+                get { return (String)GetParameter("in_fltr_cond"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Int32 Take
+            {
+                set { SetParmeter("Take", value); }
+                get { return (Int32)GetParameter("Take"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Int32 Skip
+            {
+                set { SetParmeter("Skip", value); }
+                get { return (Int32)GetParameter("Skip"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public Boolean LoadCount
+            {
+                set { SetParmeter("LoadCount", value); }
+                get { return (Boolean)GetParameter("LoadCount"); }
+            }
+        }
+
+        ///<summary>
+        /// ID: 212508136
+        /// Modified: 9/2/2024 11:17:09 AM
+        /// Parameters: 5
+        ///</summary>
+        public partial class PR_MYDL_GET_SDM_RTL_PULL_DLR_DTL : SP
+        {
+            public PR_MYDL_GET_SDM_RTL_PULL_DLR_DTL()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_SDM_RTL_PULL_DLR_DTL]";
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+            public String WhereClause
+            {
+                set { SetParmeter("WhereClause", value); }
+                get { return (String)GetParameter("WhereClause"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", -1, false)]
+            public String OrderBy
+            {
+                set { SetParmeter("OrderBy", value); }
+                get { return (String)GetParameter("OrderBy"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Int32 Take
+            {
+                set { SetParmeter("Take", value); }
+                get { return (Int32)GetParameter("Take"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public Int32 Skip
+            {
+                set { SetParmeter("Skip", value); }
+                get { return (Int32)GetParameter("Skip"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+            public Boolean LoadCount
+            {
+                set { SetParmeter("LoadCount", value); }
+                get { return (Boolean)GetParameter("LoadCount"); }
+            }
+        }
 
         ///<summary>
         /// ID: 1901249828
@@ -8411,6 +8596,52 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
         }
 
+        ///<summary>
+        /// ID: 196508079
+        /// Modified: 9/2/2024 11:17:09 AM
+        /// Parameters: 3
+        ///</summary>
+        public partial class PR_MYDL_LD_SDM_RTL_PULL_DLR_DTL : SP
+        {
+            public PR_MYDL_LD_SDM_RTL_PULL_DLR_DTL()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_LD_SDM_RTL_PULL_DLR_DTL]";
+            }
+
+            ///<summary>
+            /// DataType: table type
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public SqlTableValueParameterBase sdm_input_data
+            {
+                set { SetParmeter("sdm_input_data", value); }
+                get { return (SqlTableValueParameterBase)GetParameter("sdm_input_data"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Int32 in_emp_wwid
+            {
+                set { SetParmeter("in_emp_wwid", value); }
+                get { return (Int32)GetParameter("in_emp_wwid"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Boolean is_bulkupld
+            {
+                set { SetParmeter("is_bulkupld", value); }
+                get { return (Boolean)GetParameter("is_bulkupld"); }
+            }
+        }
 
         ///<summary>
         /// ID: 105767434

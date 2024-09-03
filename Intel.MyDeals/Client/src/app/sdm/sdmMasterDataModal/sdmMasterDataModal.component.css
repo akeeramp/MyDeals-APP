@@ -1,0 +1,36 @@
+.sdmMasterDataModal>mat-dialog-container {
+    background-color: #1a3e6f !important;
+    padding: 0 !important;
+    background-color: #1a3e6f !important;
+    padding: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    border-radius: 0 !important;
+    width: 80% !important
+}
+
+.sdmMasterDataModal mat-dialog-container .modal-content {
+    box-shadow: none
+}
+
+#btnClose.sdm-btnclose:hover {
+    color: #fff !important;
+}
+
+#btnClose.sdm-btnclose {
+    float: right;
+    margin-top: 0px;
+    background: transparent;
+    padding: 3px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.modal-header {
+    font-size: 20px;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    border-color: #004280;
+    background-color: #0071c5 !important;
+    color: #ffff !important;
+    border-radius: 0px !important
+}

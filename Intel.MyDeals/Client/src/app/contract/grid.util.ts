@@ -349,6 +349,55 @@ export class GridUtil {
             saveAs(dataUrl, 'MyDealsSearchResults.xlsx');
         });
     }
+
+    static dsToExcelSdm(data, title, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        
+        // Create element to generate templates in.
+        
+        data.forEach((row, ind) => {
+            const cells = [];
+            Object.keys(row).forEach(item => {
+                if (!(title == 'RPD_Data' && (item == 'ERROR' || item == 'IS_DELETE'))) {
+                    if (ind == 0) {
+                        rows[0].cells.push({
+                            value: item,
+                            textAlign: "center",
+                            background: "#0071C5",
+                            color: "#ffffff",
+                            wrap: true
+                        });
+                        colWidths.push({ width: item == 'CPU_SKU_NM' ? 500 : 180 });
+                    }
+                    cells.push({
+                        value: row[item],
+                        wrap: true
+                    });
+                }
+            });
+        
+            rows.push({
+                cells: cells
+            });
+        });
+        const sheets = [
+            {
+                columns: colWidths,
+                title: title,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
+
     static dsToExcelLegalException = function (gridColumns, ds, title, onlyVisible, dealListChk) {
 
         var rows = [{ cells: [] }];

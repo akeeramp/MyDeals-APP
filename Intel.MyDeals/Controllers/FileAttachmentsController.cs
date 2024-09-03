@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using System.Data;
 
 namespace Intel.MyDeals.Controllers
 {
@@ -22,10 +23,13 @@ namespace Intel.MyDeals.Controllers
 
         private readonly IPrimeCustomersLib _primeCustomersLib;
 
-        public FileAttachmentsController(IFilesLib _filesLib, IPrimeCustomersLib _primeCustomersLib)
+        private readonly ISDMLib _sdmLib;
+
+        public FileAttachmentsController(IFilesLib _filesLib, IPrimeCustomersLib _primeCustomersLib, ISDMLib _sdmLib)
         {
             this._filesLib = _filesLib;
             this._primeCustomersLib = _primeCustomersLib;
+            this._sdmLib = _sdmLib;
         }
 
         /// <summary>
@@ -711,6 +715,59 @@ namespace Intel.MyDeals.Controllers
             }
             else
                 return Json(string.Empty);
+        }
+
+
+        //SDM Bulk Upload 
+        [Authorize]
+        public ActionResult ExtractBulkSDMFile(IEnumerable<HttpPostedFileBase> files)
+        {
+            List<SDMData> lstSDMData = new List<SDMData>();
+            
+            if (files != null)
+            {
+                foreach (var file in files)
+                {
+                    using (StreamReader reader = new StreamReader(file.InputStream))
+                    {
+                        byte[] textBytes = new byte[file.InputStream.Length];
+                        file.InputStream.Read(textBytes, 0, textBytes.Length);
+                        lstSDMData.AddRange(_filesLib.ExtractBulkSDM(textBytes));
+                    }
+                }
+            }
+            if (lstSDMData.Count > 0)
+            {
+                //fields might change in future
+                List<RpdValidation> EmptyItemsValidation = _sdmLib.RpdDataValidations(lstSDMData).ToList();
+
+                // Find duplicates
+                List<RpdValidation> DuplicateItemsValidation = _sdmLib.RpdDupValidations(lstSDMData).ToList();
+
+                //further validations for date and other fields required
+                if (EmptyItemsValidation.Count > 0)
+                {
+                    return Json(EmptyItemsValidation);
+                }
+                if (DuplicateItemsValidation.Count > 0)
+                {
+                    return Json(DuplicateItemsValidation);
+                }
+                else
+                {
+                    if (lstSDMData.Count > 2000)
+                    {
+                        return Json(new ArgumentException("Excel contains more than 2000 records", "Limit Exceeded"));
+                    }
+                    List<SDMSummary> Response = _sdmLib.UploadSDMData(lstSDMData);
+                    
+                    return Response.Count > 0 ? Json(Response) : Json("SUCCESS");
+                }
+            }
+            else
+                //returning empty table if no data is present.
+                return Json("Fail");
+
         }
 
 

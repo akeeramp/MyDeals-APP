@@ -94,6 +94,98 @@
             width: 260
         },
     ]
+
+    //Need to add the error messages
+    static SDMBulkCopyColHeaders = ["Cycle Name", "Start Date", "End Date", "Category Name", "SKU Name", "Processor Number", "CPU FLR", "APAC PD", "IJKK PD", "PRC PD", "EMEA PD", "ASMO PD","IS DELETE", "Error Message"]
+
+    static SDMBulkCopyColumns = [
+     
+        {
+            data: 'CYCLE_NM',//0 Unified Customer ID
+            type: 'text',
+            readOnly: false,
+            width: 120
+        },
+        {
+            data: 'CURR_STRT_DT',//1 Unified Customer Name
+            type: 'text',
+            readOnly: false,
+            width: 120
+        },
+        {
+            data: 'CURR_END_DT',//2 Country/Region Customer ID
+            type: 'text',
+            readOnly: false,
+            width: 120
+        },
+        {
+            data: 'CPU_VRT_NM',//3 Unified Country/Region
+            type: 'text',
+            readOnly: false,
+            width: 120
+        },
+        {
+            data: 'CPU_SKU_NM',//4 End Customer Retail
+            type: 'text',
+            readOnly: false,
+            width: 400
+        },
+        {
+            data: 'CPU_PROCESSOR_NUMBER',//5 End Customer Country/Region
+            type: 'text',
+            readOnly: false,
+            width: 180
+        },
+        {
+            data: 'CPU_FLR',//6 RPL Status code
+            type: 'numeric',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'APAC_PD',//6 RPL Status code
+            type: 'numeric',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'IJKK_PD',//6 RPL Status code
+            type: 'numeric',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'PRC_PD',//6 RPL Status code
+            type: 'numeric',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'EMEA_PD',//6 RPL Status code
+            type: 'numeric',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'ASMO_PD',//6 RPL Status code
+            type: 'numeric',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'IS_DELETE',//6 RPL Status code
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'ERROR',
+            type: 'text',//7 Error Msges
+            readOnly: true,
+            width: 260
+        },
+    ];
+
     static DealReconColHeaders = ["Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "To Be Unified Customer ID", "To Be Unified Customer Name", "To Be Country/Region Customer ID", "To Be Unified Country/Region", "RPL Status Code", "Error Messages"]
     static DealReconColumns = [
         {

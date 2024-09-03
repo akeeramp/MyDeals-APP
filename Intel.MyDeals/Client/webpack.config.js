@@ -20,6 +20,7 @@ module.exports = env => {
                 advance: "./src/appModules/advancesearch/main-advance.ts",
                 report: "./src/appModules/reporting/main-report.ts",
                 codingPractices: "./src/appModules/codingPractices/main-codingPractices.ts",
+                sdm: "./src/appModules/sdm/main-sdm.ts",
                 globalStyle: './src/app/style/style.css',
             },
             cache: {
@@ -85,6 +86,7 @@ module.exports = env => {
                 advance: "./src/appModules/advancesearch/main-advance-prod.ts",
                 report: "./src/appModules/reporting/main-report-prod.ts",
                 codingPractices: "./src/appModules/codingPractices/main-codingPractices.ts",
+                sdm: "./src/appModules/sdm/main-sdm-prod.ts",
                 globalStyle: './src/app/style/style.css',
             },
             watch: false,

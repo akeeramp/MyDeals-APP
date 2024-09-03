@@ -11,7 +11,7 @@
                 <td style="vertical-align: top">
                     <div style="text-align: left;" class="navbar-collapse collapse">
                         <div style="font-size: 14px; color: white; font-weight: bold; padding-left: 10px; padding-right: 10px; padding-bottom:5px;padding-top:5px; background-color: #00B1F1; display: inline-block">
-                            <span *ngIf = "browserName !== 'CHROME'">
+                            <span *ngIf="browserName !== 'CHROME'">
                                 Google Chrome Required <img src="/images/ChromeIcon.png" alt="Google Chrome Icon Image" style="width: 24px; height: 24px; margin-left: 10px">
                             </span>
                             <div *ngIf="!isProduction()">
@@ -54,7 +54,7 @@
     <div class="menu-bar above-limited">
         <ul class="nav nav-tabs nav-tabs-intel-blocks header-fixes" id="myTab" role="tablist">
             <li>
-                <a class="mainMenu"  href="Dashboard#/portal" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs">Home</span></a>
+                <a class="mainMenu" href="Dashboard#/portal" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs">Home</span></a>
             </li>
             <li class="dropdown" *ngIf="isDeveloper()">
                 <a class="btn btn-primary mainMenu primary-one" role="button" href="/" data-toggle="dropdown" data-target="#" title="Developer Documents"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
@@ -195,107 +195,110 @@
 
                             <li *ngIf="isRealSA() || isCustomerAdmin() || getUserRole() == 'RA' || isDeveloper() ">
                                 <a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a>
-                            <li>
-                                <a href="Admin#/UnifiedDealRecon">Unified Deal Reconciliation</a>
-                            </li>
+                                <li>
+                                    <a href="Admin#/UnifiedDealRecon">Unified Deal Reconciliation</a>
+                                </li>
                         </ul>
-                    </li>
+                        </li>
 
-                    <li *ngIf="isRealSA() || isDeveloper()">
-                        <a href="Admin#/adminGeo">Geo</a>
-                    </li>
-                    <li *ngIf="isRealSA() || isDeveloper()">
-                        <a href="Admin#/funfact">Fun Facts</a>
-                    </li>
+                        <li *ngIf="isRealSA() || isDeveloper()">
+                            <a href="Admin#/adminGeo">Geo</a>
+                        </li>
+                        <li *ngIf="isRealSA() || isDeveloper()">
+                            <a href="Admin#/funfact">Fun Facts</a>
+                        </li>
 
-                    <li *ngIf="isAdminMeetCompMenuItemEnabled()">
-                        <a href="Admin#/meetComp">Meet Comp</a>
-                    </li>
+                        <li *ngIf="isAdminMeetCompMenuItemEnabled()">
+                            <a href="Admin#/meetComp">Meet Comp</a>
+                        </li>
 
-                    <li class="dropdown-submenu" *ngIf="isRealSA() || isDeveloper()">
-                        <a tabindex="-1">Products</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li>
-                                <a href="Admin#/productAlias">Product Alias</a>
-                            </li>
-                            <li>
-                                <a href="Admin#/products">Product Hierarchy</a>
-                            </li>
-                            <li>
-                                <a href="Admin#/productCategories">Product Vertical Rules</a>
-                            </li>
-                        </ul>
-                    </li>
+                        <li class="dropdown-submenu" *ngIf="isRealSA() || isDeveloper()">
+                            <a tabindex="-1">Products</a>
+                            <ul class="dropdown-menu" style="width: 250px;">
+                                <li>
+                                    <a href="Admin#/productAlias">Product Alias</a>
+                                </li>
+                                <li>
+                                    <a href="Admin#/products">Product Hierarchy</a>
+                                </li>
+                                <li>
+                                    <a href="Admin#/productCategories">Product Vertical Rules</a>
+                                </li>
+                            </ul>
+                        </li>
 
-                    <li class="dropdown-submenu" *ngIf="getUserRole() == 'Legal' || isRealSA() || isDeveloper()">
-                        <a tabindex="-1">Legal Configurations</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li>
-                                <a href="Admin#/icostproducts">Legal Classification</a>
-                            </li>
-                            <li>
-                                <a href="Admin#/legalException">Legal Exceptions</a>
-                            </li>
-                            <li>
-                                <a href="Admin#/quoteLetter">Quote Letter</a>
-                            </li>
-                        </ul>
-                    </li>
+                        <li class="dropdown-submenu" *ngIf="getUserRole() == 'Legal' || isRealSA() || isDeveloper()">
+                            <a tabindex="-1">Legal Configurations</a>
+                            <ul class="dropdown-menu" style="width: 250px;">
+                                <li>
+                                    <a href="Admin#/icostproducts">Legal Classification</a>
+                                </li>
+                                <li>
+                                    <a href="Admin#/legalException">Legal Exceptions</a>
+                                </li>
+                                <li>
+                                    <a href="Admin#/quoteLetter">Quote Letter</a>
+                                </li>
+                            </ul>
+                        </li>
 
-                    <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
-                        <a href="Admin#/dropdowns">UI Dropdown Values</a>
-                    </li>
+                        <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
+                            <a href="Admin#/dropdowns">UI Dropdown Values</a>
+                        </li>
 
-                    <li *ngIf="isRealSA() || isDeveloper()">
-                        <a href="Admin#/dataquality">Data Quality (DQ)</a>
-                    </li>
+                        <li *ngIf="isRealSA() || isDeveloper()">
+                            <a href="Admin#/dataquality">Data Quality (DQ)</a>
+                        </li>
 
-                    <li class="dropdown-submenu" *ngIf="isRealSA() || isDeveloper() || isCustomerAdmin()">
-                        <a tabindex="-1">Admin Tools</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li *ngIf="isBulkPriceAdmin() || isDeveloper()">
-                                <a href="Admin#/bulkPricingUpdate">Bulk Pricing Updates</a>
-                            </li>
-                            <li *ngIf="isRealSA() || isDeveloper() || isCustomerAdmin()">
-                                <a href="Admin#/consumptionCountry">Consumption Country/Region</a>
-                            </li>
-                        </ul>
-                    </li>
+                        <li class="dropdown-submenu" *ngIf="isRealSA() || isDeveloper() || isCustomerAdmin()">
+                            <a tabindex="-1">Admin Tools</a>
+                            <ul class="dropdown-menu" style="width: 250px;">
+                                <li *ngIf="isBulkPriceAdmin() || isDeveloper()">
+                                    <a href="Admin#/bulkPricingUpdate">Bulk Pricing Updates</a>
+                                </li>
+                                <li *ngIf="isRealSA() || isDeveloper() || isCustomerAdmin()">
+                                    <a href="Admin#/consumptionCountry">Consumption Country/Region</a>
+                                </li>
+                            </ul>
+                        </li>
 
-                    <li *ngIf="getUserRole() == 'DA' || isRealSA() || isDeveloper() || isCustomerAdmin()">
-                        <a href="Admin#/manageEmployee">User Accounts Administration</a>
-                    </li>
+                        <li *ngIf="getUserRole() == 'DA' || isRealSA() || isDeveloper() || isCustomerAdmin()">
+                            <a href="Admin#/manageEmployee">User Accounts Administration</a>
+                        </li>
 
-                    <li class="dropdown-submenu" *ngIf="getUserRole() == 'DA' || getUserRole() == 'GA' || isRealSA() || isDeveloper()">
-                        <a tabindex="-1">Approval Rules Management</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/rules">Price Rules</a></li>
-                            <li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>
-                        </ul>
-                    </li>
+                        <li class="dropdown-submenu" *ngIf="getUserRole() == 'DA' || getUserRole() == 'GA' || isRealSA() || isDeveloper()">
+                            <a tabindex="-1">Approval Rules Management</a>
+                            <ul class="dropdown-menu" style="width: 250px;">
+                                <li><a href="Admin#/rules">Price Rules</a></li>
+                                <li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>
+                            </ul>
+                        </li>
 
-                    <li *ngIf="ENVIRONMENT == 'LOCAL' && getUserWwid() == 10548414">
-                        <a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a>
-                    </li>
+                        <li *ngIf="ENVIRONMENT == 'LOCAL' && getUserWwid() == 10548414">
+                            <a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a>
+                        </li>
                 </ul>
-            </li>
-            <li>
-                <a class="mainMenu" href="AdvancedSearch#/tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs">Tender Dashboard</span></a>
-            </li>
-            <li>
-                <a class="mainMenu" href="AdvancedSearch#/advanceSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs">Advanced Search</span></a>
-            </li>
-            <li>
-                <a class="mainMenu" href="https://intel.sharepoint.com/sites/mydealstrainingportal" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs">Help</span></a>
-            </li>
-            <li class="dropdown" *ngIf="isReportingUser()">
-                <a class="btn btn-primary mainMenu primary-one" role="button" href="/" data-toggle="dropdown" data-target="#" title="Reporting Dashboard">
-                    <i class="intelicon-reports-solid"></i><span class="hidden-xs">Report</span><i class="intelicon-down"></i>
-                </a>
-                <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
-                    <li><a href="Reporting#/reportingdashboard">Report Dashboard</a></li>
-                </ul>
-            </li>
+                </li>
+                <li>
+                    <a class="mainMenu" href="AdvancedSearch#/tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs">Tender Dashboard</span></a>
+                </li>
+                <li>
+                    <a class="mainMenu" href="AdvancedSearch#/advanceSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs">Advanced Search</span></a>
+                </li>
+                <li>
+                    <a class="mainMenu" href="https://intel.sharepoint.com/sites/mydealstrainingportal" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs">Help</span></a>
+                </li>
+                <li class="dropdown" *ngIf="isReportingUser()">
+                    <a class="btn btn-primary mainMenu primary-one" role="button" href="/" data-toggle="dropdown" data-target="#" title="Reporting Dashboard">
+                        <i class="intelicon-reports-solid"></i><span class="hidden-xs">Report</span><i class="intelicon-down"></i>
+                    </a>
+                    <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
+                        <li><a href="Reporting#/reportingdashboard">Report Dashboard</a></li>
+                    </ul>
+                </li>
+                <li *ngIf="isSdmUser()">
+                    <a class="mainMenu" href="RPD#/RpdDashboard" title="Retail Pull Dollar Dashboard"><i class="intelicon-payment"></i> <span class="hidden-xs"> RPD </span></a>
+                </li>
         </ul>
 
         <global-search-angular></global-search-angular>

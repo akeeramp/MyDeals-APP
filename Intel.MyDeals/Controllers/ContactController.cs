@@ -8,7 +8,7 @@ namespace Intel.MyDeals.Controllers
 		// GET: Contract
 		public ActionResult Index()
 		{
-			return View(AppLib.AVM);
+            return View(AppLib.AVM);
 		}
 	}
 }
