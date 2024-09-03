@@ -15,13 +15,14 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
     internal class DataQualityLibTest
     {
         [Test,
-            TestCase(1, 2, "", true),
-            TestCase(3, 4, "123", false)]
-        public void ExecuteCostGapFiller_ReturnsTrue(int startYearQuarter, int endYearQuarter, string productIds, bool isnullCheck)
+            /*TestCase(1, 2, "", true),
+            TestCase(3, 4, "123", false),*/
+            TestCase(1, 4, new string[] { "123", "456" }, true)]
+        public void ExecuteCostGapFiller_ReturnsTrue(int startYearQuarter, int endYearQuarter, string[] productIds, bool isnullCheck)
         {
             var mockDataQualityDataLib = new Mock<IDataQualityDataLib>();
             mockDataQualityDataLib.Setup(x => x.ExecuteCostGapFiller(It.IsAny<int>(), It.IsAny<int>(),
-                It.IsAny<string>(), It.IsAny<bool>())).Returns(true);
+                It.IsAny<string[]>(), It.IsAny<bool>())).Returns(true);
 
             var res = new DataQualityLib(mockDataQualityDataLib.Object)
                 .ExecuteCostGapFiller(startYearQuarter, endYearQuarter, productIds, isnullCheck);

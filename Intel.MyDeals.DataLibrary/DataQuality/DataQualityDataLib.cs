@@ -98,13 +98,14 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="in_prod_ids"></param>
         /// <param name=" in_inc_null_cst"></param>
         /// <returns></returns>
-        public bool ExecuteCostGapFiller(int startYearQuarter, int endYearQuarter, string in_prod_ids ,bool inNullCost)
+        public bool ExecuteCostGapFiller(int startYearQuarter, int endYearQuarter, string[] in_prod_ids ,bool inNullCost)
         {
+            var prod_new_ids = string.Join(",", in_prod_ids);
             Procs.dbo.PR_MYDL_EXT_PRD_COSTS cmd = new Procs.dbo.PR_MYDL_EXT_PRD_COSTS
             {
                 in_start_yrqtr = startYearQuarter,
                 in_end_yrqtr = endYearQuarter,
-                in_prod_ids = in_prod_ids,
+                in_prod_ids = prod_new_ids,
                 in_inc_null_cst= inNullCost
             };
             try

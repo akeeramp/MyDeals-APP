@@ -46,7 +46,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         [AntiForgeryValidate]
         [Route("ExecuteCostGapFiller/{startYearQuarter}/{endYearQuarter}/{isnullCheck}")]
-        public bool ExecuteCostGapFiller(int startYearQuarter, int endYearQuarter, [FromBody] string productIds,bool isnullCheck)     
+        public bool ExecuteCostGapFiller(int startYearQuarter, int endYearQuarter, [FromBody] string[] productIds,bool isnullCheck)     
         {
             return SafeExecutor(() => _dataQualityLib.ExecuteCostGapFiller(startYearQuarter, endYearQuarter, productIds, isnullCheck)
               , $"Unable run COST gap filler"

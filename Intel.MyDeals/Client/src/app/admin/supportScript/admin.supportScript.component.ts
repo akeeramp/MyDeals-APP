@@ -98,12 +98,13 @@ export class adminsupportScriptComponent implements PendingChangesGuard, OnDestr
 
     executeCostFiller() {
         if (this.validate()) {
+            let noteValues = this.supportScriptDataForm.get("NOTES").value.split(',');
             this.isDirty=false;
             let startYearQuarter = this.supportScriptDataForm.get("START_YR").value + "0" + this.supportScriptDataForm.get("START_QTR").value;
             let endYearQuarter = this.supportScriptDataForm.get("END_YR").value + "0" + this.supportScriptDataForm.get("END_QTR").value;
             this.adminsupportscriptsvc.ExecuteCostGapFiller(startYearQuarter, endYearQuarter,
                 this.supportScriptDataForm.get("isFillNullSelected").value,
-                this.supportScriptDataForm.get("NOTES").value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+                noteValues).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                      this.loggersvc.success("Cost Gap Filler executed succesfully");
         }), err => {
             this.loggersvc.error("Unable to delete contract", "Error", err);
