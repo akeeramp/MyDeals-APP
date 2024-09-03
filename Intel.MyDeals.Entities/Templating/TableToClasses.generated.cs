@@ -10923,4 +10923,57 @@ namespace Intel.MyDeals.Entities {
 		}
 		*/
     }// End of class DownloadExpireYcs2Data
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.	
+    ///</summary>
+    [DataContract]
+    public partial class BatchJobConstants
+    {
+        [DataMember]
+        public System.Int32 BTCH_SID { get; set; }
+        [DataMember]
+        public System.String BTCH_NM { get; set; }
+        [DataMember]
+        public System.String BTCH_DSC { get; set; }
+        [DataMember]
+        public System.String RUN_SCHDL { get; set; }
+        [DataMember]
+        public System.Boolean ADHC_RUN { get; set; }
+        [DataMember]
+        public System.Boolean ACTV_IND { get; set; }
+        [DataMember]
+        public System.String STATUS { get; set; }
+        [DataMember]
+        public System.DateTime LST_RUN { get; set; }
+        [DataMember]
+        public System.Int32 EMP_WWID { get; set; }
+        [DataMember]
+        public System.String TRGRD_BY { get; set; }
+    }// End of class BatchJobConstants
+
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.    
+    ///</summary>
+    [DataContract]
+    public class BatchJobStepConstants
+    {
+        [DataMember]
+        public int BTCH_STEP_SID { get; set; }
+        [DataMember]
+        public int BTCH_SID { get; set; }
+        [DataMember]
+        public int STEP_SRT_ORDR { get; set; }
+        [DataMember]
+        public string STEP_NM { get; set; }
+        [DataMember]
+        public string STEP_TYPE { get; set; }
+        [DataMember]
+        public bool ADHC_RUN { get; set; }
+        [DataMember]
+        public bool ACTV_IND { get; set; }
+        [DataMember]
+        public int EMP_WWID { get; set; }
+    }// End of class BatchJobStepConstants
 }

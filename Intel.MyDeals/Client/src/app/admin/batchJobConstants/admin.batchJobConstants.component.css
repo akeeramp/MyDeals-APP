@@ -1,0 +1,129 @@
+﻿.container-fluid.batch-job-constants-parent {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    position: relative;
+    width: 100%;
+}
+
+.datepicker-job-const .k-timepicker {
+    width: 100%;
+}
+
+.batchJobConstants .form-group {
+    margin-bottom: 15px;
+}
+
+.toggle-aligner {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: relative;
+}
+
+.toggle-aligner .form-group {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+}
+
+.toggle-aligner .form-group label.control-label.alignLabels {
+    margin-bottom: 5px;
+}
+
+.mat-design-toggle {
+    margin-left: 24px;
+}
+
+.batch-job-constants-heading h2 {
+    padding-top: 20px !important;
+}
+
+kendo-grid.grid-sizefix {
+    height: 78vh;
+}
+
+#admin-constants-popup h3.kendo-dialog-message {
+    border-bottom: 1px solid #f4f4f4 !important;
+    margin: 20px 0 0 !important;
+    width: 550px !important;
+    line-height: 60px !important;
+}
+
+#admin-constants-popup .kendo-dialog-message {
+    margin: 25px !important;
+    text-align: left !important;
+    margin-left: 0px !important;
+    color: #111 !important;
+    font-family: 'Intel Clear' !important;
+    margin-top: 20px !important;
+    padding-left: 12px !important;
+}
+
+#admin-constants-popup p.kendo-dialog-message {
+    border-bottom: 1px solid #f4f4f4 !important;
+    position: relative !important;
+    width: 550px !important;
+    margin: 0 0 15px 0 !important;
+    padding: 15px;
+}
+
+#admin-constants-popup kendo-dialog-actions.k-dialog-buttongroup.k-actions {
+    width: 100% !important;
+    position: relative !important;
+    justify-content: flex-end;
+}
+
+button.k-button.cancel-btn-constants {
+    color: #111 !important;
+    background-color: #f0f0f0 !important;
+    font-size: 15px !important;
+    padding: 8px !important;
+    font-family: 'Intel Clear' !important;
+    max-width: 70px;
+    border-radius: 3px !important;
+}
+
+button.k-button.delete-btn-constants {
+    font-family: 'Intel Clear' !important;
+    font-size: 15px !important;
+    padding: 8px !important;
+    background-color: #3c8dbc !important;
+    color: #fff !important;
+    max-width: 102px;
+    border-radius: 3px !important;
+}
+
+.btn-add-remove {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.icon-intel-design {
+    margin-right: 3px;
+}
+
+.col-md-2.width-two-optimize{
+    max-width: 10.5%;
+}
+
+.width-two-optimize .form-group:first-child {
+    width: 66% !important;
+}
+
+.width-two-optimize .form-group:last-child {
+    width: 30% !important;
+}
+
+.batchJobConstantsBtn[disabled] {
+    background-color: #edeff0 !important;
+    color: #7e868b !important;
+    border-color: #b1babf !important;
+    cursor: not-allowed !important;
+    pointer-events: all !important;
+}

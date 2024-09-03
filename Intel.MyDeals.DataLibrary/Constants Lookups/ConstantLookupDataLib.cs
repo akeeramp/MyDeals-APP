@@ -187,6 +187,116 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
         }
+        public List<BatchJobConstants> SetBatchJobConstants(string mode, BatchJobConstants batchJobConstants)
+        {
+            OpLog.Log("SetBatchJobConstants");
+            var ret = new List<BatchJobConstants>();
+            try
+            {
+                batchJobConstants.EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID;
+                batchJobConstants.LST_RUN = DateTime.Now;
+                in_t_mydl_btch_dtl dt = new in_t_mydl_btch_dtl();
+                dt.AddRow(batchJobConstants);
+                Procs.dbo.PR_MYDL_SSIS_MYDL_BTCH_DTL cmd = new Procs.dbo.PR_MYDL_SSIS_MYDL_BTCH_DTL
+                {
+                    MODE = mode,
+                    MYDL_BTCH_DTL = dt
+                };
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_BTCH_SID = DB.GetReaderOrdinal(rdr, "BTCH_SID");
+                    int IDX_BTCH_NM = DB.GetReaderOrdinal(rdr, "BTCH_NM");
+                    int IDX_BTCH_DSC = DB.GetReaderOrdinal(rdr, "BTCH_DSC");
+                    int IDX_RUN_SCHDL = DB.GetReaderOrdinal(rdr, "RUN_SCHDL");
+                    int IDX_ADHC_RUN = DB.GetReaderOrdinal(rdr, "ADHC_RUN");
+                    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+                    int IDX_STATUS = DB.GetReaderOrdinal(rdr, "STATUS");
+                    int IDX_LST_RUN = DB.GetReaderOrdinal(rdr, "LST_RUN");
+                    int IDX_EMP_WWID = DB.GetReaderOrdinal(rdr, "EMP_WWID");
+                    int IDX_TRGRD_BY = DB.GetReaderOrdinal(rdr, "TRGRD_BY");
+
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new BatchJobConstants
+                        {
+                            BTCH_SID = (IDX_BTCH_SID < 0 || rdr.IsDBNull(IDX_BTCH_SID)) ? default(int) : rdr.GetFieldValue<int>(IDX_BTCH_SID),
+                            BTCH_NM = (IDX_BTCH_NM < 0 || rdr.IsDBNull(IDX_BTCH_NM)) ? default(string) : rdr.GetFieldValue<string>(IDX_BTCH_NM),
+                            BTCH_DSC = (IDX_BTCH_DSC < 0 || rdr.IsDBNull(IDX_BTCH_DSC)) ? default(string) : rdr.GetFieldValue<string>(IDX_BTCH_DSC),
+                            RUN_SCHDL = (IDX_RUN_SCHDL < 0 || rdr.IsDBNull(IDX_RUN_SCHDL)) ? default(string) : rdr.GetFieldValue<string>(IDX_RUN_SCHDL),
+                            ADHC_RUN = (IDX_ADHC_RUN < 0 || rdr.IsDBNull(IDX_ADHC_RUN)) ? default(bool) : rdr.GetFieldValue<bool>(IDX_ADHC_RUN),
+                            ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(bool) : rdr.GetFieldValue<bool>(IDX_ACTV_IND),
+                            STATUS = (IDX_STATUS < 0 || rdr.IsDBNull(IDX_STATUS)) ? default(string) : rdr.GetFieldValue<string>(IDX_STATUS),
+                            LST_RUN = (IDX_LST_RUN < 0 || rdr.IsDBNull(IDX_LST_RUN)) ? default(DateTime) : rdr.GetFieldValue<DateTime>(IDX_LST_RUN),
+                            EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(int) : rdr.GetFieldValue<int>(IDX_EMP_WWID),
+                            TRGRD_BY = (IDX_TRGRD_BY < 0 || rdr.IsDBNull(IDX_TRGRD_BY)) ? default(string) : rdr.GetFieldValue<string>(IDX_TRGRD_BY)
+                        }); ;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
+        public List<BatchJobStepConstants> SetBatchJobStepConstants(string mode, int batchSid, string batchJobConstants)
+        {
+            OpLog.Log("SetBatchJobStepConstants");
+            var ret = new List<BatchJobStepConstants>();
+            try
+            {
+                Procs.dbo.PR_MYDL_SSIS_MYDL_BTCH_STEP_DTL cmd = new Procs.dbo.PR_MYDL_SSIS_MYDL_BTCH_STEP_DTL
+                {
+                    MODE = mode,
+                    BTCH_SID = batchSid,
+                    WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    JSONDATA = batchJobConstants
+                };
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    if(mode.ToUpper()=="UPDATE")
+                    {
+                        int ERR_MSG = DB.GetReaderOrdinal(rdr, "ERROR");
+                        while (rdr.Read()){
+                            throw new Exception(rdr.GetFieldValue<string>(ERR_MSG));
+                        }
+
+                    }else{
+                        int IDX_BTCH_STEP_SID = DB.GetReaderOrdinal(rdr, "BTCH_STEP_SID");
+                        int IDX_BTCH_SID = DB.GetReaderOrdinal(rdr, "BTCH_SID");
+                        int IDX_STEP_SRT_ORDR = DB.GetReaderOrdinal(rdr, "STEP_SRT_ORDR");
+                        int IDX_STEP_NM = DB.GetReaderOrdinal(rdr, "STEP_NM");
+                        int IDX_STEP_TYPE = DB.GetReaderOrdinal(rdr, "STEP_TYPE");
+                        int IDX_ADHC_RUN = DB.GetReaderOrdinal(rdr, "ADHC_RUN");
+                        int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+
+                        while (rdr.Read())
+                        {
+                            ret.Add(new BatchJobStepConstants
+                            {
+                                BTCH_STEP_SID = (IDX_BTCH_STEP_SID < 0 || rdr.IsDBNull(IDX_BTCH_STEP_SID)) ? default(int) : rdr.GetFieldValue<int>(IDX_BTCH_STEP_SID),
+                                BTCH_SID = (IDX_BTCH_SID < 0 || rdr.IsDBNull(IDX_BTCH_SID)) ? default(int) : rdr.GetFieldValue<int>(IDX_BTCH_SID),
+                                STEP_SRT_ORDR = (IDX_STEP_SRT_ORDR < 0 || rdr.IsDBNull(IDX_STEP_SRT_ORDR)) ? default(int) : rdr.GetFieldValue<int>(IDX_STEP_SRT_ORDR),
+                                STEP_NM = (IDX_STEP_NM < 0 || rdr.IsDBNull(IDX_STEP_NM)) ? default(string) : rdr.GetFieldValue<string>(IDX_STEP_NM),
+                                STEP_TYPE = (IDX_STEP_TYPE < 0 || rdr.IsDBNull(IDX_STEP_TYPE)) ? default(string) : rdr.GetFieldValue<string>(IDX_STEP_TYPE),
+                                ADHC_RUN = (IDX_ADHC_RUN < 0 || rdr.IsDBNull(IDX_ADHC_RUN)) ? default(bool) : rdr.GetFieldValue<bool>(IDX_ADHC_RUN),
+                                ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(bool) : rdr.GetFieldValue<bool>(IDX_ACTV_IND)
+                            });
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
 
         #endregion Constants Admin
     }

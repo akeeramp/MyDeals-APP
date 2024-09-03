@@ -181,6 +181,38 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             var res = new ConstantsLookupsLib(mockConstantLookupDataLib.Object, mockDataCollectionsDataLib.Object, mockNotificationsLib.Object).UpdateAdminConstant(inputData);
             Assert.IsNotNull(res);
         }
+        [Test]
+        public void UpdateBatchJobConstants_ShouldReturnNotNull()
+        {
+            var mockData = UpdateBatchJobConstants_mockData();
+            var inputData = new BatchJobConstants
+            {
+                BTCH_SID = 2,
+                BTCH_NM = "idfcdudealags301a",
+                BTCH_DSC = "Used to get AGS roles",
+                RUN_SCHDL = "[{\"D\":\"3\",\"START\":\"0:0:0\",\"END\":\"23:59:59\",\"INTERVAL\":\"30\"}]",
+                ADHC_RUN = false,
+                ACTV_IND = true,
+                STATUS = "Completed",
+                EMP_WWID = 999999,
+                TRGRD_BY = "SQL Job Agent"
+
+            };
+            mockConstantLookupDataLib.Setup(x => x.SetBatchJobConstants("SELECT", It.IsAny<BatchJobConstants>())).Returns(mockData);
+            var res = new ConstantsLookupsLib(mockConstantLookupDataLib.Object, mockDataCollectionsDataLib.Object, mockNotificationsLib.Object).UpdateBatchJobConstants("SELECT",inputData);
+            Assert.IsNotNull(res);
+        }
+        [Test]
+        public void UpdateBatchJobStepConstants_ShouldReturnNotNull()
+        {
+            string json = "[{\"BTCH_STEP_SID\":43,\"BTCH_SID\":5,\"STEP_NM\":\"PR_MYDL_LD_STG_ESDR_ACCESS_REQUESTS @get_data=1\",\"STEP_SRT_ORDR\":20,\"STEP_TYPE\":\"PROCEDURE\",\"ADHC_RUN\":false,\"ACTV_IND\":true,\"TRGRD_BY\":\"\"},{\"BTCH_STEP_SID\":44,\"BTCH_SID\":5,\"STEP_NM\":\"PR_MYDL_LD_STG_ESDR_ACCESS_REQUESTS @delete_stg=1,@upd_day1_cnst=1\",\"STEP_SRT_ORDR\":10,\"STEP_TYPE\":\"PROCEDURE\",\"ADHC_RUN\":false,\"ACTV_IND\":true,\"TRGRD_BY\":\"\"},{\"BTCH_STEP_SID\":45,\"BTCH_SID\":5,\"STEP_NM\":\"PR_AGS_PROCESS_ESDR_REQUESTS\",\"STEP_SRT_ORDR\":30,\"STEP_TYPE\":\"PROCEDURE\",\"ADHC_RUN\":false,\"ACTV_IND\":true,\"TRGRD_BY\":\"\"}]";
+            var mockData = UpdateBatchJobStepConstants_mockData();
+            mockConstantLookupDataLib.Setup(x => x.SetBatchJobStepConstants("SELECT", 5,json)).Returns(mockData);
+            var res = new ConstantsLookupsLib(mockConstantLookupDataLib.Object, mockDataCollectionsDataLib.Object, mockNotificationsLib.Object).UpdateBatchJobStepConstants("SELECT", 5,json);
+            Assert.IsNotNull(res);
+        }
+
+
 
         private List<AdminConstant> GetConstantsByNameMockData()
         {
@@ -261,6 +293,43 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
                 UI_UPD_FLG = true
             };
             return mockData;
+        }
+        private List<BatchJobConstants> UpdateBatchJobConstants_mockData()
+        {
+            List<BatchJobConstants> batchJobConstants =new List<BatchJobConstants>();
+            var mockData = new BatchJobConstants
+            {
+
+              BTCH_SID=2 ,
+              BTCH_NM="idfcdudealags301a",
+              BTCH_DSC="Used to get AGS roles",
+              RUN_SCHDL= "[{\"D\":\"3\",\"START\":\"0:0:0\",\"END\":\"23:59:59\",\"INTERVAL\":\"30\"}]", 
+              ADHC_RUN=false,
+              ACTV_IND=true ,
+              STATUS="Completed",
+              EMP_WWID=999999,
+              TRGRD_BY="SQL Job Agent"
+             };
+            batchJobConstants.Add(mockData);
+            return batchJobConstants;
+        }
+        private List<BatchJobStepConstants> UpdateBatchJobStepConstants_mockData()
+        {
+            List<BatchJobStepConstants> batchJobConstants = new List<BatchJobStepConstants>();
+            var mockData = new BatchJobStepConstants
+            {
+
+                BTCH_STEP_SID = 45,
+                BTCH_SID = 5,
+                STEP_SRT_ORDR = 30,
+                STEP_NM = "PR_AGS_PROCESS_ESDR_REQUESTS",
+                STEP_TYPE="PRDOCEDURE",
+                ADHC_RUN = false,
+                ACTV_IND = true,
+                EMP_WWID = 999999,
+            };
+            batchJobConstants.Add(mockData);
+            return batchJobConstants;
         }
     }
 }

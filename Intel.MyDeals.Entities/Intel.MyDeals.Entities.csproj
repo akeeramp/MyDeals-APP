@@ -194,6 +194,12 @@
     <Compile Include="TableTypeParameters\in_dsa_rspn_log.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="TableTypeParameters\in_t_mydl_btch_dtl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TableTypeParameters\in_t_mydl_btch_step_dtl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TableTypeParameters\T_DEAL_RECON.cs">
       <SubType>Component</SubType>
     </Compile>

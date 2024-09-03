@@ -129,6 +129,14 @@ namespace Intel.MyDeals.BusinessLogic
             var adminConstant = new AdminConstant { CNST_SID = data.CNST_SID };
             _constantLookupDataLib.SetAdminConstants(CrudModes.Delete, adminConstant);
         }
+        public List<BatchJobConstants> UpdateBatchJobConstants(string mode, BatchJobConstants batchJobConstants)
+        {
+            return _constantLookupDataLib.SetBatchJobConstants(mode, batchJobConstants);
+        }
+        public List<BatchJobStepConstants> UpdateBatchJobStepConstants(string mode, int batchSid, string batchJobConstants)
+        {
+            return _constantLookupDataLib.SetBatchJobStepConstants(mode, batchSid, batchJobConstants);
+        }
 
         #endregion Constants Admin
     }

@@ -1,5 +1,6 @@
 ﻿import { Routes } from "@angular/router";
 import { batchTimingComponent } from "./admin/batchTiming/admin.batchTiming.component";
+import { batchJobConstantsComponent } from "./admin/batchJobConstants/admin.batchJobConstants.component";
 import { BulkPricingUpdatesComponent } from "./admin/bulkPricingUpdates/admin.bulkPricingUpdates.component";
 import { AdminCacheComponent } from "./admin/cache/admin.cache.component";
 import { ConstantsComponent } from "./admin/constants/admin.constants.component";
@@ -80,6 +81,7 @@ export const routes: Routes = [
     { path: 'CustomerVendors', component: adminCustomerVendorsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'opLog', component: OpLogComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'batchTiming', component: batchTimingComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
+    { path: 'batchJobConstants', component: batchJobConstantsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'VistexCustomerMapping', component: adminVistexCustomerMappingComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } ,canDeactivate:[PendingChangesGuard]},
     { path: 'UnifiedCustomerAdmin', component: adminPrimeCustomersComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } ,canDeactivate:[PendingChangesGuard]},
     { path: 'UnifiedDealRecon', component: adminUnifiedDealReconComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } ,canDeactivate:[PendingChangesGuard]},

@@ -9,5 +9,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         AdminConstant SetAdminConstants(CrudModes mode, AdminConstant adminValues);
         void UpdateRecycleCacheConstants(string cnstName, string cnstVal);
+
+        List<BatchJobConstants> SetBatchJobConstants(string mode, BatchJobConstants batchJobConstants);
+        List<BatchJobStepConstants> SetBatchJobStepConstants(string mode, int batchSid, string batchJobConstants);
     }
 }

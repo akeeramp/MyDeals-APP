@@ -25,5 +25,8 @@ namespace Intel.MyDeals.IBusinessLogic
         AdminConstant GetConstantsByName(string constant, bool nonCachedData);
 
         void UpdateRecycleCacheConstants(string cnstName, string cnstVal);
+        List<BatchJobConstants> UpdateBatchJobConstants(string mode, BatchJobConstants batchJobConstants);
+
+        List<BatchJobStepConstants> UpdateBatchJobStepConstants(string mode, int batchSid, string batchJobConstants);
     }
 }
