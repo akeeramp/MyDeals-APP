@@ -1,0 +1,24 @@
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<div style="padding-top: 20px; padding-left: 15px;">
+    <h2>Deal Unification & Reconciliation Report</h2>
+</div>
+<div style="padding-top: 20px; padding-left: 15px;">
+    <div class="col-md-3">
+        <button kendoButton class="btn btn-primary" icon="file-excel" (click)="getDealUnificationReport()" [disabled]="isLoading" [class.disabledButton] = "isLoading">Generate UCD Report</button>
+    </div>
+    <!-- Loader Component -->
+    <div *ngIf="isLoading" class="col-md-9">
+        <span class="k-icon k-i-loading k-icon-xl" style="margin-right: 20px;"></span>Please wait, this may take up to two minutes...
+    </div>
+</div>
+<!-- Results Grid, uncomment to enable -->
+<!-- <div>
+    <div class="col-md-12">
+        <div style="background-color: #0071c5 !important; display: flex; height: 50px; align-items: center;" *ngIf="!isLoading">
+            <span style="width: -webkit-fill-available;"></span>
+            <button kendoButton iconClass="k-icon k-i-file-excel k-icon-md" (click)="exportDataToExcel()" [disabled]="isLoading" style="margin-right: 10px; height: 80%;">Export to Excel</button>
+            <button kendoButton iconClass="k-icon k-i-reload k-icon-md" (click)="getDealUnificationReport()" [disabled]="isLoading" style="margin-right: 10px; height: 80%;">Refresh</button>
+        </div>
+        <hot-table [hotId]="HOT_ID" [settings]="hotSettings" [data]="hotTableData" style="border-bottom: gray solid 1px;"></hot-table>
+    </div>
+</div> -->

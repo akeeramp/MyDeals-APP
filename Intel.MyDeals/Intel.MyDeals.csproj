@@ -251,6 +251,7 @@
     <Folder Include="Views\Base\" />
     <Folder Include="Views\DataQuality\" />
     <Folder Include="Views\DbAuditTools\" />
+    <Folder Include="Views\DealUnification\" />
     <Folder Include="Views\Email\" />
     <Folder Include="Views\FileUpload\" />
     <Folder Include="Views\Timeline\" />
@@ -275,6 +276,7 @@
     <Compile Include="Controllers\API\DataFixController.cs" />
     <Compile Include="Controllers\API\DbAuditToolsController.cs" />
     <Compile Include="Controllers\API\DealMassUpdateController.cs" />
+    <Compile Include="Controllers\API\DealUnificationController.cs" />
     <Compile Include="Controllers\API\DownStreamController.cs" />
     <Compile Include="Controllers\API\ExpireYcs2Controller.cs" />
     <Compile Include="Controllers\API\HealthCheckController.cs" />
@@ -750,6 +752,9 @@
     <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.ts" />
     <Content Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.html" />
+    <TypeScriptCompile Include="Client\src\app\admin\dealUnificationReport\dealUnificationReport.component.ts" />
+    <Content Include="Client\src\app\admin\dealUnificationReport\dealUnificationReport.component.html" />
+    <Content Include="Client\src\app\admin\dealUnificationReport\dealUnificationReport.component.css" />
     <Content Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.css" />
     <Content Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.html" />
     <Content Include="Client\src\app\admin\primeCustomers\admin.primeCustomers.component.html" />

@@ -76,6 +76,7 @@
     <Compile Include="DataQuality\IDataQualityLib.cs" />
     <Compile Include="DbAuditTools\IDbAuditToolsLib.cs" />
     <Compile Include="DealMassUpdate\IDealMassUpdateLib.cs" />
+    <Compile Include="DealUnification\IDealUnificationLib.cs" />
     <Compile Include="DSA\IDsaEngineLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerLib.cs" />
     <Compile Include="Employees\IEmployeesLib.cs" />

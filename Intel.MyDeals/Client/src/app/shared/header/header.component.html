@@ -193,6 +193,11 @@
                                 <a href="Admin#/CustomerVendors">Customer - Vendors</a>
                             </li>
 
+                            <!-- Deal Unification Report -->
+                            <li *ngIf="isRealSA()">
+                                <a href="Admin#/DealUnificationReport">Deal Unification Report</a>
+                            </li>
+
                             <li *ngIf="isRealSA() || isCustomerAdmin() || getUserRole() == 'RA' || isDeveloper() ">
                                 <a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a>
                                 <li>

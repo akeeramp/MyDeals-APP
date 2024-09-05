@@ -66,6 +66,7 @@ import { ScopeDecisionComponent } from "./codingPractices/scopeDecision/scopeDec
 import { GettingStartedForDevComponent } from "./codingPractices/gettingStartedForDev/gettingStartedForDev.component";
 //added protection rule before leaving a page
 import { PendingChangesGuard } from "./shared/util/gaurdprotectionDeactivate";
+import { DealUnificationReportComponent } from "./admin/dealUnificationReport/dealUnificationReport.component";
 
 
 export const routes: Routes = [
@@ -129,6 +130,7 @@ export const routes: Routes = [
     { path: 'asyncProcedureJobs', component: AsyncProcedureJobsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'sdsDealOverrides', component: SdsDealOverridesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'dbAuditTools', component: dbAuditToolsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
+    { path: 'DealUnificationReport', component: DealUnificationReportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'Home', component: CodingPracticesComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
     { path: 'BusinessDesign', component: BusinessProcessComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
     { path: 'CodingTools', component: CodingToolsComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },

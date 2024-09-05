@@ -117,6 +117,7 @@
     <Compile Include="DataQuality\DataQualityDataLib.cs" />
     <Compile Include="DbAuditTools\DbAuditToolsDataLib.cs" />
     <Compile Include="DealMassUpdate\DealMassUpdateDataLib.cs" />
+    <Compile Include="DealUnification\DealUnificationDataLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerDataLib.cs" />
     <Compile Include="ExpireYcs2\ExpireYcs2DataLib.cs" />
     <Compile Include="HealthCheck\HealthCheckDataLib.cs" />

@@ -33,7 +33,6 @@ using System.Collections.Generic;
 	WriteLine("namespace {0} {{", outputNameSpace);
 	PushIndent(TAB);
 
-
 	//Attribute Master
 	var ds = dbobjects.ExecuteDataSet("dbo.PR_GET_ATRB_MSTR");
 	ds.Tables[0].TableName = "AtrbMstr";
@@ -138,7 +137,7 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "WorkFlowAttribute";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-	// Prooduct Alias
+	// Product Alias
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_PRD_ALIAS] @WWID=10548414, @MODE = 'SELECT'");
 	ds.Tables[0].TableName = "ProductAlias";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
@@ -571,6 +570,11 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("EXEC [dbo].[PR_MYDL_ASYNC_TRIGGERS] NULL, NULL;");
 	ds.Tables[0].TableName = "AsyncProcTrigger";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//Unification & Reconciliation Deal Report
+	ds = dbobjects.ExecuteDataSet("dbo.PR_MYDL_UCD_RPT");
+	ds.Tables[0].TableName = "UnificationReconciliationReport";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace
