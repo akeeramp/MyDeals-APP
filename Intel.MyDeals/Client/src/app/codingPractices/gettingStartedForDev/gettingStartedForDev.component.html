@@ -180,7 +180,7 @@
                     </ul>
                 </li>
                 <li>
-                    <p class="mb-0">Types of batch jobs</p>
+                    <p class="mb-0">Types of batch jobs in MyDeals</p>
                     <ul class="batch-job-types">
                         <li>
                             <p class="mb-0">Autosys</p>
@@ -220,7 +220,7 @@
                     </ul>
                 </li>
                 <li>
-                    <p class="mb-0">SSIS Screen Details</p>
+                    <p class="mb-0">SSIS Execution details</p>
 
                     <table class="table table-striped" style="max-width:1350px">
                         <thead>
@@ -338,7 +338,7 @@
                     </table>
                 </li>
                 <li>
-                    <p class="mb-0">Steps to run batch job constants manually:</p>
+                    <p class="mb-0">Steps to adhoc run a batch jobs (Manually via batch job constant screen)</p>
                     <ul>
                         <li>Visit the batch job constant screen, GoTo Admin -> Dev Tools -> Monitoring -> Batch Job Constants</li>
                         <li>
@@ -350,7 +350,11 @@
                             <img src="Client/Images/docs/batch-job-constant-adhoc-run-on.png" style="width: 75%; margin: 10px 0; padding: 10px " />
                         </li>
                         <li>
-                           On successful save, the message "Batch Job Constants Data Updated Successfully" will appear.
+                            On successful save, the selected batch job will have the adhoc toggle button Turned ON and the job will be enabled for adhoc execution (which will be picked by a runner at fixed interval).<br />
+                            <b>NOTE:</b> Once the batch job starts executing the status will be changed to running and once it's execution complete the status will reflect as completed/failed based on pass/failure scenario and the adhoc button will be turned OFF.
+                        </li>
+                        <li>
+                            After that, the successful message "Batch Job Constants Data Updated Successfully" will appear.
                             <img src="Client/Images/docs/batch-job-constant-adhoc-run-success-msg.png" style="width: 75%; margin: 10px 0; padding: 10px " />
                         </li>
                     </ul>
