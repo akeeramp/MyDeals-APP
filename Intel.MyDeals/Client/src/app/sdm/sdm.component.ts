@@ -172,7 +172,7 @@ export class SDMComponent {
         this.loaderMsg = 'Please wait while we fetch Retail Pull Dollar Data...';
         let whereStg = 'WHERE ';
         Object.keys(this.slctedData).forEach(key => {
-            if (key == 'STRT_DT') {
+            if (key == 'STRT_DT') {                
                 if (this.slctedData[key])
                     whereStg = whereStg == 'WHERE ' ? whereStg + "CHG_DTM >= '" + this.momentService.moment(this.slctedData[key]).format("MM/DD/YYYY") + "'" : whereStg + " AND " + "CHG_DTM >= '" + this.momentService.moment(this.slctedData[key]).format("MM/DD/YYYY") + "'"
             }else if (key == 'END_DT') {
@@ -194,8 +194,8 @@ export class SDMComponent {
     applySorting() {
         this.orderByStg = '';
         let orderBy = '';
-        if (this.state.sort && this.state.sort.length) {
-            orderBy = this.state.sort.map(s => `${s.field} ${s.dir}`).join(', ');
+        if (this.state.sort && this.state.sort.length) {            
+            orderBy = this.state.sort.filter(s => s.dir != undefined).map(s => `${s.field} ${s.dir}`).join(', ') != '' ? this.state.sort.filter(s => s.dir != undefined).map(s => `${s.field} ${s.dir}`).join(', ') : 'CHG_DTM DESC, CYCLE_NM DESC';            
         } else {
             orderBy = 'CHG_DTM DESC, CYCLE_NM DESC'; // Default sort field if no sorting is applied
         }
@@ -244,9 +244,10 @@ export class SDMComponent {
     addHandler({ sender }) {
         this.isDirty = true;
         this.closeEditor(sender);
+        const currDate = new Date();        
         this.formGroup = new FormGroup({
             CYCLE_NM: new FormControl('', Validators.required),
-            CURR_STRT_DT: new FormControl('', [Validators.required, this.dateValidator('CURR_STRT_DT')]),
+            CURR_STRT_DT: new FormControl(currDate, [Validators.required, this.dateValidator('CURR_STRT_DT')]),
             CURR_END_DT: new FormControl('', [Validators.required, this.dateValidator('CURR_END_DT')]),
             CPU_VRT_NM: new FormControl('', Validators.required),
             CPU_SKU_NM: new FormControl({ value: '', disabled: true }, Validators.required),

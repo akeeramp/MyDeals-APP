@@ -63,7 +63,7 @@
                 <button class="btn btn-primary optsdm opUiContainer md" (click)="redirectToSdmBulkUpload()" style="float: right; font-size: 14px; ">Upload RPD</button>
             </div>
         </div>
-    </div>
+    </div>    
 
     <div class="row sdmMasteDataLookup">
         <div>
@@ -113,15 +113,15 @@
                 </kendo-grid-column>
 
                 <kendo-grid-column field="CURR_STRT_DT" title="Start Date" width="200px" [headerClass]="{'headerClass':true}">
-                    <ng-template kendoGridEditTemplate let-dataItem="dataItem" kendoTooltip let-formGroup="formGroup">                        
-                        <kendo-datepicker [formControl]="formGroup.get('CURR_STRT_DT')" 
+                    <ng-template kendoGridEditTemplate let-dataItem="dataItem" kendoTooltip let-formGroup="formGroup">
+                        <kendo-datepicker [formControl]="formGroup.get('CURR_STRT_DT')"
                                           title= "{{formGroup.controls['CURR_STRT_DT'].errors ? formGroup.controls['CURR_STRT_DT'].errors.val : 'Choose a date'}}" placeholder="Choose date ...">
                         </kendo-datepicker>
                     </ng-template>
                 </kendo-grid-column>
                 <kendo-grid-column field="CURR_END_DT" title="End Date" width="200px" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                        <kendo-datepicker [formControl]="formGroup.get('CURR_END_DT')" 
+                        <kendo-datepicker [formControl]="formGroup.get('CURR_END_DT')"
                                            title = "{{formGroup.controls['CURR_END_DT'].errors ? formGroup.controls['CURR_END_DT'].errors.val : 'Choose a date'}}" placeholder="Choose date ...">                            
                         </kendo-datepicker>
                     </ng-template>
@@ -165,7 +165,7 @@
                     </ng-template>
                 </kendo-grid-column>
 
-                <kendo-grid-column field="PRC_PD" title="PRC_PD" width="200px" [headerClass]="{'headerClass':true}"[sortable]="false">
+                <kendo-grid-column field="PRC_PD" title="PRC_PD" width="200px" [headerClass]="{'headerClass':true}" [sortable]="false">
                     <ng-template kendoGridEditTemplate let-formGroup="formGroup">
                         <input type="number" class="k-textbox" [formControl]="formGroup.get('PRC_PD')" />
                     </ng-template>
@@ -192,18 +192,18 @@
                 </p>
                 <kendo-dialog-actions class="delete-actions">
                     <button class="k-button del-cancel" kendoButton (click)="close()">Cancel</button>
-                    <button class="k-button del-ok" kendoButton (click)="deleteRecord()">Delete Dropdown</button>
+                    <button class="k-button del-ok" kendoButton (click)="deleteRecord()">Delete</button>
                 </kendo-dialog-actions>
             </kendo-dialog>
 
-                <kendo-dialog class="rpd-excel-popups" *ngIf="isExportAllDialogVisible" id="rpd-kendo-excel-popup">
-                    <h2 style="padding:10px;">Excel Export Confirmation</h2>
-                    <p style="padding:15px;">You are exporting a rather large amount of data ({{totalRecs}} rows). Would you like to continue?</p>
-                    <kendo-dialog-actions class="rpd-excel-actions">
-                        <button kendoButton class="k-button rpd-excel-cancel" (click)="closeExcelDialog()">Cancel</button>
-                        <button kendoButton class="k-button rpd-excel-ok" (click)="downloadAllExcelRecords()">Ok</button>
-                    </kendo-dialog-actions>
-                </kendo-dialog>
-            </div>
+            <kendo-dialog class="rpd-excel-popups" *ngIf="isExportAllDialogVisible" id="rpd-kendo-excel-popup">
+                <h2 style="padding:10px;">Excel Export Confirmation</h2>
+                <p style="padding:15px;">You are exporting a rather large amount of data ({{totalRecs}} rows). Would you like to continue?</p>
+                <kendo-dialog-actions class="rpd-excel-actions">
+                    <button kendoButton class="k-button rpd-excel-cancel" (click)="closeExcelDialog()">Cancel</button>
+                    <button kendoButton class="k-button rpd-excel-ok" (click)="downloadAllExcelRecords()">Ok</button>
+                </kendo-dialog-actions>
+            </kendo-dialog>
         </div>
     </div>
+</div>

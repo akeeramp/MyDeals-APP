@@ -287,7 +287,7 @@ namespace Intel.MyDeals.DataLibrary
             }
             else if (fileType == "RPDCycleTemplate") {
                 fileAttachmentData.FILE_NM = "RPD_Cycle_Template.xlsx";
-                strTemplateContent = string.Join("\n", string.Join("\t", "Cycle Name *", "Start Date (MM/DD/YYYY) *", "End Date (MM/DD/YYYY) *", "Category Name *", "SKU Name *", "Processor Number *", "CPU_FLR", "APAC_PD", "IJKK_PD", "PRC_PD", "EMEA_PD", "ASMO_PD", "IS_DELETE *"));
+                strTemplateContent = string.Join("\n", string.Join("\t", "Cycle Name *", "Start Date (MM/DD/YYYY) *", "End Date (MM/DD/YYYY) *", "Category Name *", "Processor Number *", "SKU Name *", "CPU_FLR", "APAC_PD", "IJKK_PD", "PRC_PD", "EMEA_PD", "ASMO_PD", "IS_DELETE *"));
                 arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
             }
             else// (fileType == "BulkPriceUpdate")
@@ -414,7 +414,7 @@ namespace Intel.MyDeals.DataLibrary
                             for (int i = 1; i <= iRows; i++)
                             {
                                 if (i == 1) {
-                                    string[] columnNames = { "Cycle Name *", "Start Date (MM/DD/YYYY) *", "End Date (MM/DD/YYYY) *", "Category Name *", "SKU Name *", "Processor Number *", "CPU_FLR", "APAC_PD", "IJKK_PD", "PRC_PD", "EMEA_PD", "ASMO_PD", "IS_DELETE *" };
+                                    string[] columnNames = { "Cycle Name *", "Start Date (MM/DD/YYYY) *", "End Date (MM/DD/YYYY) *", "Category Name *", "Processor Number *", "SKU Name *", "CPU_FLR", "APAC_PD", "IJKK_PD", "PRC_PD", "EMEA_PD", "ASMO_PD", "IS_DELETE *" };
                                     for (int j = 0; j < columnNames.Length; j++)
                                     {
                                         if (worksheet.Cells[i, j+1].Value.ToString() != columnNames[j])
@@ -430,9 +430,9 @@ namespace Intel.MyDeals.DataLibrary
                                     string sdmCYCLE_NM = worksheet.Cells[i, 1].Value != null ? worksheet.Cells[i, 1].Value.ToString().TrimEnd() : string.Empty;
                                     bool rpdStrtDt = worksheet.Cells[i, 2].Value != null && DateTime.TryParse(worksheet.Cells[i, 2].Value.ToString().TrimEnd(), out sdmCURR_STRT_DT) ? DateTime.TryParse(worksheet.Cells[i, 2].Value.ToString().TrimEnd(), out sdmCURR_STRT_DT) : worksheet.Cells[i, 2].Text != null && DateTime.TryParse(worksheet.Cells[i, 2].Text.ToString().TrimEnd(), out sdmCURR_STRT_DT) ? DateTime.TryParse(worksheet.Cells[i, 2].Text.ToString().TrimEnd(), out sdmCURR_STRT_DT) : DateTime.TryParse("", out sdmCURR_STRT_DT);
                                     bool rpdEndDt = worksheet.Cells[i, 3].Value != null && DateTime.TryParse(worksheet.Cells[i, 3].Value.ToString().TrimEnd(), out sdmCURR_END_DT) ? DateTime.TryParse(worksheet.Cells[i, 3].Value.ToString().TrimEnd(), out sdmCURR_END_DT) : worksheet.Cells[i, 2].Text != null && DateTime.TryParse(worksheet.Cells[i, 3].Text.ToString().TrimEnd(), out sdmCURR_END_DT) ? DateTime.TryParse(worksheet.Cells[i, 3].Text.ToString().TrimEnd(), out sdmCURR_END_DT) : DateTime.TryParse("", out sdmCURR_END_DT);
-                                    string sdmCPU_VRT_NM = worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString().TrimEnd() : string.Empty;
-                                    string sdmCPU_SKU_NM = worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString().TrimEnd() : string.Empty;
-                                    string sdmCPU_PROCESSOR_NUMBER = worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().TrimEnd() : string.Empty;
+                                    string sdmCPU_VRT_NM = worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString().TrimEnd() : string.Empty;                                   
+                                    string sdmCPU_PROCESSOR_NUMBER = worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString().TrimEnd() : string.Empty;
+                                    string sdmCPU_SKU_NM = worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().TrimEnd() : string.Empty;
                                     int sdmCPU_FLR = 0;
                                     int sdmAPAC_PD = 0;
                                     int sdmIJKK_PD = 0;
