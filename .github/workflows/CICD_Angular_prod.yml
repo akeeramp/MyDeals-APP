@@ -119,7 +119,7 @@ jobs:
   
   RunSquawker-Regular:
     name: Run Squawker 
-    runs-on: [gasp]
+    runs-on: ["innersource.prod.amr.dind"]
     needs: Deploy-Angular
     container: "amr-registry.caas.intel.com/squirrels/nodelts-alpine-git-cf:latest"
     timeout-minutes: 5
@@ -136,7 +136,7 @@ jobs:
   
   RunSquawker-Latest:
     name: Run Squawker 
-    runs-on: [gasp]
+    runs-on: ["innersource.prod.amr.dind"]
     needs: Deploy_Latest
     container: "amr-registry.caas.intel.com/squirrels/nodelts-alpine-git-cf:latest"
     timeout-minutes: 5
