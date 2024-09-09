@@ -31,6 +31,7 @@ export class GettingStartedForDevComponent implements OnInit {
                 ]
             },
             { text: "Onboarding Process for DB", url: '#onboardingProcessForDB', bool: 'onboardingProcessForDB' },
+            { text: "SSIS Batch Job Process", url: '#batchJobProcess', bool: 'batchJobProcess' },
             { text: "KT Docs", url: '#ktDocs', bool: 'ktDocs' },
         ];
     }
@@ -63,6 +64,13 @@ export class GettingStartedForDevComponent implements OnInit {
                 { text: "Coding practices", url: "Home" },
                 { text: "Getting Started For Developer", url: "GettingStartedForDeveloper" },
                 { text: "Onboarding Process for DB", url: '#onboardingProcessForDB' },
+            ];
+        }
+        else if (this.flagBool == "batchJobProcess") {
+            this.list_breadcrumbs = [
+                { text: "Coding practices", url: "Home" },
+                { text: "Getting Started For Developer", url: "GettingStartedForDeveloper" },
+                { text: "SSIS Batch Job Process", url: '#batchJobProcess' },
             ];
         }
         else if (this.flagBool == "ktDocs") {

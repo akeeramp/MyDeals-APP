@@ -2922,3 +2922,11 @@ i.icon-color-pipe {
 kendo-menu.rpd-excel-export-menu ul {
     background-color: transparent !important;
 }
+
+h3.intelicon-jobs-outlined.job-outline-process:before {
+    content: "\ea0c";
+    font-family: 'Intelicon';
+    color: #0071c5;
+    font-size: 28px;
+    padding-right: 5px;
+}

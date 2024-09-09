@@ -53,7 +53,7 @@
                     </ol>
                 </div>
                 <div>
-                    <p>To access MyDeals application UI, Please <a href="mailto:michael.h.tipping@intel.com, abhilash.keerampara@intel.com, sudeepx.hegde@intel.com, pulkit.gupta@intel.com"  class="btn-ttl-coding">Click here</a> to request an email to Leads</p>
+                    <p>To access MyDeals application UI, Please <a href="mailto:michael.h.tipping@intel.com, abhilash.keerampara@intel.com, sudeepx.hegde@intel.com, pulkit.gupta@intel.com" class="btn-ttl-coding">Click here</a> to request an email to Leads</p>
                 </div>
                 <p> To access MyDeals GITHUB, developer should apply below AGS roles.</p>
                 <div>
@@ -108,7 +108,7 @@
                                 <img src="\Client\Images\docs\build-terminal.png" style="width:600px;padding:10px" />
                                 <img src="\Client\Images\docs\startup-1.png" style="width: 20%; margin-top: 10px;padding:10px" />
                             </div>
-                          
+
                         </li>
 
 
@@ -155,6 +155,210 @@
 
             </ol>
         </div>
+
+        <div id="batchJobProcess">
+            <h3 style="margin-top: 30px; font-family: 'Intel Clear' !important;" class="intelicon-jobs-outlined job-outline-process">SSIS Batch Job Process</h3>
+            <ol class="ordering-batch-job-constant">
+                <li>
+                    <p class="mb-0">How to access SSIS screen?</p>
+                    <ul>
+                        <li>
+                            To access Batch Job constant screen, empId should be added in <b>SSIS_CNST_EMP_ID</b> attribute <br /> To verify access, GoTo Admin -> Dev Tools -> Monitoring -> constants <br />
+                            <img src="Client/Images/docs/constants.png" style="width: 75%; margin: 10px 0; padding: 10px " />
+                        </li>
+                        <li>
+                            For accessing the batch job constant screen, GoTo Admin -> Dev Tools -> Monitoring -> Batch Job Constants
+                        </li>
+                        <li>
+                            If you have access the batch job constant screen will load or otherwise, it will throw the error <b>User does not have access to the screen. Press OK to redirect to Dashboard</b> in alert pop-up.<br />
+                            <img src="Client/Images/docs/batch-job-constant-without-access.png" style="width: 75%; margin: 10px 0; padding: 10px " />
+                        </li>
+                        <li>
+                            Batch job constant screen with access <br />
+                            <img src="Client/Images/docs/batch-job-constant-full-screen.png" style="width: 75%; margin: 10px 0; padding: 10px " />
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p class="mb-0">Types of batch jobs</p>
+                    <ul class="batch-job-types">
+                        <li>
+                            <p class="mb-0">Autosys</p>
+                            <ul class="explain-details">
+                                <li>
+                                    <b>Purpose:</b> Autosys is a enterprise job scheduling tool used for managing and automating the execution of batch jobs across the various platforms
+                                </li>
+                                <li>
+                                    <b>Features:</b> It provides capabilities for scheduling, monitoring and managing jobs and workflows, handling complex dependencies and condition, and integrating with different systems and applications.
+                                </li>
+                                <!--
+                    <li>
+                        Currently, in SSIS two batch job has been trigging by autosys <br />
+                        <img src="Client/Images/docs/batch-job-constant-autosys.png" style="width: 75%; margin: 10px 0; padding: 10px " />
+                    </li>
+                    -->
+                            </ul>
+
+                        </li>
+                        <li>
+                            <p class="mb-0">SQL Agent Job</p>
+                            <ul class="explain-details">
+                                <li>
+                                    <b>Purpose:</b> SQL Server Agent is a component of Microsoft SQL Server used specifically for automationg tasks and managing job execution related to SQL Server databases.
+                                </li>
+                                <li>
+                                    <b>Features:</b> It offer job scheduling, aleting, and automation capabilities directly within SQL Server. It can handle tasks such as running Transact-SQL script, SSIS packages, and managing backups.
+                                </li>
+                                <!--
+                    <li>
+                        Currently, in SSIS four batch job has been trigging by SQL Agent Job <br />
+                        <img src="Client/Images/docs/batch-job-constant-sql-agent-job.png" style="width: 75%; margin: 10px 0; padding: 10px " />
+                    </li>
+                    -->
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p class="mb-0">SSIS Screen Details</p>
+
+                    <table class="table table-striped" style="max-width:1350px">
+                        <thead>
+                            <tr>
+                                <th scope="col">Action</th>
+                                <th scope="col">Option-Description</th>
+                                <th scope="col">Option Applicable on which Job in Autosys/SQL Agent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row" rowspan="3">How to Adhoc Run/Force Start Job</th>
+                                <td>Setup Adhoc flag in Batch Job Constant Screen - Will be picked Automatically in 5 min</td>
+                                <td>idfcdudealags301a; idfcdudealcm301a;  idfcdudealprc301a</td>
+                            </tr>
+                            <tr>
+                                <td>Ask Autosys to run</td>
+                                <td>idfcdudldeal301a; idfcdudldsa301a; idfcdudlpic301a</td>
+                            </tr>
+                            <tr>
+                                <td>Setup Adhoc flag in Batch Job Constant Screen - Only FORSE MANUAL RUN IN SSIS Server</td>
+                                <td>idfcdudealags301a; idfcdudealcm301a;  idfcdudealprc301a; idfcdudeal301a; idfcdudealdsa301a;  idfcdudealpic301a</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row" rowspan="2">How to Force stop/kill the Job</th>
+                                <td>Autosys Jobs - Ask Autosys to kill the job</td>
+                                <td>idfcdudldeal301a; idfcdudldsa301a; idfcdudlpic301a</td>
+                            </tr>
+                            <tr>
+                                <td>SQL Agent Job-Go To server and stop the SQL Agent Job</td>
+                                <td>idfcdudealags301a; idfcdudealcm301a;  idfcdudealprc301a</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row" rowspan="2">How to Hold the Job</th>
+                                <td>Autosys Jobs - Ask Autosys to ICE/Hold the job</td>
+                                <td>idfcdudldeal301a; idfcdudldsa301a; idfcdudlpic301a</td>
+                            </tr>
+                            <tr>
+                                <td>SQL Agent Job-Go To server and DISABLE the SQL Agent Job</td>
+                                <td>idfcdudealags301a; idfcdudealcm301a;  idfcdudealprc301a</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row" rowspan="2">How to Enable/off-ice/off-hold the Job</th>
+                                <td>Autosys Jobs - Ask Autosys to off-ICE/off-Hold the job</td>
+                                <td>idfcdudldeal301a; idfcdudldsa301a; idfcdudlpic301a</td>
+                            </tr>
+                            <tr>
+                                <td>SQL Agent Job-Go To server and ENABLE the SQL Agent Job</td>
+                                <td>idfcdudealags301a; idfcdudealcm301a;  idfcdudealprc301a</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br/>
+                    <p>For more server details, please refer below table:</p>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Environment/DB ENV</th>
+                                <th scope="col">Connection String</th>
+                                <th scope="col">Port</th>
+                                <th scope="col">SQL Version</th>
+                                <th scope="col">Compatibility Level</th>
+                                <th scope="col">Collation</th>
+                                <th scope="col">Shared/Dedicated VM?</th>
+                                <th scope="col">Managed Owners</th>
+                                <th scope="col">SSIS Folder</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Pre-Production</td>
+                                <td>sql3309-fm1-in.amr.corp.intel.com</td>
+                                <td>3180</td>
+                                <td>SSIS19</td>
+                                <td>SQL Server 2019 (150)</td>
+                                <td>SQL_Latin1_General_CP1_CI_AS</td>
+                                <td>Shared</td>
+                                <td rowspan="2" style="vertical-align : middle;text-align:center;">LEADS</td>
+                                <td>
+                                    MyDeals_Dev<br />
+                                    MyDeals_Cons<br />
+                                    MyDeals_Ciar
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Pre-Production</td>
+                                <td>sql3310-fm1-in.amr.corp.intel.com</td>
+                                <td>3180</td>
+                                <td>SSIS19</td>
+                                <td>SQL Server 2019 (150)</td>
+                                <td>SQL_Latin1_General_CP1_CI_AS</td>
+                                <td>Shared</td>
+                                <td>
+                                    MyDeals_IAO_Dev<br />
+                                    MyDeals_IAO_Cons
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Production</td>
+                                <td>sql3305-fm1-in.amr.corp.intel.com</td>
+                                <td>3180</td>
+                                <td>SSIS19</td>
+                                <td>SQL Server 2019 (150)</td>
+                                <td>SQL_Latin1_General_CP1_CI_AS</td>
+                                <td>Shared</td>
+                                <td>Release Team</td>
+                                <td>
+                                    MyDeals
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+                <li>
+                    <p class="mb-0">Steps to run batch job constants manually:</p>
+                    <ul>
+                        <li>Visit the batch job constant screen, GoTo Admin -> Dev Tools -> Monitoring -> Batch Job Constants</li>
+                        <li>
+                            When you select the edit button for a specific batch task, the batch job details are displayed. If you see that the toggle button for adhoc runs is OFF.
+                            <img src="Client/Images/docs/batch-job-constant-adhoc-run-off.png" style="width: 75%; margin: 10px 0; padding: 10px " />
+                        </li>
+                        <li>
+                            To execute batch job constants manually, Turn ON the adhoc run toggle button and Turn ON the specific step adhoc run toggle button as well.
+                            <img src="Client/Images/docs/batch-job-constant-adhoc-run-on.png" style="width: 75%; margin: 10px 0; padding: 10px " />
+                        </li>
+                        <li>
+                           On successful save, the message "Batch Job Constants Data Updated Successfully" will appear.
+                            <img src="Client/Images/docs/batch-job-constant-adhoc-run-success-msg.png" style="width: 75%; margin: 10px 0; padding: 10px " />
+                        </li>
+                    </ul>
+
+                </li>
+            </ol>
+        </div>
+
         <div id="ktDocs">
             <h3 style="margin-top: 30px; font-family: 'Intel Clear' !important;" class="intelicon-link">KT docs and links</h3>
             <div>

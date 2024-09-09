@@ -391,6 +391,15 @@
     <Content Include="Client\Images\docs\addScaffold.png" />
     <Content Include="Client\Images\docs\addscaffoldApi.png" />
     <Content Include="Client\Images\docs\AGS-Home.png" />
+    <Content Include="Client\Images\docs\batch-job-constant-adhoc-run-off.png" />
+    <Content Include="Client\Images\docs\batch-job-constant-adhoc-run-on.png" />
+    <Content Include="Client\Images\docs\batch-job-constant-adhoc-run-success-msg.png" />
+    <Content Include="Client\Images\docs\batch-job-constant-autosys.png" />
+    <Content Include="Client\Images\docs\batch-job-constant-full-screen.png" />
+    <Content Include="Client\Images\docs\batch-job-constant-sql-agent-job.png" />
+    <Content Include="Client\Images\docs\batch-job-constant-with-access.png" />
+    <Content Include="Client\Images\docs\batch-job-constant-without-access.png" />
+    <Content Include="Client\Images\docs\constants.png" />
     <Content Include="Client\Images\docs\Request-access.png" />
     <Content Include="Client\Images\docs\search-access.png" />
     <Content Include="Client\Images\docs\github-source.png" />
