@@ -31,12 +31,12 @@
                     <span class="fl" style="color: #222; font-size: 13px;">Date Range:</span>
                     <div style="display: flex; flex-direction: row; padding: .5rem">
                         <div style="display: flex; padding: 0 .5rem 0 0; flex-direction: row;">
-                            <kendo-datepicker [(value)]="slctedData.STRT_DT" placeholder="Choose date." style="width: 140px; float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md no-dropdown-arrow-rpd">
+                            <kendo-datepicker [(value)]="slctedData.STRT_DT" [weekNumber]="true" calendarType="classic" placeholder="Choose date." style="width: 140px; float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md no-dropdown-arrow-rpd">
                             </kendo-datepicker>
                         </div>
                         <span style="display: flex; align-items: center;">to</span>
                         <div style="padding: 0 0 0 .5rem;">
-                            <kendo-datepicker [(value)]="slctedData.END_DT" placeholder="Choose date." style="width: 140px; float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md no-dropdown-arrow-rpd">
+                            <kendo-datepicker [(value)]="slctedData.END_DT" [weekNumber]="true" calendarType="classic"placeholder="Choose date." style="width: 140px; float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md no-dropdown-arrow-rpd">
                             </kendo-datepicker>
                         </div>
                     </div>

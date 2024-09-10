@@ -194,8 +194,8 @@ export class SDMComponent {
     applySorting() {
         this.orderByStg = '';
         let orderBy = '';
-        if (this.state.sort && this.state.sort.length) {            
-            orderBy = this.state.sort.filter(s => s.dir != undefined).map(s => `${s.field} ${s.dir}`).join(', ') != '' ? this.state.sort.filter(s => s.dir != undefined).map(s => `${s.field} ${s.dir}`).join(', ') : 'CHG_DTM DESC, CYCLE_NM DESC';            
+        if (this.state.sort && this.state.sort.length > 0) {            
+            orderBy = this.state.sort.map(s => `${s.field} ${s.dir}`).join(', ');            
         } else {
             orderBy = 'CHG_DTM DESC, CYCLE_NM DESC'; // Default sort field if no sorting is applied
         }
@@ -207,6 +207,9 @@ export class SDMComponent {
     dataStateChange(state: DataStateChangeEvent): void {
         this.loaderMsg = 'Please wait while we fetch Retail Pull Dollar Data...';
         const isPageChange = this.state.skip !== state.skip || this.state.take !== state.take;
+        if (state.sort) {
+            state.sort = state.sort.filter(s => s.dir != undefined).length > 0 ? state.sort : [];
+        }
         this.state = state;
         if (isPageChange) {
             this.loadSdmRecords(true);
