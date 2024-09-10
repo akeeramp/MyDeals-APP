@@ -2143,7 +2143,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deRedealDate = r.Dc.GetDataElement(AttributeCodes.LAST_REDEAL_DT);
             if (onChangeFastTrackIds.Count == 0)
             {
-                deRedealDate.AtrbValue = deRedealDate.PrevAtrbValue;
+                r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, deRedealDate.OrigAtrbValue);
             }
            
 
