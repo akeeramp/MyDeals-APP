@@ -9,7 +9,7 @@ import { AsyncProcTrigger, CreateAsyncProcTriggerData } from "./admin.asyncProce
 })
 export class AsyncProcedureJobsService {
 
-    private API_URL_ASYNC_PROC_JOBS = 'api/AsyncProcTrigger/';
+    private readonly API_URL_ASYNC_PROC_JOBS = 'api/AsyncProcTrigger/';
 
     constructor(private httpClient: HttpClient) { }
 

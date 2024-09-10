@@ -37,11 +37,11 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
     private showResults = false;
     private isDataValid = true;
     private MaxNumericValue: number;
-    private NumericAtrbIds = [3352, 3355, 3461, 3708];
-    private TextBoxAtrbIds = [3349, 3350, 3351, 3453, 3464, 3568];
-    private NumericIdTo1 = [3352, 3355, 3708];
-    private NumericIdTo24 = [3461];
-    private SingleValueDropdownAtrbIds = [57, 3009, 3717, 3719, 3465];
+    private readonly NumericAtrbIds = [3352, 3355, 3461, 3708];
+    private readonly TextBoxAtrbIds = [3349, 3350, 3351, 3453, 3464, 3568];
+    private readonly NumericIdTo1 = [3352, 3355, 3708];
+    private readonly NumericIdTo24 = [3461];
+    private readonly SingleValueDropdownAtrbIds = [57, 3009, 3717, 3719, 3465];
     public state: State = {
         skip: 0,
         group: []

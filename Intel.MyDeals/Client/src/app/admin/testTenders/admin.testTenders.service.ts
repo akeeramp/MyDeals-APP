@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 })
 
 export class admintestTendersService {
-    public apiBaseUrl = "api/Integration/";
+    public readonly apiBaseUrl = "api/Integration/";
 
     constructor(private httpClient: HttpClient) {
 

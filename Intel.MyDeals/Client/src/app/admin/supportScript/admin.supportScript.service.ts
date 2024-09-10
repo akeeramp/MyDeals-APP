@@ -6,8 +6,8 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class adminsupportScriptService {
-    public apiBaseUrl = "api/dataquality/";
-    public apiIntegrationUrl = "api/Integration/";
+    public readonly apiBaseUrl = "api/dataquality/";
+    public readonly apiIntegrationUrl = "api/Integration/";
     
     constructor(private httpClient: HttpClient) { }
     

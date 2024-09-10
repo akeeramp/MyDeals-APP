@@ -9,7 +9,7 @@ import { Observable } from "rxjs";
 export class dbAuditToolsService {
 
     constructor(private httpClient: HttpClient) { }
-    public apiBaseUrl = "api/DbAuditTools/";
+    public readonly apiBaseUrl = "api/DbAuditTools/";
 
     public service: any = {
         getDbEnvs: this.getDbEnvs,

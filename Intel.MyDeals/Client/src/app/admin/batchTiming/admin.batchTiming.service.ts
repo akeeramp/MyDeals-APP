@@ -10,7 +10,7 @@ export class batchTimingService {
 
     constructor(private httpClient: HttpClient) { }
 
-    public apiBaseUrl = "api/Logging/";
+    public readonly apiBaseUrl = "api/Logging/";
     public service: any = {
         getBatchJobTiming: this.getBatchJobTiming,
     }

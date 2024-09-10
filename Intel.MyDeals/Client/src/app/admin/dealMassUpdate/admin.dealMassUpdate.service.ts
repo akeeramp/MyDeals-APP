@@ -9,7 +9,7 @@ export class DealMassUpdateService {
 
     constructor(private httpClient: HttpClient) { }
 
-    public API_URL_DEAL_MASS_UPDATE = "api/DealMassUpdate/";
+    public readonly API_URL_DEAL_MASS_UPDATE = "api/DealMassUpdate/";
 
     public service: any = {
         UpdateDealsAttrbValue: this.UpdateDealsAttrbValue,

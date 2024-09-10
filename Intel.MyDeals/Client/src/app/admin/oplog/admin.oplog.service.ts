@@ -8,7 +8,7 @@ import { Observable, of } from "rxjs";
 
 export class opLogService {
 
-    public apiBaseUrl = "api/OpLog/";
+    public readonly apiBaseUrl = "api/OpLog/";
 
     public service: any = {
         getOpaqueLog: this.getOpaqueLog,

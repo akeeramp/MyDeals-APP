@@ -8,7 +8,7 @@ import { Observable } from "rxjs";
 
 
 export class pushDealsToVistexService {
-    public apiBaseUrl = "api/PushDealstoVistex/";
+    public readonly apiBaseUrl = "api/PushDealstoVistex/";
 
     constructor(private httpClient: HttpClient) {
 

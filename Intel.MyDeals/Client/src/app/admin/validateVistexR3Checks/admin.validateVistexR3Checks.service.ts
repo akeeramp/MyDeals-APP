@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 
 export class ValidateVistexR3ChecksService {
 
-    public apiBaseUrl = "api/ValidateVistexR3Checks/";
-    public apiCustUrl = "api/Customers/";
+    public readonly apiBaseUrl = "api/ValidateVistexR3Checks/";
+    public readonly apiCustUrl = "api/Customers/";
 
     constructor(private httpClient: HttpClient) {
     }

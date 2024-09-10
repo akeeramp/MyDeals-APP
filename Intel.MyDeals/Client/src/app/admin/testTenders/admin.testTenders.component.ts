@@ -26,7 +26,7 @@ export class adminTestTendersComponent implements PendingChangesGuard, OnDestroy
     get formData() { return this.admintestTendersForm.controls; }
 
     excutetestTendersData() {
-        var JsonObj = {
+        const JsonObj = {
             'header': {
                 'source_system': 'pricing_tenders',
                 'target_system': 'mydeals',
@@ -92,7 +92,7 @@ export class adminTestTendersComponent implements PendingChangesGuard, OnDestroy
                 }
             }
         }
-        var jsonDataPacket = JSON.stringify(JsonObj);
+        const jsonDataPacket = JSON.stringify(JsonObj);
         this.admintestTendersService.ExecutePostTest(jsonDataPacket).pipe(takeUntil(this.destroy$)).subscribe(res => {
 
             if (res) {
