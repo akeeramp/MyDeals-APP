@@ -19,29 +19,29 @@ export class DealUnificationReportComponent implements AfterViewInit {
 
     private currentUcdReportResults: Array<unknown> = undefined;
 
-    // Handsontable POC
-    private readonly HOT_ID = 'bulkUploadValueTable';
-    private hotRegisterer = new HotTableRegisterer();
-    private hotTable: Handsontable;
-    private hotTableData: Array<unknown> = [];
-    private initializeHandsontableInstance(): void {
-        this.hotTable = this.hotRegisterer.getInstance(this.HOT_ID);
-    }
-    private hotSettings: GridSettings = {
-        licenseKey: HandsonLicenseKey.license,
-        height: '70vh',
-        stretchH: 'last',
-        comments: false,
-        wordWrap: true,
-        preventOverflow: 'horizontal',
-        rowHeaders: true,
-        readOnly: true,
-        afterInit: () => {
-            if (!this.hotTable || this.hotTable === null || this.hotTable === undefined) {
-                this.initializeHandsontableInstance();
-            }
-        }
-    };
+    // Handsontable - Uncomment to Enable
+    // private readonly HOT_ID = 'bulkUploadValueTable';
+    // private hotRegisterer = new HotTableRegisterer();
+    // private hotTable: Handsontable;
+    // private hotTableData: Array<unknown> = [];
+    // private initializeHandsontableInstance(): void {
+    //     this.hotTable = this.hotRegisterer.getInstance(this.HOT_ID);
+    // }
+    // private hotSettings: GridSettings = {
+    //     licenseKey: HandsonLicenseKey.license,
+    //     height: '70vh',
+    //     stretchH: 'last',
+    //     comments: false,
+    //     wordWrap: true,
+    //     preventOverflow: 'horizontal',
+    //     rowHeaders: true,
+    //     readOnly: true,
+    //     afterInit: () => {
+    //         if (!this.hotTable || this.hotTable === null || this.hotTable === undefined) {
+    //             this.initializeHandsontableInstance();
+    //         }
+    //     }
+    // };
 
     private isLoading: boolean = false;
 
@@ -72,24 +72,25 @@ export class DealUnificationReportComponent implements AfterViewInit {
         });
     }
 
-    private updateHotGridData(newGridData: Array<unknown>): void {
-        // Update Column Config
-        const HEADER_SPLIT: Array<ColumnSettings> = Object.keys(this.currentUcdReportResults[0]).map((fieldName: string) => {
-            const SPLIT_FIELD_NAME = fieldName.split('_').join(' ');
+    // Uncomment to Enable Handsontable grid
+    // private updateHotGridData(newGridData: Array<unknown>): void {
+    //     // Update Column Config
+    //     const HEADER_SPLIT: Array<ColumnSettings> = Object.keys(this.currentUcdReportResults[0]).map((fieldName: string) => {
+    //         const SPLIT_FIELD_NAME = fieldName.split('_').join(' ');
 
-            return {
-                data: fieldName,
-                title: SPLIT_FIELD_NAME
-            }
-        });
+    //         return {
+    //             data: fieldName,
+    //             title: SPLIT_FIELD_NAME
+    //         }
+    //     });
 
-        this.hotTable.batch(() => {
-            this.hotTable.updateSettings({
-                columns: HEADER_SPLIT
-            });
-            this.hotTable.loadData(newGridData);
-        });
-    }
+    //     this.hotTable.batch(() => {
+    //         this.hotTable.updateSettings({
+    //             columns: HEADER_SPLIT
+    //         });
+    //         this.hotTable.loadData(newGridData);
+    //     });
+    // }
 
     private get generateReportFilename(): string {
         // Example: `MyDeals_IQR_ Deals Unified Data_08212024_1004PST.xlsx`
@@ -99,37 +100,21 @@ export class DealUnificationReportComponent implements AfterViewInit {
     // Using 'XLSX / SheetJS' dependency
     private exportDataToExcel(): void {
         if (this.currentUcdReportResults != undefined && this.currentUcdReportResults.length > 0) {
-            const WORKSHEET: WorkSheet = utils.json_to_sheet(this.currentUcdReportResults);
+            const SORTED_HEADER = ['Customer_Name','Deal_Id','Quote_Line_Id','Deal_Type','Rebate_Type','Deal_Created_Date','Deal_Start_Date','Deal_End_Date','Payout_Based_On','Program_Payment','Group_Type','Deal_Geo','Deal_Stage','Is_Unified','RPL_Status_Code','End_Customer_Retail','End_Customer_Country_Region','Unified_Global_Customer_ID','Unified_Customer_Name','Unified_Customer_Country_ID','GEO_APPROVED_BY'];
+            const FINAL_HEADER_TEXT = ['Customer Name','Deal Id','Quote Line Id','Deal Type','Rebate Type','Deal Created Date','Deal Start Date','Deal End Date','Payout Based On','Program Payment','Group Type','Deal Geo','Deal Stage','Is Unified','RPL Status Code','End Customer Retail','End Customer Country Region','Unified Global Customer ID','Unified Customer Name','Unified Customer Country ID','Geo Approved By'];
+            const COLUMN_WIDTHS = [{ wch: 16 },{ wch: 8 },{ wch: 18 },{ wch: 10 },{ wch: 12 },{ wch: 24 },{ wch: 16 },{ wch: 16 },{ wch: 16 },{ wch: 16 },{ wch: 20 },{ wch: 10 },{ wch: 12 },{ wch: 10 },{ wch: 38 },{ wch: 100 },{ wch: 28 },{ wch: 26 },{ wch: 100 },{ wch: 28 },{ wch: 16 }];
 
-            // Create Human Readable Column Titles
-            const HEADER_SPLIT: string[] = Object.keys(this.currentUcdReportResults[0]).map((fieldName: string) => {
-                return fieldName.split('_').join(' ');
-            });
+            const SHEET = utils.aoa_to_sheet([[]]);
+            utils.sheet_add_aoa(SHEET, [FINAL_HEADER_TEXT], { origin: 'A1' });
+            utils.sheet_add_json(SHEET, this.currentUcdReportResults, { origin: 'A2', header: SORTED_HEADER, skipHeader: true });
+            SHEET["!cols"] = COLUMN_WIDTHS;
 
-            // Update Header Row
-            utils.sheet_add_aoa(WORKSHEET, [HEADER_SPLIT], { origin: "A1" });
-
-            // Calculate Column Widths
-            const COLUMN_WIDTHS: Array<unknown> = [];
-            for (const FIELD of Object.keys(this.currentUcdReportResults[0])) {
-                const COLUMN_MAX_WIDTH: number = this.currentUcdReportResults.reduce((previousValue: number, currentValue: any) => {
-                    if (currentValue[FIELD] == undefined || currentValue[FIELD] == null || typeof currentValue[FIELD] == 'number') {
-                        return 10;
-                    } else {
-                        return Math.max(previousValue, currentValue[FIELD].length);
-                    }
-                }, 10) as number;
-
-                COLUMN_WIDTHS.push({ wch: COLUMN_MAX_WIDTH });
-            }
-            WORKSHEET["!cols"] = COLUMN_WIDTHS;
-
-            const WORKBOOK: WorkBook = utils.book_new(WORKSHEET);
+            const WB = utils.book_new(SHEET);
             const WB_OPTIONS: WritingOptions = {
                 compression: true,
             };
 
-            writeFileXLSX(WORKBOOK, this.generateReportFilename, WB_OPTIONS);
+            writeFileXLSX(WB, this.generateReportFilename, WB_OPTIONS);
         } else {
             this.loggerService.warn('', 'No data to export');
         }
