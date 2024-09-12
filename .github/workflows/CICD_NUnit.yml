@@ -31,8 +31,10 @@ jobs:
            ./scripts/nunit.ps1 '${{github.workspace}}'
        - name : Upload artifacts    
          if: always()
-         uses: actions/upload-artifact@v2
-         with:
-          name: NUnit-Report
-          path: ${{github.workspace}}\Nunit_Result\TestResult.xml
-          retention-days: 7
+         uses: jfrog/setup-jfrog-cli@v4
+         env:
+            JF_URL: ${{ vars.JFROG_URL }} 
+            # JFrog Platform access token
+            JF_ACCESS_TOKEN: ${{ vars.JFROG_TOKEN }}
+         run: |
+            jf rt upload "${{github.workspace}}\Nunit_Result\TestResult.xml" "mydeals-fm-local/Nunit_Result/"
