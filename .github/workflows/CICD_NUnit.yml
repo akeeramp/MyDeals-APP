@@ -29,12 +29,14 @@ jobs:
        - name: Run NUnit Tests
          run: |
            ./scripts/nunit.ps1 '${{github.workspace}}'
-       - name : Upload artifacts    
-         if: always()
-         uses: jfrog/setup-jfrog-cli@v4
+       
+       - uses: jfrog/setup-jfrog-cli@v4
          env:
             JF_URL: ${{ vars.JFROG_URL }} 
             # JFrog Platform access token
             JF_ACCESS_TOKEN: ${{ vars.JFROG_TOKEN }}
+
+       - name : Upload artifacts    
+         if: always()
          run: |
             jf rt upload "${{github.workspace}}\Nunit_Result\TestResult.xml" "mydeals-fm-local/Nunit_Result/"
