@@ -129,7 +129,7 @@ jobs:
       #      C:\Abhilash\deploy_env.ps1 'RemoveZipENV' '${{ vars.USN }}' '${{ vars.PWD }}' '${{github.event.inputs.ENV}}'
        - name:  Move Publish Site 
          run: |
-           C:\Abhilash\deploy_env.ps1 'MovePublish_latest' '${{ vars.USN }}' '${{ vars.PWD }}' '${{github.event.inputs.ENV}}'
+           C:\Abhilash\deploy_env.ps1 'MovePublish_latest' '${{ vars.APIGEE_KEY }}' '${{ vars.APIGEE_SECRETE }}' '${{github.event.inputs.ENV}}'
        - name:  Deploy Client App 
          run: |
            C:\Abhilash\deploy_env.ps1 'DeployENV' '${{ vars.USN }}' '${{ vars.PWD }}' '${{github.event.inputs.ENV}}'
