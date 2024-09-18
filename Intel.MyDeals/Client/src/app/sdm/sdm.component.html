@@ -114,14 +114,14 @@
 
                 <kendo-grid-column field="CURR_STRT_DT" title="Start Date" width="200px" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridEditTemplate let-dataItem="dataItem" kendoTooltip let-formGroup="formGroup">
-                        <kendo-datepicker [formControl]="formGroup.get('CURR_STRT_DT')"
+                        <kendo-datepicker [formControl]="formGroup.get('CURR_STRT_DT')" [weekNumber]="true" calendarType="classic"
                                           title= "{{formGroup.controls['CURR_STRT_DT'].errors ? formGroup.controls['CURR_STRT_DT'].errors.val : 'Choose a date'}}" placeholder="Choose date ...">
                         </kendo-datepicker>
                     </ng-template>
                 </kendo-grid-column>
                 <kendo-grid-column field="CURR_END_DT" title="End Date" width="200px" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                        <kendo-datepicker [formControl]="formGroup.get('CURR_END_DT')"
+                        <kendo-datepicker [formControl]="formGroup.get('CURR_END_DT')" [weekNumber]="true" calendarType="classic"
                                            title = "{{formGroup.controls['CURR_END_DT'].errors ? formGroup.controls['CURR_END_DT'].errors.val : 'Choose a date'}}" placeholder="Choose date ...">                            
                         </kendo-datepicker>
                     </ng-template>

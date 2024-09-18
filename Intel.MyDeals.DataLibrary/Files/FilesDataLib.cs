@@ -433,19 +433,13 @@ namespace Intel.MyDeals.DataLibrary
                                     string sdmCPU_VRT_NM = worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString().TrimEnd() : string.Empty;                                   
                                     string sdmCPU_PROCESSOR_NUMBER = worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString().TrimEnd() : string.Empty;
                                     string sdmCPU_SKU_NM = worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().TrimEnd() : string.Empty;
-                                    int sdmCPU_FLR = 0;
-                                    int sdmAPAC_PD = 0;
-                                    int sdmIJKK_PD = 0;
-                                    int sdmPRC_PD = 0;
-                                    int sdmEMEA_PD = 0;
-                                    int sdmASMO_PD = 0;
                                     string sdmIS_DELETE = worksheet.Cells[i, 13].Value != null ? worksheet.Cells[i, 13].Value.ToString().TrimEnd() : "N";
-                                    int.TryParse(worksheet.Cells[i, 7].Value != null && !worksheet.Cells[i, 7].Value.ToString().Contains("-") ? worksheet.Cells[i, 7].Value.ToString().Trim() : "0", out sdmCPU_FLR);
-                                    int.TryParse(worksheet.Cells[i, 8].Value != null && !worksheet.Cells[i, 8].Value.ToString().Contains("-") ? worksheet.Cells[i, 8].Value.ToString().Trim() : "0", out sdmAPAC_PD);
-                                    int.TryParse(worksheet.Cells[i, 9].Value != null && !worksheet.Cells[i, 9].Value.ToString().Contains("-") ? worksheet.Cells[i, 9].Value.ToString().Trim() : "0", out sdmIJKK_PD);
-                                    int.TryParse(worksheet.Cells[i, 10].Value != null && !worksheet.Cells[i, 10].Value.ToString().Contains("-") ? worksheet.Cells[i, 10].Value.ToString().Trim() : "0", out sdmPRC_PD);
-                                    int.TryParse(worksheet.Cells[i, 11].Value != null && !worksheet.Cells[i, 11].Value.ToString().Contains("-") ? worksheet.Cells[i, 11].Value.ToString().Trim() : "0", out sdmEMEA_PD);
-                                    int.TryParse(worksheet.Cells[i, 12].Value != null && !worksheet.Cells[i, 12].Value.ToString().Contains("-") ? worksheet.Cells[i, 12].Value.ToString().Trim() : "0", out sdmASMO_PD);
+                                    int? sdmCPU_FLR = worksheet.Cells[i, 7].Value != null ? (int?)worksheet.Cells[i, 7].Value : null;
+                                    int? sdmAPAC_PD = worksheet.Cells[i, 8].Value != null ? (int?)worksheet.Cells[i, 8].Value : null;
+                                    int? sdmIJKK_PD = worksheet.Cells[i, 9].Value != null ? (int?)worksheet.Cells[i, 9].Value : null;
+                                    int? sdmPRC_PD = worksheet.Cells[i, 10].Value != null ? (int?)worksheet.Cells[i, 10].Value : null;
+                                    int? sdmEMEA_PD = worksheet.Cells[i, 11].Value != null ? (int?)worksheet.Cells[i, 11].Value : null;
+                                    int? sdmASMO_PD = worksheet.Cells[i, 12].Value != null ? (int?)worksheet.Cells[i, 12].Value : null;
 
                                     if (!(sdmCYCLE_NM == "" && sdmCPU_VRT_NM == "" && sdmCPU_SKU_NM == "" && sdmCPU_PROCESSOR_NUMBER == ""))
                                         lstRtn.Add(new SDMData

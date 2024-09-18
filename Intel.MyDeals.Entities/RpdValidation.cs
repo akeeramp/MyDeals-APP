@@ -20,17 +20,17 @@ namespace Intel.MyDeals.Entities
 
         public string CPU_PROCESSOR_NUMBER { get; set; }
 
-        public int CPU_FLR { get; set; }
+        public int? CPU_FLR { get; set; }
 
-        public int APAC_PD { get; set; }
+        public int? APAC_PD { get; set; }
 
-        public int IJKK_PD { get; set; }
+        public int? IJKK_PD { get; set; }
 
-        public int PRC_PD { get; set; }
+        public int? PRC_PD { get; set; }
 
-        public int EMEA_PD { get; set; }
+        public int? EMEA_PD { get; set; }
 
-        public int ASMO_PD { get; set; }
+        public int? ASMO_PD { get; set; }
 
         public string IS_DELETE { get; set; }
 

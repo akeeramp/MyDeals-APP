@@ -58,7 +58,7 @@ namespace Intel.MyDeals.DataLibrary
                     // Read the paginated result set
                     while (rdr.Read())
                     {
-                        var sdmSummary = new SDMSummary
+                        SDMSummary sdmSummary = new SDMSummary
                         {
                             CYCLE_NM = rdr.IsDBNull(IDX_CYCLE_NM) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CYCLE_NM),
                             CURR_STRT_DT = rdr.IsDBNull(IDX_CURR_STRT_DT) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CURR_STRT_DT),
@@ -66,12 +66,12 @@ namespace Intel.MyDeals.DataLibrary
                             CPU_VRT_NM = rdr.IsDBNull(IDX_CPU_VRT_NM) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_VRT_NM),
                             CPU_SKU_NM = rdr.IsDBNull(IDX_CPU_SKU_NM) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_SKU_NM),
                             CPU_PROCESSOR_NUMBER = rdr.IsDBNull(IDX_CPU_PROCESSOR_NUMBER) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_PROCESSOR_NUMBER),
-                            CPU_FLR = rdr.IsDBNull(IDX_CPU_FLR) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CPU_FLR),
-                            APAC_PD = rdr.IsDBNull(IDX_APAC_PD) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_APAC_PD),
-                            IJKK_PD = rdr.IsDBNull(IDX_IJKK_PD) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IJKK_PD),
-                            PRC_PD = rdr.IsDBNull(IDX_PRC_PD) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRC_PD),
-                            EMEA_PD = rdr.IsDBNull(IDX_EMEA_PD) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EMEA_PD),
-                            ASMO_PD = rdr.IsDBNull(IDX_ASMO_PD) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ASMO_PD),
+                            CPU_FLR = (IDX_CPU_FLR < 0 || rdr.IsDBNull(IDX_CPU_FLR)) ? null : (int?)rdr.GetFieldValue<System.Int32>(IDX_CPU_FLR),
+                            APAC_PD = (IDX_APAC_PD < 0 || rdr.IsDBNull(IDX_APAC_PD)) ? null : (int?)rdr.GetFieldValue<System.Int32>(IDX_APAC_PD),
+                            IJKK_PD = (IDX_IJKK_PD < 0 || rdr.IsDBNull(IDX_IJKK_PD)) ? null : (int?)rdr.GetFieldValue<System.Int32>(IDX_IJKK_PD),
+                            PRC_PD = (IDX_PRC_PD < 0 || rdr.IsDBNull(IDX_PRC_PD)) ? null : (int?)rdr.GetFieldValue<System.Int32>(IDX_PRC_PD),
+                            EMEA_PD = (IDX_EMEA_PD < 0 || rdr.IsDBNull(IDX_EMEA_PD)) ? null : (int?)rdr.GetFieldValue<System.Int32>(IDX_EMEA_PD),
+                            ASMO_PD = (IDX_ASMO_PD < 0 || rdr.IsDBNull(IDX_ASMO_PD)) ? null : (int?)rdr.GetFieldValue<System.Int32>(IDX_ASMO_PD),
                             CHG_DTM = rdr.IsDBNull(IDX_CHG_DTM) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM)
                             // ... other properties
                         };
@@ -136,7 +136,7 @@ namespace Intel.MyDeals.DataLibrary
 
                     while (rdr.Read())
                     {
-                        ret.Add(new SDMSummary
+                        SDMSummary data = new SDMSummary
                         {
                             CYCLE_NM = (IDX_CYCLE_NM < 0 || rdr.IsDBNull(IDX_CYCLE_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CYCLE_NM),
                             CURR_STRT_DT = (IDX_CURR_STRT_DT < 0 || rdr.IsDBNull(IDX_CURR_STRT_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CURR_STRT_DT),
@@ -144,14 +144,15 @@ namespace Intel.MyDeals.DataLibrary
                             CPU_VRT_NM = (IDX_CPU_VRT_NM < 0 || rdr.IsDBNull(IDX_CPU_VRT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_VRT_NM),
                             CPU_SKU_NM = (IDX_CPU_SKU_NM < 0 || rdr.IsDBNull(IDX_CPU_SKU_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_SKU_NM),
                             CPU_PROCESSOR_NUMBER = (IDX_CPU_PROCESSOR_NUMBER < 0 || rdr.IsDBNull(IDX_CPU_PROCESSOR_NUMBER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_PROCESSOR_NUMBER),
-                            CPU_FLR = (IDX_CPU_FLR < 0 || rdr.IsDBNull(IDX_CPU_FLR)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CPU_FLR),
-                            APAC_PD = (IDX_APAC_PD < 0 || rdr.IsDBNull(IDX_APAC_PD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_APAC_PD),
-                            IJKK_PD = (IDX_IJKK_PD < 0 || rdr.IsDBNull(IDX_IJKK_PD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IJKK_PD),
-                            PRC_PD = (IDX_PRC_PD < 0 || rdr.IsDBNull(IDX_PRC_PD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRC_PD),
-                            EMEA_PD = (IDX_EMEA_PD < 0 || rdr.IsDBNull(IDX_EMEA_PD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EMEA_PD),
-                            ASMO_PD = (IDX_ASMO_PD < 0 || rdr.IsDBNull(IDX_ASMO_PD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ASMO_PD),
+                            CPU_FLR = (IDX_CPU_FLR < 0 || rdr.IsDBNull(IDX_CPU_FLR)) ? null : (int?)rdr.GetFieldValue<System.Int32>(IDX_CPU_FLR),
+                            APAC_PD = (IDX_APAC_PD < 0 || rdr.IsDBNull(IDX_APAC_PD)) ? null : (int?)rdr.GetFieldValue<System.Int32>(IDX_APAC_PD),
+                            IJKK_PD = (IDX_IJKK_PD < 0 || rdr.IsDBNull(IDX_IJKK_PD)) ? null : (int?)rdr.GetFieldValue<System.Int32>(IDX_IJKK_PD),
+                            PRC_PD = (IDX_PRC_PD < 0 || rdr.IsDBNull(IDX_PRC_PD)) ? null : (int?)rdr.GetFieldValue<System.Int32>(IDX_PRC_PD),
+                            EMEA_PD = (IDX_EMEA_PD < 0 || rdr.IsDBNull(IDX_EMEA_PD)) ? null : (int?)rdr.GetFieldValue<System.Int32>(IDX_EMEA_PD),
+                            ASMO_PD = (IDX_ASMO_PD < 0 || rdr.IsDBNull(IDX_ASMO_PD)) ? null : (int?)rdr.GetFieldValue<System.Int32>(IDX_ASMO_PD),
                             IS_DELETE = (IDX_IS_DELETE < 0 || rdr.IsDBNull(IDX_IS_DELETE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IS_DELETE)
-                        });
+                        };
+                        ret.Add(data);
                     }
                 }
             }
