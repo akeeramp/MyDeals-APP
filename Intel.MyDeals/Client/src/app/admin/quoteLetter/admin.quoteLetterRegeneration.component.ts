@@ -17,8 +17,6 @@ import { DownloadQuoteLetterData } from "./admin.quoteLetter.model";
     selector: "admin-regeratequoteletter",
     templateUrl: "Client/src/app/admin/quoteLetter/admin.quoteLetterRegeneration.component.html",
     styleUrls: ['Client/src/app/admin/quoteLetter/admin.quoteLetterRegeneration.component.css']
-
-
 })
 
 export class QuoteLetterRegenerationComponent implements OnDestroy {
@@ -41,7 +39,7 @@ export class QuoteLetterRegenerationComponent implements OnDestroy {
             filters: [],
         },
     };
-    submit() {
+    submit(): void {
         // var dealId = document.getElementById("dealId") as HTMLElement
         if (this.dealId == '') {
 
@@ -74,7 +72,7 @@ export class QuoteLetterRegenerationComponent implements OnDestroy {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
     }
-    validateDealID() {
+    validateDealID(): void {
         const exactMatch = new RegExp("^[0-9]+(,[0-9]+)*$");
         if (!exactMatch.test(this.dealId)) {
 
