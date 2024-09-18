@@ -5,6 +5,7 @@ import { logger } from '../../shared/logger/logger';
 import { AdminCacheService } from './admin.cache.service';
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { Cache_Item_Map } from './admin.cache.model';
 
 @Component({
     selector: 'cache',
@@ -26,9 +27,9 @@ export class AdminCacheComponent implements OnInit, OnDestroy {
     private divViewResultWidth;
     private apiCacheData;
 
-    loadCache() {
+    loadCache(): void {
         this.adminCacheService.getStaticCacheStatus().pipe(takeUntil(this.destroy$))
-            .subscribe((res: unknown[]) => {
+            .subscribe((res: Cache_Item_Map[]) => {
             this.cacheData = res;
             this.defaultStatus();
         }, (err) => {
@@ -36,11 +37,11 @@ export class AdminCacheComponent implements OnInit, OnDestroy {
         });
     }
 
-    loadCacheByName(data) {
+    loadCacheByName(data: Cache_Item_Map): void {
         data.loading = true;
         this.currentCacheDetails = "";
         this.adminCacheService.loadStaticCacheByName(data).pipe(takeUntil(this.destroy$))
-            .subscribe((res) => {
+            .subscribe((res: boolean) => {
             if (res === true) {
                 this.loadCache();
             } else {
@@ -53,7 +54,7 @@ export class AdminCacheComponent implements OnInit, OnDestroy {
         });
     }
 
-    clearCacheByName(data) {
+    clearCacheByName(data: Cache_Item_Map): void {
         data.loading = true;
         this.currentCacheDetails = "";
         this.adminCacheService.clearStaticCacheByName(data).pipe(takeUntil(this.destroy$))
@@ -66,7 +67,7 @@ export class AdminCacheComponent implements OnInit, OnDestroy {
         });
     }
 
-    viewCacheByName(data) {
+    viewCacheByName(data: Cache_Item_Map): void {
         data.loading = true;
         this.currentCacheDetails = "";
         this.adminCacheService.viewStaticCacheByName(data).pipe(takeUntil(this.destroy$))
@@ -79,8 +80,7 @@ export class AdminCacheComponent implements OnInit, OnDestroy {
     }
 
     // Clear all the cache
-    clearAll() {
-        console.log("clearall");
+    clearAll(): void {
         this.resetCache();
         this.adminCacheService.clearStaticCache().pipe(takeUntil(this.destroy$))
             .subscribe(() => {
@@ -92,7 +92,7 @@ export class AdminCacheComponent implements OnInit, OnDestroy {
     }
 
     // Reload all the cache
-    reloadAll() {
+    reloadAll(): void {
         console.log("reloadAll");
         this.resetCache();
         this.adminCacheService.reloadAllStaticCache().pipe(takeUntil(this.destroy$))
@@ -105,7 +105,7 @@ export class AdminCacheComponent implements OnInit, OnDestroy {
     }
 
     // Load the api cache details
-    loadApiCache() {
+    loadApiCache(): void {
         this.currentCacheDetails = "";
         this.adminCacheService.getApiCacheStatus().pipe(takeUntil(this.destroy$))
             .subscribe((res) => {
@@ -116,7 +116,7 @@ export class AdminCacheComponent implements OnInit, OnDestroy {
     }
 
     // Clear api cache by name
-    clearApiCacheByName(data) {
+    clearApiCacheByName(data: any): void {
         this.currentCacheDetails = "";
         this.adminCacheService.clearApiCacheByName(data).pipe(takeUntil(this.destroy$))
             .subscribe(() => {
@@ -127,7 +127,7 @@ export class AdminCacheComponent implements OnInit, OnDestroy {
     }
 
     // Clear all api cache
-    clearAllApiCache() {
+    clearAllApiCache(): void {
         this.currentCacheDetails = "";
         this.adminCacheService.clearApiCache().pipe(takeUntil(this.destroy$))
             .subscribe(() => {
@@ -138,37 +138,37 @@ export class AdminCacheComponent implements OnInit, OnDestroy {
         });
     }
 
-    defaultStatus() {
+    defaultStatus(): void {
         for (let i = 0; i < this.cacheData.length; i++) {
             this.cacheData[i]["loading"] = false;
         }
     }
 
-    loadingStatus() {
+    loadingStatus(): void {
         for (let i = 0; i < this.cacheData.length; i++) {
             this.cacheData[i]["loading"] = true;
         }
     }
 
-    resetCache() {
+    resetCache(): void {
         this.loadingStatus();
         this.currentCacheDetails = "";
     }
 
-    onResize() {
+    onResize(): void {
         const divCacheListWidth = document.getElementById("cacheList").clientWidth;
         this.divCacheListHt = window.innerHeight - 200;
         this.divViewResultHt = window.innerHeight - 200;
         this.divViewResultWidth = window.innerWidth - divCacheListWidth - 150;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.loadCache();
         this.loadApiCache();
         this.onResize();
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

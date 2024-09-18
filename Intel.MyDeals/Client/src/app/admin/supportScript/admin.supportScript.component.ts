@@ -40,7 +40,7 @@ export class adminsupportScriptComponent implements PendingChangesGuard, OnDestr
     );
      
 
-    intializesupportScriptDataForm() {
+    intializesupportScriptDataForm(): void {
         this.supportScriptDataForm = this.formBuilder.group({
             START_QTR: this.momentService.moment().quarter(),
             START_YR: parseInt(this.momentService.moment().format("YYYY")) - 1,
@@ -53,19 +53,19 @@ export class adminsupportScriptComponent implements PendingChangesGuard, OnDestr
         });
     }
 
-    startYearChange() {
+    startYearChange(): void {
         if (this.supportScriptDataForm.get("START_YR").value > this.supportScriptDataForm.get("MaxYear").value) {
             this.supportScriptDataForm.get("START_YR").setValue(this.supportScriptDataForm.get("MaxYear").value);
         }
     }
 
-    endYearChange() {
+    endYearChange(): void {
         if (this.supportScriptDataForm.get("END_YR").value > this.supportScriptDataForm.get("MaxYear").value) {
             this.supportScriptDataForm.get("END_YR").setValue(this.supportScriptDataForm.get("MaxYear").value);
         }
     }
 
-    validate() {
+    validate(): boolean {
         if (this.supportScriptDataForm.get("START_YR").value > this.supportScriptDataForm.get("END_YR").value) {
              this.titleErrorMsg = "Start year Quarter cannot be greater than end year quarter";
             this.supportScriptDataForm.controls["START_YR"].valid;
@@ -80,8 +80,8 @@ export class adminsupportScriptComponent implements PendingChangesGuard, OnDestr
         }
          if (this.supportScriptDataForm.get("NOTES").value == "" || this.supportScriptDataForm.get("NOTES").value != "") {
             const reg = new RegExp(/^[0-9,]+$/);
-            let productIds = this.supportScriptDataForm.get("NOTES").value.replace(/,+/g, ',').trim(' ');
-            let isValidProdIds = reg.test(productIds);
+            const productIds = this.supportScriptDataForm.get("NOTES").value.replace(/,+/g, ',').trim(' ');
+            const isValidProdIds = reg.test(productIds);
             if (!isValidProdIds) {
                 this.errorNotes = "Please enter comma (,) separated L4 product ids only";
                 return false;
@@ -96,12 +96,12 @@ export class adminsupportScriptComponent implements PendingChangesGuard, OnDestr
         return true;
     }
 
-    executeCostFiller() {
+    executeCostFiller(): void {
         if (this.validate()) {
             let noteValues = this.supportScriptDataForm.get("NOTES").value.split(',');
             this.isDirty=false;
-            let startYearQuarter = this.supportScriptDataForm.get("START_YR").value + "0" + this.supportScriptDataForm.get("START_QTR").value;
-            let endYearQuarter = this.supportScriptDataForm.get("END_YR").value + "0" + this.supportScriptDataForm.get("END_QTR").value;
+            const startYearQuarter = this.supportScriptDataForm.get("START_YR").value + "0" + this.supportScriptDataForm.get("START_QTR").value;
+            const endYearQuarter = this.supportScriptDataForm.get("END_YR").value + "0" + this.supportScriptDataForm.get("END_QTR").value;
             this.adminsupportscriptsvc.ExecuteCostGapFiller(startYearQuarter, endYearQuarter,
                 this.supportScriptDataForm.get("isFillNullSelected").value,
                 noteValues).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
@@ -115,7 +115,7 @@ export class adminsupportScriptComponent implements PendingChangesGuard, OnDestr
     /*executePostTest() {
         this.isDirty=false;
         const jsonDataPacket = "{\"header\": {\"source_system\": \"pricing_tenders\",\"target_system\": \"mydeals\",\"action\": \"create\",\"xid\": \"152547827hdhdh\"},\"recordDetails\": {\"SBQQ__Quote__c\": {\"Id\": \"50130000000X14c\",\"Name\": \"Q-02446\",\"Pricing_Folio_ID_Nm__c\": \"\",\"SBQQ__Account__c\": {\"Id\": \"50130000000X14c\",\"Name\": \"Dell\",\"Core_CIM_ID__c\": \"\"},\"Pricing_Deal_Type_Nm__c\": \"ECAP\",\"Pricing_Customer_Nm__c\": \"Facebook\",\"Pricing_Project_Name_Nm__c\": \"FMH\",\"Pricing_ShipmentStDate_Dt__c\": \"02/28/2019\",\"Pricing_ShipmentEndDate_Dt__c\": \"02/28/2019\",\"Pricing_Server_Deal_Type_Nm__c\": \"HPC\",\"Pricing_Region_Nm__c\": \"EMEA\",\"SBQQ__QuoteLine__c\": [{\"Id\": \"001i000001AWbWu\",\"Name\": \"QL-0200061\",\"Pricing_Deal_RFQ_Status_Nm__c\": \"\",\"Pricing_ECAP_Price__c\": \"100\",\"Pricing_Meet_Comp_Price_Amt__c\": \"90\",\"Pricing_Unit_Qty__c\": \"300\",\"Pricing_Deal_RFQ_Id__c\": \"543212\",\"Pricing_Status_Nm__c\": \"\",\"SBQQ__Product__c\": {\"Id\": \"001i000001AWbWu\",\"Name\": \"Intel® Xeon® Processor E7-8870 v4\",\"Core_Product_Name_EPM_ID__c\": \"192283\"},\"Pricing_Competetor_Product__c\": {\"Id\": \"\",\"Name\": \"\"},\"Pricing_Performance_Metric__c\": [{\"Id\": \"001i000001AWbWu\",\"Name\": \"PM-000010\",\"Pricing_Performance_Metric_Nm__c\": \"SpecInt\",\"Pricing_Intel_SKU_Performance_Nbr__c\": \"10\",\"Pricing_Comp_SKU_Performance_Nbr__c\": \"9\",\"Pricing_Weighting_Pct__c\": \"100\"}]}],\"Pricing_Comments__c\": [{\"Id\": \"\",\"Name\": \"\",\"Pricing_Question__c\": \"\",\"Pricing_Answer__c\": \"\"}]}}}";
-        this.adminsupportscriptsvc.ExecutePostTest(jsonDataPacket).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.adminsupportscriptsvc.ExecutePostTest(jsonDataPacket).pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.loggersvc.success("Post Test executed succesfully");
         }), err => {
             this.loggersvc.error("Unable to delete contract", "Error", err);
@@ -128,14 +128,14 @@ export class adminsupportScriptComponent implements PendingChangesGuard, OnDestr
     }
 
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.supportScriptDataForm.valueChanges.subscribe(x=>{
             this.isDirty=true;
         })
  
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

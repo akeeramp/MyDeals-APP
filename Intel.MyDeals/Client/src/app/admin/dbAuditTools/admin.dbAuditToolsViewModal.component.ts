@@ -5,6 +5,7 @@ import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-gr
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { dbAuditToolsService } from "./admin.dbAuditTools.service";
 import { forEach } from 'underscore';
+import { GetObjMap } from "./admin.dbAuditTools.model";
 
 @Component({
     selector: "dbAuditToolsViewModal",
@@ -27,14 +28,13 @@ export class DbAuditToolsViewModalComponent {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
 
-    close() {
+    close(): void {
         this.dialogRef.close();
     }
 
-    ngOnInit() {
-        let b = 1;
-        this.dbAuditToolsSVC.GetObjText(this.jsonData).subscribe((result: Array<any>) => {
-            let ReturnData = (JSON.parse(result.toString()).DATA as any[]).sort((a, b) => (a.LineNbr - b.LineNbr));
+    ngOnInit(): void {
+        this.dbAuditToolsSVC.GetObjText(this.jsonData).subscribe((result: string) => {
+            const ReturnData = (JSON.parse(result.toString()).DATA as GetObjMap[]).sort((a, b) => (a.LineNbr - b.LineNbr));
             let tempTextareaData = "";
             for (let LineNbr in ReturnData) {
                 tempTextareaData = tempTextareaData.concat(ReturnData[LineNbr].LineText);

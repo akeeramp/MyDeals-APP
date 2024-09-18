@@ -8,6 +8,7 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { Btch_Job_Tmng_Map } from "./admin.batchTiming.model";
 
 @Component({
     selector: 'batch-timing',
@@ -26,7 +27,7 @@ export class batchTimingComponent implements OnDestroy {
     private loadMessage = "Batch Job Details Loading..";
     private type = "numeric";
     private info = true;
-    private gridResult: Array<any>;
+    private gridResult: Array<Btch_Job_Tmng_Map>;
     private gridData: GridDataResult;
     private color: ThemePalette = 'primary';
     private state: State = {
@@ -63,7 +64,7 @@ export class batchTimingComponent implements OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
+        const excelState: State = {};
         Object.assign(excelState, this.state)
         excelState.take = this.gridResult.length;
 
@@ -74,10 +75,10 @@ export class batchTimingComponent implements OnDestroy {
         return result;
     }
 
-    loadBatchTiming() {
+    loadBatchTiming(): void {
         this.batchTimingSvc.getBatchJobTiming('BTCH_JOB_DTL')
             .pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<any>) => {
+            .subscribe((result: Array<Btch_Job_Tmng_Map>) => {
                 this.isLoading = false;
                 this.gridResult = result;
                 this.gridData = process(result, this.state);
@@ -91,7 +92,7 @@ export class batchTimingComponent implements OnDestroy {
         this.gridData = process(this.gridResult, this.state);
     }
 
-    clearFilter() {
+    clearFilter(): void {
         this.state.filter = {
             logic: "and",
             filters: [],
@@ -99,7 +100,7 @@ export class batchTimingComponent implements OnDestroy {
         this.gridData = process(this.gridResult, this.state);
     }
 
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
@@ -107,7 +108,7 @@ export class batchTimingComponent implements OnDestroy {
         };
         this.batchTimingSvc.getBatchJobTiming('BTCH_JOB_DTL')
             .pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<any>) => {
+            .subscribe((result: Array<Btch_Job_Tmng_Map>) => {
             this.isLoading = false;
             this.gridResult = result;
             this.gridData = process(result, this.state);
@@ -117,12 +118,12 @@ export class batchTimingComponent implements OnDestroy {
 
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.loadBatchTiming();
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

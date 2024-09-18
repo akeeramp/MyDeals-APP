@@ -37,7 +37,7 @@ export class CreateProcedureJobModalComponent implements OnInit {
         }
     }
 
-    close() {
+    close(): void {
         this.DIALOG_REF.close();
     }
 

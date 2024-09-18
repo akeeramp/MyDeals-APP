@@ -13,6 +13,7 @@ import { DbAuditToolsCompareModalComponent } from './admin.dbAuditToolsCompareMo
 import { forEach, uniq } from 'underscore';
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { DbAuditDataPacket, DbAuditObjTextRequest, DbObjs, EnvsDataMap, GridReturnsOrig, ObjsDataMap } from "./admin.dbAuditTools.model";
 
 @Component({
     selector: "db-Audit-Tools",
@@ -27,20 +28,20 @@ export class dbAuditToolsComponent implements OnDestroy {
         private constantsService: constantsService,
         protected dialog: MatDialog
     ) { }
-    private gridReturnsOrig = [];
+    private gridReturnsOrig: GridReturnsOrig[] = [];
     private gridReturns: GridDataResult;
-    private dbAuditDataPacket = { TESTITEM: "This is a test", ENVIRONMENTS: [], DB_OBJECTS: [] };
-    private dbAuditObjTextRequest = { ENV_NM: "", ENV_TAG: "", DB_TYPE: "", DB_OBJ: "", DB_DATA: "" };
+    private dbAuditDataPacket: DbAuditDataPacket = { TESTITEM: "This is a test", ENVIRONMENTS: [], DB_OBJECTS: [] };
+    private dbAuditObjTextRequest: DbAuditObjTextRequest = { ENV_NM: "", ENV_TAG: "", DB_TYPE: "", DB_OBJ: "", DB_DATA: "" };
     private dbAuditCompareRequest = [];
 
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
     // MIKES
-    private envsDataFinal: any[] = []; // Final Envs list used in UI
-    private selectedEnvValues: any[] = [];
-    private objsData: any[] = [];
-    private objsDataMapped: any[] = [];
-    private objsDataFinal: any[] = []; // Final Objects list used in UI
+    private envsDataFinal: EnvsDataMap[] = []; // Final Envs list used in UI
+    private selectedEnvValues: EnvsDataMap[] = [];
+    private objsData: DbObjs[] = [];
+    private objsDataMapped: ObjsDataMap[] = [];
+    private objsDataFinal: ObjsDataMap[] = []; // Final Objects list used in UI
     private selectedObjValues: any[] = [];
     public valueDepth = [1];
     public baseEnvName = "";
@@ -74,16 +75,16 @@ export class dbAuditToolsComponent implements OnDestroy {
 
     accessAllowed = true; // Default to false to prevent unauthorized users
 
-    checkPageAccess() {
+    checkPageAccess(): void {
         if (!(<any>window).isDeveloper) {
             this.accessAllowed = false;
         }
     }
 
-    loadDBEnvs() {
+    loadDBEnvs(): void {
         this.dbAuditToolsSVC.getDbEnvs().pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<any>) => {
-            let ReturnData = JSON.parse(result.toString());
+            .subscribe((result: string) => {
+            const ReturnData = JSON.parse(result.toString());
             if (ReturnData.DATA != undefined) {
                 this.envsDataFinal = ReturnData.DATA;
                 this.baseEnvName = this.envsDataFinal.filter(x => x.IS_CURR_ENV === 1)[0].ENV_NM
@@ -93,11 +94,11 @@ export class dbAuditToolsComponent implements OnDestroy {
         });
     }
 
-    loadDBObjects() {
+    loadDBObjects(): void {
         this.dbAuditToolsSVC.getDbObjs().pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<any>) => {
-            let ReturnData = JSON.parse(result.toString());
-            let ColumnData = ReturnData.DATA;
+            .subscribe((result: string) => {
+            const ReturnData = JSON.parse(result.toString());
+            const ColumnData = ReturnData.DATA;
             if (ColumnData != undefined) {
                 this.objsData = ColumnData.sort((a, b) => a.DB_OBJ.localeCompare(b.DB_OBJ));
 
@@ -115,7 +116,7 @@ export class dbAuditToolsComponent implements OnDestroy {
         });
     }
 
-    runDbAuditNow() {
+    runDbAuditNow(): void {
         if (this.selectedEnvValues.length == 0) {
             alert("You need to select some environments.");
             return;
@@ -125,20 +126,20 @@ export class dbAuditToolsComponent implements OnDestroy {
         this.dbAuditDataPacket.DB_OBJECTS = this.selectedObjValues.filter(a => a.subCategories == undefined)
 
         this.dbAuditToolsSVC.GetAuditData(this.dbAuditDataPacket).pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<any>) => {
-            let ReturnData = JSON.parse(result.toString());
+            .subscribe((result: string) => {
+            const ReturnData = JSON.parse(result.toString());
 
             let tempEnvsOrder = ["DB_OBJ", "DB_TYPE"];
             tempEnvsOrder = tempEnvsOrder.concat(this.envsDataFinal.map((envObj) => { return envObj.ENV_NM; }));
 
-            let tempColumnHeader = Object.keys(ReturnData.DATA[0]);
-            let finalVer = [];
+            const tempColumnHeader = Object.keys(ReturnData.DATA[0]);
+            const finalVer = [];
             tempEnvsOrder.forEach(a => {
                 if (tempColumnHeader.includes(a)) finalVer.push(a)
             });
 
             this.ColumnHeader = finalVer;
-            let ColumnData = ReturnData.DATA;
+            const ColumnData = ReturnData.DATA;
             if (ColumnData != undefined) {
                 this.gridReturnsOrig = ColumnData;
                 this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
@@ -151,11 +152,11 @@ export class dbAuditToolsComponent implements OnDestroy {
         });
     }
 
-    performComparison(ProcName) {
+    performComparison(ProcName: string): void {
         this.dbAuditCompareRequest = [];
-        let selObj = this.selectedObjValues.findIndex(o => o.DB_OBJ === ProcName);
+        const selObj = this.selectedObjValues.findIndex(o => o.DB_OBJ === ProcName);
         this.selectedEnvValues.sort((a, b) => (a.ENV_ORD - b.ENV_ORD)).forEach(a => {
-            let tempAuditObjTextRequest = { ENV_NM: "", ENV_TAG: "", DB_TYPE: "", DB_OBJ: "", DB_DATA: "" };
+            const tempAuditObjTextRequest = { ENV_NM: "", ENV_TAG: "", DB_TYPE: "", DB_OBJ: "", DB_DATA: "" };
 
             tempAuditObjTextRequest.ENV_NM = a.ENV_NM;
             tempAuditObjTextRequest.ENV_TAG = a.ENV_TAG;
@@ -176,9 +177,9 @@ export class dbAuditToolsComponent implements OnDestroy {
         });
     }
 
-    GetBodyData(ProcName, env) {
-        let selEnv = this.selectedEnvValues.findIndex(e => e.ENV_NM === env);
-        let selObj = this.selectedObjValues.findIndex(o => o.DB_OBJ === ProcName);
+    GetBodyData(ProcName: string, env: string): void {
+        const selEnv = this.selectedEnvValues.findIndex(e => e.ENV_NM === env);
+        const selObj = this.selectedObjValues.findIndex(o => o.DB_OBJ === ProcName);
         this.dbAuditObjTextRequest.ENV_NM = this.selectedEnvValues[selEnv].ENV_NM;
         this.dbAuditObjTextRequest.ENV_TAG = this.selectedEnvValues[selEnv].ENV_TAG;
         this.dbAuditObjTextRequest.DB_TYPE = this.selectedObjValues[selObj].DB_TYPE;
@@ -195,14 +196,14 @@ export class dbAuditToolsComponent implements OnDestroy {
         });
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.checkPageAccess();
         this.loadDBEnvs();
         this.loadDBObjects();
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

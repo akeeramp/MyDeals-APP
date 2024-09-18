@@ -6,6 +6,7 @@ import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms"
 import { Observable } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { TenderTransferRootObject } from "../supportScript/admin.supportScript.model";
 
 @Component({
     selector: "admin-test-tenders",
@@ -25,7 +26,7 @@ export class adminTestTendersComponent implements PendingChangesGuard, OnDestroy
     //get method for easy access to the form fields.
     get formData() { return this.admintestTendersForm.controls; }
 
-    excutetestTendersData() {
+    excutetestTendersData(): void {
         const JsonObj = {
             'header': {
                 'source_system': 'pricing_tenders',
@@ -93,17 +94,15 @@ export class adminTestTendersComponent implements PendingChangesGuard, OnDestroy
             }
         }
         const jsonDataPacket = JSON.stringify(JsonObj);
-        this.admintestTendersService.ExecutePostTest(jsonDataPacket).pipe(takeUntil(this.destroy$)).subscribe(res => {
-
+        this.admintestTendersService.ExecutePostTest(jsonDataPacket).pipe(takeUntil(this.destroy$)).subscribe((res: TenderTransferRootObject) => {
             if (res) {
                 this.isDirty=false;
                 this.loggerSvc.success("Post Test executed succesfully");
             }
-        },);
-
+        });
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.admintestTendersForm = new FormGroup({
             CNTRCT_SF_ID: new FormControl('50130000000X1', Validators.required),
             CNTRCT_CUST: new FormControl('Dell', Validators.required),
@@ -115,9 +114,7 @@ export class adminTestTendersComponent implements PendingChangesGuard, OnDestroy
             ECAP: new FormControl('100', Validators.required),
             VOLUME: new FormControl('300', Validators.required),
             DEAL_ID: new FormControl('543212', Validators.required),
-            PROD_IDs: new FormControl('Intel® Xeon® Processor E7 - 8870 v4', Validators.required),
-           
-
+            PROD_IDs: new FormControl('Intel® Xeon® Processor E7 - 8870 v4', Validators.required)
         });
         this.admintestTendersForm.valueChanges.subscribe((x) => {
           this.isDirty=true;
@@ -127,7 +124,7 @@ export class adminTestTendersComponent implements PendingChangesGuard, OnDestroy
         return !this.isDirty;
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

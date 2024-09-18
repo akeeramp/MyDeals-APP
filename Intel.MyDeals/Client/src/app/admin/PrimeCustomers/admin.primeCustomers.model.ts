@@ -57,8 +57,8 @@ export interface UnPrimeAtrbs {
 export interface EndCustomer {
     END_CUSTOMER_RETAIL: string;
     IS_EXCLUDE: string;
-    IS_PRIMED_CUST: string;
-    IS_RPL: string;
+    IS_PRIMED_CUST: any;
+    IS_RPL: any;
     PRIMED_CUST_CNTRY: string;
     PRIMED_CUST_ID: string;
     PRIMED_CUST_NM: string;

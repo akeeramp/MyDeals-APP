@@ -8,6 +8,8 @@ import { Observable } from "rxjs";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { AttributeFeildvalues, DealMassUpdateData, DealMassUpdateResults } from "./admin.dealMassUpdate.model";
+import { DynamicObj } from "../employee/admin.employee.model";
 
 @Component({
     selector: "deal-mass-update",
@@ -22,14 +24,14 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
     private readonly destroy$ = new Subject();
     isDirty = false;
     private color: ThemePalette = "primary";
-    private attr = [];
-    private attrValues = [];
+    private attr: Array<AttributeFeildvalues> = [];
+    private attrValues: Array<AttributeFeildvalues> = [];
     private gridResult: GridDataResult;
-    private updateResponse: any;
-    private massUpdateData: any = {};
-    private resultCount: any = {};
-    private isError: any = {};
-    private errorMsg: any = {};
+    private updateResponse: Array<DealMassUpdateResults>;
+    private massUpdateData: DynamicObj = {};
+    private resultCount: DynamicObj = {};
+    private isError: DynamicObj = {};
+    private errorMsg: DynamicObj = {};
     private showNumeric = false;
     private showTextBox = false;
     private showDropDown = false;
@@ -47,21 +49,21 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
         group: []
     };
 
-    loadAttributes() {
+    loadAttributes(): void {
         //Setting ngModel values to null initially
         this.massUpdateData.sendVistexFlag = false;
         this.massUpdateData.DealIds = null;
         this.massUpdateData.field = null;
         this.massUpdateData.textValue = null;
 
-        this.dealMassUpdateService.GetUpdateAttributes(0).pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+        this.dealMassUpdateService.GetUpdateAttributes(0).pipe(takeUntil(this.destroy$)).subscribe((result: Array<AttributeFeildvalues>) => {
             this.attr = result
         }, (error) => {
             this.loggerService.error('Unable to get Attribute List', '', 'DealMassUpdateComponent::GetUpdateAttributes::' + JSON.stringify(error));
         });
     }
 
-    attributeChange(value) {
+    attributeChange(value: AttributeFeildvalues): void {
         this.isDirty = true;
         //Resetting error messages
         this.isError = {};
@@ -88,7 +90,7 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
         } else {
             this.dealMassUpdateService.GetUpdateAttributes(value.ATRB_SID)
                 .pipe(takeUntil(this.destroy$))
-                .subscribe((result: Array<any>) => {
+                .subscribe((result: Array<AttributeFeildvalues>) => {
                     this.attrValues = result;
                 }, (error) => {
                     this.loggerService.error('Unable to get Attribute List', '', 'DealMassUpdateComponent::attributeChange::' + JSON.stringify(error));
@@ -106,17 +108,18 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
         }
     }
 
-    updateValues() {
+    updateValues(): void {
         //Resetting error messages
         this.isError = {};
         this.errorMsg = {};
         this.validateData();
 
         if (this.isDataValid) {
-            const finalData = {
+            const finalData: DealMassUpdateData = {
                 "DEAL_IDS": this.massUpdateData.DealIds,
                 "ATRB_SID": this.massUpdateData.field.ATRB_SID,
-                "SEND_VSTX_FLG": this.massUpdateData.sendVistexFlag
+                "SEND_VSTX_FLG": this.massUpdateData.sendVistexFlag,
+                "UPD_VAL": ""
             }
 
             if (this.showMultiSelect) {
@@ -129,7 +132,7 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
                 finalData["UPD_VAL"] = this.massUpdateData.textValue
             }
 
-            this.dealMassUpdateService.UpdateDealsAttrbValue(finalData).pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+            this.dealMassUpdateService.UpdateDealsAttrbValue(finalData).pipe(takeUntil(this.destroy$)).subscribe((result: Array<DealMassUpdateResults>) => {
                 this.isDirty = false;
                 this.updateResponse = result;
                 this.gridResult = process(result, this.state);
@@ -148,7 +151,7 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
         }
     }
 
-    validateData() {
+    validateData(): void {
         this.isDataValid = true;
 
         // Validate Deals IDs
@@ -225,7 +228,7 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
         this.gridResult = process(this.updateResponse, this.state);
     }
 
-    textchange(){
+    textchange(): void {
         this.isDirty=true;
     }
 
@@ -233,10 +236,10 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
         return !this.isDirty;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.loadAttributes();
     }
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

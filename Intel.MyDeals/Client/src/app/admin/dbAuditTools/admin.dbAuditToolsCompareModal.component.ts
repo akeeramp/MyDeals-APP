@@ -19,7 +19,7 @@ import { takeUntil } from "rxjs/operators";
 export class IButton  {
     text: string;
     data: string;
-    selected: boolean = false;
+    selected: boolean;
 }
 
 @Component({
@@ -52,19 +52,19 @@ export class DbAuditToolsCompareModalComponent implements OnDestroy {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
 
-    close() {
+    close(): void {
         this.dialogRef.close();
     }
 
-    public changeInline(e: boolean) {
+    public changeInline(e: boolean): void {
         this.isSideBySide = !e;
     }
 
-    singleTextViewOnly() {
-        let singleAuditObjTextRequest = this.jsonData[0];
+    singleTextViewOnly(): void {
+        const singleAuditObjTextRequest = this.jsonData[0];
         this.dbAuditToolsSVC.GetObjText(singleAuditObjTextRequest).pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<any>) => {
-            let ReturnData = JSON.parse(result.toString()).DATA.sort((a, b) => (a.LineNbr - b.LineNbr));
+            .subscribe((result: string) => {
+            const ReturnData = JSON.parse(result.toString()).DATA.sort((a, b) => (a.LineNbr - b.LineNbr));
             let tempTextareaData = "";
             for (let LineNbr in ReturnData) {
                 tempTextareaData = tempTextareaData.concat(ReturnData[LineNbr].LineText);
@@ -88,17 +88,17 @@ export class DbAuditToolsCompareModalComponent implements OnDestroy {
     }
 
     fetchData = function () {
-        let selectedItems = this.buttonEnvs.filter(a => a.selected == true);
+        const selectedItems = this.buttonEnvs.filter(a => a.selected == true);
 
         if (selectedItems.length != 2) {
             alert("You need to select 2 environments.");
         }
         else {
-            let leftAuditObjTextRequest = selectedItems[0].data;
+            const leftAuditObjTextRequest = selectedItems[0].data;
             this.myLeftLabel = selectedItems[0].text;
             this.dbAuditToolsSVC.GetObjText(leftAuditObjTextRequest).pipe(takeUntil(this.destroy$))
-                .subscribe((result: Array<any>) => {
-                let ReturnData = JSON.parse(result.toString()).DATA.sort((a, b) => (a.LineNbr - b.LineNbr));
+                .subscribe((result: string) => {
+                const ReturnData = JSON.parse(result.toString()).DATA.sort((a, b) => (a.LineNbr - b.LineNbr));
                 let tempTextareaData = "";
                 for (let LineNbr in ReturnData) {
                     tempTextareaData = tempTextareaData.concat(ReturnData[LineNbr].LineText);
@@ -109,11 +109,11 @@ export class DbAuditToolsCompareModalComponent implements OnDestroy {
                 this.loggerSvc.error('Error in retreiving DB Object Text for ' + this.procName + ' left comparison mode', error);
             });
 
-            let rightAuditObjTextRequest = selectedItems[1].data;
+            const rightAuditObjTextRequest = selectedItems[1].data;
             this.myRightLabel = selectedItems[1].text;
             this.dbAuditToolsSVC.GetObjText(rightAuditObjTextRequest).pipe(takeUntil(this.destroy$))
                 .subscribe((result: Array<any>) => {
-                let ReturnData = JSON.parse(result.toString()).DATA.sort((a, b) => (a.LineNbr - b.LineNbr));
+                const ReturnData = JSON.parse(result.toString()).DATA.sort((a, b) => (a.LineNbr - b.LineNbr));
                 let tempTextareaData = "";
                 for (let LineNbr in ReturnData) {
                     tempTextareaData = tempTextareaData.concat(ReturnData[LineNbr].LineText);
@@ -126,7 +126,7 @@ export class DbAuditToolsCompareModalComponent implements OnDestroy {
         }
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.numEnvs = this.jsonData.length;
         if (this.numEnvs == 1) {
             this.singleTextViewOnly();
@@ -165,7 +165,7 @@ export class DbAuditToolsCompareModalComponent implements OnDestroy {
         }
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

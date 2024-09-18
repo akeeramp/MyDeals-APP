@@ -3,6 +3,7 @@ import { opLogService } from "./admin.oplog.service";
 import { Component, OnDestroy } from "@angular/core";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { logFileObject } from "./admin.oplog.model";
 
 @Component({
     selector: "op-log",
@@ -14,7 +15,7 @@ export class OpLogComponent implements OnDestroy {
     constructor(private opLogSvc: opLogService, private loggerSvc: logger) { }
 
     private title = "Opaque Log Watcher";
-    public opLogData: Array<any> = [];
+    public opLogData: Array<logFileObject> = [];
     public logDetails = '';
     public stDate: Date = new Date();
     public enDate: Date = new Date();
@@ -31,11 +32,11 @@ export class OpLogComponent implements OnDestroy {
     public moduleName = "Log Viewer Dashboard";
 
 
-    getDateFormat(timestamp) {
+    getDateFormat(timestamp): Date {
         return new Date(timestamp);
     }
 
-    getOpaqueLog(startDate, endDate) {
+    getOpaqueLog(startDate: Date, endDate: Date): void {
         this.isLoading = 'false';
         const logDate = {
             'startDate': startDate,
@@ -43,18 +44,18 @@ export class OpLogComponent implements OnDestroy {
         }
         this.opLogSvc.getOpaqueLog(logDate)
             .pipe(takeUntil(this.destroy$))
-            .subscribe(response => {
+            .subscribe((response: logFileObject[]) => {
                 this.opLogData = response;
             }, err => {
                 this.loggerSvc.error("Error in getting Opaque Log", err);
             });
     }
 
-    getDetailsOpaqueLog (data) {
+    getDetailsOpaqueLog(data: logFileObject): void {
         this.logDetails = '';
         this.opLogSvc.getDetailsOpaqueLog(data.fileName.substring(0, data.fileName.length - 4))
             .pipe(takeUntil(this.destroy$))
-            .subscribe( response => {
+            .subscribe((response: string) => {
                 const entityMap = {
                     "&": "&amp;",
                     "<": "&lt;",
@@ -68,15 +69,15 @@ export class OpLogComponent implements OnDestroy {
                 });
                 this.logDetails = response;
             }, err => {
-                    this.loggerSvc.error("Error in getting Opaque Log.", err);
+                this.loggerSvc.error("Error in getting Opaque Log.", err);
             });
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.getOpaqueLog(this.startDate, this.endDate);
     }
 
-    refreshAllLog () {
+    refreshAllLog(): void {
         const one_day = 1000 * 60 * 60 * 24;
         const dateDifference = <any> new Date(this.endDate) - <any> new Date(this.startDate);
         const noOfDays = dateDifference / one_day;
@@ -91,11 +92,11 @@ export class OpLogComponent implements OnDestroy {
         }            
     }
 
-    close() {
+    close(): void {
         this.dateRangeInvalid = false;
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

@@ -12,6 +12,7 @@ import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactiva
 import { Observable } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { PushDealstoVistexResults } from "./admin.pushDealstoVistex.model";
 
 @Component({
     selector: "admin-push-dealsto-vistex",
@@ -28,7 +29,7 @@ export class adminPushDealsToVistexComponent implements PendingChangesGuard, OnD
     private color: ThemePalette = 'primary';
     private pushDealsToVistexForm: FormGroup;
     private loadMessage = "Admin Customer Loading..";
-    private Results = [];
+    private Results: PushDealstoVistexResults[] = [];
     private UpdCnt = { 'all': 0, 'error': 0, 'success': 0 };
     private showResults = false;
     public gridData: GridDataResult;
@@ -43,7 +44,7 @@ export class adminPushDealsToVistexComponent implements PendingChangesGuard, OnD
     //get method for easy access to the form fields.
     get formData() { return this.pushDealsToVistexForm.controls; }
 
-    ValidateAndSendDeals () {
+    ValidateAndSendDeals(): void {
         this.pushDealsToVistexForm.patchValue({
             //below line of code removes if any whitespaces or consecutives commas present in the user input
             DEAL_IDS: this.pushDealsToVistexForm.value.DEAL_IDS.replace(/\s/g, '').split(',').filter(x => x).join(',')
@@ -54,7 +55,7 @@ export class adminPushDealsToVistexComponent implements PendingChangesGuard, OnD
             this.loggerSvc.warn("Please fix validation errors","Validation error");
             return;
         }
-        this.pushDealstoVistexSvc.PushDealstoVistex(this.pushDealsToVistexForm.value).pipe(takeUntil(this.destroy$)).subscribe(result => {
+        this.pushDealstoVistexSvc.PushDealstoVistex(this.pushDealsToVistexForm.value).pipe(takeUntil(this.destroy$)).subscribe((result: PushDealstoVistexResults[]) => {
             this.isDirty=false;
             this.Results = result;
             this.showResults = true;
@@ -70,8 +71,8 @@ export class adminPushDealsToVistexComponent implements PendingChangesGuard, OnD
         );
           
     }
-    bindPathQueryParam() {
-        let dealIds = this.route.snapshot.queryParams.r3ValidDeals;
+    bindPathQueryParam(): string {
+        const dealIds = this.route.snapshot.queryParams.r3ValidDeals;
         return dealIds ? dealIds : "";
     }
 
@@ -82,7 +83,7 @@ export class adminPushDealsToVistexComponent implements PendingChangesGuard, OnD
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
     }
-    ngOnInit() {
+    ngOnInit(): void {
         
         //this is useful when validateVistexR3Checks screen redirects to this 'Push Deals to Vistex' page
         const dealIdString = this.bindPathQueryParam();
@@ -97,7 +98,7 @@ export class adminPushDealsToVistexComponent implements PendingChangesGuard, OnD
         })
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

@@ -9,6 +9,8 @@ import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactiva
 import { Observable } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { PushValidateVistexR3Data, R3CutoverResponse, ValidateVistexR3Wrapper } from "./admin.validateVistexR3Checks.model";
+import { Cust_Div_Map } from "../customer/admin.customer.model";
 
 
 @Component({
@@ -29,7 +31,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
     isDirty = false;
     
     private isLoading = true;
-    private Results = [];
+    private Results: R3CutoverResponse[] = [];
     private GoodToSendResults = [];
     public GoodToSendDealIds = "";
 
@@ -40,7 +42,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
 
     private DealstoSend = "";
     private RegxDealIds = "[0-9,]+$";
-    private ActiveCustomers;
+    private ActiveCustomers: Cust_Div_Map[];
     private isDealIdError = false;
     public gridData: GridDataResult;
     public state: State = {
@@ -73,7 +75,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
     ];
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
+        const excelState: State = {};
         Object.assign(excelState, this.state)
         excelState.take = this.Results.length;
         const result: ExcelExportData = {
@@ -82,11 +84,11 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
         return result; 
     }
 
-    distinctPrimitive(fieldName: string) {
+    distinctPrimitive(fieldName: string): string[] {
         return distinct(this.Results, fieldName).map(item => item[fieldName]);
     }
 
-    clearFilters() {
+    clearFilters(): void {
         // Need to be done
         this.state.filter = {
             logic: "and",
@@ -95,22 +97,20 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
         this.gridData = process(this.Results, this.state);
     }
 
-    loadValidateVistexPage() {
+    loadValidateVistexPage(): void {
         this.vldtVstxR3ChkSvc.getActiveCustomers()
             .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<any>) => {
+            .subscribe((response: Array<Cust_Div_Map>) => {
                 this.ActiveCustomers = response;
             });
         console.log("Active Customers loaded!");
     }
 
     ngOnInit(): void {
-        
-            this.loadValidateVistexPage();
-        
+        this.loadValidateVistexPage();
     }
 
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
@@ -119,7 +119,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
         this.loadValidateVistexPage();
     }
 
-    ValidateDealIDs() {
+    ValidateDealIDs(): boolean {
         const reg = new RegExp(/^[0-9,]+$/);
         if (this.DealstoSend == "" || this.DealstoSend == undefined) {
             return false;
@@ -129,7 +129,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
         return true;
     }
 
-    ValidateForVistexR3() {
+    ValidateForVistexR3(): void {
         let sentDeals = 0;
         //removing extra spaces and commas from deal Ids(DealstoSend) string
         if (this.DealstoSend != undefined) {
@@ -146,19 +146,19 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
 
         // All fields are populated, send the request
         if (!this.isDealIdError) {
-            const data = {
+            const data = <PushValidateVistexR3Data>{
                 "DEAL_IDS": this.DealstoSend
              };
-            this.vldtVstxR3ChkSvc.getVistexCustomersMapList(data).pipe(takeUntil(this.destroy$)).subscribe(response => {
+            this.vldtVstxR3ChkSvc.getVistexCustomersMapList(data).pipe(takeUntil(this.destroy$)).subscribe((response: ValidateVistexR3Wrapper) => {
                 this.isDirty=false;
                 this.Results = response.R3CutoverResponses;
                 sentDeals = this.Results.length;
                 this.GoodToSendResults = response.R3CutoverResponsePassedDeals;
-                let goodToSendDealIds = pluck(this.GoodToSendResults, 'Deal_Id');
+                const goodToSendDealIds = pluck(this.GoodToSendResults, 'Deal_Id');
                 this.GoodToSendDealIds = goodToSendDealIds.toString();
 
                 this.UpdCnt.sent = sentDeals;
-                this.UpdCnt.returned = (this.UpdCnt.sent - goodToSendDealIds.length);;
+                this.UpdCnt.returned = (this.UpdCnt.sent - goodToSendDealIds.length);
                 this.gridData = process(this.Results, this.state);
                 this.ShowResults = true;
   
@@ -173,21 +173,21 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
         }
     }
 
-    SendDealsToVistex() {
+    SendDealsToVistex(): void {
         window.open("#pushDealstoVistex?r3ValidDeals=" + this.GoodToSendDealIds, "_blank");
     }
 
-    GetActiveColumns() {
+    GetActiveColumns(): void {
         this.ShowColumns = ["Deal_Id"];
         this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Customer_Division", "Vertical", "Deal_Stage", "Pricing_Strategy_Stage", "Expire_Deal_Flag", "Deal_Start_Date", "Deal_End_Date", "Payout_Based_On", "Program_Payment", "Additive_Standalone", "End_Customer_Retailer", "Request_Date", "Requested_by", "Request_Quarter", "Division_Approved_Date", "Division_Approver", "Geo_Approver", "Market_Segment", "Deal_Description", "Ceiling_Limit_End_Volume_for_VT", "Limit", "Consumption_Reason", "Consumption_Reason_Comment", "Period_Profile", "AR_Settlement_Level", "Look_Back_Period_Months", "Consumption_Customer_Platform", "Consumption_Customer_Segment", "Consumption_Customer_Reported_Geo", "End_Customer", "End_Customer_Country", "Unified_Customer_ID", "Is_a_Unified_Cust", "Project_Name", "System_Price_Point", "System_Configuration", "Settlement_Partner", "Reset_Per_Period", "Send_To_Vistex", "COMMENTS"];
     }
 
-    txtEnterPressed(event: any) {
+    txtEnterPressed(): void {
         this.isDirty=true;
     }
 
     //To send data to DSA Outbound table 
-    toggleType(currentState) {
+    toggleType(currentState: any): void {
         this.VstxCustFlag = currentState;
     }
 
@@ -196,11 +196,11 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
         this.gridData = process(this.Results, this.state);
     }
 
-    valueChange() {
+    valueChange(): void {
         this.isDirty = true;
     }
 
-    combovalueChange(){
+    combovalueChange(): void {
         this.isDirty = true;
     }
  
@@ -276,7 +276,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
         { field: "Send_To_Vistex", title: "Send To Vistex", width: "150px", filterable: { multi: true, search: true } }
     ]
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }

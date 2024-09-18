@@ -43,18 +43,18 @@ export class AsyncProcedureJobsComponent implements OnInit, OnDestroy {
         };
     }
 
-    refreshGrid() {
+    refreshGrid(): void {
         this.isLoading = true;
         this.getAsyncProcedureJobs();
     }
 
-    updateGridData(data: AsyncProcTrigger[]) {
+    updateGridData(data: AsyncProcTrigger[]): void {
         this.state = this.DEFAULT_STATE_CONFIG;
         this.gridData = process(data, this.state);
         this.isLoading = false;
     }
 
-    getAsyncProcedureJobs() {
+    getAsyncProcedureJobs(): void {
         this.asyncProcedureJobsService.getGetAsyncProcTriggers().pipe(takeUntil(this.destroy$))
             .subscribe((result: AsyncProcTrigger[]) => {
             this.updateGridData(result);
@@ -64,7 +64,7 @@ export class AsyncProcedureJobsComponent implements OnInit, OnDestroy {
         })
     }
 
-    saveAsyncProcedureJobToQueue(data: CreateAsyncProcTriggerData) {
+    saveAsyncProcedureJobToQueue(data: CreateAsyncProcTriggerData): void {
         if (data && data.PROC_NAME != '' && data.PROC_DATA != '') {
             this.asyncProcedureJobsService.saveAsyncProcTrigger(data).pipe(takeUntil(this.destroy$))
                 .subscribe((result: AsyncProcTrigger[]) => {
@@ -78,12 +78,12 @@ export class AsyncProcedureJobsComponent implements OnInit, OnDestroy {
     }
 
     private accessAllowed = false; // Default to false to prevent unauthorized users
-    checkPageAccess() {
+    checkPageAccess(): void {
         const ALLOWED_WWIDS = ['12078459', '10548414', '10682199'];
         this.accessAllowed = contains(ALLOWED_WWIDS, (<any>window).usrDupWwid as string);
     }
 
-    createProcedureJob() {
+    createProcedureJob(): void {
         const DIALOG_REF = this.dialog.open(CreateProcedureJobModalComponent, {
             width: '60%',
             disableClose: false,
@@ -106,7 +106,7 @@ export class AsyncProcedureJobsComponent implements OnInit, OnDestroy {
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }
