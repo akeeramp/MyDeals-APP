@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 })
 
 export class dealTypesService {
-    public apiBaseUrl = "api/SecurityAttributes/";
+    public readonly apiBaseUrl = "api/SecurityAttributes/";
 
     constructor(private httpClient: HttpClient) {
 

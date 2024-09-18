@@ -10,12 +10,12 @@ export class meetCompService {
     constructor(private httpClient: HttpClient) {
 
     }
-    public apiBaseUrl = "api/MeetComp/";
-    public dropdownUrl = "api/Customers/";
+    public readonly apiBaseUrl = "api/MeetComp/";
+    public readonly dropdownUrl = "api/Customers/";
     /*Open Bulk Upload Meet Comp Modal is yet to be implemented.*/
-    public uploadMeetComp(lstMeetComps): Observable<any> { 
-       const apiUrl = this.apiBaseUrl + 'UploadMeetComp';
-       return this.httpClient.post(apiUrl, lstMeetComps);
+    public uploadMeetComp(lstMeetComps): Observable<any> {
+        const apiUrl = this.apiBaseUrl + 'UploadMeetComp';
+        return this.httpClient.post(apiUrl, lstMeetComps);
     }
     public getCustomerDropdowns(): Observable<any> {
         const apiUrl: string = this.dropdownUrl + 'GetMyCustomerNames';

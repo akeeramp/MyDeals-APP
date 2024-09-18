@@ -7,9 +7,9 @@ import { Observable } from "rxjs";
 })
 
 export class dataFixService {
-    public apiBaseUrl = "api/dataFix/";
-    public apiCustBaseUrl = "api/Customers/";
-    public apiDropUrl = "api/Dropdown/";
+    public readonly apiBaseUrl = "api/dataFix/";
+    public readonly apiCustBaseUrl = "api/Customers/";
+    public readonly apiDropUrl = "api/Dropdown/";
 
     constructor(private httpClient: HttpClient) {
 

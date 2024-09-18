@@ -17,7 +17,7 @@ import { HandsonLicenseKey } from '../../shared/config/handsontable.licenseKey.c
 })
 
 export class BulkUploadMeetCompModalComponent implements OnDestroy {
-    
+
     constructor(
         private meetCompSvc: meetCompService,
         private loggerSvc: logger, public dialogRef: MatDialogRef<BulkUploadMeetCompModalComponent>) {
@@ -79,61 +79,61 @@ export class BulkUploadMeetCompModalComponent implements OnDestroy {
 
     afterTableEdited(changes,source) {
     if (changes && changes.length > 0){
-        let colInd = ExcelColumnsConfig.meetCompExcel.findIndex((col) => col.data === changes[0][1])
+            let colInd = ExcelColumnsConfig.meetCompExcel.findIndex((col) => col.data === changes[0][1])
          if ((changes[0][1] == "CUST_NM" || changes[0][1] == "HIER_VAL_NM") &&  changes[0][3] == null) {
-            this.meetComps[changes[0][0]][changes[0][1]] = "";
-        }
-    
-        if (this.cellMessages.length > 0) {
+                this.meetComps[changes[0][0]][changes[0][1]] = "";
+            }
+
+            if (this.cellMessages.length > 0) {
             this.cellMessages.find((cell,ind) => {
                 if (ind < this.cellMessages.length){
                 if (cell.row === changes[0][0] && cell.col === colInd ) {
                     if( !(changes[0][1] == "MEET_COMP_PRC" && changes[0][3] === 0) ) {
-                        this.hotTable.setCellMetaObject(cell.row, colInd, { 'className': 'normal-product', comment: { value: '' } });
+                                this.hotTable.setCellMetaObject(cell.row, colInd, { 'className': 'normal-product', comment: { value: '' } });
                         this.cellMessages.splice(ind,1)
+                            }
+                        }
                     }
-                }
+                    this.hotTable.render();
+                });
             }
-                this.hotTable.render();
-            });   
-        }  
-    
+
     if( changes[0][1] == "MEET_COMP_PRC" && this.MeetCompValidation && this.isAlert ==false){
         if (isNaN(changes[0][3])){
             this.isInvalidPrice = true ;
-            this.priceMsg = "Format of the price is invalid. This should be greater than zero."
-            this.invalPrcRow = changes[0][0];
-        } 
+                    this.priceMsg = "Format of the price is invalid. This should be greater than zero."
+                    this.invalPrcRow = changes[0][0];
+                }
         if(!isNaN(changes[0][2])){
             this.priceVal.push(changes[0][2] != null ? changes[0][2] != '' ? changes [0][2] : 0 : 0)
             if (!isNaN(changes[0][3])){
                 this.priceVal.push(changes[0][3] != null ? changes[0][3] != '' ? changes [0][3] : 0 : 0);
+                    }
+                }
             }
-        }
-    }
     if ((changes [0][1] == "IA_BNCH" || changes [0][1] == "COMP_BNCH") && ((isNaN(changes[0][3]) && (!(parseInt(changes[0][3]) > 0))) || changes[0][3] === 0 || changes[0][3] === '') && this.MeetCompValidation ){
         let msg = changes [0][1] == "IA_BNCH" ? 'IA Bench should be greater than zero for server product!' : 'Comp Bench should be greater than zero for server product!'
         this.checkIsitServerProd(changes [0][0],colInd,msg,changes [0][1],this.cellMessages);
         this.hotTable.updateSettings({cell: this.cellMessages})   
-        this.hotTable.render();
-    }
-        this.IsSpreadSheetEdited = true;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-    }
+                this.hotTable.render();
+            }
+            this.IsSpreadSheetEdited = true;
+
+        }
     }
 
     checkIsitServerProd(row,col,msg,colName,cmnts){
         if (this.MeetCompValidation){
-        this.MeetCompValidation.ProductsRequiredBench.filter(prod => {
+            this.MeetCompValidation.ProductsRequiredBench.filter(prod => {
                     if (prod === (this.meetComps[row]['HIER_VAL_NM']).toLowerCase() && (isNaN (this.meetComps[row][colName])  || this.meetComps[row][colName] === 0 || this.meetComps[row][colName] === null)){
                         cmnts.push ({ row: (row), col: col, comment: { value: msg, readOnly: true }, className: 'error-product' })
-                    } 
-                });
-            }
+                }
+            });
+        }
     }
 
     uploadFile(e) {
-        var element = document.getElementsByClassName('k-upload-selected') as HTMLCollectionOf<HTMLElement>;
+        const element = document.getElementsByClassName('k-upload-selected') as HTMLCollectionOf<HTMLElement>;
         if (element && element.length > 0)
             element[0].click();
     }
@@ -153,7 +153,7 @@ export class BulkUploadMeetCompModalComponent implements OnDestroy {
     closePriceAlert(flag){
         if (flag == 'close') {
             this.hotTable.setDataAtCell(this.invalPrcRow,3,this.priceVal[(this.priceVal.length - 1)])
-        } 
+        }
         this.isInvalidPrice = false;
     }
 
@@ -173,7 +173,7 @@ export class BulkUploadMeetCompModalComponent implements OnDestroy {
     onFileUploadComplete() {
         if (this.uploadSuccess) {
             this.loggerSvc.success("Successfully uploaded " + this.files.length + " attachment(s).", "Upload successful");
-        }  
+        }
     }
 
     validateMeetComps() {
@@ -186,43 +186,43 @@ export class BulkUploadMeetCompModalComponent implements OnDestroy {
             this.meetCompSvc.validateMeetComps(this.meetComps)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe((response) => {
-                this.isBusy = false;
-                this.MeetCompValidation = response;
-                if (response.HasInvalidMeetComp) {
-                    this.isAlert = true;
-                    this.cellMessages = [... this.showMeetCompValidationMessages()];
-                    this.hotTable.updateSettings({
-                        cell: this.cellMessages
-                    })
-                    this.IsSpreadSheetEdited = true;
-                } else {
-                    this.isAlert = true;
-                    this.alertMsg = 'All meet comps are valid';
-                    this.IsSpreadSheetEdited = false;
-                }
-                if (this.isPrevDuplicateSku && this.MeetCompValidation.DuplicateMeetCompsSKU.length == 0) {
-                    this.isPrevDuplicateSku = false;
-                    this.cellMessages.forEach((cell) => {
+                    this.isBusy = false;
+                    this.MeetCompValidation = response;
+                    if (response.HasInvalidMeetComp) {
+                        this.isAlert = true;
+                        this.cellMessages = [... this.showMeetCompValidationMessages()];
+                        this.hotTable.updateSettings({
+                            cell: this.cellMessages
+                        })
+                        this.IsSpreadSheetEdited = true;
+                    } else {
+                        this.isAlert = true;
+                        this.alertMsg = 'All meet comps are valid';
+                        this.IsSpreadSheetEdited = false;
+                    }
+                    if (this.isPrevDuplicateSku && this.MeetCompValidation.DuplicateMeetCompsSKU.length == 0) {
+                        this.isPrevDuplicateSku = false;
+                        this.cellMessages.forEach((cell) => {
                         if(cell.col === 2)
-                            this.hotTable.setCellMetaObject(cell.row, cell.col, { 'className': 'normal-product', comment: { value: '' } });
-                    });
-                    this.hotTable.render();
-                }
-                this.setInvalidBenchValsZero();
-            }, (err) => {
-                this.isBusy = false;
-                this.loggerSvc.error("Operation failed", err);
-            });
+                                this.hotTable.setCellMetaObject(cell.row, cell.col, { 'className': 'normal-product', comment: { value: '' } });
+                        });
+                        this.hotTable.render();
+                    }
+                    this.setInvalidBenchValsZero();
+                }, (err) => {
+                    this.isBusy = false;
+                    this.loggerSvc.error("Operation failed", err);
+                });
         }
     };
 
     generateMeetComps () {
         this.meetComps = [];
-        var tempRange = this.hotTable.getData().filter(x => !(x[0] == null && x[1] == null && x[2] == null && x[3] == null && x[4] == null && x[5] == null));
+        const tempRange = this.hotTable.getData().filter(x => !(x[0] == null && x[1] == null && x[2] == null && x[3] == null && x[4] == null && x[5] == null));
         if (tempRange.length > 0) {
             this.spinnerMessageDescription = "Please wait while reading meet comp data..";
-            for (var i = 0; i < tempRange.length; i++) {
-                var newMeetComp = {};
+            for (let i = 0; i < tempRange.length; i++) {
+                const newMeetComp = {};
                 newMeetComp['CUST_NM'] = tempRange[i][0] != null ? ((tempRange[i][0]).trim()) : "";
                 newMeetComp['HIER_VAL_NM'] = tempRange[i][1] != null ? ((tempRange[i][1]).trim()) : "";
                 newMeetComp['MEET_COMP_PRD'] = tempRange[i][2] != null ? ((tempRange[i][2]).trim()) : "";
@@ -238,10 +238,10 @@ export class BulkUploadMeetCompModalComponent implements OnDestroy {
         this.meetComps.forEach((row,rowInd) => {
             if (isNaN(row['IA_BNCH']) ){
                 this.hotTable.setDataAtCell(rowInd,4,0);
-          }
+            }
             if (isNaN(row['COMP_BNCH']) ) {
                 this.hotTable.setDataAtCell(rowInd,5,0);
-             }
+            }
             if (isNaN(row['MEET_COMP_PRC']) ) {
                 this.hotTable.setDataAtCell(rowInd,3,0);
                 this.cellMessages.push({ row: (rowInd), col: 3, comment: { value: 'Format of the price is invalid. This should be greater than zero.', readOnly: true }, className: 'error-product' })
@@ -255,7 +255,7 @@ export class BulkUploadMeetCompModalComponent implements OnDestroy {
         this.alertMsg = "";
         if (this.MeetCompValidation.IsEmptyProductAvailable) {
             this.alertMsg += "Product name cannot be empty!, please fix.";}
-        if (this.MeetCompValidation.IsEmptyMeetCompSkuAvailable) {        
+        if (this.MeetCompValidation.IsEmptyMeetCompSkuAvailable) {
             this.alertMsg += "</br></br>Meet Comp SKU cannot be empty!, please fix."; }
         if (this.MeetCompValidation.IsEmptyMeetCompPriceAvailable){
             this.invalidValuesCellComments('MEET_COMP_PRC','Format of the price is invalid. This should be greater than zero.',comments,3,'')
@@ -285,7 +285,7 @@ export class BulkUploadMeetCompModalComponent implements OnDestroy {
         this.meetComps.forEach((row, rowInd) => {
            if (colName === 'MEET_COMP_PRD' && this.MeetCompValidation.DuplicateMeetCompsSKU.length > 0 && !(row['MEET_COMP_PRD'] === '' || row['MEET_COMP_PRD'] === null )){
                 if (row['CUST_NM'] === this.MeetCompValidation.DuplicateMeetCompsSKU[0].CUST_NM && row['HIER_VAL_NM'] === this.MeetCompValidation.DuplicateMeetCompsSKU[0].HIER_VAL_NM) {
-                           comments.push({ row: (rowInd), col: 2, comment: { value: celMsg, readOnly: true }, className: 'error-product' });
+                    comments.push({ row: (rowInd), col: 2, comment: { value: celMsg, readOnly: true }, className: 'error-product' });
                 }
             } else if (colName === 'CUST_NM' || colName === 'HIER_VAL_NM'){
                 if (row[colName].toLowerCase() === value) {
@@ -299,16 +299,16 @@ export class BulkUploadMeetCompModalComponent implements OnDestroy {
                     if ((row[colName] === 0 ||  row[colName] == null || row[colName] == '')) {
                         comments.push({ row: (rowInd), col: colNo, comment: { value: celMsg, readOnly: true }, className: 'error-product' });
                     }
-                }  
-        }
+                }
+            }
         });
         return comments;
     }
 
-     maxPrdCustInAlert(itemsList, maxItemsSize, itemsMessage) {
+    maxPrdCustInAlert(itemsList, maxItemsSize, itemsMessage) {
         let retString = "";
         if (itemsList.length > 0) {
-            var truncatedMatchedItems = itemsList.slice(0, maxItemsSize).map(function (data) { return " " + data });
+            const truncatedMatchedItems = itemsList.slice(0, maxItemsSize).map(function (data) { return " " + data });
             retString += "</br></br>";
             if (truncatedMatchedItems.length < itemsList.length) {
                 retString += "<b>" + itemsMessage + " (top " + maxItemsSize + " of " + itemsList.length + " items)</b></br>" + (truncatedMatchedItems).join("</br>");
@@ -333,7 +333,7 @@ export class BulkUploadMeetCompModalComponent implements OnDestroy {
         } else {
             this.isAlert = true;
             this.alertMsg = "There is no meet comp to upload!";}
-        };
+    };
 
     UploadMeetComps() {
         this.isBusy = true;
@@ -341,17 +341,17 @@ export class BulkUploadMeetCompModalComponent implements OnDestroy {
         this.meetCompSvc.uploadMeetComp(this.MeetCompValidation.ValidatedMeetComps)
             .pipe(takeUntil(this.destroy$))
             .subscribe((response) => {
-            this.isBusy = false;
-            if (response) {
-                this.loggerSvc.success("Meet comps are uploaded successfully!");
-                this.closeWindow();
-            }
-            else
+                this.isBusy = false;
+                if (response) {
+                    this.loggerSvc.success("Meet comps are uploaded successfully!");
+                    this.closeWindow();
+                }
+                else
+                    this.loggerSvc.error("Unable to upload meet comps!", "");
+            }, err => {
+                this.isBusy = false;
                 this.loggerSvc.error("Unable to upload meet comps!", "");
-        }, err => {
-            this.isBusy = false;
-            this.loggerSvc.error("Unable to upload meet comps!", "");
-        });
+            });
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
     ngOnDestroy() {

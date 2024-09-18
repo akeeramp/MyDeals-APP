@@ -115,12 +115,12 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
         this.drilledDownstages = this.filterObjTypeForStages(value.Alias);
         this.drilledDowndealtype = this.filterObjTypefordealtype(value.Alias);
 
-            // Attribute drilldown by Obj type
-            if (this.selectedObjType.length != 0) {
-                this.drilledDownAtrb = this.dropDownDatasource['AttributesByObjType'][value.Alias];
-            } else {
-                this.drilledDownAtrb = this.dropDownDatasource['AttributesByObjType']['CNTRCT'];
-            }
+        // Attribute drilldown by Obj type
+        if (this.selectedObjType.length != 0) {
+            this.drilledDownAtrb = this.dropDownDatasource['AttributesByObjType'][value.Alias];
+        } else {
+            this.drilledDownAtrb = this.dropDownDatasource['AttributesByObjType']['CNTRCT'];
+        }
         this.drilledDownAtrb = sortBy(this.drilledDownAtrb, 'ATRB_COL_NM');
     }
 
@@ -130,13 +130,13 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
     }
 
     filterObjTypefordealtype(objTypeName) {
-        var filteredDeals = [];
+        const filteredDeals = [];
         if (this.GetSelectedDDlist[objTypeName] !== undefined && this.GetSelectedDDlist[objTypeName].ATTRBS !== undefined) {
-            var dealtype = this.GetSelectedDDlist[objTypeName].ATTRBS;
-            for (var key in dealtype) {
+            const dealtype = this.GetSelectedDDlist[objTypeName].ATTRBS;
+            for (const key in dealtype) {
                 if (dealtype.hasOwnProperty(key)) {
                     if (dealtype.hasOwnProperty(key)) {
-                        var value;
+                        let value;
                         if (key == "ALL_TYPES") {
                             value = 9
                         }
@@ -172,10 +172,10 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
     }
 
     filterObjTypeForStages(objTypeName) {
-        var filteredStages = [];
+        let filteredStages = [];
         if (this.GetSelectedDDlist[objTypeName] !== undefined && this.GetSelectedDDlist[objTypeName].STAGES !== undefined) {
-            var stgs = this.GetSelectedDDlist[objTypeName].STAGES;
-            for (var key in stgs) {
+            const stgs = this.GetSelectedDDlist[objTypeName].STAGES;
+            for (const key in stgs) {
                 if (stgs.hasOwnProperty(key)) {
                     filteredStages.push({ "First": key, "Second": stgs[key][0] });
                 }
@@ -199,21 +199,21 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
         this.getGridData();
     }
     save() {
-        var saveArray = [];
-        for (var key in this.pendingSaveArray) {
+        const saveArray = [];
+        for (const key in this.pendingSaveArray) {
             if (this.pendingSaveArray.hasOwnProperty(key)) {
-                var value = this.pendingSaveArray[key];
+                const value = this.pendingSaveArray[key];
                 saveArray.push(value);
             }
         }
-        var mappingList = saveArray.filter(x => x.isModified == true);
+        const mappingList = saveArray.filter(x => x.isModified == true);
 
         this.SecurityEnginesvc.saveMapping(mappingList).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             this.loggerSvc.success("Update successful.");
-            for (var key in this.pendingSaveArray) {
+            for (const key in this.pendingSaveArray) {
                 if (this.pendingSaveArray.hasOwnProperty(key)) {
-                    var value = this.pendingSaveArray[key];
-                    var secKey = value.ATRB_COL_NM + "/" + value.OBJ_TYPE_SID + "/" + value.OBJ_SET_TYPE_CD + "/" + value.ROLE_NM + "/" + value.WFSTG_NM;
+                    const value = this.pendingSaveArray[key];
+                    const secKey = value.ATRB_COL_NM + "/" + value.OBJ_TYPE_SID + "/" + value.OBJ_SET_TYPE_CD + "/" + value.ROLE_NM + "/" + value.WFSTG_NM;
 
                     if (value.isNowChecked) {
                         // Add new values to the security mask
@@ -245,11 +245,11 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
 
             //Bind Grid Data
             if (this.selectedObjType.length != 0) {
-                for (var g = 0; g < this.drilledDownAtrb.length; g++) {
+                for (let g = 0; g < this.drilledDownAtrb.length; g++) {
                     this.GridDataattributes.push({ "ATRB_SID": this.drilledDownAtrb[g].ATRB_SID, "ATRB_COL_NM": this.drilledDownAtrb[g].ATRB_COL_NM });
                 }
             } else {
-                for (var g = 0; g < this.drilledDownAtrb.length; g++) {
+                for (let g = 0; g < this.drilledDownAtrb.length; g++) {
                     this.GridDataattributes.push({ "ATRB_SID": this.drilledDownAtrb[g].ATRB_SID, "ATRB_COL_NM": this.drilledDownAtrb[g].ATRB_COL_NM });
                 }
             }
@@ -257,14 +257,14 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
             //To filter Attributes Tab data
             if (this.selectedIds.length > 0) {
                 this.GridDataattributes = [];
-                for (var x = 0; x < this.selectedIds.length; x++) {
+                for (let x = 0; x < this.selectedIds.length; x++) {
                     if (this.selectedObjType.length != 0) {
                         this.GridDataattributes.push({ "ATRB_SID": this.selectedIds[x].ATRB_SID, "ATRB_COL_NM": this.selectedIds[x].ATRB_COL_NM });
                     }
                 }
-                
+
             }
-            
+
             //Display Action
             if (this.selectedAtrbAction.length != 0) {
                 this.currentDisplayAction = this.selectedAtrbAction['dropdownName'];
@@ -277,13 +277,13 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
             //Bind Grid Data
             if (this.selectedDealactions.length != 0) {
                 this.GridDataattributes = [];
-                for (var g = 0; g < this.selectedDealactions.length; g++) {
+                for (let g = 0; g < this.selectedDealactions.length; g++) {
                     this.GridDataattributes.push({ "ATRB_SID": this.selectedDealactions[g].dropdownID, "ATRB_COL_NM": this.selectedDealactions[g].dropdownName });
                 }
 
             } else {
                 this.GridDataattributes = [];
-                for (var g = 0; g < this.drilledDownAction.length; g++) {
+                for (let g = 0; g < this.drilledDownAction.length; g++) {
                     this.GridDataattributes.push({ "ATRB_SID": this.drilledDownAction[g].dropdownID, "ATRB_COL_NM": this.drilledDownAction[g].dropdownName });
                 }
             }
@@ -295,7 +295,7 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
         this.generateGrid()
 
         setTimeout(() => {
-        this.isGridLoading = false;
+            this.isGridLoading = false;
         }, 150);
     }
     generateGrid() {
@@ -320,16 +320,16 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
             this.CheckedselectedDealTypes = this.drilledDowndealtype
         }
 
-         if (this.selectedObjType.length != 0) {
-             this.checkedSelectedObjType = this.selectedObjType;           
+        if (this.selectedObjType.length != 0) {
+            this.checkedSelectedObjType = this.selectedObjType;
         }
 
         this.columns = [];
         // Push the stages as column (headers) of the grid
         if (this.selectedStages.length != 0) {
-            for (var r = 0; r < this.selectedStages.length; r++) {
-                var stgID = this.selectedStages[r].First;
-                var stgName = this.selectedStages[r].Second;
+            for (let r = 0; r < this.selectedStages.length; r++) {
+                const stgID = this.selectedStages[r].First;
+                const stgName = this.selectedStages[r].Second;
                 this.columns.push({
                     stgId: stgID,
                     title: stgName,
@@ -339,9 +339,9 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
                 });
             }
         } else {
-            for (var r = 0; r < this.drilledDownstages.length; r++) {
-                var stgID = this.drilledDownstages[r].First;
-                var stgName = this.drilledDownstages[r].Second;
+            for (let r = 0; r < this.drilledDownstages.length; r++) {
+                const stgID = this.drilledDownstages[r].First;
+                const stgName = this.drilledDownstages[r].Second;
                 this.columns.push({
                     stgId: stgID,
                     title: stgName,
@@ -356,74 +356,74 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
     }
 
     drawRoles(value) {
-            var div = "<div class='atrbSubTitle'>";
-            if (this.CheckedselectedRoles.length != 0) {
-                return div + this.CheckedselectedRoles.map(function (role) {
-                    return role.dropdownName;
-                }).join("</div>" + div) + "</div>";
-            } else {
-                return div + this.dropDownDatasource['AdminRoleTypes'].map(function (role) {
-                    return role.dropdownName;
-                }).join("</div>" + div) + "</div>";
-            } 
+        const div = "<div class='atrbSubTitle'>";
+        if (this.CheckedselectedRoles.length != 0) {
+            return div + this.CheckedselectedRoles.map(function (role) {
+                return role.dropdownName;
+            }).join("</div>" + div) + "</div>";
+        } else {
+            return div + this.dropDownDatasource['AdminRoleTypes'].map(function (role) {
+                return role.dropdownName;
+            }).join("</div>" + div) + "</div>";
+        }
     };
 
     /*Html of multiple deal boxes for each attribute, dealtype, role, and stage */
     securityEngineDrawDeals(atrbId, atrbCd, stgId, stgName) {
-        
-            var dummyAttrName = "ACTIVE";
-            var buf = "";
-            var divStart = "<div style='margin: 1px;'>";
-            var divEnd = "<div class='clearboth'></div></div>";
 
-            var clickableHtml = "";
-            var mappingKey = "";
-            var actionId = "";
-            var actnCd = "";
-            var newAtrbId;
-            var newAtrbCd = "";
+        const dummyAttrName = "ACTIVE";
+        let buf = "";
+        const divStart = "<div style='margin: 1px;'>";
+        const divEnd = "<div class='clearboth'></div></div>";
 
-            for (var r = 0; r < this.CheckedselectedRoles.length; r++) {
-                buf += divStart;
-                for (var d = 0; d < this.CheckedselectedDealTypes.length; d++) {
-                    if (this.isASTab == true) { // Attribute Security
-                        if (this.selectedAtrbAction.length != 0) {
-                            actionId = this.selectedAtrbAction['dropdownID'];
-                            actnCd = this.selectedAtrbAction['dropdownName'];
-                            mappingKey = this.selectedAtrbAction['dropdownName'];
-                        } else {
-                            actionId = "167";
-                            actnCd = "ATRB_REQUIRED";
-                            mappingKey = "ATRB_REQUIRED";
-                        }
-                        newAtrbId = atrbId;
-                        newAtrbCd = atrbCd;
-                        clickableHtml = "<div class='fl'>";
-                    } else { // Deal Security
-                        actionId = atrbId;
-                        var myActnCd = this.drilledDownAction.filter(x => x.dropdownID == parseInt(atrbId));
-                        actnCd = (myActnCd ? myActnCd['dropdownName'] : -1);
-                        mappingKey = atrbCd;
-                        newAtrbId = 1;
-                        newAtrbCd = dummyAttrName;
-                        clickableHtml = "<div class='fl'>";
+        let clickableHtml = "";
+        let mappingKey = "";
+        let actionId = "";
+        let actnCd = "";
+        let newAtrbId;
+        let newAtrbCd = "";
+
+        for (let r = 0; r < this.CheckedselectedRoles.length; r++) {
+            buf += divStart;
+            for (let d = 0; d < this.CheckedselectedDealTypes.length; d++) {
+                if (this.isASTab == true) { // Attribute Security
+                    if (this.selectedAtrbAction.length != 0) {
+                        actionId = this.selectedAtrbAction['dropdownID'];
+                        actnCd = this.selectedAtrbAction['dropdownName'];
+                        mappingKey = this.selectedAtrbAction['dropdownName'];
+                    } else {
+                        actionId = "167";
+                        actnCd = "ATRB_REQUIRED";
+                        mappingKey = "ATRB_REQUIRED";
                     }
-
-                    buf += this.drawDealType(mappingKey, newAtrbCd, this.CheckedselectedDealTypes[d].Alias, this.CheckedselectedRoles[r].dropdownName, stgName, clickableHtml);
+                    newAtrbId = atrbId;
+                    newAtrbCd = atrbCd;
+                    clickableHtml = "<div class='fl'>";
+                } else { // Deal Security
+                    actionId = atrbId;
+                    const myActnCd = this.drilledDownAction.filter(x => x.dropdownID == parseInt(atrbId));
+                    actnCd = (myActnCd ? myActnCd['dropdownName'] : -1);
+                    mappingKey = atrbCd;
+                    newAtrbId = 1;
+                    newAtrbCd = dummyAttrName;
+                    clickableHtml = "<div class='fl'>";
                 }
-                buf += divEnd;
+
+                buf += this.drawDealType(mappingKey, newAtrbCd, this.CheckedselectedDealTypes[d].Alias, this.CheckedselectedRoles[r].dropdownName, stgName, clickableHtml);
             }
-            return buf;
-        
+            buf += divEnd;
+        }
+        return buf;
+
     }
 
     /*Html of individual deal boxes */
     drawDealType(mappingKey, atrbCd, dealType, role, stgName, clickableHtml) {
-        var extraClasses = [];
-        var innerIcon = "";
-        var isClickable = false;
-        var objtypeselectid;
-        var objtypeselectname;
+        const extraClasses = [];
+        const innerIcon = "";
+        let isClickable = false;
+        let objtypeselectid;
+        let objtypeselectname;
         if (this.checkedSelectedObjType.length != 0) {
             objtypeselectid = this.checkedSelectedObjType['Id'];
             objtypeselectname = this.checkedSelectedObjType['Alias'];
@@ -432,10 +432,10 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
             objtypeselectname = 'CNTRCT';
         }
 
-        var actionCollection = this.secAtrbUtil_securityMappings[mappingKey];
-        var title = "Deal Type: " + dealType + "\nRole: " + role + "\nStage: " + stgName + "\n";
+        const actionCollection = this.secAtrbUtil_securityMappings[mappingKey];
+        let title = "Deal Type: " + dealType + "\nRole: " + role + "\nStage: " + stgName + "\n";
 
-        var atrbKey = atrbCd + "/" + objtypeselectid + "/" + dealType + "/" + role + "/" + stgName;
+        let atrbKey = atrbCd + "/" + objtypeselectid + "/" + dealType + "/" + role + "/" + stgName;
 
         if (this.isDSTab == true) {
             atrbKey = "ACTIVE/0/ALL_TYPES/" + role + "/All WF Stages";
@@ -466,7 +466,7 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
         }
 
         // Create element
-        var el = "<div class='fl'>";
+        let el = "<div class='fl'>";
         el += ((isClickable) ? clickableHtml : "");
         //we used dealtype to change BOX color, css already added for the particular dealtype.
         el += "<div class='atrbbasecolor" + dealType /*.replace(/ /g, "")*/ + " atrbContainer " + extraClasses.join(" ") + " " + ((isClickable) ? "clickable" : "") + "' ";
@@ -481,12 +481,12 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
 
     /* When user clicks on an interactable box, then call this function to add the deal information to the array of pending-save security attributes */
     clickBox(event, attrId, attrCd, stgId, stgCd) {
-        var atrbactid;
-        var atrbactname;
-        var roleid;
-        var rolename;
-        var dealid;
-        var dealnamename;
+        let atrbactid;
+        let atrbactname;
+        let roleid;
+        let rolename;
+        let dealid;
+        let dealnamename;
         if (this.isASTab == true) {
             if (this.selectedAtrbAction.length != 0) {
                 atrbactid = this.selectedAtrbAction['dropdownID'];
@@ -495,18 +495,18 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
                 atrbactid = 167;
                 atrbactname = "ATRB_REQUIRED";
             }
-        }else{
+        } else {
             atrbactid = attrId;
-            var myActnCd = this.drilledDownAction.filter(x => x.dropdownID == parseInt(attrId));
+            const myActnCd = this.drilledDownAction.filter(x => x.dropdownID == parseInt(attrId));
             atrbactname = (myActnCd ? myActnCd['dropdownName'] : -1);
             attrId = 1;
             attrCd = "ACTIVE";
         }
 
         if (event?.target != null) {
-            var isCurrChecked = !event.target.classList.contains("atrbbasedisabled"); 
-            var objtypeselectid;
-            var objtypeselectname;
+            const isCurrChecked = !event.target.classList.contains("atrbbasedisabled");
+            let objtypeselectid;
+            let objtypeselectname;
             if (this.selectedObjType.length != 0) {
                 objtypeselectid = this.selectedObjType['Id'];
                 objtypeselectname = this.selectedObjType['Alias'];
@@ -517,8 +517,8 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
 
             //Roles Bind
             if (this.selectedRoles.length != 0) {
-                var stgs = this.selectedRoles;
-                for (var key in stgs) {
+                const stgs = this.selectedRoles;
+                for (const key in stgs) {
                     if (stgs.hasOwnProperty(key)) {
                         if (event.target.title.includes(stgs[key]['dropdownName'])) {
                             roleid = stgs[key]['dropdownID'];
@@ -528,8 +528,8 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
                 }
 
             } else {
-                var stgs = this.dropDownDatasource['AdminRoleTypes'];
-                for (var key in stgs) {
+                const stgs = this.dropDownDatasource['AdminRoleTypes'];
+                for (const key in stgs) {
                     if (stgs.hasOwnProperty(key)) {
                         if (event.target.title.includes(stgs[key]['dropdownName'])) {
                             roleid = stgs[key]['dropdownID'];
@@ -538,11 +538,11 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
                     }
                 }
             }
-            
+
             //Deal Bind
             if (this.selectedDealTypes.length != 0) {
-                var stgsdeal = this.selectedDealTypes;
-                for (var key in stgsdeal) {
+                const stgsdeal = this.selectedDealTypes;
+                for (const key in stgsdeal) {
                     if (stgsdeal.hasOwnProperty(key)) {
                         if (event.target.title.includes(stgsdeal[key]['Alias'])) {
                             dealid = stgsdeal[key]['Id'];
@@ -552,8 +552,8 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
                 }
 
             } else {
-                var stgsdeal = this.drilledDowndealtype;
-                for (var key in stgsdeal) {
+                const stgsdeal = this.drilledDowndealtype;
+                for (const key in stgsdeal) {
                     if (stgsdeal.hasOwnProperty(key)) {
                         if (event.target.title.includes(stgsdeal[key]['Alias'])) {
                             dealid = stgsdeal[key]['Id'];
@@ -564,7 +564,7 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
             }
 
             // Note that the only the SIDS are saved, but the CDs are used to update the UI's grid data
-            var objToSave = {
+            const objToSave = {
                 ACTN_NM: atrbactname,
                 SECUR_ACTN_SID: atrbactid,
                 ATRB_COL_NM: attrCd,
@@ -578,7 +578,7 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
                 WFSTG_NM: stgCd,
                 WFSTG_MBR_SID: stgId,
                 isNowChecked: false,
-    			originallyChecked: false,
+                originallyChecked: false,
                 isModified: false
             };
             if (this.isDSTab === true) {
@@ -594,11 +594,11 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
             if (isCurrChecked) {  //It was checked orignally, so we're unchecking the box.
                 // Change Box color to unchecked
                 event.target.classList.add("atrbbasedisabled");
-            } else {  
+            } else {
                 // Change Box color to checked
                 event.target.classList.remove("atrbbasedisabled");
             }
-            var index = JSON.stringify(objToSave);
+            const index = JSON.stringify(objToSave);
             objToSave.isNowChecked = !isCurrChecked;
             if (this.pendingSaveArray[index] != null) {
                 objToSave.originallyChecked = this.pendingSaveArray[index].originallyChecked;
@@ -638,8 +638,8 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
 
     processMaskData(data) {
         // Security Mask 
-        for (var i = 0; i < data.SecurityMasks.length; i++) {
-            var mData = data.SecurityMasks[i];
+        for (let i = 0; i < data.SecurityMasks.length; i++) {
+            const mData = data.SecurityMasks[i];
             // Does security mask have a things that are not just "0"?
             if (mData.PERMISSION_MASK.replace(/0/g, "").replace(/\./g, "") !== "") {
 
@@ -649,24 +649,24 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
                 }
 
                 // Select current filters / all filter data
-                var curAction = mData.ACTN_NM;
-                var curDealType = (mData.OBJ_SET_TYPE_CD === null || mData.OBJ_SET_TYPE_CD === "null" || mData.OBJ_SET_TYPE_CD === "") ? this.drilledDowndealtype.map(function (x) { return x.Alias; }) : [mData.OBJ_SET_TYPE_CD];
-                var curStage = (mData.WFSTG_NM === null || mData.WFSTG_NM === "null" || mData.WFSTG_NM === "") ? this.drilledDownstages.map(function (x) { return x.Stage; }) : [mData.WFSTG_NM];
-                var curRole = (mData.ROLE_NM === null || mData.ROLE_NM === "null" || mData.ROLE_NM === "") ? this.dropDownDatasource['AdminRoleTypes'].map(function (x) { return x.dropdownName; }) : [mData.ROLE_NM];
+                const curAction = mData.ACTN_NM;
+                const curDealType = (mData.OBJ_SET_TYPE_CD === null || mData.OBJ_SET_TYPE_CD === "null" || mData.OBJ_SET_TYPE_CD === "") ? this.drilledDowndealtype.map(function (x) { return x.Alias; }) : [mData.OBJ_SET_TYPE_CD];
+                const curStage = (mData.WFSTG_NM === null || mData.WFSTG_NM === "null" || mData.WFSTG_NM === "") ? this.drilledDownstages.map(function (x) { return x.Stage; }) : [mData.WFSTG_NM];
+                const curRole = (mData.ROLE_NM === null || mData.ROLE_NM === "null" || mData.ROLE_NM === "") ? this.dropDownDatasource['AdminRoleTypes'].map(function (x) { return x.dropdownName; }) : [mData.ROLE_NM];
                 // TODO: Change objType id to name if we ever get that from the db
-                var curObjType = (mData.OBJ_TYPE_SID === null || mData.OBJ_TYPE_SID === "null" || mData.OBJ_TYPE_SID === "") ? this.dropDownDatasource['ObjTypes'].map(function (x) { return x.Id; }) : [mData.OBJ_TYPE_SID];
+                const curObjType = (mData.OBJ_TYPE_SID === null || mData.OBJ_TYPE_SID === "null" || mData.OBJ_TYPE_SID === "") ? this.dropDownDatasource['ObjTypes'].map(function (x) { return x.Id; }) : [mData.OBJ_TYPE_SID];
 
                 // If not already in the mappings list, then create it
                 if (this.secAtrbUtil_securityMappings[curAction] === undefined) this.secAtrbUtil_securityMappings[curAction] = {};
 
                 // Update/create the mapping with the current role, deal type, and stage ... for every role, deal type, and stage
-                for (var o = 0; o < curObjType.length; o++) {
-                    for (var d = 0; d < curDealType.length; d++) {
-                        for (var r = 0; r < curRole.length; r++) {
-                            for (var s = 0; s < curStage.length; s++) {
-                                for (var v = 0; v < this.secAtrbUtil[mData.PERMISSION_MASK].length; v++) {
+                for (let o = 0; o < curObjType.length; o++) {
+                    for (let d = 0; d < curDealType.length; d++) {
+                        for (let r = 0; r < curRole.length; r++) {
+                            for (let s = 0; s < curStage.length; s++) {
+                                for (let v = 0; v < this.secAtrbUtil[mData.PERMISSION_MASK].length; v++) {
                                     // Create security mapping, which we will use to color-in or not color-in blocks
-                                    var secKey = this.secAtrbUtil[mData.PERMISSION_MASK][v] + "/" + curObjType[o] + "/" + curDealType[d] + "/" + curRole[r] + "/" + curStage[s];
+                                    const secKey = this.secAtrbUtil[mData.PERMISSION_MASK][v] + "/" + curObjType[o] + "/" + curDealType[d] + "/" + curRole[r] + "/" + curStage[s];
                                     this.secAtrbUtil_securityMappings[curAction][secKey] = 1;
                                 }
                             }
@@ -678,14 +678,14 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
     }
 
     ChkAtrbRulesBase(permissionMask, secActionObj) {
-        var allowedActions = [];
-        var reverseSecurityMask = permissionMask.split('.').reverse();
+        const allowedActions = [];
+        const reverseSecurityMask = permissionMask.split('.').reverse();
 
-        for (var a = 0; a < secActionObj.length; a++) {
+        for (let a = 0; a < secActionObj.length; a++) {
             if (reverseSecurityMask.length < secActionObj[a].ATRB_MAGNITUDE) return allowedActions;
 
-            var binVal = this.ConvertHexToBin(reverseSecurityMask[secActionObj[a].ATRB_MAGNITUDE]);
-            var revBinVal = binVal.split('').reverse();
+            const binVal = this.ConvertHexToBin(reverseSecurityMask[secActionObj[a].ATRB_MAGNITUDE]);
+            const revBinVal = binVal.split('').reverse();
 
             if (revBinVal.length < secActionObj[a].ATRB_BIT) return allowedActions;
 
@@ -695,8 +695,8 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
     }
 
     ConvertHexToBin(hex) {
-        var base = "0000000000000000";
-        var convertBase = function (num) {
+        const base = "0000000000000000";
+        const convertBase = function (num) {
             return {
                 from: function (baseFrom) {
                     return {
@@ -707,10 +707,10 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
                 }
             };
         };
-        var val = convertBase(hex).from(16).to(2);
+        const val = convertBase(hex).from(16).to(2);
         return (base + val).slice(-1 * base.length);
     }
-    
+
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
     }

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 
 export class dataQualityService {
-    public apiBaseUrl = "api/dataquality/";
+    public readonly apiBaseUrl = "api/dataquality/";
 
     constructor(private httpClient: HttpClient) {
     }

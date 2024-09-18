@@ -8,7 +8,7 @@ import { Observable } from "rxjs";
 
 
 export class workflowService {
-    public apiBaseUrl = "api/WorkFlow/";
+    public readonly apiBaseUrl = "api/WorkFlow/";
 
     constructor(private httpClient: HttpClient) {
 

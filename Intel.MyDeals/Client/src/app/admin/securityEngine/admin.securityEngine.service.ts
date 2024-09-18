@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 export class SecurityEngineService {
     constructor(private httpClient: HttpClient) { }
 
-    public apiBaseUrl = '/api/SecurityAttributes/';
+    public readonly apiBaseUrl = '/api/SecurityAttributes/';
 
     public getSecurityDropdownData() {
         const apiUrl: string = this.apiBaseUrl + 'GetSecurityDropdownData/';
