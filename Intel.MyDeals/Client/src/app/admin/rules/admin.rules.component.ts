@@ -275,7 +275,7 @@ export class adminRulesComponent implements PendingChangesGuard, OnDestroy{
                 .subscribe(
                 (result: any) => {
                     if (!!result.data) {
-                        var prcAccess = result.data.CNST_VAL_TXT === "NA" ? "" : result.data.CNST_VAL_TXT;
+                        const prcAccess = result.data.CNST_VAL_TXT === "NA" ? "" : result.data.CNST_VAL_TXT;
                         this.toolKitHidden = prcAccess.indexOf((<any>window).usrRole) > -1;
                         if (this.toolKitHidden) {
                             this.ngOnInit();
@@ -306,7 +306,7 @@ export class adminRulesComponent implements PendingChangesGuard, OnDestroy{
     }
     UpdateRuleIndicator(ruleId, isTrue, strActionName, isEnabled) {
         if (isEnabled && ruleId != null && ruleId > 0) {
-            var priceRuleCriteria = {}
+            let priceRuleCriteria = {}
             switch (strActionName) {
                 case "UPDATE_ACTV_IND": {
                     priceRuleCriteria = { Id: ruleId, IsActive: isTrue };
@@ -414,7 +414,7 @@ export class adminRulesComponent implements PendingChangesGuard, OnDestroy{
         Object.assign(excelState, this.state)
         excelState.take = this.gridResult.length;
 
-        var result: ExcelExportData = {
+        const result: ExcelExportData = {
             data: process(this.gridResult, excelState).data,
         };
         return result;

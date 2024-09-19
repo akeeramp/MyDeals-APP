@@ -28,12 +28,12 @@ export class adminDownloadExceptionscomponent implements OnDestroy {
     private chkData = {};
 
     download() {
-        var arr = [];
-        for (var j = 0; j < this.legalExceptionData.length; j++) {
+        const arr = [];
+        for (let j = 0; j < this.legalExceptionData.length; j++) {
             arr.push(this.legalExceptionData[j]['MYDL_PCT_LGL_EXCPT_SID']);
         }
-        var chkPreviousVersion = this.chkData['PreviousVersion'];
-        var chkDealList = this.chkData['DealList'];
+        const chkPreviousVersion = this.chkData['PreviousVersion'];
+        const chkDealList = this.chkData['DealList'];
         if (arr.length > 0 ) {
             this.adminlegalExceptionSvc.getDownloadLegalException(arr, chkPreviousVersion, chkDealList).pipe(takeUntil(this.destroy$))
                 .subscribe((response: any) => {

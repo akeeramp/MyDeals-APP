@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 
 export class iCostProductService {
-    public apiBaseUrl = "api/ProductCostTest/";
+    public readonly apiBaseUrl = "api/ProductCostTest/";
 
     constructor(private httpClient: HttpClient) {
     }

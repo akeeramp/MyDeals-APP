@@ -206,7 +206,7 @@ export class BulkPricingUpdatesComponent implements PendingChangesGuard, OnDestr
     }
 
     ValidateDateColumns (priceData) {
-        var DealDate;
+        let DealDate;
         this.isDirty=true;
             priceData.forEach( (pdata) => {
             DealDate = this.momentService.moment(pdata.DealStartDate).format("MM/DD/YYYY");
@@ -333,8 +333,8 @@ export class BulkPricingUpdatesComponent implements PendingChangesGuard, OnDestr
         (row[10] == null || row[10] == "")));
         if (tempData.length > 0) {
 
-            for (var i = 0; i < tempData.length; i++) {
-                var newDeals = {};
+            for (let i = 0; i < tempData.length; i++) {
+                const newDeals = {};
                 newDeals['DealId'] =  ((!(isNaN(tempData[i][0]))) ? tempData[i][0] : 0);
                 newDeals['DealDesc'] = tempData[i][1] != null ? tempData[i][1] : "";
                 newDeals['EcapPrice'] = tempData[i][2] != null ? tempData[i][2] : "";
@@ -454,10 +454,10 @@ export class BulkPricingUpdatesComponent implements PendingChangesGuard, OnDestr
             }
             
             if (errMsg != '') {
-                var rowMsg = errMsg.slice(0, -1);
-                var arr = rowMsg.split('|');
-                var index = 1;
-                var msg = "";
+                const rowMsg = errMsg.slice(0, -1);
+                const arr = rowMsg.split('|');
+                let index = 1;
+                let msg = "";
                 arr.forEach(row => {
                     msg = msg + (index++) + ". " + row + "\n";
                 });

@@ -40,7 +40,7 @@ export class BulkPricingUpdateModalComponent {
     }
 
     uploadFile(e) {
-        var element = document.getElementsByClassName('k-upload-selected') as HTMLCollectionOf<HTMLElement>;
+        const element = document.getElementsByClassName('k-upload-selected') as HTMLCollectionOf<HTMLElement>;
         if (element && element.length > 0)
             element[0].click();
     }

@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class adminlegalExceptionService {
-    public apiBaseUrl = "api/ProductCostTest/";
+    public readonly apiBaseUrl = "api/ProductCostTest/";
     
     constructor(private httpClient: HttpClient) {
 

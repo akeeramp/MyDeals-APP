@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 })
 
 export class ruleOwnerService {
-    public apiBaseUrl = "api/Rules/";
+    public readonly apiBaseUrl = "api/Rules/";
 
     constructor(private httpClient: HttpClient) {
 

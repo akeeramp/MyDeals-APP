@@ -7,9 +7,9 @@ import { Observable } from "rxjs";
 })
 
 export class consumptionCountryService {
-    public apiBaseUrl = "api/ConsumptionCountry/";
-    public ctryNmDropdownUrl = "api/PrimeCustomers/";
-    public dropdownUrl = "api/Dropdown/";
+    public readonly apiBaseUrl = "api/ConsumptionCountry/";
+    public readonly ctryNmDropdownUrl = "api/PrimeCustomers/";
+    public readonly dropdownUrl = "api/Dropdown/";
 
     constructor(private httpClient: HttpClient) {
 

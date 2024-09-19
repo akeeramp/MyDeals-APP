@@ -9,7 +9,7 @@ import { Product_categories } from './admin.productCategories.model';
 
 
 export class productCategoryService {
-    public apiBaseUrl = "api/ProductCategories/";
+    public readonly apiBaseUrl = "api/ProductCategories/";
 
     constructor(private httpClient: HttpClient) {
 
