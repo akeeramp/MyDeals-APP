@@ -1,5 +1,7 @@
 import { each, uniq, sortBy, findIndex } from 'underscore';
+
 import { StaticMomentService } from "../../shared/moment/moment.service";
+
 import { lnavUtil } from "../lnav.util";
 import { PTE_Load_Util } from './PTE_Load_util';
 import { PTE_Config_Util } from './PTE_Config_util';
@@ -282,11 +284,13 @@ export class PTE_Validation_Util {
         }
         return modalOptions;
     }    
+
     static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract, lookBackPeriod, templates, groups): any {
         let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates);
         PTE_Common_Util.setWarningFields(data, curPricingTable);
         return isShowStopperError;
     }
+
     static validateTenderDashboardDeal(data, curPricingTable, groups, templates, allTabRename) {
         let isShowStopperError = DE_Validation_Util.validateTenderDahsboardDeals(data, templates);
         PTE_Common_Util.setWarningFields(data, curPricingTable);
@@ -958,9 +962,9 @@ export class PTE_Validation_Util {
     static validateHybridFields = function (data, curPricingStrategy, curPricingTable) {
         const hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT;            
         const isFlexDeal = curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
-        //calling clear overarching in the begening
 
         if (hybCond == '1' || isFlexDeal) {
+            //calling clear overarching in the beginning
             data = this.clearValidation(data, 'REBATE_TYPE');
             data = this.clearValidation(data, 'PAYOUT_BASED_ON');
             data = this.clearValidation(data, 'CUST_ACCNT_DIV');
@@ -990,6 +994,7 @@ export class PTE_Validation_Util {
         }
         return data;
     }
+
     //validate settlement level for hybrid 
     static validateSettlementLevel = function (data, curPricingStrategy) {
         let hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = false;
@@ -1007,10 +1012,12 @@ export class PTE_Validation_Util {
         return data;
     }
 
-    static hasDuplicateProduct(pricingTableRows) {
-        const rows = JSON.parse(JSON.stringify(pricingTableRows));
-        const sortedRanges = rows.sort((previous, current) => {
-
+    /**
+     * @returns PTR sorted by Start & End Dates
+     */
+    static sortRowRanges(pricingTableRows: any[]): any[] {
+        const ROWS = JSON.parse(JSON.stringify(pricingTableRows));
+        return ROWS.sort((previous, current) => {
             previous.START_DT = previous.START_DT instanceof Date ? previous.START_DT : new Date(previous.START_DT);
             current.END_DT = current.END_DT instanceof Date ? current.END_DT : new Date(current.END_DT);
 
@@ -1018,94 +1025,223 @@ export class PTE_Validation_Util {
             current.START_DT = current.START_DT instanceof Date ? current.START_DT : new Date(current.START_DT);
 
             // get the start date from previous and current
-            const previousTime = previous.START_DT.getTime();
-            const currentTime = current.END_DT.getTime();
+            const PREVIOUS_START_DATE = previous.START_DT.getTime();
+            const CURRENT_END_DATE = current.END_DT.getTime();
 
             // if the previous is earlier than the current
-            if (previousTime < currentTime) {
+            if (PREVIOUS_START_DATE < CURRENT_END_DATE) {
                 return -1;
             }
 
             // if the previous time is the same as the current time
-            if (previousTime === currentTime) {
+            if (PREVIOUS_START_DATE === CURRENT_END_DATE) {
                 return 0;
             }
 
             // if the previous time is later than the current time
             return 1;
         });
+    }
 
-        let dictDuplicateProducts = {};
+    /**
+     * @param wipPricingTableRows PTR Data
+     * @param uniqueProductNames Array of unique Product Member SIDs
+     * @returns Object where keys are the Product Name and the values are a Set (unique) of Deal Row IDs that have dates that overlap
+     */
+    static listOverlappingProductsByRowId(wipPricingTableRows: any[], uniqueProductMemberSids: string[]): {[PRD_MBR_SID: string]: Set<number>} {
+        const PRODUCT_SID_AND_ROW_SIDS: {[PRD_MBR_SID: string]: Set<number>} = {};
 
-        let result = sortedRanges.reduce((result, current, idx, arr) => {
-            // get the previous range
-            if (idx === 0) { return result; }
-            const previous = arr[idx - 1];
+        // Sorts by dates, returns rows with matching products
+        for (const PRD_MBR_SID of uniqueProductMemberSids) {
+            const PTR_FILTERED_BY_PRODUCT = wipPricingTableRows.filter((ptRowData) => {
+                if (ptRowData['PRODUCT_FILTER'] != undefined) { // DE Row Schema
+                    const PRD_MBR_SIDS = new Set(Object.values(ptRowData['PRODUCT_FILTER']));
 
+                    return PRD_MBR_SIDS.has(PRD_MBR_SID);
+                } else if (ptRowData['PTR_SYS_PRD'] != undefined) {
+                    const PTR_SYS_PRD = Object.values(JSON.parse(ptRowData['PTR_SYS_PRD']));
+                    const ROW_PRD_MBR_SIDS = new Set(PTR_SYS_PRD.flat(1).map((productInfo) => productInfo['PRD_MBR_SID']));
 
-            // check for any overlap
-            const previousEnd = previous.END_DT.getTime();
-            const currentStart = current.START_DT.getTime();
-            const overlap = (previousEnd >= currentStart);
+                    return ROW_PRD_MBR_SIDS.has(PRD_MBR_SID);
+                } else {
+                    return false;
+                }
+            });
 
-            // store the result
-            if (overlap) {
-                if (previous.PTR_SYS_PRD !== "") {
-                    const sysProducts = JSON.parse(previous.PTR_SYS_PRD);
-                    for (let key in sysProducts) {
-                        if (sysProducts.hasOwnProperty(key)) {
-                            each(sysProducts[key], function (item) {
-                                if (dictDuplicateProducts[item.PRD_MBR_SID] == undefined) {
-                                    dictDuplicateProducts[item.PRD_MBR_SID] = previous.DC_ID;
-                                } else if (dictDuplicateProducts[item.PRD_MBR_SID].toString().indexOf(previous.DC_ID.toString()) < 0) {
-                                    dictDuplicateProducts[item.PRD_MBR_SID] += "," + previous.DC_ID;
-                                    if (result.duplicateProductDCIds[previous.DC_ID] == undefined) {
-                                        result.duplicateProductDCIds[previous.DC_ID] = {
-                                            "OverlapDCID": dictDuplicateProducts[item.PRD_MBR_SID],
-                                            "OverlapProduct": key
-                                        }
-                                    } else {
-                                        result.duplicateProductDCIds[previous.DC_ID].OverlapDCID += "," + dictDuplicateProducts[item.PRD_MBR_SID];
-                                        result.duplicateProductDCIds[previous.DC_ID].OverlapProduct += "," + key;
-                                    }
-                                }
-                            });
+            const SORTED_MATCHING_ROW_DATA = this.sortRowRanges(PTR_FILTERED_BY_PRODUCT).map((ptRowData) => { return {
+                DC_ID: ptRowData['DC_ID'] as number,
+                PRD_MBR_SIDS: (ptRowData['PRODUCT_FILTER'] != undefined ?
+                               Array.from(new Set(Object.values(ptRowData['PRODUCT_FILTER']))) :
+                               new Set(Object.values(JSON.parse(ptRowData['PTR_SYS_PRD'])).flat(1).map((productInfo) => productInfo['PRD_MBR_SID']))),
+                START_DT: ptRowData['START_DT'] as Date,
+                END_DT: ptRowData['END_DT'] as Date 
+            }});
+
+            if (SORTED_MATCHING_ROW_DATA.length > 1) {
+                // Compare Dates
+                SORTED_MATCHING_ROW_DATA.forEach((CURRENT_ROW_DATA, index) => {
+                    if (index != 0) {
+                        const PREVIOUS_ROW_DATA = SORTED_MATCHING_ROW_DATA[index - 1];
+
+                        const IS_OVERLAP = (PREVIOUS_ROW_DATA.END_DT >= CURRENT_ROW_DATA.START_DT);
+                        if (IS_OVERLAP) {
+                            if (PRODUCT_SID_AND_ROW_SIDS[PRD_MBR_SID] == undefined) {
+                                PRODUCT_SID_AND_ROW_SIDS[PRD_MBR_SID] = new Set([]);
+                            }
+
+                            PRODUCT_SID_AND_ROW_SIDS[PRD_MBR_SID].add(PREVIOUS_ROW_DATA.DC_ID);
+                            PRODUCT_SID_AND_ROW_SIDS[PRD_MBR_SID].add(CURRENT_ROW_DATA.DC_ID);
                         }
                     }
-                }
+                });
+            }
+        }
 
-                if (current.PTR_SYS_PRD !== "") {
-                    const sysProducts = JSON.parse(current.PTR_SYS_PRD);
-                    for (let key in sysProducts) {
-                        if (sysProducts.hasOwnProperty(key)) {
-                            each(sysProducts[key], function (item) {
-                                if (dictDuplicateProducts[item.PRD_MBR_SID] == undefined) {
-                                    dictDuplicateProducts[item.PRD_MBR_SID] = current.DC_ID;
-                                } else if (dictDuplicateProducts[item.PRD_MBR_SID].toString().indexOf(current.DC_ID.toString()) < 0) {
-                                    dictDuplicateProducts[item.PRD_MBR_SID] += "," + current.DC_ID;
-                                    if (result.duplicateProductDCIds[current.DC_ID] == undefined) {
-                                        result.duplicateProductDCIds[current.DC_ID] = {
-                                            "OverlapDCID": dictDuplicateProducts[item.PRD_MBR_SID],
-                                            "OverlapProduct": key
-                                        }
-                                    } else {
-                                        result.duplicateProductDCIds[current.DC_ID].OverlapDCID += "," + dictDuplicateProducts[item.PRD_MBR_SID];
-                                        result.duplicateProductDCIds[current.DC_ID].OverlapProduct += "," + key;
-                                    }
-                                }
-                            });
+        return PRODUCT_SID_AND_ROW_SIDS;
+    }
+
+    static getUniqueProductSidsFromPricingTable(pricingTableRows: any[]): string[] {
+        const UNIQUE_PRD_MBR_SIDS: string[] = [];
+
+        pricingTableRows.forEach((dealRowData) => {
+            if (dealRowData['PRODUCT_FILTER'] != undefined) {
+                UNIQUE_PRD_MBR_SIDS.push(...(Object.values(dealRowData['PRODUCT_FILTER']) as string[]))
+            } else if (dealRowData['PTR_SYS_PRD'] != undefined) {
+                UNIQUE_PRD_MBR_SIDS.push(...Object.values(JSON.parse(dealRowData['PTR_SYS_PRD'])).flat(1).map((productInfo) => productInfo['PRD_MBR_SID']));
+            }
+        })
+
+        return Array.from(new Set(UNIQUE_PRD_MBR_SIDS));
+    }
+
+    /**
+     * @returns EXAMPLE:
+     *  {
+            "overlap": false, 
+            "duplicateProductDCIds": {
+                "3801973": {
+                    "OverlapDCID": "3801974,3801973,3801974,3801973",
+                    "OverlapProduct": "165U,155U"
+                }
+            }
+        }
+    */
+    static hasDuplicateProductPteLogic(pricingTableRows: any[]) {
+        const OVERLAP_RESULT = {
+            overlap: false,
+            duplicateProductDCIds: {}
+        }
+
+        const UNIQUE_PRODUCT_SIDS: string[] = this.getUniqueProductSidsFromPricingTable(pricingTableRows);
+
+        const PRODUCTS_AND_ROW_IDS: {[productName: string]: Set<number>} = this.listOverlappingProductsByRowId(pricingTableRows, UNIQUE_PRODUCT_SIDS);
+
+        if (Object.keys(PRODUCTS_AND_ROW_IDS).length > 0) {
+            OVERLAP_RESULT.overlap = true;
+
+            for (const PRODUCT_NAME in PRODUCTS_AND_ROW_IDS) {
+                const UNIQUE_DEAL_ROW_IDS = Array.from(PRODUCTS_AND_ROW_IDS[PRODUCT_NAME]);
+
+                for (const ROW_ID of UNIQUE_DEAL_ROW_IDS) {
+                    if (OVERLAP_RESULT.duplicateProductDCIds[ROW_ID] != undefined) {
+                        const EXISTING_OBJ = OVERLAP_RESULT.duplicateProductDCIds[ROW_ID];
+
+                        (EXISTING_OBJ['OverlapDCID'] as number[]).push(...UNIQUE_DEAL_ROW_IDS);
+                        EXISTING_OBJ['OverlapProduct'] += `, ${ PRODUCT_NAME }`
+
+                        OVERLAP_RESULT.duplicateProductDCIds[ROW_ID] = EXISTING_OBJ;
+                    } else {
+                        OVERLAP_RESULT.duplicateProductDCIds[ROW_ID] = {
+                            OverlapDCID: UNIQUE_DEAL_ROW_IDS,
+                            OverlapProduct: PRODUCT_NAME
                         }
                     }
                 }
             }
 
-            return result;
+            // Deduplicate DC_IDs and convert to strings
+            for (const ROW_ID in OVERLAP_RESULT.duplicateProductDCIds) {
+                const CURRENT_OBJ = OVERLAP_RESULT.duplicateProductDCIds[ROW_ID];
 
-            // seed the reduce  
-        }, { overlap: false, duplicateProductDCIds: {} });
+                CURRENT_OBJ['OverlapDCID'] = Array.from(new Set(CURRENT_OBJ['OverlapDCID']));
 
-        // return the final results  
-        return result;
+                OVERLAP_RESULT.duplicateProductDCIds[ROW_ID] = CURRENT_OBJ;
+            }
+        }
+
+        return OVERLAP_RESULT;
+    }
+
+    /**
+     * @returns EXAMPLE: 
+     *  {
+            992342: {   // Row ID (Also Deal ID)
+                155U: [992342, 992383, 993289], // Product Name: [array of overlapping deal IDs]
+                165U: [00003, 00007]
+            }, {...
+        }
+     */
+    static hasDuplicateProductDeLogic(wipPricingTableRows: any[]): {[dealRowId: number]: { [overlapProduct: string]: number[] }} {
+        const DUPLICATE_PRODUCTS: {[dealRowId: number]: { [overlapProduct: string]: number[] }} = {};
+
+        const UNIQUE_PRODUCT_SIDS: string[] = this.getUniqueProductSidsFromPricingTable(wipPricingTableRows);
+
+        const PRODUCTS_AND_ROW_IDS: {[productName: string]: Set<number>} = this.listOverlappingProductsByRowId(wipPricingTableRows, UNIQUE_PRODUCT_SIDS);
+
+        // Here PRODUCTS_AND_ROW_IDS now has all the overlapping deals and their products
+        for (const PRODUCT_NAME in PRODUCTS_AND_ROW_IDS) {
+            const UNIQUE_DEAL_ROW_IDS = Array.from(PRODUCTS_AND_ROW_IDS[PRODUCT_NAME]);
+
+            for (const ROW_ID of UNIQUE_DEAL_ROW_IDS) {
+                if (DUPLICATE_PRODUCTS[ROW_ID] == undefined) {
+                    DUPLICATE_PRODUCTS[ROW_ID] = {
+                        [PRODUCT_NAME]: UNIQUE_DEAL_ROW_IDS
+                    }
+                } else {
+                    DUPLICATE_PRODUCTS[ROW_ID] = {
+                        [PRODUCT_NAME]: UNIQUE_DEAL_ROW_IDS,
+                        ...DUPLICATE_PRODUCTS[ROW_ID]
+                    }
+                }
+            }
+        }
+
+        return DUPLICATE_PRODUCTS;
+    }
+
+    static validateHybridProducts(dealRowObjects: any[], curPricingStrategy): any[] {
+        const IS_HYBRID_DEAL: boolean = curPricingStrategy.IS_HYBRID_PRC_STRAT == '1';
+
+        if (IS_HYBRID_DEAL) {
+            // Check for duplicate products (if overlapping date ranges)
+            if (dealRowObjects != undefined && dealRowObjects != null && dealRowObjects.length > 1) {
+                const WIP_DEAL_ROW_OBJECTS: any[] = dealRowObjects;
+
+                // Get list of duplicate Products (PTR_USER_PRD) and Product Row IDs (DC_ID)
+                const DUPLICATE_PRODUCT_ROWS = PTE_Validation_Util.hasDuplicateProductDeLogic(WIP_DEAL_ROW_OBJECTS);
+                let countChanges = 0;
+
+                for (const DEAL_ROW_ID in DUPLICATE_PRODUCT_ROWS) {
+                    const OBJECT_INDEX = WIP_DEAL_ROW_OBJECTS.findIndex((dealRow) => dealRow['DC_ID'] as string == DEAL_ROW_ID);
+
+                    if (OBJECT_INDEX != -1) {
+                        const PRODUCT_NAMES: string = Object.keys(DUPLICATE_PRODUCT_ROWS[DEAL_ROW_ID]).join(', ');
+                        const DUPLICATE_ROWS: string = Array.from(new Set(...Object.values(DUPLICATE_PRODUCT_ROWS[DEAL_ROW_ID]))).join(', ');
+
+                        (WIP_DEAL_ROW_OBJECTS[OBJECT_INDEX])['_behaviors'].isError['START_DT'] = true;
+                        (WIP_DEAL_ROW_OBJECTS[OBJECT_INDEX])['_behaviors'].validMsg['START_DT'] = `Cannot have duplicate product(s). Product(s): ${ PRODUCT_NAMES } are duplicated within rows ${ DUPLICATE_ROWS }. Please check the date range overlap.`;
+
+                        countChanges += 1;
+                    }
+                }
+
+                if (countChanges > 0) {
+                    return WIP_DEAL_ROW_OBJECTS;
+                }
+            }
+        }
+
+        return dealRowObjects;
     }
 
     static validateCustomerDivision(dictCustDivision, baseCustDiv, custDiv) {
@@ -1120,9 +1256,10 @@ export class PTE_Validation_Util {
                 }
                 return true;
             }
-            else { return false }
-        }
-        else {
+            else {
+                return false;
+            }
+        } else {
             return false;
         }
     }

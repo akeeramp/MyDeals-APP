@@ -1203,36 +1203,34 @@ export class dealEditorComponent implements OnDestroy{
                         this.isDatesOverlap = true;
                     }
                 });
+
                 if (!this.isDatesOverlap) {
                     await this.SaveDealData();
-                }
-                else {
+                } else {
                     this.isDataLoading = false;
                     this.setBusy('', '', '', false);
                     this.isWarning = true;
                     this.message = "Extending Deal Dates will result in the extension of Contract Dates. Please click 'OK', if you want to proceed.";
                 }
+
                 if (this.isDeveloper || this.isTester) {
                     this.setPerfBarDetails('setFinalDetails', "Deal Editor Save & Validate", "UX", false, true);
                     this.perfComp.emit(this.perfBar);
                     this.setPerfBarDetails('drawChart', "", "", false, false);
                     this.perfComp.emit(this.perfBar);
                 }
-            }
-            catch (ex) {
+            } catch (ex) {
                 this.loggerService.error('Something went wrong', 'Error');
                 console.error('AllDeals::ngOnInit::', ex);
             }
-        }
-        else {//Save and Validation functionality for Tender Dashboard DE screen
+        } else {//Save and Validation functionality for Tender Dashboard DE screen
             let isShowStopError = PTE_Validation_Util.validateTenderDashboardDeal(this.gridResult, this.curPricingTable, this.groups, this.templates, this.allTabRename);
             if (isShowStopError) {
                 this.loggerService.warn("Please fix validation errors before proceeding", "");
                 this.gridData = process(this.gridResult, this.state);
                 this.isDataLoading = false;
                 this.setBusy("", "", "", false);
-            }
-            else {
+            } else {
                 var cashObj = this.gridResult.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
                 if (cashObj && cashObj.length > 0) {
                     if (this.VendorDropDownResult != null && this.VendorDropDownResult != undefined && this.VendorDropDownResult.length > 0) {
@@ -1275,12 +1273,26 @@ export class dealEditorComponent implements OnDestroy{
         this.isDataLoading = true;
         this.savingDeal = true;
         this.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
-        let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups);
+
+        // Before sending to validate, need to clear all `_behaviors` from this.gridResult
+        this.gridResult.forEach((dealRowData) => {
+            if (Object.keys(dealRowData._behaviors.isError).includes('START_DT')) {
+                delete dealRowData._behaviors.isError['START_DT'];
+            }
+
+            if (Object.keys(dealRowData._behaviors.validMsg).includes('START_DT')) {
+                delete dealRowData._behaviors.validMsg['START_DT'];
+            }
+        });
+
+        const IS_SHOWSTOPPER_ERROR = await PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups);
+
         if (this.isDeveloper || this.isTester) {
             this.setPerfBarDetails('mark', "Built data structure", "", false, false);
             this.perfComp.emit(this.perfBar);
         }
-        if (isShowStopError) {
+
+        if (IS_SHOWSTOPPER_ERROR) {
             this.loggerService.warn("Please fix validation errors before proceeding", "");
             this.gridData = process(this.gridResult, this.state);
             this.isDataLoading = false;
@@ -1298,6 +1310,7 @@ export class dealEditorComponent implements OnDestroy{
                     });
                 }
             }
+
             let data = {
                 "Contract": [],
                 "PricingStrategy": [],
@@ -1306,7 +1319,7 @@ export class dealEditorComponent implements OnDestroy{
                 "WipDeals": this.gridResult != undefined ? this.gridResult.filter(x => x._dirty == true) : [],
                 "EventSource": 'WIP_DEAL',
                 "Errors": {}
-            }
+            };
 
             if (this.isDeveloper || this.isTester) {
                 this.setPerfBarDetails('setFinalDetails', "Gather data to pass", "UI", false, false);

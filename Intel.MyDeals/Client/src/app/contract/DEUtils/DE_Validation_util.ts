@@ -5,6 +5,7 @@ import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 
 export class DE_Validation_Util {
+
     static validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates) {
         let restrictGroupFlexOverlap = false;
         each(data, (item) => {
@@ -16,6 +17,7 @@ export class DE_Validation_Util {
         PTE_Validation_Util.validateSettlementPartner(data, curPricingStrategy);
         PTE_Validation_Util.validateOverArching(data, curPricingStrategy, curPricingTable);
         data = PTE_Validation_Util.validateHybridFields(data, curPricingStrategy, curPricingTable);
+        data = PTE_Validation_Util.validateHybridProducts(data, curPricingStrategy);
         PTE_Validation_Util.validateSettlementLevel(data, curPricingStrategy);
         PTE_Validation_Util.validateFlexRowType(data, curPricingStrategy, curPricingTable, data, undefined, restrictGroupFlexOverlap);
         PTE_Validation_Util.validateMarketSegment(data, data, undefined);
@@ -25,12 +27,14 @@ export class DE_Validation_Util {
     static ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap) {
         var invalidFlexDate = PTE_Validation_Util.validateFlexDate(data, curPricingTable, data);
         var isShowStopperError = false;
+
         each(data, (item) => {
             if ((item["USER_AVG_RPU"] == null || item["USER_AVG_RPU"] == "")
                 && (item["USER_MAX_RPU"] == null || item["USER_MAX_RPU"] == "")
                 && item["RPU_OVERRIDE_CMNT"] != null && item["RPU_OVERRIDE_CMNT"] !== "") {
                 item["RPU_OVERRIDE_CMNT"] = "";
             }
+
             if ((curPricingStrategy.WF_STG_CD.toString().toUpperCase() == "APPROVED" || Object.keys(item.TRKR_NBR).length > 0) && !isTenderContract) {
                 if (parseInt(item.CONSUMPTION_LOOKBACK_PERIOD) < parseInt(lookBackPeriod[item.DC_ID])) {
                     item._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
@@ -38,6 +42,7 @@ export class DE_Validation_Util {
                     isShowStopperError = true;
                 }
             }
+
             if (item.CONSUMPTION_COUNTRY_REGION != null && item.CONSUMPTION_COUNTRY_REGION != undefined && item.CONSUMPTION_COUNTRY_REGION != "") {
                 if (item.CONSUMPTION_CUST_RPT_GEO != null && item.CONSUMPTION_CUST_RPT_GEO != undefined && item.CONSUMPTION_CUST_RPT_GEO != "") {
                     item._behaviors.isError['CONSUMPTION_CUST_RPT_GEO'] = true;
@@ -47,16 +52,19 @@ export class DE_Validation_Util {
                     isShowStopperError = true;
                 }
             }
+
             if (item["START_DT"] == undefined || item["START_DT"] == null || item["START_DT"] == "" || item["START_DT"] == "Invalid date") {
                 item._behaviors.isError['START_DT'] = true;
                 item._behaviors.validMsg['START_DT'] = "Start date is required";
                 isShowStopperError = true;
             }
+
             if (item["END_DT"] == undefined || item["END_DT"] == null || item["END_DT"] == "" || item["END_DT"] == "Invalid date") {
                 item._behaviors.isError['END_DT'] = true;
                 item._behaviors.validMsg['END_DT'] = "End date is required";
                 isShowStopperError = true;
             }            
+
             if (StaticMomentService.moment(item["START_DT"]).isAfter(contractData.END_DT) && !isTenderContract) {
                 item._behaviors.isError['START_DT'] = true;
                 item._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + StaticMomentService.moment(contractData.END_DT).format("MM/DD/YYYY") + ")";
@@ -82,12 +90,10 @@ export class DE_Validation_Util {
                 isShowStopperError = true;
             }
 
-            
             if (item["END_CUSTOMER_RETAIL"] != undefined && item["END_CUSTOMER_RETAIL"] != null) { // && isTenderFlag == "1"
                 if (item._behaviors.isError['END_CUSTOMER_RETAIL']) {
                     isShowStopperError = true;
-                }
-                else {
+                } else {
                     if (item._behaviors.isError['END_CUSTOMER_RETAIL']) {
                         delete item._behaviors.isError['END_CUSTOMER_RETAIL'];
                         delete item._behaviors.validMsg['END_CUSTOMER_RETAIL'];
@@ -101,16 +107,17 @@ export class DE_Validation_Util {
                     item["REBATE_BILLING_START"]=contractData.START_DT;
                     isShowStopperError = true;
                 }
+
                 if(StaticMomentService.moment(item["REBATE_BILLING_END"], "MM/DD/YYYY").isValid() && StaticMomentService.moment(item["REBATE_BILLING_END"], "MM/DD/YYYY").isBefore(StaticMomentService.moment('1/1/1900',"MM/DD/YYYY"))){
                     item["REBATE_BILLING_END"]=contractData.END_DT;
                     isShowStopperError = true;
                 }
+
                 if (StaticMomentService.moment(item["REBATE_BILLING_START"], "MM/DD/YYYY").isValid() && StaticMomentService.moment(item["REBATE_BILLING_END"], "MM/DD/YYYY").isValid() && StaticMomentService.moment(item["REBATE_BILLING_START"]).isAfter(StaticMomentService.moment(item["REBATE_BILLING_END"]))) {
                     item._behaviors.isError['REBATE_BILLING_START'] = true;
                     item._behaviors.validMsg['REBATE_BILLING_START'] = "Billing Start date cannot be greater than the Billing End Date";
                     isShowStopperError = true;
                 }
-                
             }
 
             if (curPricingStrategy.IS_HYBRID_PRC_STRAT == "1" || item["OBJ_SET_TYPE_CD"] == "FLEX") {
@@ -126,6 +133,7 @@ export class DE_Validation_Util {
                         }
                     });
                 }
+
                 //Calculating Draining Line
                 if (Object.keys(dictGroupTypeDrn).length == 0) {
                     data.map(function (data, index) {
@@ -165,6 +173,7 @@ export class DE_Validation_Util {
                     data.map(function (data, index) {
                         dictGroupType[data["DEAL_COMB_TYPE"]] = index;
                     });
+
                     if (Object.keys(dictGroupType).length > 1) {
                         item._behaviors.isError['DEAL_COMB_TYPE'] = true;
                         item._behaviors.validMsg['DEAL_COMB_TYPE'] = "All deals within a PS should have the same 'Group Type' value";
@@ -191,9 +200,11 @@ export class DE_Validation_Util {
                     item._behaviors.isError['SETTLEMENT_PARTNER'] || item._behaviors.isError['AR_SETTLEMENT_LVL'] ||
                     item._behaviors.isError['REBATE_TYPE'] || item._behaviors.isError['PAYOUT_BASED_ON'] ||
                     item._behaviors.isError['CUST_ACCNT_DIV'] || item._behaviors.isError['GEO_COMBINED'] ||
-                    item._behaviors.isError['PERIOD_PROFILE'] || item._behaviors.isError['PROGRAM_PAYMENT']) {
+                    item._behaviors.isError['PERIOD_PROFILE'] || item._behaviors.isError['PROGRAM_PAYMENT'] ||
+                    item._behaviors.isError['START_DT'] || item._behaviors.isError['END_DT']) {
                     isShowStopperError = true;
                 }
+
                 for (var e = 0; e < Object.keys(item._behaviors.validMsg).length; e++) {
                     if (Object.keys(item._behaviors.validMsg)[e] !== "DC_ID" && PTE_Config_Util.hybridSaveBlockingColumns.indexOf(Object.keys(item._behaviors.validMsg)[e]) >= 0) {
                         isShowStopperError = true; break;
@@ -201,6 +212,7 @@ export class DE_Validation_Util {
                 }
             }
         });
+
         return isShowStopperError;
     }
 
@@ -253,4 +265,5 @@ export class DE_Validation_Util {
         }
         return isShowStopperError;
     }
+
 }
