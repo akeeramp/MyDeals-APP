@@ -434,13 +434,48 @@ namespace Intel.MyDeals.DataLibrary
                                     string sdmCPU_PROCESSOR_NUMBER = worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString().TrimEnd() : string.Empty;
                                     string sdmCPU_SKU_NM = worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().TrimEnd() : string.Empty;
                                     string sdmIS_DELETE = worksheet.Cells[i, 13].Value != null ? worksheet.Cells[i, 13].Value.ToString().TrimEnd() : "N";
-                                    int? sdmCPU_FLR = worksheet.Cells[i, 7].Value != null ? (int?)worksheet.Cells[i, 7].Value : null;
-                                    int? sdmAPAC_PD = worksheet.Cells[i, 8].Value != null ? (int?)worksheet.Cells[i, 8].Value : null;
-                                    int? sdmIJKK_PD = worksheet.Cells[i, 9].Value != null ? (int?)worksheet.Cells[i, 9].Value : null;
-                                    int? sdmPRC_PD = worksheet.Cells[i, 10].Value != null ? (int?)worksheet.Cells[i, 10].Value : null;
-                                    int? sdmEMEA_PD = worksheet.Cells[i, 11].Value != null ? (int?)worksheet.Cells[i, 11].Value : null;
-                                    int? sdmASMO_PD = worksheet.Cells[i, 12].Value != null ? (int?)worksheet.Cells[i, 12].Value : null;
-
+                                    string sdmCPU_FLR = worksheet.Cells[i, 7].Value != null ? worksheet.Cells[i, 7].Value.ToString().TrimEnd() : string.Empty;
+                                    string sdmAPAC_PD = worksheet.Cells[i, 8].Value != null ? worksheet.Cells[i, 8].Value.ToString().TrimEnd() : string.Empty;
+                                    string sdmIJKK_PD = worksheet.Cells[i, 9].Value != null ? worksheet.Cells[i, 9].Value.ToString().TrimEnd() : string.Empty;
+                                    string sdmPRC_PD = worksheet.Cells[i, 10].Value != null ? worksheet.Cells[i, 10].Value.ToString().TrimEnd() : string.Empty;
+                                    string sdmEMEA_PD = worksheet.Cells[i, 11].Value != null ? worksheet.Cells[i, 11].Value.ToString().TrimEnd() : string.Empty;
+                                    string sdmASMO_PD = worksheet.Cells[i, 12].Value != null ? worksheet.Cells[i, 12].Value.ToString().TrimEnd() : string.Empty;
+                                    int? sdmcpuflr = null;
+                                    int? sdmapacpd = null;
+                                    int? sdmijkkpd = null;
+                                    int? sdmprcpd = null;
+                                    int? sdmemeapd = null;
+                                    int? sdmasmopd = null;
+                                    if (!String.IsNullOrEmpty(sdmCPU_FLR))
+                                    {
+                                        int.TryParse(sdmCPU_FLR, out int outInt);
+                                        sdmcpuflr = outInt;
+                                    }
+                                    if (!String.IsNullOrEmpty(sdmAPAC_PD))
+                                    {
+                                        int.TryParse(sdmAPAC_PD, out int outInt);
+                                        sdmapacpd = outInt;
+                                    }
+                                    if (!String.IsNullOrEmpty(sdmIJKK_PD))
+                                    {
+                                        int.TryParse(sdmIJKK_PD, out int outInt);
+                                        sdmijkkpd = outInt;
+                                    }
+                                    if (!String.IsNullOrEmpty(sdmPRC_PD))
+                                    {
+                                        int.TryParse(sdmPRC_PD, out int outInt);
+                                        sdmprcpd = outInt;
+                                    }
+                                    if (!String.IsNullOrEmpty(sdmEMEA_PD))
+                                    {
+                                        int.TryParse(sdmEMEA_PD, out int outInt);
+                                        sdmemeapd = outInt;
+                                    }
+                                    if (!String.IsNullOrEmpty(sdmASMO_PD))
+                                    {
+                                        int.TryParse(sdmASMO_PD, out int outInt);
+                                        sdmasmopd = outInt;
+                                    }
                                     if (!(sdmCYCLE_NM == "" && sdmCPU_VRT_NM == "" && sdmCPU_SKU_NM == "" && sdmCPU_PROCESSOR_NUMBER == ""))
                                         lstRtn.Add(new SDMData
                                         {
@@ -450,12 +485,12 @@ namespace Intel.MyDeals.DataLibrary
                                             CPU_VRT_NM = sdmCPU_VRT_NM,
                                             CPU_SKU_NM = sdmCPU_SKU_NM,
                                             CPU_PROCESSOR_NUMBER = sdmCPU_PROCESSOR_NUMBER,
-                                            CPU_FLR = sdmCPU_FLR,
-                                            APAC_PD = sdmAPAC_PD,
-                                            IJKK_PD = sdmIJKK_PD,
-                                            PRC_PD = sdmPRC_PD,
-                                            EMEA_PD = sdmEMEA_PD,
-                                            ASMO_PD = sdmASMO_PD,
+                                            CPU_FLR = sdmcpuflr,
+                                            APAC_PD = sdmapacpd,
+                                            IJKK_PD = sdmijkkpd,
+                                            PRC_PD = sdmprcpd,
+                                            EMEA_PD = sdmemeapd,
+                                            ASMO_PD = sdmasmopd,
                                             IS_DELETE = sdmIS_DELETE
                                         });
                                 }
