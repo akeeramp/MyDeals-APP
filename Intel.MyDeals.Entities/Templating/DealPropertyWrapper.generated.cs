@@ -1,8 +1,8 @@
 ﻿
 /*
-File Updated: 9/3/2024 10:17:14 PM
-On: MBAIGX-MOBL
-From: sql3877-fm1-in.amr.corp.intel.com,3181, MYDEALS
+File Updated: 6/23/2023 5:39:45 PM
+On: MHTIPPIN-MOBL1
+From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
 
 namespace Intel.MyDeals.Entities {
@@ -486,7 +486,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "MAJOR_FASTTRACK",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "Label"
 		};
@@ -614,7 +614,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR_FASTTRACK",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -630,7 +630,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR_FASTTRACK",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -646,7 +646,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR_FASTTRACK",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -662,7 +662,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR_FASTTRACK",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -678,7 +678,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "MAJOR_FASTTRACK",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -694,7 +694,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR_FASTTRACK",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "DropDownList"
 		};
@@ -710,7 +710,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR_FASTTRACK",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -726,7 +726,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR_FASTTRACK",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -742,7 +742,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR_FASTTRACK",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -4125,16 +4125,16 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute QLTR_PROJECT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "QLTR_PROJECT",
-			ATRB_DESC = "Project Name",
-			ATRB_LBL = "Project Name",
-			ATRB_MAX_LEN = 65,
+			ATRB_DESC = "Tender Project",
+			ATRB_LBL = "Project",
+			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3568,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR_FASTTRACK",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -4774,7 +4774,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR_FASTTRACK",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};

@@ -292,9 +292,9 @@
             <kendo-dialog *ngIf="isWarning" id="warning" (close)="Close()" class="the-comp-de ok-button-color-change" style="width: 41%; left: 505.062px;">
                 <p class="kendo-dialog-message deal-extend-popup">{{message}}</p>
                 <kendo-dialog-actions>
-                    <button *ngIf="isAlertDialog" class='k-button first-child-btn' style="font-size: 15px; font-weight: 400; color: #fff !important;" (click)="Close()">OK</button>
-                    <button *ngIf="!isAlertDialog" class='k-button first-child-btn extend-dealpopup' (click)="SaveDealData()">OK</button>
-                    <button *ngIf="!isAlertDialog" class='k-button last-child-btn cancel-extend-deal' (click)="Close()">CANCEL</button>
+                    <button *ngIf="!isDatesOverlap" class='k-button first-child-btn' style="font-size: 15px; font-weight: 400; color: #fff !important;" (click)="Close()">OK</button>
+                    <button *ngIf="isDatesOverlap" class='k-button first-child-btn extend-dealpopup' (click)="SaveDealData()">OK</button>
+                    <button *ngIf="isDatesOverlap" class='k-button last-child-btn cancel-extend-deal' (click)="Close()">CANCEL</button>
                 </kendo-dialog-actions>
             </kendo-dialog>
         </ng-template>
