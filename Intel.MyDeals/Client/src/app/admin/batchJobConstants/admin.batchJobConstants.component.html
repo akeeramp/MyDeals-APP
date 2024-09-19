@@ -219,8 +219,8 @@
                                                     <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_SRT_ORDR'].touched && getStepsFormArr(i).controls['STEP_SRT_ORDR'].hasError('required')">
                                                         {{isRequiredMsg}}
                                                     </kendo-formerror>
-                                                    <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_SRT_ORDR'].hasError('multipleOfTen') && getStepsFormArr(i).controls['STEP_SRT_ORDR'].touched">
-                                                        Sort order must be a multiple of 10.
+                                                    <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_SRT_ORDR'].hasError('sortOrder') && getStepsFormArr(i).controls['STEP_SRT_ORDR'].touched">
+                                                        Sort order must be greater than 0.
                                                     </kendo-formerror>
                                                     <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_SRT_ORDR'].hasError('uniqueSortOrder') && getStepsFormArr(i).controls['STEP_SRT_ORDR'].touched">
                                                         Sort order must be unique.

@@ -148,7 +148,7 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
       BTCH_STEP_SID : [],
       BTCH_SID : [],
       STEP_NM: ['', [Validators.required,this.uniqueStepNameValidator(stepsArray)]],
-      STEP_SRT_ORDR: ['', [Validators.required,this.multipleOfTenValidator.bind(this),this.uniqueSortOrderValidator(stepsArray)]],
+        STEP_SRT_ORDR: ['', [Validators.required, this.sortValidator.bind(this),this.uniqueSortOrderValidator(stepsArray)]],
       STEP_TYPE:['', Validators.required],
       ADHC_RUN:[true, Validators.required],
       ACTV_IND:[true, Validators.required],
@@ -284,7 +284,7 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
       BTCH_STEP_SID : [''],
       BTCH_SID : [''],
       STEP_NM: ['', [Validators.required,this.uniqueStepNameValidator(stepsArray)]],
-      STEP_SRT_ORDR: ['', [Validators.required,this.multipleOfTenValidator,this.uniqueSortOrderValidator(stepsArray)]],
+      STEP_SRT_ORDR: ['', [Validators.required, this.sortValidator,this.uniqueSortOrderValidator(stepsArray)]],
       STEP_TYPE: ['', Validators.required],
       ADHC_RUN: ['', Validators.required],
       ACTV_IND:['', Validators.required],
@@ -446,10 +446,10 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
     return obj;
   }
 
-  // Validator to check if the value is a multiple of ten
-  multipleOfTenValidator(control: FormControl): { [key: string]: any } | null {
-    if (control.value !== null && control.value % 10 !== 0) {
-      return { 'multipleOfTen': true };
+  // Validator to check if the value is greater than 0
+  sortValidator(control: FormControl): { [key: string]: any } | null {
+    if (control.value !== null && control.value <= 0) {
+      return { 'sortOrder': true };
     }
     return null;
   }
