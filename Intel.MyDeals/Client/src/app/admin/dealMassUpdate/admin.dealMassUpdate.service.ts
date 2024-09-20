@@ -16,6 +16,8 @@ export class DealMassUpdateService {
     constructor(private httpClient: HttpClient) { }
 
     public readonly API_URL_DEAL_MASS_UPDATE = "api/DealMassUpdate/";
+    private readonly API_URL_CUSTOMERS = "api/Customers/";      
+    private API_URL_DROPDOWNS = "api/Dropdown/";
 
     public service: DealMassUpdateServiceInterface = {
         UpdateDealsAttrbValue: this.UpdateDealsAttrbValue,
@@ -32,4 +34,16 @@ export class DealMassUpdateService {
         return this.httpClient.get<AttributeFeildvalues[]>(apiUrl);
     }
 
+    public getMyCustomerNames(): Observable<any> {
+        const apiUrl: string = this.API_URL_CUSTOMERS + "GetMyCustomerNames";
+        return this.httpClient.get(apiUrl);
+    }
+    public getMyCustomerDivsByCustNmSid(custId): Observable<any> {
+        const apiUrl: string = this.API_URL_CUSTOMERS + "GetMyCustomerDivsByCustNmSid/" + custId;
+        return this.httpClient.get(apiUrl);
+    }
+    public getGeoDropdown(): Observable<any> {
+        const apiUrl: string = this.API_URL_DROPDOWNS + 'GetGeosDropdowns';
+        return this.httpClient.get(apiUrl);
+    }
 }

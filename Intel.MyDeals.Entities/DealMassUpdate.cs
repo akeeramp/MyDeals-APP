@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
 
 namespace Intel.MyDeals.Entities
@@ -21,6 +17,8 @@ namespace Intel.MyDeals.Entities
 
         [DataMember]
         public Boolean SEND_VSTX_FLG { get; set; }
+        [DataMember]
+        public string CUST_NM { get; set; }
     }
 
     public class DealMassUpdateResults

@@ -16569,7 +16569,18 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 set { SetParmeter("in_send_vstx_flg", value); }
                 get { return (Boolean)GetParameter("in_send_vstx_flg"); }
             }
-        }
+            ///<summary>
+            /// DataType: varchar(50)
+            /// Mode: IN
+            /// Max Length: 50
+            ///</summary>
+            [SQLParameterAttribute(6, "ParameterDirection.Input", 50, false)]
+            public String in_cust_nm
+            {
+                set { SetParmeter("in_cust_nm", value); }
+                get { return (String)GetParameter("in_cust_nm"); }
+            }
+        }                    
 
         ///<summary>
         /// ID: 184387726

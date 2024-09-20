@@ -10,7 +10,10 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { AttributeFeildvalues, DealMassUpdateData, DealMassUpdateResults } from "./admin.dealMassUpdate.model";
 import { DynamicObj } from "../employee/admin.employee.model";
-
+enum ATRB_MSTR{
+    GEO_COMBINED = 3620,
+    CUST_ACCNT_DIV = 3591
+}
 @Component({
     selector: "deal-mass-update",
     templateUrl: "Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.html",
@@ -43,11 +46,18 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
     private readonly TextBoxAtrbIds = [3349, 3350, 3351, 3453, 3464, 3568];
     private readonly NumericIdTo1 = [3352, 3355, 3708];
     private readonly NumericIdTo24 = [3461];
-    private readonly SingleValueDropdownAtrbIds = [57, 3009, 3717, 3719, 3465];
+    private readonly SingleValueDropdownAtrbIds = [57, 3009, 3717, 3719, 3465,ATRB_MSTR.GEO_COMBINED];
+
     public state: State = {
         skip: 0,
         group: []
     };
+    public Customers:Array<any> =[];
+    public CustomersFilterData:Array<any> = [];           
+    public Customer_Divs: Array<any> = [];
+    public GeoData:Array<any> = [];    
+    public isVistextStgHidden: boolean = false;
+    public isCustomerDropdownHidden: boolean = true;
 
     loadAttributes(): void {
         //Setting ngModel values to null initially
@@ -69,12 +79,15 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
         this.isError = {};
         this.errorMsg = {};
         this.isDataValid = true;
+        this.isVistextStgHidden = false;
+        this.isCustomerDropdownHidden = true;
 
         //Resetting ngModel values
         this.massUpdateData.textValue = null;
         this.massUpdateData.numericValue = null;
         this.massUpdateData.multiSelectValue = null;
         this.massUpdateData.dropdownValue = null;
+        this.massUpdateData.CUST_SID = null;
 
         if (this.NumericAtrbIds.includes(value.ATRB_SID)) {
             this.showTextBox = this.showMultiSelect = this.showDropDown = false;
@@ -87,20 +100,47 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
             } else {
                 this.MaxNumericValue = 999999999;
             }
-        } else {
+        } 
+        else if(value.ATRB_SID == ATRB_MSTR.GEO_COMBINED)
+        {
+            this.getGeos();
+            this.showNumeric = this.showMultiSelect = this.showTextBox = false;
+            this.showDropDown = true; 
+        }
+        else if(value.ATRB_SID == ATRB_MSTR.CUST_ACCNT_DIV)
+        {
+            this.Customers = [];
+            this.CustomersFilterData = [];
+            this.showNumeric = this.showMultiSelect = this.showTextBox = this.showDropDown = false;
+            this.isVistextStgHidden = true;
+            this.dealMassUpdateService.getMyCustomerNames().pipe(takeUntil(this.destroy$)).subscribe((response:Array<any>) => {
+                response.forEach((cust:any)=>{
+                    var customer = {
+                        CUST_NM : cust.CUST_NM,CUST_SID : cust.CUST_SID
+                    }
+                    this.CustomersFilterData.push(customer);
+                });
+                this.Customers = this.CustomersFilterData;                
+                this.isCustomerDropdownHidden = false;                               
+            },
+            (error) => {
+                this.loggerService.error("Unable to fetch Customer data","Error",error);
+            });
+        }
+        else {
             this.dealMassUpdateService.GetUpdateAttributes(value.ATRB_SID)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe((result: Array<AttributeFeildvalues>) => {
                     this.attrValues = result;
                 }, (error) => {
                     this.loggerService.error('Unable to get Attribute List', '', 'DealMassUpdateComponent::attributeChange::' + JSON.stringify(error));
-                });
+                });                
             if (this.TextBoxAtrbIds.includes(value.ATRB_SID)) {
                 this.showNumeric = this.showMultiSelect = this.showDropDown = false;
                 this.showTextBox = true;
             } else if (this.SingleValueDropdownAtrbIds.includes(value.ATRB_SID)) {
-                this.showNumeric = this.showMultiSelect = this.showTextBox = false;
-                this.showDropDown = true;
+                this.showNumeric = this.showMultiSelect = this.showTextBox = false;                
+                this.showDropDown = true;                
             } else {
                 this.showNumeric = this.showDropDown = this.showTextBox = false;
                 this.showMultiSelect = true;
@@ -121,8 +161,13 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
                 "SEND_VSTX_FLG": this.massUpdateData.sendVistexFlag,
                 "UPD_VAL": ""
             }
-
-            if (this.showMultiSelect) {
+            if(this.showMultiSelect && !this.isCustomerDropdownHidden)
+            {
+                finalData["UPD_VAL"] = (this.massUpdateData.multiSelectValue).join("/");
+                var custData = this.Customers.filter((cust) => cust.CUST_SID == this.massUpdateData.CUST_SID);                
+                finalData["CUST_NM"] = custData[0]?.["CUST_NM"];
+            }
+            if (this.showMultiSelect && this.isCustomerDropdownHidden) {
                 finalData["UPD_VAL"] = (this.massUpdateData.multiSelectValue).join(",")
             } else if (this.showDropDown) {
                 finalData["UPD_VAL"] = this.massUpdateData.dropdownValue
@@ -182,6 +227,14 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
             this.isDataValid = false;
         }
 
+        //validate customer value
+        if(!this.isCustomerDropdownHidden && !this.massUpdateData['CUST_SID'])
+        {
+            this.isError["CUST_SID"] = true;
+            this.errorMsg["CUST_SID"] = "Please Select Valid Customer";
+            this.isDataValid = false;
+        }
+
         // Validate multiselect Value
         if (this.showMultiSelect && !this.massUpdateData.multiSelectValue) {
             this.isError["multiSelectValue"] = true;
@@ -232,16 +285,69 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
         this.isDirty=true;
     }
 
+    customerFilter(value){
+        this.Customers = this.CustomersFilterData.filter(s => s.CUST_NM.toLowerCase().indexOf(value.toLowerCase()) !== -1);
+    }       
+    onCustomerChange(CUST_SID: any) {
+        if (CUST_SID != undefined) {            
+            this.updateCorpDivision(CUST_SID);
+            this.showMultiSelect = true;
+        }
+    }
+    //Get Customer Divisions
+    updateCorpDivision(custID) {
+        if (custID === "" || custID == null) return;
+        this.attrValues = [];
+        this.massUpdateData.multiSelectValue = null;        
+        this.dealMassUpdateService.getMyCustomerDivsByCustNmSid(custID).pipe(takeUntil(this.destroy$)).subscribe(
+            (response: Array<any>) => {
+                this.Customer_Divs = response.filter(x => x.CUST_LVL_SID == 2003);
+                if(this.Customer_Divs != null && this.Customer_Divs.length > 0)                    
+                       this.Customer_Divs.forEach((div : any) =>{
+                            var Division_Dropdown ={
+                                ATRB_SID:ATRB_MSTR.CUST_ACCNT_DIV,
+                                ATRB_LBL:null,
+                                ATRB_VAL_TXT : div['CUST_DIV_NM'].toString()                        
+                            }
+                            this.attrValues.push(Division_Dropdown);
+                        });
+            },
+            error => {
+                this.loggerService.error("Unable to get Customer Divisions.", error);
+            }
+        );
+    }
+    getGeos() {
+        this.attrValues = [];
+        this.isVistextStgHidden = true;
+        this.dealMassUpdateService.getGeoDropdown()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((response: Array<any>) => {
+                if(response != null && response.length > 0)
+                this.GeoData = response;
+                   this.GeoData.forEach((geo : any) =>{
+                        var geoDropdown ={
+                            ATRB_SID:ATRB_MSTR.GEO_COMBINED,
+                            ATRB_LBL:null,
+                            ATRB_VAL_TXT : geo['dropdownName'].toString()                        
+                        }
+                        this.attrValues.push(geoDropdown);
+                    });
+                      
+            }, function (response) {
+                this.loggerSvc.error("Unable to get Geo.", response, response.statusText);
+            });                                                      
+    } 
+
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
     }
 
     ngOnInit(): void {
-        this.loadAttributes();
+        this.loadAttributes();        
     }
-    ngOnDestroy(): void {
+    ngOnDestroy():void {
         this.destroy$.next();
         this.destroy$.complete();
-    }
-
+    }     
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.DataAccessLib;
@@ -10,27 +8,27 @@ using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using Intel.Opaque.DBAccess;
 using Intel.Opaque;
 
-
 namespace Intel.MyDeals.DataLibrary
 {
     public class DealMassUpdateDataLib : IDealMassUpdateDataLib
     {
         public List<DealMassUpdateResults> UpdateMassDealAttributes(DealMassUpdateData data)
         {
-            var result = new List<DealMassUpdateResults>();
-            List<int> DealIds = data.DEAL_IDS.Split(',').Select(Int32.Parse).ToList();
+            var result = new List<DealMassUpdateResults>();            
             try
             {
-                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_DEAL_ATRBS
+                List<int> DealIds = data.DEAL_IDS.Split(',').Select(Int32.Parse).ToList();
+                var cmd = new Procs.dbo.PR_MYDL_UPD_DEAL_ATRBS
                 {
-
                     in_deal_lst = new type_int_list(DealIds.ToArray()),
                     in_atrb_sid = data.ATRB_SID,
                     in_atrb_val = data.UPD_VAL,
                     in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
-                    in_send_vstx_flg = data.SEND_VSTX_FLG
-
-                }))
+                    in_send_vstx_flg = data.SEND_VSTX_FLG,
+                    //when user select a customer division attribute that time this CUST_NM will have the value, in all othere scenarios this will be null
+                    in_cust_nm = data.CUST_NM
+                };
+                using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
                     int IDX_ATRB_DESC = DB.GetReaderOrdinal(rdr, "ATRB_DESC");
@@ -45,11 +43,9 @@ namespace Intel.MyDeals.DataLibrary
                             ATRB_DESC = (IDX_UPD_MSG < 0 || rdr.IsDBNull(IDX_ATRB_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_DESC),
                             UPD_MSG = (IDX_UPD_MSG < 0 || rdr.IsDBNull(IDX_UPD_MSG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_UPD_MSG),
                             ERR_FLAG = (IDX_ERR_FLAG < 0 || rdr.IsDBNull(IDX_ERR_FLAG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ERR_FLAG)
-
                         });
-
                     }
-                }
+                }                
             }
             catch (Exception ex)
             {

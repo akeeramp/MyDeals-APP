@@ -35,6 +35,17 @@
                     </kendo-formerror>
                 </div>
 
+                <div class="col-md-12 margin-btn-dmu-15" *ngIf="!isCustomerDropdownHidden">
+                    <label style="width: 180px; vertical-align: top;">Customers:</label>
+                    <kendo-dropdownlist class="k-dropdown-design" [data]="Customers" textField="CUST_NM" valueField="CUST_SID" [valuePrimitive]="true"
+                    [filterable]="true" (filterChange)="customerFilter($event)" [valuePrimitive]="true" (valueChange)="onCustomerChange($event)" [(ngModel)]="massUpdateData['CUST_SID']"
+                                        [ngStyle]="{'border':isError['CUST_SID']?'1px solid red':'','width': '490px','padding':0}">
+                    </kendo-dropdownlist>
+                    <kendo-formerror style="padding-left: 180px" *ngIf="isError['CUST_SID']">
+                        {{ errorMsg['CUST_SID'] }}
+                    </kendo-formerror>
+                </div>
+
                 <div class="col-md-12 margin-btn-dmu-15" *ngIf="showNumeric">
                     <label style="width: 180px">New Value:</label>
                     <kendo-numerictextbox [style.width.px]="488" [min]="0" [max]="MaxNumericValue" [autoCorrect]="true"
@@ -73,7 +84,7 @@
                     </kendo-formerror>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12" *ngIf="!isVistextStgHidden">
                     <div class="parent-update-vistex">
                         <div class="dateRangeLabel" style="width: 180px;">
                             <b>Update Vistex Staging Table.*</b>
