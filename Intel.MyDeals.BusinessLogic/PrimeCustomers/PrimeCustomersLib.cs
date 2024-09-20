@@ -502,6 +502,8 @@ namespace Intel.MyDeals.BusinessLogic
             AMCResponce res = new AMCResponce();
             res = JsonConvert.DeserializeObject<AMCResponce>(amqResponse);
 
+            if (res.RecordType.ToLower() == "rejected account" || res.RecordType.ToLower() == "end customer deal account")
+            {
             bool isValidAMQResponse = res.customerAggregationType.Code == "UNFD_CTRY_CUST" && res.customerProcessEngagement.Where(data => data.Code == "DIR_PRC_EXCPT").Count() > 0;
             if (isValidAMQResponse)
             {
@@ -622,6 +624,8 @@ namespace Intel.MyDeals.BusinessLogic
                 }
 
             }
+            }
+            
         }
 
         public List<RplStatusCode> GetRplStatusCodes()
