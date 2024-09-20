@@ -16,9 +16,9 @@ namespace Intel.MyDeals.Entities
 
         public string CPU_VRT_NM { get; set; }
 
-        public string CPU_SKU_NM { get; set; }
-
         public string CPU_PROCESSOR_NUMBER { get; set; }
+
+        public string CPU_SKU_NM { get; set; }
 
         public int? CPU_FLR { get; set; }
 

@@ -96,7 +96,7 @@
     ]
 
     //Need to add the error messages
-    static SDMBulkCopyColHeaders = ["Cycle Name", "Start Date", "End Date", "Category Name", "SKU Name", "Processor Number", "CPU FLR", "APAC PD", "IJKK PD", "PRC PD", "EMEA PD", "ASMO PD","IS DELETE", "Error Message"]
+    static SDMBulkCopyColHeaders = ["Cycle Name", "Start Date", "End Date", "Category Name", "Processor Number", "SKU Name", "CPU FLR", "APAC PD", "IJKK PD", "PRC PD", "EMEA PD", "ASMO PD","IS DELETE", "Error Message"]
 
     static SDMBulkCopyColumns = [
      
@@ -125,16 +125,16 @@
             width: 120
         },
         {
-            data: 'CPU_SKU_NM',//4 End Customer Retail
-            type: 'text',
-            readOnly: false,
-            width: 400
-        },
-        {
             data: 'CPU_PROCESSOR_NUMBER',//5 End Customer Country/Region
             type: 'text',
             readOnly: false,
             width: 180
+        },
+        {
+            data: 'CPU_SKU_NM',//4 End Customer Retail
+            type: 'text',
+            readOnly: false,
+            width: 400
         },
         {
             data: 'CPU_FLR',//6 RPL Status code
