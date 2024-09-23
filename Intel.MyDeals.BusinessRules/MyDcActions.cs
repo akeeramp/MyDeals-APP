@@ -1406,6 +1406,7 @@ namespace Intel.MyDeals.BusinessRules
                 deSendToVistex.IsReadOnly = true;
                     if (deProgPayment.AtrbValue.ToString().ToLower().Contains("frontend"))
                     {
+                        deSendToVistex.AtrbValue = "Yes";
                         deSendToVistex.IsHidden = true;
                     }
                 
