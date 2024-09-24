@@ -3204,7 +3204,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 25,
                 AtrbCd = AttributeCodes.MAX_PAYOUT,
-                HeaderTemplate = "<span title = 'This is a $ amount field' > Max Payout </span>",
+                HeaderTemplate = "<span title = 'Max Payout cannot be $0.00 value and must reflect the actual payout for all combined Tiers' > Max Payout <i class=\"intelicon-help\" style=\"font-size: 15px !important\"></i></span>",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.REV_TIER },
                 Width = 100,

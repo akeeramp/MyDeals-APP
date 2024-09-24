@@ -834,7 +834,11 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             }
             this.columns.push(currentColumnConfig);
             nestedHeaders[0].push(sheetObj[index]);
-            nestedHeaders[1].push(`<span style="color: rgb(0, 60, 113);font-family:'Intel Clear';font-weight: bold;font-size: 13px;opacity: .7;">${item.title}</span>`);
+            if (item.field == 'MAX_PAYOUT') {
+                nestedHeaders[1].push(`<span style="color: rgb(0, 60, 113);font-family:'Intel Clear';font-weight: bold;font-size: 13px;opacity: .7;" title='Max Payout cannot be $0.00 value and must reflect the actual payout for all combined Tiers'>${item.title} <i class="intelicon-help" style="font-size: 15px !important"></i></span>`);
+            } else {
+                nestedHeaders[1].push(`<span style="color: rgb(0, 60, 113);font-family:'Intel Clear';font-weight: bold;font-size: 13px;opacity: .7;">${item.title}</span>`);
+            }
         });
         /* Hidden Columns */
         hiddenColumns = PTE_Load_Util.getHiddenColumns(columnTemplates, this.contractData.CustomerDivisions);
