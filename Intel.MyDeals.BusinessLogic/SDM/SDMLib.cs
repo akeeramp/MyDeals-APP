@@ -79,6 +79,7 @@ namespace Intel.MyDeals.BusinessLogic
                         string.IsNullOrEmpty(item.CPU_VRT_NM) ? new { CPU_VRT_NM = "Invalid/Empty Data" } : null,
                         string.IsNullOrEmpty(item.CPU_SKU_NM) ? new { CPU_SKU_NM = "Invalid/Empty Data" } : null,
                         string.IsNullOrEmpty(item.CPU_PROCESSOR_NUMBER) ? new { CPU_PROCESSOR_NUMBER = "Invalid/Empty Data" } : null,
+                        string.IsNullOrEmpty(item.IS_DELETE)  ?  new { IS_DELETE = "Empty Field" } : (item.IS_DELETE == "Y"  || item.IS_DELETE == "N" ? null : new { IS_DELETE = "Invalid Data" }),
                         item.CURR_STRT_DT == null || item.CURR_STRT_DT == errorDate ? new { CURR_STRT_DT = "Invalid/Empty Data" } : null,
                         item.CURR_END_DT == null || item.CURR_END_DT == errorDate ? new { CURR_END_DT = "Invalid/Empty Data" } : null,
                         item.CURR_STRT_DT > item.CURR_END_DT ? new { CURR_END_DT = "End Date greater than Start Date" } : null,

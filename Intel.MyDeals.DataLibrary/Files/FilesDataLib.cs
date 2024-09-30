@@ -433,7 +433,7 @@ namespace Intel.MyDeals.DataLibrary
                                     string sdmCPU_VRT_NM = worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString().TrimEnd() : string.Empty;                                   
                                     string sdmCPU_PROCESSOR_NUMBER = worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString().TrimEnd() : string.Empty;
                                     string sdmCPU_SKU_NM = worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().TrimEnd() : string.Empty;
-                                    string sdmIS_DELETE = worksheet.Cells[i, 13].Value != null ? worksheet.Cells[i, 13].Value.ToString().TrimEnd() : "N";
+                                    string sdmIS_DELETE = worksheet.Cells[i, 13].Value != null ? worksheet.Cells[i, 13].Value.ToString().TrimEnd() : string.Empty;
                                     string sdmCPU_FLR = worksheet.Cells[i, 7].Value != null ? worksheet.Cells[i, 7].Value.ToString().TrimEnd() : string.Empty;
                                     string sdmAPAC_PD = worksheet.Cells[i, 8].Value != null ? worksheet.Cells[i, 8].Value.ToString().TrimEnd() : string.Empty;
                                     string sdmIJKK_PD = worksheet.Cells[i, 9].Value != null ? worksheet.Cells[i, 9].Value.ToString().TrimEnd() : string.Empty;
