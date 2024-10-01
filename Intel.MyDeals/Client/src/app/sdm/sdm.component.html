@@ -11,28 +11,28 @@
     <div style="display: flex;align-items: center; max-width: 100vw; margin-left: 1rem">
         <div class="col-md-14 sdmFilters">
             <div style="display: flex; padding: 0 .5rem 0 2rem; flex-direction: column;">
-                <span class="fl" style="color: #222; font-size: 13px;">Cycle NM:</span>
+                <span class="fl" style="color: #222; font-size: 13px;">Cycle Name:</span>
                 <div style="padding:.5rem">
                     <kendo-combobox [(ngModel)]="slctedData.CYCLE_NM" (filterChange)="getDropValues($event, 'CYCLE_NM')" [data]="filter['CYCLE_NM']" [filterable]="true" placeholder="Type to Search" style="width: 140px; float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md no-dropdown-arrow-rpd">
                     </kendo-combobox>
                 </div>
             </div>
             <div style="display: flex; padding: 0 .5rem 0 .5rem; flex-direction: column; ">
-                <span class="fl" style="color: #222; font-size: 13px;">Category NM:</span>
+                <span class="fl" style="color: #222; font-size: 13px;">Category Name:</span>
                 <div style="padding:.5rem">
                     <kendo-combobox [(ngModel)]="slctedData.CPU_VRT_NM" (filterChange)="getDropValues($event, 'CPU_VRT_NM')" [data]="filter['CPU_VRT_NM']" [filterable]="true" placeholder="Type to Search" style="width: 140px; float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md no-dropdown-arrow-rpd">
                     </kendo-combobox>
                 </div>
             </div>
             <div style="display: flex; padding: 0 .5rem 0 .5rem; flex-direction: column; ">
-                <span class="fl" style="color: #222; font-size: 13px;">PCSR NBR:</span>
+                <span class="fl" style="color: #222; font-size: 13px;">Processor Number:</span>
                 <div style="padding:.5rem">
                     <kendo-combobox [(ngModel)]="slctedData.CPU_PROCESSOR_NUMBER" (filterChange)="getDropValues($event, 'CPU_PROCESSOR_NUMBER')" [data]="filter['CPU_PROCESSOR_NUMBER']" [filterable]="true" placeholder="Type to Search" style="width: 140px; float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md no-dropdown-arrow-rpd">
                     </kendo-combobox>
                 </div>
             </div>
             <div style="display: flex; padding: 0 .5rem 0 .5rem; flex-direction: column; ">
-                <span class="fl" style="color: #222; font-size: 13px;">SKU NM:</span>
+                <span class="fl" style="color: #222; font-size: 13px;">SKU Name:</span>
                 <div style="padding:.5rem">
                     <kendo-combobox [(ngModel)]="slctedData.CPU_SKU_NM" (filterChange)="getDropValues($event, 'CPU_SKU_NM')" [data]="filter['CPU_SKU_NM']" [filterable]="true" placeholder="Type to Search" style="width: 140px; float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md no-dropdown-arrow-rpd">
                     </kendo-combobox>
@@ -42,12 +42,12 @@
                 <span class="fl" style="color: #222; font-size: 13px;">Date Range:</span>
                 <div style="display: flex; flex-direction: row; padding: .5rem">
                     <div style="display: flex; padding: 0 .5rem 0 0; flex-direction: row;">
-                        <kendo-datepicker [(value)]="slctedData.STRT_DT" [weekNumber]="true" calendarType="classic" placeholder="Choose date" style="width: 140px; float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md no-dropdown-arrow-rpd">
+                        <kendo-datepicker [(value)]="slctedData.STRT_DT" [weekNumber]="true" calendarType="classic" placeholder="Uploaded From" style="width: 156px; float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md no-dropdown-arrow-rpd">
                         </kendo-datepicker>
                     </div>
                     <span style="display: flex; align-items: center;">to</span>
                     <div style="padding: 0 0 0 .5rem;">
-                        <kendo-datepicker [(value)]="slctedData.END_DT" [weekNumber]="true" calendarType="classic" placeholder="Choose date" style="width: 140px; float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md no-dropdown-arrow-rpd">
+                        <kendo-datepicker [(value)]="slctedData.END_DT" [weekNumber]="true" calendarType="classic" placeholder="Uploaded Till" style="width: 156px; float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md no-dropdown-arrow-rpd">
                         </kendo-datepicker>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
                         </kendo-combobox>
                     </ng-template>
                 </kendo-grid-column>
-                <kendo-grid-column field="CPU_PROCESSOR_NUMBER" title="PROCESSOR NUMBER" width="200px" [headerClass]="{'headerClass':true}">
+                <kendo-grid-column field="CPU_PROCESSOR_NUMBER" title="Processor Number" width="200px" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridEditTemplate let-dataItem="CPU_PROCESSOR_NUMBER" let-formGroup="formGroup">
                         <kendo-combobox [formControl]="formGroup.get('CPU_PROCESSOR_NUMBER')" (filterChange)="getDropValues($event, 'PCSR_NBR')" [data]="filter['PCSR_NBR']" [filterable]="true" placeholder="Type to Search" style="width: 180px; float: left; height: 35px; font-size: 11px;"
                                         class="optsdm opUiContainer md no-dropdown-arrow-rpd">
