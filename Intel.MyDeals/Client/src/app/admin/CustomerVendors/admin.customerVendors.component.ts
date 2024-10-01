@@ -58,8 +58,8 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
     private vendorsNamesOptions: any;
     private vendorsIdsOptions: any;
     private gridOptions: any;
-    private allowCustom = true;
-    private color: ThemePalette = "primary";*/
+    private allowCustom = true;*/
+    private color: ThemePalette = "primary";
 
     public gridResult: Array<Cust_Map>;
     public type = "numeric";
