@@ -1558,11 +1558,12 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 }
                 this.warnings = false;
             }
+            this.isLoading = false;
         } else {
+            this.isLoading = false;
             this.loggerService.error("Something went wrong", 'Error');
             console.error("PricingTableEditorComponent::saveUpdatePTEAPI::", 'error');
         }
-        this.isLoading = false;
     }
 
     async validatePricingTableProducts(deleteDcIds?) {
