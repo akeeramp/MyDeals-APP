@@ -116,7 +116,7 @@ export class PTE_Load_Util {
         else if (cond == 'equalboth' && (elem == 'REBATE_OA_MAX_AMT' || elem == 'REBATE_OA_MAX_VOL')) {
             item._behaviors.validMsg[elem] = "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot contain values. Choose one or the other.";
         }
-        else if (cond == 'duplicate' && elem == 'PTR_USER_PRD') {
+        else if (cond == 'duplicate' && (elem == 'PTR_USER_PRD' || elem == 'START_DT')) {
             item._behaviors.validMsg[elem] = "Overlapping products have been identified, please change the overlapping Accrual and Draining dates.";
         }
         else if (cond == 'dateissue' && elem == 'PTR_USER_PRD') {

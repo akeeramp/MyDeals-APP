@@ -341,7 +341,8 @@ export class PTE_Validation_Util {
 
     static validateFlexDate(data, curPricingTable, wipData) {
         if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
-            data = this.clearValidation(data, 'START_DT');
+            //TWC5971-173: Commented out the clearValidation method because the Flex date overlap validation method, called before this one, may contain errors.
+            //data = this.clearValidation(data, 'START_DT');
             const accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
             const drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
             const objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
@@ -378,7 +379,11 @@ export class PTE_Validation_Util {
             item._behaviors.validMsg[elem] = "Consumption based accrual with billings based draining is not valid";
         }
         else if (cond == 'invalidDate' && elem == 'START_DT') {
-            item._behaviors.validMsg[elem] = "Accrual Date needs to start on or before the Draining dates";
+            if (item._behaviors.validMsg[elem]) {
+                item._behaviors.validMsg[elem] += "\nAccrual Date needs to start on or before the Draining dates";
+            } else {
+                item._behaviors.validMsg[elem] = "Accrual Date needs to start on or before the Draining dates";
+            }
         }
         return item;
     }
@@ -413,6 +418,29 @@ export class PTE_Validation_Util {
                 each(restrictedDraininngData, (item) => {
                     item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'notallowed', restrictGroupFlexOverlap);
                 });
+            }
+        }
+        return data;
+    }
+
+    static validateFlexOverlapRules(data, curPricingTable, wipData): any[] {
+        if (curPricingTable.OBJ_SET_TYPE_CD == "FLEX") {
+            const objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
+            const filterData = uniq(sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+            const WIP_DEAL_ROW_OBJECTS: any[] = filterData;
+            let countChanges = 0;
+            if (filterData.length > 0) {
+                const DUPLICATE_PRODUCT_ROWS = PTE_Validation_Util.hasDuplicateProductDeLogic(filterData);
+                for (const DEAL_ROW_ID in DUPLICATE_PRODUCT_ROWS) {
+                    const OBJECT_INDEX = WIP_DEAL_ROW_OBJECTS.findIndex((dealRow) => dealRow['DC_ID'] as string == DEAL_ROW_ID);
+                    if (OBJECT_INDEX != -1) {
+                        WIP_DEAL_ROW_OBJECTS[OBJECT_INDEX] = PTE_Load_Util.setBehaviors(WIP_DEAL_ROW_OBJECTS[OBJECT_INDEX], "START_DT", "duplicate", curPricingTable)
+                        countChanges += 1;
+                    }
+                }
+                if (countChanges > 0) {
+                    return WIP_DEAL_ROW_OBJECTS;
+                }
             }
         }
         return data;

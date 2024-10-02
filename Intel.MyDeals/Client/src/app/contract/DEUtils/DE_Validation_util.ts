@@ -13,6 +13,7 @@ export class DE_Validation_Util {
         });
         this.dataConversion(data, templates);
         PTE_Validation_Util.validateFlexRules(data, curPricingTable, data, restrictGroupFlexOverlap);
+        PTE_Validation_Util.validateFlexOverlapRules(data, curPricingTable, data);
         PTE_Validation_Util.ValidateEndCustomer(data, 'OnValidate', curPricingStrategy, curPricingTable);
         PTE_Validation_Util.validateSettlementPartner(data, curPricingStrategy);
         PTE_Validation_Util.validateOverArching(data, curPricingStrategy, curPricingTable);
@@ -25,8 +26,19 @@ export class DE_Validation_Util {
     }
 
     static ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap) {
-        var invalidFlexDate = PTE_Validation_Util.validateFlexDate(data, curPricingTable, data);
         var isShowStopperError = false;
+
+        if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+            var invalidFlexDate = PTE_Validation_Util.validateFlexDate(data, curPricingTable, data);
+            if ((invalidFlexDate || invalidFlexDate != undefined)) {
+                each(invalidFlexDate, (item) => {
+                    if (!restrictGroupFlexOverlap) {
+                        item = PTE_Validation_Util.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
+                        isShowStopperError = true;
+                    }
+                });
+            }
+        }
 
         each(data, (item) => {
             if ((item["USER_AVG_RPU"] == null || item["USER_AVG_RPU"] == "")
@@ -144,7 +156,7 @@ export class DE_Validation_Util {
                 }
                 
 
-                if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
+                /*if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
                     //Delete if there is any previous Error  messages
                     if ((invalidFlexDate || invalidFlexDate != undefined)) {
                         each(invalidFlexDate, (item) => {
@@ -152,7 +164,7 @@ export class DE_Validation_Util {
                                 isShowStopperError = true;
                         });
                     }
-                }
+                }*/
 
                 if (Object.keys(dictGroupTypeAcr).length > 1) {
                     if (item.FLEX_ROW_TYPE.toLowerCase() == 'accrual') {
@@ -183,13 +195,8 @@ export class DE_Validation_Util {
             }
 
             if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
-                if ((invalidFlexDate || invalidFlexDate != undefined)) {
-                    each(invalidFlexDate, (item) => {
-                        if (!restrictGroupFlexOverlap) {
-                            item = PTE_Validation_Util.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
-                            isShowStopperError = true;
-                        }
-                    });
+                if (!isShowStopperError && item._behaviors && item._behaviors.isError && item._behaviors.isError.hasOwnProperty("START_DT")) {
+                    isShowStopperError = true;
                 }
             }
 
