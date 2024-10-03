@@ -423,6 +423,11 @@ export class PTE_Validation_Util {
         return data;
     }
 
+    //Incident INC14042382
+    //Below method is added to validate flex deal date overlap
+    //In PTE, Overlap logic for Products is written in Server side and Date overlap validation written in client side
+    //In DE, Products overlap and Date overlap logic is written in Client side
+    //TO DO: Need to apply the PTE logic (Calling server side products overlap check) in DE
     static validateFlexOverlapRules(data, curPricingTable, wipData): any[] {
         if (curPricingTable.OBJ_SET_TYPE_CD == "FLEX") {
             const objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
