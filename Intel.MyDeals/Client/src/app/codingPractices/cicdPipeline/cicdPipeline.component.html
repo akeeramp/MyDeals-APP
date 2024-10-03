@@ -1,4 +1,4 @@
-﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> 
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <app-breadcrumbs [list_breadcrumbs]="list_breadcrumbs" (selectedBreadCrumb)="loadSelected($event)"></app-breadcrumbs>
 
 <div class="layout-cp-inner-page">
@@ -9,227 +9,226 @@
         </div>
         <div id="tocExpand" *ngIf="!isVisible" (click)="Toggle()" class="intelicon-up rotateIcon"><span class="font-cp">TOC</span> </div>
     </div>
-        <div class="grid-two" id="cicdPipeline">
+    <div class="grid-two" id="cicdPipeline">
 
-            <div style="margin: 10px;">
-                <div id="intro">
-                    <h1>My Deals CI/CD Pipeline</h1>
-                    <p>
-                        This is basic information about My Deals CI/CD Pipeline Process.
-                    </p>
+        <div style="margin: 10px;">
+            <div id="intro">
+                <h1>My Deals CI/CD Pipeline</h1>
+                <p>
+                    This is basic information about My Deals CI/CD Pipeline Process.
+                </p>
 
-                    <h4><i class="fa fa-code-fork icon-color-pipe" aria-hidden="true"></i>&nbsp; Branches</h4>
-                    <div style="padding-left: 30px;">
-                        <h6>master</h6>
-                        <ul>
-                            <li>Strictly for Production Deployment</li>
-                            <li>No Manual Check-ins recommended.</li>
-                        </ul>
+                <h4><i class="fa fa-code-fork icon-color-pipe" aria-hidden="true"></i>&nbsp; Branches</h4>
+                <div style="padding-left: 30px;">
+                    <h6>master</h6>
+                    <ul>
+                        <li>Strictly for Production Deployment</li>
+                        <li>No Manual Check-ins recommended.</li>
+                    </ul>
 
-                        <h6>release</h6>
-                        <ul>
-                            <li><b><i>RC</i></b> Branch is dedicated to Next Planned Release.</li>
-                            <li><b><i>GitHub</i></b> check-in should have <b>comments</b> on the check-in with the <i>User Story</i> or <i>Defect</i> number in the comment</li>
-                            <li>Developers work in a single <b><i>GitHub</i></b> working location. Upon selected release stages, the working version will be branched, however all new development will be done in the <b><i>GitHub</i></b> UI folder path: <a href="https://github.com/intel-innersource/applications.web.mydeals.webui" target="_blank">GITHUB (webui)</a> and DB folder path: <a href="https://github.com/intel-innersource/applications.web.mydeals.database" target="_blank">GITHUB (database)</a></li>
-                        </ul>
+                    <h6>release</h6>
+                    <ul>
+                        <li><b><i>RC</i></b> Branch is dedicated to Next Planned Release.</li>
+                        <li><b><i>GitHub</i></b> check-in should have <b>comments</b> on the check-in with the <i>User Story</i> or <i>Defect</i> number in the comment</li>
+                        <li>Developers work in a single <b><i>GitHub</i></b> working location. Upon selected release stages, the working version will be branched, however all new development will be done in the <b><i>GitHub</i></b> UI folder path: <a href="https://github.com/intel-innersource/applications.web.mydeals.webui"
+                                target="_blank">GITHUB (webui)</a> and DB folder path: <a href="https://github.com/intel-innersource/applications.web.mydeals.database" target="_blank">GITHUB (database)</a></li>
+                    </ul>
 
-                        <h6>development</h6>
-                        <ul>
-                            <li><b><i>development</i></b> Branch is intended for initial Check-ins.</li>
-                            <li>After Final Check-ins initiate <b>Merge</b> to <b><i>feature</i></b> Branch with Code Review Request.</li>
-                            <li>If code does not compile or code is NOT ready to be promoted through the environments, <b><i>"git stash"</i></b> the changes in <b><i>GitHub</i></b> until ready to formally check-in.</li>
+                    <h6>development</h6>
+                    <ul>
+                        <li><b><i>development</i></b> Branch is intended for initial Check-ins.</li>
+                        <li>After Final Check-ins initiate <b>Merge</b> to <b><i>feature</i></b> Branch with Code Review Request.</li>
+                        <li>If code does not compile or code is NOT ready to be promoted through the environments, <b><i>"git stash"</i></b> the changes in <b><i>GitHub</i></b> until ready to formally check-in.</li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="ui-pipeline" id="ui-pipeline">
+                <h4><i class="fa fa-desktop icon-color-pipe" aria-hidden="true"></i>&nbsp; UI Pipeline</h4>
+                <div style="padding-left: 30px;">
+                    <h6>MyDeals UI CICD Flow</h6>
+                    <ul>
+                        <li>
+                            Below are the workflows available now <br />
+                            <ol>
+                                <li><b>WF1 Angular Automation:</b> Angular workflows to deploy only MyDeals_Migration branch to CIN environment.</li>
+
+                                <li><b>WF2 MyDeals development automate:</b> Development workflow to deploy only development branch to DEV environment.</li>
+
+                                <li><b>WF5 MyDeals Angular pre-prod Manual:</b> Manual workflow for Angular branch to deploy to pre-prod</li>
+
+                                <li>
+                                    <b>WF6 MyDeals Angular prod Manual:</b> Manual workflow for Angular branch to deploy to Prod <br />
+                                    <img src="/Client/Images/docs/ui-cicd-pipline-1.png" style="width: 850px;" /><br /><br />
+                                </li>
+                            </ol>
+                        </li>
+
+                        <li>
+                            <b>WF3</b> will ask you to provide 3 parameters <br />
+                            <ol>
+                                <li><b>Branch:</b> Select the eligible branch from the list.</li>
+                                <li><b>ENV:</b> Select the right environment from the list.</li>
+                                <li>
+                                    <b>Move latest code deployed:</b> This option indicates whether you want a fresh build or the last successful build. <br />
+                                    <img src="/Client/Images/docs/ui-cicd-pipline-2.png" style="width: 350px;" /><br /><br />
+                                </li>
+                            </ol>
+                        </li>
+                    </ul>
+                    <div class="note-ui-cicd">
+                        <p class="firstNoteHeading">Note</p>
+                        <p class="firstNoteDesc">
+                            <b>Move latest code deployed</b> option is to save build time while deploying the code. But we need to be sure what was the last success build. For example, once your PR gets merged with the development branch the automate
+                            build will run and deploy to DEV. If you want the same build to move to ITT, you can use this option. But you want a different branch to freshly deploy keep this value as no.
+                        </p>
+                    </div>
+                    <ul>
+                        <li>
+                            <b>WF4</b> is very similar to WF3, but since its prod, only certain folks will have access to deploy the code.<br />
+                        </li>
+                        <li>
+                            Once the user gets access when they try to run the pipeline system will be requested to review the workflow. The user can reject or approve the flow.<br />
+                            <img src="/Client/Images/docs/ui-cicd-pipline-6.png" style="width: 850px;" /><br /><br />
+                        </li>
+                    </ul>
+
+                    <h6>WF5 & WF6 </h6>
+                    <ul>
+                        <li>These are exactly same as workflow 3 and 4. The build and deploy step will be matching to angular build and deploy steps.</li>
+                        <li>After Angular release and stabilization, we will not have workflow 3 and 4 that will get deleted or kept as inactive</li>
+                        <li>Unlike in other Angular prod will have environment options like PRODA1, PRODA2. These are the new VMs created for angular alone.</li>
+                        <li>The same applies for the temporary workflow created for CONS and UTT</li>
+                    </ul>
+
+                    <h6>Angular pipeline changes</h6>
+                    <ul>
+                        <li>We have added temporary workflows for CONS and UTT for angular deployment. The steps are same as regular angular pipelines</li>
+                        <li>Once we have our Angular migration complete and when the solution moves to one branch approach, all the preprod and prod pipeline must update the way the Angular pipeline works.</li>
+                        <li>This will be very straight change like the build and deploy step of regular pipeline must copy from Build-Angular and Deploy-Angular from Angular pipeline.</li>
+                        <li>Additionally, we can delete/keep the email sending part from the pipeline. Also add the deploy latest related changes in Angular flow.</li>
+                        <li>This will need testing in PROD once we have the changes moved.</li>
+                        <li>
+                            The email notification is based on a repo <a href="https://github.com/intel-innersource/applications.web.mydeals.automation-newman" target="_blank">GITHUB (automation-newman) </a><br />
+                            <ol>
+                                <li>This will help you trigger email</li>
+                                <li>
+                                    Can configure like this<br />
+                                    <img src="/Client/Images/docs/ui-cicd-pipline-10.png" style="width: 700px;" /><br /><br />
+                                </li>
+                            </ol>
+                        </li>
+                    </ul>
+
+                    <p><a href="https://intel.sharepoint.com/:w:/r/sites/MyDealsTeam/Shared%20Documents/General/1Source/GitHub_mydeals_ui_CICD.docx?d=w5c8db62fd9f345ce8629e1ef6ccf9435&csf=1&web=1&e=y72U9O" target="_blank" class="anchorPipeline">Click here</a>                        for more details on <b>UI Pipeline</b>.</p>
+                </div>
+            </div>
+
+            <div class="db-pipeline" id="db-pipeline">
+                <h4><i class="fa fa-database icon-color-pipe" aria-hidden="true"></i>&nbsp; DB Pipeline</h4>
+                <div style="padding-left: 30px;">
+                    <h6>Highlight</h6>
+                    <ul>
+                        <li>There are no multiple repos for DB pipeline. All the changes must be pushed to <a href="https://github.com/intel-innersource/applications.web.mydeals.database" target="_blank">DataBase</a> repo.</li>
+                        <li>CIBuild checklists will go under CIBuild folder in the database repo instead of the CIBuild repo.</li>
+                        <li>Unlike in GitLab you don’t have to specify Environment, ProjectURL, BranchName, ProjectRootFolder in the checklist xml file.</li>
+                    </ul>
+
+                    <h6>Workflows </h6>
+                    <ul>
+                        <li>
+                            There are 3 workflows available. <br />
+                            <ol>
+                                <li><b>WF1- MyDeals DB pre-prod manual:</b> This will push all the changes mentioned in checklist file from the <b>selected branch</b> to the <b>selected DBAAS environment.</b></li>
+                                <li><b>WF2- MyDeals DB prod manual:</b> This will push all the changes mentioned in checklist file from the <b>selected branch</b> to the <b>DBAAS PROD environment</b>.</li>
+                                <li><b>WF3- MyDeals DB CIAR manual:</b> This will push all the changes mentioned in checklist file from the <b>selected branch</b> to the <b> DBAAS CIAR environment.</b></li>
+                            </ol>
+                        </li>
+                    </ul>
+                    <div class="note-ui-cicd">
+                        <p class="firstNoteHeading">Note</p>
+                        <ul class="firstNoteList">
+                            <li>Please specify the checklist file including extension.</li>
+                            <li>You don’t need to make multiple commits for different environments since that functionality is done by selecting the environment.</li>
+                            <li>Please check the log for build status.</li>
+                            <li>The DB solution uses an node.js solution for deployment. Please refer to the <a href="https://github.com/intel-innersource/applications.web.mydeals.db-release-cli" target="_blank" class="anchorPipeline">link</a> for details.</li>
                         </ul>
                     </div>
+                    <p><a href="https://intel.sharepoint.com/:w:/r/sites/MyDealsTeam/Shared%20Documents/General/1Source/GitHub_mydeals_DB_CICD.docx?d=w31968b5d176441dabaf9c81a50a6ffe2&csf=1&web=1&e=uAHmHl" target="_blank" class="anchorPipeline">Click here</a>                        for more details on <b>DB Pipeline</b>.</p>
                 </div>
-                
+            </div>
 
-                <div class="ui-pipeline" id="ui-pipeline">
-                    <h4><i class="fa fa-desktop icon-color-pipe" aria-hidden="true"></i>&nbsp; UI Pipeline</h4>
-                    <div style="padding-left: 30px;">
-                        <h6>MyDeals UI CICD Flow</h6>
+            <div class="deployment-process" id="deployment-process">
+                <h4><i class="fa fa-cloud-upload icon-color-pipe" aria-hidden="true"></i>&nbsp; Deployment process</h4>
+                <div style="padding-left: 30px;">
+
+                    <h6>Pre-PROD</h6>
+                    <ul>
+                        <li>Deployment to <b>DEV</b> server is automated.</li>
+                        <li>Deployment to all other pre-prods are Manual.</li>
+                    </ul>
+
+                    <h6>Production</h6>
+                    <ul>
+                        <li>Code should be taken from <b> CIAR Release </b></li>
+                    </ul>
+
+                    <div>
+                        <h6>Follow the below process to deploy a branch to specific environment</h6>
+                        <p>Once the code reviewer (Tech Lead) approves the PR for the UI/DB changes commit, the deployment process will starts.</p>
+                        <img src="/Client/Images/docs/GitHub6.png" style="width: 850px;" /><br /><br />
+                        <img src="/Client/Images/docs/GitHub7.png" style="width: 850px;" /><br /><br />
+                    </div>
+                    <div>
+                        <h6>New branch depolyment to any environment (Github UI)</h6>
                         <ul>
                             <li>
-                                Below are the workflows available now <br />
+                                To deploy any other branch to any other environment, follow the below path Github -> Actions -> MyDeals Angular pre-prod manual - > Run workflow <br />
+                                <img src="/Client/Images/docs/ui-cicd-pipeline-12.png" style="width: 850px;" /><br /><br />
+                            </li>
+                            <li>
+                                From below image, Branch <b>codingPractices_Reference</b> will be deployed in <b>DEV</b> environment. <br />
+                                <img src="/Client/Images/docs/ui-cicd-pipeline-13.png" style="width: 350px;" /><br /><br />
+                            </li>
+                            <li>
+                                <b>Move latest code deployed:</b><br />
                                 <ol>
-                                    <li><b>WF1 Angular Automation:</b> Angular workflows to deploy only MyDeals_Migration branch to CIN environment.</li>
-
-                                    <li><b>WF2 MyDeals development automate:</b> Development workflow to deploy only development branch to DEV environment.</li>
-
-                                    <li><b>WF5 MyDeals Angular pre-prod Manual:</b> Manual workflow for Angular branch to deploy to pre-prod</li>
-
                                     <li>
-                                        <b>WF6 MyDeals Angular prod Manual:</b> Manual workflow for Angular branch to deploy to Prod <br />
-                                        <img src="/Client/Images/docs/ui-cicd-pipline-1.png" style="width: 850px;" /><br /><br />
+                                        Yes will take the latest code and this process takes less time.
+                                    </li>
+                                    <li>
+                                        No will not take the latest code and builds newly.
                                     </li>
                                 </ol>
                             </li>
-
                             <li>
-                                <b>WF3</b> will ask you to provide 3 parameters <br />
+                                <b>Send email for the build commit list:</b><br />
                                 <ol>
-                                    <li><b>Branch:</b> Select the eligible branch from the list.</li>
-                                    <li><b>ENV:</b> Select the right environment from the list.</li>
-                                    <li>
-                                        <b>Move latest code deployed:</b> This option indicates whether you want a fresh build or the last successful build. <br />
-                                        <img src="/Client/Images/docs/ui-cicd-pipline-2.png" style="width: 350px;" /><br /><br />
-                                    </li>
+                                    <li>Yes means a mail will be triggered to developer list once the deployment completed.</li>
+                                    <li>No means there will no mail triggered to developer list once the deployment completes</li>
                                 </ol>
                             </li>
                         </ul>
-                        <div class="note-ui-cicd">
-                            <p class="firstNoteHeading">Note</p>
-                            <p class="firstNoteDesc">
-                                <b>Move latest code deployed</b> option is to save build time while deploying the code. But we need to be sure what was the last success build.
-                                For example, once your PR gets merged with the development branch the automate build will run and deploy to DEV.
-                                If you want the same build to move to ITT, you can use this option. But you want a different branch to freshly deploy keep this value as no.
-                            </p>
-                        </div>
-                        <ul>
-                            <li>
-                                <b>WF4</b> is very similar to WF3, but since its prod, only certain folks will have access to deploy the code.<br />
-                            </li>
-                            <li>
-                                Once the user gets access when they try to run the pipeline system will be requested to review the workflow. The user can reject or approve the flow.<br />
-                                <img src="/Client/Images/docs/ui-cicd-pipline-6.png" style="width: 850px;" /><br /><br />
-                            </li>
-                        </ul>
-
-                        <h6>WF5 & WF6 </h6>
-                        <ul>
-                            <li>These are exactly same as workflow 3 and 4. The build and deploy step will be matching to angular build and deploy steps.</li>
-                            <li>After Angular release and stabilization, we will not have workflow 3 and 4 that will get deleted or kept as inactive</li>
-                            <li>Unlike in other Angular prod will have environment options like PRODA1, PRODA2. These are the new VMs created for angular alone.</li>
-                            <li>The same applies for the temporary workflow created for CONS and UTT</li>
-                        </ul>
-
-                        <h6>Angular pipeline changes</h6>
-                        <ul>
-                            <li>We have added temporary workflows for CONS and UTT for angular deployment. The steps are same as regular angular pipelines</li>
-                            <li>Once we have our Angular migration complete and when the solution moves to one branch approach, all the preprod and prod pipeline must update the way the Angular pipeline works.</li>
-                            <li>This will be very straight change like the build and deploy step of regular pipeline must copy from Build-Angular and Deploy-Angular from Angular pipeline.</li>
-                            <li>Additionally, we can delete/keep the email sending part from the pipeline. Also add the deploy latest related changes in Angular flow.</li>
-                            <li>This will need testing in PROD once we have the changes moved.</li>
-                            <li>
-                                The email notification is based on a repo <a href="https://github.com/intel-innersource/applications.web.mydeals.automation-newman" target="_blank">GITHUB (automation-newman) </a><br />
-                                <ol>
-                                    <li>This will help you trigger email</li>
-                                    <li>
-                                        Can configure like this<br />
-                                        <img src="/Client/Images/docs/ui-cicd-pipline-10.png" style="width: 700px;" /><br /><br />
-                                    </li>
-                                </ol>
-                            </li>
-                        </ul>
-                        
-                        <p><a href="https://intel.sharepoint.com/:w:/r/sites/MyDealsTeam/Shared%20Documents/General/1Source/GitHub_mydeals_ui_CICD.docx?d=w5c8db62fd9f345ce8629e1ef6ccf9435&csf=1&web=1&e=y72U9O" target="_blank" class="anchorPipeline">Click here</a> for more details on <b>UI Pipeline</b>.</p>
                     </div>
-                </div>
-
-                <div class="db-pipeline" id="db-pipeline">
-                    <h4><i class="fa fa-database icon-color-pipe" aria-hidden="true"></i>&nbsp; DB Pipeline</h4>
-                    <div style="padding-left: 30px;">
-                        <h6>Highlight</h6>
-                        <ul>
-                            <li>There are no multiple repos for DB pipeline. All the changes must be pushed to <a href="https://github.com/intel-innersource/applications.web.mydeals.database" target="_blank">DataBase</a> repo.</li>
-                            <li>CIBuild checklists will go under CIBuild folder in the database repo instead of the CIBuild repo.</li>
-                            <li>Unlike in GitLab you don’t have to specify Environment, ProjectURL, BranchName, ProjectRootFolder in the checklist xml file.</li>
-                        </ul>
-
-                        <h6>Workflows </h6>
+                    <div>
+                        <h6>New branch depolyment to any environment (Github DB)</h6>
                         <ul>
                             <li>
-                                There are 4 workflows available. <br />
-                                <ol>
-                                    <li><b>WF1- MyDeals DB pre-prod manual:</b> This will push all the changes mentioned in checklist file from the <b>selected branch</b> to the <b>selected environment.</b></li>
-                                    <li><b>WF2- MyDeals DB prod manual:</b> This will push all the changes mentioned in checklist file from the <b>selected branch</b> to the <b>PROD environment</b>.</li>
-                                    <li><b>WF3- MyDeals Autosys pre-prod manual:</b> This is an autosys job which will push the items under the folder <b>Autosys/Scripts</b> to the <b>selected environment.</b>.</li>
-                                    <li><b>WF4- MyDeals Autosys prod manual:</b> This is an autosys job which will push the items under the folder <b>Autosys/Scripts</b> to the <b>PROD environment</b>.</li>
-                                </ol>
+                                To deploy any other branch to any other environment, follow the below path Github -> Actions -> MyDeals DB pre-prod manual - > Run workflow <br />
+                                <img src="/Client/Images/docs/db-github-2.png" style="width: 850px;" /><br /><br />
+                            </li>
+                            <li>
+                                From below image, Branch <b>development</b> will be deployed in <b>DEV</b> environment and File is the <b>DB Checklist Path</b>. <br />
+                                <img src="/Client/Images/docs/db-github-1.png" style="width: 350px;" /><br /><br />
+                            </li>
+                            <li>
+                                After giving mandatory fields. Click on <b>Run workflow</b>. The build triggers.
                             </li>
                         </ul>
-                        <div class="note-ui-cicd">
-                            <p class="firstNoteHeading">Note</p>
-                            <ul class="firstNoteList">
-                                <li>Please specify the checklist file including extension.</li>
-                                <li>You don’t need to make multiple commits for different environments since that functionality is done by selecting the environment.</li>
-                                <li>Please check the log for build status.</li>
-                                <li>The DB solution uses an exe for deployment. Please refer to the <a href="https://github.com/intel-innersource/applications.web.mydeals.release-cli" target="_blank" class="anchorPipeline">link</a> for details.</li>
-                            </ul>
-                        </div>
-                        <p><a href="https://intel.sharepoint.com/:w:/r/sites/MyDealsTeam/Shared%20Documents/General/1Source/GitHub_mydeals_DB_CICD.docx?d=w31968b5d176441dabaf9c81a50a6ffe2&csf=1&web=1&e=uAHmHl" target="_blank" class="anchorPipeline">Click here</a> for more details on <b>DB Pipeline</b>.</p>
-                    </div>
-                </div>
-
-                <div class="deployment-process" id="deployment-process">
-                    <h4><i class="fa fa-cloud-upload icon-color-pipe" aria-hidden="true"></i>&nbsp; Deployment process</h4>
-                    <div style="padding-left: 30px;">
-
-                        <h6>Pre-PROD</h6>
-                        <ul>
-                            <li>Deployment to <b>DEV</b> server is automated.</li>
-                            <li>Deployment to all other pre-prods are Manual.</li>
-                        </ul>
-
-                        <h6>Production</h6>
-                        <ul>
-                            <li>Code should be taken from <b> CIAR Release </b></li>
-                        </ul>
-
-                        <div>
-                            <h6>Follow the below process to deploy a branch to specific environment</h6>
-                            <p>Once the code reviewer (Tech Lead) approves the PR for the UI/DB changes commit, the deployment process will starts.</p>
-                            <img src="/Client/Images/docs/GitHub6.png" style="width: 850px;" /><br /><br />
-                            <img src="/Client/Images/docs/GitHub7.png" style="width: 850px;" /><br /><br />
-                        </div>
-                        <div>
-                            <h6>New branch depolyment to any environment (Github UI)</h6>
-                            <ul>
-                                <li>
-                                    To deploy any other branch to any other environment, follow the below path Github -> Actions -> MyDeals Angular pre-prod manual - > Run workflow <br />
-                                    <img src="/Client/Images/docs/ui-cicd-pipeline-12.png" style="width: 850px;" /><br /><br />
-                                </li>
-                                <li>
-                                    From below image, Branch <b>codingPractices_Reference</b> will be deployed in <b>DEV</b> environment. <br />
-                                    <img src="/Client/Images/docs/ui-cicd-pipeline-13.png" style="width: 350px;" /><br /><br />
-                                </li>
-                                <li>
-                                    <b>Move latest code deployed:</b><br />
-                                    <ol>
-                                        <li>
-                                            Yes will take the latest code and this process takes less time.
-                                        </li>
-                                        <li>
-                                            No will not take the latest code and builds newly.
-                                        </li>
-                                    </ol>
-                                </li>
-                                <li>
-                                    <b>Send email for the build commit list:</b><br />
-                                    <ol>
-                                        <li>Yes means a mail will be triggered to developer list once the deployment completed.</li>
-                                        <li>No means there will no mail triggered to developer list once the deployment completes</li>
-                                    </ol>
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h6>New branch depolyment to any environment (Github DB)</h6>
-                            <ul>
-                                <li>
-                                    To deploy any other branch to any other environment, follow the below path Github -> Actions -> MyDeals DB pre-prod manual - > Run workflow <br />
-                                    <img src="/Client/Images/docs/db-github-2.png" style="width: 850px;" /><br /><br />
-                                </li>
-                                <li>
-                                    From below image, Branch <b>development</b> will be deployed in <b>DEV</b> environment and File is the <b>DB Checklist Path</b>. <br />
-                                    <img src="/Client/Images/docs/db-github-1.png" style="width: 350px;" /><br /><br />
-                                </li>
-                                <li>
-                                    After giving mandatory fields. Click on <b>Run workflow</b>. The build triggers.
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
