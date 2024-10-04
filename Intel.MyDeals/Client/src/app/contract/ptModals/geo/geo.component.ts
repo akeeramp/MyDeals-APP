@@ -1,5 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { DropDownFilterSettings } from '@progress/kendo-angular-dropdowns';
 import { indexOf, reject } from 'underscore';
 
 export interface DialogData {
@@ -21,6 +22,11 @@ export interface DialogData {
     private isCustDiv: boolean = false;
     private geoMarkArr: Array<string> = [];
     private newEmptyArr: Array<string> = [];
+
+    public filterSettings: DropDownFilterSettings = {
+        caseSensitive: false,
+        operator: "contains",
+    };
 
     constructor(
       public dialogRef: MatDialogRef<GeoSelectorComponent>,
