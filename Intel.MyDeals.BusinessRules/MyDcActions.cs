@@ -2132,12 +2132,24 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             AttributeCollection atrbMstr = DataCollections.GetAttributeData();
-            List<MyDealsAttribute> onChangeWrongWayItems = atrbMstr != null ? atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE" || a.MJR_MNR_CHG == "MAJOR_DECREASE").ToList() : new List<MyDealsAttribute>();
+            List<MyDealsAttribute> onChangeWrongWayItems = atrbMstr != null ? atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE" || a.MJR_MNR_CHG == "MAJOR_DECREASE" || a.MJR_MNR_CHG == "MAJOR_FASTTRACK").ToList() : new List<MyDealsAttribute>();
+            List<MyDealsAttribute> onChangeFastItems = atrbMstr != null ? atrbMstr.All.Where(a =>  a.MJR_MNR_CHG == "MAJOR_FASTTRACK").ToList() : new List<MyDealsAttribute>();
+            List<int> onChangeFastTrackIds = r.Dc.DataElements.Where(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).Select(d => d.DcID).ToList();
 
             List<int> onChangeWrongWayIds = r.Dc.DataElements.Where(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).Select(d => d.DcID).ToList();
             List<int> majorFieldNoRedealIds = r.Dc.DataElements
                 .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && (d.AtrbValue.ToString() == WorkFlowStages.Active || d.AtrbValue.ToString() == WorkFlowStages.Won) && !d.HasValueChanged && onChangeWrongWayIds.Contains(d.DcID))
                 .Select(d => d.DcID).ToList();
+
+            IOpDataElement deRedealDate = r.Dc.GetDataElement(AttributeCodes.LAST_REDEAL_DT);
+
+            string wipStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+
+            if (onChangeFastTrackIds.Count == 0 && (wipStage == WorkFlowStages.Active || wipStage == WorkFlowStages.Won))
+            {
+                r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, deRedealDate.OrigAtrbValue);
+ 
+            }
 
             if (!majorFieldNoRedealIds.Any()) return; // If there are no "wrong way" major changes to process, bail out.
 
@@ -2224,8 +2236,8 @@ namespace Intel.MyDeals.BusinessRules
             AttributeCollection atrbMstr = DataCollections.GetAttributeData();
             List<MyDealsAttribute> onChangeItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR").ToList();
             List<MyDealsAttribute> onChangeIncreaseItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE").ToList();
-            List<MyDealsAttribute> onChangeDecreaseItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_DECREASE").ToList();
-
+            List<MyDealsAttribute> onChangeDecreaseItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_DECREASE").ToList(); 
+ 
             // Find DE item changes that trigger a true re-deal/stage change here
             List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueDifferentFromOrig(atrbMstr)).ToList();
             List<IOpDataElement> changedIncreaseDes = r.Dc.GetDataElementsWhere(d => onChangeIncreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueIncreasedFromOrig(atrbMstr)).ToList();
@@ -2233,7 +2245,7 @@ namespace Intel.MyDeals.BusinessRules
             // Wrong way changes that also threw an error to force Fast Track redeals back into normal redeal space
             List<IOpDataElement> WrongWayFTErrorIncDes = r.Dc.GetDataElementsWhere(d => onChangeIncreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueDecreasedFromOrig(atrbMstr) && d.ValidationMessage != "").ToList();
             List<IOpDataElement> WrongWayFTErrorDecDes = r.Dc.GetDataElementsWhere(d => onChangeDecreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueIncreasedFromOrig(atrbMstr) && d.ValidationMessage != "").ToList();
-            
+ 
             var titleDe = changedDes.Where(x => x.AtrbCd == AttributeCodes.TITLE);
 
             // Product title changed..  Check if Atrb 15 changed

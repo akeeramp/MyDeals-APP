@@ -151,6 +151,19 @@ export class dealEditorCellTemplateComponent {
                 classNm += " isSavedCell";
             if (passedData._behaviors.isDirty != undefined && passedData._behaviors.isDirty[field])
                 classNm += " isDirtyCell";
+            if ( passedData.HAS_TRACKER=="1" && field=='LAST_REDEAL_DT' && passedData._behaviors.isDirty != undefined ){
+                if (passedData._behaviors.isDirty['CONSUMPTION_CUST_PLATFORM'] == true || passedData._behaviors.isDirty['CONSUMPTION_SYS_CONFIG'] == true ||
+                    passedData._behaviors.isDirty['CNSMPTN_LKBACK_PERD_DT'] == true || passedData._behaviors.isDirty['CONSUMPTION_REASON'] == true ||
+                    passedData._behaviors.isDirty['CONSUMPTION_CUST_SEGMENT'] == true || passedData._behaviors.isDirty['CONSUMPTION_CUST_RPT_GEO'] == true ||
+                    passedData._behaviors.isDirty['CONSUMPTION_COUNTRY_REGION'] == true || passedData._behaviors.isDirty['CONSUMPTION_REASON_CMNT'] == true||
+                    passedData._behaviors.isDirty['CONSUMPTION_TYPE'] == true || passedData._behaviors.isDirty['SYS_PRICE_POINT'] == true||
+                    passedData._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || passedData._behaviors.isDirty['QLTR_PROJECT'] == true) {
+                    if(passedData.LAST_REDEAL_DT ==''){
+                        passedData.LAST_REDEAL_DT=this.datePipe.transform(new Date(), "MM/dd/yyyy"); 
+                    }
+                    classNm = "";
+                }
+            }
         }
         return classNm.replace(" isRequiredCell", "");
     }

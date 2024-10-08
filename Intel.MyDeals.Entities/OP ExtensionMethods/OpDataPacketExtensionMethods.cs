@@ -83,14 +83,14 @@ namespace Intel.MyDeals.Entities
             majorDealIds.AddRange(wonTenderIds);
 
             // US155169: Check for major change not triggering re-deal items to trigger tracker and sync major (Wrong way major changes)
-            List<MyDealsAttribute> onChangeWrongWayItems = atrbMstr != null? atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE" || a.MJR_MNR_CHG == "MAJOR_DECREASE").ToList(): new List<MyDealsAttribute>();
+            List<MyDealsAttribute> onChangeWrongWayItems = atrbMstr != null? atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE" || a.MJR_MNR_CHG == "MAJOR_DECREASE" || a.MJR_MNR_CHG == "MAJOR_FASTTRACK").ToList(): new List<MyDealsAttribute>();
             List<MyDealsAttribute> onChangeQuoteOnlyItems = atrbMstr != null ? atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_QUOTEONLY").ToList() : new List<MyDealsAttribute>();
-
+ 
             List<int> onChangeWrongWayIds = testPacket.AllDataElements.Where(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).Select(d => d.DcID).ToList();
             List<int> majorFieldNoRedealIds = testPacket.AllDataElements
                 .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && (d.AtrbValue.ToString() == WorkFlowStages.Active || d.AtrbValue.ToString() == WorkFlowStages.Won) && !d.HasValueChanged && onChangeWrongWayIds.Contains(d.DcID))
                 .Select(d => d.DcID).ToList();
-
+             
             // US201153: end customer should be editable even after deal is won (Make it a major change field with quote only updates)
             List<int> onChangeQuoteOnlyIds = testPacket.AllDataElements.Where(d => onChangeQuoteOnlyItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).Select(d => d.DcID).ToList();
             List<int> majorFieldQuoteOnlyIds = testPacket.AllDataElements
@@ -106,6 +106,15 @@ namespace Intel.MyDeals.Entities
             {
                 packet.AttachAction(DealSaveActionCodes.SYNC_DEALS_MAJOR, 80, majorDealIds); // Set action - save it.
             }
+
+            //if (majorFastTrackNoRedealIds.Any()) // Add all actions as if this were crossing the pending/approved line, was a fast tracked re-deal.
+            //{
+            //    packet.AttachAction(DealSaveActionCodes.SYNC_DEALS_MAJOR, 80, majorFastTrackNoRedealIds); // Set actions - save them.
+            //    packet.AddGoingActiveActions(majorFastTrackNoRedealIds);
+            //    packet.AddAuditActions(majorFastTrackNoRedealIds);
+            //    packet.AddQuoteLetterActions(majorFastTrackNoRedealIds);
+            //    //packet.AddAuditActions(majorFastTrackNoRedealIds); // Pulled out since Doug doesn't think that we need to re-trigger cost testing.
+            //}
 
             if (majorFieldNoRedealIds.Any()) // Add all actions as if this were crossing the pending/approved line, was a fast tracked re-deal.
             {

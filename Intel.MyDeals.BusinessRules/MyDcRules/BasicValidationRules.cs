@@ -1252,6 +1252,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
                 },
+                
 
                 new MyOpRule
                 {
