@@ -683,26 +683,26 @@ export class dealEditorComponent implements OnDestroy{
         });
     }
 
-    openMCTPCTModal(dataItem, isMeetComp) {
+    openMCTPCTModal(dataItem: unknown, isMeetComp: boolean): void {
         const dialogRef = this.dialog.open(tenderMCTPCTModalComponent, {
             width: "1420px",
             panelClass:'admin_deal_mctpct',
             data: {
-                CNTRCT_OBJ_SID: dataItem.CNTRCT_OBJ_SID,
-                PRC_ST_OBJ_SID: dataItem.PRC_ST_OBJ_SID,
-                WIP_ID: dataItem.DC_ID,
+                CNTRCT_OBJ_SID: dataItem['CNTRCT_OBJ_SID'],
+                PRC_ST_OBJ_SID: dataItem['PRC_ST_OBJ_SID'],
+                WIP_ID: dataItem['DC_ID'],
                 isMeetComp: isMeetComp,
                 UItemplate: this.UItemplate
             }
         });
+
         dialogRef.afterClosed().subscribe((returnVal) => {
-            if (!isMeetComp) {
+            if (isMeetComp) {
                 this.loggerService.success("Please wait for the result to be updated...");
             }
+
             if (!isMeetComp || (isMeetComp && returnVal && returnVal.length > 0)) {
-                let ids = [];
-                ids.push(dataItem.DC_ID);
-                this.refreshGridData.emit({ wipIds: ids });
+                this.refreshGridData.emit({ wipIds: [dataItem['DC_ID']] });
             }
         });
     }
