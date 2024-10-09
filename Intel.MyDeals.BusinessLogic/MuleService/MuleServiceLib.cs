@@ -82,9 +82,9 @@ namespace Intel.MyDeals.BusinessLogic
                 if (runMode == "M")
                 {
                     //Header Construct
-                    header = "{\"VistexConsumptionParameters\":{\"SourceSystem\":\"MyDeals\",\"TargetSystem\":\"SAP\",\"Action\":\"POST\",\"BatchId\":\"" + BatchId.ToString() + "\",";
+                    header = "{\"SourceSystem\":\"MyDeals\",\"Action\":\"POST\",\"BatchId\":\"" + BatchId.ToString() + "\",";
                     //Footer item
-                    footer = "}}";
+                    footer = "}";
                 }
                 else
                 {
