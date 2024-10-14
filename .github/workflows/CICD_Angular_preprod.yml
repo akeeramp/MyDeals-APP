@@ -10,11 +10,11 @@ on:
         options:
           - 'CIN'
           - 'DEV'
-          - 'ITT'
+          - 'IAO-DEV'
           - 'DAY1'
           - 'EUT'
-          - 'UTT1'
-          - 'UTT2'
+          - 'IAO-CONS01'
+          - 'IAO-CONS02'
           - 'CONS1'
           - 'CONS2'
       Move_Latest:

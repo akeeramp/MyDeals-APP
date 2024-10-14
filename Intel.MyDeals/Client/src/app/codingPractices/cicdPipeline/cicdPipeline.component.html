@@ -81,7 +81,7 @@
                         <p class="firstNoteHeading">Note</p>
                         <p class="firstNoteDesc">
                             <b>Move latest code deployed</b> option is to save build time while deploying the code. But we need to be sure what was the last success build. For example, once your PR gets merged with the development branch the automate
-                            build will run and deploy to DEV. If you want the same build to move to ITT, you can use this option. But you want a different branch to freshly deploy keep this value as no.
+                            build will run and deploy to DEV. If you want the same build to move to IAO-DEV, you can use this option. But you want a different branch to freshly deploy keep this value as no.
                         </p>
                     </div>
                     <ul>
@@ -99,12 +99,12 @@
                         <li>These are exactly same as workflow 3 and 4. The build and deploy step will be matching to angular build and deploy steps.</li>
                         <li>After Angular release and stabilization, we will not have workflow 3 and 4 that will get deleted or kept as inactive</li>
                         <li>Unlike in other Angular prod will have environment options like PRODA1, PRODA2. These are the new VMs created for angular alone.</li>
-                        <li>The same applies for the temporary workflow created for CONS and UTT</li>
+                        <li>The same applies for the temporary workflow created for CONS and IAO-CONS</li>
                     </ul>
 
                     <h6>Angular pipeline changes</h6>
                     <ul>
-                        <li>We have added temporary workflows for CONS and UTT for angular deployment. The steps are same as regular angular pipelines</li>
+                        <li>We have added temporary workflows for CONS and IAO-CONS for angular deployment. The steps are same as regular angular pipelines</li>
                         <li>Once we have our Angular migration complete and when the solution moves to one branch approach, all the preprod and prod pipeline must update the way the Angular pipeline works.</li>
                         <li>This will be very straight change like the build and deploy step of regular pipeline must copy from Build-Angular and Deploy-Angular from Angular pipeline.</li>
                         <li>Additionally, we can delete/keep the email sending part from the pipeline. Also add the deploy latest related changes in Angular flow.</li>

@@ -12,8 +12,6 @@ on:
           - 'DR'
           - 'PROD1'
           - 'PROD2'
-          - 'PRODA1'
-          - 'PRODA2'
       Move_Latest:
         description: 'Move last code deployed from CIAR'
         required: true
