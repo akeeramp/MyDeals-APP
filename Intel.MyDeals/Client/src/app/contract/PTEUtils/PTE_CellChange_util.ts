@@ -392,8 +392,9 @@ export class PTE_CellChange_Util {
             const selrow = items[0].row;
             items[0].new=  items[0].new.toString().replace(/,(\s+)?$/, '');
             //to identify the uniq records
-            let prods = uniq(items[0].new.split(','));
-
+            let prods = uniq(items[0].new.split(',').filter(function (str) {
+                return /\S/.test(str);
+            }));
             items[0].new = prods.toString();
             if (!this.isAlreadyChange(selrow)) {
                 //identify the empty row and add it there
