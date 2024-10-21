@@ -104,8 +104,8 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
         else if(value.ATRB_SID == ATRB_MSTR.GEO_COMBINED)
         {
             this.getGeos();
-            this.showNumeric = this.showMultiSelect = this.showTextBox = false;
-            this.showDropDown = true; 
+            this.showNumeric = this.showDropDown = this.showTextBox = false;
+            this.showMultiSelect = true; 
         }
         else if(value.ATRB_SID == ATRB_MSTR.CUST_ACCNT_DIV)
         {
