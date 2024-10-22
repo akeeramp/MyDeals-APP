@@ -1700,7 +1700,7 @@ namespace Intel.MyDeals.BusinessLogic
                 DateTime ReDealEffectiveDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].EffectivePricingStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
                 UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.LAST_REDEAL_DT), ReDealEffectiveDate.ToString("MM/dd/yyyy"));
             }
-
+             
             // Using this to allow us to dive right into rules engines
             SavePacket savePacket = new SavePacket()
             {
@@ -1740,7 +1740,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<int> passedFolioIds = new List<int>() { dealId };
             MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(passedFolioIds, new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate(); // Make the save object .FillInHolesFromAtrbTemplate()
-
+            var oldmydealsData= myDealsData.DeepClone();
             if (!myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Any())
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(712, "Deal Error: Couldn't find deal for this request, contact L2 suport", "Couldn't find deal " + dealId + " to update"));
@@ -1773,6 +1773,24 @@ namespace Intel.MyDeals.BusinessLogic
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
 
+            string iqrConsumptionCustomerPlatform = workRecordDataFields.recordDetails.quote.quoteLine[recordId].ConsumptionCustomerPlatform == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[recordId].ConsumptionCustomerPlatform;
+            string iqrConsumptionCustomerSegment = workRecordDataFields.recordDetails.quote.quoteLine[recordId].ConsumptionCustomerSegment == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[recordId].ConsumptionCustomerSegment;
+            string iqrConsumptionRegion = workRecordDataFields.recordDetails.quote.quoteLine[recordId].ConsumptionRegion;
+            string iqrConsumptionCountry = workRecordDataFields.recordDetails.quote.quoteLine[recordId].ConsumptionCountry;
+            string iqrConsumptionReportedSalesGeo = workRecordDataFields.recordDetails.quote.quoteLine[recordId].ConsumptionReportedSalesGeo == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[recordId].ConsumptionReportedSalesGeo;
+            string consumptionCountryRegion = GatherConsumptionContries(iqrConsumptionRegion, iqrConsumptionCountry);
+            consumptionCountryRegion = consumptionCountryRegion == null ? "" : consumptionCountryRegion;
+
+            var isplatformchange = string.Compare(iqrConsumptionCustomerPlatform, oldmydealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_PLATFORM).AtrbValue.ToString(), StringComparison.OrdinalIgnoreCase);
+            var isCustomerSegment = string.Compare(iqrConsumptionCustomerSegment, oldmydealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_SEGMENT).AtrbValue.ToString(), StringComparison.OrdinalIgnoreCase);
+            var isConsumptionCountryRegion = string.Compare(consumptionCountryRegion, oldmydealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_COUNTRY_REGION).AtrbValue.ToString(), StringComparison.OrdinalIgnoreCase);
+            var isConsumptionReportedSalesGeo = string.Compare(iqrConsumptionReportedSalesGeo, oldmydealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO).AtrbValue.ToString(), StringComparison.OrdinalIgnoreCase);
+
+            if (workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQStatus=="Won" && (isplatformchange != 0 || isCustomerSegment != 0 || isConsumptionCountryRegion != 0 || isConsumptionReportedSalesGeo != 0))
+            {
+                DateTime ReDealEffectiveDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[recordId].EffectivePricingStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+                UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.LAST_REDEAL_DT), ReDealEffectiveDate.ToString("MM/dd/yyyy"));
+            }
             // Break out update and validate checks, then come back and do the needed saves if everything is good.
             string validErrors = "";
             if (UpdateRecordsFromSfPackets(myDealsData, workRecordDataFields, recordId, custId, folioId, psId, dealId, reRunMode, ref validErrors)) // If validation errors, log and skip to next
@@ -1781,14 +1799,14 @@ namespace Intel.MyDeals.BusinessLogic
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
-
+            
             // Start the save process - No errors, use MyDealsData Packets saving methods here as opposed to the flattened dictionary method used during create.
             ContractToken saveContractToken = new ContractToken("ContractToken Created - Save IRQ Deal Updates")
             {
                 CustId = custId,
                 ContractId = folioId
             };
-
+           
             TagSaveActionsAndBatches(myDealsData); // Add needed save actions and batch IDs for the save
             MyDealsData saveResponse = myDealsData.Save(saveContractToken);
 
@@ -1798,7 +1816,7 @@ namespace Intel.MyDeals.BusinessLogic
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
-
+             
             // Check post validation data to see if we triggered a hard or soft re-deal to set up for second save run.
             IOpDataElement OrigRedealBit = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IN_REDEAL);
             IOpDataElement OrigWfStg = myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.WF_STG_CD);
