@@ -54,24 +54,25 @@
                             <ol>
                                 <li><b>WF1 Angular Automation:</b> Angular workflows to deploy only MyDeals_Migration branch to CIN environment.</li>
 
-                                <li><b>WF2 MyDeals development automate:</b> Development workflow to deploy only development branch to DEV environment.</li>
-
-                                <li><b>WF5 MyDeals Angular pre-prod Manual:</b> Manual workflow for Angular branch to deploy to pre-prod</li>
+                                <li><b>WF2 MyDeals Angular pre-prod Manual:</b> Manual workflow for Angular branch to deploy to pre-prod</li>
 
                                 <li>
-                                    <b>WF6 MyDeals Angular prod Manual:</b> Manual workflow for Angular branch to deploy to Prod <br />
+                                    <b>WF3 MyDeals Angular prod Manual:</b> Manual workflow for Angular branch to deploy to Prod <br />
                                     <img src="/Client/Images/docs/ui-cicd-pipline-1.png" style="width: 850px;" /><br /><br />
                                 </li>
                             </ol>
                         </li>
 
                         <li>
-                            <b>WF3</b> will ask you to provide 3 parameters <br />
+                            <b>WF2</b> will ask you to provide 4 parameters <br />
                             <ol>
                                 <li><b>Branch:</b> Select the eligible branch from the list.</li>
                                 <li><b>ENV:</b> Select the right environment from the list.</li>
                                 <li>
-                                    <b>Move latest code deployed:</b> This option indicates whether you want a fresh build or the last successful build. <br />
+                                    <b>Move latest code deployed:</b> This option indicates whether you want a fresh build or the last successful build.
+                                </li>
+                                <li>
+                                    <b>Send email for the build commit list:</b> This option indicates whether you want to trigger an email notification to the developer list on completion of deployment process. <br />
                                     <img src="/Client/Images/docs/ui-cicd-pipline-2.png" style="width: 350px;" /><br /><br />
                                 </li>
                             </ol>
@@ -86,29 +87,19 @@
                     </div>
                     <ul>
                         <li>
-                            <b>WF4</b> is very similar to WF3, but since its prod, only certain folks will have access to deploy the code.<br />
+                            <b>WF3</b> is very similar to WF2, but since its prod, only certain folks will have access to deploy the code.<br />
                         </li>
                         <li>
                             Once the user gets access when they try to run the pipeline system will be requested to review the workflow. The user can reject or approve the flow.<br />
                             <img src="/Client/Images/docs/ui-cicd-pipline-6.png" style="width: 850px;" /><br /><br />
                         </li>
-                    </ul>
-
-                    <h6>WF5 & WF6 </h6>
-                    <ul>
-                        <li>These are exactly same as workflow 3 and 4. The build and deploy step will be matching to angular build and deploy steps.</li>
-                        <li>After Angular release and stabilization, we will not have workflow 3 and 4 that will get deleted or kept as inactive</li>
-                        <li>Unlike in other Angular prod will have environment options like PRODA1, PRODA2. These are the new VMs created for angular alone.</li>
-                        <li>The same applies for the temporary workflow created for CONS and IAO-CONS</li>
-                    </ul>
+                    </ul>          
 
                     <h6>Angular pipeline changes</h6>
                     <ul>
-                        <li>We have added temporary workflows for CONS and IAO-CONS for angular deployment. The steps are same as regular angular pipelines</li>
-                        <li>Once we have our Angular migration complete and when the solution moves to one branch approach, all the preprod and prod pipeline must update the way the Angular pipeline works.</li>
+                        <li>All the preprod and prod pipeline must update the way the Angular pipeline works.</li>
                         <li>This will be very straight change like the build and deploy step of regular pipeline must copy from Build-Angular and Deploy-Angular from Angular pipeline.</li>
                         <li>Additionally, we can delete/keep the email sending part from the pipeline. Also add the deploy latest related changes in Angular flow.</li>
-                        <li>This will need testing in PROD once we have the changes moved.</li>
                         <li>
                             The email notification is based on a repo <a href="https://github.com/intel-innersource/applications.web.mydeals.automation-newman" target="_blank">GITHUB (automation-newman) </a><br />
                             <ol>
@@ -117,6 +108,7 @@
                                     Can configure like this<br />
                                     <img src="/Client/Images/docs/ui-cicd-pipline-10.png" style="width: 700px;" /><br /><br />
                                 </li>
+                                <li>This repository has been archived and is now read-only.</li>
                             </ol>
                         </li>
                     </ul>
