@@ -1026,6 +1026,12 @@ export class ProductSelectorComponent implements OnDestroy {
     removeProduct(item, mode) {
         if (mode == 'add') {
             this.addedProducts = this.addedProducts.filter(product => product.HIER_VAL_NM != item.HIER_VAL_NM);
+            //Product Selector- Clear selected products check mark when deleted
+            this.gridData.data.filter(product => {
+                if (product.HIER_VAL_NM == item.HIER_VAL_NM) {
+                    product.selected = false;
+                }
+            })
         }
         else if (mode == 'exclude') {
             this.excludedProducts = this.excludedProducts.filter(product => product.HIER_VAL_NM != item.HIER_VAL_NM);
@@ -1080,6 +1086,14 @@ export class ProductSelectorComponent implements OnDestroy {
 
     clearProducts(type?) {
         if (type != 'E') {
+            //Product Selector- Clear selected products check mark when deleted
+            this.gridData.data.filter(product => {
+                this.addedProducts.forEach(addedPrd => {
+                    if (product.HIER_VAL_NM == addedPrd.HIER_VAL_NM) {
+                        product.selected = false;
+                    }
+                })
+            });
             if (this.addedProducts.length == 0) return;
             // Paper toss animation..
             this.animateInclude = true;
