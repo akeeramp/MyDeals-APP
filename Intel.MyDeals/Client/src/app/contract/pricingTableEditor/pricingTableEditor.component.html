@@ -209,6 +209,13 @@
     </kendo-dialog-actions>
 </kendo-dialog>
 
+<kendo-dialog *ngIf="isValidationMsg" class="ptevalidopoup valid-out-pop-ups k-dialog-popup-design">
+    <p class="text-para-color">{{ validationMsg }}</p>
+    <kendo-dialog-actions class="pteokbtnstyle alter-btns-ok">
+        <button class='k-button ok-btn-pop-up' (click)="closeAlerts()">OK</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+
 <div hidden>
     <div #addProductTooltipTarget="ngbTooltip"
          ngbTooltip="Start by adding Products here"

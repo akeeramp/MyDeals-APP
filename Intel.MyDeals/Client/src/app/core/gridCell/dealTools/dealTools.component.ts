@@ -60,6 +60,8 @@ export class dealToolsComponent implements OnDestroy {
     public confirmRollback: boolean = false;
     public openHoldDialog: boolean = false;
     public openUnHoldDialog: boolean = false;
+    private isValidationMessage: boolean = false;
+    public validationMsg: string = '';
     public gridDataTmp: any = [];
     public dealTxt;
     public notes;
@@ -235,6 +237,11 @@ export class dealToolsComponent implements OnDestroy {
         this.confirmRollback = false;
         this.openHoldDialog = false;
         this.openUnHoldDialog = false;
+        //TWC3179-4696: refresh DE post click on alert message 
+        if (this.isValidationMessage) {
+            this.refreshContract.emit(true);
+            this.isValidationMessage = false;
+        }
     }
     //split items    
     openSplit() {
@@ -465,6 +472,9 @@ export class dealToolsComponent implements OnDestroy {
             let ptrId = this.dataItem.DC_PARENT_ID;
             // Remove from DB first... then remove from UI
             let response = await this.dataService.deletePricingTableRow(this.dataItem.CUST_MBR_SID, this.contractData.DC_ID, ptrId).toPromise().catch((response) => {
+                //TWC3179-4696: added user failure alert for deal deletion
+                this.validationMsg = 'The Deal deletion is not successful. Please try again.';
+                this.isValidationMessage = false; //make it true for WW47 release
                 this.loggerSvc.error("Could not delete the Pricing Table " + ptrId, response, response.statusText);
                 this.setBusy("", "", "", "");
             })
@@ -729,7 +739,10 @@ export class dealToolsComponent implements OnDestroy {
                     }, 4000);
                 }*/
                
-            }, (response)=> {
+            }, (response) => {
+                //TWC3179-4696: added user failure alert for deal hold/unhold
+                this.validationMsg = 'Unable to update hold status of deals. Please try again.';
+                this.isValidationMessage = false; //make it true for WW47 release
                 this.loggerSvc.error("Unable to update hold status of deals","Error",response);
                 this.setBusy("", "", "", "");
             });

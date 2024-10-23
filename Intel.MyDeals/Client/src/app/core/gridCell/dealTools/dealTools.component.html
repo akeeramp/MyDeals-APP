@@ -152,6 +152,14 @@
                     <button kendoButton class="k-button cancelDelete cancel-btn-pop-up line-height-unset" style="width: 50% !important;" (click)="closeDialogs()">CANCEL</button>
                 </kendo-dialog-actions>
             </kendo-dialog>
+            <kendo-dialog *ngIf="isValidationMessage" (close)="closeDialogs()" [maxWidth]="440" [height]="147">
+                <div  class="k-content k-dialog-content">
+                    <p class="text-para-color">{{ validationMsg }}</p>
+                </div>
+                    <kendo-dialog-actions style=" padding: 0;">
+                        <button class='k-button cancelDelete' (click)="closeDialogs()">OK</button>
+                    </kendo-dialog-actions>
+            </kendo-dialog>
         </div>
         <div class='fl md-icon-disabled' *ngIf="isDeleteEnabled && editable === true && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
             <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;" title="This deal shares the same pricing table row as other deals.  You will need to split the group or delete the deal from the Pricing Table."></i>

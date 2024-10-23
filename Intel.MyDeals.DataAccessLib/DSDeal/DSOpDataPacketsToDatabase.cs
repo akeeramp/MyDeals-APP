@@ -178,53 +178,78 @@ namespace Intel.MyDeals.DataAccessLib
         /// <param name="ds">DataSet to import</param>
         public void BulkImportDataSet(DataSet ds)
         {
-#if DEBUG
-            DataSetDebug.DataSetToSqlScriptOutput(ds);
-#endif
-
+                #if DEBUG
+                DataSetDebug.DataSetToSqlScriptOutput(ds);
+                #endif
+            
             if (String.IsNullOrEmpty(ConnectionString))
-            {
-                throw new ArgumentException("Connection String is required.", "connectionString");
-            }
-
-            // Since each table is distinct, we should be able to load in parallel.
-            Parallel.ForEach<DataTable>(ds.Tables.Cast<DataTable>(), dt =>
-            {
-                using (SqlConnection conn = new SqlConnection(ConnectionString))
-                // note that this is not wired up to fire trigger, just FYI
-                using (var copy = new SqlBulkCopy(conn, SqlBulkCopyOptions.TableLock, null))
                 {
-                    foreach (DataColumn dc in dt.Columns.Cast<DataColumn>().Where(c => c.ColumnMapping != MappingType.Hidden))
-                    {
-                        copy.ColumnMappings.Add(new SqlBulkCopyColumnMapping(
-                            dc.ColumnName,
-                            dc.ColumnName
-                            ));
-                    }
-                    copy.DestinationTableName = dt.TableName;
-                    copy.BulkCopyTimeout = 180;
-                    conn.Open();
-                    copy.WriteToServer(dt);
-                    copy.Close();
+                    throw new ArgumentException("Connection String is required.", "connectionString");
+                }
 
-                    /*
-                    // Useful for debugging...
-                    foreach (DataRow row in dt.Rows)
+                // Since each table is distinct, we should be able to load in parallel.
+                Parallel.ForEach<DataTable>(ds.Tables.Cast<DataTable>(), dt =>
+                {
+                    using (SqlConnection conn = new SqlConnection(ConnectionString))
                     {
-                        try
+                        conn.Open();
+                        SqlTransaction transaction = conn.BeginTransaction();
+                        try //added commit and rollback as part of TWC3179-4696: MT Optimization
                         {
-                            var rows = new DataRow[] { row };
-                            copy.WriteToServer(rows);
+                            // note that this is not wired up to fire trigger, just FYI
+                            using (var copy = new SqlBulkCopy(conn, SqlBulkCopyOptions.TableLock, transaction))
+                            {
+                                foreach (DataColumn dc in dt.Columns.Cast<DataColumn>().Where(c => c.ColumnMapping != MappingType.Hidden))
+                                {
+                                    copy.ColumnMappings.Add(new SqlBulkCopyColumnMapping(
+                                        dc.ColumnName,
+                                        dc.ColumnName
+                                        ));
+                                }
+                                copy.DestinationTableName = dt.TableName;
+                                copy.BulkCopyTimeout = 180;
+                                copy.WriteToServer(dt);
+                                copy.Close();
+                                transaction.Commit();
+                                conn.Close(); //added connection close as part of TWC3179-4696: MT Optimization
+                                /*
+                                // Useful for debugging...
+                                foreach (DataRow row in dt.Rows)
+                                {
+                                    try
+                                    {
+                                        var rows = new DataRow[] { row };
+                                        copy.WriteToServer(rows);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        throw;
+                                    }
+                                }
+                                */
+                            }
                         }
                         catch (Exception ex)
                         {
-                            throw;
+                            transaction.Rollback();
+                            throw ex;
                         }
+                        finally
+                        {
+                            if (conn != null)
+                            {
+                                if (conn.State == ConnectionState.Open)
+                                {
+                                    conn.Close();
+                                }
+                                conn.Dispose();
+                            }
+                        }
+
                     }
-                    */
                 }
-            }
             );
+            
         }
 
         /// <summary>

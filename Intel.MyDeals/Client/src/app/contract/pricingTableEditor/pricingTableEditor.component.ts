@@ -438,6 +438,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
     private isDialogOpen: boolean = false;
     private isCustDivNull: boolean = false;
     private validationMessage: boolean = false;
+    private isValidationMsg: boolean = false;
+    public validationMsg: string = '';
     private curRow = [];
     private msgType: string = "";
     private spinnerMessageHeader: string = "";
@@ -1359,18 +1361,25 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         });
         return result;
     }
+    //TWC3179-4696: refresh DE post click on alert message 
+    closeAlerts() {
+        if (this.isValidationMsg) {
+            this.isValidationMsg = false;
+            this.loadPTE();
+        }
+    }
 
     async loadPTE() {
         try {
             this.isLoading = true;
             this.overlapFlexResult = [];
 
-            if (this.savedResponseWarning.length > 0){
+            if (this.savedResponseWarning.length > 0) {
                 this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning", true);
             } else {
                 this.setBusy("Loading...", "Loading the Table Editor", "Info", true);
             }
-            
+
             let PTR = await this.getPtrDetails();
             //to avoid losing warning details which comes only during save action
             if (this.savedResponseWarning && this.savedResponseWarning.length > 0) {
@@ -1382,7 +1391,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             PTR = PTE_Load_Util.setPrdColor(PTR);
             this.getTemplateDetails();
 
-            if (Object.keys(this.dropdownResponses).length ==0) {
+            if (Object.keys(this.dropdownResponses).length == 0) {
                 this.dropdownResponses = await this.getAllDrowdownValues();
             }
 
@@ -1523,6 +1532,9 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             this.setBusy("Saving your data...", "Please wait as we save your information", "Info", true);
         }
         let result = await this.pteService.updateContractAndCurrentPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((error) => {
+            //TWC3179-4696: added user failure alert for deal creation
+            this.validationMsg = 'The Deal Operation is not successful. Please try again.'; 
+            this.isValidationMsg = false; //make it true for WW47 release
             this.loggerService.error("Something went wrong", 'Error');
             console.error("PricingTableEditorComponent::saveUpdatePTEAPI::", error);
         });
