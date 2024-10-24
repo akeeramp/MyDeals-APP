@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { GridDataResult } from "@progress/kendo-angular-grid";
 import { orderBy, SortDescriptor, State } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
@@ -23,7 +22,6 @@ export class SdsDealOverridesComponent implements OnInit, OnDestroy {
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
 
-    private color: ThemePalette = "primary";
     private attr = ['Pricing Table Row', 'Deal'];
     private gridReturnsOrig = [];
     private gridReturns: GridDataResult;

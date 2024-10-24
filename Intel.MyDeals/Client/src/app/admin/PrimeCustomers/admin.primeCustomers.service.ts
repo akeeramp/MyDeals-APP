@@ -1,7 +1,7 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
-import { Countires, EndCustomer, PrimeCust_Map, PrimeCustomerDetails, RplStatusCode, UnPrimeAtrbs, UnPrimeDeals, UnifiedDealsSummary, UnifyDeal } from "./admin.primeCustomers.model";
+import { Countires, EndCustomer, PrimeCust_Map, RplStatusCode, UnPrimeAtrbs, UnPrimeDeals, UnifiedDealsSummary, UnifyDeal } from "./admin.primeCustomers.model";
 import { DynamicObj } from "../employee/admin.employee.model";
 
 @Injectable({

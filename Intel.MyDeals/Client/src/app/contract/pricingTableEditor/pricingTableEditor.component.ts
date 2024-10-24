@@ -515,31 +515,6 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 console.error('PTE::afterChange::', ex);
             }
         },
-        // afterValidate: (isValid, value, row, prop, source) => {
-        //     this.currencyValidatorMessageHandler(isValid, row, prop);
-        //     // // TWC3119-682 - Currency cells have a max numeric value
-        //     // const COLUMN_DEFINITION: PRC_TBL_Model_Field = this.pricingTableTemplates.model.fields[prop];
-        //     // if (!(COLUMN_DEFINITION.type == undefined && COLUMN_DEFINITION.format == undefined)) {
-        //     //     const CELL_TYPE: string = COLUMN_DEFINITION.type;
-        //     //     const CELL_FORMAT: string = COLUMN_DEFINITION.format;
-
-        //     //     if (CELL_TYPE === 'number' && CELL_FORMAT.toLowerCase().includes('0:c')) {
-        //     //         const COLUMN = this.hotTable.propToCol(prop);
-
-        //     //         const COMMENT_PLUGIN = this.hotTable.getPlugin('comments'); // WIP: Can probably call this outside to make more efficient
-
-        //     //         if (!isValid) {
-        //     //             COMMENT_PLUGIN.updateCommentMeta(row, COLUMN, {
-        //     //                 value: 'Not a valid number (too large).',
-        //     //                 readOnly: true
-        //     //             });
-        //     //             COMMENT_PLUGIN.showAtCell(row, COLUMN);
-        //     //         } else {
-        //     //             COMMENT_PLUGIN.removeCommentAtCell(row, COLUMN, true);
-        //     //         }
-        //     //     }
-        //     // }
-        // },
         afterDocumentKeyDown: (event) => {
             this.afterDocumentKeyDown(event);
         },
@@ -2038,12 +2013,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                                         this.validMisProd = denBandData.validMisProds;
                                         this.generateHandsonTable(denBandData.finalPTR);
                                     }
-                                    //handonsontable takes time to bind the data to the so putting this logic.
-                                    // setTimeout(() => {
-                                    //     this.isLoading = false;
-                                    //     this.setBusy("", "", "", false);
-                                    // }, 2000);
-
+                                    
                                 } else if (deletedProds && deletedProds.length > 0) {
                                     let deletedRowIdList = distinct(deletedProds, 'DC_ID').map(item => item['DC_ID']);
                                     each(deletedRowIdList, (rowId) => {

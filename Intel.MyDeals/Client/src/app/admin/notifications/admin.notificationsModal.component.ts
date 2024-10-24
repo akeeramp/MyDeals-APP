@@ -18,7 +18,6 @@ export class notificationsModalDialog {
     }
 
     private role = (<any>window).usrRole;
-    private wwid = (<any>window).usrWwid;
     public loading = true;
     public emailTable: any = "<b>Loading...</b>";
 

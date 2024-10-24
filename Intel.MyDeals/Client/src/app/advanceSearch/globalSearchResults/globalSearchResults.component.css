@@ -70,11 +70,7 @@
 }
 
     .customBtn .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
-        font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif !important;
-        /*font-size: 19px !important;
-        line-height: 1.33333 !important;
-        font-weight: normal !important;
-        padding: 0 12px !important*/
+        font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif !important;        
     }
 
 @media (max-width:970px) {

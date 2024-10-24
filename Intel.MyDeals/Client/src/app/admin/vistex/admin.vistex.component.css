@@ -7,30 +7,6 @@
     margin-left: 37%;
 }
 
-/*.reportLink {
-    font-size: 13px;
-}
-
-.filterInfo {
-    width: 450px;
-    background: rgba(0, 0, 0, 0.69);
-    border: 2px solid #8c8c8c;
-    position: fixed;
-    top: 100px;
-    height: 120px;
-    color: #fff;
-    padding: 5px;
-}
-
-.showMore {
-    padding: 3px;
-    background: #2196f3;
-    float: left;
-    margin-top: 10px;
-    cursor: pointer;
-    color: #FFF;
-}*/
-
 .tableHeaderVistex > thead:first-child > tr:first-child > th {
     background: #FFFFFF;
     border-right: 1px solid #f2f2f2;
@@ -40,47 +16,3 @@
 .tableHeaderVistex {
     border: 1px solid #f2f2f2;
 }
-
-/*.ui-tooltip {
-    white-space: pre-line;
-}
-
-.ui-tooltip-content {
-    white-space: pre-line;
-}
-
-.mainBodyStyle {
-    position: absolute;
-    top: 84px;
-    bottom: 15px;
-    left: 0;
-    right: 0;
-    overflow: scroll !important;
-}
-
-.profiseePaddingTop{
-    padding-top:40px;
-}
-
-.profiseeMessage {
-    color: #FC4C02
-}
-
-.profiseeTools {
-    margin-top: 15px;
-}
-
-.profiseeFontStyle {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-#profiseeCust {
-    height: 35px;
-    font-size: 12px;
-    width: 100%;
-}
-
-#migrate {
-    float: left;
-}*/

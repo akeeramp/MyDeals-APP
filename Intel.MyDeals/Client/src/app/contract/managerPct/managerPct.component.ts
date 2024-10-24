@@ -68,21 +68,13 @@ export class ManagerPctComponent implements OnInit, OnDestroy {
     userRole = ""; canEmailIcon = true;
     isPSExpanded = []; isPTExpanded = {};
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
-    private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
-    private CAN_VIEW_EXPORT = true;
-    private CAN_VIEW_ALL_DEALS = true;
     private usrRole;
     private isSuper = true;
     private superPrefix = "";
     private extraUserPrivsDetail: Array<string> = [];
-    private contractType = "Contract";
     private selectedTab = 0;
-    private selectedModel;
     private pctFilter = "";
-    private isSummaryHidden = false;
-    private context = {};
     private needToRunPct = false;
-    private dealPtIdDict = {};
     private CostTestGroupDetails = {};
     public mySelection = [];
     private gridResult = {};

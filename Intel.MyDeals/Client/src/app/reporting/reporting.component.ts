@@ -153,7 +153,6 @@ export class ReportingComponent implements OnDestroy{
   private numberOfRecrods: number = 10;
   private masterData: any;
   private ReportDealType :Array<any>=[]; ReportName:Array<any>=[];ReportSummary:Array<any>=[];ReportDashboardData:Array<any>=[];ReportLogDeatils:Array<any>=[];
-  private loadMoreRecords: any;
   private btnText: string = "Show more ";
   private isRecordAvailable: boolean = false;
   private getReportCatagory: any;

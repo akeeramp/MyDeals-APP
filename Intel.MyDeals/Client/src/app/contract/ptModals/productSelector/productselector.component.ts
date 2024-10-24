@@ -135,9 +135,6 @@ export class ProductSelectorComponent implements OnDestroy {
     private showTree: boolean = false;
     private gridColumnsSuggestion: Array<gridCol> = ProdSel_Util.gridColsSuggestion(this.isGA);
     private gridColumnsProduct: Array<gridCol> = ProdSel_Util.gridColProduct(this.isGA);
-    private selectAllState: SelectAllCheckboxState = 'unchecked';
-    private prdSelection: Array<any> = [];
-    private prdSelectionDisp: string = '';
     private prdSelectionkey: string = 'DEAL_PRD_NM';
     private userInput: string = "";
     private showSuggestions = false;

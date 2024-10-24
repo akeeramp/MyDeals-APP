@@ -70,68 +70,6 @@
     border: 1px solid rgba(230,230,230,.40)
 }
 
-/*.txtOff {
-    text-align: right !important;
-    padding-right: 3px
-}
-
-.txtOn {
-    text-align: left;
-    padding-left: 2px
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 24px;
-    border: 1px solid #e7e7e8;
-    margin-left: 05px
-}
-
-    .switch input {
-        display: none
-    }
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #1a3e6f;
-    -webkit-transition: .4s;
-    transition: .4s
-}
-
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 14px;
-        width: 26px;
-        left: 4px;
-        bottom: 4px;
-        background-color: #e7e7e8;
-        -webkit-transition: .4s;
-        transition: .4s
-    }
-
-input:checked + .slider {
-    background-color: #00AEEF
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 1px #00AEEF
-}
-
-input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-    background-color: #ffffff
-}*/
-
 #ExcldGrid.k-grid {
     height: calc(85vh - 250px) !important;
     overflow: hidden;
@@ -162,168 +100,6 @@ input:checked + .slider:before {
     background-color: #00AEEF
 }
 
-/*.checkbox-custom + .checkbox-custom-label:before {
-    content: '';
-    background: #fff;
-    border: 1.5px solid #eee;
-    border-radius: 4px;
-    display: inline-block;
-    vertical-align: middle;
-    width: 16px;
-    height: 14px;
-    padding: 2px;
-    text-align: center
-}
-
-.checkbox-custom:checked + .checkbox-custom-label:before {
-    content: 'X';
-    color: #ffffff;
-    padding: 0 2px 4px 3px;
-    font-size: 14px
-}
-
-.checkbox-custom:hover + .checkbox-custom-label:before {
-    border: 1.5px solid #01AEEF
-}
-
-.ss-loading-panel.ss-Info {
-    height: auto !important;
-    margin-top: 200px !important;
-    margin-left: 40% !important
-}*/
-
-/*.contractHeaderGrpExclusion {
-    word-wrap: break-word
-}
-
-.displayNone {
-    display: none !important
-}
-
-#ExcldGrid > .k-grid-content > table > tbody > tr:nth-child(1) {
-    display: none
-}
-
-#ExcldGrid > .k-grid-content > table > tbody > tr:nth-child(2) > td {
-    border: 1px solid rgba(230,230,230,.40)
-}
-
-.txtOff {
-    text-align: right !important;
-    padding-right: 3px
-}
-
-.txtOn {
-    text-align: left;
-    padding-left: 2px
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 24px;
-    border: 1px solid #e7e7e8;
-    margin-left: 05px
-}
-
-    .switch input {
-        display: none
-    }
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #1a3e6f;
-    -webkit-transition: .4s;
-    transition: .4s
-}
-
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 14px;
-        width: 26px;
-        left: 4px;
-        bottom: 4px;
-        background-color: #e7e7e8;
-        -webkit-transition: .4s;
-        transition: .4s
-    }
-
-input:checked + .slider {
-    background-color: #00AEEF
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 1px #00AEEF
-}
-
-input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-    background-color: #ffffff
-}
-
-#ExcldGrid.k-grid {
-    height: calc(85vh - 250px) !important;
-    overflow: hidden;
-    width: 100%
-}
-
-.k-grid .k-alt {
-    background-color: #ffffff
-}
-
-#ExcldGrid.k-grid .k-grid-content {
-    height: calc(85vh - 290px) !important
-}
-
-#ExcldGrid tr.tr-disabled td span.ng-binding, #ExcldGrid tr.tr-disabled td {
-    color: #aaaaaa
-}
-
-#ExcldGrid tr.tr-disabled {
-    background-color: #f4f4f4
-}
-
-#ExcldGrid tr.tr-current td span.ng-binding, #ExcldGrid tr.tr-current td {
-    color: #FFFFFF
-}
-
-#ExcldGrid tr.tr-current {
-    background-color: #00AEEF
-}
-
-.checkbox-custom + .checkbox-custom-label:before {
-    content: '';
-    background: #fff;
-    border: 1.5px solid #eee;
-    border-radius: 4px;
-    display: inline-block;
-    vertical-align: middle;
-    width: 16px;
-    height: 14px;
-    padding: 2px;
-    text-align: center
-}
-
-.checkbox-custom:checked + .checkbox-custom-label:before {
-    content: 'X';
-    color: #ffffff;
-    padding: 0 2px 4px 3px;
-    font-size: 14px
-}
-
-.checkbox-custom:hover + .checkbox-custom-label:before {
-    border: 1.5px solid #01AEEF
-}*/
-
 .exclude-filter-style .opUiContainer.md.k-grid td {
     white-space: nowrap !important
 }
@@ -331,22 +107,6 @@ input:checked + .slider:before {
 .exclude-filter-style .childGrid > .k-grid-content {
     height: auto !important
 }
-
-/*tr.blue, tr.k-alt.blue {
-    background-color: #B9D6E5 !important
-}
-
-.k-grid tbody tr.blue:hover {
-    background-color: #B9D6E5 !important
-}
-
-tr.grey, tr.k-alt.grey {
-    background-color: #AEAEAE !important
-}
-
-.k-grid tbody tr.grey:hover {
-    background-color: #AEAEAE !important
-}*/
 
 .group-Excl-grid .medIcon {
     font-size: 18px
@@ -540,12 +300,6 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
     background: white
 }
 
-/*.ss-loading-panel.ss-Info {
-    height: auto;
-    margin-top: 20px !important;
-    margin-left: 0 !important
-}*/
-
 .grouping_grid_h {
     height: calc(100vh - 233px) !important
 }
@@ -558,35 +312,6 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
 .k-grid.view_popup_height {
     height: calc(100vh - 591px)
 }
-
-/*.extra_box_padding mat-dialog-container {
-    padding: 0 !important
-}
-
-.extra_box_padding th.k-group-cell.k-header {
-    background-color: #e7e7e8 !important;
-    border-right: 1px solid #e6e6e6
-}
-
-.extra_box_padding .k-grid-filter .k-icon.k-i-filter {
-    color: #00AEEF !important;
-    opacity: 1;
-    font-size: 14px
-}
-
-    .extra_box_padding .k-grid-filter .k-icon.k-i-filter:hover {
-        color: #0071c5 !important
-    }
-
-.extra_box_padding mat-dialog-container kendo-grid kendo-grid-list table tbody tr.k-grid-norecords td {
-    height: 383px;
-    width: 792px;
-    max-width: 792px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #fff !important
-}*/
 
 .excl-DG-modal.cdk-overlay-pane {
     max-width: 95vw !important;
@@ -688,11 +413,6 @@ kendo-grid.exclude-filter-style kendo-grid-list table tr td.k-detail-cell table 
 .grping-exclusion-borderstyle .k-grid .k-grid-content {
     overflow: overlay !important
 }
-
-/*.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
-    opacity: 1;
-    pointer-events: none;
-}*/
 
 .excludeGroupLoadingSpinners .spinner {
     margin: 10px auto;

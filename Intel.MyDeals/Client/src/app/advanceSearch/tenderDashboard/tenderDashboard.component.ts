@@ -18,8 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { contractStatusWidgetService } from "../../dashboard/contractStatusWidget.service";
 import { emailModal } from "../../contract/contractManager/emailModal/emailModal.component";
 import { constantsService } from "../../admin/constants/admin.constants.service";
-import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
-import { Observable, Subject, forkJoin } from "rxjs";
+import { Subject, forkJoin } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { AttributeBuilder } from "../../core/attributeBuilder/attributeBuilder.component";
 

@@ -87,7 +87,6 @@ export class iCostProductsComponent implements PendingChangesGuard, OnDestroy{
     private ProductVertical: any = [];
     private origProductVertical: any = [];
     private selectedVertical = '';
-    private defaultVertical = { VERTICAL: "", VERTICAL_SID: "" };
     private costTestProductType = [{ 'name': 'L1' }, { 'name': 'L2' }];
     private conditionCriteria = [{ 'name': 'Include' }, { 'name': 'Exclude' }];
     private pctRule =  {

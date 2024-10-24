@@ -24,7 +24,6 @@ export class GlobalSearchResultsComponent implements OnDestroy {
     @Output() getWindowWidth = new EventEmitter;
     @Output() isWindowOpen = new EventEmitter;
     private resultTake = 5;
-    private viewMoreVisible = true;
     public isLoading: boolean;
     private readonly opTypes: Array<any> = [
         { value: "ALL", label: "All" },

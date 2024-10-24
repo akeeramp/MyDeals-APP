@@ -108,15 +108,11 @@ export class dealEditorComponent implements OnDestroy{
     public voltLength;
     private isBusyShowFunFact: boolean = true;
     private numSoftWarn = 0;
-    private ecapDimKey = "20___0";
-    private kitEcapdim = "20_____1";
-    private dim = "10___";
     private _gridResult: BehaviorSubject<any[]> = new BehaviorSubject([]);
     private gridData: GridDataResult;
     public isLoading = false;
     private isTenderContract = false;
     private dropdownResponses: any = {};
-    private EndCustDropdownResponses: any = null;
     private enableSelectAll: boolean = false;
     private enableDeselectAll: boolean = false;
     private isDataLoading: boolean = false;

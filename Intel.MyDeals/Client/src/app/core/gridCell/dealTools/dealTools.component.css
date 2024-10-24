@@ -194,47 +194,6 @@ textarea.textAreaDesigns {
         color: #C4D600
     }
 
-/*#notesDialog {
-    width: 100%;
-    height: 100%;
-    padding: 0
-}
-
-    #notesDialog div {
-        padding: 0 8px
-    }
-
-        #notesDialog div textarea {
-            width: 440px;
-            height: 200px
-        }
-
-.custom-deal-tools .k-dialog .notesDialog.k-content textarea {
-    width: 450px;
-    height: 250px
-}
-
-.custom-deal-tools .k-dialog .notesDialog.k-content .opUiContainer {
-    margin-top: -30px
-}
-
-.k-dialog .promptUserDialog {
-    text-align: center;
-    padding: 10px 0 0 0
-}
-
-    .k-dialog .promptUserDialog h4 {
-        color: #003C71;
-        font-size: 18px;
-        font-weight: 600;
-        margin-top: 0
-    }
-
-    .k-dialog .promptUserDialog p {
-        font-size: 12px;
-        padding: 10px 20px
-    }
-    */
 .custom-deal-tools .rotate90 {
     -ms-transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
@@ -343,15 +302,6 @@ textarea.textAreaDesigns {
             color: #C4D600
         }
 
-/*.delete-attach-icon {
-    font-size: 16px;
-    cursor: pointer
-}
-
-    .delete-attach-icon:hover {
-        text-decoration: none
-    }*/
-
 .tools-parent {
     display: flex;
     align-items: center;
@@ -442,8 +392,6 @@ kendo-dialog.toolsartho-css .k-dialog-buttongroup {
     border-color: rgba(0,0,0,.2);
     box-shadow: 1px 1px 7px 1px rgba(128,128,128,.2);
     background-color: #fff;
-    /*left: 691px !important;
-    top: 350px !important;*/
     position: fixed !important; 
     z-index: 10000 !important;
 }
@@ -481,14 +429,6 @@ kendo-dialog.dt-on-hold .k-window {
     kendo-dialog.dt-on-hold .k-window kendo-dialog-actions {
         border-radius: 0
     }
-
-/*.myLoader[_ngcontent-prg-c14] {
-    min-height: 200px;
-    width: 320px;
-    position: absolute;
-    left: 45%;
-    top: 200px
-}*/
 
 .custom-deal-tools .k-dialog-popup-design .k-window kendo-dialog-actions .cancel-btn-pop-up {
     margin-left: 0px;

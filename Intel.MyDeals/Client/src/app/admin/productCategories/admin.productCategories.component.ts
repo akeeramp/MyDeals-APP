@@ -27,7 +27,6 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
     }
     private readonly destroy$ = new Subject();
     private isLoading = true;
-    private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
     private info = true;
     private gridResult: Array<any>;

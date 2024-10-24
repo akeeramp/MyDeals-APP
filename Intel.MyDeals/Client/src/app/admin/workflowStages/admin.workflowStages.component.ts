@@ -40,9 +40,7 @@ export class adminWorkflowStagesComponent implements PendingChangesGuard, OnDest
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
     private isLoading = true;
-    private errorMsg = "";
-    private dataSource: any;
-    private gridOptions: any;
+    private errorMsg = "";    
     private allowCustom = true;
     private color: ThemePalette = "primary";
 

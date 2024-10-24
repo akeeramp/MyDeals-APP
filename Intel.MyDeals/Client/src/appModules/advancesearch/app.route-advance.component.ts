@@ -8,7 +8,6 @@ import { authGuard } from "./../../app/shared/util/guardProtection";
 
 //added for security check
 import { SecurityResolver } from "../../app/shared/security.resolve";
-import { PendingChangesGuard } from "../../app/shared/util/gaurdprotectionDeactivate";
 
 export const routesAdvance: Routes = [
     //search routes

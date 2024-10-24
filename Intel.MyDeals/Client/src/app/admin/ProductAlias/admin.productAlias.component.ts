@@ -2,7 +2,6 @@
 import { productAliasService } from "./admin.productAlias.service";
 import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { Product_Alias_Map } from "./admin.productAlias.model";
-import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
@@ -27,11 +26,7 @@ export class adminProductAliasComponent implements PendingChangesGuard, OnDestro
     @ViewChild("partDropDown") private partDdl;
     isDirty = false;
     private isLoading = true;
-    private errorMsg = "";
-    private dataSource;
-    private gridOptions;
-    private allowCustom = true;
-    private color: ThemePalette = "primary";
+    private errorMsg = "";    
 
     public gridResult = [];
     public type = "numeric";

@@ -59,22 +59,6 @@
     margin-left: 15px
 }
 
-/*.notes {
-    font-size: 14px;
-    margin-left: 40px;
-    padding: 0
-}
-
-.bluebold {
-    color: #0071c5;
-    font-weight: 600
-}
-
-.redbold {
-    color: red;
-    font-weight: 700
-}*/
-
 .footerLegalException {
     position: fixed;
     bottom: 50px;
@@ -107,10 +91,6 @@
     padding-top: 5px;
     cursor: pointer
 }
-
-/*.align-padding {
-    padding-left: 4px !important
-}*/
 
 .cancel-btn-ExceptionLegal {
     margin-top: -49px;

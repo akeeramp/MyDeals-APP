@@ -10,7 +10,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { adminamendmentExceptioncomponent } from "./admin.amendmentException.component";
 import { admincompareExceptionscomponent } from "./admin.compareExceptions.component";
 import { GridUtil } from "../../contract/grid.util";
-import { DatePipe, formatDate } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { adminDownloadExceptionscomponent } from "./admin.downloadExceptions.component"
 import { adminviewDealListcomponent } from "./admin.viewDealList.component";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";

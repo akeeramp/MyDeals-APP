@@ -1,6 +1,6 @@
 import { Component,Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DataStateChangeEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
+import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 
 @Component({
@@ -24,24 +24,6 @@ export class pctGroupModal {
             filters: [],
         }
     }
-    private pageSizes: PageSizeItem[] = [
-        {
-            text: "10",
-            value: 10
-        },
-        {
-            text: "25",
-            value: 25
-        },
-        {
-            text: "50",
-            value: 50
-        },
-        {
-            text: "100",
-            value: 100
-        }
-    ];
     public gridData: GridDataResult; 
     public curData: any;
     public dataItem:any;

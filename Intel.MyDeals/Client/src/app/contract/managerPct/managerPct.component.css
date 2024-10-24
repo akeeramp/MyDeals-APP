@@ -195,10 +195,6 @@
     border: 0 solid #ccc
 }
 
-/*    .new-view .tbl-header {
-        margin-top: 10px
-    }*/
-
 .new-view .k-tabstrip-wrapper {
     border-bottom: 0 solid #eeeeee
 }
@@ -713,10 +709,7 @@ kendo-tabstrip.new-allDeals.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.
 }
 
 .new-view .sum-filter-bar {
-    border: 0 solid #e4e4e4;
-    /***/
-    /*padding: 38px 2px;*/
-    /***/
+    border: 0 solid #e4e4e4;    
     border-left: 1px solid #e4e4e4;
     border-right: 1px solid #e4e4e4;
     background-color: #eeeeee;

@@ -42,7 +42,6 @@ export class CopyContractComponent implements OnDestroy {
     private copyCntrctList: any;
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
-    //public copyLoading = true;
     private spinnerMessageHeader = "Loading contracts";
     private spinnerMessageDescription = "Please wait while we load your contracts.";
 
@@ -117,7 +116,6 @@ export class CopyContractComponent implements OnDestroy {
             this.copyCntrctList = response;
             this.gridData = process(this.copyCntrctList, this.state);
             this.orgGridData = process(this.copyCntrctList, this.state);
-            //this.isCopyCntrctListLoaded = true;
             this.copyLoading = false;
         }, (error) => {
             if (error.status == 400) {

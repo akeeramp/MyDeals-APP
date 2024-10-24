@@ -48,10 +48,6 @@ div.overFlowWidget>div.row {
     color: white !important
 }
 
-/*.widgetFull:hover a:hover {
-            color: #00aeef !important
-        }*/
-
 .btn-icons {
     color: white;
     margin-left: 12px;
@@ -123,10 +119,6 @@ gridster {
     padding: 0 !important
 }
 
-/*.k-upload .k-dropzone .k-dropzone-hint {
-    visibility: collapse !important
-}*/
-
 .dashboard-kendo-window {
     z-index: 10001 !important
 }
@@ -175,19 +167,6 @@ gridster {
     color: #0071c5;
     text-decoration: none
 }
-
-/*.contract-correction-upload.k-upload .k-upload-files .k-upload-action {
-    border: none !important;
-    background-color: transparent !important;
-    padding: 0px !important;
-}
-
-.contract_manager_dialog .k-window.k-dialog {
-    border-radius: 0px !important;
-    border-top: 0px !important;
-    border-right: 0px !important;
-    border-left: 0px !important;
-}*/
 
 .add-widget-link:hover {
     color: #004579;

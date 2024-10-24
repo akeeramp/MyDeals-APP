@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy, ViewEncapsulation } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent } from "@progress/kendo-angular-grid";
 import { process, State, distinct, CompositeFilterDescriptor, FilterDescriptor } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { allDealsService } from "./allDeals.service";
@@ -42,7 +41,6 @@ export class allDealsComponent implements OnDestroy {
     private readonly destroy$ = new Subject();
     private isLoading = true;
     private loadMessage: string = "Loading Deals";
-    private isTenderContract = false;
     public groups: any =[];
     public selectedTab: any;
     public columns: any = [];
@@ -55,8 +53,6 @@ export class allDealsComponent implements OnDestroy {
     private gridResult = [];
     private gridData: GridDataResult;
     public exportFileName: string;
-    private color: ThemePalette = 'primary';
-    private curPricingTable: any = {};
     private dealType: string;
     wrapEnabled = false;
     Ecap_Filter_Array :any =[];

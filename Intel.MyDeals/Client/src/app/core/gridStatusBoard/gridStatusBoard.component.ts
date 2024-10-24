@@ -1,6 +1,6 @@
 ﻿import { Input, Component, ViewChild, OnInit, OnChanges, EventEmitter, Output, OnDestroy } from "@angular/core"
 import { GridComponent, GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
-import { process, State, distinct } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
+import { process, State } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
 import { DatePipe } from "@angular/common";
 import { each, sortBy, uniq, pluck } from 'underscore';
 import { Subject } from "rxjs";

@@ -396,7 +396,7 @@
     .productCorrectParent .productpath.breadcrumb {
         padding: 0px;
         margin-bottom: 0px;
-        /*padding-bottom: 10px;*/ padding-bottom: 0px;
+        padding-bottom: 0px;
         padding-left: 5px;
     }
 

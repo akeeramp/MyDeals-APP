@@ -6,8 +6,6 @@ import { GridDataResult, DataStateChangeEvent} from "@progress/kendo-angular-gri
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { ActivatedRoute } from "@angular/router";
-import { ExcelExportData } from "@progress/kendo-angular-excel-export";
-import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Observable } from "rxjs";
 import { Subject } from "rxjs";
@@ -28,7 +26,6 @@ export class adminPushDealsToVistexComponent implements PendingChangesGuard, OnD
     private readonly destroy$ = new Subject();
     private color: ThemePalette = 'primary';
     private pushDealsToVistexForm: FormGroup;
-    private loadMessage = "Admin Customer Loading..";
     private Results: PushDealstoVistexResults[] = [];
     private UpdCnt = { 'all': 0, 'error': 0, 'success': 0 };
     private showResults = false;

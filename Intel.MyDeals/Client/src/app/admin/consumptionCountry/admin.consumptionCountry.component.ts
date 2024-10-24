@@ -2,7 +2,6 @@
 import { consumptionCountryService } from "./admin.consumptionCountry.service";
 import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { consumption_Country_Map } from "./admin.consumptionCountry.model";
-import { ThemePalette } from "@angular/material/core";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import {
@@ -32,10 +31,7 @@ export class adminConsumptionCountryComponent implements OnDestroy {
     private readonly destroy$ = new Subject();
     isDirty = false;
     private isLoading = true;
-    private dataSource: any;
-    private gridOptions: any;
     private allowCustom = true;
-    private color: ThemePalette = "primary";
 
     public gridResult: Array<any> = [];
     public type = "numeric";

@@ -18,7 +18,6 @@ export class notificationsSettingsDialog {
         public dialogRef: MatDialogRef<notificationsSettingsDialog>, private notificationsSvc: notificationsService, private loggerSvc: logger) { }
 
     private role = (<any>window).usrRole;
-    private wwid = (<any>window).usrWwid;
     public loading = true;
     private color: ThemePalette = 'primary';
     public subScriptions;

@@ -7,7 +7,7 @@ import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { Observable, Subject, forkJoin } from "rxjs";
-import { each, isEmpty, isNull, isUndefined } from 'underscore';
+import { each } from 'underscore';
 
 import { logger } from "../../shared/logger/logger";
 import { ContractDetailsService } from "./contractDetails.service";

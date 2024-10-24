@@ -3,7 +3,7 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { process, State, distinct } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
 import { logger } from "../../shared/logger/logger";
 import { ValidateVistexR3ChecksService } from './admin.validateVistexR3Checks.service';
-import { any, pluck } from 'underscore';
+import { pluck } from 'underscore';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Observable } from "rxjs";
@@ -136,9 +136,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
             this.DealstoSend = this.DealstoSend.replace(/ |\n|\r/g, "");
              if (this.DealstoSend.slice(-1) == ',') {
                 this.DealstoSend = this.DealstoSend.replace(/,+$/g, "");
-            }
-            //Finding total Deal Ids present in DealstoSend string
-            //sentDeals = this.DealstoSend.split(',').length;
+            }            
         }
 
         // Check that all fields have data before sending

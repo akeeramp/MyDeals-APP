@@ -141,13 +141,6 @@ kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hov
     display: inline-flex !important
 }
 
-
-/*.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],
-.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"] {
-    border-bottom: 3px solid rgb(0, 113, 197) !important;
-    border-bottom-color: rgb(0, 113, 197) !important
-}*/
-
 kendo-grid.file-attachment-contract kendo-grid-list .k-grid-content {
     overflow: overlay;
 }
@@ -513,7 +506,6 @@ kendo-grid.icon-changes table tr td.k-detail-cell table tr td a.k-plus:focus:bef
     font-weight: 200 !important;
     font-style: normal !important;
     background-color: #fafafa !important;
-    /* margin-top: 28px !important */
 }
 
 .advancedSearch:hover,
@@ -1926,15 +1918,6 @@ kendo-window.flexOverlapProducts {
     margin-left: 5px;
 }
 
-
-/*kendo-grid#manageFilterStyle .k-grid-content-locked {
-    height: auto !important;
-}
-
-.cdk-virtual-scroll-content-wrapper {
-    position: unset !important;
-}*/
-
 kendo-grid#manageFilterStyle tr.k-grid-norecords {
     height: 38px !important;
 }
@@ -2105,11 +2088,6 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link .k-c
 kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link:hover {
     background: transparent !important
 }
-
-
-/*kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter {
-    color: #808080
-}*/
 
 kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter:hover {
     color: #00aeef !important;
@@ -2409,7 +2387,6 @@ kendo-editor#color_c_button .k-dialog-wrapper .k-dialog kendo-dialog-actions.k-d
 kendo-editor#color_c_button .k-dialog-wrapper .k-dialog kendo-dialog-actions.k-dialog-buttongroup {
     clear: both;
     background-color: #fafafa;
-    /* text-align: right; */
     border-style: solid;
     position: relative;
     padding: 0.6em;
@@ -2488,11 +2465,6 @@ button.warn-custom:hover {
     white-space: nowrap;
     text-overflow: ellipsis
 }
-
-
-/*#dealDtl {
-    padding-left: 5px
-}*/
 
 a.dealHoverLink:hover {
     color: #1a3e6f !important;

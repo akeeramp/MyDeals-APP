@@ -1,21 +1,10 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, Inject, ViewEncapsulation, OnDestroy } from "@angular/core"
-import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
-import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { dbAuditToolsService } from "./admin.dbAuditTools.service";
-import { forEach } from 'underscore';
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
-//export class IButton {
-//    ENV_NM: string;
-//    ENV_TAG: string;
-//    DB_TYPE: string;
-//    DB_OBJ: string;
-//    DB_DATA: string;
-//    selected: boolean = false;
-//}
 export class IButton  {
     text: string;
     data: string;
@@ -40,7 +29,7 @@ export class DbAuditToolsCompareModalComponent implements OnDestroy {
     private isSideBySide = true;
     private numEnvs = 0;
     private buttonEnvs: IButton[] = [];
-    private editorOptions = { theme: 'vs-dark', language: 'sql' };
+    //private editorOptions = { theme: 'vs-dark', language: 'sql' };
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
 
@@ -77,7 +66,6 @@ export class DbAuditToolsCompareModalComponent implements OnDestroy {
     }
 
     public selectedChange(e: boolean, btn: IButton): void {
-        //btn.selected = !btn.selected;
         btn.selected = e;
         if (this.myTextareaLeft != "" || this.myTextareaRight != "") {
             this.myTextareaLeft = "";
@@ -132,14 +120,6 @@ export class DbAuditToolsCompareModalComponent implements OnDestroy {
             this.singleTextViewOnly();
         }
 
-        //this.jsonData.forEach(obj => {
-        //    this.buttonEnvs.push(obj)
-        //});
-
-        //this.jsonData.forEach(obj => {
-        //    let x = '{ text: ' + obj.ENV_NM + ', data: ' + obj + ', selected: false }';
-        //    this.buttonEnvs.push(x);
-        //});
         this.buttonEnvs = this.jsonData.map(o => {
             return { text: o.ENV_NM, data: o, selected: false };
         });
@@ -147,21 +127,7 @@ export class DbAuditToolsCompareModalComponent implements OnDestroy {
         if (this.numEnvs == 2) { //alert("Running auto-comparisons"); }
             if (this.numEnvs > 2) {
                 //alert("Must pick");
-            }
-
-            //this.dbAuditToolsSVC.GetObjText(this.jsonData).subscribe((result: Array<any>) => {
-            //    let ReturnData = JSON.parse(result.toString()).DATA.sort((a, b) => (a.LineNbr - b.LineNbr));
-            //    //let SortedReturnData = ReturnData.DATA.sort((a, b) => (a.LineNbr - b.LineNbr));
-            //    let tempTextareaData = "";
-            //    for (let LineNbr in ReturnData) {
-            //        tempTextareaData = tempTextareaData.concat(ReturnData[LineNbr].LineText);
-            //    }
-
-            //    this.myTextarea = tempTextareaData;
-
-            //}, (error) => {
-            //    this.loggerSvc.error('Error in retreiving DB Object Text for ' + this.procName + ' - ' + this.envName, error);
-            //});
+            }            
         }
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component

@@ -1,16 +1,13 @@
 ﻿import { Component, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
-import { orderBy, process, SortDescriptor, State } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
-import { ExcelExportData } from "@progress/kendo-angular-excel-export";
-import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { GridDataResult } from "@progress/kendo-angular-grid";
+import { orderBy, SortDescriptor } from "@progress/kendo-data-query";
 import { MatDialog } from '@angular/material/dialog';
 import { dbAuditToolsService } from "./admin.dbAuditTools.service";
 import { constantsService } from "../constants/admin.constants.service";
 import { DbAuditToolsViewModalComponent } from './admin.dbAuditToolsViewModal.component';
 import { DbAuditToolsCompareModalComponent } from './admin.dbAuditToolsCompareModal.component';
-import { forEach, uniq } from 'underscore';
+import { uniq } from 'underscore';
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { DbAuditDataPacket, DbAuditObjTextRequest, DbObjs, EnvsDataMap, GridReturnsOrig, ObjsDataMap } from "./admin.dbAuditTools.model";
@@ -56,22 +53,7 @@ export class dbAuditToolsComponent implements OnDestroy {
 
     public ColumnHeader = [];
     public selectionIDs = [];
-    public myGridData: GridDataResult;
-    public state: State = {
-        //skip: 0,
-        //take: 25,
-        //group: [],
-        //filter: {
-        //    logic: "and",
-        //    filters: [
-        //        {
-        //            field: "ACTV_IND",
-        //            operator: "eq",
-        //            value: true
-        //        },
-        //    ],
-        //}
-    };
+    public myGridData: GridDataResult;    
 
     accessAllowed = true; // Default to false to prevent unauthorized users
 

@@ -2252,7 +2252,6 @@
     <TypeScriptCompile Include="Client\src\app\admin\workFlow\admin.workFlow.service.ts" />
     <TypeScriptCompile Include="Client\src\app\app-root.component.ts" />
     <TypeScriptCompile Include="Client\src\app\app.module.ts" />
-    <TypeScriptCompile Include="Client\src\app\app.route.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\allDeals\allDeals.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\allDeals\allDeals.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractDetails\contractDetails.component.ts" />
@@ -2425,8 +2424,6 @@
     <TypeScriptCompile Include="Client\src\app\advanceSearch\tenderDashboard\tenderDashboard.component.ts" />
     <TypeScriptCompile Include="Client\src\app\advanceSearch\tenderDashboard\tenderDashboard.service.ts" />
     <TypeScriptCompile Include="Client\src\app\advanceSearch\tenderDashboard\tenderDashboard_config.ts" />
-    <TypeScriptCompile Include="Client\src\load-libs.ts" />
-    <TypeScriptCompile Include="Client\src\main.ts" />
     <TypeScriptCompile Include="Client\src\polyfills.ts" />
   </ItemGroup>
   <ItemGroup>

@@ -2,17 +2,6 @@
     font-size: 13px
 }
 
-/*.filterInfo {
-    width: 450px;
-    background: rgba(0,0,0,.69);
-    border: 2px solid #8c8c8c;
-    position: fixed;
-    top: 100px;
-    height: 120px;
-    color: #fff;
-    padding: 5px
-}*/
-
 .showMoreCult {
     padding: 3px;
     background: #2196f3;
@@ -32,28 +21,10 @@
     border: 1px solid #f2f2f2
 }
 
-/*.mainBodyStyle {
-    position: absolute;
-    top: 84px;
-    bottom: 15px;
-    left: 0;
-    right: 0;
-    overflow: scroll !important
-}*/
-
 div.overFlowDash {
     width: auto;
     height: auto !important
 }
-
-/*.k-chart-tooltip-wrapper .k-animation-container {
-    position: absolute !important;
-    top: 0 !important;
-    width: 100px;
-    border: red solid 2px;
-    background-color: yellow;
-    color: blue
-}*/
 
 .kendocontainer {
     width: 100%;

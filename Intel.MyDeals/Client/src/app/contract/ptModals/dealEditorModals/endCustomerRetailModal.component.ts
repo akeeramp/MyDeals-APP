@@ -26,7 +26,6 @@ export class endCustomerRetailModalComponent implements OnDestroy {
     private ecOptionsFlag = true;
     private spinnerMessageHeader = "Loading...";
     private spinnerMessageDescription = "Loading the End Customer/Retail information.";
-    private isBusyShowFunFact = true;
     private isAdmin: any;
     private endCustomer = "END_CUSTOMER_RETAIL"
     private endCustomerRetailPopUpModal = this.data.item;
@@ -35,7 +34,6 @@ export class endCustomerRetailModalComponent implements OnDestroy {
     private colName: any;
     private embValidationMsg = 'Intel is currently unable to approve deals with the selected End Customer Country/Region. Please verify the agreement.';
     private isEndCustomer: boolean;
-    private isEmptyList = false;
     private endCustOptions: any;
     private endCustOptionsWithOutAny: any;
     private countries: any;

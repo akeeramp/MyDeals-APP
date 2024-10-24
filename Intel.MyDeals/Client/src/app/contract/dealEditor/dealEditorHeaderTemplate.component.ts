@@ -1,4 +1,4 @@
-﻿import { Component, Input, ViewEncapsulation, OnInit, OnChanges } from '@angular/core';
+﻿import { Component, Input, ViewEncapsulation, OnChanges } from '@angular/core';
 import { each } from 'underscore';
 
 @Component({

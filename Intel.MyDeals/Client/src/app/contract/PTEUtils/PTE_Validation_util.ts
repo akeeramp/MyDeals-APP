@@ -125,21 +125,6 @@ export class PTE_Validation_Util {
                     }
                 }
             }
-            ////This is to Check Product Line -- commented below part, Once Mitusha confirmed, will delete it.
-            //if (prod_used.length > 0) {
-            //    var uniq = prod_used
-            //        .map(function (e) {
-            //            return e;
-            //        }).reduce((a, b) => {
-            //            a[b] = (a[b] || 0) + 1;
-            //            return a
-            //        }, {})
-            //    //Duplicate Product Check
-            //    var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
-            //    if (duplicates.length > 0) {
-            //        return "2";
-            //    }
-            //}
         }
         return "0";
        }

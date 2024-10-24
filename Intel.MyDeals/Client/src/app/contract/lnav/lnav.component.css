@@ -403,23 +403,6 @@
     color: #FFFFFF !important
 }
 
-/*::-webkit-scrollbar-button {
-    background-color: #ddd
-}
-
-::-webkit-scrollbar-corner {
-    background-color: #ddd
-}
-
-::-webkit-scrollbar-track-piece {
-    background-color: transparent
-}*/
-
-/*.k-popup.k-menu-popup {
-    padding: 0 !important;
-    border-radius: 0 !important
-}*/
-
 #lnavContainerWrapper .active:hover {
     background-color: #0071C5;
     filter: brightness(100%) !important
@@ -530,10 +513,6 @@ kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-state-disabled {
     margin-top: 5px !important
 }
 
-/*lnavview .navIconLnk-small-wrapper {
-    top: 10px
-}*/
-
 #lnavContainerWrapper .dialogmsg {
     text-align: center;
     font-family: 'Intel Clear' !important;
@@ -608,14 +587,6 @@ i.intelicon-vertical-menu.blue_b_fix {
     border-top: 2px solid #fff !important;
 }
 
-/*div.mainMenuContainer li#k-tabstrip-tab-1 {
-    width: 34%;
-    margin-left: 0 !important;
-}
-
-div.mainMenuContainer {
-    width: 102%;
-}*/
 ul.contract-submenu-dropdwn.dropdown-menu.show {
     transform: translate3d(0px, 0px, 0px) !important;
 }
@@ -625,29 +596,7 @@ ul.contract-submenu-dropdwn.dropdown-menu.show {
 }
 
 .pricing-strategy-input-tooltip .tooltip-inner {
-    /* background-color: transparent; */
     opacity: 90%;
     font-size: 18px;
     color: var(--tooltip-color);
 }
-
-/* More Tooltip styles avaliable */
-/* .pricing-strategy-input-tooltip.bs-tooltip-end .arrow::before {
-    border-right-color: var(--tooltip-color);
-}
-
-.pricing-strategy-input-tooltip.bs-tooltip-start .arrow::before {
-    border-left-color: var(--tooltip-color);
-}
-
-.pricing-strategy-input-tooltip.bs-tooltip-top .arrow::before {
-    border-top-color: var(--tooltip-color);
-}
-
-.pricing-strategy-input-tooltip.bs-tooltip-bottom .arrow::before {
-    border-bottom-color: var(--tooltip-color);
-}
-
-.pricing-strategy-input-tooltip.bs-tooltip-bottom {
-    padding: 1.4rem 0;
-} */

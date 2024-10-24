@@ -1,10 +1,7 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, Inject, ViewEncapsulation } from "@angular/core"
-import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
-import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { dbAuditToolsService } from "./admin.dbAuditTools.service";
-import { forEach } from 'underscore';
 import { GetObjMap } from "./admin.dbAuditTools.model";
 
 @Component({

@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
 import { contractHistoryService } from "./contractHistory.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -26,7 +25,6 @@ export class contractHistoryComponent implements OnDestroy{
     private info = true;
     private gridResult = [];
     private gridData: GridDataResult;
-    private color: ThemePalette = 'primary';
     private state: State = {
         skip: 0,
         take: 25,

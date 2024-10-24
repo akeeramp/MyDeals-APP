@@ -11,27 +11,9 @@
     border-bottom: transparent
 }
 
-/*.af-setting-fixes .buttongroup-btn {
-    border-bottom: transparent
-}
-*/
-/*.opUiContainer.md .opUiLabel.buttonGroupLabel {
-    font-size: 13px !important
-}*/
-
-/*.af-setting-fixes .msPopup {
-    max-height: 200px
-}*/
-
 .af-setting-fixes .autofill-header-title {
-   /* color: #1a3e6f;*/
     font-size: 24px !important;
-    /*text-align: center*/
 }
-
-/*.af-setting-fixes .minPadding {
-    padding: 2px
-}*/
 
 .af-setting-fixes .autoFillOverarchingTitle {
     color: darkslategray;
@@ -47,11 +29,6 @@
     width: 100%;
     padding-top: 15px !important
 }
-
-/*.opUiContainer.md .opUiLabel {
-    font-size: 13px !important;
-    width: 203px
-}*/
 
 .af-setting-fixes .mattogglebutton.matbutton {
     color: #fff;
@@ -199,7 +176,6 @@
 
 .af-setting-fixes .autofillrow .label {
     margin-top: 6px;
-    /*margin-left: -6px*/
 }
 
 .af-setting-fixes .autofillrow .k-numerictextbox .k-numeric-wrap {
@@ -210,15 +186,6 @@
     height: 33px !important;
     border-bottom: 2px solid #0071c5 !important
 }
-
-/*.k-numerictextbox .k-numeric-wrap {
-    width: 146px !important;
-    height: 33px !important
-}*/
-
-/*.af-setting-fixes #mat-button-toggle-98-button .mattogglebutton .mat-button-toggle-button {
-    margin-left: -14px !important
-}*/
 
 .af-setting-fixes .mattogglebutton .mat-button-toggle-group-appearance-standard {
     margin-left: 5px !important;
@@ -239,16 +206,6 @@
     margin-left: 0 !important;
     margin-top: 0
 }
-
-/*.af-setting-fixes .md .intel.titleclass {
-    float: right;
-    margin: -19px;
-    padding-right: 41px;
-    color: #1a3e6f;
-    font-weight: bold;
-    font-family: 'Intel Clear';
-    font-size: 13px
-}*/
 
 .af-setting-fixes .mattogglebutton .mat-button-toggle {
     margin-right: 4px !important
@@ -280,18 +237,6 @@
     color: #f3d54e;
     margin-right: 3px
 }
-
-/*.af-setting-fixes .marketSegment {
-    padding-left: 30px !important
-}
-*/
-/*.af-setting-fixes.autoFillSetting.totalcontent.modal-content {
-    padding: 20px
-}*/
-
-/*.cdk-overlay-pane {
-    height: auto !important
-}*/
 
 #autoLoading .ss-loading-overlay .myLoader {
     left: 40% !important
@@ -358,7 +303,6 @@
 
 .geo-desc {
     position: absolute;
-    /*top: 60px !important;*/
     left: 34px
 }
 

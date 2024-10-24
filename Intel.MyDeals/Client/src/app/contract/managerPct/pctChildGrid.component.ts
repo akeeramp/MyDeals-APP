@@ -41,14 +41,10 @@ export class pctChildGridComponent implements OnDestroy{
     userRole = ""; canEmailIcon = true;
     isPSExpanded = []; isPTExpanded = {};
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
-    private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
-    private CAN_VIEW_EXPORT = true;
-    private CAN_VIEW_ALL_DEALS = true;
     private usrRole;
     private isSuper = true;
     public mySelection = [];
     public selectAllState: SelectAllCheckboxState = "unchecked";
-    private childGridData: GridDataResult;
     private gridResult;
     public childGridResult;
     public pctMasterdata = [];

@@ -1,7 +1,7 @@
 ﻿import { Component, ViewEncapsulation, OnDestroy } from "@angular/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
-import { where, pluck, each, isEmpty, isNull, isUndefined } from 'underscore';
+import { where, pluck, each } from 'underscore';
 import { ThemePalette } from "@angular/material/core";
 import { DatePipe } from "@angular/common";
 import { MatDialog } from '@angular/material/dialog';
@@ -46,7 +46,6 @@ export class MeetCompComponent implements PendingChangesGuard, OnDestroy {
     private disabled = false;
     private products;
     private selectedProdName:any = '';
-    private meetCompMasterData = [];
     private isCustomerMissing = false;
     private isCatMissing = false;
     private filteredData = {};
@@ -55,7 +54,6 @@ export class MeetCompComponent implements PendingChangesGuard, OnDestroy {
     private gridData: GridDataResult;
     private gridResult: Array<any> = [];
     private color: ThemePalette = "primary";
-    private bulkUploadModal: boolean = false;
     private state: State = {
         skip: 0,
         take: 25,

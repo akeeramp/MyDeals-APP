@@ -14,11 +14,7 @@ export class AdminBannerComponent implements OnDestroy {
 
     private adminBannerMessage = "";
     private adminMessage = "ADMIN_MESSAGE";
-    private bannerValue;
     private userDismissed;
-    private dontAddTheseInRecents = 'portal';
-    private recents = [];
-    private distinctURL = [];
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
 

@@ -1,4 +1,4 @@
-import { each, uniq, sortBy, pluck, findWhere, findIndex, reject, find, keys, isUndefined } from 'underscore';
+import { each, uniq, sortBy, pluck, findWhere, findIndex, reject, find, keys } from 'underscore';
 import Handsontable from 'handsontable';
 import { HandsonLicenseKey } from '../../shared/config/handsontable.licenseKey.config';
 

@@ -1,13 +1,9 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
-import { AfterViewInit, ChangeDetectorRef, Component } from "@angular/core";
-import Handsontable from "handsontable";
-import { HotTableRegisterer } from "@handsontable/angular";
-import { ColumnSettings, GridSettings } from "handsontable/settings";
+import { ChangeDetectorRef, Component } from "@angular/core";
 import { utils, writeFileXLSX, WritingOptions } from "xlsx";
 
 import { DealUnificationReportService } from "./dealUnificationReport.service";
 import { logger } from "../../shared/logger/logger";
-import { HandsonLicenseKey } from "../../shared/config/handsontable.licenseKey.config";
 import { MomentService } from "../../shared/moment/moment.service";
 
 @Component({
@@ -15,33 +11,9 @@ import { MomentService } from "../../shared/moment/moment.service";
     templateUrl: 'Client/src/app/admin/dealUnificationReport/dealUnificationReport.component.html',
     styleUrls: ['Client/src/app/admin/dealUnificationReport/dealUnificationReport.component.css']
 })
-export class DealUnificationReportComponent implements AfterViewInit {
+export class DealUnificationReportComponent {
 
     private currentUcdReportResults: Array<unknown> = undefined;
-
-    // Handsontable - Uncomment to Enable
-    // private readonly HOT_ID = 'bulkUploadValueTable';
-    // private hotRegisterer = new HotTableRegisterer();
-    // private hotTable: Handsontable;
-    // private hotTableData: Array<unknown> = [];
-    // private initializeHandsontableInstance(): void {
-    //     this.hotTable = this.hotRegisterer.getInstance(this.HOT_ID);
-    // }
-    // private hotSettings: GridSettings = {
-    //     licenseKey: HandsonLicenseKey.license,
-    //     height: '70vh',
-    //     stretchH: 'last',
-    //     comments: false,
-    //     wordWrap: true,
-    //     preventOverflow: 'horizontal',
-    //     rowHeaders: true,
-    //     readOnly: true,
-    //     afterInit: () => {
-    //         if (!this.hotTable || this.hotTable === null || this.hotTable === undefined) {
-    //             this.initializeHandsontableInstance();
-    //         }
-    //     }
-    // };
 
     private isLoading: boolean = false;
 
@@ -59,7 +31,6 @@ export class DealUnificationReportComponent implements AfterViewInit {
 
             this.exportDataToExcel();
 
-            // this.updateHotGridData(this.currentUcdReportResults);    // To enable Handsontable grid
 
             setTimeout(() => {
                 this.isLoading = false;
@@ -71,26 +42,6 @@ export class DealUnificationReportComponent implements AfterViewInit {
             this.changeDetectorRef.detectChanges();
         });
     }
-
-    // Uncomment to Enable Handsontable grid
-    // private updateHotGridData(newGridData: Array<unknown>): void {
-    //     // Update Column Config
-    //     const HEADER_SPLIT: Array<ColumnSettings> = Object.keys(this.currentUcdReportResults[0]).map((fieldName: string) => {
-    //         const SPLIT_FIELD_NAME = fieldName.split('_').join(' ');
-
-    //         return {
-    //             data: fieldName,
-    //             title: SPLIT_FIELD_NAME
-    //         }
-    //     });
-
-    //     this.hotTable.batch(() => {
-    //         this.hotTable.updateSettings({
-    //             columns: HEADER_SPLIT
-    //         });
-    //         this.hotTable.loadData(newGridData);
-    //     });
-    // }
 
     private get generateReportFilename(): string {
         // Example: `MyDeals_IQR_ Deals Unified Data_08212024_1004PST.xlsx`
@@ -129,10 +80,6 @@ export class DealUnificationReportComponent implements AfterViewInit {
 
     private get showResults(): boolean {
         return (this.currentUcdReportResults != undefined && this.currentUcdReportResults.length > 0);
-    }
-
-    ngAfterViewInit(): void {
-        // this.getDealUnificationReport(); // To enable Handsontable grid
     }
 
 }

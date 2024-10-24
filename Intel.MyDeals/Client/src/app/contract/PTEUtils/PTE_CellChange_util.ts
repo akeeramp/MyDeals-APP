@@ -1,4 +1,4 @@
-import { countBy, each, uniq, filter, map, where, sortBy, pluck, findWhere, indexOf, findIndex, find, keys, compact, without, isEqual, union, first, object, reject, lastIndexOf, flatten, includes, isNumber } from 'underscore';
+import { countBy, each, uniq, filter, map, where, sortBy, pluck, findWhere, indexOf, findIndex, find, keys, compact, without, isEqual, union, first, reject, includes, isNumber } from 'underscore';
 import Handsontable from 'handsontable';
 
 import { StaticMomentService } from "../../shared/moment/moment.service";
@@ -125,51 +125,39 @@ export class PTE_CellChange_Util {
             //this logic is to add PTR_SYS_PRD in case of produc selector and corrector
             if (val.prop == 'PTR_SYS_PRD' || val.prop == 'PRD_EXCLDS') {
                 if (operation && operation.operation && operation.PRD_EXCLDS) {
-
-                    //  this.hotTable.setDataAtRowProp(row, val.prop, operation.PRD_EXCLDS, 'no-edit');
                     currentString = row + ',' + val.prop;
                     const obj = currentString.split(',').concat(operation.PRD_EXCLDS, 'no-edit');
                     updateRows.push(obj);
                 }
 
-                if (operation && operation.operation && operation.PTR_SYS_PRD) {
-                    //this helps to avoid comma seperated issue.
-                    // this.hotTable.setDataAtRowProp(row, val.prop, operation.PTR_SYS_PRD, 'no-edit');
+                if (operation && operation.operation && operation.PTR_SYS_PRD) {                   
                     currentString = row + ',' + val.prop;
                     const obj = currentString.split(',').concat(operation.PTR_SYS_PRD, 'no-edit');
                     updateRows.push(obj);
                 } else {
-                    this.hotTable.setDataAtRowProp(row, val.prop, rowData[`${val.prop}`], 'no-edit');
-                    // currentString = row + ',' + val.prop + ',' + rowData[`${val.prop}`] + ',' + 'no-edit';
-                    // updateRows.push(currentString.split(','));
+                    this.hotTable.setDataAtRowProp(row, val.prop, rowData[`${val.prop}`], 'no-edit');                    
                 }
             } else {
                 //the condition in this logic is to avoid server side issue when sending data as null
-                this.hotTable.setDataAtRowProp(row, val.prop, (rowData[`${val.prop}`]==null) ? '' : rowData[`${val.prop}`], 'no-edit');
-                // currentString = row + ',' + val.prop + ',' + (rowData[`${val.prop}`] == null ? '' : rowData[`${val.prop}`]) + ',' + 'no-edit';
-                // updateRows.push(currentString.split(','));
+                this.hotTable.setDataAtRowProp(row, val.prop, (rowData[`${val.prop}`]==null) ? '' : rowData[`${val.prop}`], 'no-edit');                
             }
         } else {
             if (val.prop == 'PTR_SYS_PRD') {
                 if (operation && operation.operation && operation.PTR_SYS_PRD) {
-                    // this.hotTable.setDataAtRowProp(row, val.prop, operation.PTR_SYS_PRD, 'no-edit');
                     currentString = row + ',' + val.prop;
                     let obj = currentString.split(',').concat(operation.PTR_SYS_PRD, 'no-edit');
                     updateRows.push(obj);
 
                 } else {
-                    //  this.hotTable.setDataAtRowProp(row, val.prop, '', 'no-edit');
                     currentString = row + ',' + val.prop + ',' + '' + ',' + 'no-edit';
                     updateRows.push(currentString.split(','));
                 }
             } else if (val.prop == 'PRD_EXCLDS') {
                 if (operation && operation.operation && operation.PRD_EXCLDS) {
-                    //  this.hotTable.setDataAtRowProp(row, val.prop, operation.PRD_EXCLDS, 'no-edit');
                     currentString = row + ',' + val.prop;
                     let obj = currentString.split(',').concat(operation.PRD_EXCLDS, 'no-edit');
                     updateRows.push(obj);
                 } else {
-                    //this.hotTable.setDataAtRowProp(row, val.prop, '', 'no-edit');
                     currentString = row + ',' + val.prop + ',' + '' + ',' + 'no-edit';
                     updateRows.push(currentString.split(','));
                 }
@@ -321,12 +309,10 @@ export class PTE_CellChange_Util {
         each(cols, (val, key) => {
             let currentString = '';
             if (val.prop == 'PTR_USER_PRD') {
-                //hotTable.setDataAtRowProp(row, 'PTR_USER_PRD', cellItem.new, 'no-edit');
                 currentString = row + ',' + val.prop;
                 const obj = currentString.split(',').concat(cellItem.new, 'no-edit');
                 updateRows.push(obj);
             } else if (val.prop == 'DC_ID') {
-                // hotTable.setDataAtRowProp(row, val.prop, ROW_ID, 'no-edit');
                 let updateDCID: [string, string, number, string] = [row.toString(), val.prop, ROW_ID, 'no-edit'];
                 updateRows.push(updateDCID);
             } else if (val.prop == 'PRD_BCKT') {
@@ -859,13 +845,9 @@ export class PTE_CellChange_Util {
             if (val.prop == 'PTR_USER_PRD') {
                 //update PTR_USER_PRD with entered value
                 //this exclussivlt because for  products can be with comma seperate values
-                hotTable.setDataAtRowProp(row, 'PTR_USER_PRD', cellItem.new, 'no-edit');
-                //currentString = row + ',' + val.prop;
-                //const obj=currentString.split(',').concat(cellItem.new,'no-edit');
-                //updateRows.push(obj);
+                hotTable.setDataAtRowProp(row, 'PTR_USER_PRD', cellItem.new, 'no-edit');                
             } else if (val.prop == 'DC_ID') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                //hotTable.setDataAtRowProp(row, val.prop, ROW_ID, 'no-edit');
                 let updateDCID: [string, string, number, string] = [row.toString(), val.prop, ROW_ID, 'no-edit'];
                 updateRows.push(updateDCID);
             } else if (val.prop == 'TIER_NBR') {
@@ -914,7 +896,6 @@ export class PTE_CellChange_Util {
                 mergCells.push({ row: empRow, col: ind, rowspan: numOfRows, colspan: 1 });
             }
         });
-        // this.hotTable.updateSettings({ mergeCells: mergCells });
         return mergCells;
     }
 

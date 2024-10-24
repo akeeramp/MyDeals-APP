@@ -259,12 +259,6 @@
 }
 
 .overlappingRows .k-grid th, .overlappingRows .k-grid td {
-    /*padding: 0 !important;
-    border-style: solid;
-    border-color: inherit;
-    outline: 0;
-    font-weight: inherit;
-    text-align: inherit;*/
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -329,25 +323,6 @@
     height: 20px;
 }
 
-/*.overlappingRows a {
-    color: #0071c5 !important;
-    text-decoration: none !important;
-    cursor: pointer;
-}*/
-
-
-/*.overlappingRows a:hover, .overlappingRows a:focus {
-        color: #004579 !important;
-        text-decoration: underline !important;
-        cursor: pointer;
-    }*/
-
-/*.k-button:hover, .k-button.k-state-hover, .k-button:active:hover, .k-button.k-state-active:hover {
-    color: #444;
-    border-color: #ebebeb;
-    background-color: #ebebeb;
-}*/
-
 .kendo-alrt-btn.validatingKendoEditors {
     text-align: center;
     width: 100%;
@@ -358,12 +333,6 @@
     height: inherit;
 }
 
-/*.k-button {
-    color: #444;
-    border-color: #fafafa;
-    background-color: #fafafa;
-}
-*/
 .dialog-button-style {
     height: 60px;
     vertical-align: middle;

@@ -23,9 +23,8 @@ export class adminCustomerComponent implements OnDestroy {
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
     private isLoading = true;
-    private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
-    private info = true;
+    private info = true;    
     private gridResult: Cust_Div_Map[] = [];
     private gridData: GridDataResult;
     private color: ThemePalette = 'primary';

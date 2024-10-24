@@ -101,48 +101,6 @@ h3.ruleOneHeading a {
     height: 27px
 }
 
-/*.true {
-    background-color: rgb(196,214,0) !important
-}
-
-.dealTools .md-icon i {
-    color: #00AEEF !important
-}
-
-.dealTools .md-icon {
-    padding: 4px 0 0 5px
-}
-
-.dealTools .md-icon i:hover {
-    color: #003C71 !important
-}
-
-.dealTools .md-icon-disabled {
-    padding: 4px 2px 0 1px
-}
-
-.dealTools .md-icon-disabled i {
-    color: #00AEEF
-}
-
-.dealTools {
-    line-height: 1.8em;
-    height: 100% !important;
-    width: 100%
-}
-
-.dealTools .gridStatusMarker {
-    font-family: arial
-}
-
-.dealTools a {
-    text-decoration: none
-}
-
-.dealTools i:hover {
-    color: #003C71
-}*/
-
 .rulesGidIcon {
     font-size: 20px;
     margin: 2px;
@@ -327,40 +285,6 @@ kendo-grid.runprice-grid-style {
     color: #0071c5 !important;
     border-color: #b1babf !important
 }
-
-/*.k-list .k-item.k-state-selected {
-    color: #fff !important;
-    background-color: #00aeef !important;
-    font-size: 12px;
-    font-family: 'Intel Clear' !important
-}
-
-.k-list .k-item.k-state-selected:hover {
-    border: 1px solid #ebebeb !important
-}
-
-.k-list .k-item.k-state-focused.k-state-selected {
-    background-color: #00aeef !important
-}
-
-.k-list .k-item.k-state-selected:hover {
-    background-color: #00aeef !important
-}
-
-.k-list .k-item.k-state-focused {
-    box-shadow: none !important
-}
-
-.k-list .k-item {
-    font-size: 12px !important;
-    font-family: 'Intel Clear' !important;
-    padding: 10px .5rem 0 13px !important;
-    line-height: 2.14em !important
-}
-
-.k-list .k-item:hover {
-    background: #ebebeb !important
-}*/
 
 .rule-list-style.k-multiselect .k-multiselect-wrap:hover .k-clear-value {
     visibility: visible !important;
@@ -845,7 +769,6 @@ button.price-rule-retry {
 }
 
 #RulesDetailsBodyDivRules td.error-cell {
-    /*background-color: #fc4c02;*/
     border: solid red 1px !important
 }
 
@@ -910,15 +833,6 @@ kendo-dialog-actions.price-rule-dialog-sty:hover {
     background: #00AEEF !important
 }
 
-/*.k-dialog-wrapper .k-dialog {
-    position: relative !important;
-    padding: 0 !important;
-    border-left: 0 !important;
-    border-right: 0 !important;
-    border-bottom: 0 !important;
-    border-radius: 0 !important;
-}*/
-
 .rule-details-model-style .mat-dialog-container .colHeader {
     font-size: 11px;
     color: #0071c5;
@@ -966,13 +880,6 @@ button.btn.btn-primary.validate-price-rule-style {
     right: -10px !important
 }
 
-/*.colHeader {
-    font-size: 11px;
-    color: #0071c5;
-    font-family: 'Intel Clear';
-    font-weight: 400
-}*/
-
 .alertHeader {
     color: blue
 }
@@ -998,14 +905,8 @@ button.btn.btn-primary.validate-price-rule-style {
     font-weight: bold
 }
 
-/*.modal-dialog {
-    width: 90%;
-    margin-top: 100px
-}*/
-
 .ruleOneHeading {
     float: left;
-    /*margin-top: -15px*/
 }
 
 #ruleModal .modal-body {

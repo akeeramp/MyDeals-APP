@@ -26,8 +26,6 @@ export class sdmBulkUploadComponent implements OnDestroy {
     private hotEnable = false;
     private isDownloadData = false;
     private showWarningDialog = false;
-    private isDownload = false;
-    private columnProperties = ExcelColumnsConfig.SDMBulkCopyColumns;
     private readonly destroy$ = new Subject();
     private hotId = "spreadsheet";
     private hotTable: Handsontable;

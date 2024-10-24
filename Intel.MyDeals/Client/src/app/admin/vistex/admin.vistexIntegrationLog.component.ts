@@ -47,9 +47,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
     public formGroup: FormGroup;
     public isFormChange = false;
     private editedRowIndex: number;
-
-    private type = "numeric";
-    private info = true;
+   
     public state: State = {
         skip: 0,
         take: 25,

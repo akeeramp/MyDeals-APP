@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {GridsterItem} from 'angular-gridster2';
-import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AppEvent, broadCastService } from '../../core/dealPopup/broadcast.service';
 
 

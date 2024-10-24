@@ -2,7 +2,6 @@
 import { adminRulesService } from "./admin.rules.service";
 import { constantsService } from "../constants/admin.constants.service";
 import { Component, ViewEncapsulation, OnDestroy } from "@angular/core";
-import { ThemePalette } from "@angular/material/core";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import {
@@ -46,13 +45,8 @@ export class adminRulesComponent implements PendingChangesGuard, OnDestroy{
     isDirty = false;
     public rule = {};
     public Rules: Array<any> = [];
-    //public rid = rid;
     public toolKitHidden = false;
     private isLoading = true;
-    //private dataSource: any;
-    private gridOptions: any;
-    private allowCustom = true;
-    private color: ThemePalette = "primary";
     public gridResult: Array<any> = [];
     public type = "numeric";
     public info = true;

@@ -44,21 +44,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
     isDirty = false;
     private isLoading = true;
     private errorMsg = "";
-    private isCombExists = false;
-    /*private custsDataSource: any[] = [];
-    private vendorsNamesinfo: any[] = [];
-    private vendorsNamesId: any[] = [];
-    private selectedCUST_MBR_SID = 1;
-    private selectedVENDOR_SID = 0;
-    private getCustomersData: any;
-    private OnlyActv_ind_chg = true;
-    private dataSource: any;
-    private CustvendorsData: any;
-    private customers: any;
-    private vendorsNamesOptions: any;
-    private vendorsIdsOptions: any;
-    private gridOptions: any;
-    private allowCustom = true;*/
+    private isCombExists = false;    
     private color: ThemePalette = "primary";
 
     public gridResult: Array<Cust_Map>;

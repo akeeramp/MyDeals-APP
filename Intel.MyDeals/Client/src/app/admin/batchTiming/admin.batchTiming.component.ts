@@ -2,7 +2,6 @@
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
 import { batchTimingService } from "./admin.batchTiming.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
@@ -29,7 +28,6 @@ export class batchTimingComponent implements OnDestroy {
     private info = true;
     private gridResult: Array<Btch_Job_Tmng_Map>;
     private gridData: GridDataResult;
-    private color: ThemePalette = 'primary';
     private state: State = {
         skip: 0,
         take: 25,

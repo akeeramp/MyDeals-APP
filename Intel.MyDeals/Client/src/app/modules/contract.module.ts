@@ -1,4 +1,3 @@
-//import { contractComponent } from "../contract/contract.component";
 import { ContractDetailsComponent } from "../contract/contractDetails/contractDetails.component";
 import { LnavComponent } from "../contract/lnav/lnav.component";
 import { pricingTableComponent } from "../contract/pricingTable/pricingTable.component";

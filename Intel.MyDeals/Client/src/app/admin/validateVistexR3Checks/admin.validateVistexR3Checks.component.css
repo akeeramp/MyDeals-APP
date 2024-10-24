@@ -2,14 +2,6 @@
     padding: 5px
 }
 
-/*#OutputContainer {
-    padding-top: 15px !important;
-    height: 60vh;
-    overflow-y: inherit;
-    overflow-x: hidden;
-    margin-left:-7px;
-}*/
-
 .validaterRules .k-grid-content {
     height: 370px !important
 }
@@ -28,20 +20,6 @@
         width: -webkit-fill-available;
     }
 }
-
-/*@media (max-width: 768px) {
-    #OutputContainer {
-        height: 30vh;
-    }
-
-    #OutputGrid {
-        height: 100%;
-    }
-}
-
-a {
-    text-decoration: underline !important
-}*/
 
 .dataCell {
     padding: 0;

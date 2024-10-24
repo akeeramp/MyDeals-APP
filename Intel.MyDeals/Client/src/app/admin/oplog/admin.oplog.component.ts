@@ -19,7 +19,6 @@ export class OpLogComponent implements OnDestroy {
     public logDetails = '';
     public stDate: Date = new Date();
     public enDate: Date = new Date();
-    private test: number = this.enDate.setDate(this.enDate.getDate() - 30);
     private startDate: Date = this.enDate;
     private endDate: Date = this.stDate;
     private dateRangeInvalid = false;

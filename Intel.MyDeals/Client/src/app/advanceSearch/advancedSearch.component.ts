@@ -10,9 +10,7 @@ import { process, State, FilterDescriptor, CompositeFilterDescriptor } from "@pr
 import { GridUtil } from '../contract/grid.util';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, FilterService } from "@progress/kendo-angular-grid";
 
-import { PTE_Common_Util } from "../contract/PTEUtils/PTE_Common_util";
-import { PendingChangesGuard } from "../shared/util/gaurdprotectionDeactivate";
-import { Observable, Subject } from "rxjs";
+import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { each } from 'underscore';
 @Component({

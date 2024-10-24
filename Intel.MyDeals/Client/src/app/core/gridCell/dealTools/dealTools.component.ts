@@ -729,7 +729,6 @@ export class dealToolsComponent implements OnDestroy {
                 if (response) {
                     this.windowOpened = true;
                     this.messages = response.Messages;
-                  //  this.refreshContract.emit(true);
                 }
                 this.setBusy("", "", "", "");
                 //removing timeout as the popup should be manually closed 

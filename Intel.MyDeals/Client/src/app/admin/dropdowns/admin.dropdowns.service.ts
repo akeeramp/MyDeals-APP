@@ -2,7 +2,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from "rxjs";
 
-import { BulkDeleteResponse, UiDropdownItem } from "./admin.dropdowns.model";
+import { UiDropdownItem } from "./admin.dropdowns.model";
 
 @Injectable({
     providedIn: 'root'

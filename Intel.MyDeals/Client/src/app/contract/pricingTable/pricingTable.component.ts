@@ -62,7 +62,6 @@ export class pricingTableComponent implements OnDestroy  {
     private isBusyShowFunFact: boolean = true;
     private isShowPCT: boolean = false;
     private isInformationIconReqd: boolean = false;
-    private rowlength: any;
     private searchText: any;
     private selectedTab: any;
     public meetCompRefresh: boolean = false;

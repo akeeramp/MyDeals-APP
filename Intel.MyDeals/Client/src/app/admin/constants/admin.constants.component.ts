@@ -25,9 +25,7 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
 
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
-    private isLoading = true;
-    //private dataSource: any;
-    //private gridOptions: any;
+    private isLoading = true;    
     private allowCustom = true;
     private color: ThemePalette = "primary";
     isDirty = false;

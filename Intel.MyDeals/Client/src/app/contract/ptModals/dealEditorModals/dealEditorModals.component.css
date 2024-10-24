@@ -1,9 +1,5 @@
 ﻿@import '../../../admin/kendo_grid.css';
 
-/*.mat-dialog-container {
-    overflow: initial;
-}*/
-
 #endCustomermodalBody .endCustomerRowStyle {
     padding-left: 5px;
     padding-bottom: 15px;
@@ -74,10 +70,6 @@
     padding: 0 !important
 }
 
-/*.modal-dialog {
-    width: 1000px !important
-}*/
-
 #endCustomermodalBody .filterRow {
     margin-bottom: 7px
 }
@@ -131,11 +123,6 @@
 .buttonMaxPadding {
     padding-left: 150px !important
 }
-
-/*.ss-loading-panel {
-    margin-top: 15%;
-    margin-left: 37%
-}*/
 
 #endCustomermodalBody .appro-label {
     font-weight: bold !important;
@@ -292,7 +279,3 @@ button.btn.endCusbtn-style[disabled] {
     left: 22% !important;
     top: 30% !important;
 }
-
-/*.modal-body kendo-grid {
-    width: -webkit-fill-available;
-}*/

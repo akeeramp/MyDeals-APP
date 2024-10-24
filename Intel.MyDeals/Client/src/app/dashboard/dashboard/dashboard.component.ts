@@ -3,7 +3,7 @@ import { DisplayGrid, GridsterConfig, GridsterItem, GridType, CompactType } from
 import { MatDialog } from '@angular/material/dialog';
 import { findWhere } from 'underscore';
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
-import { Subject, of } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
@@ -16,7 +16,6 @@ import { contractStatusWidgetService } from '../contractStatusWidget.service';
 import { userPreferencesService } from "../../shared/services/userPreferences.service";
 import { logger } from "../../shared/logger/logger";
 import { SecurityService } from "../../shared/services/security.service";
-import { Observable } from 'rxjs-compat';
 
 interface Item {
     text: string;

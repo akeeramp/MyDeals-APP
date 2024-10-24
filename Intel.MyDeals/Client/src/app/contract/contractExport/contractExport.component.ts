@@ -1,8 +1,5 @@
 import { Component, Input, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { PageSizeItem } from "@progress/kendo-angular-grid";
-import {  State } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
 import { contractExportService } from "./contractExport.service";
 import { lnavService } from "../lnav/lnav.service";
 import { takeUntil } from "rxjs/operators";
@@ -28,39 +25,8 @@ export class contractExportComponent implements OnDestroy{
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
     private isLoading = true;
-    private loadMessage = "Loading Contract Data";
-    private type = "numeric";
-    private info = true;
+    private loadMessage = "Loading Contract Data";    
     public exportData : any;
-    private color: ThemePalette = 'primary';
-    private state: State = {
-        skip: 0,
-        take: 25,
-        group: [],
-        // Initial filter descriptor
-        filter: {
-            logic: "and",
-            filters: [],
-        },
-    };
-    private pageSizes: PageSizeItem[] = [
-        {
-            text: "10",
-            value: 10
-        },
-        {
-            text: "25",
-            value: 25
-        },
-        {
-            text: "50",
-            value: 50
-        },
-        {
-            text: "100",
-            value: 100
-        }
-    ];
 
     loadContractExportData() {
         const cId = this.contractData.DC_ID;

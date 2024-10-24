@@ -16,7 +16,6 @@ export class GlobalSearchComponent implements OnDestroy {
     private searchText = "";
     private opType = "ALL";
     private searchDialogVisible = false;
-    private resultTake = 5;
     private windowOpened = false;
     private windowTop = 75; windowLeft = 300; windowWidth = 950; windowHeight = 500; windowMinWidth = 100; windowMinHeight = 100;
 

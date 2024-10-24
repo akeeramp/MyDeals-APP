@@ -76,7 +76,6 @@
 }
 
 .left-pane-widget {
-    /* height: 526px; */
     float: left;
     overflow-y: auto;
     width: 180px;
@@ -265,7 +264,6 @@
 
 .horizontal-widget .k-grid td {
     padding: 0;
-    /*height: 50px;*/
     color: #1a3e6f;
     font-weight: 500;
     font-size: 14px

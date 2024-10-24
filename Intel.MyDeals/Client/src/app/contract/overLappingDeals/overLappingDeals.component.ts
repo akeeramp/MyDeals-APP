@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
 import { overLappingDealsService } from "./overLapping.service";
 import { overLappingcheckDealService } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.service";
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
@@ -32,7 +31,6 @@ export class overLappingDealsComponent implements OnDestroy{
     private info = true;
     private gridResult = [];
     private gridData: GridDataResult;
-    private color: ThemePalette = 'primary';
     private isNoDealsFound: boolean = false;
     private state: State = {
         skip: 0,
@@ -74,12 +72,7 @@ export class overLappingDealsComponent implements OnDestroy{
     private isReqChange: boolean = false;
     private ovlpErrorCount: Array<any> = [];
     private ovlpData: any;
-
-    filterOverLapData(data) {
-        let hasResolved = false;
-        let cnt = 0;
-        let isSelected = false;
-    }
+    
     distinctPrimitive(fieldName: string) {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
@@ -132,14 +125,7 @@ export class overLappingDealsComponent implements OnDestroy{
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
     }
-    clearFilter() {
-        this.state.filter = {
-            logic: "and",
-            filters: [],
-        };
-        this.gridData = process(this.gridResult, this.state);
-    }
-
+   
     openOverlapDealCheck() {
         const DATA = {
             contractData: this.contractData,

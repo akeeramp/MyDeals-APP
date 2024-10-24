@@ -34,8 +34,6 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
     private isLoading = true;
     private errorMsg: string[] = [];
     private isCombExists = false;
-    private dataSource;
-    private gridOptions;
     private allowCustom = true;
     private color: ThemePalette = "primary";
     public gridResult: Vistex_Cust_Map[] = [];

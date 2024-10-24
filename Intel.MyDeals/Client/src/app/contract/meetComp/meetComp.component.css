@@ -364,10 +364,6 @@
     margin-top: 10px !important
 }
 
-/*.meet-conduct .k-grid table {
-    height: 100%
-}*/
-
 .meet-conduct td.k-touch-action-auto {
     padding: 0 !important;
     height: 100%
@@ -542,10 +538,6 @@
     left: 38% !important;
     top: 10% !important
 }
-
-/*.meet-comp-filter ul {
-    max-height: 300px;
-}*/
 
 .meet-comp-blank_space {
     color: #c1c1c1

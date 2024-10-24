@@ -47,7 +47,6 @@ export class AttributeBuilder implements OnInit, OnDestroy {
     private currentRuleColumns: any;
     public rules: any;
     private selectedRuleItem: any
-    private attributeSettings: any;
     private defaultSelection: boolean = true;
     public disabledropdowns: boolean;
     public enableTextbox: boolean[];

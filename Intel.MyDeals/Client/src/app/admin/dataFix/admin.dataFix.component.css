@@ -29,20 +29,12 @@
     width: 15px
 }
 
-/*.k-dropdown .k-dropdown-wrap {
-    background-color: #fff !important
-}*/
-
 .AlertMsgData {
     width: 100px;
     color: black;
     background-color: lightgray;
     border: none
 }
-
-/*.btn[disabled] {
-    cursor: not-allowed !important
-}*/
 
 #dataFixAttributes .dataValueNumeric {
     font-size: 11px;
@@ -58,17 +50,6 @@
         font-size: 11px !important;
     }
 
-/*#dataFixAttributes table thead th,
-.col {
-    text-align: center;
-    font-size: 13px
-}
-
-#dataFixAttributes table tbody td,
-.data {
-    padding-right: 2px
-}*/
-
 #dataFixAttributes {
     max-height: 250px;
     overflow: auto
@@ -80,7 +61,6 @@
 }
 
 .addModeScroll {
-    /* max-height: 500px; */
     overflow: auto
 }
 
@@ -117,88 +97,6 @@
     padding: 5px;
     width: 100%
 }
-
-/*.k-animation-container ul {
-    min-width: 50px !important
-}*/
-
-/*.filterRow {
-    margin-bottom: 7px
-}
-
-.filterRow .k-dropdown {
-    border: 1px solid #e5e5e5;
-    border-radius: 3px
-}
-
-.icnBtn {
-    border-radius: 4px;
-    width: 24px;
-    padding: 2px 5px;
-    margin: 2px 12px 2px 0;
-    cursor: pointer
-}
-
-.icnBtn i {
-    color: #ffffff
-}
-
-.icnSkyBtn {
-    background-color: #00AEEF
-}
-
-.icnSkyBtn:hover {
-    background-color: #0071C5
-}
-
-.icnGryBtn {
-    background-color: #bbbbbb
-}
-
-.icnGryBtn:hover {
-    background-color: #cccccc
-}
-
-.k-window-titlebar.k-dialog-titlebar.k-header {
-    display: none
-}
-
-.btn-def {
-    margin: 0 0 0 15px
-}
-
-.h5-small {
-    font-size: 12px;
-    color: #444444;
-    font-weight: 200;
-    margin-left: 10px;
-    font-style: italic
-}
-
-.curRule {
-    color: #0071C5;
-    margin-left: 10px
-}
-
-.icnSky {
-    cursor: pointer;
-    color: #00AEEF;
-    margin-left: 8px
-}
-
-.menu-container li a {
-    cursor: pointer
-}
-
-.sm-help {
-    font-size: 11px;
-    color: #666666;
-    line-height: 1.1em
-}
-
-.sm-help I {
-    color: #FFA300
-}*/
 
 .mainDataFix .divTable {
     display: table;
@@ -240,7 +138,6 @@
 
 .dataFixHeaders {
     padding-left: 15px !important;
-    /*margin-top: 30px !important*/
 }
 
 .text-alignfix {

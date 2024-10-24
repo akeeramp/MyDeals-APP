@@ -2,7 +2,7 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { managerExcludeGroupsService } from './managerExcludeGroups.service';
 import { logger } from "../../shared/logger/logger";
-import { DataStateChangeEvent, ExcelExportEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
+import { DataStateChangeEvent, ExcelExportEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from "@angular/material/core";
 import { RowClassArgs, RowArgs } from "@progress/kendo-angular-grid";
@@ -10,7 +10,7 @@ import { MomentService } from "../../shared/moment/moment.service";
 import { sortBy } from 'underscore';
 import * as saveAs from 'file-saver';
 import { Workbook } from '@progress/kendo-angular-excel-export';
-import { Observable, Subject, zip } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -34,9 +34,7 @@ export class excludeDealGroupModalDialog implements OnDestroy{
                 private momentService: MomentService) {}
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
-    private isSelected: boolean = true;
-    private role = (<any>window).usrRole;
-    private wwid = (<any>window).usrWwid;
+    private isSelected: boolean = true;    
     public loading = true;
     public emailTable: any = "<b>Loading...</b>";
     private gridResult = [];

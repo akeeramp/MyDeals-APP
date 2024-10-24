@@ -1,7 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { dataFixService } from "./admin.dataFix.service";
 import { Component, OnDestroy } from "@angular/core";
-import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { forkJoin, Observable } from "rxjs";
@@ -27,7 +26,6 @@ export class adminDataFixComponent implements PendingChangesGuard, OnDestroy {
  
     isDirty = false;
     private isLoading = true;
-    private color: ThemePalette = "primary";
     OpDataElements = [];
     MyCustomersInfo = [];
     AttributeSettings = [];

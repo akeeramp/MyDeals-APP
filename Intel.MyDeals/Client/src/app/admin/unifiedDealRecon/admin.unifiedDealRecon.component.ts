@@ -2,7 +2,6 @@
 import { unifiedDealReconService } from "./admin.unifiedDealRecon.service";
 import { Component, OnDestroy } from "@angular/core";
 import { endCustomerRetailModalComponent } from "../../contract/ptModals/dealEditorModals/endCustomerRetailModal.component";
-import { Unified_Deal_Recon } from "./admin.unifiedDealRecon.model";
 import { MatDialog } from '@angular/material/dialog';
 import { bulkUnifyModalComponent } from "./admin.bulkUnifyModal.component";
 import { retriggerUnifyModalComponent } from "./admin.retriggerUnifyModal.component";
@@ -49,7 +48,6 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
     private editedRowIndex: number;
     public isFormChange = false;
     private errorMsg: string[] = [];
-    private isCombExists = false;
     public editAccess = true;
     private retrigger = ((<any>window).isCustomerAdmin || (<any>window).usrRole == "SA" || (<any>window).isDeveloper) ? true : false;
     public uploadUnifiedData = (((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).usrRole == "SA" || (<any>window).isDeveloper) ? true : false;

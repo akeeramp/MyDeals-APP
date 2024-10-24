@@ -1,4 +1,4 @@
-﻿import { ChangeDetectorRef, Component, Input, OnDestroy } from "@angular/core";
+﻿import { Component, Input, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger"; 
 import { dealPopupService } from "./dealPopup.service";
 import { colorDictionary, opGridTemplate } from "../angular.constants";
@@ -54,7 +54,6 @@ export class dealPopupComponent implements OnDestroy {
 
     private timelinegridData: GridDataResult;
     private productsgridData: GridDataResult;
-    private propertiesgridData: GridDataResult;
     private searchgridData: GridDataResult;
     private schedulegridData: GridDataResult;
     //RXJS subject for takeuntil

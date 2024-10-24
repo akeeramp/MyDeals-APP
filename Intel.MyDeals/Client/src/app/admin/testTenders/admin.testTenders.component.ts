@@ -19,7 +19,6 @@ export class adminTestTendersComponent implements PendingChangesGuard, OnDestroy
 
 
     private admintestTendersForm: FormGroup;
-    private dateValue: Date;
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
     isDirty = false;

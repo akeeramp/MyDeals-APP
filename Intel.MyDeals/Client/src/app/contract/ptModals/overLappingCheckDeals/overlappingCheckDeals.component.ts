@@ -1,10 +1,9 @@
 ﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
 import { Component, Inject, Input, OnDestroy, OnInit } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { each, filter, isEmpty, isNull, isUndefined } from 'underscore';
+import { each, filter } from 'underscore';
 
 import { logger } from "../../../shared/logger/logger";
 import { overLappingcheckDealService } from "./overlappingCheckDeals.service";
@@ -28,7 +27,6 @@ export class OverlappingCheckComponent implements OnInit, OnDestroy  {
     @Input() contractData: any;
     @Input() curPricingTable: any;
     @Input() responseData: any;
-    private acceptYes = false;
     public pricingId: number;
     public contractDetails: any;
     private isLoading = true;
@@ -37,14 +35,12 @@ export class OverlappingCheckComponent implements OnInit, OnDestroy  {
     private info = true;
     private gridResult = [];
     private gridData: GridDataResult;
-    private color: ThemePalette = 'primary';
     private ovlpErrorCount: Array<any> = [];
     private isOvlpAccess: boolean = false;
     private isdealEndDateNeedChange: boolean = false;
     private isRevalidate: boolean = false;
     private isDealEndDateChange: boolean = false;
     private isReqChange: boolean = false;
-    private selectBtnText: string = "Select All";
     private ovlpData: any;
     private isSelectAll: boolean = true;
     private showKendoAlert: boolean = false;

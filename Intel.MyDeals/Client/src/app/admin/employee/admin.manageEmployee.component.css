@@ -4,21 +4,11 @@
     cursor: pointer
 }
 
-/*.cust {
-    padding: 0 4px;
-    color: #CCCCCC
-}*/
-
 .vert-clickable {
     padding: 0 4px;
     color: #0071C5;
     cursor: pointer
 }
-
-/*.vert {
-    padding: 0 4px;
-    color: #CCCCCC
-}*/
 
 .filter-col {
     font-size: 26px;
@@ -65,19 +55,6 @@
     font-size: 32px
 }
 
-/*.my_sidebar {
-    padding: 40px;
-    background-color: #eeeeee
-}
-
-.my_filters {
-    padding: 40px
-}
-
-.nm {
-    color: #0071C5
-}*/
-
 .manageDialogEmployee .k-window-titlebar.k-dialog-titlebar.k-header {
     display: none
 }
@@ -86,16 +63,6 @@
     background-color: #003C71;
     color: #ffffff
 }
-
-/*.excelText {
-    line-height: 1.2em;
-    font-size: 12px;
-    float: right
-}
-
-.excelText span {
-    text-align: left
-}*/
 
 .selCustomers {
     margin-bottom: 330px !important;
@@ -117,25 +84,6 @@
     color: #000000;
     padding: 4px 0
 }
-
-/*.info-container {
-    text-align: center
-}
-
-.info-box-container {
-    border: 1px solid #d7d7d7;
-    border-radius: 6px;
-    padding: 30px;
-    margin: 10px 50px;
-    text-align: left
-}
-
-.filter-container {
-    margin-top: 10px;
-    text-align: right;
-    font-size: 12px;
-    color: #aaaaaa
-}*/
 
 kendo-grid.ManageKendoGrid {
     height: calc(100vh - 250px) !important;

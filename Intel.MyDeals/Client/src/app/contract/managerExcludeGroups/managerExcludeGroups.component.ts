@@ -63,10 +63,6 @@ export class managerExcludeGroupsComponent implements OnDestroy {
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
     private usrRole;
     private isSuper = true;
-    private superPrefix = "";
-    private extraUserPrivsDetail: Array<string> = [];
-    private contractType = "Contract";
-    private context = {};
     public mySelection = [];
     public selectAllState: SelectAllCheckboxState = "unchecked";
     private gridResult;

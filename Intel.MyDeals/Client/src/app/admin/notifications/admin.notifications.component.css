@@ -18,11 +18,6 @@ mat-dialog-container:has(notificationssettingsdialog) {
     padding: 0 !important
 }
 
-/*hr {
-    margin-top: 18px;
-    margin-bottom: 18px
-}*/
-
 .gridCompNotification .unread {
     color: #00AEEF !important;
     font-weight: bold

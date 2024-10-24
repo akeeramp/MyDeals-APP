@@ -45,10 +45,6 @@ export class ProductCorrectorComponent implements OnDestroy{
     private curRowProds = [];
     private curRowData = [];
     private curRowIssues = [];
-    private isPrdCollapsed = false;
-    private isExcludePrdCollapsed = false;
-    private isCalCollapsed = false;
-    private isLvlCollapsed = false;
     private invalidProdName = '';
     private ProductCorrectorData: any;
     private allDone = false;

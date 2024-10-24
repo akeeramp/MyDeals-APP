@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, ViewEncapsulation, OnDestroy, OnInit } from "@angular/core";
 import { MatDialogRef } from '@angular/material/dialog';
 import { logger } from "../../shared/logger/logger";
 import { Subject } from "rxjs";

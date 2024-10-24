@@ -1,13 +1,7 @@
 ﻿import { logger } from "../../shared/logger/logger";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Component, ViewEncapsulation, Inject, OnDestroy } from "@angular/core";
-import { FileRestrictions } from "@progress/kendo-angular-upload";
-import { ThemePalette } from "@angular/material/core";
-import Handsontable from 'handsontable';
-import { HotTableRegisterer } from '@handsontable/angular';
-import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
+import { MatDialogRef } from "@angular/material/dialog";
+import { Component, ViewEncapsulation, OnDestroy } from "@angular/core";
 import { unifiedDealReconService } from './admin.unifiedDealRecon.service';
-import { each } from 'underscore';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -34,7 +28,6 @@ export class retriggerUnifyModalComponent implements OnDestroy {
     private alertMsg = ''
     private isError = false;
     private isErrorEndCustomer = false;
-    private isErrorEndCustCountry = false;
     private validateDealId = true;
     public formGroup: FormGroup;
     loadDetails(): void {

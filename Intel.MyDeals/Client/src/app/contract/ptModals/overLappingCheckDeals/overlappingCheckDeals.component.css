@@ -1,13 +1,4 @@
-﻿/*.kendo-grid-buttons {
-    position: relative !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    padding-top: 0 !important;
-    width: 100% !important;
-    height: 200px !important
-}*/
-
-.oo-lapping-style mat-dialog-container {
+﻿.oo-lapping-style mat-dialog-container {
     padding: 0 !important;
     overflow: hidden !important
 }
@@ -276,7 +267,6 @@
 }
 
 .windOverLaps .k-grid th, .windOverLaps .k-grid td {
-    /*padding: 0 !important;*/
     border-style: solid;
     border-color: inherit;
     outline: 0;
@@ -291,14 +281,6 @@
     padding-top: 4px;
     font-weight: bold;
 }
-
-/*#OvrLp1 .k-grid td {
-    padding: 0 !important;
-}
-
-#OvrLp1 .k-grid td {
-    padding: 0 !important;
-}*/
 
 .windOverLaps .helpBtn:hover {
     color: #0071c5;
@@ -346,25 +328,6 @@
     height: 20px;
 }
 
-/*a {
-    color: #0071c5 !important;
-    text-decoration: none !important;
-    cursor: pointer;
-}
-
-
-    a:hover, a:focus {
-        color: #004579 !important;
-        text-decoration: underline !important;
-        cursor: pointer;
-    }
-
-.k-button:hover, .k-button.k-state-hover, .k-button:active:hover, .k-button.k-state-active:hover {
-    color: #444;
-    border-color: #ebebeb;
-    background-color: #ebebeb;
-}*/
-
 .kendo-alrt-btn.okAlteringOverlapDeals {
     text-align: center;
     width: 100%;
@@ -374,12 +337,6 @@
     padding: 0;
     height: inherit;
 }
-
-/*.k-button {
-    color: #444;
-    border-color: #fafafa;
-    background-color: #fafafa;
-}*/
 
 .dialog-button-style-overLapping {
     height: 60px;

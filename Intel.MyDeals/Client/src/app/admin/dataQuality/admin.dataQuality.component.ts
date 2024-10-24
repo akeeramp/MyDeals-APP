@@ -3,7 +3,6 @@ import { logger } from "../../shared/logger/logger";
 import { dataQualityService } from "./admin.dataQuality.service";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Subject } from "rxjs";
@@ -21,12 +20,10 @@ export class admindataQualityComponent implements OnDestroy {
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
     private isLoading = true;
-    private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
     private info = true;
     private gridResult = [];
     private gridData: GridDataResult;
-    private color: ThemePalette = 'primary';
     private state: State = {
         skip: 0,
         take: 25,

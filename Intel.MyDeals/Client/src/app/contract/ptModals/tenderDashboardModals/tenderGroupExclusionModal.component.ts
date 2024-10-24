@@ -15,7 +15,6 @@ export class tenderGroupExclusionModalComponent {
     private contractData: any = this.data.contractData;
     private selLnav: string = this.data.selLnav;
     private UItemplate: any = this.data.UItemplate;
-    private wipIDs: any = [];
     closeWindow() {
         this.dialogRef.close();
     }

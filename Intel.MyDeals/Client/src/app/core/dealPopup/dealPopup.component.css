@@ -320,29 +320,6 @@ i.cn-close-panel {
     width: 100%
 }
 
-/*.cn-button {
-    position: relative;
-    cursor: pointer;
-    z-index: 10;
-    color: #00AEEF;
-    text-align: center;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    -webkit-backface-visibility: hidden
-}
-
-    .cn-button:hover, .cn-button:active, .cn-button:focus {
-        color: #0071C5
-    }
-
-.opened-nav {
-    -webkit-transform: rotate(160deg) scale(1);
-    -moz-transform: rotate(160deg) scale(1);
-    -ms-transform: rotate(160deg) scale(1);
-    transform: rotate(160deg) scale(1)
-}*/
-
 .csstransforms .rot1 {
     border-radius: 50%;
     pointer-events: auto;
@@ -631,23 +608,6 @@ i.cn-close-panel {
     border-radius: 0 0 8px 8px
 }
 
-/*.prop-grid {
-    height: 118px;
-    border: 0 solid transparent;
-    border-radius: 0 0 8px 8px
-}
-
-.prop-grid-large {
-    height: 318px
-}
-
-.no-border {
-    border: 0 solid transparent;
-    margin-left: 2px;
-    margin-bottom: 2px;
-    outline: none
-}*/
-
 .round-border-search {
     border-radius: 8px;
     border: 1px solid #e5e5e5;
@@ -814,12 +774,6 @@ i.cn-close-panel {
     top: 0
 }
 
-/*.animation {
-    -webkit-transition: all .3s ease;
-    -moz-transition: all .3s ease;
-    transition: all .3s ease
-}*/
-
 .cn-deal-popup-recent-icon {
     cursor: pointer;
     color: #00AEEF;
@@ -887,10 +841,6 @@ i.cn-close-panel {
     .cn-deal-popup-icon:hover, .cn-deal-popup-icon:active, .cn-deal-popup-icon:focus {
         color: #0071C5
     }
-
-/*.k-window-titlebar.k-dialog-titlebar.k-header {
-    display: none
-}*/
 
 .deal-popup-docking hr {
     height: auto !important;

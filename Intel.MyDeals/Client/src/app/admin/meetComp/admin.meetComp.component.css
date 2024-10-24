@@ -217,10 +217,6 @@ button#saveImportBtn.saveimported-databtn:hover {
   text-transform: uppercase;
 }
 
-/*.modal-backdrop {
-  display: none !important;
-}
-*/
 #btnClose.bulk-close-icon {
   float: right !important;
   margin-top: 0px !important;
@@ -433,7 +429,6 @@ kendo-splitter.admin-meetcomp-splitter.k-widget.k-splitter.k-splitter-flex.k-spl
   overflow: auto !important;
   overflow-x: hidden !important;
   white-space: nowrap !important;
-  /*max-height: 150px !important;*/
   margin-bottom: 5px !important;
 }
 

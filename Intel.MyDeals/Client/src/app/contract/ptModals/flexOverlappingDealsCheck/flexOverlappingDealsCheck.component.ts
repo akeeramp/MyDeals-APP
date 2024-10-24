@@ -27,7 +27,6 @@ export class FlexOverlappingCheckComponent {
 
     @Input() curPricingTable: any;
     @Input() pricingTableRowData: any;
-    private reqBody: any;
     private ovlpResult: any[];
     private pageSizes: PageSizeItem[] = [
         {

@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
 import { missingCAPService } from "./missingCAP.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
@@ -30,7 +29,6 @@ export class missingCAPComponent implements OnDestroy{
     private gridResult = [];
     private gridData: GridDataResult;
     public exportFileName: string;
-    private color: ThemePalette = 'primary';
     private state: State = {
         skip: 0,
         take: 25,

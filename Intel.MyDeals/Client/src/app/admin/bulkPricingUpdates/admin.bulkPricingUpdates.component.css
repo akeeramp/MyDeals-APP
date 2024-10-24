@@ -6,16 +6,6 @@
     font-size: 22px;
     cursor: pointer;
 }
-/*.btn-default.active:hover {
-  color: #fff !important;
-  background-color: #367fa9 !important;
-  border-color: #00aeef !important;
-}
-.btn-default.active {
-  color: #fff !important;
-  background-color: #00aeef !important;
-  border-color: #367fa9 !important;
-}*/
 #bulkPriceUpdateModalWindow .modal-footer {
   position: fixed;
   bottom: -59px;
@@ -29,10 +19,6 @@
     margin-left: -5px;
     width: 700px;
 }
-/*.modal-dialog {
-  width: 750px;
-  margin-top: 100px;
-}*/
 #modalTitle.modal-title-admin-bulk {
     float: left !important;
     font-size: 28px !important;
@@ -64,10 +50,6 @@
     padding: 0;
 }
 
-/*.bluebold {
-  color: #0071c5;
-  font-weight: bold;
-}*/
 .redboldBulk {
     color: red;
     font-weight: bold;
@@ -82,7 +64,6 @@
     margin-top: 100px;
     margin-left: 0;
     border-radius: 0px !important;
-    /*padding-top: 25px !important;*/
 }
 #bulkPrcUpdateFileUpd .kuploadaction.k-upload .k-dropzone .k-dropzone-hint {
   visibility: collapse !important;
@@ -216,27 +197,6 @@
 #bulkPriceUpdateTable .handsontable td.area:before {
   background: rgba(0,174,239,.2) !important;
 }
-
-/*#disabledCellsError .ok-btn {
-  background-color: #00aeef !important;
-}
-
-#disabledCellsError .k-dialog .k-button:hover{
-  background-color: #00aeef !important;
-  color: #fff !important;
-}
-
-#disabledCellsError .k-dialog .k-content{
-  padding: 1em;
-}
-
-#disabledCellsError .k-dialog .k-dialog-buttongroup{
-  border-width: 1px !important;
-  border-style: solid;
-}
-#disabledCellsError .k-widget.k-window.k-dialog{
-width: 320px;
-}*/
 
 #urlLink a{
   color: #0071c5;

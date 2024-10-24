@@ -67,9 +67,7 @@ import { codingPracticesComponents } from './modules/codingPractices.module';
 //pipe module
 import { MainPipe } from './modules/pipe.module';
 import { broadCastService } from './core/dealPopup/broadcast.service';
-import { RouterModule } from '@angular/router';
 //*********************Angular single boot files *********************
-import { routes } from './app.route.component';
 import { SecurityResolver } from './shared/security.resolve';
 import { AppRootComponent } from './app-root.component';
 import { FooterComponent } from './shared/footer/footer.component';
@@ -121,8 +119,7 @@ import { HeaderComponent } from './shared/header/header.component';
         TreeViewModule,
         DragDropModule,
         ScrollingModule,
-        MainPipe,
-        RouterModule.forRoot(routes, { useHash: true })
+        MainPipe
     ],
     providers: [
         {

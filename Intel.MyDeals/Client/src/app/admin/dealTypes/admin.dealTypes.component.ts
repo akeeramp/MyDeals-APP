@@ -21,11 +21,7 @@ export class adminDealTypesComponent implements OnDestroy {
     }
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
-    private isLoading = true;
-    private errorMsg = "";
-    private dataSource;
-    private gridOptions;
-    private allowCustom = true;
+    private isLoading = true;    
     private color: ThemePalette = "primary";
 
     public gridResult = [];
@@ -33,7 +29,6 @@ export class adminDealTypesComponent implements OnDestroy {
     public info = true;
     public formGroup: FormGroup;
     public isFormChange = false;
-    private editedRowIndex: number;
 
     public state: State = {
         skip: 0,

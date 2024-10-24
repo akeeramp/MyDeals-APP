@@ -1,6 +1,6 @@
-﻿import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+﻿import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { SelectableSettings, TreeItem } from "@progress/kendo-angular-treeview";
+import { SelectableSettings } from "@progress/kendo-angular-treeview";
 import { of } from "rxjs";
 
 @Component({

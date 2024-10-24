@@ -79,18 +79,7 @@ export class SDMComponent {
     getColumns() {// for getting column meta-data from config file
         return ExcelColumnsConfig.SDMBulkCopyColumns;
     }
-    onFileUploadError() {
-        this.files = [];
-        this.loggerSvc.error("Unable to upload attachment.", "Upload failed");
-    }
-
-    //created for Angular loader
-    validateData() {
-        const element = document.getElementsByClassName('k-upload-selected') as HTMLCollectionOf<HTMLElement>;
-        if (element && element.length > 0)
-            element[0].click();
-    }
-
+    
     loadSdmRecords(pageChange = false,exportAll = false) {
         //if page change is true we will not be fetching total count 
         this.isBusy = true;
