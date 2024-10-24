@@ -1534,7 +1534,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         let result = await this.pteService.updateContractAndCurrentPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((error) => {
             //TWC3179-4696: added user failure alert for deal creation
             this.validationMsg = 'The Deal Operation is not successful. Please try again.'; 
-            this.isValidationMsg = false; //make it true for WW47 release
+            this.isValidationMsg = true; //User alert flag 
             this.loggerService.error("Something went wrong", 'Error');
             console.error("PricingTableEditorComponent::saveUpdatePTEAPI::", error);
         });
