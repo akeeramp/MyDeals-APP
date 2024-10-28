@@ -7,6 +7,8 @@ import { TooltipDirective } from "@progress/kendo-angular-tooltip";
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { TenderDashboardGridUtil } from '../tenderDashboardGrid.util';
 import { GridUtil } from '../grid.util'
+import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
+import { utils } from '../../shared/util/util';
 
 @Component({
     selector: 'deal-editor-edit',
@@ -104,6 +106,17 @@ export class dealEditorEditTemplateComponent {
         if (field == 'EXPIRE_YCS2' && dataItem.EXPIRE_YCS2 == 'Yes') {
             dataItem.EXPIRE_YCS2 = '';
             this.confirmDialog = true;
+        }
+        if((dataItem.WF_STG_CD=='Active' || dataItem.WF_STG_CD=='Won') &&  field=='CONSUMPTION_LOOKBACK_PERIOD' && utils.isNull(dataItem.CONSUMPTION_LOOKBACK_PERIOD))
+        {  
+                if (!dataItem._behaviors) dataItem._behaviors = {};
+                if (!dataItem._behaviors.isError) dataItem._behaviors.isError = {};
+                if (!dataItem._behaviors.validMsg) dataItem._behaviors.validMsg = {};
+                    dataItem._behaviors.isError["CONSUMPTION_LOOKBACK_PERIOD"] = true;
+                    dataItem._behaviors.validMsg["CONSUMPTION_LOOKBACK_PERIOD"] = "Consumption Lookback Period must be a whole number between 0 and 24.";
+        }else{
+            if( (dataItem.WF_STG_CD=='Active' || dataItem.WF_STG_CD=='Won') && field=='CONSUMPTION_LOOKBACK_PERIOD')
+            PTE_Validation_Util.clearValidation([dataItem],field);
         }
        if ((dataItem.isLinked != undefined && dataItem.isLinked) || (dataItem._parentCnt > 1 && !dataItem.isLinked)) {// if modified dataItem is linked, then modifying corresponding columns of all other linked data
             each(this.in_DataSet, (item) => {

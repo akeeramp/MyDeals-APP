@@ -55,6 +55,15 @@ export class DE_Validation_Util {
                 }
             }
 
+            if ((curPricingStrategy.WF_STG_CD.toString().toUpperCase() == "APPROVED" || Object.keys(item.TRKR_NBR).length > 0) && !isTenderContract) {
+              
+                if (item._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD']) {
+                    item._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
+                    item._behaviors.validMsg['CONSUMPTION_LOOKBACK_PERIOD'] = "Consumption Lookback Period must be a whole number between 0 and 24.";
+                    isShowStopperError = true;
+                }
+            }
+
             if (item.CONSUMPTION_COUNTRY_REGION != null && item.CONSUMPTION_COUNTRY_REGION != undefined && item.CONSUMPTION_COUNTRY_REGION != "") {
                 if (item.CONSUMPTION_CUST_RPT_GEO != null && item.CONSUMPTION_CUST_RPT_GEO != undefined && item.CONSUMPTION_CUST_RPT_GEO != "") {
                     item._behaviors.isError['CONSUMPTION_CUST_RPT_GEO'] = true;
@@ -239,6 +248,14 @@ export class DE_Validation_Util {
             if (data[i]._dirty) {
                 this.dataConversion(data, templates);
                 
+            }
+        }
+        if ((data[i].WF_STG_CD.toString().toUpperCase() == "WON" || Object.keys(data[i].TRKR_NBR).length > 0)) {
+                   
+            if (data[i]._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD']) {
+                data[i]._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
+                data[i]._behaviors.validMsg['CONSUMPTION_LOOKBACK_PERIOD'] = "Consumption Lookback Period must be a whole number between 0 and 24.";
+                isShowStopperError = true;
             }
         }
         return isShowStopperError;
