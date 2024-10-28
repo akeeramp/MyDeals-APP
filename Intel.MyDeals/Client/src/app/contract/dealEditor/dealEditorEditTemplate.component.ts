@@ -109,7 +109,7 @@ export class dealEditorEditTemplateComponent {
         }
         if((dataItem.WF_STG_CD=='Active' || dataItem.WF_STG_CD=='Won') &&  field=='CONSUMPTION_LOOKBACK_PERIOD')
         {  
-            if (dataItem.CONSUMPTION_LOOKBACK_PERIOD != undefined && (dataItem.CONSUMPTION_LOOKBACK_PERIOD == null || dataItem.CONSUMPTION_LOOKBACK_PERIOD == '')) {
+            if (dataItem.CONSUMPTION_LOOKBACK_PERIOD == null || dataItem.CONSUMPTION_LOOKBACK_PERIOD == '') {
                 if (!dataItem._behaviors) dataItem._behaviors = {};
                 if (!dataItem._behaviors.isError) dataItem._behaviors.isError = {};
                 if (!dataItem._behaviors.validMsg) dataItem._behaviors.validMsg = {};

@@ -57,11 +57,12 @@ export class DE_Validation_Util {
             }
 
             if ((curPricingStrategy.WF_STG_CD.toString().toUpperCase() == "APPROVED" || Object.keys(item.TRKR_NBR).length > 0) && !isTenderContract) {
-              
-                if (item._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD']) {
-                    item._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
-                    item._behaviors.validMsg['CONSUMPTION_LOOKBACK_PERIOD'] = "Consumption Lookback Period must be a whole number between 0 and 24.";
-                    isShowStopperError = true;
+                if (!(parseInt(item.CONSUMPTION_LOOKBACK_PERIOD) < parseInt(lookBackPeriod[item.DC_ID]))) {
+                    if (item._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD']) {
+                        item._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
+                        item._behaviors.validMsg['CONSUMPTION_LOOKBACK_PERIOD'] = "Consumption Lookback Period must be a whole number between 0 and 24.";
+                        isShowStopperError = true;
+                    }
                 }
             }
 
