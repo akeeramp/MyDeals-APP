@@ -22,6 +22,7 @@ export class DE_Validation_Util {
         PTE_Validation_Util.validateSettlementLevel(data, curPricingStrategy);
         PTE_Validation_Util.validateFlexRowType(data, curPricingStrategy, curPricingTable, data, undefined, restrictGroupFlexOverlap);
         PTE_Validation_Util.validateMarketSegment(data, data, undefined);
+        PTE_Validation_Util.validateBillingLookbakPeriod(data);
         return this.ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap);
     }
 
@@ -244,6 +245,7 @@ export class DE_Validation_Util {
     }
     static validateTenderDahsboardDeals(data, templates) {
         let isShowStopperError = false;
+        PTE_Validation_Util.validateBillingLookbakPeriod(data);
         for (var i = 0; i < data.length; i++) {
             if (data[i]._dirty) {
                 this.dataConversion(data, templates);

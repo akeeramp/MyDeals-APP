@@ -107,13 +107,15 @@ export class dealEditorEditTemplateComponent {
             dataItem.EXPIRE_YCS2 = '';
             this.confirmDialog = true;
         }
-        if((dataItem.WF_STG_CD=='Active' || dataItem.WF_STG_CD=='Won') &&  field=='CONSUMPTION_LOOKBACK_PERIOD' && utils.isNull(dataItem.CONSUMPTION_LOOKBACK_PERIOD))
+        if((dataItem.WF_STG_CD=='Active' || dataItem.WF_STG_CD=='Won') &&  field=='CONSUMPTION_LOOKBACK_PERIOD')
         {  
+            if (dataItem.CONSUMPTION_LOOKBACK_PERIOD != undefined && (dataItem.CONSUMPTION_LOOKBACK_PERIOD == null || dataItem.CONSUMPTION_LOOKBACK_PERIOD == '')) {
                 if (!dataItem._behaviors) dataItem._behaviors = {};
                 if (!dataItem._behaviors.isError) dataItem._behaviors.isError = {};
                 if (!dataItem._behaviors.validMsg) dataItem._behaviors.validMsg = {};
                     dataItem._behaviors.isError["CONSUMPTION_LOOKBACK_PERIOD"] = true;
                     dataItem._behaviors.validMsg["CONSUMPTION_LOOKBACK_PERIOD"] = "Consumption Lookback Period must be a whole number between 0 and 24.";
+            }
         }else{
             if( (dataItem.WF_STG_CD=='Active' || dataItem.WF_STG_CD=='Won') && field=='CONSUMPTION_LOOKBACK_PERIOD')
             PTE_Validation_Util.clearValidation([dataItem],field);
