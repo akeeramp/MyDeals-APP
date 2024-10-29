@@ -5846,6 +5846,18 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 set { SetParmeter("in_to_dt", value); }
                 get { return (DateTime)GetParameter("in_to_dt"); }
             }
+
+            ///<summary>
+			/// DataType: varchar(30)
+			/// Mode: IN
+			/// Max Length: 30
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 30, false)]
+            public String in_deal_id
+            {
+                set { SetParmeter("in_deal_id", value); }
+                get { return (String)GetParameter("in_deal_id"); }
+            }
         }
 
         ///<summary>

@@ -8597,110 +8597,116 @@ namespace Intel.MyDeals.Entities {
 	
 	} // End of class TendersSFIDCheck
 
-	///<summary>
-	/// Class created via template - Do Not Modify!
-	/// To modify this code, re-execute the template, or extend as partial.
-	/// on MHTIPPIN-MOBL1
-	/// by mhtippin
-	/// at 10/17/2023 3:48:36 PM
-	///</summary>
-	
-	[DataContract]
-	public partial class VistexLogsInfo {
-	
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on KBHARA2X-MOBL
+    /// by kbhara2x
+    /// at 2024-10-28 1:03:02 PM
+    ///</summary>
 
-	[DataMember]
-	public System.Guid BTCH_ID {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime CRE_DTM {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 DEAL_ID {set;get;}
-	
-	
-	[DataMember]
-	public System.String ERR_MSG {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime INTRFC_RQST_DTM {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime INTRFC_RSPN_DTM {set;get;}
-	
-	
-	[DataMember]
-	public System.String RQST_JSON_DATA {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 RQST_SID {set;get;}
-	
-	
-	[DataMember]
-	public System.String RQST_STS {set;get;}
-	
-	
-	[DataMember]
-	public System.String RQST_TYPE {set;get;}
-	
-	
-	[DataMember]
-	public System.String VISTEX_HYBRID_TYPE {set;get;}
-	
-	
-	/*
-	private static List<VistexLogsInfo> VistexLogsInfoFromReader(SqlDataReader rdr){
-	// This helper method is template generated.
-	// Refer to that template for details to modify this code.
-	
-	var ret = new List<VistexLogsInfo>();
-	int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
-	int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
-	int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
-	int IDX_ERR_MSG = DB.GetReaderOrdinal(rdr, "ERR_MSG");
-	int IDX_INTRFC_RQST_DTM = DB.GetReaderOrdinal(rdr, "INTRFC_RQST_DTM");
-	int IDX_INTRFC_RSPN_DTM = DB.GetReaderOrdinal(rdr, "INTRFC_RSPN_DTM");
-	int IDX_RQST_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
-	int IDX_RQST_SID = DB.GetReaderOrdinal(rdr, "RQST_SID");
-	int IDX_RQST_STS = DB.GetReaderOrdinal(rdr, "RQST_STS");
-	int IDX_RQST_TYPE = DB.GetReaderOrdinal(rdr, "RQST_TYPE");
-	int IDX_VISTEX_HYBRID_TYPE = DB.GetReaderOrdinal(rdr, "VISTEX_HYBRID_TYPE");
-	
-	while (rdr.Read()){
-	ret.Add(new VistexLogsInfo {
-	BTCH_ID = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(System.Guid) : rdr.GetFieldValue<System.Guid>(IDX_BTCH_ID),
-	CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
-	DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
-	ERR_MSG = (IDX_ERR_MSG < 0 || rdr.IsDBNull(IDX_ERR_MSG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ERR_MSG),
-	INTRFC_RQST_DTM = (IDX_INTRFC_RQST_DTM < 0 || rdr.IsDBNull(IDX_INTRFC_RQST_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_INTRFC_RQST_DTM),
-	INTRFC_RSPN_DTM = (IDX_INTRFC_RSPN_DTM < 0 || rdr.IsDBNull(IDX_INTRFC_RSPN_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_INTRFC_RSPN_DTM),
-	RQST_JSON_DATA = (IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA),
-	RQST_SID = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
-	RQST_STS = (IDX_RQST_STS < 0 || rdr.IsDBNull(IDX_RQST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_STS),
-	RQST_TYPE = (IDX_RQST_TYPE < 0 || rdr.IsDBNull(IDX_RQST_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_TYPE),
-	VISTEX_HYBRID_TYPE = (IDX_VISTEX_HYBRID_TYPE < 0 || rdr.IsDBNull(IDX_VISTEX_HYBRID_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_VISTEX_HYBRID_TYPE)
-	});
-	} // while
-	return ret;
-	}
-	*/
-	
-	} // End of class VistexLogsInfo
+    [DataContract]
+    public partial class VistexLogsInfo
+    {
 
-	///<summary>
-	/// Class created via template - Do Not Modify!
-	/// To modify this code, re-execute the template, or extend as partial.
-	/// on MHTIPPIN-MOBL1
-	/// by mhtippin
-	/// at 10/17/2023 3:48:36 PM
-	///</summary>
-	
-	[DataContract]
+        [DataMember]
+        public System.Boolean ARCHV_FLG { set; get; }
+
+
+        [DataMember]
+        public System.Guid BTCH_ID { set; get; }
+
+
+        [DataMember]
+        public System.DateTime CRE_DTM { set; get; }
+
+
+        [DataMember]
+        public System.Int32 DEAL_ID { set; get; }
+
+
+        [DataMember]
+        public System.String ERR_MSG { set; get; }
+
+
+        [DataMember]
+        public System.DateTime INTRFC_RQST_DTM { set; get; }
+
+
+        [DataMember]
+        public System.DateTime INTRFC_RSPN_DTM { set; get; }
+
+
+        [DataMember]
+        public System.String RQST_JSON_DATA { set; get; }
+
+
+        [DataMember]
+        public System.Int32 RQST_SID { set; get; }
+
+
+        [DataMember]
+        public System.String RQST_STS { set; get; }
+
+
+        [DataMember]
+        public System.String RQST_TYPE { set; get; }
+
+
+        [DataMember]
+        public System.String VISTEX_HYBRID_TYPE { set; get; }
+
+
+        /*
+        private static List<VistexLogsInfo> VistexLogsInfoFromReader(SqlDataReader rdr){
+        // This helper method is template generated.
+        // Refer to that template for details to modify this code.
+
+        var ret = new List<VistexLogsInfo>();
+        int IDX_ARCHV_FLG = DB.GetReaderOrdinal(rdr, "ARCHV_FLG");
+        int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
+        int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+        int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+        int IDX_ERR_MSG = DB.GetReaderOrdinal(rdr, "ERR_MSG");
+        int IDX_INTRFC_RQST_DTM = DB.GetReaderOrdinal(rdr, "INTRFC_RQST_DTM");
+        int IDX_INTRFC_RSPN_DTM = DB.GetReaderOrdinal(rdr, "INTRFC_RSPN_DTM");
+        int IDX_RQST_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+        int IDX_RQST_SID = DB.GetReaderOrdinal(rdr, "RQST_SID");
+        int IDX_RQST_STS = DB.GetReaderOrdinal(rdr, "RQST_STS");
+        int IDX_RQST_TYPE = DB.GetReaderOrdinal(rdr, "RQST_TYPE");
+        int IDX_VISTEX_HYBRID_TYPE = DB.GetReaderOrdinal(rdr, "VISTEX_HYBRID_TYPE");
+
+        while (rdr.Read()){
+        ret.Add(new VistexLogsInfo {
+        ARCHV_FLG = (IDX_ARCHV_FLG < 0 || rdr.IsDBNull(IDX_ARCHV_FLG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ARCHV_FLG),
+        BTCH_ID = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(System.Guid) : rdr.GetFieldValue<System.Guid>(IDX_BTCH_ID),
+        CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+        DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+        ERR_MSG = (IDX_ERR_MSG < 0 || rdr.IsDBNull(IDX_ERR_MSG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ERR_MSG),
+        INTRFC_RQST_DTM = (IDX_INTRFC_RQST_DTM < 0 || rdr.IsDBNull(IDX_INTRFC_RQST_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_INTRFC_RQST_DTM),
+        INTRFC_RSPN_DTM = (IDX_INTRFC_RSPN_DTM < 0 || rdr.IsDBNull(IDX_INTRFC_RSPN_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_INTRFC_RSPN_DTM),
+        RQST_JSON_DATA = (IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA),
+        RQST_SID = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
+        RQST_STS = (IDX_RQST_STS < 0 || rdr.IsDBNull(IDX_RQST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_STS),
+        RQST_TYPE = (IDX_RQST_TYPE < 0 || rdr.IsDBNull(IDX_RQST_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_TYPE),
+        VISTEX_HYBRID_TYPE = (IDX_VISTEX_HYBRID_TYPE < 0 || rdr.IsDBNull(IDX_VISTEX_HYBRID_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_VISTEX_HYBRID_TYPE)
+        });
+        } // while
+        return ret;
+        }
+        */
+
+    } // End of class VistexLogsInfo
+
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on MHTIPPIN-MOBL1
+    /// by mhtippin
+    /// at 10/17/2023 3:48:36 PM
+    ///</summary>
+
+    [DataContract]
 	public partial class VersionHistPCTExceptions {
 	
 	[DataMember]

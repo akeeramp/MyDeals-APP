@@ -37,8 +37,10 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
     private editedRowData;
     private VistexStatuses: string[] = [];
     private DealIds = "";
+    private LogDealId = "";
+    private showArchivedData = false;
     private IsDealIdsValid = true;
-    private startDate: Date = new Date(this.momentService.moment().subtract(30, 'days').format("MM/DD/YYYY"));
+    private startDate: Date = new Date(this.momentService.moment().subtract(5, 'days').format("MM/DD/YYYY"));
     private endDate: Date = new Date(this.momentService.moment().format("MM/DD/YYYY"));
     private isLoading = true;
     private showKendoAlert = false;
@@ -47,7 +49,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
     public formGroup: FormGroup;
     public isFormChange = false;
     private editedRowIndex: number;
-   
+
     public state: State = {
         skip: 0,
         take: 25,
@@ -111,41 +113,68 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         this.isDirty = true;
         this.startDate = new Date(this.momentService.moment(this.startDate).format("MM/DD/YYYY"));
         this.endDate = new Date(this.momentService.moment(this.endDate).format("MM/DD/YYYY"));
+        
+            if (this.momentService.moment(this.startDate, "MM/DD/YYYY", true).isValid() && this.momentService.moment(this.endDate, "MM/DD/YYYY", true).isValid() && this.momentService.moment(this.startDate).isBefore(this.endDate)) {
+                if (this.selectedRequestType == undefined || this.selectedRequestType.RQST_TYPE == undefined || this.selectedRequestType.RQST_TYPE == "" || this.selectedRequestType.RQST_TYPE == null) {
+                    this.showKendoAlert = true;
+                    this.kendoAlertMsg = "Please Select Request Type";
+                    this.kendoBoldMsg = "";
+                    return;
+                }
+                this.isLoading = true;
+                const postData = <VistexLogFilters>{
+                    "Dealmode": this.selectedRequestType.RQST_TYPE,
+                    "StartDate": this.momentService.moment(this.startDate).format("MM/DD/YYYY"),
+                    "EndDate": this.momentService.moment(this.endDate).format("MM/DD/YYYY"),
+                    "DealId": this.LogDealId
+                }
+                this.dsaService.getVistexLogs(postData).pipe(takeUntil(this.destroy$)).subscribe((response: VistexLogsInfo[]) => {
+                    this.gridResult = response;
+                    this.gridData = process(this.gridResult, this.state);
+                    if (this.LogDealId == "") {
+                        this.toggleAtchFilter(false);
+                    }
+                    else {
+                        this.toggleAtchFilter(true);
+                    }
+                    this.LogDealId = "";
+                    this.showArchivedData = false;
+                    this.isLoading = false;
+                }, function (err) {
+                    this.loggerSvc.error("Operation failed", err, err.statusText)
+                });
 
-        if (this.momentService.moment(this.startDate, "MM/DD/YYYY", true).isValid() && this.momentService.moment(this.endDate, "MM/DD/YYYY", true).isValid() && this.momentService.moment(this.startDate).isBefore(this.endDate)) {
-            if (this.selectedRequestType == undefined || this.selectedRequestType.RQST_TYPE == undefined || this.selectedRequestType.RQST_TYPE == "" || this.selectedRequestType.RQST_TYPE == null) {
+                this.dsaService.getVistexStatuses().pipe(takeUntil(this.destroy$)).subscribe((response: string[]) => {
+                    this.VistexStatuses = response;
+                }, function (err) {
+                    this.loggerSvc.error("Unable to get statuses of vistex", err, err.statusText);
+                });
+            }
+            else {
                 this.showKendoAlert = true;
-                this.kendoAlertMsg = "Please Select Request Type";
-                this.kendoBoldMsg = "";
-                return;
+                this.kendoAlertMsg = "Please provide valid";
+                this.kendoBoldMsg = " Start and End Date";
+                this.startDate = new Date(this.momentService.moment().subtract(5, 'days').format("MM/DD/YYYY"));
+                this.endDate = new Date(this.momentService.moment().format("MM/DD/YYYY"));
             }
-            this.isLoading = true;
-            const postData = <VistexLogFilters>{
-                "Dealmode": this.selectedRequestType.RQST_TYPE,
-                "StartDate": this.momentService.moment(this.startDate).format("MM/DD/YYYY"),
-                "EndDate": this.momentService.moment(this.endDate).format("MM/DD/YYYY")
-            }
-            this.dsaService.getVistexLogs(postData).pipe(takeUntil(this.destroy$)).subscribe((response: VistexLogsInfo[]) => {
-                this.gridResult = response;
-                this.gridData = process(this.gridResult, this.state);
-                this.isLoading = false;
-            }, function (err) {
-                this.loggerSvc.error("Operation failed", err, err.statusText)
-            });
+    }
 
-            this.dsaService.getVistexStatuses().pipe(takeUntil(this.destroy$)).subscribe((response: string[]) => {
-                this.VistexStatuses = response;
-            }, function (err) {
-                this.loggerSvc.error("Unable to get statuses of vistex", err, err.statusText);
-            });
+    toggleAtchFilter(event) {
+        if (event == false || event.checked == false) {
+            this.showArchivedData = false;
+            this.state.filter = {
+                logic: "or",
+                filters: [{ field: "ARCHV_FLG", operator: "eq", value: false }]
+            };
         }
         else {
-            this.showKendoAlert = true;
-            this.kendoAlertMsg = "Please provide valid";
-            this.kendoBoldMsg = " Start and End Date";
-            this.startDate = new Date(this.momentService.moment().subtract(30, 'days').format("MM/DD/YYYY"));
-            this.endDate = new Date(this.momentService.moment().format("MM/DD/YYYY"));
+            this.showArchivedData = true;
+            this.state.filter = {
+                logic: "or",
+                filters: []
+            };
         }
+        this.gridData = process(this.gridResult, this.state);
     }
 
     editHandler({ sender, rowIndex, dataItem }: EditEvent): void {

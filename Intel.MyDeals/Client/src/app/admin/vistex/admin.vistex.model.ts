@@ -10,6 +10,7 @@ export interface VistexLogsInfo {
 	RQST_STS: string;
 	RQST_TYPE: string;
 	VISTEX_HYBRID_TYPE: string;
+	ARCHV_FLG: boolean;
 }
 
 export interface VistexLogFilters {

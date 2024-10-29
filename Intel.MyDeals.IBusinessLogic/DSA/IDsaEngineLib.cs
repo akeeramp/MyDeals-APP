@@ -6,7 +6,7 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IDsaEngineLib
     {
-        List<VistexLogsInfo> GetVistexLogs(VistexMode vistexMode, DateTime StartDate, DateTime EndDate);
+        List<VistexLogsInfo> GetVistexLogs(VistexMode vistexMode, DateTime StartDate, DateTime EndDate,string DealId);
         List<VistexAttributes> GetVistexAttrCollection(int id);
         List<string> GetVistexStatuses();
         Guid UpdateVistexStatus(Guid batchId, VistexStage vistexStage, int? DealId, string strErrorMessage, int RQST_SID);

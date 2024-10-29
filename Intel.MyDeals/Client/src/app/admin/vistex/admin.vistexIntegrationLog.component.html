@@ -8,7 +8,7 @@
     <div class="col-md-7 float-wdth" style="margin-top:35px;">
         <div class="col-md-10"><input class="form-control md" type="text" [(ngModel)]="DealIds" placeholder="Deal IDs. Multiple deal IDs can be separated with comma." title="Deal IDs. Multiple deal IDs can be separated with comma." style="width:100%;"></div>
         <div class="col-md-2"><button (click)="SendVistexData()" class="btn btn-primary" style="float: left;">Send
-                Data</button></div>
+            Data</button></div>
         <br />
         <div *ngIf="IsDealIdsValid == false" style="color: #FC4C02;float:right;">Please enter valid Deal Ids</div>
     </div>
@@ -23,15 +23,27 @@
                 <kendo-datepicker #picker [(value)]="endDate" calendarType="classic" [(ngModel)]="endDate" class="datePickerWidth">
                 </kendo-datepicker>
             </div>
-            <div class="fr mrgn-txt-color">Date Range:</div>
+            <div class="fr mrgn-txt-color"> (OR) Date Range:</div>
+            <div class="fr" style="margin-right:5px;">
+                <input class="form-control md" type="text" [(ngModel)]="LogDealId" placeholder="Seach by Deal ID " title="Get data by Deal ID" style="width:100%;">
+            </div>
         </div>
-        <div class="col-md-2"><button (click)="getData()" class="btn btn-primary" style="float: left;width:97px;">Get
-                Data</button></div>
+        <div class="col-md-2">
+            <button (click)="getData()" class="btn btn-primary" style="float: left;width:97px;">
+                Get Data
+            </button>
+        </div>
     </div>
     <div class="another-press" style="margin-left: 20px;display:inline-block">
         <kendo-combobox class="fr opUiContainer md vistexIntegrationCombox" [data]="requestTypeList" [kendoDropDownFilter]="filterSettings" textField="RQST_NAME" valueField="RQST_TYPE" [(ngModel)]="selectedRequestType" (valueChange)="onRequestTypeChange($event)" style="width: 220px;height:33px;font-size: 5px;"></kendo-combobox>
         <div class="fr mrgn-txt-color" style="width: 100px;">
             Request Type:
+        </div>
+    </div>
+    <div class="" style="margin-left: 20px;display:inline-block">
+        <div class="fr mrgn-txt-color" style="width: 150px;">
+            Show Archived data :
+            <mat-slide-toggle (change)="toggleAtchFilter($event)" class="toggle-button-custom mat-slide-toggle mat-primary mat-checked" [checked]="showArchivedData" id="ARCHV_FLG" name="ARCHV_FLG" [color]="color"></mat-slide-toggle>
         </div>
     </div>
 </div>
@@ -139,6 +151,13 @@
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                 </multicheck-filter>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="140px" field="ARCHV_FLG" title="Is Archived" filter="boolean">
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <div class="text-center">
+                    <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.ARCHV_FLG" disabled></mat-slide-toggle>
+                </div>
             </ng-template>
         </kendo-grid-column>
         <ng-template kendoGridDetailTemplate let-dataItem>

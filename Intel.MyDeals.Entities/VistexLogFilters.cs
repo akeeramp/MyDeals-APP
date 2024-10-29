@@ -8,6 +8,7 @@ namespace Intel.MyDeals.Entities
         public string Dealmode { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public string DealId { get; set; }
     }
     public class VistexResponseData
     {

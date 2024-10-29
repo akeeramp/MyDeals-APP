@@ -24,7 +24,7 @@ namespace Intel.MyDeals.Controllers.API
         public List<VistexLogsInfo> GetVistexLogs(VistexLogFilters data)
         {
             VistexMode vistexMode = (VistexMode)Enum.Parse(typeof(VistexMode), data.Dealmode);
-            return SafeExecutor(() => _dsaLib.GetVistexLogs(vistexMode,data.StartDate,data.EndDate), $"Unable to get vistex data");
+            return SafeExecutor(() => _dsaLib.GetVistexLogs(vistexMode,data.StartDate,data.EndDate,data.DealId), $"Unable to get vistex data");
         }
 
         [Authorize]

@@ -67,18 +67,20 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         //Only for internal testing
-        public List<VistexLogsInfo> GetVistexLogs(VistexMode vistexMode, DateTime StartDate, DateTime EndDate)
+        public List<VistexLogsInfo> GetVistexLogs(VistexMode vistexMode, DateTime StartDate, DateTime EndDate, string DealId)
         {
             List<VistexLogsInfo> lstVistex = new List<VistexLogsInfo>();
             var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_LOG
             {
                 in_rqst_type = vistexMode.ToString("g"),
                 in_from_dt = StartDate,
-                in_to_dt = EndDate
+                in_to_dt = EndDate,
+                in_deal_id = DealId
             };
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
+                int IDX_ARCHV_FLG = DB.GetReaderOrdinal(rdr, "ARCHV_FLG");
                 int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
                 int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
                 int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
@@ -95,6 +97,7 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     lstVistex.Add(new VistexLogsInfo
                     {
+                        ARCHV_FLG = (IDX_ARCHV_FLG < 0 || rdr.IsDBNull(IDX_ARCHV_FLG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ARCHV_FLG),
                         BTCH_ID = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(System.Guid) : rdr.GetFieldValue<System.Guid>(IDX_BTCH_ID),
                         CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
                         DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
@@ -175,7 +178,7 @@ namespace Intel.MyDeals.DataLibrary
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
 
-               lstVistex = GetVistexLogs(VistexMode.VISTEX_DEALS, DateTime.Now.AddDays(-30), DateTime.Today);
+               lstVistex = GetVistexLogs(VistexMode.VISTEX_DEALS, DateTime.Now.AddDays(-30), DateTime.Today, "");
             }
             return lstVistex;
         }
