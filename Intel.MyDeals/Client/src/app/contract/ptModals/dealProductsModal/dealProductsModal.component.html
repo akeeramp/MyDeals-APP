@@ -25,15 +25,15 @@
 </div>
 <div class="modal-body modalBlueBody there-modal-body deal-excel-body-style oppo-grids physics-css new-now-wrap" id="modal-body">
     <kendo-grid id="dealProduct" [data]="gridData" [navigable]="true" [loading]="isLoading" [skip]="state.skip"
-                [sort]="state.sort" [sortable]="true" [resizable]="true"                
+                [sort]="state.sort" [sortable]="true" [resizable]="true"
                 (dataStateChange)="dataStateChange($event)"
                 class="opUiContainer dashboard op-grid k-grid k-widget k-reorderable k-editable k-grid-lockedcolumns md dealproductgrid"
                 data-role="grid">
         <ng-template kendoGridToolbarTemplate class="excelborderstyle">
             <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText differ-artho-excel style-icon-btn">EXCEL<br>EXPORT</button>
         </ng-template>
-
-        <kendo-grid-column [headerClass]="{'headerClass': true}" field="HIER_VAL_NM" title="Product" width="160px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="CPU_PROCESSOR_NUMBER" title="CPU Processor" width="160px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="HIER_VAL_NM" title="Product" width="110px"></kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass': true}" field="CAP" title="CAP-YCP1" width="110px" [hidden]="!showDealProducts">
             <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
                 <div *ngIf="dataItem.CAP == 'No CAP'" class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;">
@@ -62,7 +62,6 @@
         <kendo-grid-column [headerClass]="{'headerClass': true}" field="SKU_NM" title="Sku Name" width="110px"></kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass': true}" field="CPU_CACHE" title="CPU Cache" width="110px"></kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass': true}" field="CPU_PACKAGE" title="CPU Package" width="110px"></kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass': true}" field="CPU_PROCESSOR_NUMBER" title="CPU Processor" width="110px"></kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass': true}" field="CPU_VOLTAGE_SEGMENT" title="CPU Voltage" width="110px"></kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass': true}" field="CPU_WATTAGE" title="CPU Wattage" width="110px"></kendo-grid-column>
         <kendo-grid-excel fileName="{{ excelFileName }}" filterable="true"></kendo-grid-excel>
