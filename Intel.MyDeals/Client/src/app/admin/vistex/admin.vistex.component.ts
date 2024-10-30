@@ -27,7 +27,7 @@ export class adminVistexComponent implements PendingChangesGuard, OnDestroy {
     private selectedApiID = 1;
     private selectedApiCD = "";
     private apiList = [
-        { API_ID: 1, API_NM: "Customer ", API_CD: "C" },
+       // { API_ID: 1, API_NM: "Customer ", API_CD: "C" },              //Disabling the customer dropdown, later it would be enabled for IAO testing.
         { API_ID: 2, API_NM: "Deal ", API_CD: "D" },
         { API_ID: 3, API_NM: "Product ", API_CD: "P" },
         { API_ID: 4, API_NM: "Product Vertical", API_CD: "V" },
@@ -53,7 +53,7 @@ export class adminVistexComponent implements PendingChangesGuard, OnDestroy {
 
     //API KEY Value Pair
     private apiPair = {
-        "C": 'GetVistexDFStageData',
+        // "C": 'GetVistexDFStageData',          //Disabling the customer dropdown, later it would be enabled for IAO testing.
         "D": 'GetVistexDealOutBoundData',
         "P": 'GetVistexDFStageData',
         "V": 'GetVistexDFStageData',
