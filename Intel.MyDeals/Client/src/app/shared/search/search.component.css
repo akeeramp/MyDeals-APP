@@ -1,4 +1,5 @@
 ﻿.disabled-dropdown .k-dropdown .k-state-disabled .k-input,
+.disabled-dropdown .k-dropdown .k-state-disabled .k-input-inner,
 .disabled-dropdown .k-dropdown .k-state-disabled .k-select,
 .disabled-dropdown .k-dropdown .k-state-disabled .k-select .k-icon {
     cursor: not-allowed;
@@ -101,7 +102,8 @@ kendo-datepicker.date-dashboard-search.datepick_style.k-datepicker {
     font-weight: 500 !important;
 }
 
-kendo-datepicker.date-dashboard-search .k-dateinput .k-input {
+kendo-datepicker.date-dashboard-search .k-dateinput .k-input,
+kendo-datepicker.date-dashboard-search .k-dateinput .k-input-inner {
     font-size: 12px !important
 }
 

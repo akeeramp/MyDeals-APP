@@ -1,8 +1,7 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, ViewEncapsulation,ViewChild} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {GridsterItem} from 'angular-gridster2';
-import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
-
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { GridsterItem } from 'angular-gridster2';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-widget-opencontract',

@@ -46,9 +46,10 @@
     font-size: 11px
 }
 
-    .inputWidthDataFix .k-input {
-        font-size: 11px !important;
-    }
+.inputWidthDataFix .k-input,
+.inputWidthDataFix .k-input-inner {
+    font-size: 11px !important;
+}
 
 #dataFixAttributes {
     max-height: 250px;

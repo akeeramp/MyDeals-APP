@@ -1,8 +1,7 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {GridsterItem} from 'angular-gridster2';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { GridsterItem } from 'angular-gridster2';
 import { AppEvent, broadCastService } from '../../core/dealPopup/broadcast.service';
-
 
 @Component({
   selector: 'app-widget-searchcontract',

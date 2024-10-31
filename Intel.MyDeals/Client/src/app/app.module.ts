@@ -3,7 +3,6 @@ import * as $ from 'jquery';
 import { NgModule, ElementRef, ApplicationRef } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { UpgradeModule } from '@angular/upgrade/static';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from "@angular/common";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -85,7 +84,6 @@ import { HeaderComponent } from './shared/header/header.component';
         FormsModule,
         ReactiveFormsModule,
         BrowserModule,
-        UpgradeModule,
         HttpClientModule,
         Ng2SearchPipeModule,
         BrowserAnimationsModule,

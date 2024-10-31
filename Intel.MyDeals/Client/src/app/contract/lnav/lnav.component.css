@@ -161,6 +161,7 @@
 }
 
 #lnavContainerWrapper .k-tabstrip-items .k-item.k-state-active,
+#lnavContainerWrapper .k-tabstrip-items .k-item.k-active,
 .k-tabstrip-items .k-item.k-state-selected {
     background-color: #003C71 !important
 }
@@ -170,7 +171,8 @@
 }
 
 #lnavContainerWrapper .k-tabstrip-content.k-state-active,
-.k-tabstrip>.k-content.k-state-active {
+.k-tabstrip>.k-content.k-state-active,
+.k-tabstrip>.k-content.k-active {
     display: contents !important
 }
 
@@ -446,7 +448,7 @@ kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li:last-child {
 }
 
 kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li {
-    width: 99px;
+    width: 98px;
 }
 
 kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper .k-tabstrip-items li:hover {
@@ -483,13 +485,15 @@ kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper .k-tabstrip-items li:hover {
     color: #FFFFFF !important
 }
 
-kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-state-disabled span {
+kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-state-disabled span,
+kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-disabled span {
     background-color: #cccccc !important;
     color: #5c5b5b;
     cursor: not-allowed !important;
 }
 
-kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-state-disabled {
+kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-state-disabled,
+kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-disabled {
     border: #ccc 1px solid !important;
     cursor: not-allowed !important
 }

@@ -1,6 +1,6 @@
 ﻿import { formatDate } from "@angular/common";
 import { Component, OnInit, ViewEncapsulation, ViewChild, OnDestroy } from "@angular/core";
-import { Item } from "@progress/kendo-angular-charts/dist/es2015/common/collection.service";
+import { Item } from "@progress/kendo-angular-charts/common/collection.service";
 import { MomentService } from "../../shared/moment/moment.service";
 import { logger } from "../../shared/logger/logger";
 import { tenderDashboardService } from "./tenderDashboard.service";

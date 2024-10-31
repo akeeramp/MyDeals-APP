@@ -15,8 +15,10 @@
         "sourceMap": true,
         "target": "ES5",
         "types": [
+            "eslint__js",
             "jquery",
             "node",
+            "underscore"
         ],
         "typeRoots": [
             "node_modules/@types"

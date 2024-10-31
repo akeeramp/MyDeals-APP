@@ -1,5 +1,12 @@
-﻿#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="START_DT"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="END_DT"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TITLE"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="ECAP_PRICE"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="VOLUME"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TERMS"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="GEO_APPROVED_BY"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="DIV_APPROVED_BY"] {
-    border-bottom: 3px solid rgb(0,113,197) !important
+﻿#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="START_DT"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="END_DT"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TITLE"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="ECAP_PRICE"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="VOLUME"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TERMS"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="GEO_APPROVED_BY"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="DIV_APPROVED_BY"] {
+    border-bottom: 3px solid rgb(0, 113, 197) !important
 }
 
 #pubOpGrid .k-cell-inner .k-grid-filter {
@@ -66,18 +73,22 @@
 .filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a .k-i-filter {
     background-color: transparent !important;
 }
+
 #pubOpGrid .rowHeight {
-     height: auto !important;
+    height: auto !important;
     padding: 2px 0 0 1px;
     border-bottom: .01px solid rgba(0, 0, 0, .05)
 }
+
 #pubOpGrid .kitRowValue.kitSideLine {
     padding: 7px 4px !important;
     height: auto !important;
 }
+
 #pubOpGrid .uiControlDiv .capLineStyle.No_ycs2fix {
     padding: 12px 2px !important;
 }
+
 #pubOpGrid .textRightAlign.isReadOnlyCell {
     padding: 13px 0 0 1px;
 }

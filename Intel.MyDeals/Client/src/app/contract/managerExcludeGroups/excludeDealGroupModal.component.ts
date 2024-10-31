@@ -1,17 +1,18 @@
 ﻿import { Component, EventEmitter, Inject, OnDestroy, Output, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { managerExcludeGroupsService } from './managerExcludeGroups.service';
-import { logger } from "../../shared/logger/logger";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { DataStateChangeEvent, ExcelExportEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from "@angular/material/core";
 import { RowClassArgs, RowArgs } from "@progress/kendo-angular-grid";
-import { MomentService } from "../../shared/moment/moment.service";
 import { sortBy } from 'underscore';
-import * as saveAs from 'file-saver';
+import { saveAs } from "@progress/kendo-file-saver";
 import { Workbook } from '@progress/kendo-angular-excel-export';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil } from "rxjs/operators";
+
+import { managerExcludeGroupsService } from './managerExcludeGroups.service';
+import { logger } from "../../shared/logger/logger";
+import { MomentService } from "../../shared/moment/moment.service";
 
 @Component({
     selector: "exclude-deal-group-modal-dialog",

@@ -85,6 +85,7 @@ h3.ruleOneHeading a {
     height: calc(100vh - 200px) !important;
     margin-right: 10px;
 }
+
 .ruleKendoGrid td {
     vertical-align: top !important
 }
@@ -108,20 +109,23 @@ h3.ruleOneHeading a {
     margin-right: 5px
 }
 
-.ruleKendoGrid .k-plus::before, .ruleKendoGrid .k-i-plus::before {
+.ruleKendoGrid .k-plus::before,
+.ruleKendoGrid .k-i-plus::before {
     content: "\e005" !important
 }
 
-.ruleKendoGrid .k-minus::before, .ruleKendoGrid .k-i-minus::before {
+.ruleKendoGrid .k-minus::before,
+.ruleKendoGrid .k-i-minus::before {
     content: "\e006" !important
 }
 
-.ruleKendoGrid .k-grid-toolbar > .k-grid-add > .k-icon {
+.ruleKendoGrid .k-grid-toolbar>.k-grid-add>.k-icon {
     font-size: 14px !important;
     margin-top: 1px
 }
 
-.ruleKendoGrid .k-grid td, .ruleKendoGrid .k-grid td div {
+.ruleKendoGrid .k-grid td,
+.ruleKendoGrid .k-grid td div {
     text-overflow: ellipsis;
     overflow: hidden
 }
@@ -179,7 +183,9 @@ h3.ruleOneHeading a {
     overflow: auto
 }
 
-#dispResults-list.k-list-container.k-popup.k-group.k-reset, #dispResults-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller, #dispResults-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller ul {
+#dispResults-list.k-list-container.k-popup.k-group.k-reset,
+#dispResults-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller,
+#dispResults-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller ul {
     height: 300px !important
 }
 
@@ -189,24 +195,25 @@ h3.ruleOneHeading a {
     border-color: #adbd00 !important
 }
 
-    .btn-success.btnSuccessRulers[disabled] {
-        color: #b1babf !important;
-        background-color: #edeff0 !important;
-        border-color: #b1babf !important
-    }
+.btn-success.btnSuccessRulers[disabled] {
+    color: #b1babf !important;
+    background-color: #edeff0 !important;
+    border-color: #b1babf !important
+}
 
-    .btn-success.btnSuccessRulers:hover, .btn-success.btnSuccessRulers:focus {
-        color: #0071c5 !important
-    }
+.btn-success.btnSuccessRulers:hover,
+.btn-success.btnSuccessRulers:focus {
+    color: #0071c5 !important
+}
 
 kendo-grid.runprice-grid-style {
     height: calc(81vh - 120px) !important
 }
 
 .admin-simulate-style .mat-dialog-container {
-    box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%),0 24px 38px 3px rgb(0 0 0 / 14%),0 9px 46px 8px rgb(0 0 0 / 12%) !important;
+    box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%), 0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%) !important;
     background: #fff !important;
-    color: rgba(0,0,0,.87) !important;
+    color: rgba(0, 0, 0, .87) !important;
     padding: 0 !important;
     border-radius: 0 !important
 }
@@ -243,16 +250,16 @@ kendo-grid.runprice-grid-style {
 }
 
 .textBoxWidth.k-textbox:hover {
-    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
 .textBoxWidth.k-textbox:focus-within {
     border-color: #f0f0f0 !important;
-    box-shadow: 0 2px 6px rgb(0 0 0 /20%),0 2px 3px rgb(0 0 0 / 5%) !important
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
-.rule-list-style.k-multiselect.k-state-focused > .k-multiselect-wrap {
-    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important
+.rule-list-style.k-multiselect.k-state-focused>.k-multiselect-wrap {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
 .rule-list-style.k-multiselect .k-multiselect-wrap {
@@ -263,7 +270,7 @@ kendo-grid.runprice-grid-style {
 .rule-list-style.k-multiselect .k-multiselect-wrap:hover {
     border-color: #e6e6e6 !important;
     background-color: #ffffff !important;
-    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
 .rule-list-style.k-multiselect .k-multiselect-wrap .k-button {
@@ -345,9 +352,9 @@ kendo-grid.runprice-grid-style {
 }
 
 .rule-details-model-style .mat-dialog-container {
-    box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%),0 24px 38px 3px rgb(0 0 0 / 14%),0 9px 46px 8px rgb(0 0 0 / 12%) !important;
+    box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%), 0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%) !important;
     background: #fff !important;
-    color: rgba(0,0,0,.87) !important;
+    color: rgba(0, 0, 0, .87) !important;
     padding: 0 !important
 }
 
@@ -401,15 +408,21 @@ kendo-grid.runprice-grid-style {
     font-weight: 300 !important
 }
 
-.mrule-type-styl.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container, .mtoggle-approve-sty.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container, .toggle-ruletype-btn.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
-    transform: translate3d(123px,0,0) !important
+.mrule-type-styl.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container,
+.mtoggle-approve-sty.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container,
+.toggle-ruletype-btn.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
+    transform: translate3d(123px, 0, 0) !important
 }
 
-.mrule-type-styl.mat-slide-toggle.mat-checked .mat-slide-toggle-bar, .mtoggle-approve-sty.mat-slide-toggle.mat-checked .mat-slide-toggle-bar, .toggle-ruletype-btn.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+.mrule-type-styl.mat-slide-toggle.mat-checked .mat-slide-toggle-bar,
+.mtoggle-approve-sty.mat-slide-toggle.mat-checked .mat-slide-toggle-bar,
+.toggle-ruletype-btn.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
     background-color: #C4D600 !important
 }
 
-.mrule-type-styl.mat-slide-toggle:not(.mat-checked).toggle-button-custom .mat-slide-toggle-bar, .mtoggle-approve-sty.mat-slide-toggle:not(.mat-checked).toggle-button-custom .mat-slide-toggle-bar, .toggle-ruletype-btn.mat-slide-toggle:not(.mat-checked).toggle-button-custom .mat-slide-toggle-bar {
+.mrule-type-styl.mat-slide-toggle:not(.mat-checked).toggle-button-custom .mat-slide-toggle-bar,
+.mtoggle-approve-sty.mat-slide-toggle:not(.mat-checked).toggle-button-custom .mat-slide-toggle-bar,
+.toggle-ruletype-btn.mat-slide-toggle:not(.mat-checked).toggle-button-custom .mat-slide-toggle-bar {
     color: #ffffff !important;
     background-color: #931c1a !important
 }
@@ -471,7 +484,8 @@ kendo-dialog-actions.del-admin {
     border-bottom-left-radius: 0 !important
 }
 
-.admin-okbtn-style, .admin-cancelbtn-style {
+.admin-okbtn-style,
+.admin-cancelbtn-style {
     border-radius: 0 !important;
     height: 60px !important;
     font-size: 15px !important;
@@ -498,7 +512,8 @@ kendo-dialog-actions.del-admin {
     border: none !important
 }
 
-.admin-notes-style.k-textarea .k-input {
+.admin-notes-style.k-textarea .k-input,
+.admin-notes-style.k-textarea .k-input-inner {
     padding: .375rem .75rem !important;
     height: 115px !important;
     min-height: calc(1.5em + .75rem + 2px) !important;
@@ -509,9 +524,9 @@ kendo-textarea.admin-notes-style.k-textarea {
     box-shadow: none !important
 }
 
-    kendo-textarea.admin-notes-style.k-textarea:focus-within {
-        border: 2px solid #000000 !important
-    }
+kendo-textarea.admin-notes-style.k-textarea:focus-within {
+    border: 2px solid #000000 !important
+}
 
 .intelicon-plus-max.mplusminus-styleRule {
     background: #00aeef !important;
@@ -526,9 +541,9 @@ kendo-textarea.admin-notes-style.k-textarea {
     margin-right: 12px !important
 }
 
-    .intelicon-plus-max.mplusminus-styleRule:hover {
-        background-color: #0071c5 !important
-    }
+.intelicon-plus-max.mplusminus-styleRule:hover {
+    background-color: #0071c5 !important
+}
 
 .intelicon-minus-max.mplusminus-styleRule {
     background-color: #bbbbbb !important;
@@ -543,9 +558,9 @@ kendo-textarea.admin-notes-style.k-textarea {
     margin-right: 3px !important
 }
 
-    .intelicon-minus-max.mplusminus-styleRule:hover {
-        background-color: #cccccc !important
-    }
+.intelicon-minus-max.mplusminus-styleRule:hover {
+    background-color: #cccccc !important
+}
 
 .dealtype-dropdwn-style.k-dropdown .k-dropdown-wrap {
     border: 1px solid #e5e5e5 !important;
@@ -599,9 +614,9 @@ input.form-control.ruledet-boxes-style {
     box-shadow: none !important
 }
 
-    input.form-control.ruledet-boxes-style:focus {
-        border-color: #00AEEF !important
-    }
+input.form-control.ruledet-boxes-style:focus {
+    border-color: #00AEEF !important
+}
 
 .mtoggle-approve-sty {
     margin-left: -80px !important;
@@ -623,8 +638,11 @@ input.form-control.ruledet-boxes-style {
     margin-left: 5px !important
 }
 
-.dealtype-dropdwn-style.k-dropdown .k-dropdown-wrap:hover, .equalto-dropdwn-style.k-dropdown .k-dropdown-wrap:hover, kendo-textbox.extra-box-style.k-textbox:hover, .box_style_dropdwn.k-dropdown .k-dropdown-wrap:hover kendo-multiselect.multi_kendo_style.k-multiselect:hover {
-    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important
+.dealtype-dropdwn-style.k-dropdown .k-dropdown-wrap:hover,
+.equalto-dropdwn-style.k-dropdown .k-dropdown-wrap:hover,
+kendo-textbox.extra-box-style.k-textbox:hover,
+.box_style_dropdwn.k-dropdown .k-dropdown-wrap:hover kendo-multiselect.multi_kendo_style.k-multiselect:hover {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
 kendo-textbox.extra-box-style.k-textbox {
@@ -640,7 +658,10 @@ kendo-textbox.extra-box-style.k-textbox {
     box-shadow: none !important
 }
 
-.ecap-combo-style.k-combobox .k-state-focused, .box-style-numeric.k-numerictextbox .k-state-focused .calender-row-style span.k-picker-wrap.k-state-focused, .multi_kendo_style.k-multiselect.k-state-focused .k-multiselect-wrap, .numerictextbox-style.k-numerictextbox .k-numeric-wrap.k-state-focused {
+.ecap-combo-style.k-combobox .k-state-focused,
+.box-style-numeric.k-numerictextbox .k-state-focused .calender-row-style span.k-picker-wrap.k-state-focused,
+.multi_kendo_style.k-multiselect.k-state-focused .k-multiselect-wrap,
+.numerictextbox-style.k-numerictextbox .k-numeric-wrap.k-state-focused {
     box-shadow: none !important;
     border-color: #f0f0f0 !important
 }
@@ -698,9 +719,9 @@ button.price-rule-retry {
     border-radius: 3px !IMPORTANT
 }
 
-    button.price-rule-retry:hover {
-        background-color: #00AEEF !important
-    }
+button.price-rule-retry:hover {
+    background-color: #00AEEF !important
+}
 
 .price-rule-popup .k-widget.k-window.k-dialog {
     width: fit-content !important;
@@ -712,7 +733,8 @@ button.price-rule-retry {
     height: fit-content !important
 }
 
-.numerictextbox-style.k-numerictextbox .k-input {
+.numerictextbox-style.k-numerictextbox .k-input,
+.numerictextbox-style.k-numerictextbox .k-input-inner {
     padding: 9px 7px 12px !important;
     font-size: 11px !important
 }
@@ -778,7 +800,7 @@ button.price-rule-retry {
 }
 
 #RulesDetailsBodyDivRules td:not(.error-cell).readonly-cell {
-    background-color: rgb(238,238,238) !important
+    background-color: rgb(238, 238, 238) !important
 }
 
 kendo-multiselect.multi_kendo_style.k-multiselect {
@@ -870,9 +892,9 @@ button.btn.btn-primary.validate-price-rule-style {
     box-shadow: none !important
 }
 
-    .multi_kendo_style.k-multiselect .k-multiselect-wrap li.k-button:hover {
-        background-color: #00AEEF !important
-    }
+.multi_kendo_style.k-multiselect .k-multiselect-wrap li.k-button:hover {
+    background-color: #00AEEF !important
+}
 
 .multi_kendo_style.k-multiselect .k-multiselect-wrap .k-button .k-icon {
     opacity: .6 !important;
@@ -1001,14 +1023,14 @@ kendo-dropdownlist.box_style_dropdwn {
     position: relative !important
 }
 
-    kendo-dropdownlist.box_style_dropdwn:hover {
-        box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important;
-        background: transparent !important;
-        border: none !important
-    }
+kendo-dropdownlist.box_style_dropdwn:hover {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+    background: transparent !important;
+    border: none !important
+}
 
 kendo-datepicker.calender-row-style:hover {
-    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
 kendo-datepicker.calender-row-style {
@@ -1040,6 +1062,7 @@ kendo-datepicker.calender-row-style {
 .price-rule-spread #spreadsheet table.htCore tr th {
     background: #f0f0f4 !important;
 }
+
 .intelicon-plus-max.mplusminus-styleRule.add-plus.col-md-6 {
     top: 0 !important;
 }

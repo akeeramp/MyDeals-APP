@@ -3,12 +3,7 @@ import { editor } from 'monaco-editor/esm/vs/editor/editor.api';
 
 @Component({
     selector: 'monaco-editor',
-    template: `
-    <div
-      style="height:100%"
-      #editorContainer
-    ></div>
-  `,
+    template: `<div style="height:100%" #editorContainer></div>`,
 })
 export class MonacoEditorComponent implements OnInit {
     @ViewChild('editorContainer', { static: true }) _editorContainer!: ElementRef;
@@ -23,15 +18,6 @@ export class MonacoEditorComponent implements OnInit {
 
     private defaultLanguage = 'plaintext';
 
-    private defaultOptions = {
-        theme: 'vs',
-        automaticLayout: true,
-        colorDecorators: true,
-        selectionHighlight: true,
-        occurrencesHighlight: true,
-        renderSideBySide: true,
-    };
-
     constructor() { }
 
     private toggleSideBySide() {
@@ -39,7 +25,14 @@ export class MonacoEditorComponent implements OnInit {
     }
 
     private updateEditorModels() {
-        this.codeEditorInstance = editor.createDiffEditor(this._editorContainer.nativeElement, this.defaultOptions);
+        this.codeEditorInstance = editor.createDiffEditor(this._editorContainer.nativeElement, {
+            theme: 'vs',
+            automaticLayout: true,
+            colorDecorators: true,
+            selectionHighlight: true,
+            occurrencesHighlight: 'singleFile',
+            renderSideBySide: true
+        });
         this.leftModel = editor.createModel(this.leftModelCode, this.defaultLanguage);
         this.rightModel = editor.createModel(this.rightModelCode, this.defaultLanguage);
         this.codeEditorInstance.setModel({ original: this.leftModel, modified: this.rightModel });

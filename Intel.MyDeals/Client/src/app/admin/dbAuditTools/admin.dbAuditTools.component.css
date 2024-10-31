@@ -1,6 +1,6 @@
 ﻿p.all-para-warn {
     margin: 5px 0 5px 20px;
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
     line-height: 1.5;
     color: #FC4C02
@@ -44,7 +44,8 @@
     border: 1px solid;
 }
 
-.dbAuditTextArea .k-input {
+.dbAuditTextArea .k-input,
+.dbAuditTextArea .k-input-inner {
     text-wrap: nowrap !important;
     overflow: auto !important;
 }

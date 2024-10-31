@@ -1,5 +1,5 @@
 ﻿import { Component, EventEmitter, Input, Output, OnDestroy } from "@angular/core";
-import { Item } from "@progress/kendo-angular-charts/dist/es2015/common/collection.service";
+import { Item } from "@progress/kendo-angular-charts/common/collection.service";
 import { MomentService } from "../../shared/moment/moment.service";
 import { contractStatusWidgetService } from "../../dashboard/contractStatusWidget.service";
 import { logger } from "../logger/logger";

@@ -5,14 +5,11 @@
 @import '../../../../css/_controls.css';
 @import '../../../../css/_contractManager.css';
 @import '~font-awesome/css/font-awesome.min.css';
-@import '~bootstrap/dist/css/bootstrap.min.css';
 @import '~@progress/kendo-theme-bootstrap/dist/all.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
 @import '~bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css';
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import '../../../node_modules/ngx-toastr/toastr.css';
-@import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-@import '../../../node_modules/@progress/kendo-theme-bootstrap/dist/all.css';
-@import '../../../node_modules/@progress/kendo-theme-bootstrap/dist/all.css';
 @import '../../../node_modules/handsontable/dist/handsontable.full.min.css';
 @import '~monaco-editor/min/vs/editor/editor.main.css';
 @import './common.css';
@@ -21,13 +18,9 @@
 @import '../../app/core/dealPopup/dealPopup.component.css';
 
 /* Intel IT */
-
-
 /* @import '../../../../css/it-mlaf.min.css';    Need to resolve an issue for missing images/fonts when adding to bundle, in the meantime, it should be included in the project's BundleConfig */
 
-
 /* Variables */
-
 :root {
     /* Used in `#horizontal.expanded:has(.contractManagerPlus)` */
     --top-single-row-nav: 85px;
@@ -359,12 +352,15 @@ kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li {
     background-color: #E7E7E8;
 }
 
-.k-grid-header .k-grid-filter.k-state-active {
+.k-grid-header .k-grid-filter.k-state-active,
+.k-grid-header .k-grid-filter.k-active {
     background-color: #E7E7E8;
 }
 
 .k-state-active>.k-i-filter,
-.k-grid-filter.k-state-active {
+.k-grid-filter.k-state-active,
+.k-active>.k-i-filter,
+.k-grid-filter.k-active {
     color: #003C71 !important;
     /*Pink to test*/
 }
@@ -451,7 +447,8 @@ kendo-grid.approval-tables .k-grid-content-locked table tr td:first-child {
     padding-left: 0 !important;
 }
 
-kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.k-state-active {
+kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.k-state-active,
+kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.k-active {
     border-color: #b1babf;
 }
 
@@ -460,7 +457,8 @@ kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li {
     border-color: #dfdfdf;
 }
 
-kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.k-state-active span.k-link {
+kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.k-state-active span.k-link,
+kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.k-active span.k-link {
     font-size: 15px;
 }
 
@@ -879,7 +877,8 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     height: 100%
 }
 
-kendo-dropdownlist.font-input .k-input {
+kendo-dropdownlist.font-input .k-input,
+kendo-dropdownlist.font-input .k-input-inner {
     font-size: 14px;
     font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif
 }
@@ -898,8 +897,9 @@ kendo-dropdownlist.font-input .k-input {
     border-color: #f0f0f0 !important;
     box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
-
-.dateclass.k-datepicker .k-input:focus-within {
+/* .k-input-inner */
+.dateclass.k-datepicker .k-input:focus-within,
+.dateclass.k-datepicker .k-input-inner:focus-within {
     background-color: #ffffff !important
 }
 
@@ -1252,6 +1252,7 @@ kendo-grid.admin-deal-grid.k-widget.k-grid {
 }
 
 .tab-sec-add .k-tabstrip-items .k-item.k-state-active,
+.tab-sec-add .k-tabstrip-items .k-item.k-active,
 .k-tabstrip-items .k-item.k-state-selected {
     color: #fff;
     background-color: #00aeef;
@@ -1395,14 +1396,16 @@ kendo-window#OvrLp.k-wind-design {
     box-shadow: none !important
 }
 
-.contract-toggle.k-switch-off .k-switch-container {
+.contract-toggle.k-switch-off .k-switch-container,
+.contract-toggle.k-switch-off .k-switch-track {
     background-color: #C4D600 !important;
     color: #ffffff !important;
     font-size: 14px !important;
     line-height: 1.2em !important;
 }
 
-.contract-toggle.k-switch-on .k-switch-container {
+.contract-toggle.k-switch-on .k-switch-container,
+.contract-toggle.k-switch-on .k-switch-track {
     background-color: #00AEEF !important;
     color: #ffffff !important;
     font-size: 14px !important;
@@ -1613,7 +1616,8 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     margin: 0 -10px;
 }
 
-.managable-meet-pct kendo-tabstrip.art-kendo-bars.k-tabstrip>.k-content.k-state-active {
+.managable-meet-pct kendo-tabstrip.art-kendo-bars.k-tabstrip>.k-content.k-state-active,
+.managable-meet-pct kendo-tabstrip.art-kendo-bars.k-tabstrip>.k-content.k-active {
     padding: 8px;
 }
 
@@ -1774,7 +1778,8 @@ kendo-window.flexOverlapProducts {
     padding: 0px !important;
 }
 
-#manageFilterStyle a.k-grid-filter.k-state-active {
+#manageFilterStyle a.k-grid-filter.k-state-active,
+#manageFilterStyle a.k-grid-filter.k-active {
     background-color: #EFEFEF;
 }
 
@@ -1959,9 +1964,7 @@ kendo-popup.k-animation-container .k-list-filter input.k-textbox:focus {
     box-shadow: none;
 }
 
-
 /*    summary Wrappers Manage Screen*/
-
 #sum-wrapper {
     height: 100vh;
     overflow: auto;
@@ -2066,7 +2069,8 @@ kendo-grid.raid-style.proselector-raid-style table tr th .k-cell-inner .k-grid-f
     opacity: .45;
 }
 
-kendo-grid.raid-style.proselector-raid-style table tr th .k-cell-inner .k-grid-filter.k-state-active {
+kendo-grid.raid-style.proselector-raid-style table tr th .k-cell-inner .k-grid-filter.k-state-active,
+kendo-grid.raid-style.proselector-raid-style table tr th .k-cell-inner .k-grid-filter.k-active {
     background-color: #fff;
 }
 
@@ -2123,11 +2127,13 @@ kendo-grid.filterDesignComp table tr th .k-grid-filter .k-i-filter:hover {
     color: #00aeef !important;
 }
 
-kendo-grid.filterDesignComp table tr th a.k-grid-filter.k-state-active {
+kendo-grid.filterDesignComp table tr th a.k-grid-filter.k-state-active,
+kendo-grid.filterDesignComp table tr th a.k-grid-filter.k-active {
     background-color: #fff;
 }
 
-kendo-grid.filterDesignComp table tr th a.k-grid-filter.k-state-active .k-i-filter {
+kendo-grid.filterDesignComp table tr th a.k-grid-filter.k-state-active .k-i-filter,
+kendo-grid.filterDesignComp table tr th a.k-grid-filter.k-active .k-i-filter {
     opacity: 1;
     color: var(--light-blue) !important;
 }
@@ -2173,7 +2179,8 @@ kendo-grid.filterDesignComp table tr th .k-cell-inner {
     margin-left: 6px
 }
 
-kendo-datepicker.createContractDatepicker .k-input {
+kendo-datepicker.createContractDatepicker .k-input,
+kendo-datepicker.createContractDatepicker .k-input-inner {
     font-size: 12px;
 }
 
@@ -2206,8 +2213,9 @@ kendo-dialog.backdate-popup .k-window-content {
     opacity: .45;
 }
 
-.kAlignHeaders .k-grid-header .k-grid-filter.k-state-active {
-    background-color: #fff;
+.kAlignHeaders .k-grid-header .k-grid-filter.k-state-active,
+.kAlignHeaders .k-grid-header .k-grid-filter-menu.k-active {
+    background-color: #fff !important;
 }
 
 .kAlignHeaders .k-grid-header .headerClass span.k-icon.k-i-filter:hover {
@@ -2248,6 +2256,7 @@ kendo-tabstrip.tabs-coll.pricingTableKendoTabstrip>.k-tabstrip-items-wrapper>.k-
 }
 
 kendo-tabstrip.tabs-coll.pricingTableKendoTabstrip>.k-tabstrip-items-wrapper>.k-tabstrip-items li.k-state-active,
+kendo-tabstrip.tabs-coll.pricingTableKendoTabstrip>.k-tabstrip-items-wrapper>.k-tabstrip-items li.k-active,
 kendo-tabstrip.tabs-coll.pricingTableKendoTabstrip>.k-tabstrip-items-wrapper>.k-tabstrip-items li:hover {
     background-color: #003c71 !important;
 }
@@ -2262,7 +2271,8 @@ kendo-tabstrip.tabs-coll.pricingTableKendoTabstrip>.k-tabstrip-items-wrapper>.k-
     margin-top: 0 !important;
 }
 
-kendo-datepicker.date-dashboard-search .k-dateinput .k-input {
+kendo-datepicker.date-dashboard-search .k-dateinput .k-input,
+kendo-datepicker.date-dashboard-search .k-dateinput .k-input-inner {
     font-size: 12px !important;
 }
 
@@ -2355,7 +2365,8 @@ kendo-tabstrip#priceTableDealEdit>.k-tabstrip-items-wrapper>.k-tabstrip-items>.k
     background-color: #00AEEF !important;
 }
 
-kendo-tabstrip#priceTableDealEdit>.k-tabstrip-items-wrapper>.k-tabstrip-items>.k-item.k-state-active {
+kendo-tabstrip#priceTableDealEdit>.k-tabstrip-items-wrapper>.k-tabstrip-items>.k-item.k-state-active,
+kendo-tabstrip#priceTableDealEdit>.k-tabstrip-items-wrapper>.k-tabstrip-items>.k-item.k-active {
     margin-right: 5px !important;
     color: #FFFFFF !important;
     background-color: #003C71 !important;
@@ -2672,16 +2683,20 @@ kendo-grid.tableScope th.k-header a.k-grid-filter .k-i-filter {
 kendo-grid.tableScope th.k-header a.k-grid-filter .k-i-filter:hover,
 kendo-grid.tableScope th.k-header a.k-grid-filter .k-i-filter:focus,
 kendo-grid.tableScope th.k-header a.k-grid-filter.k-state-active span.k-icon.k-i-filter:hover,
-kendo-grid.tableScope th.k-header a.k-grid-filter.k-state-active span.k-icon.k-i-filter:focus {
+kendo-grid.tableScope th.k-header a.k-grid-filter.k-state-active span.k-icon.k-i-filter:focus,
+kendo-grid.tableScope th.k-header a.k-grid-filter.k-active span.k-icon.k-i-filter:hover,
+kendo-grid.tableScope th.k-header a.k-grid-filter.k-active span.k-icon.k-i-filter:focus {
     color: var(--light-blue) !important;
     opacity: 1;
 }
 
-kendo-grid.tableScope th.k-header a.k-grid-filter.k-state-active {
+kendo-grid.tableScope th.k-header a.k-grid-filter.k-state-active,
+kendo-grid.tableScope th.k-header a.k-grid-filter.k-active {
     background: #fff;
 }
 
-kendo-grid.tableScope th.k-header a.k-grid-filter.k-state-active span.k-icon.k-i-filter {
+kendo-grid.tableScope th.k-header a.k-grid-filter.k-state-active span.k-icon.k-i-filter,
+kendo-grid.tableScope th.k-header a.k-grid-filter.k-active span.k-icon.k-i-filter {
     color: #000 !important;
 }
 
@@ -2885,7 +2900,9 @@ i.icon-color-pipe {
 
 .rpd-excel-export-menu li,
 .rpd-excel-export-menu li:hover .k-state-active,
-.rpd-excel-export-menu li:active .k-state-active {
+.rpd-excel-export-menu li:active .k-state-active,
+.rpd-excel-export-menu li:hover .k-active,
+.rpd-excel-export-menu li:active .k-active {
     color: #fff !important;
     font: bold;    
     font-size: 18px;

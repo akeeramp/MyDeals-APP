@@ -1,4 +1,5 @@
-﻿.correcting-product.k-grid tr.k-state-selected, .k-grid td.k-state-selected,
+﻿.correcting-product.k-grid tr.k-state-selected,
+.k-grid td.k-state-selected,
 .correcting-product.k-grid td.k-state-selected.k-state-focused,
 .correcting-product.k-grid tr.k-state-selected.k-state-hover,
 .correcting-product.k-grid td.k-state-selected.k-state-hover,
@@ -22,27 +23,28 @@
     box-shadow: none;
 }
 
-.prod-headers{
+.prod-headers {
     border-bottom: none;
     margin-bottom: 15px;
     padding: 15px;
     padding-bottom: 0;
 }
 
-    .lblFilterProdCorrect.k-treeview-leaf:hover,
-    .lblFilterProdCorrect.k-treeview-leaf.k-state-hover,
-    .lblFilterProdCorrect.k-treeview .k-in:hover,
-    .lblFilterProdCorrect.k-treeview .k-in.k-state-hover {
-        border-color: transparent;
-        color: var(--light-blue);
-        background-color: transparent;
-    }
+.lblFilterProdCorrect.k-treeview-leaf:hover,
+.lblFilterProdCorrect.k-treeview-leaf.k-state-hover,
+.lblFilterProdCorrect.k-treeview .k-in:hover,
+.lblFilterProdCorrect.k-treeview .k-in.k-state-hover {
+    border-color: transparent;
+    color: var(--light-blue);
+    background-color: transparent;
+}
 
-    .lblFilterProdCorrect.k-treeview-leaf.k-state-selected, .lblFilterProdCorrect.k-treeview .k-in.k-state-selected {
-        border-color: var(--light-blue);
-        color: white;
-        background-color: var(--light-blue);
-    }
+.lblFilterProdCorrect.k-treeview-leaf.k-state-selected,
+.lblFilterProdCorrect.k-treeview .k-in.k-state-selected {
+    border-color: var(--light-blue);
+    color: white;
+    background-color: var(--light-blue);
+}
 
 .correcting-product .k-grid-header .k-grid-filter.k-state-active,
 .correcting-product .k-grid-header .k-header-column-menu.k-state-active,
@@ -51,17 +53,18 @@
     background-color: var(--white);
 }
 
-    .correcting-product .k-grid-header .k-grid-filter.k-state-active .k-icon:hover,
-    .correcting-product .k-grid-header .k-grid-filter.k-state-active .k-icon:focus {
-        color: #808080 !important;
-    }
+.correcting-product .k-grid-header .k-grid-filter.k-state-active .k-icon:hover,
+.correcting-product .k-grid-header .k-grid-filter.k-state-active .k-icon:focus {
+    color: #808080 !important;
+}
 
 .correcting-product.k-grid td {
     height: 30px !important;
     white-space: nowrap;
 }
 
-.corrector-one-details, .corrector-two-details {
+.corrector-one-details,
+.corrector-two-details {
     height: calc(87vh - 260px) !important;
 }
 
@@ -79,7 +82,9 @@
     width: 4px !important;
 }
 
-.corrector-two-details.k-grid td, .corrector-two-details.k-grid td div, .corrector-two-details.k-grid td span {
+.corrector-two-details.k-grid td,
+.corrector-two-details.k-grid td div,
+.corrector-two-details.k-grid td span {
     white-space: nowrap !important;
     text-overflow: ellipsis;
     width: 100%;
@@ -112,7 +117,7 @@ span.big-label.badge.upperBadge {
     z-index: 2;
 }
 
-.pc-checkbox-design input[type=checkbox].prd-crctor-chkbox + label:before {
+.pc-checkbox-design input[type=checkbox].prd-crctor-chkbox+label:before {
     font-family: FontAwesome;
     display: inline-block;
     content: "\f096";
@@ -126,7 +131,7 @@ span.big-label.badge.upperBadge {
     z-index: 1;
 }
 
-.pc-checkbox-design input[type=checkbox].prd-crctor-chkbox:checked + label:before {
+.pc-checkbox-design input[type=checkbox].prd-crctor-chkbox:checked+label:before {
     content: "\f046";
     font-size: 22px;
     letter-spacing: 5px;
@@ -145,19 +150,22 @@ kendo-grid#productcorrectorgrid table tr th span.k-cell-inner .k-grid-filter .k-
 }
 
 @media (max-width:1920px) {
-    .corrector-one-details, .corrector-two-details {
+    .corrector-one-details,
+    .corrector-two-details {
         height: calc(100vh - 360px)
     }
 }
 
 @media (max-width:1620px) {
-    .corrector-one-details, .corrector-two-details {
+    .corrector-one-details,
+    .corrector-two-details {
         height: calc(100vh - 345px)
     }
 }
 
 @media (max-width:1450px) {
-    .corrector-one-details, .corrector-two-details {
+    .corrector-one-details,
+    .corrector-two-details {
         height: calc(100vh - 335px)
     }
 }

@@ -1,18 +1,14 @@
-import { Component, Inject, Input, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, Inject, OnInit, ViewEncapsulation } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { process, State } from "@progress/kendo-data-query";
+
 import { logger } from "../../../../shared/logger/logger";
 import { productSelectorService } from '../productselector.service';
 
 @Component({
     selector: 'product-breakout',
     templateUrl: 'Client/src/app/contract/ptModals/productSelector/productBreakout/productBreakout.component.html',
-    styleUrls: [
-        // 'Client/node_modules/bootstrap/dist/css/bootstrap.min.css',
-        // 'Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css',
-        'Client/src/app/admin/kendo_grid.css',
-        'Client/src/app/contract/ptModals/productSelector/productBreakout/productBreakout.component.css'
-    ],
+    styleUrls: ['Client/src/app/contract/ptModals/productSelector/productBreakout/productBreakout.component.css'],
     encapsulation: ViewEncapsulation.Emulated
 })
 export class ProductBreakoutComponent implements OnInit {
@@ -55,10 +51,10 @@ export class ProductBreakoutComponent implements OnInit {
         { field: "Level4", title: "Deal Product Name", width: '20%', template: " #= kendo.toString(Level4) #" },
         { field: "CAP_START", title: "Date Range", width: '24%', template: "#= kendo.toString(new Date(CAP_START), 'M/d/yyyy') # - #= kendo.toString(new Date(CAP_END), 'M/d/yyyy') #" },
         { field: "GEO_MBR_SID", title: "GEO", width: '11%' },
-        { field: "CUST_MBR_SID1", title: "SOLD TO", width: '11%'},
+        { field: "CUST_MBR_SID1", title: "SOLD TO", width: '11%' },
         { field: "CAP", title: "CAP", width: '11%' },
         { field: "CAP_PRC_COND", template: '<input type="checkbox" style="margin-top:2px;" disabled ng-checked="dataItem.CAP_PRC_COND == \'YCP1\'" />', title: 'YCP1', width: '11%' },
-  ];
+    ];
 
     private readonly ycs2Columns = [
         { field: "YCS2", title: "YCS2", template: "#= isNaN(YCS2) ? YCS2 : kendo.toString(parseFloat(YCS2), 'c') #" },

@@ -1,10 +1,11 @@
-﻿import { logger } from "../../shared/logger/logger";
-import { quoteLetterService } from "./admin.quoteLetter.service";
-import { Component, OnDestroy } from "@angular/core";
-import { saveAs } from 'file-saver';
-import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+﻿import { Component, OnDestroy } from "@angular/core";
+import { saveAs } from "@progress/kendo-file-saver";
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+
+import { logger } from "../../shared/logger/logger";
+import { quoteLetterService } from "./admin.quoteLetter.service";
+import { PendingChangesGuard } from "../../shared/util/gaurdprotectionDeactivate";
 import { AdminQuoteLetter } from "./admin.quoteLetter.model";
 
 @Component({
@@ -12,7 +13,6 @@ import { AdminQuoteLetter } from "./admin.quoteLetter.model";
     templateUrl: "Client/src/app/admin/quoteLetter/admin.quoteLetter.component.html",
     styleUrls: ['Client/src/app/admin/quoteLetter/admin.quoteLetter.component.css']
 })
-
 export class QuoteLetterComponent implements PendingChangesGuard, OnDestroy {
 
     constructor(private quoteLetterSvc: quoteLetterService, private loggerSvc: logger) { }

@@ -1,11 +1,13 @@
-﻿.action_style{
-    text-align:center !important
+﻿.action_style {
+    text-align: center !important
 }
+
 .admin-dialog-full-style-tender .k-content.k-window-content.k-dialog-content {
     padding: 30px;
     color: #444444 !important;
     font-size: 15px !important;
 }
+
 button.k-button.ok_admin_btn-tender {
     color: #444 !important;
     font-family: 'Intel Clear' !important;
@@ -13,16 +15,19 @@ button.k-button.ok_admin_btn-tender {
     height: 60px !important;
     font-size: 15px !important
 }
-    button.k-button.ok_admin_btn-tender:hover {
-        color: #444 !important;
-        border-color: #ebebeb !important;
-        background-color: #ebebeb !important
-    }
+
+button.k-button.ok_admin_btn-tender:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important
+}
+
 kendo-dialog-actions.admin-tender-action-tender.k-dialog-buttongroup {
     border-width: 0 !important;
     padding: 0 !important;
     border-radius: 0 !important
 }
+
 button.k-button.first-child-btn.cancel-dash-btn-style {
     width: 50% !important;
     height: 60px !important;
@@ -34,17 +39,20 @@ button.k-button.first-child-btn.cancel-dash-btn-style {
     color: #444444 !important;
     font-size: 15px !important;
 }
+
 button.k-button.first-child-btn.cancel-dash-btn-style:hover {
     color: #444444 !important;
     border-color: #ebebeb !important;
     background-color: #ebebeb !important;
 }
+
 kendo-dialog-actions.tender-admin-action {
     gap: 0px !important;
     padding: 0px !important;
     border-bottom-left-radius: 0px !important;
     border-bottom-right-radius: 0px !important;
 }
+
 button.k-button.first-child-btn.ok-dash-style {
     width: 50% !important;
     position: relative !important;
@@ -56,11 +64,13 @@ button.k-button.first-child-btn.ok-dash-style {
     border: none !important;
     font-size: 15px !important;
 }
+
 button.k-button.first-child-btn.ok-dash-style:hover {
     color: #fff !important;
     border-color: #0071c5 !important;
     background-color: #0071c5 !important;
 }
+
 .advance-show-hide {
     color: #00AEEF !important;
     cursor: pointer;
@@ -72,22 +82,24 @@ button.k-button.first-child-btn.ok-dash-style:hover {
     position: absolute;
     z-index: 9;
 }
+
 .advance-show-hide:hover {
     color: #32589c !important
 }
+
 .admin_deal_mctpct .mat-dialog-container {
     box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%) !important;
     background: #fff !important;
-    color: rgba(0,0,0,.87) !important;
+    color: rgba(0, 0, 0, .87) !important;
     border-radius: 0px !important;
     height: 485px !important;
     width: 1652px !important;
     margin-left: -231px !important;
-    padding:0px !important;
-    overflow:hidden !important;
-    right:-120px !important;
-    position:relative !important;
-    bottom:20px !important
+    padding: 0px !important;
+    overflow: hidden !important;
+    right: -120px !important;
+    position: relative !important;
+    bottom: 20px !important
 }
 
 .modal-header.admin_mctpct_header {
@@ -111,12 +123,14 @@ button.k-button.first-child-btn.ok-dash-style:hover {
     padding: 20px 10px 20px 900px;
     margin-left: -460px;
 }
+
 #search-info-container-tenderDashboard .right-inner-container {
     border: 1px solid #e5e5e5 !important;
     border-radius: 6px !important;
     padding: 10px !important;
     height: fit-content !important;
 }
+
 #search-info-container-tenderDashboard .left-container {
     width: 420px !important;
     float: left !important;
@@ -127,6 +141,7 @@ button.k-button.first-child-btn.ok-dash-style:hover {
     border-radius: 6px !important;
     padding: 0 10px 20px 10px !important;
 }
+
 #horizontal-search-tenderDashboard {
     border: 0 solid transparent !important;
     height: 100% !important;
@@ -138,6 +153,7 @@ button.k-button.first-child-btn.ok-dash-style:hover {
     width: 100% !important;
     margin: auto !important;
 }
+
 deal-editor.tender_de_admin {
     position: relative !important;
     top: 30px !important;
@@ -145,33 +161,36 @@ deal-editor.tender_de_admin {
     width: calc(100% - -31px) !important;
     margin-left: -15px !important;
 }
+
 meet-comp-contract.admin_tender_meetcomp {
     position: relative;
     bottom: 50px !important;
 }
+
 manager-pct.admin-tender-pricecosttest {
     top: -45px !important;
     position: relative !important;
 }
+
 i#btnClose.intelicon-close-max.tender-cross-close {
     color: #ffff !important;
     position: relative !important;
     float: right !important;
     padding: 12.5px !important;
-   
+
 }
+
 i#btnClose.intelicon-close-max.tender-cross-close:hover {
     background: #00aeef !important;
 }
+
 .tender_de_admin kendo-grid#dealEditor {
     height: calc(100vh - 420px) !important;
     position: relative !important;
 }
-/*.admin_tender_meetcomp kendo-grid#meetcomp-contract {
-    height: calc(100vh - 529px) !important;
-}*/
 
-kendo-numerictextbox.advance-numerictextbox-style input.k-input {
+kendo-numerictextbox.advance-numerictextbox-style input.k-input,
+kendo-numerictextbox.advance-numerictextbox-style input.k-input-inner {
     font-size: 11px;
 }
 
@@ -181,34 +200,40 @@ kendo-numerictextbox.advance-numerictextbox-style input.k-input {
 
 .admin_tender_meetcomp .meetComp-show-hide.meet-conduct.meet-comp-blank_space {
     top: 15px !important;
-    margin-left:0px !important;
-    position:relative !important
+    margin-left: 0px !important;
+    position: relative !important
 }
+
 .admin-tender-pricecosttest div#sum-header {
     height: 50px !important;
 }
+
 .admin-tender-pricecosttest hr {
     height: 0px !important;
     margin: 6px 0 !important;
     border-top: 1px solid #000000 !important;
     opacity: 0.6 !important;
 }
+
 .admin-tender-pricecosttest div#sum-wrapper {
     margin-left: 2px !important;
     overflow: hidden !important;
 }
+
 .admin-tender-pricecosttest kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
     /*bottom: -16px !important;*/
-    position:relative !important
+    position: relative !important
 }
+
 .admin-tender-pricecosttest td .tender_mctpct {
     position: relative;
     top: 4px;
 }
+
 .tender-grouping-exclusion .mat-dialog-container {
     box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%) !important;
     background: #fff !important;
-    color: rgba(0,0,0,.87) !important;
+    color: rgba(0, 0, 0, .87) !important;
     border-radius: 0px !important;
     height: 485px !important;
     width: 1652px !important;
@@ -219,9 +244,10 @@ kendo-numerictextbox.advance-numerictextbox-style input.k-input {
     position: relative !important;
     bottom: 20px !important
 }
+
 .tender_exclude_grouping kendo-grid.group-Excl-grid.grouping_grid_h {
     height: calc(100vh - 570px) !important;
-    position:relative !important
+    position: relative !important
 }
 
 .padding-design-horizontal-tenderDashboard {
@@ -230,8 +256,8 @@ kendo-numerictextbox.advance-numerictextbox-style input.k-input {
 
 .tender-de-custom #dealEditor .k-grid-header .headerClass[aria-label="GEO_APPROVED_BY"],
 .tender-de-custom #dealEditor .k-grid-header .headerClass[aria-label="DIV_APPROVED_BY"] {
-    border-bottom: 3px solid rgb(0,113,197) !important;
-    border-bottom-color: rgb(0,113,197) !important;
+    border-bottom: 3px solid rgb(0, 113, 197) !important;
+    border-bottom-color: rgb(0, 113, 197) !important;
 }
 
 .non-action-gray {
@@ -242,19 +268,21 @@ kendo-numerictextbox.advance-numerictextbox-style input.k-input {
     background-color: #f2f2f2 !important;
 }
 
-#folioCell a 
-{
+#folioCell a {
     color: #0071c5;
     text-decoration: none;
 }
 
-#folioCell a:hover,#folioCell a:focus {
+#folioCell a:hover,
+#folioCell a:focus {
     color: #004579;
     text-decoration: underline !important;
 }
+
 .admin_tender_meetcomp kendo-grid#meetcomp-contract td.k-touch-action-auto {
     border-width: 0px !important;
 }
+
 div#horizontal-search-tenderDashboard.padding-design-horizontal-tenderDashboard {
     max-width: 97vw !important;
 }
@@ -267,6 +295,7 @@ div#horizontal-search-tenderDashboard.padding-design-horizontal-tenderDashboard 
     justify-content: center;
     align-items: center;
 }
+
 #dealEditor .k-grid-norecords {
     background-color: #EBC3BC !important;
 }
@@ -275,7 +304,8 @@ div#horizontal-search-tenderDashboard.padding-design-horizontal-tenderDashboard 
     background-color: #EBC3BC !important;
 }
 
-#dealEditorTab .k-grid .k-grid-content-locked .k-state-hover td, #dealEditorTab .k-grid .k-grid-content-locked tr.k-grid-norecords:hover td {
+#dealEditorTab .k-grid .k-grid-content-locked .k-state-hover td,
+#dealEditorTab .k-grid .k-grid-content-locked tr.k-grid-norecords:hover td {
     background-color: #EBC3BC !important;
 }
 

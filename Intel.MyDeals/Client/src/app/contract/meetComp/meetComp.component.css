@@ -108,7 +108,7 @@
     margin-left: -5px;
     min-width: auto !important;
     height: 35px !important;
-    white-space:pre !important;
+    white-space: pre !important;
     font-size: 12px
 }
 
@@ -458,11 +458,11 @@
     color: #0071C5 !important
 }
 
-    .meet-conduct .deallink:hover {
-        text-decoration: underline !important;
-        cursor: pointer !important;
-        color: #004579 !important
-    }
+.meet-conduct .deallink:hover {
+    text-decoration: underline !important;
+    cursor: pointer !important;
+    color: #004579 !important
+}
 
 .meet-conduct .secondary-btn:hover {
     background-color: #ebebeb
@@ -494,13 +494,13 @@
     font-size: 14px !important
 }
 
-    .either-pin.meetEitherPins kendo-grid kendo-grid-list .k-icon.k-i-plus:before {
-        content: "\e005" !important
-    }
+.either-pin.meetEitherPins kendo-grid kendo-grid-list .k-icon.k-i-plus:before {
+    content: "\e005" !important
+}
 
-    .either-pin.meetEitherPins kendo-grid kendo-grid-list .k-icon.k-i-minus:before {
-        content: "\e001" !important
-    }
+.either-pin.meetEitherPins kendo-grid kendo-grid-list .k-icon.k-i-minus:before {
+    content: "\e001" !important
+}
 
 .meetEitherPins .all-labels {
     font-weight: bold !important
@@ -634,6 +634,7 @@ kendo-grid#meetcomp-contract td {
     font-size: 12px;
 }
 
-kendo-grid#meetcomp-contract .k-input {
+kendo-grid#meetcomp-contract .k-input,
+kendo-grid#meetcomp-contract .k-input-inner {
     font-size: 12px;
 }

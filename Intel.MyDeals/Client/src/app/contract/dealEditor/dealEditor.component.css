@@ -185,7 +185,7 @@
     margin: 1px 0 0 0px !important;
 }
 
-#dealEditorTab tr:last-child > td {
+#dealEditorTab tr:last-child>td {
     border-bottom-width: 1px !important
 }
 
@@ -220,7 +220,8 @@
     border-top-right-radius: .25rem !important
 }
 
-#dealEditorTab .k-tabstrip-items .k-state-active {
+#dealEditorTab .k-tabstrip-items .k-state-active,
+#dealEditorTab .k-tabstrip-items .k-active {
     background: #ffffff !important;
     border-color: #b1babf;
     border-width: 1px;
@@ -357,7 +358,7 @@
     white-space: nowrap
 }
 
-#dealEditorTab .k-grid-content-locked + .k-grid-content {
+#dealEditorTab .k-grid-content-locked+.k-grid-content {
     display: inline-block;
     vertical-align: top
 }
@@ -367,7 +368,7 @@
 }
 
 .opDealEditorGrids.k-grid .uiControlDiv {
-   /* line-height: 2 !important;*/
+    /* line-height: 2 !important;*/
     margin-bottom: 0 !important;
     margin-top: 0 !important;
     padding: 4px 8px !important
@@ -403,22 +404,22 @@
 #dealEditorTab .k-grid td.k-state-focused,
 #dealEditorTab .k-grid th.k-state-focused,
 #dealEditorTab .k-grid th:focus,
-#dealEditorTab .k-grid .k-master-row > td:focus,
-#dealEditorTab .k-grid .k-grouping-row > td:focus,
-#dealEditorTab .k-grid .k-detail-row > td:focus,
-#dealEditorTab .k-grid .readOnlyCell > td:focus,
-#dealEditorTab .k-grid .k-detail-row > td:focus {
+#dealEditorTab .k-grid .k-master-row>td:focus,
+#dealEditorTab .k-grid .k-grouping-row>td:focus,
+#dealEditorTab .k-grid .k-detail-row>td:focus,
+#dealEditorTab .k-grid .readOnlyCell>td:focus,
+#dealEditorTab .k-grid .k-detail-row>td:focus {
     box-shadow: inset 0 0 0 1px #00aeef !important
 }
 
 #dealEditorTab .k-grid td.k-state-focused,
 #dealEditorTab .k-grid th.k-state-focused,
 #dealEditorTab .k-grid th:focus:hover,
-#dealEditorTab .k-grid .k-master-row > td:focus:hover,
-#dealEditorTab .k-grid .k-grouping-row > td:focus:hover,
-#dealEditorTab .k-grid .k-detail-row > td:focus:hover,
-#dealEditorTab .k-grid .readOnlyCell > td:focus:hover,
-#dealEditorTab .k-grid .k-detail-row > td:focus:hover {
+#dealEditorTab .k-grid .k-master-row>td:focus:hover,
+#dealEditorTab .k-grid .k-grouping-row>td:focus:hover,
+#dealEditorTab .k-grid .k-detail-row>td:focus:hover,
+#dealEditorTab .k-grid .readOnlyCell>td:focus:hover,
+#dealEditorTab .k-grid .k-detail-row>td:focus:hover {
     box-shadow: inset 0 0 0 1px #003C71 !important
 }
 
@@ -428,9 +429,9 @@
     padding: 0 !important
 }
 
-    #dealEditorTab .gridStatusMarker.Active {
-        line-height: 2
-    }
+#dealEditorTab .gridStatusMarker.Active {
+    line-height: 2
+}
 
 .dealDetail .dealDetailContainer {
     line-height: 2
@@ -464,7 +465,8 @@
     vertical-align: top
 }
 
-#dealEditorTab .k-state-disabled {
+#dealEditorTab .k-state-disabled,
+#dealEditorTab .k-disabled {
     opacity: 1 !important
 }
 
@@ -508,7 +510,7 @@
     color: #ff0000 !important
 }
 
-#dealEditorTab tr:last-child > td {
+#dealEditorTab tr:last-child>td {
     border-bottom-width: 0 !important
 }
 
@@ -531,12 +533,12 @@
     border-color: #ccc !important
 }
 
-    #dealEditorTab .k-grid .k-grid-header-locked,
-    #dealEditorTab .k-grid .k-grid-content-locked,
-    #dealEditorTab .k-grid .k-grid-header-locked .k-header,
-    #dealEditorTab .k-grid .k-grid-content-locked td {
-        border-color: #ccc !important
-    }
+#dealEditorTab .k-grid .k-grid-header-locked,
+#dealEditorTab .k-grid .k-grid-content-locked,
+#dealEditorTab .k-grid .k-grid-header-locked .k-header,
+#dealEditorTab .k-grid .k-grid-content-locked td {
+    border-color: #ccc !important
+}
 
 #dealEditor.op-grid.k-grid tr:hover {
     background-color: #ecf8fb !important
@@ -547,7 +549,7 @@
     background-color: #ecf8fb !important
 }
 
-#dealEditorTab .k-cell-inner > .k-link:hover {
+#dealEditorTab .k-cell-inner>.k-link:hover {
     background: none !important;
     color: #1a3e6f !important
 }
@@ -556,7 +558,8 @@
     background: #eee !important
 }
 
-#dealEditorTab .k-tabstrip-items .k-state-active .colorChg {
+#dealEditorTab .k-tabstrip-items .k-state-active .colorChg,
+#dealEditorTab .k-tabstrip-items .k-active .colorChg {
     color: #00aeef !important
 }
 
@@ -582,22 +585,22 @@
 #dealEditorTab .k-grid td.k-state-focused,
 #dealEditorTab .k-grid th.k-state-focused,
 #dealEditorTab .k-grid th:focus:hover,
-#dealEditorTab .k-grid .k-master-row > td:focus:hover,
-#dealEditorTab .k-grid .k-grouping-row > td:focus:hover,
-#dealEditorTab .k-grid .k-detail-row > td:focus:hover,
-#dealEditorTab .k-grid .readOnlyCell > td:focus:hover,
-#dealEditorTab .k-grid .k-detail-row > td:focus:hover {
+#dealEditorTab .k-grid .k-master-row>td:focus:hover,
+#dealEditorTab .k-grid .k-grouping-row>td:focus:hover,
+#dealEditorTab .k-grid .k-detail-row>td:focus:hover,
+#dealEditorTab .k-grid .readOnlyCell>td:focus:hover,
+#dealEditorTab .k-grid .k-detail-row>td:focus:hover {
     box-shadow: inset 0 0 0 1px #00aeef !important
 }
 
 #dealEditorTab .k-grid td.k-state-focused,
 #dealEditorTab .k-grid th.k-state-focused,
 #dealEditorTab .k-grid th:focus,
-#dealEditorTab .k-grid .k-master-row > td:focus,
-#dealEditorTab .k-grid .k-grouping-row > td:focus,
-#dealEditorTab .k-grid .k-detail-row > td:focus,
-#dealEditorTab .k-grid .readOnlyCell > td:focus,
-#dealEditorTab .k-grid .k-detail-row > td:focus {
+#dealEditorTab .k-grid .k-master-row>td:focus,
+#dealEditorTab .k-grid .k-grouping-row>td:focus,
+#dealEditorTab .k-grid .k-detail-row>td:focus,
+#dealEditorTab .k-grid .readOnlyCell>td:focus,
+#dealEditorTab .k-grid .k-detail-row>td:focus {
     box-shadow: inset 0 0 0 1px #00aeef !important
 }
 
@@ -738,18 +741,18 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
     cursor: pointer
 }
 
-    #dealEditorTab .dropdown-content ul li {
-        color: #00AEEF;
-        padding: 8px 0;
-        text-decoration: none;
-        display: block;
-        cursor: pointer
-    }
+#dealEditorTab .dropdown-content ul li {
+    color: #00AEEF;
+    padding: 8px 0;
+    text-decoration: none;
+    display: block;
+    cursor: pointer
+}
 
-        #dealEditorTab .dropdown-content ul li:hover {
-            background-color: #f1f1f1;
-            cursor: pointer
-        }
+#dealEditorTab .dropdown-content ul li:hover {
+    background-color: #f1f1f1;
+    cursor: pointer
+}
 
 #dealEditorTab .dropdown:hover .dropdown-content {
     display: block;
@@ -908,10 +911,10 @@ ngb-tooltip-window .tooltip-inner {
     position: relative;
 }
 
-    .dealCell.isErrorCell .err-bit {
-        position: absolute;
-        top: -2px;
-    }
+.dealCell.isErrorCell .err-bit {
+    position: absolute;
+    top: -2px;
+}
 
 .isErrorCell .err-bit {
     position: absolute;
@@ -1039,11 +1042,11 @@ kendo-dialog-actions.add-tab-style.k-dialog-buttongroup {
     padding: 1.375rem .75rem !important
 }
 
-    #dealEditorTab button.k-button.add-tab-okbtn:hover {
-        color: #fff !important;
-        border-color: #0071c5 !important;
-        background-color: #0071c5 !important
-    }
+#dealEditorTab button.k-button.add-tab-okbtn:hover {
+    color: #fff !important;
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important
+}
 
 #dealEditorTab button.k-button.add-tab-cancelbtn {
     font-family: 'Intel Clear' !important;
@@ -1053,11 +1056,11 @@ kendo-dialog-actions.add-tab-style.k-dialog-buttongroup {
     color: #444444 !important
 }
 
-    #dealEditorTab button.k-button.add-tab-cancelbtn:hover {
-        color: #444 !important;
-        border-color: #ebebeb !important;
-        background-color: #ebebeb !important
-    }
+#dealEditorTab button.k-button.add-tab-cancelbtn:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important
+}
 
 .tab-name-style {
     font-size: 15px !important;
@@ -1279,7 +1282,7 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
 #capYcs2Col {
     position: relative;
     top: 25%;
-    display:flex;
+    display: flex;
 }
 
 #tdsCol {
@@ -1293,18 +1296,6 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
 
 #breakOutGrid.k-grid td {
     padding-left: 15px !important
-}
-
-
-.product-breakout-modal .k-icon.k-i-file-excel {
-    margin-top: -30px !important;
-    padding-left: 17px
-}
-
-.product-breakout-modal .excelbtn-style {
-    margin-bottom: -30px !important;
-    margin-left: -32px;
-    text-align: center !important
 }
 
 .deal-pmc-custom .k-grid tr:last-child>td {
@@ -1368,7 +1359,8 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
     padding: 5px !important
 }
 
-.parent-tier-child kendo-numerictextbox .k-input {
+.parent-tier-child kendo-numerictextbox .k-input,
+.parent-tier-child kendo-numerictextbox .k-input-inner {
     padding: 5px
 }
 
@@ -1401,7 +1393,7 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
 
 #DC_ID .err-bit {
     margin: -45px 0 0 1px !important;
-    top:44px
+    top: 44px
 }
 
 #closePopover {
@@ -1528,13 +1520,15 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li span.k-icon.k-i-reload 
     height: auto;
 }
 
-.dealsInputOpt:focus-visible, .dealsInputOpt:focus {
+.dealsInputOpt:focus-visible,
+.dealsInputOpt:focus {
     outline: none;
 }
 
 kendo-grid#dealEditor .k-grid-header-wrap {
     background: #fff;
 }
+
 .deDealsOvrLap mat-dialog-container {
     padding: 0;
 }
@@ -1547,20 +1541,23 @@ kendo-grid#dealEditor .k-grid-header-wrap {
     gap: 0.2rem;
 }
 
-    .bidGeoMultiSelect .k-multiselect-wrap.k-floatwrap ul li:hover {
-        background-color: var(--light-blue);
-    }
+.bidGeoMultiSelect .k-multiselect-wrap.k-floatwrap ul li:hover {
+    background-color: var(--light-blue);
+}
 
-    .bidGeoMultiSelect .k-multiselect-wrap.k-floatwrap ul li span {
-        color: #fff;
-        line-height: 1;
-    }
+.bidGeoMultiSelect .k-multiselect-wrap.k-floatwrap ul li span {
+    color: #fff;
+    line-height: 1;
+}
 
-    .bidGeoMultiSelect .k-multiselect-wrap.k-floatwrap ul li span.k-select {
-        display: inline-flex !important;
-    }
+.bidGeoMultiSelect .k-multiselect-wrap.k-floatwrap ul li span.k-select {
+    display: inline-flex !important;
+}
 
-kendo-datepicker#dealDatePicker .k-input, kendo-grid#dealEditor .k-input {
+kendo-datepicker#dealDatePicker .k-input,
+kendo-grid#dealEditor .k-input,
+kendo-datepicker#dealDatePicker .k-input,
+kendo-grid#dealEditor .k-input-inner {
     font-size: 12px;
 }
 
@@ -1599,6 +1596,7 @@ kendo-datepicker#dealDatePicker .k-input, kendo-grid#dealEditor .k-input {
     background-color: #0071c5 !important;
 }
 }
+
 i.iConFont.intelicon-help-solid {
     color: #F3D54E !important
 }
@@ -1618,49 +1616,56 @@ i.iConFont.intelicon-information-solid {
 i.iConFont.intelicon-alert-solid {
     color: rgb(252, 76, 2) !important;
 }
+
 .err-bit.class-date-fix {
     margin: 0px !important;
     position: absolute !important;
     top: 0px !important;
     z-index: 1 !important;
 }
+
 .err-bit.ratebrkout-fix-class.ng-star-inserted {
     position: absolute !important;
     top: 0px !important;
     z-index: 9;
 }
+
 .err-bit.ratebrkout-fix-den-class.ng-star-inserted {
     position: absolute !important;
     left: 0px !important;
 }
+
 span.ng-binding.dataPadding.rate-value-fix {
     position: relative !important;
     padding-right: 20px !important;
 }
+
 .Tabfix .k-content.k-window-content.k-dialog-content {
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
     margin: 0;
     padding: 1.8em 1em !important;
 }
+
 .multiselect-scroll-style .mat-dialog-container {
     padding: 6px !important;
 }
+
 #dealEditorTab .k-dialog .k-button.okbtnfix {
     background: #00AEEF !important;
 }
 
-    #dealEditorTab .k-dialog .k-button.okbtnfix:hover {
-        background-color: #0071c5 !important;
-    }
+#dealEditorTab .k-dialog .k-button.okbtnfix:hover {
+    background-color: #0071c5 !important;
+}
 
 #dealEditorTab .k-dialog .k-button.extend-dealpopup {
     background-color: #00aeef !important;
 }
 
-    #dealEditorTab .k-dialog .k-button.extend-dealpopup:hover {
-        background-color: #0071c5 !important;
-    }
+#dealEditorTab .k-dialog .k-button.extend-dealpopup:hover {
+    background-color: #0071c5 !important;
+}
 
 #dealEditorTab .k-dialog .k-button.cancel-extend-deal {
     background-color: #fafafa !important;
@@ -1668,8 +1673,8 @@ span.ng-binding.dataPadding.rate-value-fix {
     color: #444 !important;
 }
 
-    #dealEditorTab .k-dialog .k-button.cancel-extend-deal:hover {
-        color: #444 !important;
-        border-color: #ebebeb !important;
-        background-color: #ebebeb !important;
-    }
+#dealEditorTab .k-dialog .k-button.cancel-extend-deal:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important;
+}

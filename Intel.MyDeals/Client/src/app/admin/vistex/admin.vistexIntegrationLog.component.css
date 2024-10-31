@@ -7,8 +7,14 @@
     width: 210px
 }
 
-.vistexIntegrationCombox .k-dropdown-wrap k-state-default, .rmv-lft-rght-pdng .k-input {
+.vistexIntegrationCombox .k-dropdown-wrap k-state-default,
+.rmv-lft-rght-pdng .k-input,
+.rmv-lft-rght-pdng .k-input-inner {
     height: 32px
+}
+
+.datePickerWidth {
+    width: 10em !important;
 }
 
 .rmv-lft-rght-pdng {
@@ -31,14 +37,14 @@
     border-color: #fafafa !important
 }
 
-    .kendo-dlg-action:hover {
-        background-color: lightgrey !important;
-        cursor: pointer
-    }
+.kendo-dlg-action:hover {
+    background-color: lightgrey !important;
+    cursor: pointer
+}
 
 .vistexOkIntegrationLog {
     padding: 10px;
-    font-family: Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif !important;
+    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
     font-size: 15px;
     text-align: center
 }
@@ -47,7 +53,7 @@
     padding: 18px !important;
     text-align: center;
     font-size: 15px;
-    font-family: Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif !important
+    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important
 }
 
 .KendoVistexLog.k-grid td {

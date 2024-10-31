@@ -16,7 +16,6 @@
                     <i class="intelicon-refresh" style="font-size:18px"></i>
                 </a>
             </div>
-
             <div class="fr">
                 <div class="fr">
                     <kendo-datepicker class="date-dashboard"
@@ -56,14 +55,12 @@
                 <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa; font-size: 14px;">Date Range:</div>
 
                 <div class="fr" style="width:254px">
-                    <kendo-multiselect kendoMultiSelectSummaryTag [placeholder]="'Select Customers...'" class="fr opUiContainer md divineo-one dashcusstyle" style="width: 250px; margin-right: 7px; font-weight: 500;" #cmbmulti [data]="custData" textField="CUST_NM" valueField="CUST_SID"
-                                       [autoClose]="false" [(ngModel)]="selectedCustNames" (valueChange)="onCustomerChange($event)" [kendoDropDownFilter]="filterSettings">
+                    <kendo-multiselect kendoMultiSelectSummaryTag [placeholder]="'Select Customers...'" class="fr opUiContainer md divineo-one dashcusstyle" style="width: 250px; margin-right: 7px; font-weight: 500;" #cmbmulti [data]="custData" textField="CUST_NM" valueField="CUST_SID" [autoClose]="false" [(ngModel)]="selectedCustNames" (valueChange)="onCustomerChange($event)" [kendoDropDownFilter]="filterSettings">
                         <ng-template kendoMultiSelectGroupTagTemplate let-dataItems>
                             <span class="k-icon k-i-caret-alt-down"></span> {{ dataItems.length }} ITEMS(S) SELECTED
                         </ng-template>
                     </kendo-multiselect>
                 </div>
-
                 <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa; font-size: 14px; ">
                     Customers: <i class="intelicon-find-a-person-solid" style="font-size:24px;"></i>
                 </div>

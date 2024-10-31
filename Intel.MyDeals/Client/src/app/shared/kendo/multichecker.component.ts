@@ -10,81 +10,89 @@ import { each, compact, sortBy, filter } from 'underscore';
         <input id="multiCheckFilter" class="k-textbox" (input)="onInput($event)" placeholder="Search" />
         <span id="searchIcon" class="k-icon k-i-zoom"></span>
     </div>
-    <cdk-virtual-scroll-viewport [itemSize]="7"  style="min-height: 200px;">
-        <ul style="overflow:hidden !important; max-width: 300px;">      
-          <li #itemElement
-            *cdkVirtualFor="let item of currentData; let i = index;"
+    <cdk-virtual-scroll-viewport [itemSize]="7" style="min-height: 200px;">
+        <ul style="overflow:hidden !important; max-width: 300px;">
+            <li #itemElement *cdkVirtualFor="let item of currentData; let i = index;"
             (click)="onSelectionChange(valueAccessor(item), itemElement)"
             [ngClass]="{'k-state-selected': isItemSelected(item)}">
-            <input
-              type="checkbox"
-              id="chk-{{valueAccessor(item)}}"
-              (focus)="onFocus(itemElement)"
-              class="k-checkbox"
-              [checked]="isItemSelected(item)"
-              [disabled] = "currentData.length == 1 && textAccessor(item) == 'Select All'" />
-            <label
-              class="k-multiselect-checkbox k-checkbox-label"
-              for="chk-{{valueAccessor(item)}}">
-                {{ textAccessor(item) }}
-            </label>
-          </li>
+            <div class="k-form-field-checkbox-wrap">
+                <input kendoCheckBox type="checkbox" id="chk-{{ valueAccessor(item) }}" (focus)="onFocus(itemElement)" [checked]="isItemSelected(item)" />
+                <label class="k-multiselect-checkbox k-checkbox-label" for="chk-{{ valueAccessor(item) }}">{{ textAccessor(item) }}</label>
+            </div>
+            </li>
         </ul>
     </cdk-virtual-scroll-viewport>
-    <div id="selectedCount">{{selectedCount}} items selected</div>
-  `,
+    <div id="selectedCount">{{ selectedCount }} items selected</div>`,
     styles: [`
-    #searchIcon{
-        display:inline-block;
-        left:200px;
-        bottom:30px;
-        text-align:center;
-        vertical-align:middle;
-        overflow:hidden;
-    }
-    #filterBar{
-        margin-bottom: -15px;
-    }
-    #filterBar input{
-        width:100%;
-        margin-left:1px !important;
-    }
-    #multiCheckFilter.k-textbox {
-        font-size:14px;
-        font-weight:bold;
-    }
-    ul {
-      list-style-type: none;
-      padding-left: 0;
-      padding-right: 12px;
-      position: relative;
-      overflow: hidden;
-      overflow-x: hidden;
-      white-space: nowrap;
-      max-height: initial;
-      margin-bottom: 5px;
-    }
+        #searchIcon {
+            display: inline-block;
+            left: 200px;
+            bottom: 30px;
+            text-align: center;
+            vertical-align: middle;
+            overflow: hidden;
+        }
 
-    ul>li{
-        padding: 1px 12px;
-    }
+        #filterBar {
+            margin-bottom: -15px;
+        }
 
-    #filterBar, #selectedCount {
-      padding: 0px 5px;
-    }    
+        #filterBar input {
+            width: 100%;
+            margin-left: 1px !important;
+        }
 
-    .k-multiselect-checkbox {
-      pointer-events: none;
-    }
-   #selectedCount{
-        font-weight:bold;
-    }
-    cdk-virtual-scroll-viewport.cdk-virtual-scroll-viewport ul li {
-        word-wrap: break-word;
-        width: 100%;
-        max-width: 1000px;
-    }
-  `]
+        #multiCheckFilter.k-textbox {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            padding-right: 12px;
+            position: relative;
+            overflow: hidden;
+            overflow-x: hidden;
+            white-space: nowrap;
+            max-height: initial;
+            margin-bottom: 5px;
+        }
+
+        ul>li {
+            padding: 1px 12px;
+        }
+
+        #filterBar,
+        #selectedCount {
+            padding: 0px 5px;
+        }
+
+        .k-multiselect-checkbox {
+            pointer-events: none;
+        }
+
+        #selectedCount {
+            font-weight: bold;
+        }
+
+        cdk-virtual-scroll-viewport.cdk-virtual-scroll-viewport ul li {
+            word-wrap: break-word;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        input.k-textbox {
+            padding: .375rem .75rem;
+            border-color: #ced4da;
+            color: #495057;
+            background: none;
+            border-radius: .25rem;
+            border-style: solid;
+            border-width: 1px;
+            box-shadow: none;
+        }
+    `]
 })
 export class MultiCheckFilterComponent implements AfterViewInit {
     @Input() public isPrimitive: boolean;
