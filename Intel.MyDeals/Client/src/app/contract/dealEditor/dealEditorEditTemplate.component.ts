@@ -230,7 +230,7 @@ export class dealEditorEditTemplateComponent {
             if (field === "END_REV" && (dataItem[field][dimKey] === null || dataItem[field]["10___" + row] == 9999999999.99 || dataItem[field][dimKey] == "9999999999.99")) {
                 dataItem[field][dimKey] = 9999999999.99;
             }
-            else if ((dataItem[field][dimKey] === null || dataItem[field][dimKey] == 999999999 || dataItem[field][dimKey] == "999999999")) {
+            else if (field != "END_REV" && (dataItem[field][dimKey] === null || dataItem[field][dimKey] == 999999999 || dataItem[field][dimKey] == "999999999")) {
                 dataItem[field][dimKey] = "Unlimited";
             }
             this.saveLinkedDataItem(dataItem, field, dataItem[field][dimKey], dimKey)
