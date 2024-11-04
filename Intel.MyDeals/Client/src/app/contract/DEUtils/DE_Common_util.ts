@@ -157,8 +157,12 @@ export class DE_Common_Util {
                 else if (dataItem.OBJ_SET_TYPE_CD === 'REV_TIER') {
                     if (!Number.isNaN(Number(dataItem["STRT_REV"][key])))
                         dataItem["STRT_REV"][key] = dataItem["STRT_REV"][key].toString();
-                    if (!Number.isNaN(Number(dataItem["END_REV"][key])))
+                    if (!Number.isNaN(Number(dataItem["END_REV"][key]))) {
+                        if (dataItem["END_REV"][key] == null) {
+                            dataItem["END_REV"][key] = 0;
+                        }
                         dataItem["END_REV"][key] = dataItem["END_REV"][key].toString();
+                    }
                     dataItem["INCENTIVE_RATE"][key] = dataItem["INCENTIVE_RATE"][key].toString();
                 }
                 else if (dataItem.OBJ_SET_TYPE_CD === 'DENSITY') {

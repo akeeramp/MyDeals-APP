@@ -126,7 +126,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
                     "Dealmode": this.selectedRequestType.RQST_TYPE,
                     "StartDate": this.momentService.moment(this.startDate).format("MM/DD/YYYY"),
                     "EndDate": this.momentService.moment(this.endDate).format("MM/DD/YYYY"),
-                    "DealId": this.LogDealId
+                    "DealId": this.LogDealId.trim()
                 }
                 this.dsaService.getVistexLogs(postData).pipe(takeUntil(this.destroy$)).subscribe((response: VistexLogsInfo[]) => {
                     this.gridResult = response;

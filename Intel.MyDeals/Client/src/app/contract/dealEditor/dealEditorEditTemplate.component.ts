@@ -214,7 +214,7 @@ export class dealEditorEditTemplateComponent {
     updateTierAttributes(dataItem: any, field: string, row: number) {
         let dimKey = "10___" + (row);
         if (field === "END_VOL" || field === "END_REV" || field === "END_PB") {
-            if (field === "END_REV" && (dataItem[field][dimKey] === null || dataItem[field]["10___" + row] == 9999999999.99 || dataItem[field][dimKey] == "9999999999.99")) {
+            if (field === "END_REV" && (dataItem[field]["10___" + row] == 9999999999.99 || dataItem[field][dimKey] == "9999999999.99")) {
                 dataItem[field][dimKey] = 9999999999.99;
             }
             else if (field != "END_REV" && (dataItem[field][dimKey] === null || dataItem[field][dimKey] == 999999999 || dataItem[field][dimKey] == "999999999")) {
@@ -268,7 +268,7 @@ export class dealEditorEditTemplateComponent {
         GridUtil.stgFullTitleChar(passedData);
     }
     convertToLowerCase(value) {
-        if (typeof value !== 'number')
+        if (typeof value !== 'number' && value != null)
             return value.toLowerCase();
         return value;
     }
