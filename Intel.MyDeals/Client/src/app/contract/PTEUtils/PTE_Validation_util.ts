@@ -271,13 +271,13 @@ export class PTE_Validation_Util {
     }    
 
     static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract, lookBackPeriod, templates, groups): any {
-        let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates);
+        let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates,groups);
         PTE_Common_Util.setWarningFields(data, curPricingTable);
         return isShowStopperError;
     }
 
     static validateTenderDashboardDeal(data, curPricingTable, groups, templates, allTabRename) {
-        let isShowStopperError = DE_Validation_Util.validateTenderDahsboardDeals(data, templates);
+        let isShowStopperError = DE_Validation_Util.validateTenderDahsboardDeals(data, templates,groups);
         PTE_Common_Util.setWarningFields(data, curPricingTable);
         if (data != null) {
             for (let i = 0; i < data.length; i++) {
@@ -1030,8 +1030,10 @@ export class PTE_Validation_Util {
         return data;
     }
 
-    static validateBillingLookbakPeriod(data){
+    static validateBillingLookbakPeriod(data,groups?){
         data = this.clearValidation(data, 'CONSUMPTION_LOOKBACK_PERIOD');
+        let isconsumpptionvisible= groups!=undefined? groups.filter(x=>x.name=='Consumption'):0;
+        if(isconsumpptionvisible.length>0){
         each(data, (item) => {
             if (item.WF_STG_CD == "Active" || item.WF_STG_CD == "Won") {
                 if (item.CONSUMPTION_LOOKBACK_PERIOD != undefined && (item.CONSUMPTION_LOOKBACK_PERIOD == null || item.CONSUMPTION_LOOKBACK_PERIOD == '')) {
@@ -1044,6 +1046,7 @@ export class PTE_Validation_Util {
                 }
             }
         });
+    }
     }
 
     /**

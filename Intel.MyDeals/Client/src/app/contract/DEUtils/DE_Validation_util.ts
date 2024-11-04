@@ -6,7 +6,7 @@ import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 
 export class DE_Validation_Util {
 
-    static validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates) {
+    static validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates,groups) {
         let restrictGroupFlexOverlap = false;
         each(data, (item) => {
             PTE_Common_Util.setBehaviors(item);
@@ -22,7 +22,7 @@ export class DE_Validation_Util {
         PTE_Validation_Util.validateSettlementLevel(data, curPricingStrategy);
         PTE_Validation_Util.validateFlexRowType(data, curPricingStrategy, curPricingTable, data, undefined, restrictGroupFlexOverlap);
         PTE_Validation_Util.validateMarketSegment(data, data, undefined);
-        PTE_Validation_Util.validateBillingLookbakPeriod(data);
+        PTE_Validation_Util.validateBillingLookbakPeriod(data,groups);
         return this.ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap);
     }
 
@@ -244,9 +244,9 @@ export class DE_Validation_Util {
             if (item["LAST_REDEAL_DT"] !== undefined) item["LAST_REDEAL_DT"] = StaticMomentService.moment(item["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
         });
     }
-    static validateTenderDahsboardDeals(data, templates) {
+    static validateTenderDahsboardDeals(data, templates,groups) {
         let isShowStopperError = false;
-        PTE_Validation_Util.validateBillingLookbakPeriod(data);
+        PTE_Validation_Util.validateBillingLookbakPeriod(data,groups);
         for (var i = 0; i < data.length; i++) {
             if (data[i]._dirty) {
                 this.dataConversion(data, templates);
