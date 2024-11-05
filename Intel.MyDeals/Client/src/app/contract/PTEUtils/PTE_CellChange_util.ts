@@ -520,7 +520,7 @@ export class PTE_CellChange_Util {
                     //the row can be insert or delete to get that we are removing and adding the rows
                     let DataOfRow = filter(PTE_Common_Util.getPTEGenerate(columns, curPricingTable), itm => { return itm.DC_ID == ROW_ID });
                     this.hotTable.alter('remove_row', selrow, items[0].old.split(',').length, 'no-edit');
-                    this.hotTable.alter('insert_row_above', selrow, items[0].new.split(',').length, 'no-edit');
+                    this.hotTable.alter('insert_row', selrow, items[0].new.split(',').length, 'no-edit');
                     //this line of code is only for KIT incase of success product
                     if (operation && operation.operation) {
                         let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
