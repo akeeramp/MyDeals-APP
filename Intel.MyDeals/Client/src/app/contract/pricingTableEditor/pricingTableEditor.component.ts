@@ -1553,7 +1553,10 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         }
     }
 
-    async validatePricingTableProducts(deleteDcIds?) {
+    async validatePricingTableProducts(deleteDcIds?, tabNav = false) {
+        if (tabNav) {
+            this.enableDeTab.emit({ isEnableDeTab: false, enableDeTabInfmIcon: false });
+        }
         let currentPricingTableRowData = this.newPTR.filter(x => x.DC_ID != null);
         let hasProductDependencyErr = false;
         if (currentPricingTableRowData && currentPricingTableRowData.length > 0) {
