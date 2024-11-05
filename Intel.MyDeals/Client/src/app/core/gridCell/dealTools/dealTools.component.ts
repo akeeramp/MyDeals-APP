@@ -473,7 +473,7 @@ export class dealToolsComponent implements OnDestroy {
             // Remove from DB first... then remove from UI
             let response = await this.dataService.deletePricingTableRow(this.dataItem.CUST_MBR_SID, this.contractData.DC_ID, ptrId).toPromise().catch((response) => {
                 //TWC3179-4696: added user failure alert for deal deletion
-                this.validationMsg = 'The Deal deletion is not successful. Please try again.';
+                this.validationMsg = 'The Deal was not deleted correctly, Please click ok and reload the page.';
                 this.isValidationMessage = true; //User alert flag 
                 this.loggerSvc.error("Could not delete the Pricing Table " + ptrId, response, response.statusText);
                 this.setBusy("", "", "", "");
@@ -740,7 +740,7 @@ export class dealToolsComponent implements OnDestroy {
                
             }, (response) => {
                 //TWC3179-4696: added user failure alert for deal hold/unhold
-                this.validationMsg = 'Unable to update hold status of deals. Please try again.';
+                this.validationMsg = 'The Deal was not kept on hold correctly, Please click ok and reload the page.';
                 this.isValidationMessage = true; //User alert flag 
                 this.loggerSvc.error("Unable to update hold status of deals","Error",response);
                 this.setBusy("", "", "", "");

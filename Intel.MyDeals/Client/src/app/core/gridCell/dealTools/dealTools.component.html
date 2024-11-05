@@ -152,7 +152,7 @@
                     <button kendoButton class="k-button cancelDelete cancel-btn-pop-up line-height-unset" style="width: 50% !important;" (click)="closeDialogs()">CANCEL</button>
                 </kendo-dialog-actions>
             </kendo-dialog>
-            <kendo-dialog *ngIf="isValidationMessage" (close)="closeDialogs()" [maxWidth]="440" [height]="147">
+            <kendo-dialog *ngIf="isValidationMessage" (close)="closeDialogs()" [maxWidth]="600" [height]="147">
                 <div  class="k-content k-dialog-content">
                     <p class="text-para-color">{{ validationMsg }}</p>
                 </div>
