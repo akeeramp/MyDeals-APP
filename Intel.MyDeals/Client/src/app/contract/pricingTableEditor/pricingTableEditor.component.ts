@@ -858,7 +858,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
 
                 if (item[1] == 'PTR_USER_PRD') {
                     if (item[3] != null && item[3] != '') {
-                        const obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
+                        const trimmedCellValue = item[3].toString().split(",").map(cVal => cVal.trim()).toString();
+                        const obj = { row: item[0], prop: item[1], old: item[2], new: trimmedCellValue };
                         uniqchanges.push(obj);
                     } else {
                         // in case of copy paste and Autofill the empty rows based on tier will come but that doesnt mean they are to delete
