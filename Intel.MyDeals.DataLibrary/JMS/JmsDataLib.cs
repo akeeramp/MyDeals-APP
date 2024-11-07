@@ -794,7 +794,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns>Failover url</returns>
         private string ModifyURLForCertIgnore(string url)
         {
-            string certIgnoreSuffix = "?transport.acceptInvalidBrokerCert=true";
+            string certIgnoreSuffix = "?transport.acceptInvalidBrokerCert=true&transport.SslProtocol=Tls12";
             string modifiedURL = "";
             if (!String.IsNullOrEmpty(url))
             {

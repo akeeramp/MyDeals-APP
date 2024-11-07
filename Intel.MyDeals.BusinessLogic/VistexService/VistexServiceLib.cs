@@ -315,9 +315,9 @@ namespace Intel.MyDeals.BusinessLogic
                     //Parsing Response from SAP PO
                     VistexDFResponse visResponse = JsonConvert.DeserializeObject<VistexDFResponse>(sendResponse["Data"]);
                     //Assigning Message Body to be Tranferred 
-                    responseObj.BatchMessage = runMode == "D" ? "PO_Send_Complete" : runMode == "V" ? visResponse.Status + ": " + visResponse.Message ?? string.Empty : visResponse.Message ?? string.Empty;
+                    responseObj.BatchMessage = runMode == "E" ? "PO_Send_Complete" : runMode == "D" ? "PO_Send_Complete" : runMode == "V" ? visResponse.Status + ": " + visResponse.Message ?? string.Empty : visResponse.Message ?? string.Empty;
                     //API Type                
-                    responseObj.BatchName = runMode == "D" ? "VISTEX_DEAL" : runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : runMode == "C" ? "CUSTOMER_BRD" : runMode == "M" ? "CNSMPTN_LD" : "";
+                    responseObj.BatchName = runMode == "D" || runMode == "E" ? "VISTEX_DEAL" : runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : runMode == "C" ? "CUSTOMER_BRD" : runMode == "M" ? "CNSMPTN_LD" : "";
                     //Status of the Call
                     responseObj.BatchStatus = "PROCESSED";
                 }
