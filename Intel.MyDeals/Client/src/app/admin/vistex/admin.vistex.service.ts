@@ -55,7 +55,12 @@ export class dsaService {
     }
 
     public updateVistexStatusNew(postData: VistexResponseUpdData): Observable<string> {
-        const apiUrl = this.apiBaseUrl + 'UpdateVistexStatusNew';
+        let apiUrl: string;
+        if (postData.archived) {
+            apiUrl = this.apiBaseUrl + 'MoveArchivedToLog';
+        } else {
+            apiUrl = this.apiBaseUrl + 'UpdateVistexStatusNew';
+        }
         return this.httpClient.post<string>(apiUrl, postData);
     }
 

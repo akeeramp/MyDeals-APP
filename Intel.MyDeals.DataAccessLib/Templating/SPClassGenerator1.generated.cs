@@ -8356,6 +8356,42 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
+        /// ID: 1718609511
+        /// Modified: 11/5/2024 1:20:36 PM
+        /// Parameters: 2
+        ///</summary>
+        public partial class PR_MYDL_LOG_ARCHV_TO_LOG : SP
+        {
+            public PR_MYDL_LOG_ARCHV_TO_LOG()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_LOG_ARCHV_TO_LOG]";
+            }
+
+            ///<summary>
+            /// DataType: table type
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public SqlTableValueParameterBase in_dsa_rspn_log
+            {
+                set { SetParmeter("in_dsa_rspn_log", value); }
+                get { return (SqlTableValueParameterBase)GetParameter("in_dsa_rspn_log"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Int32 rqst_id
+            {
+                set { SetParmeter("rqst_id", value); }
+                get { return (Int32)GetParameter("rqst_id"); }
+            }
+        }
+
+        ///<summary>
         /// ID: 2077250455
         /// Modified: 2/7/2024 8:13:28 PM
         /// Parameters: 0

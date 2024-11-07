@@ -25,6 +25,7 @@ export interface VistexResponseUpdData {
 	dealId?: number;
 	rqstSid: number;
 	strErrorMessage: string;
+	archived?: boolean;
 }
 
 export interface RequestDetails {

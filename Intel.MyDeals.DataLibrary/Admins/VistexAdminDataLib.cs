@@ -244,5 +244,44 @@ namespace Intel.MyDeals.DataLibrary
             }
             return batchId;
         }
+
+        public Guid ArchivedToLog(Guid batchId, VistexStage vistexStage, int? dealId, string strErrorMessage, int RQST_SID)
+        {
+            var myDict = new Dictionary<int, string>
+            {
+                { dealId.HasValue? dealId.Value:0, strErrorMessage }
+            };
+
+            in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
+
+            DataRow dr = opDealMessages.NewRow();
+            dr["OBJ_SID"] = dealId;
+            dr["RSPN_MSG"] = string.IsNullOrEmpty(strErrorMessage) ? strErrorMessage : strErrorMessage.Trim();
+            dr["RQST_STS"] = vistexStage.ToString("g");
+            opDealMessages.Rows.Add(dr);
+
+            type_int_dictionary opPair = new type_int_dictionary();
+
+            var cmd = new Procs.dbo.PR_MYDL_LOG_ARCHV_TO_LOG()
+            {
+                rqst_id = RQST_SID,
+                in_dsa_rspn_log = opDealMessages
+            };
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //Just save the data and move on - only error will report back below
+                }
+                OpLogPerf.Log($"BTCH_ID: {batchId} DEAL_ID: {dealId}  IDSID:  {OpUserStack.MyOpUserToken.Usr.WWID}  ", LogCategory.Warning);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                //return '';
+                //throw;
+            }
+            return batchId;
+        }
     }
 }

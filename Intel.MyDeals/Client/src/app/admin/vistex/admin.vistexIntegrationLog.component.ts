@@ -192,6 +192,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
             INTRFC_RQST_DTM: new FormControl({ value: dataItem.INTRFC_RQST_DTM, disabled: true }),
             INTRFC_RSPN_DTM: new FormControl({ value: dataItem.INTRFC_RSPN_DTM, disabled: true }),
             CRE_DTM: new FormControl({ value: dataItem.CRE_DTM, disabled: true }),
+            ARCHV_FLG: new FormControl({ value: dataItem.ARCHV_FLG, disabled: true }),
         });
         this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
@@ -253,12 +254,12 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         const selectedRow = formGroup.getRawValue();
         //check if row value is changed/updated
         if (selectedRow.RQST_STS != this.editedRowData.RQST_STS || selectedRow.ERR_MSG != this.editedRowData.ERR_MSG) {
-            this.UpdateVistexStatus(selectedRow.BTCH_ID, selectedRow.DEAL_ID, selectedRow.RQST_SID, selectedRow.RQST_STS, selectedRow.ERR_MSG);
+            this.UpdateVistexStatus(selectedRow.BTCH_ID, selectedRow.DEAL_ID, selectedRow.RQST_SID, selectedRow.RQST_STS, selectedRow.ERR_MSG, selectedRow.ARCHV_FLG);
         }
         sender.closeRow(rowIndex);
     }
 
-    UpdateVistexStatus(strTransantionId: string, dealId: number, rqstSid: number, rqstStatus: string, errMsg: string): void {
+    UpdateVistexStatus(strTransantionId: string, dealId: number, rqstSid: number, rqstStatus: string, errMsg: string, archvFlg: boolean): void {
         if (errMsg == '') {
             errMsg = null;
         }
@@ -270,7 +271,8 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
             "strVistexStage": rqstStatus,
             "dealId": dealId,
             "strErrorMessage": errMsg,
-            "rqstSid": rqstSid
+            "rqstSid": rqstSid,
+            "archived": archvFlg
         }
         this.dsaService.updateVistexStatusNew(postDataObj).pipe(takeUntil(this.destroy$)).subscribe((response: string) => {
             this.isDirty = false;
