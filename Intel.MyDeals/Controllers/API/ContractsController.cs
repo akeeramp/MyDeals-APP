@@ -72,6 +72,30 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetInActCustUpperContract/{id}")]
+        public OpDataCollectorFlattenedList GetInActCustUpperContract(int id)
+        {
+            if (id <= 0) return new OpDataCollectorFlattenedList();
+
+            OpDataCollectorFlattenedList rtn = SafeExecutor(() => _contractsLib.GetUpperContract(id)
+                , $"Unable to get Contract {id}"
+            );
+
+            int custId = !rtn.Any() || rtn[0]["CUST_MBR_SID"] == null || rtn[0]["CUST_MBR_SID"].ToString() == string.Empty ? 0 : int.Parse(rtn[0]["CUST_MBR_SID"].ToString());
+
+            //List<VerticalSecurityItem> blah = DataCollections.GetMyVerticals().VerticalInfo; // Testing call, comment out
+            //List<string> objVerticals = rtn[0]["VERTICAL_ROLLUP"].ToString().Split(',').ToList(); // Testing call, comment out
+            // Next line gathers the current user's verticals and cross checks them with the contract level verticals to set containsVertical flag.  Matches trigger True as does empty user verticals (WW).
+            bool containsVertical = DataCollections.GetMyVerticals().VerticalInfo.Any() ? DataCollections.GetMyVerticals().VerticalInfo.Select(x => x.VerticalName).Intersect(rtn[0]["VERTICAL_ROLLUP"].ToString().Split(',').ToList()).Any() : true;
+
+            if (custId == 0 || DataCollections.GetMyCustomers(true).CustomerInfo.All(c => c.CUST_SID != custId) || !containsVertical)
+            {
+                return new OpDataCollectorFlattenedList();
+            }
+            return rtn;
+        }
+
+        [Authorize]
         [Route("GetExportContract/{id}")]
         public OpDataCollectorFlattenedList GetExportContract(int id)
         {

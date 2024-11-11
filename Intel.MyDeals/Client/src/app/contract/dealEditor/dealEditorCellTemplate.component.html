@@ -42,7 +42,7 @@
 <div *ngIf="in_Field_Name == 'DC_ID'" id="DC_ID" class="dealCell" style="align-items: center; display: flex; "
      [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
     <div class="err-bit" *ngIf="in_DataItem._behaviors && in_DataItem._behaviors.isError && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
-    <deal-popup-icon [dealId]="in_DataItem.DC_ID"></deal-popup-icon>
+    <deal-popup-icon *ngIf="!isInActCustSearch" [dealId]="in_DataItem.DC_ID"></deal-popup-icon>
     <div style="margin-top: 20px;">
         <div class="ng-binding vert-center">
             <span style="padding-left: 0px;" *ngIf="in_DataItem[in_Field_Name] && in_DataItem[in_Field_Name] != null">
@@ -462,7 +462,7 @@
         </div>
     </ng-template>
 </div>
-<div *ngIf="in_Field_Name === 'tender_actions'">
+<div *ngIf="in_Field_Name === 'tender_actions' && !isInActCustSearch">
     <div id='cb_actn_{{in_DataItem.DC_ID}}' style="text-align:center">
         <div *ngIf="in_DataItem['WF_STG_CD'] !== undefined && in_DataItem['WF_STG_CD'] !== null && in_DataItem['WF_STG_CD'] === 'no access'; else first" class='noaccess'>no access</div>
         <ng-template #first>

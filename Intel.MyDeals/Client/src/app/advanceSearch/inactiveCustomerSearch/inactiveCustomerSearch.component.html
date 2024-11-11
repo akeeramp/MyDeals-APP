@@ -1,0 +1,166 @@
+﻿<loading-panel-angular [show]="isLoading" [header]="headerMsg" [isShowFunFact]="false" [description]="'Please wait we are fetching Data...'" [msgType]="'Info'"></loading-panel-angular>
+<div class="row " style="padding-left: 30px; padding-top: 10px">
+    <h2 class="header-bottomsizereduce">Inactive Customer Search</h2>
+</div>
+<div class="container" style="display: unset !important;">
+    <div class="row header-toolbox-inactCustSrch">
+        <div class="col-md-10">
+            <div class="applied-products">
+                <span class="search intelicon-search margin-btn-15" style=" margin-right: 8px; font-size: 28px; color: #0071C5; vertical-align: sub; cursor: default;"></span>
+                <kendo-textbox class="searchResultInpt margin-btn-15" [clearButton]="true" [(ngModel)]="searchText" (keypress)="txtEnterPressed($event)"></kendo-textbox>
+                <div class="copper-btns margin-btn-15">
+                    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="customBtn">
+                        <mat-button-toggle class="btn btn-primary globalSearchResultsBtnPrimary" *ngFor="let toggle of opTypes" [checked]="opType==toggle.value" value="{{toggle.value}}" (change)="onOpTypeChange(toggle.value)">{{toggle.label}} </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2" style="padding-right: 5px;">
+            <button *ngIf="columns.length != 0 && gridResult.length > 0" kendoButton class="k-button" (click)="exportToExcel()" style="float:right;">Excel Export</button>
+        </div>
+    </div>
+    <div class="row no-gutters justify-content-start" *ngIf="gridResult.length == 0">
+        <div class="col" style="min-width:25% !important; padding-left:10px;" *ngIf="opType=='CNTRCT' || opType=='ALL'">
+            <h5>Contracts / Folio</h5>
+            <div class="boderClass">
+                <div class="waiting no-items" [hidden]="!objTypes['CNTRCT'].loading">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <div>Searching...</div><span class="sr-only">Loading...</span>
+                </div>
+                <div [hidden]="objTypes['CNTRCT'].loading">
+                    <div *ngIf="objTypes['CNTRCT'].result.length==0">
+                        <p class="no-items">No contracts found.</p>
+                    </div>
+                    <div *ngIf="objTypes['CNTRCT'].result.length>0">
+                        <mat-list class="matResultListSearch">
+                            <div *ngFor="let item of objTypes['CNTRCT'].result">
+                                <mat-list-item>
+                                    <div (click)="gotoObject(item,'CNTRCT')">
+                                        <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}:&nbsp;<span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
+                                        <div class="search-result-item">{{item.TITLE}}</div>
+                                    </div>
+                                </mat-list-item>
+                                <mat-divider></mat-divider>
+                            </div>
+                        </mat-list>
+                    </div>
+                </div>
+            </div>
+            <div class="align-self-end" [hidden]="!objTypes['CNTRCT'].viewMore">
+                <p style="text-align:right; margin-right:6px;" class="search-result-item" (click)="viewMore('CNTRCT')">view more</p>
+            </div>
+        </div>
+        <div class="col" style="min-width:25% !important" *ngIf="opType=='PRC_ST' || opType=='ALL' ">
+            <h5>Pricing Strategy</h5>
+            <div class="boderClass">
+                <div class="waiting no-items" [hidden]="!objTypes['PRC_ST'].loading">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <div>Searching...</div><span class="sr-only">Loading...</span>
+                </div>
+                <div [hidden]="objTypes['PRC_ST'].loading">
+                    <div *ngIf="objTypes['PRC_ST'].result.length==0">
+                        <p class="no-items">No pricing strategies found.</p>
+                    </div>
+                    <div *ngIf="objTypes['PRC_ST'].result.length>0">
+                        <mat-list class="matResultListSearch">
+                            <div *ngFor="let item of objTypes['PRC_ST'].result">
+                                <mat-list-item>
+                                    <div (click)="gotoObject(item,'PRC_ST')">
+                                        <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}<span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
+                                        <div class="search-result-item">{{item.TITLE}}</div>
+                                    </div>
+                                </mat-list-item>
+                                <mat-divider></mat-divider>
+                            </div>
+                        </mat-list>
+                    </div>
+                </div>
+            </div>
+            <div class="align-self-end" [hidden]="!objTypes['PRC_ST'].viewMore">
+                <p style="text-align:right; margin-right:6px;" class="search-result-item" (click)="viewMore('PRC_ST')">view more</p>
+            </div>
+        </div>
+        <div class="col" style="min-width:25% !important" *ngIf="opType=='PRC_TBL' || opType=='ALL' ">
+            <h5>Pricing Table</h5>
+            <div class="boderClass">
+                <div class="waiting no-items" [hidden]="!objTypes['PRC_TBL'].loading">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <div>Searching...</div><span class="sr-only">Loading...</span>
+                </div>
+                <div [hidden]="objTypes['PRC_TBL'].loading">
+                    <div *ngIf="objTypes['PRC_TBL'].result.length==0">
+                        <p class="no-items">No pricing tables found.</p>
+                    </div>
+                    <div *ngIf="objTypes['PRC_TBL'].result.length>0">
+                        <mat-list class="matResultListSearch">
+                            <div *ngFor="let item of objTypes['PRC_TBL'].result">
+                                <mat-list-item>
+                                    <div (click)="gotoObject(item,'PRC_TBL')">
+                                        <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}<span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
+                                        <div class="search-result-item">{{item.TITLE}}</div>
+                                    </div>
+                                </mat-list-item>
+                                <mat-divider></mat-divider>
+                            </div>
+                        </mat-list>
+                    </div>
+                </div>
+            </div>
+            <div class="align-self-end" [hidden]="!objTypes['PRC_TBL'].viewMore">
+                <p style="text-align:right; margin-right:6px;" class="search-result-item" (click)="viewMore('PRC_TBL')">view more</p>
+            </div>
+        </div>
+        <div class="col" style="min-width:25% !important;padding-right:10px;" *ngIf="opType=='WIP_DEAL' || opType=='ALL' ">
+            <h5>Deal</h5>
+            <div class="boderClass">
+                <div class="waiting no-items" [hidden]="!objTypes['WIP_DEAL'].loading">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <div>Searching...</div><span class="sr-only">Loading...</span>
+                </div>
+                <div [hidden]="objTypes['WIP_DEAL'].loading">
+                    <div *ngIf="objTypes['WIP_DEAL'].result.length==0">
+                        <p class="no-items">No deals found.</p>
+                    </div>
+                    <div *ngIf="objTypes['WIP_DEAL'].result.length>0">
+                        <mat-list class="matResultListSearch">
+                            <div *ngFor="let item of objTypes['WIP_DEAL'].result">
+                                <mat-list-item>
+                                    <div>
+                                        <div style="display:flex">
+                                            <deal-popup-icon [dealId]="item.DC_ID"></deal-popup-icon>
+                                            <div (click)="gotoObject(item,'WIP_DEAL')" style="font-weight: bold; color: #003C71;margin-top:0px">#{{item.DC_ID}}</div>
+                                        </div>
+                                        <div style="margin-top: -10px; margin-left: 25px;" class="search-result-item" (click)="gotoObject(item,'WIP_DEAL')">{{item.TITLE}}</div>
+                                    </div>
+                                </mat-list-item>
+                                <mat-divider></mat-divider>
+                            </div>
+                        </mat-list>
+                    </div>
+                </div>
+            </div>
+            <div class="align-self-end" [hidden]="!objTypes['WIP_DEAL'].viewMore">
+                <p style="text-align:right; margin-right:6px;" class="search-result-item" (click)="viewMore('WIP_DEAL')">view more</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="op-grid-container one-check oppo-grids padding-alternate">
+    <kendo-grid *ngIf="columns.length != 0 && gridResult.length > 0" #dealEditor="kendoGrid" id="dealEditor" [data]="gridData" [navigable]="true" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [resizable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
+        (dataStateChange)="dataStateChange($event)" class="opUiContainer dashboard op-grid k-grid k-widgetGr k-reorderable k-editable k-grid-lockedcolumns md opDealEditorGrids" [ngClass]="{ 'enableWrapping': wrapEnabled, 'disableWrapping': !wrapEnabled }"
+        data-role="grid">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}" width="200">
+            <ng-template kendoGridHeaderTemplate>
+                <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [pageCount]="state.take" [in_Title]="column.title" [in_Is_Tender_Dashboard]="false" [grid_Result]="gridResult" [grid_Data]="gridData"></deal-editor-header>
+            </ng-template>
+            <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
+                <deal-editor-cell class="extraSpace-colFix InActvCust" [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="dataItem.OBJ_SET_TYPE_CD" [isInActCustSearch]="true" [in_DataItem]="dataItem" [grid_Data]="gridData.data" [in_Is_Tender_Dashboard]="true"
+                    [in_DataSet]="gridResult"></deal-editor-cell>
+            </ng-template>
+        </kendo-grid-column>
+
+        <ng-template kendoGridNoRecordsTemplate>
+            <div class="NoDataFound">There is no data to display.</div>
+        </ng-template>        
+    </kendo-grid>
+</div>

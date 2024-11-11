@@ -38,6 +38,15 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetFullNestedDealDetails/{id}")]
+        public OpDataCollectorFlattenedDictList GetFullNestedDealDetails(int id)
+        {
+            return SafeExecutor(() => _pricingTablesLib.GetFullNestedDealDetails(id)
+                , $"Unable to get Pricing Table {id}"
+            );
+        }
+
+        [Authorize]
         [Route("GetFullPricingTable/{id}")]
         public OpDataCollectorFlattenedDictList GetFullPricingTable(int id)
         {

@@ -5,8 +5,12 @@ import { PTE_Config_Util } from './PTEUtils/PTE_Config_util';
 import { StaticMomentService } from "../shared/moment/moment.service";
 import { saveAs } from '@progress/kendo-file-saver';
 import { Workbook } from '@progress/kendo-angular-excel-export';
-import { ExcelExport } from "../contract/excelExport.util"
+import { ExcelExport } from "../contract/excelExport.util";
+import { InActiveCustomerService } from "../advanceSearch/inactiveCustomerSearch/inactiveCustomerSearch.service";
 export class GridUtil {
+
+    constructor(public inactSvc: InActiveCustomerService) { }
+
     static uiValidationErrorDetail(passedData) {
         var values: string[] = Object.values(passedData._behaviors.validMsg);
         var formattedMessage = '';
@@ -130,7 +134,7 @@ export class GridUtil {
         return prd_mbr_sid;
     }
 
-    static dsToExcel(gridColumns, data, title) {
+    static dsToExcel(gridColumns, data, title, filename = null, inactSvc? : InActiveCustomerService) {
         var rows = [{ cells: [], height: 80 }];
         var rowsProd = [{ cells: [], height: 80 }];
         var colWidths = [];
@@ -346,7 +350,13 @@ export class GridUtil {
             sheets: sheets
         });
         workbook.toDataURL().then((dataUrl: string) => {
-            saveAs(dataUrl, 'MyDealsSearchResults.xlsx');
+            if (filename) {
+                saveAs(dataUrl, filename + '.xlsx');
+                inactSvc.setData(false);
+            }
+            else {
+                saveAs(dataUrl, 'MyDealsSearchResults.xlsx');
+            }
         });
     }
 

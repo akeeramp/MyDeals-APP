@@ -4,7 +4,8 @@ import { authGuard } from "./../../app/shared/util/guardProtection";
  //search routes
  import { AdvancedSearchComponent } from "../../app/advanceSearch/advancedSearch.component";
  import { goToComponent } from "../../app/contract/goTo.component";
- import { TenderDashboardComponent } from "../../app/advanceSearch/tenderDashboard/tenderDashboard.component";
+import { TenderDashboardComponent } from "../../app/advanceSearch/tenderDashboard/tenderDashboard.component";
+import { InActiveCustomerSearchComponent } from "../../app/advanceSearch/inactiveCustomerSearch/inactiveCustomerSearch.component";
 
 //added for security check
 import { SecurityResolver } from "../../app/shared/security.resolve";
@@ -14,5 +15,6 @@ export const routesAdvance: Routes = [
     { path: 'gotoPs/:cid', component: goToComponent, data: { title: 'AdvancedSearch', BaseHref: 'AdvancedSearch' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'gotoDeal/:cid', component: goToComponent, data: { title: 'AdvancedSearch', BaseHref: 'AdvancedSearch' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'advanceSearch', component: AdvancedSearchComponent, data: { title: 'AdvancedSearch', BaseHref: 'AdvancedSearch' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
-    { path: 'tenderDashboard', component: TenderDashboardComponent, data: { title: 'Tender Dashboard', BaseHref: 'AdvancedSearch' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
+    { path: 'tenderDashboard', component: TenderDashboardComponent, data: { title: 'Tender Dashboard', BaseHref: 'AdvancedSearch' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },//InActiveCustomerSearchComponent
+    { path: 'inactiveCustSearch', component: InActiveCustomerSearchComponent, data: { title: 'Advanced Cust Search', BaseHref: 'AdvancedSearch' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] }
 ];

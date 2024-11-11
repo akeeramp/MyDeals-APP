@@ -337,14 +337,14 @@ namespace Intel.MyDeals.BusinessLogic
             ObjSetPivotMode pivotMode,
             Dictionary<int, string> prdMaps,
             MyDealsData myDealsData,
-            bool security = true)
+            bool security = true, bool inactCust = false)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             if (EN.GLOBAL.DEBUG >= 2) Debug.WriteLine("{1:HH:mm:ss:fff}\t ToOpDataCollectorFlattenedItem [{2} {0}] - Started", dc.DcID, DateTime.Now, dc.DcType);
 
             // Call all load triggered rules
-            if (security)
+            if (security && !inactCust)
             {
                 dc.ApplyRules(MyRulesTrigger.OnLoad);
                 if (EN.GLOBAL.DEBUG >= 3) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\t Rules OnLoad [{1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now);

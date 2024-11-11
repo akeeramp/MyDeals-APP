@@ -40,6 +40,40 @@ namespace Intel.MyDeals.BusinessLogic
             return OpDataElementType.PRC_TBL.GetByIDs(new List<int> { id }, opDataElementTypes);
         }
 
+        public OpDataCollectorFlattenedDictList GetFullNestedDealDetails(int id)
+        {
+            var myDealsData = GetPricingTable(id, true).FillInHolesFromAtrbTemplate();
+            var customerVendorData = DataCollections.GetCustomerVendors();
+
+            OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
+
+            foreach (OpDataElementType opDataElementType in myDealsData.Keys)
+            {
+                if(opDataElementType == OpDataElementType.WIP_DEAL)
+                    data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedInActDictList(opDataElementType, ObjSetPivotMode.Nested, true);
+            }
+            if (customerVendorData != null && customerVendorData.Count > 0)
+            {
+
+                if (data.ContainsKey(OpDataElementType.WIP_DEAL))
+                {
+                    foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.WIP_DEAL])
+                    {
+                        if (item.Count > 1 && item["SETTLEMENT_PARTNER"] != null && item["SETTLEMENT_PARTNER"].ToString() != string.Empty)
+                        {
+                            var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
+                            supplierName = supplierName + " - " + item["SETTLEMENT_PARTNER"].ToString();
+                            item["SETTLEMENT_PARTNER"] = supplierName;
+                        }
+                    }
+                }
+            }
+
+            return data;
+            //return GetPricingTable(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+        }
+
+
         public OpDataCollectorFlattenedDictList GetFullNestedPricingTable(int id)
         {
             var myDealsData = GetPricingTable(id, true).FillInHolesFromAtrbTemplate();

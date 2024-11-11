@@ -527,6 +527,7 @@
     <Content Include="Client\Images\docs\pricingassoc.png" />
     <Content Include="Client\Images\docs\pricingstrategy.png" />
     <Content Include="Client\Images\docs\Pricingtable.png" />
+    <Content Include="Client\src\app\advanceSearch\inactiveCustomerSearch\inactiveCustomerSearch.component.html" />
     <Content Include="Client\src\app\sdm\sdm.component.css" />
     <Content Include="Client\src\app\sdm\sdm.component.html" />
     <Content Include="Client\src\app\sdm\sdmBulkUpload\sdmBulkUpload.component.css" />
@@ -813,6 +814,9 @@
     <TypeScriptCompile Include="Client\src\appModules\reporting\main-report.ts" />
     <TypeScriptCompile Include="Client\src\appModules\reporting\main-report-prod.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.model.ts" />
+    <TypeScriptCompile Include="Client\src\app\advanceSearch\inactiveCustomerSearch\inactiveCustomerSearch.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\advanceSearch\inactiveCustomerSearch\inactiveCustomerSearch.grid.util.ts" />
+    <TypeScriptCompile Include="Client\src\app\advanceSearch\inactiveCustomerSearch\inactiveCustomerSearch.service.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\businessProcess\businessProcess.component.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\cicdPipeline\cicdPipeline.component.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\codeQuality\codeQuality.component.ts" />
@@ -2045,6 +2049,7 @@
     <Content Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.component.html" />
     <Content Include="Client\src\app\codingPractices\codingPractices.component.css" />
     <TypeScriptCompile Include="Client\src\app\shared\config\handsontable.licenseKey.config.ts" />
+    <Content Include="Client\src\app\advanceSearch\inactiveCustomerSearch\inactiveCustomerSearch.component.css" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />

@@ -51,7 +51,7 @@ namespace Intel.MyDeals.BusinessLogic
             return _searchDataLib.GetSearchResults(searchText, custIds).OrderBy(sr => sr.CUSTOMER).ToList();
         }
 
-        public DcPath GotoDcId(OpDataElementType opDataElementType, int dcId)
+        public DcPath GotoDcId(OpDataElementType opDataElementType, int dcId, bool inactCust = false)
         {
             // Get DcPath
             DcPath dcPath = opDataElementType.GetDcPath(dcId);
@@ -64,7 +64,7 @@ namespace Intel.MyDeals.BusinessLogic
                 };
             }
 
-            MyCustomersInformation cust = new CustomerLib().GetMyCustomersInfo(dcPath.CustMbrSid);
+            MyCustomersInformation cust = inactCust ? new CustomerLib().GetMyCustomersInfo(dcPath.CustMbrSid, true) : new CustomerLib().GetMyCustomersInfo(dcPath.CustMbrSid);
             if (cust == null)
             {
                 // No access to the Customer
@@ -802,7 +802,7 @@ namespace Intel.MyDeals.BusinessLogic
             return _searchDataLib.GetTenderResultFilter(custName, st, en); ;
         }
 
-        public OpDataCollectorFlattenedList GetGlobalList(SearchParams data, OpDataElementType deType)
+        public OpDataCollectorFlattenedList GetGlobalList(SearchParams data, OpDataElementType deType, bool InactCustSrch)
         {
             List<int> atrbs = new List<int>
             {
@@ -819,15 +819,19 @@ namespace Intel.MyDeals.BusinessLogic
             int dcIdNum;
             string whereClause, orderBy, searchIn;
 
+            CustomerLib custLib = new CustomerLib();
+            List<int> mtCustIds = InactCustSrch ? custLib.GetMyCustomersInfo(InactCustSrch).Select(c => c.CUST_SID).ToList() : custLib.GetMyCustomersInfo().Select(c => c.CUST_SID).ToList();
+            //CUST_ACCNT_DIV
+
             if (int.TryParse(data.StrSearch, out dcIdNum)) // IDs are being searched for (US477064)
             {
                 if (deType == OpDataElementType.WIP_DEAL) // WIP_DEAL only pass the SID, TITLE makes no sense and hurts performance
                 {
-                    whereClause = $"{SearchTools.BuildCustSecurityWhere()} AND ({deType}_OBJ_SID = {dcIdNum})";
+                    whereClause = $"{SearchTools.BuildCustSecurityWhere(mtCustIds)} AND ({deType}_OBJ_SID = {dcIdNum})";
                 }
                 else // Original layout for non WIP_DEAL objects
                 {
-                    whereClause = $"{SearchTools.BuildCustSecurityWhere()} AND ({deType}_OBJ_SID = {dcIdNum} OR {deType}_TITLE LIKE '%{data.StrSearch.Replace("'", "''").Replace(" ", "%")}%')";
+                    whereClause = $"{SearchTools.BuildCustSecurityWhere(mtCustIds)} AND ({deType}_OBJ_SID = {dcIdNum} OR {deType}_TITLE LIKE '%{data.StrSearch.Replace("'", "''").Replace(" ", "%")}%')";
                 }
                 orderBy = $"{deType}_OBJ_SID desc";
                 searchIn = $"{deType}";
@@ -836,11 +840,11 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 if (deType == OpDataElementType.WIP_DEAL) // WIP_DEAL TITLE makes no sense and hurts performance, so kill search by passing 0 ID
                 {
-                    whereClause = $"{SearchTools.BuildCustSecurityWhere()} AND ({deType}_OBJ_SID = 0)";
+                    whereClause = $"{SearchTools.BuildCustSecurityWhere(mtCustIds)} AND ({deType}_OBJ_SID = 0)";
                 }
                 else // Original layout for non WIP_DEAL objects
                 {
-                    whereClause = $"{SearchTools.BuildCustSecurityWhere()} AND {deType}_TITLE LIKE '%{data.StrSearch.Replace("'", "''").Replace(" ", "%")}%'";
+                    whereClause = $"{SearchTools.BuildCustSecurityWhere(mtCustIds)} AND {deType}_TITLE LIKE '%{data.StrSearch.Replace("'", "''").Replace(" ", "%")}%'";
                 }
                 orderBy = $"{deType}_OBJ_SID desc";
                 searchIn = $"{deType}";
@@ -850,10 +854,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<int> dcIds = res.SearchResults.Where(s => s.OBJ_TYPE == deType.ToString()).OrderByDescending(s => s.OBJ_SID).Select(s => s.OBJ_SID).ToList();
             MyDealsData myDealsData = deType.GetByIDs(dcIds, new List<OpDataElementType> { deType }, atrbs);
-
-            CustomerLib custLib = new CustomerLib();
-            List<int> mtCustIds = custLib.GetMyCustomersInfo().Select(c => c.CUST_SID).ToList();
-            //CUST_ACCNT_DIV
 
             var updatedRet = myDealsData.ToOpDataCollectorFlattenedDictList(deType, ObjSetPivotMode.Nested, false);
 

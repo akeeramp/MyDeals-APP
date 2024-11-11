@@ -6206,6 +6206,13 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 set { SetParmeter("IN_CUST_MBR_SID", value); }
                 get { return (Int32)GetParameter("IN_CUST_MBR_SID"); }
             }
+
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public Boolean IN_INACT_CUST_FLG
+            {
+                set { SetParmeter("IN_INACT_CUST_FLG", value); }
+                get { return (Boolean)GetParameter("IN_INACT_CUST_FLG"); }
+            }//IN_INACT_CUST_FLG
         }
 
         ///<summary>

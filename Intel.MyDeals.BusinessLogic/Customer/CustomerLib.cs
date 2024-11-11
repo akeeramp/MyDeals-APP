@@ -135,6 +135,11 @@ namespace Intel.MyDeals.BusinessLogic
             return DataCollections.GetMyCustomers();
         }
 
+        public MyCustomerDetailsWrapper GetMyCustomers(bool inactCust)
+        {
+            return DataCollections.GetMyCustomers(inactCust);
+        }
+
         public List<MyCustomersInformation> GetMyCustomerNames()
         {
             return DataCollections.GetMyCustomers().CustomerInfo.Where(c => c.CUST_LVL_SID == 2002).ToList();
@@ -155,9 +160,19 @@ namespace Intel.MyDeals.BusinessLogic
             return GetMyCustomers().CustomerInfo;
         }
 
+        public List<MyCustomersInformation> GetMyCustomersInfo(bool inactCust)
+        {
+            return GetMyCustomers(inactCust).CustomerInfo;
+        }
+
         public MyCustomersInformation GetMyCustomersInfo(int custId)
         {
             return GetMyCustomers().CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
+        }
+
+        public MyCustomersInformation GetMyCustomersInfo(int custId, bool inactCust)
+        {
+            return GetMyCustomers(inactCust).CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
         }
 
         ///// <summary>

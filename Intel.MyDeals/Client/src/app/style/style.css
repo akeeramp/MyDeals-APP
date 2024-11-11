@@ -2919,3 +2919,17 @@ h3.intelicon-jobs-outlined.job-outline-process:before {
     font-size: 28px;
     padding-right: 5px;
 }
+
+.op-grid-container.padding-alternate {
+    padding: 0 15px;
+}
+
+.one-check.op-grid-container.padding-alternate .k-grid td .vert-center.wordWrapTransform {
+    padding: 0 10px;
+}
+
+.one-check.op-grid-container.padding-alternate .k-grid td {
+    border: 1px solid lightgrey !important;
+    border-left: none !important;
+    border-top: none !important;
+}

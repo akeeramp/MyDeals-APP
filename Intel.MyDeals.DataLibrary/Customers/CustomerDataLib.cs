@@ -67,7 +67,7 @@ namespace Intel.MyDeals.DataLibrary
         /// Get Customer Divisions information for user making the request
         /// </summary>
         /// <returns>lists of customer data</returns>
-        public MyCustomerDetailsWrapper GetMyCustomers(bool fullAccess = false, bool allCustomers = false)
+        public MyCustomerDetailsWrapper GetMyCustomers(bool fullAccess = false, bool allCustomers = false, bool inactCust = false)
         {
             OpLog.Log("GetMyCustomers");
 
@@ -79,7 +79,8 @@ namespace Intel.MyDeals.DataLibrary
             var cmd = new Procs.dbo.PR_MYDL_GET_MY_CUST
             {
                 IN_IDSID = OpUserStack.MyOpUserToken.Usr.Idsid,
-                IN_ALL_CUST_FLG = allCustomers
+                IN_ALL_CUST_FLG = allCustomers,
+                IN_INACT_CUST_FLG = inactCust
             };
 
             try
@@ -133,12 +134,11 @@ namespace Intel.MyDeals.DataLibrary
                             PRC_GRP_CD = (IDX_PRC_GRP_CD < 0 || rdr.IsDBNull(IDX_PRC_GRP_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRC_GRP_CD),
                             VISTEX_CUST_FLAG = (IDX_VISTEX_CUST_FLAG < 0 || rdr.IsDBNull(IDX_VISTEX_CUST_FLAG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_VISTEX_CUST_FLAG)
                         });
-                    } // while
+                    } 
 
                     ret.CustomerInfo = retCustInfo;
-                    rdr.NextResult();
-
                     // REMOVED FOR NOW... DON'T NEED SOLD TO VALUES HERE
+                    // rdr.NextResult();
                     ////TABLE 2
                     //int IDX_CUST_DIV_SID2 = DB.GetReaderOrdinal(rdr, "CUST_DIV_SID");
                     //int IDX_CUST_NM2 = DB.GetReaderOrdinal(rdr, "CUST_NM");

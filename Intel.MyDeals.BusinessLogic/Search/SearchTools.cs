@@ -140,5 +140,11 @@ namespace Intel.MyDeals.BusinessLogic
             string custIds = string.Join(",", DataCollections.GetMyCustomers().CustomerInfo.Select(s => s.CUST_SID));
             return $"cnt.CUST_MBR_SID IN ({custIds})"; // pst. replaced for performance reasons, cnt is directly in deal atrbs table, dhr is joined table (US492799)
         }
+
+        public static string BuildCustSecurityWhere(List<int> myCustIDs)
+        {
+            string custIds = string.Join(",", myCustIDs);
+            return $"cnt.CUST_MBR_SID IN ({custIds})"; // pst. replaced for performance reasons, cnt is directly in deal atrbs table, dhr is joined table (US492799)
+        }
     }
 }

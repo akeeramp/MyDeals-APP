@@ -6,6 +6,6 @@ namespace Intel.MyDeals.IDataLibrary
     public interface ICustomerDataLib
     {
         List<CustomerDivision> GetCustomerDivisions();
-        MyCustomerDetailsWrapper GetMyCustomers(bool fullAccess = false, bool allCustomers = false);
+        MyCustomerDetailsWrapper GetMyCustomers(bool fullAccess = false, bool allCustomers = false, bool inactCust = false);
     }
 }

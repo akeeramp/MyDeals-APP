@@ -42,6 +42,17 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpGet]
+        [Route("GotoInActDeal/{dcid}")]
+        public DcPath GotoInActDeal(int dcid)
+        {
+            return SafeExecutor(() => _searchLib.GotoDcId(OpDataElementType.WIP_DEAL, dcid, true)
+                , $"Unable to get Search Results"
+            );
+        }
+
+
+        [Authorize]
+        [HttpGet]
         [Route("GotoPt/{dcid}")]
         public DcPath GotoPt(int dcid)
         {
@@ -163,9 +174,9 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetGlobalSearchList/{opType}/{take}/{searchText}")]
+        [Route("GetGlobalSearchList/{opType}/{take}/{InactCustSrch}/{searchText}")]
         [HttpGet]
-        public OpDataCollectorFlattenedList GetGlobalSearchList(string opType, int take, string searchText)
+        public OpDataCollectorFlattenedList GetGlobalSearchList(string opType, int take, bool InactCustSrch, string searchText)
         {
             return SafeExecutor(() =>
             {
@@ -179,7 +190,8 @@ namespace Intel.MyDeals.Controllers.API
                     StrFilters = "",
                     Skip = 0,
                     Take = take <= 1 ? 1 : take - 1
-                }, OpDataElementTypeConverter.FromString(opType));
+                }, OpDataElementTypeConverter.FromString(opType)
+                , InactCustSrch);
             }
                 , $"Unable to get Search Results"
             );

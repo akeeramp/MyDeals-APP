@@ -38,6 +38,7 @@ export class dealEditorCellTemplateComponent {
     @Input() in_DataItem: any = '';
     @Input() contract_Data: any = '';
     @Input() grid_Data: any = '';
+    @Input() isInActCustSearch: boolean = false;
     @Input() in_Is_Tender_Dashboard: boolean = false;//will recieve true when DE Grid Used in Tender Dashboard Screen
     @Input() in_DataSet: any = '';
     @Output() iconUpdate: EventEmitter<any> = new EventEmitter<any>();
@@ -72,14 +73,17 @@ export class dealEditorCellTemplateComponent {
     }
         
     updateIcon(eventData: boolean) {
-        this.iconUpdate.emit(eventData);
+        if (!this.isInActCustSearch)
+            this.iconUpdate.emit(eventData);
     }
 
     reload(eventData) {
-        this.reLoad.emit('');
+        if (!this.isInActCustSearch)
+            this.reLoad.emit('');
     }
     refreshContractData(eventData: boolean) {
-        this.refresh_Contract_Data.emit(eventData);
+        if (!this.isInActCustSearch)
+            this.refresh_Contract_Data.emit(eventData);
     }
 
     uiControlWrapper(passedData, field) {
@@ -400,7 +404,8 @@ export class dealEditorCellTemplateComponent {
         return TenderDashboardGridUtil.getBidActions(data);
     }
     removeDeletedRowData(event) {
-        this.removeDeletedRow.emit(event);
+        if (!this.isInActCustSearch)
+            this.removeDeletedRow.emit(event);
     }
     ngOnInit() {
         if (!this.in_Is_Tender_Dashboard)//if not Tender Dashboard Screen, take salesforce Id from contract data

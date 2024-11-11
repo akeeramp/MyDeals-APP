@@ -363,6 +363,50 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="pivotMode"></param>
         /// <param name="security"></param>
         /// <returns>OpDataCollectorFlattenedList</returns>
+        public static OpDataCollectorFlattenedList ToOpDataCollectorFlattenedInActDictList(this MyDealsData myDealsData, OpDataElementType opType, ObjSetPivotMode pivotMode, bool security = true, bool inactCust = true)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            if (EN.GLOBAL.DEBUG >= 1) Debug.WriteLine("{1:HH:mm:ss:fff}\t ToOpDataCollectorFlattenedDictList [{0}] - Started", opType, DateTime.Now);
+
+            // Construct return variable
+            OpDataCollectorFlattenedList data = new OpDataCollectorFlattenedList();
+            Dictionary<int, string> prdMaps = new Dictionary<int, string>();
+
+            // Bail if DataPacket is null
+            if (!myDealsData.ContainsKey(opType) || myDealsData[opType] == null) return data;
+
+            // Get DataPacket
+            OpDataPacket<OpDataElementType> dpObjSet = myDealsData[opType];
+
+
+            //Get Products
+            // TODO make this a rule
+            // This is a call accross the entire OpDataPacket to get products
+            // Since this is a DB call, we don't want to do this for EVERY data collector individually
+            //if (opType == OpDataElementType.DEAL || opType == OpDataElementType.WIP_DEAL)
+            //    prdMaps = dpObjSet.GetProductMapping();
+
+            var dataCollectors = dpObjSet.AllDataCollectors;
+            if (opType == OpDataElementType.WIP_DEAL)
+                dataCollectors = dpObjSet.AllDataCollectors.OrderByDescending(i => i.Message.Count);
+
+            // loop through deals and flatten each Data Collector
+            data.AddRange(dataCollectors.Select(dc => dc.ToOpDataCollectorFlattenedItem(opType, pivotMode, prdMaps, myDealsData, security, inactCust)));
+
+            if (EN.GLOBAL.DEBUG >= 1) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t ToOpDataCollectorFlattenedDictList [{1}]", stopwatch.Elapsed.TotalMilliseconds, opType, DateTime.Now);
+
+            return data;
+        }
+
+        /// <summary>
+        /// Build ObjSet Flattened Object from a single OpDataElementType
+        /// </summary>
+        /// <param name="myDealsData"></param>
+        /// <param name="opType"></param>
+        /// <param name="pivotMode"></param>
+        /// <param name="security"></param>
+        /// <returns>OpDataCollectorFlattenedList</returns>
         public static OpDataCollectorFlattenedList ToOpDataCollectorFlattenedDictList(this MyDealsData myDealsData, OpDataElementType opType, ObjSetPivotMode pivotMode, bool security = true)
         {
             Stopwatch stopwatch = new Stopwatch();

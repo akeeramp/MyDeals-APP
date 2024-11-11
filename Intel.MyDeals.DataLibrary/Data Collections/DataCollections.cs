@@ -522,7 +522,28 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        public static MyCustomerDetailsWrapper GetMyCustomers(bool inactCust)
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_getMyInactiveCustomers == null || !_getMyInactiveCustomers.Any())
+                {
+                    _getMyInactiveCustomers = new Dictionary<string, MyCustomerDetailsWrapper>();
+                }
+                string authenticatedName = Thread.CurrentPrincipal.Identity.Name.ToUpper().Replace("AMR\\", "");
+                // Check customer count, this will fix when user has access to mydeals but unable to see any customers in dropdown
+                if (!_getMyInactiveCustomers.ContainsKey(authenticatedName) ||
+                        (_getMyInactiveCustomers.ContainsKey(authenticatedName) && !_getMyInactiveCustomers[authenticatedName].CustomerInfo.Any()))
+                {
+                    _getMyInactiveCustomers[authenticatedName] = new CustomerDataLib().GetMyCustomers(false, false, inactCust);
+                }
+                return _getMyInactiveCustomers[authenticatedName];
+            }
+            //return new CustomerDataLib().GetMyCustomers(false, false, inactCust);
+        }
+
         private static Dictionary<string, MyCustomerDetailsWrapper> _getMyCustomers;
+        private static Dictionary<string, MyCustomerDetailsWrapper> _getMyInactiveCustomers;
 
         public static MyVerticalDetailsWrapper GetMyVerticals()
         {
