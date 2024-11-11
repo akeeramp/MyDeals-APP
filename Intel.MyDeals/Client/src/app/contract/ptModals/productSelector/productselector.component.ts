@@ -1024,7 +1024,7 @@ export class ProductSelectorComponent implements OnDestroy {
         if (mode == 'add') {
             this.addedProducts = this.addedProducts.filter(product => product.HIER_VAL_NM != item.HIER_VAL_NM);
             //Product Selector- Clear selected products check mark when deleted
-            this.gridData.data.filter(product => {
+            this.gridData?.data.filter(product => {
                 if (product.HIER_VAL_NM == item.HIER_VAL_NM) {
                     product.selected = false;
                 }
@@ -1084,7 +1084,7 @@ export class ProductSelectorComponent implements OnDestroy {
     clearProducts(type?) {
         if (type != 'E') {
             //Product Selector- Clear selected products check mark when deleted
-            this.gridData.data.filter(product => {
+            this.gridData?.data.filter(product => {
                 this.addedProducts.forEach(addedPrd => {
                     if (product.HIER_VAL_NM == addedPrd.HIER_VAL_NM) {
                         product.selected = false;

@@ -627,7 +627,7 @@ export class dealEditorComponent implements OnDestroy{
                 this.openMCTPCTModal(args.dataItem, true)
             }
             else if (this.in_Is_Tender_Dashboard && args.column.field == "COST_TEST_RESULT") {// functionality required only for Grid in TenderDashboard Screen
-                this.openMCTPCTModal(args.dataItem, false)
+                this.openMCTPCTModal(args.dataItem, true)
             }
             else if (args.column.field == 'MISSING_CAP_COST_INFO') {
                 this.openMissingCapCostInfo(args.dataItem);
