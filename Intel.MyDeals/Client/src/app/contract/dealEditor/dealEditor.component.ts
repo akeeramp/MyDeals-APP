@@ -627,7 +627,7 @@ export class dealEditorComponent implements OnDestroy{
                 this.openMCTPCTModal(args.dataItem, true)
             }
             else if (this.in_Is_Tender_Dashboard && args.column.field == "COST_TEST_RESULT") {// functionality required only for Grid in TenderDashboard Screen
-                this.openMCTPCTModal(args.dataItem, true)
+                this.openMCTPCTModal(args.dataItem, false)
             }
             else if (args.column.field == 'MISSING_CAP_COST_INFO') {
                 this.openMissingCapCostInfo(args.dataItem);
@@ -693,9 +693,9 @@ export class dealEditorComponent implements OnDestroy{
         });
 
         dialogRef.afterClosed().subscribe((returnVal) => {
-            if (isMeetComp) {
+
                 this.loggerService.success("Please wait for the result to be updated...");
-            }
+
 
             if (!isMeetComp || (isMeetComp && returnVal && returnVal.length > 0)) {
                 this.refreshGridData.emit({ wipIds: [dataItem['DC_ID']] });
