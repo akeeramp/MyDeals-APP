@@ -2058,10 +2058,11 @@ namespace Intel.MyDeals.BusinessLogic
                         // TODO: Put in data limits here if business decides to truncate the deals
                         myDealsData[OpDataElementType.PRC_ST].Data[strategyId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Cancelled);
                         myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Cancelled);
-                        myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.PS_WF_STG_CD, WorkFlowStages.Cancelled);
-                        myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementsValue(AttributeCodes.END_DT, workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedEndDate);
-                        myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementsValue(AttributeCodes.REBATE_BILLING_END, workRecordDataFields.recordDetails.quote.quoteLine[i].BillingEndDate);
-
+                        myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.PS_WF_STG_CD, WorkFlowStages.Cancelled);                        
+                        DateTime approvedEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+                        DateTime billingEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].BillingEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+                        myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementsValue(AttributeCodes.END_DT, approvedEndDate.ToString("MM/dd/yyyy"));
+                        myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementsValue(AttributeCodes.REBATE_BILLING_END, billingEndDate.ToString("MM/dd/yyyy"));
                         break;
                 }
 
