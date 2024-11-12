@@ -1245,6 +1245,14 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
                 },
 
+                 new MyOpRule
+                {
+                    Title="Check for consumption param modified for Active Deals",
+                    ActionRule = MyDcActions.ConsumptinParamModifiedCheck,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
+                },
+
                 new MyOpRule
                 {
                     Title="Check for Major Wrong Way Changes to Update Tracker",
@@ -1252,8 +1260,8 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
                 },
+                 
                 
-
                 new MyOpRule
                 {
                     Title="Add history message for changed fields",

@@ -2125,6 +2125,71 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ConsumptinParamModifiedCheck(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            AttributeCollection atrbMstr = DataCollections.GetAttributeData();
+            string wipStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+            List<MyDealsAttribute> onChangeFastItems = atrbMstr != null ? atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_FASTTRACK").ToList() : new List<MyDealsAttribute>();
+            List<int> onChangeFastTrackIds = r.Dc.DataElements.Where(d => onChangeFastItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.AtrbValue != d.OrigAtrbValue).Select(d => d.DcID).ToList();
+            List<IOpDataElement> onChangeFastTrackElements = r.Dc.GetDataElementsWhere(d => onChangeFastItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.AtrbValue != d.OrigAtrbValue).ToList();
+            if (onChangeFastTrackElements.Count > 0 && (wipStage == WorkFlowStages.Active || wipStage == WorkFlowStages.Won))
+            {
+                bool isremoved = false;
+                foreach (var item in onChangeFastTrackElements)
+                {
+                    var newlist = new List<string>();
+                    var oldlist = new List<string>();
+                    if (item.AtrbCd == AttributeCodes.CONSUMPTION_CUST_SEGMENT)
+                    {
+                        newlist = item.AtrbValue.ToString().Split(',').ToList();
+                        oldlist = item.OrigAtrbValue.ToString().Split(',').ToList();
+                    }
+                    else if (item.AtrbCd == AttributeCodes.CONSUMPTION_COUNTRY_REGION)
+                    {
+                        newlist = item.AtrbValue.ToString().Split('|').ToList();
+                        oldlist = item.OrigAtrbValue.ToString().Split('|').ToList();
+                    }
+                    else if (item.AtrbCd == AttributeCodes.CONSUMPTION_SYS_CONFIG)
+                    {
+                        newlist = item.AtrbValue.ToString().Split(',').ToList();
+                        oldlist = item.OrigAtrbValue.ToString().Split(',').ToList();
+                    }
+                    else if (item.AtrbCd == AttributeCodes.CONSUMPTION_CUST_PLATFORM)
+                    {
+                        newlist = item.AtrbValue.ToString().Split(',').ToList();
+                        oldlist = item.OrigAtrbValue.ToString().Split(',').ToList();
+                    }
+                    else if (item.AtrbCd == AttributeCodes.CONSUMPTION_CUST_RPT_GEO)
+                    {
+                        newlist = item.AtrbValue.ToString().Split(',').ToList();
+                        oldlist = item.OrigAtrbValue.ToString().Split(',').ToList();
+                    }
+                    if (oldlist.FindAll(x => x != "").Count > 0)
+                    {
+                        var removedlist = oldlist.Except(newlist, StringComparer.OrdinalIgnoreCase).ToList();
+                        if (removedlist.Count > 0)
+                        {
+                            item.AddMessage("We cannot remove existing Values");
+                            isremoved = true;
+                        }
+                    }
+                }
+                if (isremoved)
+                {
+                    foreach (var item in onChangeFastTrackElements)
+                    {
+                        item.AtrbValue = item.OrigAtrbValue;
+                        item.State = OpDataElementState.Unchanged;
+                        //r.Dc.SetAtrb(item.AtrbCd, item.OrigAtrbValue);
+                    }
+                    return;
+                }
+            }
+        }
+
         public static void MajorWrongWayChangeCheck(params object[] args)
         {
             // This rule added in because Kannan said that for wrong way major changes to properly generate a tracker.  The DB is relying on tracker having "*" prior to gen-tracker call.
@@ -2134,8 +2199,8 @@ namespace Intel.MyDeals.BusinessRules
             AttributeCollection atrbMstr = DataCollections.GetAttributeData();
             List<MyDealsAttribute> onChangeWrongWayItems = atrbMstr != null ? atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE" || a.MJR_MNR_CHG == "MAJOR_DECREASE" || a.MJR_MNR_CHG == "MAJOR_FASTTRACK").ToList() : new List<MyDealsAttribute>();
             List<MyDealsAttribute> onChangeFastItems = atrbMstr != null ? atrbMstr.All.Where(a =>  a.MJR_MNR_CHG == "MAJOR_FASTTRACK").ToList() : new List<MyDealsAttribute>();
-            List<int> onChangeFastTrackIds = r.Dc.DataElements.Where(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).Select(d => d.DcID).ToList();
-
+            List<int> onChangeFastTrackIds = r.Dc.DataElements.Where(d => onChangeFastItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.AtrbValue != d.OrigAtrbValue).Select(d => d.DcID).ToList();
+            
             List<int> onChangeWrongWayIds = r.Dc.DataElements.Where(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).Select(d => d.DcID).ToList();
             List<int> majorFieldNoRedealIds = r.Dc.DataElements
                 .Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && (d.AtrbValue.ToString() == WorkFlowStages.Active || d.AtrbValue.ToString() == WorkFlowStages.Won) && !d.HasValueChanged && onChangeWrongWayIds.Contains(d.DcID))
