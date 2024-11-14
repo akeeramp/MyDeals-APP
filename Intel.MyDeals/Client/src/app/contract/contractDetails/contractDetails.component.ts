@@ -211,7 +211,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         this.contractData["NO_END_DT"] = false;
         this.contractData["CUST_MBR_SID"] = "";
         this.contractData.CUST_ACCNT_DIV_UI = "";
-        this.contractData["CONTRACT_TYPE"] = "Standard";
+        this.contractData["CONTRACT_TYPE"] = "";
         this.contractData["CUST_ACCPT"] = "Pending";
         this.contractData["AttachmentError"] = false;
         this.contractData["CUST_ACCNT_DIV_UI"] = "";
@@ -369,6 +369,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         this.contractData["END_QTR"] = this.END_QTR;
         this.contractData["END_YR"] = this.END_YR;
         this.contractData["TITLE"] = this.TITLE;
+        this.contractData["CONTRACT_TYPE"] = this.CONTRACT_TYPE.DROP_DOWN;
         this.contractData["displayTitle"] = this.TITLE;
         this.contractData["START_DT"] = this.momentService.moment(this.START_DT).format("MM/DD/YYYY");
         this.contractData["START_QTR"] = this.START_QTR;
@@ -840,6 +841,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         }
         this.contractType = ' Contract';
         this.TITLE = this.contractData.TITLE;
+        this.CONTRACT_TYPE = this.dropdownFieldsData['CONTRACT_TYPE'].find(x => x.DROP_DOWN == this.contractData.CONTRACT_TYPE);
         this.START_DT = this.momentService.moment(this.contractData.START_DT, "MM/DD/YYYY").toDate();
         this.END_DT = this.existingMinEndDate = this.momentService.moment(this.contractData.END_DT, "MM/DD/YYYY").toDate();
         this.selectedCUST_ACCPT = this.contractData.CUST_ACCPT;
@@ -1026,7 +1028,6 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
                     this.dropdownFieldsData['CUST_ACCPT'] = CUST_ACCPT;
                     this.backdateReasonsDropdownList = BACK_DATE_RSN;
                     // below lines of code is to set default value for contract type dropdown.
-                    this.CONTRACT_TYPE = CONTRACT_TYPE[0];
                     const conrtType = this.route.snapshot.url.find(x => x.path == 'copycid');
                     if (!!conrtType && conrtType.path =='copycid') {
                         this.c_Id = parseInt(this.route.snapshot.paramMap.get('cid'));
@@ -1060,6 +1061,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
                                     this.contractData.CUST_ACCNT_DIV = this.copyContractData.CUST_ACCNT_DIV;
                                     this.contractData.IS_TENDER = this.copyContractData.IS_TENDER;
                                     this.contractData.CONTRACT_TYPE = this.copyContractData.CONTRACT_TYPE;
+                                    this.CONTRACT_TYPE = this.dropdownFieldsData['CONTRACT_TYPE'].find(x => x.DROP_DOWN == this.copyContractData.CONTRACT_TYPE);
                                     this.contractData.CUST_ACCNT_DIV_UI = !this.contractData["CUST_ACCNT_DIV"] ? "" : this.contractData["CUST_ACCNT_DIV"].split("/");
                                     this.updateCorpDivision(this.copyContractData.CUST_MBR_SID);
                                     this.pastDateConfirm(this.contractData.START_DT);  // Check for Backdate Reason
