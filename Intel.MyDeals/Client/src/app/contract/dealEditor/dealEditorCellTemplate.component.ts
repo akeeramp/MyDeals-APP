@@ -166,9 +166,9 @@ export class dealEditorCellTemplateComponent {
                         passedData.LAST_REDEAL_DT=this.datePipe.transform(new Date(), "MM/dd/yyyy"); 
                     }
                     classNm = "";
-                }
-            }
-        }
+                } else classNm = "isReadOnlyCell";
+            } else classNm = "isReadOnlyCell";
+        } 
         return classNm.replace(" isRequiredCell", "");
     }
     getMissingCostCapTitle(in_DataItem) {

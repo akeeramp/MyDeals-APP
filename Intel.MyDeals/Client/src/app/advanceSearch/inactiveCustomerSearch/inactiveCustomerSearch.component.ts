@@ -1,7 +1,7 @@
-import { Component, ChangeDetectorRef, OnDestroy, ViewChild } from "@angular/core";
+import { Component, OnDestroy, ViewChild } from "@angular/core";
 import { globalSearchResultsService } from "../globalSearchResults/globalSearchResults.service";
 import { logger } from "../../shared/logger/logger";
-import { Subject, Observable } from "rxjs";
+import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { TemplatesService } from "../../shared/services/templates.service";
 import { DataStateChangeEvent, PageSizeItem, GridComponent } from "@progress/kendo-angular-grid";
@@ -10,17 +10,18 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { GridUtil } from '../../contract/grid.util';
 import { ExcelExportComponent } from '@progress/kendo-angular-excel-export';
 import { InActiveCustomerService } from "./inactiveCustomerSearch.service";
+import * as _ from 'underscore';
 
 @Component({
     selector: 'inactivecustomer-search-angular',
     templateUrl: 'Client/src/app/advanceSearch/inactiveCustomerSearch/inactiveCustomerSearch.component.html',
     styleUrls: ['Client/src/app/advanceSearch/inactiveCustomerSearch/inactiveCustomerSearch.component.css']
 })
+
 export class InActiveCustomerSearchComponent implements OnDestroy {
     
     constructor(protected globalSearchService: globalSearchResultsService,
         private loggerService: logger,
-        private ref: ChangeDetectorRef,
         private templatesSvc: TemplatesService,
         private inactSvc: InActiveCustomerService
     ) {
@@ -131,8 +132,6 @@ export class InActiveCustomerSearchComponent implements OnDestroy {
         this.globalSearchService.getObjectType(sanitizedSearchText, this.resultTake, type, inactCust).pipe(takeUntil(this.destroy$)).subscribe((result) => {
             this.objTypes[type].result = result;
             this.objTypes[type].loading = false;
-            //this method is added for UI to render proper. without this line the UI databinding is not happening from dashboard search screen but it will work fine for header search
-            this.ref.detectChanges();
             if (this.objTypes[type].result.length == 5) {
                 this.objTypes[type].viewMore = true;
             }
@@ -163,7 +162,6 @@ export class InActiveCustomerSearchComponent implements OnDestroy {
     txtEnterPressed(event: any) {
         //KeyCode 13 is 'Enter'
         if (event.keyCode === 13 && this.searchText != "") {
-            //opening kendo window
             this.getObjectTypeResult(this.opType);
         }
     }
@@ -218,16 +216,12 @@ export class InActiveCustomerSearchComponent implements OnDestroy {
 
         } else {
             const dcId = item.DC_ID;
-            //this.fetchTableData(dcId);
-            //calling this function because to navigate to the PS we need contract data,PS ID and PT ID -- in the item we dont have PT ID for opType ->PS so hitting API to get data
-            //in case of WIp deal click on the global search results we need contract id ,PS and PT ID to navigate to respective deal so calling this function to hit the api to get the details
-            //in case of PT ID click on the global search results we need contract ID which is not present in item so calling API to get the data
             this.getIds(dcId, opType);
         }
     }
 
     viewMore(opType: string) {
-        this.resultTake = 50;
+        this.resultTake = 500;
         this.getObjectTypeResult(opType);
     }
 
@@ -294,11 +288,6 @@ export class InActiveCustomerSearchComponent implements OnDestroy {
         });
     }
 
-    //yet to migrate Advance Search Screen
-    gotoAdvanced() {
-        window.location.href = "AdvancedSearch#/advanceSearch";
-    }
-
     public exportToExcel(): void {
         this.inactSvc.setData(true);
         GridUtil.dsToExcel(this.columns, this.gridResult, "Deal Editor Export", "InactiveCustomerSearchResult", this.inactSvc);
@@ -323,57 +312,31 @@ export class InActiveCustomerSearchComponent implements OnDestroy {
                 combinedColumns = combinedColumns.concat(columns);
             }
         });
-        return combinedColumns;
-    }
-
-    private removeDuplicateColumns(columns: any[]): any[] {
-        const uniqueColumns = [];
-        const columnFields = new Set();
-        columns.forEach((column) => {
-          if (!columnFields.has(column.field)) {
-            columnFields.add(column.field);
-            uniqueColumns.push(column);
-          }
-        });
-        return uniqueColumns;
+        return _.uniq(combinedColumns, (column) => column.field);
     }
 
     private modifyAndOrderColumnDetails(inputCols: any[]): any[] {
 
         const fieldsToRemove = ['tools', 'tender_actions', 'EXCLUDE_AUTOMATION', 'PRD_BCKT'];
-        // 1)Remove specified fields
-        inputCols = inputCols.filter(column => !fieldsToRemove.includes(column.field));
-
-        // 2)Add specified fields
-        inputCols = inputCols.concat(this.ColFieldsToAdd);
-
-        //3) Rename the title of the field 'CNTRCT_OBJ_SID'
-        inputCols = inputCols.map(column => {
-            if (column.field === 'CNTRCT_OBJ_SID') {
-                return {
-                    ...column,
-                    title: 'Contract Id'
-                };
-            }
-            return column;
-        });
-
-        // 4) Reorder columns
         const desiredOrder = [
             'CNTRCT_OBJ_SID', 'PS_OBJ_SID', 'PT_OBJ_SID', 'DC_PARENT_ID', 'DC_ID', 'REBATE_TYPE', 'OBJ_SET_TYPE_CD'
         ];
-        const orderedColumns = [];
-        const remainingColumns = [];
-        inputCols.forEach(column => {
-            if (desiredOrder.includes(column.field)) {
-                orderedColumns.push(column);
-            } else {
-                remainingColumns.push(column);
-            }
+        // 1) Remove specified fields
+        inputCols = inputCols.filter(column => !fieldsToRemove.includes(column.field));
+    
+        // 2) Add specified fields
+        inputCols = inputCols.concat(this.ColFieldsToAdd);
+    
+        // 3) Rename the title of the field 'CNTRCT_OBJ_SID'
+        inputCols = inputCols.map(column => column.field === 'CNTRCT_OBJ_SID' ? { ...column, title: 'Contract Id' } : column);
+    
+        // 4) Reorder columns
+        const orderedColumns = _.sortBy(inputCols, column => {
+            const index = desiredOrder.indexOf(column.field);
+            return index === -1 ? desiredOrder.length : index;
         });
-        orderedColumns.sort((a, b) => desiredOrder.indexOf(a.field) - desiredOrder.indexOf(b.field));
-        // Combine ordered columns with the remaining columns
-        return orderedColumns.concat(remainingColumns);
+        
+        return orderedColumns;
     }
 
     ngOnInit() {
@@ -383,8 +346,7 @@ export class InActiveCustomerSearchComponent implements OnDestroy {
            .subscribe((response: any) => {
                const columnsApiResponse = response.ModelTemplates.WIP_DEAL;
                const combinedColumns = this.combineColumns(columnsApiResponse);
-               const nonDuplicateColumns = this.removeDuplicateColumns(combinedColumns);
-               this.columns = this.modifyAndOrderColumnDetails(nonDuplicateColumns)
+               this.columns = this.modifyAndOrderColumnDetails(combinedColumns);
                this.setLoading(false);
         }, (error) => {
                this.loggerService.error("Error Fetching Column Templates for Deal Level Details",'loadAllContractDetails::readTemplates:: service', error);
@@ -402,6 +364,5 @@ export class InActiveCustomerSearchComponent implements OnDestroy {
 
     private setLoading(isLoading: boolean) {
         this.isLoading = isLoading;
-        //this.ref.detectChanges();
     }    
 }

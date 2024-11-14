@@ -54,5 +54,26 @@ namespace Intel.MyDeals.DataLibrary.Test
             //Assert.IsTrue(results.CustomerSoldTo.Any());
         }
 
+        [TestCase]
+        public void CustomersGetMy(bool inactSrch)
+        {
+            OpUserStack.EmulateUnitTester(new OpUserToken
+            {
+                Role = new OpRoleType
+                {
+                    RoleTypeCd = "GA"
+                },
+                Usr = new OpUser
+                {
+                    FirstName = "Philip",
+                    LastName = "Eckenroth",
+                    WWID = 10505693,
+                    Idsid = "Pweckenr"
+                }
+            });
+            MyCustomerDetailsWrapper results = DataCollections.GetMyCustomers(true);
+            Assert.IsTrue(results.CustomerInfo.Any());
+            //Assert.IsTrue(results.CustomerSoldTo.Any());
+        }
     }
 }

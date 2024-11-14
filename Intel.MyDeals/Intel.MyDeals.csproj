@@ -815,7 +815,6 @@
     <TypeScriptCompile Include="Client\src\appModules\reporting\main-report-prod.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.model.ts" />
     <TypeScriptCompile Include="Client\src\app\advanceSearch\inactiveCustomerSearch\inactiveCustomerSearch.component.ts" />
-    <TypeScriptCompile Include="Client\src\app\advanceSearch\inactiveCustomerSearch\inactiveCustomerSearch.grid.util.ts" />
     <TypeScriptCompile Include="Client\src\app\advanceSearch\inactiveCustomerSearch\inactiveCustomerSearch.service.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\businessProcess\businessProcess.component.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\cicdPipeline\cicdPipeline.component.ts" />
