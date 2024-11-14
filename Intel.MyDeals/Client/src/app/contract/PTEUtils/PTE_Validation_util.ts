@@ -1035,16 +1035,16 @@ export class PTE_Validation_Util {
         let isconsumpptionvisible= groups!=undefined? groups.filter(x=>x.name=='Consumption'):0;
         if(isconsumpptionvisible.length>0){
         each(data, (item) => {
-            if (item.WF_STG_CD == "Active" || item.WF_STG_CD == "Won") {
+            if ((item.WF_STG_CD == "Active" || item.WF_STG_CD == "Won") && item.PAYOUT_BASED_ON == "Consumption") {
                 if (item.CONSUMPTION_LOOKBACK_PERIOD != undefined && (item.CONSUMPTION_LOOKBACK_PERIOD == null || item.CONSUMPTION_LOOKBACK_PERIOD == '')) {
-                      if(!isNumber(item.CONSUMPTION_LOOKBACK_PERIOD)){
+                    if (!isNumber(item.CONSUMPTION_LOOKBACK_PERIOD)) {
                         if (!item._behaviors) item._behaviors = {};
                         if (!item._behaviors.isError) item._behaviors.isError = {};
                         if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
                         item._behaviors.isError["CONSUMPTION_LOOKBACK_PERIOD"] = true;
                         item._behaviors.validMsg["CONSUMPTION_LOOKBACK_PERIOD"] = "Consumption Lookback Period must be a whole number between 0 and 24.";
-                      }
-                        return data;
+                    }
+                    return data;
                 }
             }
         });
