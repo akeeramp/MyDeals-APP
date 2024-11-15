@@ -1,6 +1,6 @@
 ﻿<loading-panel-angular [show]="isLoading" [header]="headerMsg" [isShowFunFact]="false" [description]="'Please wait we are fetching Data...'" [msgType]="'Info'"></loading-panel-angular>
 <div class="row " style="padding-left: 30px; padding-top: 10px">
-    <h2 class="header-bottomsizereduce">Inactive Customer Search</h2>
+    <h2 class="header-bottomsizereduce">Inactive Customer Search <i style="color:#0071c5; font-size:14px !important">(READ ONLY)</i></h2>   
 </div>
 <div class="container" style="display: unset !important;">
     <div class="row header-toolbox-inactCustSrch">
@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="col-md-2" style="padding-right: 5px;">
-            <button *ngIf="columns.length != 0 && gridResult.length > 0" kendoButton class="k-button" (click)="exportToExcel()" style="float:right;">Excel Export</button>
+            <button *ngIf="columns.length != 0 && gridResult.length > 0" kendoButton class="k-button" (click)="exportToExcel()" style="float:right; height: 41px; width: 120px; font-size: 18px;">Excel Export</button>
         </div>
     </div>
     <div class="row no-gutters justify-content-start" *ngIf="gridResult.length == 0">
