@@ -903,6 +903,28 @@ export class ProductCorrectorComponent implements OnDestroy{
 
         // delete from valid if exists
         if (!!this.ProductCorrectorData.ValidProducts[this.curRowId] && !!this.ProductCorrectorData.ValidProducts[this.curRowId][this.prdNm]) {
+            if (this.ProductCorrectorData.ProdctTransformResults[this.curRowId]['E'] && this.ProductCorrectorData.ProdctTransformResults[this.curRowId]['E'].includes(this.prdNm)) {
+                this.deletedProductDetails.push({
+                    DC_ID: this.curRowId,
+                    deletedUserInput: this.prdNm,
+                    exclude: true,
+                    indx: findWhere(this.data.selRows,
+                        {
+                            DC_ID: parseInt(this.curRowId)
+                        }).indx
+                });
+            }
+            else {
+                this.deletedProductDetails.push({
+                    DC_ID: this.curRowId,
+                    deletedUserInput: this.prdNm,
+                    exclude: false,
+                    indx: findWhere(this.data.selRows,
+                        {
+                            DC_ID: parseInt(this.curRowId)
+                        }).indx
+                });
+            }
             delete this.ProductCorrectorData.ValidProducts[this.curRowId][this.prdNm];
         }
 
@@ -936,7 +958,8 @@ export class ProductCorrectorComponent implements OnDestroy{
             //Delete fromProdctTransformResults
             if (!!this.ProductCorrectorData.ProdctTransformResults[this.curRowId][exclude]
                 && !!this.ProductCorrectorData.ProdctTransformResults[this.curRowId][exclude][this.prdNm]) {
-                delete this.ProductCorrectorData.ProdctTransformResults[this.curRowId][exclude][this.prdNm];
+                let delIdx = this.ProductCorrectorData.ProdctTransformResults[this.curRowId][exclude].indexOf(this.prdNm);
+                this.ProductCorrectorData.ProdctTransformResults[this.curRowId][exclude].splice(delIdx, 1);
             }
             var transItem = this.ProductCorrectorData.ProdctTransformResults[this.curRowId][exclude];
             for (var t = 0; t < transItem.length; t++) {

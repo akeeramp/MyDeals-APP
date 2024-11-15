@@ -2064,6 +2064,17 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                         }
                     }
                 }
+                //Handling Invalid Products in Exclude Product's Cell for Validate Products Action
+                if (action == "onLoad" && !!transformResult && !!transformResult.ProdctTransformResults) {
+                    for (let key in transformResult.ProdctTransformResults) {
+                        let r = parseInt(key);
+                        let index = findWhere(selRows, { DC_ID: r }).indx;
+                        if (transformResult.InValidProducts[key]["E"] && transformResult.InValidProducts[key]["E"].length !== 0) {
+                            let PTR_EXCLUDE_col_ind = findIndex(this.columns, { data: 'PRD_EXCLDS' });
+                            this.hotTable.setCellMeta(index, PTR_EXCLUDE_col_ind, 'className', 'error-product');
+                        }
+                    }
+                }
                 if (this.multiRowDelete.length > 0) {
                     this.deleteRow(this.multiRowDelete, true);
                 }
