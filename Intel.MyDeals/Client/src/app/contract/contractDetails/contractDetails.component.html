@@ -157,6 +157,9 @@
                                         </div>
                                         <kendo-dropdownlist [data]="dropdownFieldsData?.CONTRACT_TYPE" textField="DROP_DOWN"
                                                             valueField="DROP_DOWN" [(ngModel)]="CONTRACT_TYPE" class="inputWidth newbotborder font-input cd-input-bottom bg-cntrct-dtl" name="CONTRACT_TYPE" required>
+                                            <ng-template kendoDropDownListItemTemplate let-dataItem>
+                                                <span style="width: 100%" title="{{dataItem.ATRB_LKUP_DESC}}" class="template">{{ dataItem.DROP_DOWN }}</span> 
+                                            </ng-template>
                                         </kendo-dropdownlist>
                                     </div>
                                 </div>

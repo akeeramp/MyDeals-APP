@@ -834,6 +834,23 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
             this.disableCustomer = true;
         }
 
+        var conTypeObj = {
+            "ACTV_IND": true,
+            "ATRB_CD": "CONTRACT_TYPE",
+            "ATRB_LKUP_DESC": "",
+            "ATRB_LKUP_SID": 1318,
+            "ATRB_LKUP_TTIP": "",
+            "ATRB_SID": 3595,
+            "CUST_CIM_ID": "",
+            "CUST_MBR_SID": 1,
+            "CUST_NM": "ALL CUSTOMERS",
+            "DFLT_FLG": 0,
+            "DROP_DOWN": this.contractData.CONTRACT_TYPE,
+            "OBJ_SET_TYPE_CD": "ALL_TYPES",
+            "OBJ_SET_TYPE_SID": 9,
+            "ORD": 20
+        }
+
         if (this.contractData.HAS_TRACKER === "1") {
             this.showDeleteButton = false;
         } else {
@@ -841,7 +858,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         }
         this.contractType = ' Contract';
         this.TITLE = this.contractData.TITLE;
-        this.CONTRACT_TYPE = this.dropdownFieldsData['CONTRACT_TYPE'].find(x => x.DROP_DOWN == this.contractData.CONTRACT_TYPE);
+        this.CONTRACT_TYPE = this.contractData.CONTRACT_TYPE == "Standard" || this.contractData.CONTRACT_TYPE == "Other" ? conTypeObj : this.dropdownFieldsData['CONTRACT_TYPE'].find(x => x.DROP_DOWN == this.contractData.CONTRACT_TYPE);
         this.START_DT = this.momentService.moment(this.contractData.START_DT, "MM/DD/YYYY").toDate();
         this.END_DT = this.existingMinEndDate = this.momentService.moment(this.contractData.END_DT, "MM/DD/YYYY").toDate();
         this.selectedCUST_ACCPT = this.contractData.CUST_ACCPT;
