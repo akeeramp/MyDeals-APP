@@ -199,7 +199,7 @@ export class dealEditorComponent implements OnDestroy{
         if (this.columnSearchFilter == '')
             return this.wipTemplate.columns;
         else
-            return this.wipTemplate.columns.filter(x => x.title.toLowerCase().includes(this.columnSearchFilter.toLowerCase()));
+            return this.wipTemplate.columns.filter(x => x.title && x.title.toLowerCase().includes(this.columnSearchFilter.toLowerCase()));
     }
 
     distinctPrimitive(): any {
