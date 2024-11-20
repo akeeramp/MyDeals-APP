@@ -33,7 +33,7 @@
                                 <div class="md intel">
                                     <div *ngFor="let drops of dropdownResponses |keyvalue">
                                         <div *ngIf="drops.key==item.key" class="mattogglebutton">
-                                            <div *ngIf="item.value.opLookupText=='DROP_DOWN'" class="another-container">
+                                            <div *ngIf="item.value.opLookupText=='DROP_DOWN' && item.key != 'REBATE_TYPE'" class="another-container">
                                                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="matbutton mat-icon" style="width:100%; margin:1%">
                                                     <mat-button-toggle style="width:100%" *ngFor="let elem of drops.value" value="{{elem.DROP_DOWN}}" [checked]="item.value.value==elem.DROP_DOWN" (change)="onAutoChange(item.key,elem.DROP_DOWN)" [disabled]="isUIDisable(item.key, elem.DROP_DOWN)">
                                                         <a style=" text-transform: uppercase; font-weight: bold !important;"> {{elem.DROP_DOWN}}</a>
@@ -42,6 +42,13 @@
                                                         </span>
                                                     </mat-button-toggle>
                                                 </mat-button-toggle-group>
+                                            </div>
+                                            <div *ngIf="item.value.opLookupText=='DROP_DOWN' && item.key == 'REBATE_TYPE'" class="another-container" style="width: 100%; margin:1% 0px 1% 6px;">
+                                                <kendo-combobox [data]="filteredrebateTypedata" [filterable]="true" (filterChange)="rebateTypeFilter($event)"  [(ngModel)]="defaultRebateType"
+                                                                class="kendoInput noborderclass font-input contract-details-customer cd-input-bottom" (valueChange)="onRebateTypehange($event)" textField="DROP_DOWN" valueField="DROP_DOWN"
+                                                                name="Rebate Type" required>
+                                                </kendo-combobox>
+                                                <kendo-formerror><a style="color: #ff6e77; font-family:'Intel Clear'; font-size: 11px !important; font-weight:bold !important;width:168px !important">{{opValidMsg}}</a></kendo-formerror>
                                             </div>
                                             <div *ngIf="(item.key == 'NUM_OF_TIERS' || item.key == 'NUM_OF_DENSITY') && item.value.opLookupText=='dropdownName'">
                                                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="matbutton mat-icon" style="width:100%; margin:1%">

@@ -44,6 +44,9 @@ export class AutoFillComponent implements OnDestroy {
     //UItemplate is to get lnav data
     public UItemplate: any;
     private readonly destroy$ = new Subject();
+    private rebateTypedata: Array<any> = [];
+    private filteredrebateTypedata: Array<any> = [];
+    private defaultRebateType: any = {};
     
     constructor(private autoSvc: autoFillService,
                 private loggerSvc: logger, private templatesSvc: TemplatesService,
@@ -143,6 +146,15 @@ export class AutoFillComponent implements OnDestroy {
             this.autofillData.DEFAULT[`${elem}`].value = this.geoValues;
         }
 
+    }
+
+    private onRebateTypehange(evt: any) {
+        if (evt == undefined) {
+            this.autofillData.DEFAULT['REBATE_TYPE'].value = "";
+        }
+        else {
+            this.autofillData.DEFAULT['REBATE_TYPE'].value = evt.DROP_DOWN;
+        }
     }
 
     updateBlend(elem: string) {
@@ -270,7 +282,10 @@ export class AutoFillComponent implements OnDestroy {
         } else if (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "0" ||
             this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === 0) {
             this.opValidMsg = "Overarching Maximum Volume must be blank or > 0";
-        } else {
+        } else if (this.autofillData.DEFAULT.REBATE_TYPE.value == '' || this.autofillData.DEFAULT.REBATE_TYPE.value == null) {
+            this.opValidMsg = "Please select Rebate Type";
+        }
+        else {
             if (this.autofillData.ISTENDER) {
                 // For Tenders, default to blank and let priceTable.controller.js handle setting it
                 if (this.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value !== "") {
@@ -502,11 +517,20 @@ export class AutoFillComponent implements OnDestroy {
             this.mkgvalues = mkgvalue;
         }
 
+        this.rebateTypedata = this.dropdownResponses['REBATE_TYPE'];
+        this.filteredrebateTypedata = this.rebateTypedata;
+        this.defaultRebateType = { 'DROP_DOWN': this.autofillData.DEFAULT['REBATE_TYPE'].value };
         this.ConditionalInfoMessages('REBATE_TYPE', this.autofillData.DEFAULT['REBATE_TYPE'].value.toUpperCase());
 
         this.multSlctMkgValues = this.mkgvalues;
         this.isLoading = false;
         this.setBusy("", "", "", false);
+    }
+
+    rebateTypeFilter(value) {
+        this.filteredrebateTypedata = this.rebateTypedata.filter(
+            (s) => s.DROP_DOWN.toLowerCase().indexOf(value.toLowerCase()) !== -1
+        );
     }
 
     onAutoChange(elem: string, val: string) {

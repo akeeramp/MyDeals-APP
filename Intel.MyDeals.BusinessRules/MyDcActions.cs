@@ -3285,7 +3285,9 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             List<string> targetTypes = new List<string> { "NRE", "MDF" };
+            List<string> newtargetTypes = new List<string> { "CO-"};
             string myRebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            var dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 
             IOpDataElement dealCompType = r.Dc.GetDataElement(AttributeCodes.DEAL_COMB_TYPE);   // For message update
             string dealCompTypeValue = r.Dc.GetDataElementValue(AttributeCodes.DEAL_COMB_TYPE); // For conditional check
@@ -3294,6 +3296,11 @@ namespace Intel.MyDeals.BusinessRules
             {
                 // TWC3119-219 - Legal: Remove Mutually exclusive group type for MDF/NRE Rebate type
                 dealCompType.AddMessage("MDF / NRE rebates does not support the Mutually Exclusive group type.");
+            }
+
+            if (newtargetTypes.Any(myRebateType.Contains) && dealCompTypeValue.Contains("Mutually Exclusive") && dealType == "PROGRAM")
+            {
+                dealCompType.AddMessage(myRebateType + " rebates does not support the Mutually Exclusive group type.");
             }
         }
 
