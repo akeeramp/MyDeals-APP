@@ -9,6 +9,7 @@ import { DE_Validation_Util } from "../DEUtils/DE_Validation_util"
 import { DE_Save_Util } from '../DEUtils/DE_Save_util';
 import { PTE_Helper_Util } from './PTE_Helper_util';
 import { PTE_Common_Util } from './PTE_Common_util';
+import { DE_Common_Util } from '../DEUtils/DE_Common_util';
 
 export class PTE_Validation_Util {
     static getCorrectedPtrUsrPrd (userInpProdName) {
@@ -270,8 +271,8 @@ export class PTE_Validation_Util {
         return modalOptions;
     }    
 
-    static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract, lookBackPeriod, templates, groups): any {
-        let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates,groups);
+    static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract, lookBackPeriod, templates, groups, prcTblRowData, overlapFlexDEResult): any {
+        let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates, groups, prcTblRowData, overlapFlexDEResult);
         PTE_Common_Util.setWarningFields(data, curPricingTable);
         return isShowStopperError;
     }
@@ -327,7 +328,7 @@ export class PTE_Validation_Util {
     static validateFlexDate(data, curPricingTable, wipData) {
         if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
             //TWC5971-173: Commented out the clearValidation method because the Flex date overlap validation method, called before this one, may contain errors.
-            //data = this.clearValidation(data, 'START_DT');
+            data = this.clearValidation(data, 'START_DT');
             const accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
             const drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
             const objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';

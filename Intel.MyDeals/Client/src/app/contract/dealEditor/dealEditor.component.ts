@@ -29,6 +29,7 @@ import { tenderMCTPCTModalComponent } from '../ptModals/tenderDashboardModals/te
 import { SecurityService } from "../../shared/services/security.service"
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
+import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service';
 
 @Component({
     selector: 'deal-editor',
@@ -40,6 +41,7 @@ export class dealEditorComponent implements OnDestroy{
 
     constructor(private pteService: PricingTableEditorService,
                 private contractDetailsSvc: ContractDetailsService,
+                private flexOverlappingCheckDealService: flexoverLappingcheckDealService,
                 private loggerService: logger,
                 private datePipe: DatePipe,
                 protected dialog: MatDialog,
@@ -143,7 +145,9 @@ export class dealEditorComponent implements OnDestroy{
     public fieldCols: any = [];
     private isConsumptiondirty = false;
     private isAlertDialog=false;
-    private oldDEData :any=[];
+    private oldDEData: any = [];
+    private prcTblRowData: any = [];
+    private overlapFlexDEResult: any;
     public perfBar = {
         action: '',
         title: '',
@@ -380,6 +384,7 @@ export class dealEditorComponent implements OnDestroy{
             this.distinctPrimitive();
             this.isLoading = false;
             this.isDataLoading = false;
+            this.prcTblRowData = response.PRC_TBL_ROW;
             this.oldDEData = PTE_Common_Util.deepClone(this.gridResult);
         } else {
             this.gridResult = [];
@@ -1315,8 +1320,12 @@ export class dealEditorComponent implements OnDestroy{
             this.savingDeal = true;
             this.isWarning = false;
             this.isAlertDialog = false;
+            const flexReqData = PTE_Common_Util.getOverlapFlexProducts(this.curPricingTable, this.prcTblRowData);
+            if (flexReqData != undefined) {
+                this.overlapFlexDEResult = await this.flexOverlappingCheckDealService.GetProductOVLPValidation(flexReqData).toPromise();
+            }
             this.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
-            let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups);
+            let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups, this.prcTblRowData, this.overlapFlexDEResult);
             if (this.isDeveloper || this.isTester) {
                 this.setPerfBarDetails('mark', "Built data structure", "", false, false);
                 this.perfComp.emit(this.perfBar);

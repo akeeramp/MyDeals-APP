@@ -6,14 +6,14 @@ import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 
 export class DE_Validation_Util {
 
-    static validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates,groups) {
+    static validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates, groups, prcTblRowData, overlapFlexDEResult) {
         let restrictGroupFlexOverlap = false;
         each(data, (item) => {
             PTE_Common_Util.setBehaviors(item);
         });
         this.dataConversion(data, templates);
         PTE_Validation_Util.validateFlexRules(data, curPricingTable, data, restrictGroupFlexOverlap);
-        PTE_Validation_Util.validateFlexOverlapRules(data, curPricingTable, data);
+        //PTE_Validation_Util.validateFlexOverlapRules(data, curPricingTable, data);
         PTE_Validation_Util.ValidateEndCustomer(data, 'OnValidate', curPricingStrategy, curPricingTable);
         PTE_Validation_Util.validateSettlementPartner(data, curPricingStrategy);
         PTE_Validation_Util.validateOverArching(data, curPricingStrategy, curPricingTable);
@@ -23,24 +23,19 @@ export class DE_Validation_Util {
         PTE_Validation_Util.validateFlexRowType(data, curPricingStrategy, curPricingTable, data, undefined, restrictGroupFlexOverlap);
         PTE_Validation_Util.validateMarketSegment(data, data, undefined);
         PTE_Validation_Util.validateBillingLookbakPeriod(data,groups);
-        return this.ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap);
+        return this.ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap,prcTblRowData, overlapFlexDEResult);
     }
 
-    static ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap) {
+    static ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap, prcTblRowData, overlapFlexDEResult) {
         var isShowStopperError = false;
-
-        if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
-            var invalidFlexDate = PTE_Validation_Util.validateFlexDate(data, curPricingTable, data);
-            if ((invalidFlexDate || invalidFlexDate != undefined)) {
-                each(invalidFlexDate, (item) => {
-                    if (!restrictGroupFlexOverlap) {
-                        item = PTE_Validation_Util.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
-                        isShowStopperError = true;
-                    }
-                });
-            }
+        if (overlapFlexDEResult != undefined) {
+            let restrictGroupFlexOverlap = false;
+            let OVLPFlexPdtPTRUSRPRDError = false;
+            PTE_Common_Util.validateOVLPFlexProduct(data, prcTblRowData, false, curPricingTable, restrictGroupFlexOverlap, overlapFlexDEResult, OVLPFlexPdtPTRUSRPRDError);
         }
+        var invalidFlexDate = PTE_Validation_Util.validateFlexDate(data, curPricingTable, data);
 
+        this.valideFlexDuplicateProducts(data, curPricingTable);
         each(data, (item) => {
             if ((item["USER_AVG_RPU"] == null || item["USER_AVG_RPU"] == "")
                 && (item["USER_MAX_RPU"] == null || item["USER_MAX_RPU"] == "")
@@ -181,6 +176,16 @@ export class DE_Validation_Util {
                     }
                 }
 
+                if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
+                    //Delete if there is any previous Error  messages
+                    if ((invalidFlexDate || invalidFlexDate != undefined)) {
+                        each(invalidFlexDate, (item) => {
+                            item = PTE_Validation_Util.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
+                            isShowStopperError = true;
+                        });
+                    }
+                }
+
                 if (curPricingStrategy.IS_HYBRID_PRC_STRAT == "1") {
                     data.map(function (data, index) {
                         dictGroupType[data["DEAL_COMB_TYPE"]] = index;
@@ -195,7 +200,15 @@ export class DE_Validation_Util {
             }
 
             if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
-                if (!isShowStopperError && item._behaviors && item._behaviors.isError && item._behaviors.isError.hasOwnProperty("START_DT")) {
+                if ((invalidFlexDate || invalidFlexDate != undefined)) {
+                    each(invalidFlexDate, (item) => {
+                        if (!restrictGroupFlexOverlap) {
+                            item = PTE_Validation_Util.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
+                            isShowStopperError = true;
+                        }
+                    });
+                }
+                if (!isShowStopperError && item._behaviors && item._behaviors.isError && item._behaviors.isError.hasOwnProperty("PTR_USER_PRD")) {
                     isShowStopperError = true;
                 }
             }
@@ -221,6 +234,49 @@ export class DE_Validation_Util {
         });
 
         return isShowStopperError;
+    }
+
+    static valideFlexDuplicateProducts(data, curPricingTable) {
+
+        if (curPricingTable.OBJ_SET_TYPE_CD != undefined && curPricingTable.OBJ_SET_TYPE_CD == "FLEX") {
+            const duplicateFlexRows = PTE_Validation_Util.hasDuplicateProductPteLogic(data);
+            let errDealsFlex = [0];
+            for (let s = 0; s < data.length; s++) {
+                if (duplicateFlexRows["duplicateProductDCIds"] !== undefined && (duplicateFlexRows['duplicateProductDCIds'])[data[s].DC_ID] !== undefined) errDealsFlex.push(s);
+            }
+            if (errDealsFlex.length > 0) {  // Flex Deals - Validate for duplicate products
+                for (let t = 0; t < errDealsFlex.length; t++) {
+                    const el = data[errDealsFlex[t]];
+                    const splitProd = el.PTR_USER_PRD.split(',');
+                    if (curPricingTable.OBJ_SET_TYPE_CD == "FLEX") {
+                        //getting flex rowType values
+                        for (let tmpProd = 0; tmpProd < data.length; tmpProd++) {
+                            if (el.DC_ID != data[tmpProd].DC_ID) {
+                                let compareFirstProduct1 = data[tmpProd].PTR_USER_PRD;
+                                compareFirstProduct1 = compareFirstProduct1.split(',');
+
+                                let productCompareAll = splitProd.filter((val) => {
+                                    return compareFirstProduct1.includes(val)
+                                });
+
+                                if ((el.FLEX_ROW_TYPE == data[tmpProd].FLEX_ROW_TYPE) && (productCompareAll.length > 0)) {
+                                    if ((StaticMomentService.moment(data[tmpProd].START_DT).isSameOrAfter(StaticMomentService.moment(el.START_DT)) &&
+                                        StaticMomentService.moment(data[tmpProd].START_DT).isSameOrBefore(StaticMomentService.moment(el.END_DT))) ||
+                                        ((StaticMomentService.moment(data[tmpProd].END_DT).isSameOrBefore(StaticMomentService.moment(el.END_DT))) &&
+                                        (StaticMomentService.moment(data[tmpProd].END_DT).isSameOrAfter(StaticMomentService.moment(el.START_DT))))) {
+                                        if ((duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID] !== undefined) {
+                                            el._behaviors.isError["PTR_USER_PRD"] = true;
+                                            el._behaviors.validMsg["PTR_USER_PRD"] = "Cannot have duplicate product(s). Product(s): " +
+                                                (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapProduct + " are duplicated within rows " + (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapDCID + ". Please check the date range overlap.";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     static dataConversion(data, templates) {

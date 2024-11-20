@@ -147,7 +147,10 @@ export class PTE_Save_Util {
                             });
 
                             if ((el.FLEX_ROW_TYPE == PTR[tmpProd].FLEX_ROW_TYPE) && (productCompareAll.length > 0)) {
-                                if (PTR[tmpProd].START_DT >= el.START_DT && PTR[tmpProd].END_DT <= el.END_DT) {
+                                if ((StaticMomentService.moment(PTR[tmpProd].START_DT).isSameOrAfter(StaticMomentService.moment(el.START_DT)) &&
+                                    StaticMomentService.moment(PTR[tmpProd].START_DT).isSameOrBefore(StaticMomentService.moment(el.END_DT))) ||
+                                    ((StaticMomentService.moment(PTR[tmpProd].END_DT).isSameOrBefore(StaticMomentService.moment(el.END_DT))) &&
+                                    (StaticMomentService.moment(PTR[tmpProd].END_DT).isSameOrAfter(StaticMomentService.moment(el.START_DT))))) {
                                     if (isFlexPs && (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID] !== undefined) {
                                         el._behaviors.isError["PTR_USER_PRD"] = true;
                                         el._behaviors.validMsg["PTR_USER_PRD"] = "Cannot have duplicate product(s). Product(s): " +
