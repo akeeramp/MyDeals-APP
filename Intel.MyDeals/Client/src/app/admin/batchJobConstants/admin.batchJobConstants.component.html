@@ -31,19 +31,19 @@
                             <div>{{getDays(dataItem.RUN_SCHDL)}}</div>
                         </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column field="RUN_SCHDL" title="Start Date" [width]="200">
+                    <kendo-grid-column field="RUN_SCHDL" title="Start Time (in PST)" [width]="200">
                         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                            <div>{{getStart(dataItem.RUN_SCHDL)}}</div>
+                            <div>{{getStart(dataItem.RUN_SCHDL,true)}}</div>
                         </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column field="RUN_SCHDL" title="End Date" [width]="200">
+                    <kendo-grid-column field="RUN_SCHDL" title="End Time (in PST)" [width]="200">
                         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                            <div>{{getEnd(dataItem.RUN_SCHDL)}}</div>
+                            <div>{{getEnd(dataItem.RUN_SCHDL,true)}}</div>
                         </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column field="RUN_SCHDL" title="Interval" [width]="200">
                         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                            <div>{{getInterval(dataItem.RUN_SCHDL)}}</div>
+                            <div>{{getInterval(dataItem.RUN_SCHDL,true)}}</div>
                         </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column field="ADHC_RUN" title="Adhoc Run" [width]="200">
@@ -57,7 +57,11 @@
                         </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column field="STATUS" title="Status" [width]="200"></kendo-grid-column>
-                    <kendo-grid-column field="LST_RUN" title="Last Run" [width]="200"></kendo-grid-column>
+                    <kendo-grid-column field="LST_RUN" title="Last Run" [width]="200">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <div>{{getLastRun(dataItem.LST_RUN,true)}}</div>
+                        </ng-template>
+                    </kendo-grid-column>
                     <kendo-grid-column field="EMP_WWID" title="Last Modified By" [width]="200"></kendo-grid-column>
                     <kendo-grid-column field="TRGRD_BY" title="Triggered By" [width]="200"></kendo-grid-column>
                     <kendo-grid-excel fileName="BatchJobConstants.xlsx" [fetchData]="allData">
@@ -148,7 +152,7 @@
                                     </div>
                                     <div class="col-md-1">
                                         <div class="form-group">
-                                            <label for="interval" class="control-label alignLabels">Interval:</label><br/>
+                                            <label for="interval" class="control-label alignLabels">Interval (in mins):</label><br/>
                                             <input type="number" id="interval" class="form-control w-100" placeholder="Enter the Interval" formControlName="INTERVAL" />
                                             <kendo-formerror *ngIf="(batchJobConstForm.controls.INTERVAL?.errors?.required && batchJobConstForm.controls.INTERVAL?.touched)">
                                                 {{isRequiredMsg}}

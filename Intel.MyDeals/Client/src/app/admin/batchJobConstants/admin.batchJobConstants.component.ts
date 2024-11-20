@@ -9,6 +9,7 @@ import { logger } from "../../shared/logger/logger";
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { MomentService } from "../../shared/moment/moment.service";
 
 
 interface Item {
@@ -27,6 +28,7 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
       private formBuilder: FormBuilder, 
       private batchJobCnstSrvc: batchJobConstantsService,
       private constantsService: constantsService,
+      private momentService: MomentService,
       private loggerSvc: logger)
   { }
 
@@ -193,7 +195,7 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
       return dateAdd;
   }
 
-  editBatchJobData(dataItem){
+  editBatchJobData(dataItem) {
     this.allData = false;
     this.addData = true;
     const getBatchID = dataItem.BTCH_SID;
@@ -587,63 +589,75 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
     }
   }
 
-  getStart(start){
+  getStart(start,isDisplay = false){
     if(start !== null){
       if(start == "Checking Schdl"){
         return "Checking Schdl"
       }else{
         const startVal = JSON.parse(start);
         const startValInt = startVal[0]['START'];
-        return startValInt;
+        const [startValIntHrs, startValIntMin] = startValInt.split(':');
+          return isDisplay ? `${startValIntHrs}:${startValIntMin}` : startValInt;                  
       }
     }
   }
 
-  getEnd(end){
+  getEnd(end, isDisplay = false){
     if(end !== null){
       if(end == "Checking Schdl"){
         return "Checking Schdl"
       }else{
         const endVal = JSON.parse(end);
         const endValInt = endVal[0]['END'];
-        return endValInt;
+        const [endValIntHrs, endValIntMin] = endValInt.split(':');
+          return isDisplay ? `${endValIntHrs}:${endValIntMin}` : endValInt;        
       }
     }
   }
 
-  getInterval(interval){
-      if(interval !== null){
-        if(interval == "Checking Schdl"){
-          return "Checking Schdl"
-        }else{
-          const intervalVal = JSON.parse(interval);
-          const intervalVallInt = intervalVal[0]['INTERVAL'];
-          return intervalVallInt;
-        }
+  getInterval(interval, isDisplay = false){
+    if(interval !== null){
+      if(interval == "Checking Schdl"){
+        return "Checking Schdl"
+      }else{
+        const intervalVal = JSON.parse(interval);
+        const intervalVallInt = intervalVal[0]['INTERVAL'];
+        return isDisplay ? intervalVallInt / 60 + " Hr" : intervalVallInt;
       }
+    }
   }
 
-  checkPageAcess() {
-      this.constantsService.getConstantsByName("SSIS_CNST_EMP_ID").pipe(takeUntil(this.destroy$)).subscribe((data) => {
-          if (data) {
-              this.validWWID = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
-              this.hasAccess = this.validWWID.indexOf((<any>window).usrDupWwid) > -1;
-              if (!this.hasAccess) {
-                  window.alert("User does not have access to the screen. Press OK to redirect to Dashboard.");
-                  document.location.href = "/Dashboard#/portal";
-              }else{
-                  this.isLoading = false;
-              }
-          }
-      }, (error) => {
-          this.loggerSvc.error("Unable to get Eomployee Id", error)
-      });
+  getLastRun(lastRun,isDisplay = false) {
+      const lastRunVal = this.momentService.moment(lastRun).format("MM/DD/YYYY,  HH:mm");
+      return isDisplay ? lastRunVal : lastRun;
+  }
+
+  private redirectInvalidAccess(){
+    window.alert("User does not have access to the screen. Press OK to redirect to Dashboard.");
+    document.location.href = "/Dashboard#/portal";
+  }
+
+  async checkPageAccess() {
+    const response = await this.constantsService.getConstantsByName("SSIS_CNST_EMP_ID").toPromise().catch(error => {
+        this.loggerSvc.error("Unable to fetch Employee Id",error,error.statusText);
+    });
+
+    if(response) {
+      this.validWWID = response.CNST_VAL_TXT === "NA" ? "" : response.CNST_VAL_TXT;
+      this.hasAccess = this.validWWID.indexOf((<any>window).usrDupWwid) > -1;
+      if (this.hasAccess) {
+        this.getAllBatchJobConstants();
+      } else {
+        this.redirectInvalidAccess();
+      }
+    }else {
+      this.redirectInvalidAccess();
+    }
   }
 
   ngOnInit() {
       this.isLoading = true;
-      this.checkPageAcess();
-      this.getAllBatchJobConstants();
+      this.checkPageAccess();
   }
 
   ngOnDestroy() {
