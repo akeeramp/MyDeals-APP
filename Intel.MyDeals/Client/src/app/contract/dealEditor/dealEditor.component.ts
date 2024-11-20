@@ -1465,19 +1465,21 @@ export class dealEditorComponent implements OnDestroy{
         each(data, (item) => {
             if (item.WF_STG_CD == "Active"  || item.WF_STG_CD == "Won" ) {
                 if(this.oldDEData !=undefined){
-                let endDate = item.END_DT!=""?item.END_DT:  this.datePipe.transform(new Date(), "MM/dd/yyyy");
-                let  getlasttrackerdate =this.oldDEData.find(x=>x.DC_ID==item.DC_ID).LAST_REDEAL_DT;
-                let startDate =getlasttrackerdate!=""?getlasttrackerdate: item.START_DT;
-                //let startd=item.START_DT > item.TRKR_START_DT ? item.START_DT : item.TRKR_START_DT;  
+                    let endDate = item.END_DT!=""?item.END_DT:  this.datePipe.transform(new Date(), "MM/dd/yyyy");
+                    let  getlasttrackerdate =this.oldDEData.find(x=>x.DC_ID==item.DC_ID).LAST_REDEAL_DT;
+                    let startDate =getlasttrackerdate!=""?getlasttrackerdate: item.START_DT;
+                    //let startd=item.START_DT > item.TRKR_START_DT ? item.START_DT : item.TRKR_START_DT;  
                 
-                if (StaticMomentService.moment(item.LAST_REDEAL_DT).isBefore(startDate) || StaticMomentService.moment(item.LAST_REDEAL_DT).isAfter(endDate)) {
-                    iserror= true;  
-                    this.isWarning = true;      
-                    this.message = "Tracker Effective Start Date must be between " + startDate +" and "+ endDate;
-                    this.isAlertDialog=true;
-                    return ;
+                    if (item._behaviors.isDirty) {
+                        if (item._behaviors.isDirty['LAST_REDEAL_DT'] == true && (StaticMomentService.moment(item.LAST_REDEAL_DT).isBefore(startDate) || StaticMomentService.moment(item.LAST_REDEAL_DT).isAfter(endDate))) {
+                            iserror = true;
+                            this.isWarning = true;
+                            this.message = "Tracker Effective Start Date must be between " + startDate + " and " + endDate;
+                            this.isAlertDialog = true;
+                            return;
+                        }
+                    }
                 }
-            }
             }
         });
 
