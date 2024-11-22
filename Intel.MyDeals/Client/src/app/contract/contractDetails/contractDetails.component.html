@@ -155,12 +155,17 @@
                                         <div class="fl opUiLabel" style="width: 160px">
                                             <span *ngIf="contractData?._behaviors?.isRequired?.CONTRACT_TYPE" class="isReqField">*</span>Contract Type:
                                         </div>
-                                        <kendo-dropdownlist [data]="dropdownFieldsData?.CONTRACT_TYPE" textField="DROP_DOWN"
-                                                            valueField="DROP_DOWN" [(ngModel)]="CONTRACT_TYPE" class="inputWidth newbotborder font-input cd-input-bottom bg-cntrct-dtl" name="CONTRACT_TYPE" required>
-                                            <ng-template kendoDropDownListItemTemplate let-dataItem>
-                                                <span style="width: 100%" title="{{dataItem.ATRB_LKUP_DESC}}" class="template">{{ dataItem.DROP_DOWN }}</span> 
-                                            </ng-template>
-                                        </kendo-dropdownlist>
+                                        <div style="width: 100% !important">
+                                            <kendo-dropdownlist [data]="dropdownFieldsData?.CONTRACT_TYPE" textField="DROP_DOWN"
+                                                                valueField="DROP_DOWN" [(ngModel)]="CONTRACT_TYPE" class="inputWidth newbotborder font-input cd-input-bottom bg-cntrct-dtl" name="CONTRACT_TYPE" required>
+                                                <ng-template kendoDropDownListItemTemplate let-dataItem>
+                                                    <span style="width: 100%" title="{{dataItem.ATRB_LKUP_DESC}}" class="template">{{ dataItem.DROP_DOWN }}</span>
+                                                </ng-template>
+                                            </kendo-dropdownlist>
+                                            <kendo-formerror *ngIf="contractDetailsForm.controls.CONTRACT_TYPE?.errors?.required && contractDetailsForm.controls.CONTRACT_TYPE?.touched">
+                                                Please select a valid contract type
+                                            </kendo-formerror>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
