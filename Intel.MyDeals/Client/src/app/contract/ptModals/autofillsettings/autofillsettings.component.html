@@ -46,7 +46,7 @@
                                             <div *ngIf="item.value.opLookupText=='DROP_DOWN' && item.key == 'REBATE_TYPE'" class="another-container" style="width: 100%; margin:1% 0px 1% 6px;">
                                                 <kendo-combobox [data]="filteredrebateTypedata" [filterable]="true" (filterChange)="rebateTypeFilter($event)"  [(ngModel)]="defaultRebateType"
                                                                 class="kendoInput noborderclass font-input contract-details-customer cd-input-bottom" (valueChange)="onRebateTypehange($event)" textField="DROP_DOWN" valueField="DROP_DOWN"
-                                                                name="Rebate Type" required>
+                                                                name="Rebate Type" style="width:100%" required>
                                                 </kendo-combobox>
                                                 <kendo-formerror><a style="color: #ff6e77; font-family:'Intel Clear'; font-size: 11px !important; font-weight:bold !important;width:168px !important">{{opValidMsg}}</a></kendo-formerror>
                                             </div>
