@@ -97,7 +97,45 @@ jobs:
        - name:  Copy Publish Site to latest folder
          run: |
            ./scripts/deploy_env.ps1 'copy_latest_prodENV' '${{ vars.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}'  
+  Triggering-Jmeter-Test:
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && github.event.inputs.ENV == 'CIAR') 
+    runs-on: [self-hosted, mydeals-runner01]
+    needs: Deploy-Angular
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
+      - name: Trigger Jmeter Performance Test
+        shell: pwsh
+        run: |
+          $repositoryOwner = "intel-innersource" # Replace with the owner of the target repository
+          $repositoryName = "applications.web.mydeals.performance-testing" # Replace with the name of the target repository
+          $workflowFileName = "TriggerJmeterTest.yml" # Replace with the name of the workflow file
+          $accessToken = "${{ secrets.CICD_ACCESSTOKEN }}" # Use the secret from GitHub Actions
+
+          # Define the API endpoint
+          $apiUrl = "https://api.github.com/repos/$repositoryOwner/$repositoryName/actions/workflows/$workflowFileName/dispatches"
+
+          # Define the payload
+          $payload = @{
+              ref = "main" # Branch to run the workflow on
+              inputs = @{
+                  Release = "abc.xml" # Example input value
+              }
+          } | ConvertTo-Json
+
+          # Create the headers
+          $headers = @{
+              "Authorization" = "token $accessToken"
+              "Accept" = "application/vnd.github+json"
+              "Content-Type" = "application/json"
+          }
+
+          # Send the request
+          $response = Invoke-RestMethod -Uri $apiUrl -Method Post -Headers $headers -Body $payload
+
+          # Output the response (for debugging purposes)
+          $response
   Deploy_Latest:
     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes')
     runs-on: [self-hosted, mydeals-prd-automation]

@@ -116,7 +116,7 @@ jobs:
          if: ${{ github.event.inputs.Send_Build_Commits }} == 'yes'
          run: |
             ./scripts/deploy_env.ps1 'build_commit_list' '${{ github.event.inputs.Send_Build_Commits }}' '${{ vars.PWD }}' '${{ github.event.inputs.ENV }}'
-
+  
   Deploy_Latest:
     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes')
     runs-on: [self-hosted, mydeals-runner01]
@@ -138,10 +138,48 @@ jobs:
          run: |
             C:\Abhilash\deploy_env.ps1 'build_commit_list' '${{  github.event.inputs.Send_Build_Commits }}' '${{ vars.PWD }}' '${{ github.event.inputs.ENV }}'
   
+  Triggering-UIPath:
+    #change to CONS2
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes' && github.event.inputs.ENV == 'CONS2')
+    runs-on: [self-hosted, mydeals-runner01]
+    needs: Deploy_Latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Trigger UIPath Sanity Suit
+        shell: pwsh
+        run: |
+          $repositoryOwner = "intel-innersource" # Replace with the owner of the target repository
+          $repositoryName = "applications.robotics.uipath.testautomation.sanitytestsuite-mydeals" # Replace with the name of the target repository
+          $workflowFileName = "uipath-ci.yml" # Replace with the name of the workflow file
+          $accessToken = "${{ secrets.CICD_ACCESSTOKEN }}" # Use the secret from GitHub Actions
+
+          # Define the API endpoint
+          $apiUrl = "https://api.github.com/repos/$repositoryOwner/$repositoryName/actions/workflows/$workflowFileName/dispatches"
+
+          # Define the payload
+          $payload = @{
+              ref = "test" # Branch to run the workflow on
+          } | ConvertTo-Json
+
+          # Create the headers
+          $headers = @{
+              "Authorization" = "token $accessToken"
+              "Accept" = "application/vnd.github+json"
+              "Content-Type" = "application/json"
+          }
+
+          # Send the request
+          $response = Invoke-RestMethod -Uri $apiUrl -Method Post -Headers $headers -Body $payload
+
+          # Output the response (for debugging purposes)
+          $response
+          
   RunSquawker-Regular:
     name: Run Squawker 
     runs-on: ["innersource.prod.amr.dind"]
-    needs: Deploy-Angular
+    needs: Triggering-Jmeter-Test
     container: "amr-registry.caas.intel.com/squirrels/nodelts-alpine-git-cf:latest"
     timeout-minutes: 5
     continue-on-error: true
@@ -158,7 +196,7 @@ jobs:
   RunSquawker-Latest:
     name: Run Squawker 
     runs-on: ["innersource.prod.amr.dind"]
-    needs: Deploy_Latest
+    needs: Triggering-UIPath
     container: "amr-registry.caas.intel.com/squirrels/nodelts-alpine-git-cf:latest"
     timeout-minutes: 5
     continue-on-error: true
