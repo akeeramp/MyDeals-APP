@@ -147,8 +147,15 @@ try {
           }
           else{
             $pw = convertto-securestring -AsPlainText -Force -String "$PWD";
-            $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "$USN",$pw; 
-            & Invoke-Command -computername $result.DEPLOY_SERVER -credential $cred -ScriptBlock { param($pool)
+            $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "$USN",$pw;
+            if ($SERVER -ne 'DR' -and $SERVER -ne 'PROD1' -and $SERVER -ne 'PROD2') {
+                & Invoke-Command -computername $result.DEPLOY_SERVER -credential $cred -ScriptBlock { param($pool)
+                    Restart-WebAppPool -Name  $pool
+                } -Argumentlist $pool
+            } else {
+                Write-Host "Skipping IIS restart for environment: $SERVER"
+            } 
+          }
             #  if($SERVER -eq 'DAY1') {
             #     Remove-Item "D:\WebSites\MyDealsDay1\Client\*" -Force -Recurse;
             #     Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDealsDay1\Client.zip", "D:\WebSites\MyDealsDay1\Client\");
@@ -161,9 +168,7 @@ try {
             #     Remove-Item "D:\WebSites\MyDeals\Client\*" -Force -Recurse;
             #     Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDeals\Client.zip", "D:\WebSites\MyDeals\Client\");
             #  }
-              Restart-WebAppPool -Name  $pool
-          } -Argumentlist $pool
-     }
+          
     }
     elseif ($Operation -eq 'copy_latestENV' ){
      $result =  $ENV_DATA | Where env -eq $SERVER;
