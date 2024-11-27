@@ -27,6 +27,10 @@
                     <mat-slide-toggle [color]="color" [(ngModel)]="isSelected" (change)="onToggleChange()"
                                       title='Click to see Excluded/Included by USER'></mat-slide-toggle>
                 </div>
+                <div style="color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: right; right: 50px; position: relative;">
+                    Consumption deals only:
+                    <mat-slide-toggle [(ngModel)]="isConsumptionToggleOn" (change)="viewConsumptionOnly()" [color]="color" title='Show only consumption based deals' style="position: relative; left: 20px;"></mat-slide-toggle>
+                </div>
                 <div class="row oppo-grids new-now-wrap" style="margin: 0px;width:100%">
                     <kendo-grid class="exclude-filter-style view_popup_height icon-changes" [data]="gridData" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                                 [groupable]="false" [group]="state.group" filterable="menu" [navigable]="true"  [resizable]="true"
@@ -102,9 +106,13 @@
                                            [headerClass]="{'headerClass':true}" [width]="180" [hidden]="pctGroupDealsView"></kendo-grid-column>
                         <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN"
                                            [headerClass]="{'headerClass':true}" [width]="140" [hidden]="!pctGroupDealsView"></kendo-grid-column>
+                        <!--adding consumption columns for pct grouping-->
+                        <div *ngIf="isConsumptionToggleOn">
+                            <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of Consumptioncolumns" field="{{column.field}}" title="{{column.title}}" [width]="140"></kendo-grid-column>
+                         </div>
                         <ng-template *ngIf="isData" kendoGridDetailTemplate let-dataItem>
                             <div id="childGrid" class="opUiContainer md dashboard group-exclude-child">
-                              <kendo-grid *ngFor="let childColumn of childGrid" [data]="childColumn" (dataStateChange)="dataStateChange($event)" [kendoGridExpandDetailsBy]="expandDetailsBy"
+                                <kendo-grid *ngFor="let childColumn of childGrid" [data]="childColumn" (dataStateChange)="dataStateChange($event)" [kendoGridExpandDetailsBy]="expandDetailsBy"
                                             [(expandedDetailKeys)]="expandedDetailKeys" class="height-auto-child child-head icon-changes" [hideHeader]="true"[resizable]="true">
                                     <kendo-grid-column field="data" title=""
                                                        [headerClass]="{'headerClass':false}" [width]="1500"></kendo-grid-column>
@@ -164,6 +172,10 @@
 
                                             <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN"
                                                                [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
+                                            <!--adding consumption columns for pct grouping-->
+                                            <div *ngIf="isConsumptionToggleOn">
+                                                <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of Consumptioncolumns" field="{{column.field}}" title="{{column.title}}" [width]="140"></kendo-grid-column>
+                                            </div>
                                         </kendo-grid>
                                     </ng-template>
                                 </kendo-grid>

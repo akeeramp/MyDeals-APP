@@ -19,8 +19,8 @@ export class managerExcludeGroupsService {
         const apiUrl: string = this.apiBaseContractUrl + 'GetWipExclusionFromContract/' + id;
         return this.httpClient.get(apiUrl);
     }
-    public getExcludeGroupDetails(dealId): Observable<any> {
-        const apiUrl: string = this.apiLookupUrl + dealId;
+    public getExcludeGroupDetails(dealId, isToggleOn): Observable<any> {
+        const apiUrl: string = this.apiLookupUrl + dealId + '/' + isToggleOn;
         return this.httpClient.get(apiUrl);
     }
 

@@ -55,8 +55,8 @@ export class excludeDealGroupModalDialog implements OnDestroy{
     private isDealToolsChecked = false;
     private DEAL_GRP_CMNT;
     private OVLP_DEAL_ID: Array<any>;
-    @Output() public selectAllData: EventEmitter<void> = new EventEmitter()
-
+    @Output() public selectAllData: EventEmitter<void> = new EventEmitter();
+    public isConsumptionToggleOn: boolean = true;
     private readonly childGroup1Title = 'Deals below are included as part of the Cost Test';
 
     private state: State = {
@@ -68,6 +68,18 @@ export class excludeDealGroupModalDialog implements OnDestroy{
         }
     }
     public gridData: GridDataResult;
+
+    public Consumptioncolumns = [
+        { title: "Payout Based On", field: "OVLP_CONSUMPTION_PAYOUT_BASED_ON" },
+        { title: "Billings START Date (for Consumption)",field: "OVLP_CONSUMPTION_REBATE_BILLING_STRT_DATE" },
+        { title: "Billings END Date (for Consumption)",  field: "OVLP_CONSUMPTION_REBATE_BILLING_END_DATE" },
+        { title: "Billing Rolling Lookback Period (Months)", field:"OVLP_CONSUMPTION_LOOKBACK_PERIOD" },
+        { title :"Consumption Type" ,field:"OVLP_CONSUMPTION_TYPE" },
+        { title: "Customer Segment", field: "OVLP_CONSUMPTION_CUSTOMER_SEGMENT" },
+        { title: "Customer Reported Sales Geo", field: "OVLP_CONSUMPTION_RPT_GEO" },
+        { title: "System Price Point", field: "OVLP_CONSUMPTION_SYSTEM_PRICE_POINT" },
+        { title: "Project Name", field: "OVLP_CONSUMPTION_PROJECT_NAME" },
+        { title: "Consumption Reason Comment", field: "OVLP_CONSUMPTION_REASON_CMNT" }];
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
@@ -160,9 +172,16 @@ export class excludeDealGroupModalDialog implements OnDestroy{
         this.showKendoAlert = false;
     }
 
-    loadExcludeDealGroupModel() {
+    loadExcludeDealGroupModel(isToggleOn: boolean = true) {
         this.isLoading = true;
         this.hasCheckbox = true;
+        this.gridResult = [];
+        this.dealArray = [];
+        this.childGridData = null;
+        this.childGridData1 = null;
+        this.childGridData2 = null;
+        this.childGrid = [];
+        this.childGridResult = null;
 
         if (this.dataItem.cellCurrValues?.DEAL_ID) {
             this.pctGroupDealsView = true;
@@ -196,10 +215,23 @@ export class excludeDealGroupModalDialog implements OnDestroy{
             a["OVLP_CONSUMPTION_CUST_PLATFORM"] = row["CONSUMPTION_CUST_PLATFORM"];
             a["OVLP_CONSUMPTION_SYS_CONFIG"] = row["CONSUMPTION_SYS_CONFIG"];
             a["OVLP_CONSUMPTION_COUNTRY_REGION"] = row["CONSUMPTION_COUNTRY_REGION"];
+            a["OVLP_CONSUMPTION_PAYOUT_BASED_ON"] = row["PAYOUT_BASED_ON"]
+            a["OVLP_CONSUMPTION_REBATE_BILLING_STRT_DATE"] = row["REBATE_BILLING_START"];
+            a["OVLP_CONSUMPTION_REBATE_BILLING_END_DATE"] = row["REBATE_BILLING_END"];
+            a["OVLP_CONSUMPTION_LOOKBACK_PERIOD"] = row["CONSUMPTION_LOOKBACK_PERIOD"];
+            a["OVLP_CONSUMPTION_TYPE"] = row["CONSUMPTION_TYPE"];
+            a["OVLP_CNSMPTN_RSN"] = row["CONSUMPTION_REASON"];
+            a["OVLP_CONSUMPTION_REASON_CMNT"] = row["CONSUMPTION_REASON_CMNT"];
+            a["OVLP_CONSUMPTION_CUSTOMER_SEGMENT"] = row["CONSUMPTION_CUST_SEGMENT"];
+            a["OVLP_CONSUMPTION_RPT_GEO"] = row["CONSUMPTION_CUST_RPT_GEO"];
+            a["OVLP_CONSUMPTION_SYSTEM_PRICE_POINT"] = row["SYS_PRICE_POINT"];
+            a["OVLP_CONSUMPTION_PROJECT_NAME"] = row["QLTR_PROJECT"];
+                
+            
             this.gridResult.push(a);
         }
         this.gridData = process(this.gridResult, this.state);
-        this.managerExcludeGrpSvc.getExcludeGroupDetails(this.dealId).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
+        this.managerExcludeGrpSvc.getExcludeGroupDetails(this.dealId, isToggleOn).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
             this.isLoading = false;;
             this.childGridResult = result;
             if (this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != undefined && this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != null && this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != '') {
@@ -262,6 +294,14 @@ export class excludeDealGroupModalDialog implements OnDestroy{
             || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'pending' || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'submitted'))
             this.hasCheckbox = false;
         this.DEAL_GRP_CMNT = (this.dataItem.cellCurrValues.DEAL_GRP_CMNT === null || this.dataItem.cellCurrValues.DEAL_GRP_CMNT == undefined) ? "" : this.dataItem.cellCurrValues.DEAL_GRP_CMNT;
+    }
+    viewConsumptionOnly() {
+        if (this.isConsumptionToggleOn) {
+            this.loadExcludeDealGroupModel(true);
+        }
+        else {
+            this.loadExcludeDealGroupModel(false);
+        }
     }
 
     //handling changes on toggle changes
@@ -378,7 +418,7 @@ export class excludeDealGroupModalDialog implements OnDestroy{
     }
 
     ngOnInit() {
-        this.loadExcludeDealGroupModel();
+        this.viewConsumptionOnly();
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component

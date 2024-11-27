@@ -339,7 +339,7 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         /// <param name="ids">A dealId</param>
         /// <returns>a list of deal groups</returns>
-        public List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> ids)
+        public List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> ids, Boolean isConsumptionToggleOn)
         {
             type_int_pair opPair = new type_int_pair();
             opPair.AddRows(ids.Select(id => new OpPair<int, int>
@@ -349,10 +349,14 @@ namespace Intel.MyDeals.DataLibrary
             }));
 
             var ret = new List<OverlappingDeal>();
-            Procs.dbo.PR_MYDL_GET_OVLP_DEALS cmd = new Procs.dbo.PR_MYDL_GET_OVLP_DEALS()
+
+
+            var cmd = new Procs.dbo.PR_MYDL_GET_OVLP_DEALS()
             {
-                in_obj_keys = opPair
+                in_obj_keys = opPair,
+                cnsmptn_tgl_chk  = isConsumptionToggleOn
             };
+            
 
             try
             {
@@ -380,6 +384,17 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_OVLP_REBT_TYPE = DB.GetReaderOrdinal(rdr, "OVLP_REBT_TYPE");
                     int IDX_OVLP_WF_STG_CD = DB.GetReaderOrdinal(rdr, "OVLP_WF_STG_CD");
                     int IDX_WIP_DEAL_OBJ_SID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_OBJ_SID");
+                    int IDX_OVLP_CONSUMPTION_PAYOUT_BASED_ON = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_PAYOUT_BASED_ON");
+                    int IDX_OVLP_CONSUMPTION_REBATE_BILLING_STRT_DATE = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_REBATE_BILLING_STRT_DATE");
+                    int IDX_OVLP_CONSUMPTION_REBATE_BILLING_END_DATE = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_REBATE_BILLING_END_DATE");
+                    int IDX_OVLP_CONSUMPTION_LOOKBACK_PERIOD = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_LOOKBACK_PERIOD");
+                    int IDX_OVLP_CONSUMPTION_TYPE = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_TYPE");
+                    int IDX_OVLP_CONSUMPTION_CUSTOMER_SEGMENT = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_CUSTOMER_SEGMENT");
+                    int IDX_OVLP_CONSUMPTION_RPT_GEO = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_RPT_GEO");
+                    int IDX_OVLP_CONSUMPTION_SYSTEM_PRICE_POINT = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_SYSTEM_PRICE_POINT");
+                    int IDX_OVLP_CONSUMPTION_PROJECT_NAME = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_PROJECT_NAME");
+                    int IDX_OVLP_CONSUMPTION_REASON_CMNT = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_REASON_CMNT");
+
 
                     while (rdr.Read())
                     {
@@ -406,7 +421,17 @@ namespace Intel.MyDeals.DataLibrary
                             OVLP_PTR_USER_PRD = (IDX_OVLP_PTR_USER_PRD < 0 || rdr.IsDBNull(IDX_OVLP_PTR_USER_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_PTR_USER_PRD),
                             OVLP_REBT_TYPE = (IDX_OVLP_REBT_TYPE < 0 || rdr.IsDBNull(IDX_OVLP_REBT_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_REBT_TYPE),
                             OVLP_WF_STG_CD = (IDX_OVLP_WF_STG_CD < 0 || rdr.IsDBNull(IDX_OVLP_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_WF_STG_CD),
-                            WIP_DEAL_OBJ_SID = (IDX_WIP_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_OBJ_SID)
+                            WIP_DEAL_OBJ_SID = (IDX_WIP_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_OBJ_SID),
+                            OVLP_CONSUMPTION_PAYOUT_BASED_ON = (IDX_OVLP_CONSUMPTION_PAYOUT_BASED_ON < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_PAYOUT_BASED_ON)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CONSUMPTION_PAYOUT_BASED_ON),
+                            OVLP_CONSUMPTION_REBATE_BILLING_STRT_DATE = (IDX_OVLP_CONSUMPTION_REBATE_BILLING_STRT_DATE < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_REBATE_BILLING_STRT_DATE)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OVLP_CONSUMPTION_REBATE_BILLING_STRT_DATE),
+                            OVLP_CONSUMPTION_REBATE_BILLING_END_DATE = (IDX_OVLP_CONSUMPTION_REBATE_BILLING_END_DATE < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_REBATE_BILLING_END_DATE)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OVLP_CONSUMPTION_REBATE_BILLING_END_DATE),
+                            OVLP_CONSUMPTION_LOOKBACK_PERIOD = (IDX_OVLP_CONSUMPTION_LOOKBACK_PERIOD < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_LOOKBACK_PERIOD)) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_OVLP_CONSUMPTION_LOOKBACK_PERIOD),
+                            OVLP_CONSUMPTION_TYPE = (IDX_OVLP_CONSUMPTION_TYPE < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CONSUMPTION_TYPE),
+                            OVLP_CONSUMPTION_CUSTOMER_SEGMENT = (IDX_OVLP_CONSUMPTION_CUSTOMER_SEGMENT < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_CUSTOMER_SEGMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CONSUMPTION_CUSTOMER_SEGMENT),
+                            OVLP_CONSUMPTION_RPT_GEO = (IDX_OVLP_CONSUMPTION_RPT_GEO < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_RPT_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CONSUMPTION_RPT_GEO),
+                            OVLP_CONSUMPTION_SYSTEM_PRICE_POINT = (IDX_OVLP_CONSUMPTION_SYSTEM_PRICE_POINT < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_SYSTEM_PRICE_POINT)) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_OVLP_CONSUMPTION_SYSTEM_PRICE_POINT),
+                            OVLP_CONSUMPTION_PROJECT_NAME = (IDX_OVLP_CONSUMPTION_PROJECT_NAME < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_PROJECT_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CONSUMPTION_PROJECT_NAME),
+                            OVLP_CONSUMPTION_REASON_CMNT = (IDX_OVLP_CONSUMPTION_REASON_CMNT < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_REASON_CMNT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CONSUMPTION_REASON_CMNT),
                         });
                     }
                 }

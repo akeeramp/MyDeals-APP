@@ -790,7 +790,19 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.CONSUMPTION_REASON_CMNT.ATRB_SID,
                     Attributes.CONSUMPTION_CUST_PLATFORM.ATRB_SID,
                     Attributes.CONSUMPTION_SYS_CONFIG.ATRB_SID,
-                    Attributes.CONSUMPTION_COUNTRY_REGION.ATRB_SID
+                    Attributes.CONSUMPTION_COUNTRY_REGION.ATRB_SID,
+                    Attributes.PAYOUT_BASED_ON.ATRB_SID,
+                    Attributes.REBATE_BILLING_START.ATRB_SID,
+                    Attributes.REBATE_BILLING_END.ATRB_SID,
+                    Attributes.CONSUMPTION_LOOKBACK_PERIOD.ATRB_SID,
+                    Attributes.CONSUMPTION_TYPE.ATRB_SID,
+                    Attributes.CONSUMPTION_REASON.ATRB_SID,
+                    Attributes.CONSUMPTION_REASON_CMNT.ATRB_SID,
+                    Attributes.CONSUMPTION_CUST_SEGMENT.ATRB_SID,
+                    Attributes.CONSUMPTION_CUST_RPT_GEO.ATRB_SID,
+                    Attributes.SYS_PRICE_POINT.ATRB_SID,
+                    Attributes.QLTR_PROJECT.ATRB_SID,
+
                 });
 
             //// Get all the products in a collection base on the PRODUCT_FILTER

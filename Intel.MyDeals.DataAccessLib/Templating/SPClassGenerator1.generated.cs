@@ -6546,6 +6546,16 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 set { SetParmeter("in_obj_keys", value); }
                 get { return (SqlTableValueParameterBase)GetParameter("in_obj_keys"); }
             }
+            ///<summary>
+            /// DataType: table type
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Boolean cnsmptn_tgl_chk
+            {
+                set { SetParmeter("cnsmptn_tgl_chk", value); }
+                get { return (Boolean)GetParameter("cnsmptn_tgl_chk"); }
+            }
         }
 
         ///<summary>
@@ -16635,7 +16645,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 set { SetParmeter("in_cust_nm", value); }
                 get { return (String)GetParameter("in_cust_nm"); }
             }
-        }                    
+        }
 
         ///<summary>
         /// ID: 184387726
@@ -19665,7 +19675,10 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 StoredProdedureName = "[dbo].[PR_ZMIGRATE_USERS]";
             }
         }
+
     }
-
-
 }
+   
+
+   
+

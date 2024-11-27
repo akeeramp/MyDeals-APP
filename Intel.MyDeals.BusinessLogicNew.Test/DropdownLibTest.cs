@@ -411,8 +411,8 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             var mockData = new List<OverlappingDeal>();
             OpDataElementType inputOpDataElementType = data[0];
             List<int> inputDealIds = data[1];
-            mockDropdownDataLib.Setup(x => x.GetDealGroupDropdown(It.IsAny<OpDataElementType>(), It.IsAny<List<int>>())).Returns(mockData);
-            var res = new DropdownLib(mockDropdownDataLib.Object, mockDataCollectionsDataLib.Object).GetDealGroupDropdown(inputOpDataElementType,inputDealIds);
+            mockDropdownDataLib.Setup(x => x.GetDealGroupDropdown(It.IsAny<OpDataElementType>(), It.IsAny<List<int>>(), true)).Returns(mockData);
+            var res = new DropdownLib(mockDropdownDataLib.Object, mockDataCollectionsDataLib.Object).GetDealGroupDropdown(inputOpDataElementType,inputDealIds,true);
             Assert.IsNotNull(res);
 
         }

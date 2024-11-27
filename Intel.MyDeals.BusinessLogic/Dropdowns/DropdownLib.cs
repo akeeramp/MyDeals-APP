@@ -4,6 +4,7 @@ using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
+using System;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -463,9 +464,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// Gets a list of deal groups given a dealId
         /// </summary>
         /// <returns>a list of deal groups</returns>
-        public List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds)
+        public List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds, Boolean isConsumptionToggleOn)
         {
-            return _dropdownDataLib.GetDealGroupDropdown(opDataElementType, dealIds);
+            return _dropdownDataLib.GetDealGroupDropdown(opDataElementType, dealIds, isConsumptionToggleOn);
         }
     }
 }

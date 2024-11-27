@@ -417,10 +417,10 @@ namespace Intel.MyDeals.Controllers.API
         /// <param name="dealId">A dealId</param>
         /// <returns>a list of deal groups</returns>
         [Authorize]
-		[Route("GetDealGroupDropdown/{dealId}")]
-		public List<OverlappingDeal> GetDealGroupDropdown(int dealId)
+		[Route("GetDealGroupDropdown/{dealId}/{isConsumptionToggleOn}")]
+		public List<OverlappingDeal> GetDealGroupDropdown(int dealId,bool isConsumptionToggleOn)
 		{
-			return SafeExecutor(() => _dropdownLib.GetDealGroupDropdown(OpDataElementType.WIP_DEAL, new List<int> { dealId })
+			return SafeExecutor(() => _dropdownLib.GetDealGroupDropdown(OpDataElementType.WIP_DEAL, new List<int> { dealId }, isConsumptionToggleOn)
 				, $"Unable to get deal groups"
 			);
 		}

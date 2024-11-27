@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.IBusinessLogic
@@ -62,7 +63,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<Dropdown> GetCustomersDropdown();
 
-        List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds);
+        List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds,Boolean isConsumptionToggleOn);
         void RecycleBasicDropdownCache();
     }
 }

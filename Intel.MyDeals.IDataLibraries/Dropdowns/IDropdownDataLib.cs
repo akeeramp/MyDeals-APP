@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.IDataLibrary
@@ -20,7 +21,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<DropdownBulkStatus> ExecuteBulkDeleteSP(string lookupSids);
 
-        List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds);
+        List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds, Boolean isConsumptionToggleOn);
         void RecycleBasicDropdownCache();
     }
 }

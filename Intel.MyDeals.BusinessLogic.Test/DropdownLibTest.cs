@@ -217,7 +217,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
         [Test, TestCaseSource("_sourceLists")] // Old DCS deal with many overlaps
         public void DropDnLib_GetDealGroupDropdown(List<int> deals)
         {
-            List<OverlappingDeal> overlappingList = new DropdownLib().GetDealGroupDropdown(OpDataElementType.WIP_DEAL, deals);
+            List<OverlappingDeal> overlappingList = new DropdownLib().GetDealGroupDropdown(OpDataElementType.WIP_DEAL, deals,true);
             Assert.IsTrue(overlappingList.Any());
         }
 
