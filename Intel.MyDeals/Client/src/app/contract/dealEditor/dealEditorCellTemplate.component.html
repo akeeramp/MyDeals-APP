@@ -68,10 +68,13 @@
     </div>
 </div>
 <div *ngIf="in_Template.includes('gridUtils.uiReadonlyFolioWrapper')" class="dealCell">
-    <div id="folioCell" class="uiControlDiv isReadOnlyCell">
+    <div *ngIf="!isInActCustSearch" id="folioCell" class="uiControlDiv isReadOnlyCell">
         <a href="/contract#/manager/{{in_DataItem[in_Field_Name]}}" target="_blank">
             <div class="ng-binding vert-center">{{in_DataItem[in_Field_Name]}}</div>
         </a>
+    </div>
+    <div *ngIf="isInActCustSearch" id="folioCell" class="uiControlDiv isReadOnlyCell">
+        <div class="ng-binding vert-center">{{in_DataItem[in_Field_Name]}}</div>
     </div>
 </div>
 <div *ngIf="in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'" class="dealCell dealsIcon-dealcell" style="top:45% !important">
