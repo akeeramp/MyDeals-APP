@@ -156,7 +156,7 @@ jobs:
   RunSquawker-Regular:
     name: Run Squawker 
     runs-on: ["innersource.prod.amr.dind"]
-    needs: Deploy-Angular
+    needs: Triggering-Jmeter-Test
     container: "amr-registry.caas.intel.com/squirrels/nodelts-alpine-git-cf:latest"
     timeout-minutes: 5
     continue-on-error: true
