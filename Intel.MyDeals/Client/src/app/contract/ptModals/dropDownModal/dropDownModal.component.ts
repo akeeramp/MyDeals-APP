@@ -39,7 +39,7 @@ export class dropDownModalComponent {
         // TO DO: would be nice to drive this off of element title instead of dialog title
         this.infoMsg = "";
         var applicableRebateTypes: string[];
-        applicableRebateTypes = ["MDF ACCRUAL", "NRE ACCRUAL", "MDF/NRE ACCRUAL"];
+        applicableRebateTypes = ["MDF ACCRUAL", "NRE ACCRUAL", "MDF/NRE ACCRUAL", "CO-MARKETING ACCRUAL", "CO-ENGINEERING ACCRUAL", "CO-SELLING ACCRUAL", "CO-MARKETING/CO-ENGINEERING ACCRUAL"];
         if (dlgTitle == "Select Rebate Type *" && applicableRebateTypes.indexOf(dlgValue) !== -1) {
             this.infoMsg = "Note: 'Rebate Type Selection of Accrual' will result in Payout based upon accruals earned via Billings or Consumption";
         }

@@ -461,7 +461,7 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate},
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValueIn(new[] { "MDF ACTIVITY", "MDF ACCRUAL", "NRE ACCRUAL" })).Any(),
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValueIn(new[] { "MDF ACTIVITY", "MDF ACCRUAL", "NRE ACCRUAL",  "CO-MARKETING ACCRUAL", "CO-ENGINEERING ACCRUAL", "CO-SELLING ACCRUAL" })).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>

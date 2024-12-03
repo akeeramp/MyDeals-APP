@@ -1400,7 +1400,7 @@ namespace Intel.MyDeals.BusinessRules
 
             string rebateType = deRebateType.AtrbValue.ToString().ToLower();
 
-            if(rebateType== "tender accrual" || rebateType == "mdf spif/per unit activity" || deProgPayment.AtrbValue.ToString().ToLower().Contains("frontend"))
+            if(rebateType== "tender accrual" || rebateType == "mdf spif/per unit activity" || rebateType == "co-marketing spif/per unit activity" || deProgPayment.AtrbValue.ToString().ToLower().Contains("frontend"))
             {
                 deSendToVistex.AtrbValue = "No";
                 deSendToVistex.IsReadOnly = true;
@@ -1411,7 +1411,7 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 
             }
-            else if (rebateType.ToString().ToUpper() != "NRE" && (rebateType != "tender accrual" || rebateType != "mdf spif/per unit activity") && deRebateType.HasValueChanged)
+            else if (rebateType.ToString().ToUpper() != "NRE" && (rebateType != "tender accrual" || rebateType != "mdf spif/per unit activity" || rebateType == "co-marketing spif/per unit activity") && deRebateType.HasValueChanged)
             {
                     deSendToVistex.AtrbValue = "Yes";                   
             }
@@ -2754,7 +2754,7 @@ namespace Intel.MyDeals.BusinessRules
 
             string programPaymentValue = programPayment.AtrbValue.ToString();
             string rebateTypeValue = rebateType.AtrbValue.ToString();
-            if (programPaymentValue == "Backend" && !(rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL"))
+            if (programPaymentValue == "Backend" && !(rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL" || rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "CO-MARKETING ACCRUAL" || rebateTypeValue == "CO-ENGINEERING ACCRUAL" || rebateTypeValue == "CO-SELLING ACCRUAL"))
             {
                 // Apply the action from the rule (SetRequired) to the targets (Anything in Target[])
                 r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
@@ -2796,7 +2796,7 @@ namespace Intel.MyDeals.BusinessRules
             string programPaymentValue = programPayment.AtrbValue.ToString();
             string rebateTypeValue = rebateType.AtrbValue.ToString();
             // Period Profile has different blanking rules then Settlement Level
-            if (dealTypeValue == "PROGRAM" || programPaymentValue != "Backend" || rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL")
+            if (dealTypeValue == "PROGRAM" || programPaymentValue != "Backend" || rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL" || rebateTypeValue == "CO-MARKETING ACCRUAL" || rebateTypeValue == "CO-ENGINEERING ACCRUAL" || rebateTypeValue == "CO-SELLING ACCRUAL")
             {
                 if (periodProfile.AtrbValue.ToString() != "")
                 {
@@ -3298,7 +3298,7 @@ namespace Intel.MyDeals.BusinessRules
                 dealCompType.AddMessage("MDF / NRE rebates does not support the Mutually Exclusive group type.");
             }
 
-            if (newtargetTypes.Any(myRebateType.Contains) && dealCompTypeValue.Contains("Mutually Exclusive") && dealType == "PROGRAM")
+            if (newtargetTypes.Any(myRebateType.Contains) && dealCompTypeValue.Contains("Mutually Exclusive"))
             {
                 dealCompType.AddMessage(myRebateType + " rebates does not support the Mutually Exclusive group type.");
             }

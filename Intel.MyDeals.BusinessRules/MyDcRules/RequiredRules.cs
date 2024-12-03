@@ -68,6 +68,27 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    // If deal type is Vol Tier and Type is CO-MARKETING SPIF/PER UNIT ACTIVITY, then ensure that user fills in VOLUME values - Used to be MDF ACTIVITY
+                    Title="Forecast Volume Required if Program Type is CO-MARKETING SPIF/PER UNIT ACTIVITY",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("CO-MARKETING SPIF/PER UNIT ACTIVITY")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {
+                                AttributeCodes.FRCST_VOL
+                            }
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
                     Title="Setting Vistex Required for certain Payment and Rebate Types",
                     // Stays complex rule as extra checks are needed to carry out
                     ActionRule = MyDcActions.VistexRequiredFields,

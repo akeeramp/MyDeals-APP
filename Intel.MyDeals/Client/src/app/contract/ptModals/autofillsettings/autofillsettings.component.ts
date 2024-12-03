@@ -549,7 +549,7 @@ export class AutoFillComponent implements OnDestroy {
         // This function needs to manually set the global label for any given control that it is effecting
         if (elmntName == 'REBATE_TYPE') { // Rebates can update consumption based on info labels
             //var applicableRebateTypes: string[];
-            var applicableRebateTypes = ["MDF ACCRUAL", "NRE ACCRUAL", "MDF/NRE ACCRUAL"];
+            var applicableRebateTypes = ["MDF ACCRUAL", "NRE ACCRUAL", "MDF/NRE ACCRUAL", "CO-MARKETING ACCRUAL", "CO-ENGINEERING ACCRUAL", "CO-SELLING ACCRUAL", "CO-MARKETING/CO-ENGINEERING ACCRUAL"];
 
             if (applicableRebateTypes.indexOf(elmntVal) !== -1) {
                 this.payoutBasedOnMessage = "** 'Rebate Type Selection of Accrual' will result in Payout based upon accruals earned via Billings or Consumption";
