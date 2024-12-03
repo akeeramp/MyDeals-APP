@@ -1232,9 +1232,6 @@ export class dealEditorComponent implements OnDestroy{
                             item._behaviors.isDirty['CONSUMPTION_TYPE'] == true || item._behaviors.isDirty['SYS_PRICE_POINT'] == true ||
                             item._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || item._behaviors.isDirty['QLTR_PROJECT'] == true) 
                             {
-                                if (item.LAST_REDEAL_DT == '') {
-                                    item.LAST_REDEAL_DT = this.datePipe.transform(new Date(), "MM/dd/yyyy");
-                                }
                                 this.isConsumptiondirty=true;
                             }
                     }
@@ -1276,9 +1273,6 @@ export class dealEditorComponent implements OnDestroy{
                         item._behaviors.isDirty['CONSUMPTION_TYPE'] == true || item._behaviors.isDirty['SYS_PRICE_POINT'] == true ||
                         item._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || item._behaviors.isDirty['QLTR_PROJECT'] == true) 
                         {
-                            if (item.LAST_REDEAL_DT == '') {
-                                item.LAST_REDEAL_DT = this.datePipe.transform(new Date(), "MM/dd/yyyy");
-                            }
                             this.isConsumptiondirty=true;
                         }
                 }
@@ -1348,6 +1342,21 @@ export class dealEditorComponent implements OnDestroy{
                         });
                     }
                 }
+                //added this check should done after the validation check previously it was done for before validation
+                each(this.gridResult, (item) => {
+                    if (item.HAS_TRACKER == "1" && item._behaviors.isDirty != undefined) {
+                        if (item._behaviors.isDirty['CONSUMPTION_CUST_PLATFORM'] == true || item._behaviors.isDirty['CONSUMPTION_SYS_CONFIG'] == true ||
+                            item._behaviors.isDirty['CNSMPTN_LKBACK_PERD_DT'] == true || item._behaviors.isDirty['CONSUMPTION_REASON'] == true ||
+                            item._behaviors.isDirty['CONSUMPTION_CUST_SEGMENT'] == true || item._behaviors.isDirty['CONSUMPTION_CUST_RPT_GEO'] == true ||
+                            item._behaviors.isDirty['CONSUMPTION_COUNTRY_REGION'] == true || item._behaviors.isDirty['CONSUMPTION_REASON_CMNT'] == true ||
+                            item._behaviors.isDirty['CONSUMPTION_TYPE'] == true || item._behaviors.isDirty['SYS_PRICE_POINT'] == true ||
+                            item._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || item._behaviors.isDirty['QLTR_PROJECT'] == true) {
+                            if (item.LAST_REDEAL_DT == null || item.LAST_REDEAL_DT == '' || item.LAST_REDEAL_DT == "Invalid date") {
+                                item.LAST_REDEAL_DT = this.datePipe.transform(new Date(), "MM/dd/yyyy");
+                            }
+                        }
+                    }
+                })
                 let data = {
                     "Contract": [],
                     "PricingStrategy": [],
@@ -1442,6 +1451,21 @@ export class dealEditorComponent implements OnDestroy{
                         });
                     }
                 }
+                //added this check should done after the validation check previously it was done for before validation
+                each(this.gridResult, (item) => {
+                    if (item.HAS_TRACKER == "1" && item._behaviors.isDirty != undefined) {
+                        if (item._behaviors.isDirty['CONSUMPTION_CUST_PLATFORM'] == true || item._behaviors.isDirty['CONSUMPTION_SYS_CONFIG'] == true ||
+                            item._behaviors.isDirty['CNSMPTN_LKBACK_PERD_DT'] == true || item._behaviors.isDirty['CONSUMPTION_REASON'] == true ||
+                            item._behaviors.isDirty['CONSUMPTION_CUST_SEGMENT'] == true || item._behaviors.isDirty['CONSUMPTION_CUST_RPT_GEO'] == true ||
+                            item._behaviors.isDirty['CONSUMPTION_COUNTRY_REGION'] == true || item._behaviors.isDirty['CONSUMPTION_REASON_CMNT'] == true ||
+                            item._behaviors.isDirty['CONSUMPTION_TYPE'] == true || item._behaviors.isDirty['SYS_PRICE_POINT'] == true ||
+                            item._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || item._behaviors.isDirty['QLTR_PROJECT'] == true) {
+                            if (item.LAST_REDEAL_DT == null || item.LAST_REDEAL_DT == '' || item.LAST_REDEAL_DT == "Invalid date") {
+                                item.LAST_REDEAL_DT = this.datePipe.transform(new Date(), "MM/dd/yyyy");
+                            }
+                        }
+                    }
+                })
                 let data = {
                     "Contract": [],
                     "PricingStrategy": [],

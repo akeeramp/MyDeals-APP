@@ -162,7 +162,8 @@ export class dealEditorCellTemplateComponent {
                     passedData._behaviors.isDirty['CONSUMPTION_COUNTRY_REGION'] == true || passedData._behaviors.isDirty['CONSUMPTION_REASON_CMNT'] == true ||
                     passedData._behaviors.isDirty['CONSUMPTION_TYPE'] == true || passedData._behaviors.isDirty['SYS_PRICE_POINT'] == true ||
                     passedData._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || passedData._behaviors.isDirty['QLTR_PROJECT'] == true) {
-                    if (passedData.LAST_REDEAL_DT == '') {
+                    if (passedData.LAST_REDEAL_DT == null || passedData.LAST_REDEAL_DT == ''|| passedData.LAST_REDEAL_DT  =="Invalid date") 
+                    {
                         passedData.LAST_REDEAL_DT = this.datePipe.transform(new Date(), "MM/dd/yyyy");
                     }
                     classNm = "";
