@@ -235,12 +235,26 @@ export class managerExcludeGroupsComponent implements OnDestroy {
 
     saveAndRunPct() {
         const dirtyRecords = this.gridResult.filter(x => x._dirty == true);
+        /*TWC3167-9503 : Deleting newly added cnsmptn column values for parent dealID from dirtyRecords to keep the payload same as before for updateWipDeals API before saving the excluding deals*/
+        for (let i = 0; i < dirtyRecords.length; i++) {
+            delete dirtyRecords[i].PAYOUT_BASED_ON;
+            delete dirtyRecords[i].REBATE_BILLING_START;
+            delete dirtyRecords[i].REBATE_BILLING_END;
+            delete dirtyRecords[i].CONSUMPTION_LOOKBACK_PERIOD;
+            delete dirtyRecords[i].CONSUMPTION_TYPE;
+            delete dirtyRecords[i].CONSUMPTION_REASON;
+            delete dirtyRecords[i].CONSUMPTION_REASON_CMNT;
+            delete dirtyRecords[i].CONSUMPTION_CUST_SEGMENT;
+            delete dirtyRecords[i].CONSUMPTION_CUST_RPT_GEO;
+            delete dirtyRecords[i].SYS_PRICE_POINT;
+            delete dirtyRecords[i].QLTR_PROJECT;
+        }
         if (dirtyRecords.length != 0) {
             this.isLoading = true;
             this.managerExcludeGrpSvc.updateWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dirtyRecords).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
                 this.gridResult = result;
                 this.gridData = process(this.gridResult, this.state);
-                this.managerExcludeGrpSvc.runPctContract(this.contractData.DC_ID.pipe(takeUntil(this.destroy$))).subscribe((res) => {
+                this.managerExcludeGrpSvc.runPctContract(this.contractData.DC_ID).pipe(takeUntil(this.destroy$)).subscribe((res) => {
                     this.loadExcludeGroups();
                 }, (err) => {
                     this.loggerSvc.error('Could not run Cost Test in Exclude Groups for contract', err);
