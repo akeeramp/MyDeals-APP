@@ -70,6 +70,20 @@ export class DE_Validation_Util {
                     isShowStopperError = true;
                 }
             }
+            if (item._behaviors != undefined && item._behaviors.isError != undefined) {
+                if (Object.keys(item._behaviors.isError).includes('START_DT')) {
+                    delete item._behaviors.isError['START_DT'];
+                }
+                if (Object.keys(item._behaviors.validMsg).includes('START_DT')) {
+                    delete item._behaviors.validMsg['START_DT'];
+                }
+            }
+            if (Object.keys(item._behaviors.isError).includes('END_DT')) {
+                delete item._behaviors.isError['END_DT'];
+            }
+            if (Object.keys(item._behaviors.validMsg).includes('END_DT')) {
+                delete item._behaviors.validMsg['END_DT'];
+            }
 
             if (item["START_DT"] == undefined || item["START_DT"] == null || item["START_DT"] == "" || item["START_DT"] == "Invalid date") {
                 item._behaviors.isError['START_DT'] = true;
