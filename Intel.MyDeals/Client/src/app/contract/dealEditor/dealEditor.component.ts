@@ -1319,7 +1319,7 @@ export class dealEditorComponent implements OnDestroy{
                 this.overlapFlexDEResult = await this.flexOverlappingCheckDealService.GetProductOVLPValidation(flexReqData).toPromise();
             }
             this.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
-            let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups, this.prcTblRowData, this.overlapFlexDEResult);
+            let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups, this.prcTblRowData, this.overlapFlexDEResult,this.oldDEData);
             if (this.isDeveloper || this.isTester) {
                 this.setPerfBarDetails('mark', "Built data structure", "", false, false);
                 this.perfComp.emit(this.perfBar);
@@ -1431,7 +1431,7 @@ export class dealEditorComponent implements OnDestroy{
             this.isAlertDialog = false;
             this.isDataLoading = true;
             this.setBusy("Saving your data..", "Please wait while saving data.", "Info", true);
-            let isShowStopError = PTE_Validation_Util.validateTenderDashboardDeal(this.gridResult, this.curPricingTable, this.groups, this.templates, this.allTabRename);
+            let isShowStopError = PTE_Validation_Util.validateTenderDashboardDeal(this.gridResult, this.curPricingTable, this.groups, this.templates, this.allTabRename,this.oldDEData);
             if (isShowStopError) {
                 this.loggerService.warn("Please fix validation errors before proceeding", "");
                 this.gridData = process(this.gridResult, this.state);

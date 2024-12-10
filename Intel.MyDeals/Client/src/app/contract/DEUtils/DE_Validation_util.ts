@@ -1,4 +1,4 @@
-﻿import { each } from 'underscore';
+﻿import { contains, each, every } from 'underscore';
 import { StaticMomentService } from "../../shared/moment/moment.service";
 import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
@@ -6,7 +6,7 @@ import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 
 export class DE_Validation_Util {
 
-    static validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates, groups, prcTblRowData, overlapFlexDEResult) {
+    static validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates, groups, prcTblRowData, overlapFlexDEResult,oldDEData) {
         let restrictGroupFlexOverlap = false;
         each(data, (item) => {
             PTE_Common_Util.setBehaviors(item);
@@ -23,10 +23,10 @@ export class DE_Validation_Util {
         PTE_Validation_Util.validateFlexRowType(data, curPricingStrategy, curPricingTable, data, undefined, restrictGroupFlexOverlap);
         PTE_Validation_Util.validateMarketSegment(data, data, undefined);
         PTE_Validation_Util.validateBillingLookbakPeriod(data,groups);
-        return this.ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap,prcTblRowData, overlapFlexDEResult);
+        return this.ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap,prcTblRowData, overlapFlexDEResult,oldDEData);
     }
 
-    static ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap, prcTblRowData, overlapFlexDEResult) {
+    static ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap, prcTblRowData, overlapFlexDEResult,oldDEData) {
         var isShowStopperError = false;
         if (overlapFlexDEResult != undefined) {
             let restrictGroupFlexOverlap = false;
@@ -150,6 +150,12 @@ export class DE_Validation_Util {
                     item._behaviors.validMsg['REBATE_BILLING_START'] = "Billing Start date cannot be greater than the Billing End Date";
                     isShowStopperError = true;
                 }
+            }
+             //this check added for consumption lockdown US twc3167-9409
+            if((item.WF_STG_CD == "Active"  || item.WF_STG_CD == "Won") && (item.PAYOUT_BASED_ON == "Consumption")){
+                let iserror =DE_Validation_Util.valideConsumptionParams(item,oldDEData);
+                if(iserror)
+                    isShowStopperError = true;
             }
 
             if (curPricingStrategy.IS_HYBRID_PRC_STRAT == "1" || item["OBJ_SET_TYPE_CD"] == "FLEX") {
@@ -314,7 +320,7 @@ export class DE_Validation_Util {
             if (item["LAST_REDEAL_DT"] !== undefined) item["LAST_REDEAL_DT"] = StaticMomentService.moment(item["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
         });
     }
-    static validateTenderDahsboardDeals(data, templates,groups) {
+    static validateTenderDahsboardDeals(data, templates,groups,oldDEData) {
         let isShowStopperError = false;
         PTE_Validation_Util.validateBillingLookbakPeriod(data,groups);
         for (var i = 0; i < data.length; i++) {
@@ -330,9 +336,101 @@ export class DE_Validation_Util {
                     isShowStopperError = true;
                 }
             }
+
+            //this check added for consumption lockdown US twc3167-9409
+            if (data[i].CONSUMPTION_COUNTRY_REGION != null && data[i].CONSUMPTION_COUNTRY_REGION != undefined && data[i].CONSUMPTION_COUNTRY_REGION != "") {
+                if (data[i].CONSUMPTION_CUST_RPT_GEO != null && data[i].CONSUMPTION_CUST_RPT_GEO != undefined && data[i].CONSUMPTION_CUST_RPT_GEO != "") {
+                    data[i]._behaviors.isError['CONSUMPTION_CUST_RPT_GEO'] = true;
+                    data[i]._behaviors.validMsg['CONSUMPTION_CUST_RPT_GEO'] = "Please enter a value in either Customer Reported Sales Geo or Consumption Country/Region, but not both";
+                    data[i]._behaviors.isError['CONSUMPTION_COUNTRY_REGION'] = true;
+                    data[i]._behaviors.validMsg['CONSUMPTION_COUNTRY_REGION'] = "Please enter a value in either Customer Reported Sales Geo or Consumption Country/Region, but not both";
+                    isShowStopperError = true;
+                }
+            }
+
+            if((data[i].WF_STG_CD == "Won") && (data[i].PAYOUT_BASED_ON == "Consumption")){
+                let iserror =DE_Validation_Util.valideConsumptionParams(data[i],oldDEData);
+                if(iserror)
+                    isShowStopperError = true;
+            }
         }
         
         return isShowStopperError;
+    }
+
+
+    static valideConsumptionParams(item,oldDEData) {
+        let iserror=false;
+        if ((item.HAS_TRACKER == "1" && item._behaviors != undefined && item._behaviors.isDirty != undefined)
+            && (item.WF_STG_CD == "Active"  || item.WF_STG_CD == "Won") && (item.PAYOUT_BASED_ON == "Consumption")) {
+                each(item._behaviors.isDirty, (key,value) => {
+                    let newlist=[];
+                    let oldlist=[];
+                    if (value == 'CONSUMPTION_CUST_PLATFORM') {
+                         newlist = item.CONSUMPTION_CUST_PLATFORM.toString().split(',');
+                         oldlist = oldDEData.find(x => x.DC_ID == item.DC_ID).CONSUMPTION_CUST_PLATFORM.toString().split(',');
+                    }
+                    else if (value == 'CONSUMPTION_SYS_CONFIG') {
+                         newlist = item.CONSUMPTION_SYS_CONFIG.toString().split(',');
+                         oldlist = oldDEData.find(x => x.DC_ID == item.DC_ID).CONSUMPTION_SYS_CONFIG.toString().split(',');
+                    }
+                    else if (value == 'CONSUMPTION_CUST_SEGMENT') {
+                         newlist = item.CONSUMPTION_CUST_SEGMENT.toString().split(',');
+                         oldlist = oldDEData.find(x => x.DC_ID == item.DC_ID).CONSUMPTION_CUST_SEGMENT.toString().split(',');
+                    }
+                    else if (value == 'CONSUMPTION_CUST_RPT_GEO') {
+                         newlist = item.CONSUMPTION_CUST_RPT_GEO.toString().split(',');
+                         oldlist = oldDEData.find(x => x.DC_ID == item.DC_ID).CONSUMPTION_CUST_RPT_GEO.toString().split(',');
+                       let isValue=  newlist.every(el => el === '');
+                       if(isValue){
+                        if(item.CONSUMPTION_COUNTRY_REGION !=undefined && item.CONSUMPTION_COUNTRY_REGION!=null && item.CONSUMPTION_COUNTRY_REGION!=""){
+                            if (item._behaviors.isError && !!item._behaviors.isError["CONSUMPTION_COUNTRY_REGION"])
+                                delete item._behaviors.isError[value];
+                            if (item._behaviors.validMsg && !!item._behaviors.validMsg["CONSUMPTION_COUNTRY_REGION"])
+                              delete item._behaviors.validMsg[value];
+                        }
+                      }
+                    }
+                    else if (value == 'CONSUMPTION_COUNTRY_REGION') {
+                         newlist = item.CONSUMPTION_COUNTRY_REGION.toString().split('|');
+                         oldlist = oldDEData.find(x => x.DC_ID == item.DC_ID).CONSUMPTION_COUNTRY_REGION.toString().split('|');
+                         let isValue=  newlist.every(el => el === '');
+                       if(isValue){
+                        if(item.CONSUMPTION_CUST_RPT_GEO !=undefined && item.CONSUMPTION_CUST_RPT_GEO!=null && item.CONSUMPTION_CUST_RPT_GEO!=""){
+                            if (item._behaviors.isError && !!item._behaviors.isError["CONSUMPTION_CUST_RPT_GEO"])
+                                delete item._behaviors.isError[value];
+                            if (item._behaviors.validMsg && !!item._behaviors.validMsg["CONSUMPTION_CUST_RPT_GEO"])
+                              delete item._behaviors.validMsg[value];
+                        }
+                      }
+                    }
+                    let isempty=oldlist.every(el => el === '');
+                    if(!isempty)
+                    {
+                    
+                     let isSubset = every(oldlist, (element) =>
+                        {   return  contains(newlist, element);});
+                       if(!isSubset)
+                       {
+                        iserror=true;
+                        if (!item._behaviors.isError) item._behaviors.isError = {};
+                        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+                        item._behaviors.isError[value] = true;
+                        item._behaviors.validMsg[value] = "We cannot remove existing Values";
+                       }
+                       else if(value== 'CONSUMPTION_COUNTRY_REGION' || value == 'CONSUMPTION_CUST_RPT_GEO' ||
+                        value == 'CONSUMPTION_CUST_SEGMENT' || value == 'CONSUMPTION_SYS_CONFIG'||value == 'CONSUMPTION_CUST_PLATFORM')
+                       {
+                        if (item._behaviors.isError && !!item._behaviors.isError[value])
+                            delete item._behaviors.isError[value];
+                        if (item._behaviors.validMsg && !!item._behaviors.validMsg[value])
+                          delete item._behaviors.validMsg[value];
+                       }
+                    }
+                })                
+            }
+
+            return iserror;
     }
 
 }

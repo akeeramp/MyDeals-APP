@@ -2175,6 +2175,11 @@ namespace Intel.MyDeals.BusinessRules
                             item.AddMessage("We cannot remove existing Values");
                             isremoved = true;
                         }
+                        if (removedlist.Count == 0 && oldlist.Count==newlist.Count)
+                        {
+                            item.AtrbValue = item.OrigAtrbValue;
+                            item.State = OpDataElementState.Unchanged;
+                        }
                     }
                 }
                 if (isremoved)

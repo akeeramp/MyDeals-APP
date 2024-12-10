@@ -271,14 +271,14 @@ export class PTE_Validation_Util {
         return modalOptions;
     }    
 
-    static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract, lookBackPeriod, templates, groups, prcTblRowData, overlapFlexDEResult): any {
-        let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates, groups, prcTblRowData, overlapFlexDEResult);
+    static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract, lookBackPeriod, templates, groups, prcTblRowData, overlapFlexDEResult,oldDEData: Array<any>,): any {
+        let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates, groups, prcTblRowData, overlapFlexDEResult,oldDEData);
         PTE_Common_Util.setWarningFields(data, curPricingTable);
         return isShowStopperError;
     }
 
-    static validateTenderDashboardDeal(data, curPricingTable, groups, templates, allTabRename) {
-        let isShowStopperError = DE_Validation_Util.validateTenderDahsboardDeals(data, templates,groups);
+    static validateTenderDashboardDeal(data, curPricingTable, groups, templates, allTabRename,oldDEData) {
+        let isShowStopperError = DE_Validation_Util.validateTenderDahsboardDeals(data, templates,groups,oldDEData);
         PTE_Common_Util.setWarningFields(data, curPricingTable);
         if (data != null) {
             for (let i = 0; i < data.length; i++) {
