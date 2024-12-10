@@ -354,6 +354,16 @@ namespace Intel.MyDeals.BusinessLogic
 
             var productsToDb = productsTodbConcurrent.SelectMany(x => x).ToList();
             var productMatchResults = GetProductDetails(productsToDb, CUST_MBR_SID, DEAL_TYPE, IS_TENDER);
+            if (DEAL_TYPE == "KIT")
+            {
+                productMatchResults = productMatchResults
+                                        .OrderBy(item => CustomPrdTypeOrder(item.DEAL_PRD_TYPE))
+                                        .ThenByDescending(item => item.HAS_L1)
+                                        .ThenByDescending(item => item.HAS_L2)
+                                        .ThenByDescending(item => item.CAP.ToUpper() == "NO CAP" ? -1 : float.Parse(item.CAP))
+                                        .ThenBy(item => item.PRD_MBR_SID)
+                                        .ToList();
+            }
             contractToken.AddMark("GetProductDetails - PR_MYDL_TRANSLT_PRD_ENTRY", TimeFlowMedia.DB, (DateTime.Now - start).TotalMilliseconds);
             if (EN.GLOBAL.DEBUG >= 1)
                 Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished GetProductDetails", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
@@ -371,6 +381,19 @@ namespace Intel.MyDeals.BusinessLogic
                 Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFinished TranslateProducts", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
             return productLookup;
+        }
+
+        private int CustomPrdTypeOrder(string dealPrdType)
+        {
+            switch (dealPrdType)
+            {
+                case "CPU":
+                    return 1;
+                case "CS":
+                    return 2;
+                default:
+                    return 3;
+            }
         }
 
         private Dictionary<string, string> GetVerticalandMedia()

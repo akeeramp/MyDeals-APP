@@ -1437,6 +1437,22 @@ export class ProductSelectorComponent implements OnDestroy {
     }
 
     filterProducts(item, field) {
+        //As per the old design, Order of precedence should be >> Product Type(CPU, CS, Other), Legal classification, then CAP Price, then Product ID.
+        let items = item.sort((a, b) => {
+            return (this.customOrder(a[field]) > this.customOrder(b[field]) ? 1 : -1)
+        })
+        let filtered = items;
+        // L1 products will be primary irrespective of CAP and CPU/CS. Within L1 products with highest CAP will be primary. This applies to L2 as well.
+        // If both product has same CAP then latest Product ID will be Primary
+        filtered = orderBy(filtered, ['HAS_L1', 'HAS_L2', (item) => this.parseFloat(item), 'PRD_MBR_SID'], ['desc', 'desc', 'desc', 'asc']);
+        return filtered;
+    }
+
+    parseFloat(product) {
+        return isNaN(product.CAP) ? -1 : parseInt(product.CAP);
+    };
+
+    /*filterProducts(item, field) {
         // If CPU or CS present it will take least precedence. If CPU has less CAP and CS has highest CAP, CS will be primary.
         let items = item.sort((a, b) => {
             return (this.customOrder(a[field]) > this.customOrder(b[field]) ? 1 : -1);
@@ -1449,7 +1465,7 @@ export class ProductSelectorComponent implements OnDestroy {
     }
     parseFloat(product) {
         return isNaN(product.CAP) ? -0 : -parseInt(product.CAP);
-    };
+    };*/
     customOrder(item) {
         switch (item) {
             case 'CPU':
