@@ -589,46 +589,69 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
     }
   }
 
-  getStart(start,isDisplay = false){
-    if(start !== null){
-      if(start == "Checking Schdl"){
-        return "Checking Schdl"
-      }else{
+  padZero(value) {
+    return value.toString().padStart(2, '0');
+  }
+  
+  formatTime(time) {
+    const [hours, minutes, seconds] = time.split(':');
+    return `${this.padZero(hours)}:${this.padZero(minutes)}:${this.padZero(seconds)}`;
+  }
+  
+  getStart(start, isDisplay = false) {
+    if (start !== null) {
+      if (start === "Checking Schdl") {
+        return "Checking Schdl";
+      } else {
         const startVal = JSON.parse(start);
         const startValInt = startVal[0]['START'];
-        const [startValIntHrs, startValIntMin] = startValInt.split(':');
-          return isDisplay ? `${startValIntHrs}:${startValIntMin}` : startValInt;                  
+        return isDisplay ? this.formatTime(startValInt) : startValInt;
       }
     }
   }
-
-  getEnd(end, isDisplay = false){
-    if(end !== null){
-      if(end == "Checking Schdl"){
-        return "Checking Schdl"
-      }else{
+  
+  getEnd(end, isDisplay = false) {
+    if (end !== null) {
+      if (end === "Checking Schdl") {
+        return "Checking Schdl";
+      } else {
         const endVal = JSON.parse(end);
         const endValInt = endVal[0]['END'];
-        const [endValIntHrs, endValIntMin] = endValInt.split(':');
-          return isDisplay ? `${endValIntHrs}:${endValIntMin}` : endValInt;        
+        return isDisplay ? this.formatTime(endValInt) : endValInt;
       }
     }
   }
 
-  getInterval(interval, isDisplay = false){
-    if(interval !== null){
-      if(interval == "Checking Schdl"){
-        return "Checking Schdl"
-      }else{
+  formatInterval(interval) {
+    const hours = Math.floor(interval / 60);
+    const minutes = interval % 60;
+    let formattedInterval = '';
+    if (hours > 0) {
+      formattedInterval += `${hours} Hr`;
+    }
+    if (minutes > 0) {
+      if (hours > 0) {
+        formattedInterval += ' ';
+      }
+      formattedInterval += `${minutes} Min`;
+    }
+    return formattedInterval;
+  }
+  
+  getInterval(interval, isDisplay = false) {
+    if (interval !== null) {
+      if (interval === "Checking Schdl") {
+        return "Checking Schdl";
+      } else {
         const intervalVal = JSON.parse(interval);
         const intervalVallInt = intervalVal[0]['INTERVAL'];
-        return isDisplay ? intervalVallInt / 60 + " Hr" : intervalVallInt;
+        return isDisplay ? this.formatInterval(intervalVallInt) : intervalVallInt;
       }
     }
   }
 
   getLastRun(lastRun,isDisplay = false) {
-      const lastRunVal = this.momentService.moment(lastRun).format("MM/DD/YYYY,  HH:mm");
+      const lastRunVal = this.momentService.moment(lastRun).format("MM/DD/YYYY,  HH:mm:ss");
       return isDisplay ? lastRunVal : lastRun;
   }
 
