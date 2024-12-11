@@ -150,9 +150,9 @@ jobs:
       - name: Trigger UIPath Sanity Suit
         shell: pwsh
         run: |
-          $repositoryOwner = "intel-innersource" # Replace with the owner of the target repository
-          $repositoryName = "applications.robotics.uipath.testautomation.sanitytestsuite-mydeals" # Replace with the name of the target repository
-          $workflowFileName = "uipath-ci.yml" # Replace with the name of the workflow file
+          $repositoryOwner = "intel-innersource" # owner of the target repository
+          $repositoryName = "applications.robotics.uipath.testautomation.sanitytestsuite-mydeals" # name of the target repository
+          $workflowFileName = "uipathtestmanager-ci.yml" # name of the workflow file
           $accessToken = "${{ secrets.CICD_ACCESSTOKEN }}" # Use the secret from GitHub Actions
 
           # Define the API endpoint
