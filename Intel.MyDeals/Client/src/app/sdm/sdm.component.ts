@@ -420,9 +420,18 @@ export class SDMComponent {
     closeExcelDialog() {
         this.isExportAllDialogVisible = false;
     }
+
+    checkPageAccess(){
+        if ((<any> window).isDeveloper || ((<any> window).isSdmAdmin)){
+            this.filterSdmGrid();
+        }else{
+            window.alert("User does not have access to the screen. Press OK to redirect to Dashboard.");
+            document.location.href = "/Dashboard#/portal";
+        }
+    }
     
     ngOnInit() {
-        this.filterSdmGrid();
+        this.checkPageAccess();
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component

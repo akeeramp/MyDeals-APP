@@ -17,8 +17,7 @@ export class authGuard implements CanActivate {
             'Super': (<any>window).isSuper,
             'T': (<any>window).isTester,
             'B': (<any>window).isBulkPriceAdmin,
-            'D': (<any>window).isDeveloper,
-            'RPD': (<any>window).isSdmAdmin
+            'D': (<any>window).isDeveloper
         };
         const roleCombinations = this.getRoleCombinations(userRole, roleBits);
 

@@ -148,8 +148,7 @@ export class HeaderComponent {
     }
 
     isSdmUser(): boolean {
-        const allowedUserRole = ['RA'];
-        return (this.isDeveloper() || (allowedUserRole.includes(this.getUserRole()) && (<any> window).isSdmAdmin));
+        return ( this.isDeveloper() || ((<any> window).isSdmAdmin) );
     }
 
 }
