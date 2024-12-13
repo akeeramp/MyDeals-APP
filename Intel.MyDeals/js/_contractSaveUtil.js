@@ -648,7 +648,7 @@ contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, curPrici
     if (curPricingTableData[0].OBJ_SET_TYPE_CD === "ECAP" || curPricingTableData[0].OBJ_SET_TYPE_CD === "KIT"
         || curPricingTableData[0].OBJ_SET_TYPE_CD === "PROGRAM" || curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER"
         || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX" || curPricingTableData[0].OBJ_SET_TYPE_CD === "REV_TIER"
-        || curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY") {
+        || curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY" || curPricingTableData[0].OBJ_SET_TYPE_CD === "LUMP_SUM") {
         for (var s = 0; s < sData.length; s++) {
             if (sData[s]["IS_CANCELLED"] === undefined || sData[s]["IS_CANCELLED"] !== "1") {
                 if (sData[s]["_dirty"] !== undefined && sData[s]["_dirty"] === true) errDeals.push(s);
@@ -670,7 +670,7 @@ contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, curPrici
                             dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
                         }
                         dictGeoCombined[sData[s]["GEO_COMBINED"]] = s;
-                        if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "PROGRAM") {
+                        if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "PROGRAM" || curPricingTableData[0].OBJ_SET_TYPE_CD !== "LUMP_SUM") {
                             dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
                         }
                         dictResetPerPeriod[sData[s]["RESET_VOLS_ON_PERIOD"]] = s;

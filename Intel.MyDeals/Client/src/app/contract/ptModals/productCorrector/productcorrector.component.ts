@@ -80,7 +80,7 @@ export class ProductCorrectorComponent implements OnDestroy{
     private crossVertical = {
         'productCombination1': ["DT", "Mb", "SvrWS", "EIA CPU"],
         'productCombination2': ["CS", "EIA CS"],
-        'message': "The product combination is not valid. You can combine (DT, Mb, SvrWS, EIA CPU) or (CS, EIA CS) verticals. For NON IA, you can combine as many products within same verticals for PROGRAM, VOLTIER and REV TIER deals."
+        'message': "The product combination is not valid. You can combine (DT, Mb, SvrWS, EIA CPU) or (CS, EIA CS) verticals. For NON IA, you can combine as many products within same verticals for PROGRAM, LUMP SUM, VOLTIER and REV TIER deals."
     }
     private duplicateMsg: string = "";
     private duplicateData: any;
@@ -241,7 +241,7 @@ export class ProductCorrectorComponent implements OnDestroy{
     }
     isValidProductCombination(existingProdTypes, newProductType) {
         var isValid = true;
-        if (this.DEAL_TYPE == 'FLEX' || this.DEAL_TYPE == 'VOL_TIER' || this.DEAL_TYPE == 'PROGRAM' || this.DEAL_TYPE == 'REV_TIER') {
+        if (this.DEAL_TYPE == 'FLEX' || this.DEAL_TYPE == 'VOL_TIER' || this.DEAL_TYPE == 'PROGRAM' || this.DEAL_TYPE == 'LUMP_SUM' || this.DEAL_TYPE == 'REV_TIER') {
             return true;
         }
         var selfCheck = newProductType == undefined;
@@ -1182,7 +1182,7 @@ export class ProductCorrectorComponent implements OnDestroy{
         this.ProductCorrectorData['AutoValidatedProducts'] = PTE_Common_Util.deepClone(this.data.ProductCorrectorData.ValidProducts);
         this.DEAL_TYPE = this.data.curPricingTable.OBJ_SET_TYPE_CD;
         //Deal type checking: make it false if you don't want to show the label in Product(s) not found area.
-        if (this.DEAL_TYPE == "VOL_TIER" || this.DEAL_TYPE == "FLEX" || this.DEAL_TYPE == "PROGRAM" || this.DEAL_TYPE == "REV_TIER" || this.DEAL_TYPE == "DENSITY") {
+        if (this.DEAL_TYPE == "VOL_TIER" || this.DEAL_TYPE == "FLEX" || this.DEAL_TYPE == "PROGRAM" || this.DEAL_TYPE == "LUMP_SUM" || this.DEAL_TYPE == "REV_TIER" || this.DEAL_TYPE == "DENSITY") {
             this.showIncludeExcludeLabel = true;
         }
         this.initProducts();

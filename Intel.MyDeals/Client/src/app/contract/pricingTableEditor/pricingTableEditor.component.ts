@@ -599,7 +599,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     kitNextIndex = kitNextIndex + oldvalue.split(',').length;
                 }
             }
-            else if (dealType == "ECAP" || dealType == "PROGRAM") {
+            else if (dealType == "ECAP" || dealType == "PROGRAM" || dealType == "LUMP_SUM" ) {
                 numOfTiers = 1;
             }
             else {

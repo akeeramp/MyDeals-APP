@@ -987,14 +987,9 @@ namespace Intel.MyDeals.BusinessLogic
         {
 
             var productSelectorWrapper = new ProductSelectorWrapper();
+                     
+            productSelectorWrapper = GetProductSelectorWrapper();
             
-            if (dealType.ToString() == "DENSITY")
-            {
-                productSelectorWrapper = GetProductSelectorWrapperDensity(startDate, endDate, mediaCode);
-            }
-            else {
-                productSelectorWrapper = GetProductSelectorWrapper();
-            }
             var productSelectionLevels = new List<ProductSelectionLevels>();
             var productSelectionLevelsAttributes = new List<ProductSelectionLevelsAttributes>();
 

@@ -497,7 +497,7 @@
             lookupValue: "OBJ_SET_TYPE_CD",
             lookups: [
 
-                { Value: "DENSITY" },
+                { Value: "LUMP_SUM" },
                 { Value: "ECAP" },
                 { Value: "FLEX" },
                 { Value: "KIT" },
@@ -856,7 +856,7 @@
             lookupValue: "OBJ_SET_TYPE_CD",
             lookups: [
 
-                { Value: "DENSITY" },
+                { Value: "LUMP_SUM" },
                 { Value: "ECAP" },
                 { Value: "FLEX" },
                 { Value: "KIT" },

@@ -105,8 +105,8 @@ export class dealProductsModalComponent implements OnDestroy {
     ngOnInit() {
         try{
             this.isLoading = true;
-            this.showDealProducts = this.data.dataItem.OBJ_SET_TYPE_CD == 'VOL_TIER' || this.data.dataItem.OBJ_SET_TYPE_CD == 'PROGRAM' || this.data.dataItem.OBJ_SET_TYPE_CD == 'FLEX' ||
-                this.data.dataItem.OBJ_SET_TYPE_CD == 'REV_TIER' || this.data.dataItem.OBJ_SET_TYPE_CD == 'DENSITY';
+            this.showDealProducts = this.data.dataItem.OBJ_SET_TYPE_CD == 'VOL_TIER' || this.data.dataItem.OBJ_SET_TYPE_CD == 'PROGRAM' || this.data.dataItem.OBJ_SET_TYPE_CD == 'LUMP_SUM' || this.data.dataItem.OBJ_SET_TYPE_CD == 'FLEX' ||
+                this.data.dataItem.OBJ_SET_TYPE_CD == 'REV_TIER';
             if (this.data.dataItem._contractPublished !== undefined && this.data.dataItem._contractPublished == 1) {
                 this.prods = this.data.dataItem.products;
                 if(this.prods && this.prods.length>0){

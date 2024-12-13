@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 9/3/2024 10:17:14 PM
-On: MBAIGX-MOBL
+File Updated: 2024-11-22 9:32:10 AM
+On: KBHARA2X-MOBL
 From: sql3877-fm1-in.amr.corp.intel.com,3181, MYDEALS
 */
 
@@ -142,7 +142,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "APAC_GROSS_REV_GROUPING",
 			ATRB_DESC = "APAC_GROSS_Rev_Grouping",
-			ATRB_LBL = "APAC GROSS Rev Grouping",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7068,
 			DATA_TYPE_CD = "CUSTOM",
@@ -334,7 +334,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "BRAND_GROUP",
 			ATRB_DESC = "Brand Group",
-			ATRB_LBL = "Brand Group",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7082,
 			DATA_TYPE_CD = "CUSTOM",
@@ -366,7 +366,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "BRND_UNIQ_NM",
 			ATRB_DESC = "GDM Brand Full Path",
-			ATRB_LBL = "Brand Full Path",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7048,
 			DATA_TYPE_CD = "CUSTOM",
@@ -878,7 +878,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "CPU_PACKAGE",
 			ATRB_DESC = "CPU Package",
-			ATRB_LBL = "CPU Package",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7025,
 			DATA_TYPE_CD = "CUSTOM",
@@ -910,7 +910,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "CPU_VOLTAGE_SEGMENT",
 			ATRB_DESC = "CPU Voltage Segment",
-			ATRB_LBL = "Voltage Segment",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7043,
 			DATA_TYPE_CD = "CUSTOM",
@@ -926,7 +926,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "CPU_WATTAGE",
 			ATRB_DESC = "CPU Wattage",
-			ATRB_LBL = "CPU Wattage",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7023,
 			DATA_TYPE_CD = "CUSTOM",
@@ -1598,7 +1598,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "DIV_CD",
 			ATRB_DESC = "DIV_CD",
-			ATRB_LBL = "Div code",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 6,
 			ATRB_SID = 7063,
 			DATA_TYPE_CD = "CUSTOM",
@@ -1886,7 +1886,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "EST_DIE_SIZE",
 			ATRB_DESC = "Estimated Die Size",
-			ATRB_LBL = "Estimated Die Size",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 7057,
 			DATA_TYPE_CD = "CUSTOM",
@@ -1998,7 +1998,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "FG_OLD_MTRL_NBR",
 			ATRB_DESC = "FG_OLD_MTRL_NBR",
-			ATRB_LBL = "DSA FG_OLD_MTRL_NBR",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 21,
 			ATRB_SID = 7058,
 			DATA_TYPE_CD = "CUSTOM",
@@ -2062,7 +2062,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "FMLY_UNIQ_NM",
 			ATRB_DESC = "GDM Family Full Path",
-			ATRB_LBL = "Family Full Path",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7053,
 			DATA_TYPE_CD = "CUSTOM",
@@ -2078,7 +2078,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "FRCST_DVC_NM",
 			ATRB_DESC = "FRCST_DVC_NM",
-			ATRB_LBL = "Forecast Device Name",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 30,
 			ATRB_SID = 7059,
 			DATA_TYPE_CD = "CUSTOM",
@@ -2206,7 +2206,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "GDM_PRC_SKU_REV_GRP",
 			ATRB_DESC = "GDM_PRC_SKU_REV_GRP",
-			ATRB_LBL = "PRC Sku Rev Group",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7071,
 			DATA_TYPE_CD = "CUSTOM",
@@ -3150,7 +3150,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "MKTING_CD_NM",
 			ATRB_DESC = "Marketing Code Name",
-			ATRB_LBL = "Mkting CD Nm",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7074,
 			DATA_TYPE_CD = "CUSTOM",
@@ -3166,7 +3166,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "MM_BNB_TRANSFER_DATE",
 			ATRB_DESC = "Material BNB transfer date",
-			ATRB_LBL = "BNB Transfer Date",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 7040,
 			DATA_TYPE_CD = "CUSTOM",
@@ -3326,7 +3326,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "NAND_DENSITY",
 			ATRB_DESC = "Nand Density",
-			ATRB_LBL = "NAND Density",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7077,
 			DATA_TYPE_CD = "CUSTOM",
@@ -3342,7 +3342,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "NAND_FAMILY",
 			ATRB_DESC = "Nand Family",
-			ATRB_LBL = "NAND Family",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7076,
 			DATA_TYPE_CD = "CUSTOM",
@@ -3358,7 +3358,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "NAND_INTERFACE",
 			ATRB_DESC = "Nand Interface",
-			ATRB_LBL = "NAND Interface",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7078,
 			DATA_TYPE_CD = "CUSTOM",
@@ -3374,7 +3374,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "NAND_TRUE_DENSITY",
 			ATRB_DESC = "True NAND Density",
-			ATRB_LBL = "True NAND Density",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7094,
 			DATA_TYPE_CD = "CUSTOM",
@@ -3550,7 +3550,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "OFF_ROADMAP_FLG",
 			ATRB_DESC = "Off roadmap flag for COGNOS",
-			ATRB_LBL = "DSA OFF ROADMAP FLG",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 7041,
 			DATA_TYPE_CD = "CUSTOM",
@@ -3870,7 +3870,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "PRD_FMLY_TXT",
 			ATRB_DESC = "PRD_FMLY_TXT",
-			ATRB_LBL = "EDW Product family",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7083,
 			DATA_TYPE_CD = "CUSTOM",
@@ -4120,7 +4120,7 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "TextBox"
+			UI_TYPE_CD = "MultiGeoSelector"
 		};
 		public static MyDealsAttribute QLTR_PROJECT = new MyDealsAttribute()
 		{
@@ -4446,7 +4446,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "SBS_NM",
 			ATRB_DESC = "SBS Nm",
-			ATRB_LBL = "SBS Name ",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 40,
 			ATRB_SID = 7079,
 			DATA_TYPE_CD = "CUSTOM",
@@ -4734,7 +4734,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "SUPER_GRP_NM",
 			ATRB_DESC = "Super Group Name",
-			ATRB_LBL = "Super Group",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7072,
 			DATA_TYPE_CD = "CUSTOM",
@@ -4878,7 +4878,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "TRDMRK_NM",
 			ATRB_DESC = "Trade Mark",
-			ATRB_LBL = "EPM Trademark",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 40,
 			ATRB_SID = 7080,
 			DATA_TYPE_CD = "CUSTOM",
@@ -5102,7 +5102,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "VRTCL_SEG_CD",
 			ATRB_DESC = "VRTCL_SEG_CD",
-			ATRB_LBL = "EDW Vertical Seg Code",
+			ATRB_LBL = default(System.String),
 			ATRB_MAX_LEN = 12,
 			ATRB_SID = 7064,
 			DATA_TYPE_CD = "CUSTOM",

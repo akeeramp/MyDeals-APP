@@ -1744,11 +1744,8 @@ export class dealEditorComponent implements OnDestroy{
         if (this.wipTemplate.name == "VOL_TIER" || this.wipTemplate.name == "FLEX") {
             dealid = columns.splice(12, 1);
             columns.splice(0, 0, dealid[0]);
-        } else if (this.wipTemplate.name == "PROGRAM") {
+        } else if (this.wipTemplate.name == "PROGRAM" || this.wipTemplate.name == "LUMP_SUM") {
             dealid = columns.splice(11, 1);
-            columns.splice(0, 0, dealid[0]);
-        } else if (this.wipTemplate.name == "DENSITY") {
-            dealid = columns.splice(13, 1);
             columns.splice(0, 0, dealid[0]);
         } else if (this.wipTemplate.name == "REV_TIER") {
             dealid = columns.splice(17, 1);

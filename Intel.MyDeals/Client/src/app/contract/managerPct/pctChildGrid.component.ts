@@ -184,10 +184,10 @@ export class pctChildGridComponent implements OnDestroy{
         if ((this.dealType == 'ECAP' || this.dealType == 'KIT') && !this.ECAP_KIT_Col.includes(fieldName)) {
             return true;
         }
-        else if ((this.dealType == 'VOL_TIER' || this.dealType == 'REV_TIER' || this.dealType == 'DENSITY' || this.dealType == 'FLEX') && !this.VOL_REV_FLEX_DNSTY_Col.includes(fieldName)) {
+        else if ((this.dealType == 'VOL_TIER' || this.dealType == 'REV_TIER' || this.dealType == 'FLEX') && !this.VOL_REV_FLEX_DNSTY_Col.includes(fieldName)) {
             return true;
         }
-        else if (this.dealType == 'PROGRAM' && !this.PGM_Col.includes(fieldName)) {
+        else if ((this.dealType == 'PROGRAM' || this.dealType == 'LUMP_SUM') && !this.PGM_Col.includes(fieldName)) {
             return true;
         }
         return false;

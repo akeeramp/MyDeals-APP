@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 8/21/2024 3:01:45 PM
-On: MHTIPPIN-MOBL1
+File Updated: 2024-11-22 9:31:12 AM
+On: KBHARA2X-MOBL
 From: sql3877-fm1-in.amr.corp.intel.com,3181, MYDEALS
 */
 using System;
@@ -3103,7 +3103,6 @@ namespace Intel.MyDeals.Entities {
 		public const string NUMBER_2018WW31_OTS = "2018WW31_OTS";
 		public const string ADMIN_MESSAGE = "ADMIN_MESSAGE";
 		public const string AGS_PROVISIONING_MAILING_SUPPORT_LIST = "AGS_PROVISIONING_MAILING_SUPPORT_LIST";
-		public const string ANGULAR_ENABLED = "ANGULAR_ENABLED";
 		public const string BATCH_IGNR_DEALS = "BATCH_IGNR_DEALS";
 		public const string BATCH_LOG = "BATCH_LOG";
 		public const string BATCH_STATUS = "BATCH_STATUS";
@@ -3114,7 +3113,6 @@ namespace Intel.MyDeals.Entities {
 		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
 		public const string CHNL_CUST_FLTR = "CHNL_CUST_FLTR";
 		public const string CNSMPTN_LD = "CNSMPTN_LD";
-		public const string CONTRACT_TYPE = "CONTRACT_TYPE";
 		public const string COST_TEST_PRD_MODE_1 = "COST_TEST_PRD_MODE_1";
 		public const string COST_TEST_PRD_MODE_2 = "COST_TEST_PRD_MODE_2";
 		public const string COST_TEST_ROLES = "COST_TEST_ROLES";
@@ -3126,10 +3124,12 @@ namespace Intel.MyDeals.Entities {
 		public const string CUTOFF_PCSR_FMLY_AT_L4_DT = "CUTOFF_PCSR_FMLY_AT_L4_DT";
 		public const string DATA_FIX_ACTIONS = "DATA_FIX_ACTIONS";
 		public const string DB_AUDIT_EXCEPTION_USER_LIST = "DB_AUDIT_EXCEPTION_USER_LIST";
+		public const string DB_INDEX_FRAGMENTAION_THRESHOLD = "DB_INDEX_FRAGMENTAION_THRESHOLD";
 		public const string DB_INDEX_MAINTANANCE = "DB_INDEX_MAINTANANCE";
 		public const string DB_INDEX_MAINTANANCE_tableList = "DB_INDEX_MAINTANANCE_tableList";
 		public const string DB_LOGGING = "DB_LOGGING";
 		public const string DB_SERVER_NODES_JSON = "DB_SERVER_NODES_JSON";
+		public const string DB_STATS_MAINTENANCE = "DB_STATS_MAINTENANCE";
 		public const string DCS_DEAL_NOFILTER = "DCS_DEAL_NOFILTER";
 		public const string DEAL_ATRB_IGNR = "DEAL_ATRB_IGNR";
 		public const string DEFECT_FIX_RUN_DATA = "DEFECT_FIX_RUN_DATA";
@@ -3154,6 +3154,7 @@ namespace Intel.MyDeals.Entities {
 		public const string iCOST_PRODUCTS = "iCOST_PRODUCTS";
 		public const string IDMS_DEAL_MIGRATION = "IDMS_DEAL_MIGRATION";
 		public const string IQR_Atomic_Lock_Key = "IQR_Atomic_Lock_Key";
+		public const string IQR_AUTO_APPROVAL_TIMER = "IQR_AUTO_APPROVAL_TIMER";
 		public const string IQR_Maximum_Process_Objects_Limit = "IQR_Maximum_Process_Objects_Limit";
 		public const string JMSQ_ERROR_REPORT_DAYS_BACK = "JMSQ_ERROR_REPORT_DAYS_BACK";
 		public const string JMSQ_PROCESS_TIMEOUT = "JMSQ_PROCESS_TIMEOUT";
@@ -3189,10 +3190,11 @@ namespace Intel.MyDeals.Entities {
 		public const string RECYCLE_CACHE_COUNT_NODE1 = "RECYCLE_CACHE_COUNT_NODE1";
 		public const string RECYCLE_CACHE_COUNT_NODE2 = "RECYCLE_CACHE_COUNT_NODE2";
 		public const string ROLLBACK_MIGRATION = "ROLLBACK_MIGRATION";
-		public const string RPT_MSTR_LOG_DAYS = "RPT_MSTR_LOG_DAYS";
 		public const string SAP_JMS_PROD_EMAIL_DIST = "SAP_JMS_PROD_EMAIL_DIST";
 		public const string SDM_ADMIN = "SDM_ADMIN";
 		public const string SDS_OVERRIDE_DEAL_VALIDATION_ADMINS = "SDS_OVERRIDE_DEAL_VALIDATION_ADMINS";
+		public const string SQL_AGENT_ERR_MAIL_LIST = "SQL_AGENT_ERR_MAIL_LIST";
+		public const string SQL_AGENT_MYDL_HIGH_CPU_EMAIL = "SQL_AGENT_MYDL_HIGH_CPU_EMAIL";
 		public const string SSD_PRD_CAT_LIST = "SSD_PRD_CAT_LIST";
 		public const string SSIS_CNST_EMP_ID = "SSIS_CNST_EMP_ID";
 		public const string SSPEC_PRD_TYPES = "SSPEC_PRD_TYPES";
@@ -3200,6 +3202,7 @@ namespace Intel.MyDeals.Entities {
 		public const string TENDER_SEARCH_MAX_VALUE = "TENDER_SEARCH_MAX_VALUE";
 		public const string TRKR_GEN_CUTOFF = "TRKR_GEN_CUTOFF";
 		public const string VERBOSE_LOG_TO_DB = "VERBOSE_LOG_TO_DB";
+		public const string VISTEX_PRD_REC_CNT = "VISTEX_PRD_REC_CNT";
 		public const string VISTEX_SEND_PND_SBMT_DEAL = "VISTEX_SEND_PND_SBMT_DEAL";
 		public const string VNDR_REC_CNT_THRHLD = "VNDR_REC_CNT_THRHLD";
 		public const string VOL_TIER_MIGRATION = "VOL_TIER_MIGRATION";
@@ -3368,7 +3371,7 @@ namespace Intel.MyDeals.Entities {
 		VOL_TIER = 5,
 		KIT = 6,
 		REV_TIER = 7,
-		DENSITY = 8,
+		LUMP_SUM = 8,
 		ALL_TYPES = 9,
 		Unknown = 0
 	}
@@ -3384,7 +3387,7 @@ namespace Intel.MyDeals.Entities {
 				new OpDataElementSetTypeItem {Id = 5, OpDeSetType = OpDataElementSetType.VOL_TIER, Alias = "VOL_TIER", Description = "VOL TIER Deal Type", TemplateDealNumber = -2, TrackerDtLetter = "V", Order = 5 },
 				new OpDataElementSetTypeItem {Id = 6, OpDeSetType = OpDataElementSetType.KIT, Alias = "KIT", Description = "KIT Deal Type", TemplateDealNumber = -5, TrackerDtLetter = "K", Order = 6 },
 				new OpDataElementSetTypeItem {Id = 7, OpDeSetType = OpDataElementSetType.REV_TIER, Alias = "REV_TIER", Description = "REV TIER Deal Type", TemplateDealNumber = -7, TrackerDtLetter = "R", Order = 7 },
-				new OpDataElementSetTypeItem {Id = 8, OpDeSetType = OpDataElementSetType.DENSITY, Alias = "DENSITY", Description = "Density Based Deal Type", TemplateDealNumber = -8, TrackerDtLetter = "D", Order = 8 },
+				new OpDataElementSetTypeItem {Id = 8, OpDeSetType = OpDataElementSetType.LUMP_SUM, Alias = "LUMP_SUM", Description = "Lump Sum Deal Type", TemplateDealNumber = -8, TrackerDtLetter = "L", Order = 8 },
 				new OpDataElementSetTypeItem {Id = 9, OpDeSetType = OpDataElementSetType.ALL_TYPES, Alias = "ALL_TYPES", Description = "ALL Object set types", TemplateDealNumber = 0, TrackerDtLetter = "", Order = 9 },
 			},
 
@@ -3393,11 +3396,11 @@ namespace Intel.MyDeals.Entities {
 				[OpDataElementType.ALL_OBJ_TYPE] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.CNTRCT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.PRC_ST] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.DENSITY,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.DENSITY,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.DENSITY,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.DENSITY,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.PTR_SNAPSHT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.DENSITY,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.LUMP_SUM,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.LUMP_SUM,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.LUMP_SUM,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.LUMP_SUM,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.PTR_SNAPSHT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.LUMP_SUM,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
 				[OpDataElementType.MASTER] = new List<OpDataElementSetType> { OpDataElementSetType.FLEX },
 			}
 		);

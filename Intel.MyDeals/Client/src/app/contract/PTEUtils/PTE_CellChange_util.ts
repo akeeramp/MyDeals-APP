@@ -204,10 +204,10 @@ export class PTE_CellChange_Util {
             } else if (val.prop == 'AR_SETTLEMENT_LVL' && contractData.IS_TENDER == "1") {
                 currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, contractData.Customer.DFLT_TNDR_AR_SETL_LVL, 'no-edit');
                 updateRows.push(currentString.split(','));
-            } else if (val.prop == 'TOTAL_DOLLAR_AMOUNT' && curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM') {
+            } else if (val.prop == 'TOTAL_DOLLAR_AMOUNT' && (curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM' || curPricingTable.OBJ_SET_TYPE_CD == 'LUMP_SUM')) {
                 currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, '0.00', 'no-edit');
                 updateRows.push(currentString.split(','));
-            } else if (val.prop == 'ADJ_ECAP_UNIT' && curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM') {
+            } else if (val.prop == 'ADJ_ECAP_UNIT' && (curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM' || curPricingTable.OBJ_SET_TYPE_CD == 'LUMP_SUM')) {
                 currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, '0', 'no-edit');
                 updateRows.push(currentString.split(','));
             } else if (val.prop == 'MRKT_SEG') {
@@ -1294,8 +1294,8 @@ export class PTE_CellChange_Util {
                         }
                     }
                 }
-                if (item.prop == 'REBATE_TYPE' && (item.new != 'NRE ACCRUAL' || item.new != 'CO-ENGINEERING') && this.hotTable.getDataAtRowProp(item.row, 'PERIOD_PROFILE') == '') {
-                    if (ptDefaults["_defaultAtrbs"] != undefined && curPricingTable.OBJ_SET_TYPE_CD != 'PROGRAM') {
+                if (item.prop == 'REBATE_TYPE' && item.new != 'NRE ACCRUAL' && this.hotTable.getDataAtRowProp(item.row, 'PERIOD_PROFILE') == '') {
+                    if (ptDefaults["_defaultAtrbs"] != undefined && (curPricingTable.OBJ_SET_TYPE_CD != 'PROGRAM' || curPricingTable.OBJ_SET_TYPE_CD != 'LUMP_SUM')) {
                         this.delReadOnlyBehaviours("PERIOD_PROFILE", item);
                         let prdPfvalue = curPricingTable["PERIOD_PROFILE"] ? curPricingTable["PERIOD_PROFILE"] : ptDefaults["_defaultAtrbs"]["PERIOD_PROFILE"].value
                         this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', prdPfvalue.toString(), 'no-edit');

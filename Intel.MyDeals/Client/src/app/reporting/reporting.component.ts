@@ -270,7 +270,7 @@ export class ReportingComponent implements OnDestroy{
             cnt < vm.ReportDealType.length;
             cnt++
           ) {
-            if (vm.ReportDealType[cnt].DEAL_TYPE == "PROGRAM") {
+              if (vm.ReportDealType[cnt].DEAL_TYPE == "PROGRAM" || vm.ReportDealType[cnt].DEAL_TYPE == "LUMP_SUM") {
               vm.totalDollarAmount =
                 vm.ReportDealType[cnt].Total_Dollar_Amount;
             }

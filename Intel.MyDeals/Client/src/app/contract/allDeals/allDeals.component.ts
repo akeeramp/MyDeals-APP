@@ -61,7 +61,7 @@ export class allDealsComponent implements OnDestroy {
         { dealType: "FLEX", name: "FLEX" },
         { dealType: "VOL_TIER", name: "Volume Tier" },
         { dealType: "REV_TIER", name: "Rev Tier" },
-        { dealType: "DENSITY", name: "Density Based" },
+        { dealType: "LUMP_SUM", name: "Lump Sum" },
         { dealType: "KIT", name: "Kit" },
         { dealType: "PROGRAM", name: "Program" }
     ];
@@ -388,7 +388,7 @@ export class allDealsComponent implements OnDestroy {
                     this.columns.push(col[0]);
                 }
             }
-            else if (group[0].dealType == 'PROGRAM') {
+            else if (group[0].dealType == 'PROGRAM' || group[0].dealType == 'LUMP_SUM') {
                 let col = this.wipTemplate?.columns.filter(x => x.field == 'TOTAL_DOLLAR_AMOUNT' && x.hidden == false);
                 if (col && col.length == 1) {
                     this.columns.push(col[0]);

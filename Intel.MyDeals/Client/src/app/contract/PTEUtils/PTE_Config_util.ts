@@ -91,7 +91,7 @@ export class PTE_Config_Util {
                 { "name": "Payment", "order": 10 },
                 { "name": "All", "order": 99 }
             ],
-            "DENSITY": [
+            "LUMP_SUM": [
                 { "name": "Deal Info", "order": 0 },
                 { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
                 { "name": "Backdate", "order": 2 },
@@ -1235,12 +1235,12 @@ export class PTE_Config_Util {
                     "Groups": ["All"]
                 }
             },
-            "DENSITY": {
+            "LUMP_SUM": {
                 "tools": {
-                    "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "RPU", "Payment"]
+                    "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU", "Payment"]
                 },
                 "details": {
-                    "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "RPU", "Payment"]
+                    "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU", "Payment"]
                 },
                 "DC_ID": {
                     "Groups": ["Deal Info"]
@@ -1251,6 +1251,15 @@ export class PTE_Config_Util {
                 "PASSED_VALIDATION": {
                     "Groups": ["Deal Info"]
                 },
+                "TOTAL_DOLLAR_AMOUNT": {
+                    "Groups": ["Deal Info"]
+                },
+                "ORIG_ECAP_TRKR_NBR": {
+                    "Groups": ["Deal Info"]
+                },
+                "ADJ_ECAP_UNIT": {
+                    "Groups": ["Deal Info"]
+                },
                 "CUST_MBR_SID": {
                     "Groups": ["Deal Info"]
                 },
@@ -1258,6 +1267,12 @@ export class PTE_Config_Util {
                     "Groups": ["Deal Info"]
                 },
                 "END_DT": {
+                    "Groups": ["Deal Info"]
+                },
+                "OEM_PLTFRM_LNCH_DT": {
+                    "Groups": ["Deal Info"]
+                },
+                "OEM_PLTFRM_EOL_DT": {
                     "Groups": ["Deal Info"]
                 },
                 "WF_STG_CD": {
@@ -1288,7 +1303,7 @@ export class PTE_Config_Util {
                     "Groups": ["Deal Info", "RPU"]
                 },
                 "SERVER_DEAL_TYPE": {
-                    "Groups": ["Deal Info"]
+                    "Groups": ["Deal Info", "RPU"]
                 },
                 "DEAL_COMB_TYPE": {
                     "Groups": ["Deal Info"]
@@ -1299,7 +1314,7 @@ export class PTE_Config_Util {
                 "PROD_INCLDS": {
                     "Groups": ["Deal Info"]
                 },
-                "TIER_NBR": {
+                "ON_ADD_DT": {
                     "Groups": ["Deal Info"]
                 },
                 "REBATE_TYPE": {
@@ -1332,7 +1347,7 @@ export class PTE_Config_Util {
                 "PERIOD_PROFILE": {
                     "Groups": ["Deal Info", "Payment"]
                 },
-                "RESET_VOLS_ON_PERIOD": {
+                "SEND_TO_VISTEX": {
                     "Groups": ["Deal Info"]
                 },
                 "AR_SETTLEMENT_LVL": {
@@ -1403,6 +1418,9 @@ export class PTE_Config_Util {
                 },
                 "RPU_OVERRIDE_CMNT": {
                     "Groups": ["RPU"]
+                },
+                "REBATE_OA_MAX_VOL": {
+                    "Groups": ["All"]
                 },
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]

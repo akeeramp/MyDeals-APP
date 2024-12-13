@@ -140,7 +140,7 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
                         if (key == "ALL_TYPES") {
                             value = 9
                         }
-                        else if (key == "DENSITY") {
+                        else if (key == "LUMP_SUM") {
                             value = 8
                         }
                         else if (key == "REV_TIER") {

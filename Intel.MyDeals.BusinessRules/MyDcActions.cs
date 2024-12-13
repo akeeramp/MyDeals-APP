@@ -332,81 +332,6 @@ namespace Intel.MyDeals.BusinessRules
                 dePrdUsr.AddMessage("Product select has some invalid products.");
                 return;
             }
-            //if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
-            //{
-            //    foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
-            //    {
-            //        foreach (ProdMapping prodMapping in kvp.Value)
-            //        {
-            //            if (string.IsNullOrEmpty(prodMapping.PRD_MBR_SID))
-            //            {
-            //                dePrdUsr.AddMessage($"User entered product ({kvp.Key}) is unable to locate product ({prodMapping.HIER_VAL_NM})");
-            //            }
-
-            //            if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
-            //            {
-            //                #region CAP Validations
-
-            //                double cap;
-            //                if (!double.TryParse(prodMapping.CAP, out cap) && prodMapping.CAP.IndexOf("-") >= 0)
-            //                {
-            //                    dePrdUsr.AddMessage($"Product ({prodMapping.HIER_VAL_NM}) CAP price ({prodMapping.CAP}) cannot be a range.");
-            //                }
-
-            //                //double ecap;
-            //                //if (!double.TryParse(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE), out ecap)) ecap = 0;
-
-            //                // When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning.
-            //                // TODO... put this as a soft warning on the grid
-            //                //if (ecap > 0 && cap > ecap)
-            //                //{
-            //                //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP price ({cap}) is greater than ECAP Price.");
-            //                //}
-
-            //                // IF CAP is not available at all then show as NO CAP.User can not create deals.
-            //                // not true anymore... soft warning in grid now
-            //                //if (cap <= 0)
-            //                //{
-            //                //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP is not available ({prodMapping.CAP}). You can not create deals with this product.");
-            //                //}
-
-            //                //if (!string.IsNullOrEmpty(prodMapping.PRD_STRT_DTM) && !string.IsNullOrEmpty(prodMapping.CAP_START))
-            //                //{
-            //                //    DateTime capStart = DateTime.Parse(prodMapping.CAP_START);
-            //                //    DateTime capEnd = DateTime.Parse(prodMapping.CAP_END);
-            //                //    DateTime prdStart = DateTime.Parse(prodMapping.PRD_STRT_DTM);
-
-            //                //    DateTime dealStart;
-            //                //    DateTime dealEnd;
-            //                //    if (DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStart) && DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEnd))
-            //                //    {
-            //                //        if (!(capStart < dealEnd && dealStart < capEnd))
-            //                //        {
-            //                //            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product entered does not have CAP within the Deal's start date and end date");
-            //                //        }
-
-            //                //        if (capStart > dealEnd)
-            //                //        {
-            //                //            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The CAP start date ({capStart:mm/dd/yyyy}) and end date ({capEnd:mm/dd/yyyy}) exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
-            //                //        }
-            //                //    }
-
-            //                //    // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
-            //                //    if (prdStart > dealStart)
-            //                //    {
-            //                //        BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.");
-            //                //    }
-            //                //}
-
-            //                #endregion CAP Validations
-            //            }
-            //        }
-            //    }
-            //}
-            if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.DENSITY.ToString())
-            {
-                CheckForCrossVerticalProducts(dePrdUsr, hasTrkr, items);
-            }
         }
 
         /// <summary>
@@ -1415,7 +1340,7 @@ namespace Intel.MyDeals.BusinessRules
             {
                     deSendToVistex.AtrbValue = "Yes";                   
             }
-            else if (dealtype.AtrbValue.ToString().ToUpper() == "PROGRAM")
+            else if (dealtype.AtrbValue.ToString().ToUpper() == "PROGRAM" || dealtype.AtrbValue.ToString().ToUpper() == "LUMP_SUM")
             {
                 if (rebateType.ToString().ToUpper() == "NRE"  && deSendToVistex.State== OpDataElementState.Unchanged && (deSendToVistex.PrevAtrbValue == null || deSendToVistex.PrevAtrbValue.ToString() == "")) //
                 {
@@ -2801,7 +2726,7 @@ namespace Intel.MyDeals.BusinessRules
             string programPaymentValue = programPayment.AtrbValue.ToString();
             string rebateTypeValue = rebateType.AtrbValue.ToString();
             // Period Profile has different blanking rules then Settlement Level
-            if (dealTypeValue == "PROGRAM" || programPaymentValue != "Backend" || rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL" || rebateTypeValue == "CO-MARKETING ACCRUAL" || rebateTypeValue == "CO-ENGINEERING ACCRUAL" || rebateTypeValue == "CO-SELLING ACCRUAL")
+            if (dealTypeValue == "PROGRAM" || dealTypeValue == "LUMP_SUM" || programPaymentValue != "Backend" || rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL")
             {
                 if (periodProfile.AtrbValue.ToString() != "")
                 {
@@ -3303,7 +3228,7 @@ namespace Intel.MyDeals.BusinessRules
                 dealCompType.AddMessage("MDF / NRE rebates does not support the Mutually Exclusive group type.");
             }
 
-            if (newtargetTypes.Any(myRebateType.Contains) && dealCompTypeValue.Contains("Mutually Exclusive"))
+            if (newtargetTypes.Any(myRebateType.Contains) && dealCompTypeValue.Contains("Mutually Exclusive") && (dealType == "PROGRAM" || dealType == "LUMP_SUM"))
             {
                 dealCompType.AddMessage(myRebateType + " rebates does not support the Mutually Exclusive group type.");
             }
@@ -3645,15 +3570,6 @@ namespace Intel.MyDeals.BusinessRules
                                 errMsg = "The End Rev can only be increased after a tracker has been assigned.  Please refresh the page to reset to original values.";
                             }
                             break;
-                        case "DENSITY":
-                            if (!double.TryParse(de.OrigAtrbValue.ToString(), out double origPb)) origPb = 0;
-                            if (!double.TryParse(de.AtrbValue.ToString(), out double newPb)) newPb = 0;
-                            if (origPb == 0) origPb = 999999999;
-                            if (origPb > newPb)
-                            {
-                                errMsg = "The End PB can only be increased after a tracker has been assigned.  Please refresh the page to reset to original values.";
-                            }
-                            break;
                         default:
                             break;
                     }
@@ -3749,21 +3665,6 @@ namespace Intel.MyDeals.BusinessRules
                         Value = de.AtrbValue.ToString()
                     }).ToDictionary(pair => pair.Key, pair => pair.Value);
                     atrbMsgToken = "rev";
-                    break;
-                case "DENSITY":
-                    startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_PB).FirstOrDefault();
-                    endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_PB).FirstOrDefault();
-                    startValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_PB).Select(de => new
-                    {
-                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
-                        Value = de.AtrbValue.ToString()
-                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
-                    endValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_PB).Select(de => new
-                    {
-                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
-                        Value = de.AtrbValue.ToString()
-                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
-                    atrbMsgToken = "petabyte";
                     break;
                 default:
                     break;
@@ -3970,13 +3871,6 @@ namespace Intel.MyDeals.BusinessRules
                             if (converted && Math.Round(currValue, 2) != currValue) // Fix decimals to 2 if more added
                             {
                                 currValue = Math.Round(currValue, 2);
-                                de.AtrbValue = currValue;
-                            }
-                            break;
-                        case "DENSITY":
-                            if (converted && Math.Round(currValue, 3) != currValue) // Fix decimals to 3 if more added
-                            {
-                                currValue = Math.Round(currValue, 3);
                                 de.AtrbValue = currValue;
                             }
                             break;

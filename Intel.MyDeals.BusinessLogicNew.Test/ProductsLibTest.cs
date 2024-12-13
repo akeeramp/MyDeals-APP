@@ -659,15 +659,9 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
 
         private static readonly object[] GetProductSelectorWrapperByDatesParams2 =
         {
-            new object[] { new DateTime(), new DateTime(), "EIA CPU", "DENSITY" },
-            new object[] { new DateTime(), new DateTime(), "TRAY", "DENSITY" },
-            new object[] { new DateTime(), new DateTime(),"BOX", "DENSITY" },
             new object[] { new DateTime(), new DateTime(), "EIA CPU", "ECAP" },
             new object[] { new DateTime(), new DateTime(), "TRAY", "ECAP" },
             new object[] { new DateTime(), new DateTime(),"BOX", "ECAP" },
-            new object[] { new DateTime(2024, 01, 01), new DateTime(2024, 01, 01), "EIA CPU", "DENSITY" },
-            new object[] { new DateTime(2024, 01, 01), new DateTime(2024, 01, 01), "TRAY", "DENSITY" },
-            new object[] { new DateTime(2024, 01, 01), new DateTime(2024, 01, 01),"BOX", "DENSITY" },
             new object[] { new DateTime(2024, 01, 01), new DateTime(2024, 01, 01), "EIA CPU", "ECAP" },
             new object[] { new DateTime(2024, 01, 01), new DateTime(2024, 01, 01), "TRAY", "ECAP" },
             new object[] { new DateTime(2024, 01, 01), new DateTime(2024, 01, 01),"BOX", "ECAP" }
@@ -687,41 +681,6 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             Assert.IsNotNull(res);
             Assert.AreEqual(res.ProductSelectionLevels.Count, 0);
             Assert.AreEqual(res.ProductSelectionLevelsAttributes.Count, 0);
-        }
-
-        private static readonly object[] GetProductSelectionResultsParams =
-        {
-            new object[] {
-                "searchHash",
-                new DateTime(2022, 1, 1),
-                new DateTime(2023, 1, 1),
-                2, //selectionlevel
-                "drillDownFilter4",
-                "drillDownFilter5",
-                1, //custsid
-                "3", //geosid
-                "tray", //mediacode
-                OpDataElementSetType.DENSITY
-            }
-        };
-        [Test, TestCaseSource("GetProductSelectionResultsParams")]
-        public void GetProductSelectionResults_ShouldReturnNotNull(dynamic data)
-        {
-            var searchHash = data[0];
-            var startDate = data[1];
-            var endDate = data[2];
-            var selectionLevel = data[3];
-            var drillDownFilter4 = data[4];
-            var drillDownFilter5 = data[5];
-            var custSid = data[6];
-            var geoSid = data[7];
-            var mediaCd = data[8];
-            var dealType = data[9];
-
-            var mockData = new List<ProductSelectionResults>();
-            mockProductDataLib.Setup(x => x.GetProductSelectionResults(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<OpDataElementSetType>())).Returns(mockData);
-            var res = new ProductsLib(mockProductDataLib.Object, mockDataCollectionsDataLib.Object, mockConstantsLookupsLib.Object).GetProductSelectionResults(searchHash, startDate, endDate, selectionLevel, drillDownFilter4, drillDownFilter5, custSid, geoSid, mediaCd, dealType);
-            Assert.IsNotNull(res);
         }
 
         private static readonly object[] GetProductCAPYCS2DataParams =

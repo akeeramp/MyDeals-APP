@@ -47,12 +47,12 @@ namespace Intel.MyDeals.Entities
             ///<summary>
             /// ID: 8
             ///</summary>
-            public const string DENSITY = @"DENSITY";
+            public const string LUMP_SUM = @"LUMP SUM";
 
             ///<summary>
             /// All values associated with this lookup
             ///</summary>
-            public static readonly string[] Values = { @"All Deals", @"FLEX", @"KIT", @"ECAP", @"PROGRAM", @"VOL TIER", @"REV TIER", @"DENSITY" };
+            public static readonly string[] Values = { @"All Deals", @"FLEX", @"KIT", @"ECAP", @"PROGRAM", @"VOL TIER", @"REV TIER", @"LUMP SUM" };
 
             ///<summary>
             /// Keyed values associated with the lookup
@@ -65,7 +65,7 @@ namespace Intel.MyDeals.Entities
                 {5, @"VOL TIER"},
                 {6, @"KIT"},
                 {7, @"REV TIER"},
-                {8, @"DENSITY"}
+                {8, @"LUMP SUM"}
             };
 
             ///<summary>

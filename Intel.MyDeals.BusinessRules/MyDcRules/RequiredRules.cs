@@ -42,7 +42,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ForecastVolumeRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() }
+                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.LUMP_SUM.ToString(), OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() }
                 },
 
                 new MyOpRule
@@ -141,7 +141,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ProgramNreDateChecks,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},
+                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString(),OpDataElementSetType.LUMP_SUM.ToString()},
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -170,7 +170,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.EcapAdjRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()}
+                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.LUMP_SUM.ToString() }
                 },
 
                 new MyOpRule

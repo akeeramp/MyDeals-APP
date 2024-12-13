@@ -122,7 +122,7 @@ export class dealPopupComponent implements OnDestroy {
                 this.disableQoute = true; 
             }
 
-            if (this.data.OBJ_SET_TYPE_CD === "PROGRAM" || this.data.OBJ_SET_TYPE_CD === "ECAP") {
+            if (this.data.OBJ_SET_TYPE_CD === "PROGRAM" || this.data.OBJ_SET_TYPE_CD === "LUMP_SUM" || this.data.OBJ_SET_TYPE_CD === "ECAP") {
                 this.disableShedule = true;
             }
             if (this.data.OBJ_SET_TYPE_CD === "ECAP" || this.data.OBJ_SET_TYPE_CD === "KIT") {

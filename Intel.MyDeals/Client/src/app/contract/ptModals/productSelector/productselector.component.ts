@@ -71,7 +71,7 @@ export class ProductSelectorComponent implements OnDestroy {
     private crossVertical = {
         'productCombination1': ["DT", "Mb", "SvrWS", "EIA CPU"],
         'productCombination2': ["CS", "EIA CS"],
-        'message': "The product combination is not valid. You can combine (DT, Mb, SvrWS, EIA CPU) or (CS, EIA CS) verticals. For NON IA, you can combine as many products within same verticals for PROGRAM, VOLTIER and REV TIER deals."
+        'message': "The product combination is not valid. You can combine (DT, Mb, SvrWS, EIA CPU) or (CS, EIA CS) verticals. For NON IA, you can combine as many products within same verticals for PROGRAM, LUMP SUM,VOLTIER and REV TIER deals."
     }
     private hideSelection: boolean = false;
     private errorMessage = "";
@@ -252,8 +252,8 @@ export class ProductSelectorComponent implements OnDestroy {
                 })
             })
         }
-        this.enableMultipleSelection = this.dealType == 'VOL_TIER' || this.dealType == 'FLEX' || this.dealType == 'PROGRAM' || this.dealType == 'REV_TIER' || this.dealType == 'DENSITY';
-        this.excludeMode = this.suggestedProduct.isExcludeProduct ? this.suggestedProduct.isExcludeProduct && (this.dealType == 'VOL_TIER' || this.dealType == 'FLEX' || this.dealType == 'PROGRAM' || this.dealType == 'REV_TIER' || this.dealType == 'DENSITY') : false;
+        this.enableMultipleSelection = this.dealType == 'VOL_TIER' || this.dealType == 'FLEX' || this.dealType == 'PROGRAM' || this.dealType == 'LUMP_SUM' || this.dealType == 'REV_TIER';
+        this.excludeMode = this.suggestedProduct.isExcludeProduct ? this.suggestedProduct.isExcludeProduct && (this.dealType == 'VOL_TIER' || this.dealType == 'FLEX' || this.dealType == 'PROGRAM' || this.dealType == 'LUMP_SUM' || this.dealType == 'REV_TIER') : false;
     }
     getItems(item: any) {
         this.selectedItems = []; // Clear the selected items, when user moves around drill levels
@@ -591,7 +591,7 @@ export class ProductSelectorComponent implements OnDestroy {
     }
     isValidProductCombination(existingProdTypes, newProductType) {
         let isValid = true;
-        if (this.dealType == 'FLEX' || this.dealType == 'VOL_TIER' || this.dealType == 'PROGRAM' || this.dealType == 'REV_TIER') {
+        if (this.dealType == 'FLEX' || this.dealType == 'VOL_TIER' || this.dealType == 'PROGRAM' || this.dealType == 'LUMP_SUM' || this.dealType == 'REV_TIER') {
             return true;
         }
         let selfCheck = newProductType == undefined;

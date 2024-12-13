@@ -238,10 +238,10 @@ export class ManagerPctComponent implements OnInit, OnDestroy {
                     if ((ptData[0].OBJ_SET_TYPE_CD == 'ECAP' || ptData[0].OBJ_SET_TYPE_CD == 'KIT') && !this.ECAP_KIT_Col.includes(fieldName)) {
                         return true;
                     }
-                    else if ((ptData[0].OBJ_SET_TYPE_CD == 'VOL_TIER' || ptData[0].OBJ_SET_TYPE_CD == 'REV_TIER' || ptData[0].OBJ_SET_TYPE_CD == 'DENSITY' || ptData[0].OBJ_SET_TYPE_CD == 'FLEX') && !this.VOL_REV_FLEX_DNSTY_Col.includes(fieldName)) {
+                    else if ((ptData[0].OBJ_SET_TYPE_CD == 'VOL_TIER' || ptData[0].OBJ_SET_TYPE_CD == 'REV_TIER' || ptData[0].OBJ_SET_TYPE_CD == 'FLEX') && !this.VOL_REV_FLEX_DNSTY_Col.includes(fieldName)) {
                         return true;
                     }
-                    else if (ptData[0].OBJ_SET_TYPE_CD == 'PROGRAM' && !this.PGM_Col.includes(fieldName)) {
+                    else if ((ptData[0].OBJ_SET_TYPE_CD == 'PROGRAM' || ptData[0].OBJ_SET_TYPE_CD == 'LUMP_SUM') && !this.PGM_Col.includes(fieldName)) {
                         return true;
                     }
                 }

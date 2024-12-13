@@ -73,6 +73,7 @@ namespace Intel.MyDeals.DataLibrary.Test
         [TestCase(4, "7006,7007,7008")] // PROGRAM deal prod levels
         [TestCase(5, "7006,7007,7008")] // VOL TIER deal prod levels
         [TestCase(6, "7006,7007,7008")] // KIT deal prod levels
+        [TestCase(8, "7006,7007,7008")] // LUMP SUM deal prod levels
         public void PrdDataLib_GetProdSelectionLevel(int OBJ_SET_TYPE_SID, string levels)
         {
             List<int> levelsCheck = levels.Split(',').Select(Int32.Parse).ToList(); // Make it an array to make it a fast check

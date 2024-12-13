@@ -89,7 +89,7 @@ export class PTE_Save_Util {
                         dictCustDivision[PTR[s]["CUST_ACCNT_DIV"]] = s;
                     }
                     dictGeoCombined[PTR[s]["GEO_COMBINED"]] = s;
-                    if (curPricingTable.OBJ_SET_TYPE_CD !== "PROGRAM") {
+                    if (curPricingTable.OBJ_SET_TYPE_CD !== "PROGRAM" || curPricingTable.OBJ_SET_TYPE_CD !== "LUMP_SUM") {
                         dictPeriodProfile[PTR[s]["PERIOD_PROFILE"]] = s;
                     }
                     dictResetPerPeriod[PTR[s]["RESET_VOLS_ON_PERIOD"]] = s;
@@ -353,7 +353,7 @@ export class PTE_Save_Util {
                     }
                 }
             }
-            if (curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM' || curPricingTable.OBJ_SET_TYPE_CD == 'FLEX' || curPricingTable.OBJ_SET_TYPE_CD == 'REV_TIER') {
+            if (curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM' || curPricingTable.OBJ_SET_TYPE_CD == 'LUMP_SUM' || curPricingTable.OBJ_SET_TYPE_CD == 'FLEX' || curPricingTable.OBJ_SET_TYPE_CD == 'REV_TIER') {
                 item["VOLUME"] = null;
                 item["ECAP_PRICE"] = null;
             }

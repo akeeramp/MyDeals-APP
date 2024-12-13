@@ -431,7 +431,7 @@ export class AutoFillComponent implements OnDestroy {
             else if ((dealType == 'REV_TIER' || dealType == 'DENSITY') && val == 'Consumption') { // Disable Autofill field
                 return true;
             }
-            else if ((dealType === 'VOL_TIER' || dealType === 'PROGRAM') && (rebateType === 'TENDER' || rebateType === 'TENDER ACCRUAL')) {
+            else if ((dealType === 'VOL_TIER' || dealType === 'PROGRAM' || dealType === 'LUMP_SUM') && (rebateType === 'TENDER' || rebateType === 'TENDER ACCRUAL')) {
                 this.autofillData.DEFAULT.PAYOUT_BASED_ON.value = "Consumption";
                 // return true;
             }

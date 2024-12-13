@@ -48,7 +48,7 @@ export class contractExportComponent implements OnDestroy{
         if (objType === "PROGRAM") return "Program";
         if (objType === "VOL_TIER") return "Volume Tier";
         if (objType === "REV_TIER") return "Rev Tier";
-        if (objType === "DENSITY") return "Density Based";
+        if (objType === "LUMP_SUM") return "Lump Sum";
         if (objType === "FLEX") return "Flex Accruals";
         return "";
     }
