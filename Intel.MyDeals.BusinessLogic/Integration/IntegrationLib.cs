@@ -5,7 +5,6 @@ using Intel.MyDeals.IDataLibrary;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
@@ -25,14 +24,17 @@ namespace Intel.MyDeals.BusinessLogic
         private readonly IDropdownDataLib _dropdownDataLib;
         private readonly IPrimeCustomersDataLib _primeCustomerLib;
         private readonly IConstantsLookupsLib _constantsLookupsLib;
+        private readonly IDataFixDataLib _dataFixDataLib;        
         private List<int> UserTokenErrorCodes = new List<int> { 704, 705 }; // Known abort messages for User Token Security
 
-        public IntegrationLib(IJmsDataLib jmsDataLib, IOpDataCollectorLib dataCollectorLib, IPrimeCustomersDataLib primeCustomerLib, IConstantsLookupsLib constantsLookupsLib)
+        public IntegrationLib(IJmsDataLib jmsDataLib, IOpDataCollectorLib dataCollectorLib, IPrimeCustomersDataLib primeCustomerLib,
+            IConstantsLookupsLib constantsLookupsLib, IDataFixDataLib dataFixDataLib)
         {
             _jmsDataLib = jmsDataLib;
             _dataCollectorLib = dataCollectorLib;
             _primeCustomerLib = primeCustomerLib;
             _constantsLookupsLib = constantsLookupsLib;
+            _dataFixDataLib = dataFixDataLib;            
         }
 
         public void TestAsyncProcess(Guid myGuid)
@@ -489,8 +491,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return returnVal;
-        }
-
+        }        
         private static int ToInt32(string value)
         {
             return value == null ? 0 : int.Parse(value, (IFormatProvider)CultureInfo.CurrentCulture);
@@ -1256,8 +1257,126 @@ namespace Intel.MyDeals.BusinessLogic
 
             return fullPackageResponse;
         }
+        private string ProcessRollbackRequestShell(TenderTransferRootObject workRecordDataFields, Guid batchId, ref int dealId)
+        {
+            string fullPackageResponse = "";
 
-        private string ProcessDeleteRequestShell(TenderTransferRootObject workRecordDataFields, Guid batchId, ref int dealId)
+            for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
+            {
+                string executionResponse = "";
+                // Get OpUserToken
+                OpUserToken opUserToken = setUserToken(workRecordDataFields, i, "Rollback");
+                if (!containsError(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, UserTokenErrorCodes))
+                {
+                    OpUserStack.TendersAutomatedUserToken(opUserToken); // Set the user token for this record
+                }
+                else
+                {
+                    continue; // Fail and skip this record due to User Token issues
+                }
+
+                // Start Rollback Request Action for the current quoteline item
+                executionResponse += ProcessRollbackRequest(workRecordDataFields, batchId, i, ref dealId);
+                fullPackageResponse += executionResponse + "<br><br>";
+            }
+
+            return fullPackageResponse;
+        }
+
+        private string ProcessRollbackRequest(TenderTransferRootObject workRecordDataFields, Guid batchId, int recordId, ref int dealId)
+        {
+            string executionResponse = "";
+            string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
+            string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[recordId].Id;
+
+            executionResponse += "Processing rollback for [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
+            int folioId = Int32.Parse(workRecordDataFields.recordDetails.quote.FolioID);
+            dealId = Int32.Parse(workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQId);
+
+            List<int> passedFolioIds = new List<int>() { dealId };
+            MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(passedFolioIds, new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate(); // Make the save object .FillInHolesFromAtrbTemplate()
+
+            if (!myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Any())
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(712, "Deal Error: Couldn't find deal for this request, contact L2 suport", "Couldn't find deal " + dealId + " to delete"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..  We had error on lookup, skip to next to process
+            }            
+
+            int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
+            //var currentWipWfStg = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+            var currentWippsWfStg = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PS_WF_STG_CD);            
+            
+            if(!(currentWippsWfStg == WorkFlowStages.Submitted || currentWippsWfStg == WorkFlowStages.Requested))
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(724, "Update Error: Deal is not at Submitted stage where rollback is not allowed", "Rollback is not allowed when Deal is at Submitted stage"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse;
+            }
+            bool hasTracker = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.HAS_TRACKER)) == 1 ? true : false;
+            bool isRollbackToWon = hasTracker && (currentWippsWfStg == WorkFlowStages.Requested || currentWippsWfStg == WorkFlowStages.Submitted);
+   
+            DataFix data = new DataFix();                               
+            DataFixAction dtac = new DataFixAction();
+            dtac.OBJ_TYPE_SID = (int)OpDataElementType.WIP_DEAL;
+            dtac.ACTN_VAL_LIST = dealId.ToString();
+            dtac.ACTN_NM = isRollbackToWon ? "DEAL_ROLLBACK_TO_WON" : "DEAL_ROLLBACK_TO_OFFER";
+            dtac.BTCH_ID = 0;
+            List<DataFixAttribute> atrb_List = new List<DataFixAttribute>();                    
+            if (!hasTracker)
+            {
+                DateTime dealStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[recordId].ApprovedStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+                DateTime dealEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[recordId].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+                DateTime billStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[recordId].BillingStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+                DateTime billEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[recordId].BillingEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+                Dictionary<int, string> keyValuePairs = new Dictionary<int, string>()
+                {
+                    { Attributes.START_DT.ATRB_SID,dealStartDate.ToString("MM/dd/yyyy")},
+                    { Attributes.END_DT.ATRB_SID,dealEndDate.ToString("MM/dd/yyyy")},
+                    { Attributes.REBATE_BILLING_START.ATRB_SID,billStartDate.ToString("MM/dd/yyyy")},
+                    { Attributes.REBATE_BILLING_END.ATRB_SID,billEndDate.ToString("MM/dd/yyyy")},
+                    { Attributes.ECAP_PRICE.ATRB_SID,workRecordDataFields.recordDetails.quote.quoteLine[recordId].ApprovedECAPPrice},
+                    { Attributes.VOLUME.ATRB_SID,workRecordDataFields.recordDetails.quote.quoteLine[recordId].ApprovedQuantity}                        
+                };
+                foreach (var item in keyValuePairs)
+                    {
+                        var dataFixAttribute = new DataFixAttribute
+                        {
+                            OBJ_TYPE_SID = (int)OpDataElementType.WIP_DEAL,
+                            ATRB_SID = item.Key,
+                            ATRB_RVS_NBR = 0,
+                            OBJ_SID = dealId,
+                            ATRB_VAL = item.Value,
+                            CUST_MBR_SID = custId
+                        };
+                        atrb_List.Add(dataFixAttribute);
+                    }                                       
+            }
+            data.DataFixAttributes = atrb_List;
+            data.DataFixActions = new List<DataFixAction>() { dtac };
+            int response= _dataFixDataLib.IQRRollback(data);
+            if (response == 1)
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQStatus = isRollbackToWon ? "Won" : "Offer";
+                executionResponse += "Deal Rollbacked: [" + dealId + "] - [" + batchId + "]<br>";                
+            }
+            else if(response == 2)
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(725, "Deal can not be rollback because of given values are not matched","Deal can not be rollback to Offer stage beacuse of data mismatch"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse;
+            }
+            else
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(700, "Mydeals applicaton error.  Please contact My Deals Support", "Failed DB Call, ProcessRollbackRequest"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse;
+            }                         
+            return executionResponse;
+        }
+
+    
+    private string ProcessDeleteRequestShell(TenderTransferRootObject workRecordDataFields, Guid batchId, ref int dealId)
         {
             string fullPackageResponse = "";
 
@@ -1697,7 +1816,7 @@ namespace Intel.MyDeals.BusinessLogic
             string OrigRedealBit = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.IN_REDEAL);
             if (reRunMode && OrigRedealBit == "1")
             {
-                DateTime ReDealEffectiveDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].EffectivePricingStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+                DateTime ReDealEffectiveDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].EffectivePricingStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format                
                 UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.LAST_REDEAL_DT), ReDealEffectiveDate.ToString("MM/dd/yyyy"));
             }
              
@@ -2136,7 +2255,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public string ExecuteSalesForceTenderData(Guid workId)
         {
-            List<string> goodRequestTypes = new List<string> { "Create", "Update", "UpdateStatus", "Delete" };
+            List<string> goodRequestTypes = new List<string> { "Create", "Update", "UpdateStatus", "Delete","Rollback" };
             string executionResponse = "";
 
             List<TenderTransferObject> tenderStagedWorkRecords = _jmsDataLib.FetchTendersStagedData("TENDER_DEALS", workId);
@@ -2182,6 +2301,9 @@ namespace Intel.MyDeals.BusinessLogic
                             break;
                         case "Delete":
                             executionResponse += ProcessDeleteRequestShell(workRecordDataFields, batchId, ref dealId);
+                            break;
+                        case "Rollback":
+                            executionResponse += ProcessRollbackRequestShell(workRecordDataFields, batchId, ref dealId);
                             break;
                         default:
                             break;

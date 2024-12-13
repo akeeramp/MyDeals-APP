@@ -103,5 +103,40 @@ namespace Intel.MyDeals.DataLibrary
             }
             return IncdnUpd;
         }
+        public int IQRRollback(DataFix data)
+        {
+            int Result = 0;
+            try
+            {
+                in_t_obj_atrb dt1 = new in_t_obj_atrb();
+                foreach (var r in data.DataFixAttributes)
+                {
+                    dt1.AddRow(r);
+                }
+                in_t_obj_actn dt2 = new in_t_obj_actn();
+                foreach (var r in data.DataFixActions)
+                {
+                    dt2.AddRow(r);
+                }
+                var cmd = new Procs.dbo.PR_MYDL_ROLLBACK_IQR_DEALS
+                {
+                    @in_obj_atrb = dt1,
+                    @in_obj_actn = dt2,
+                    @in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
+                };
+                //Used ExecuteDataSet instead of ExecuteReader method to execute rollback stored procedure to ignore time out error.
+                using (var dt = DataAccess.ExecuteDataSet(cmd,700))
+                {
+                    var result = dt.Tables[0].Rows;
+                    Result = (int)result[0].ItemArray[0];
+                }                                                    
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                return Result;
+            }
+            return Result;
+        }
     }
 }

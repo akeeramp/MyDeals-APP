@@ -1,4 +1,5 @@
 ﻿using Intel.MyDeals.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.IDataLibrary
@@ -10,5 +11,6 @@ namespace Intel.MyDeals.IDataLibrary
         List<IncdnDataFix> GetDataFixes();
 
         IncdnActnUpd UpdateDataFix(DataFix data, bool isExecute);
+        int IQRRollback(DataFix data);
     }
 }
