@@ -1295,7 +1295,7 @@ export class PTE_CellChange_Util {
                     }
                 }
                 if (item.prop == 'REBATE_TYPE' && item.new != 'NRE ACCRUAL' && this.hotTable.getDataAtRowProp(item.row, 'PERIOD_PROFILE') == '') {
-                    if (ptDefaults["_defaultAtrbs"] != undefined && (curPricingTable.OBJ_SET_TYPE_CD != 'PROGRAM' || curPricingTable.OBJ_SET_TYPE_CD != 'LUMP_SUM')) {
+                    if (ptDefaults["_defaultAtrbs"] != undefined && (curPricingTable.OBJ_SET_TYPE_CD != 'PROGRAM' && curPricingTable.OBJ_SET_TYPE_CD != 'LUMP_SUM')) {
                         this.delReadOnlyBehaviours("PERIOD_PROFILE", item);
                         let prdPfvalue = curPricingTable["PERIOD_PROFILE"] ? curPricingTable["PERIOD_PROFILE"] : ptDefaults["_defaultAtrbs"]["PERIOD_PROFILE"].value
                         this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', prdPfvalue.toString(), 'no-edit');
