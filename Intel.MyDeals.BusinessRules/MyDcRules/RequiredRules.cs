@@ -69,7 +69,28 @@ namespace Intel.MyDeals.BusinessRules
                 new MyOpRule
                 {
                     // If deal type is Vol Tier and Type is CO-MARKETING SPIF/PER UNIT ACTIVITY, then ensure that user fills in VOLUME values - Used to be MDF ACTIVITY
-                    Title="Forecast Volume Required if Program Type is CO-MARKETING SPIF/PER UNIT ACTIVITY",
+                    Title="Forecast Volume Required if Rebate Type is CO-MARKETING SPIF/PER UNIT ACTIVITY",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("CO-MARKETING SPIF/PER UNIT ACTIVITY")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {
+                                AttributeCodes.FRCST_VOL
+                            }
+                        }
+
+                    }
+                },
+                new MyOpRule
+                {
+                    // If deal type is Vol Tier and Type is CO-MARKETING SPIF/PER UNIT ACTIVITY, then ensure that user fills in VOLUME values - Used to be MDF ACTIVITY
+                    Title="Forecast Volume Required if Lump Sum Type is CO-MARKETING SPIF/PER UNIT ACTIVITY",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
@@ -132,6 +153,28 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.MakeSettlementPartnerRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL}
+                },
+
+                new MyOpRule
+                {
+                    // If deal type is LumpSum and Type is CO-ENGINEERING, then ensure that user fills in OEM_PLTFRM_LNCH_DT, OEM_PLTFRM_EOL_DT values
+                    Title="Required if Rebate Type is CO-ENGINEERING",
+                    ActionRule = MyDcActions.ProgramNreDateChecks,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.LUMP_SUM.ToString()},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("CO-ENGINEERING")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {
+                                AttributeCodes.OEM_PLTFRM_LNCH_DT,
+                                AttributeCodes.OEM_PLTFRM_EOL_DT
+                            }
+                        }
+                    }
                 },
 
                 new MyOpRule

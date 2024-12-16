@@ -907,7 +907,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3717,
                 AtrbCd = AttributeCodes.PERIOD_PROFILE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER, OpDataElementSetType.LUMP_SUM },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER },
                 Width = 160,
                 Label = "Period Profile",
                 UiType = "DROPDOWN",
@@ -922,7 +922,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 57,
                 AtrbCd = AttributeCodes.RESET_VOLS_ON_PERIOD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER, OpDataElementSetType.LUMP_SUM },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER},
                 Template = "#=gridUtils.uiControlWrapper(data, 'RESET_VOLS_ON_PERIOD')#",
                 DataType = "string",
                 Label = "Reset Per Period",
@@ -1097,7 +1097,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 35,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.REV_TIER, OpDataElementSetType.LUMP_SUM },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.REV_TIER },
                 Width = 120,
                 IsDefaultable = true,
                 Label = "Payout Based On *",
@@ -1340,14 +1340,6 @@ namespace Intel.MyDeals.DataLibrary
                 IsHidden = true
             });
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 3490,
-                AtrbCd = AttributeCodes.NUM_OF_DENSITY,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.LUMP_SUM },
-                IsHidden = true
-            });
 
             // Can't remove this at PT/PTR since there is customer level setting logic at play - review is that is still needed and remove if not.  Search DFLT_CUST_RPT_GEO
             items.Add(new UiTemplateContainerItem

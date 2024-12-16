@@ -1183,7 +1183,7 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
     }
 
     private isProgram(OBJ_SET_TYPE_CD: string): boolean {
-        return OBJ_SET_TYPE_CD.toLowerCase().includes('program');
+        return (OBJ_SET_TYPE_CD.toLowerCase().includes('program') || OBJ_SET_TYPE_CD.toLowerCase().includes('lump_sum'));
     }
 
     private isFlex(OBJ_SET_TYPE_CD: string): boolean {

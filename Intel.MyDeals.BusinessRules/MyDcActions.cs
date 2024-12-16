@@ -1311,53 +1311,66 @@ namespace Intel.MyDeals.BusinessRules
 
         public static void SendToVistexReadOnlyRequiredAndSetValue(params object[] args)
         {
-          try
-          {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
+            try
+            {
+                MyOpRuleCore r = new MyOpRuleCore(args);
+                if (!r.IsValid) return;
 
-           IOpDataElement deSendToVistex = r.Dc.GetDataElement(AttributeCodes.SEND_TO_VISTEX);
-            IOpDataElement deRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
-            IOpDataElement dealtype = r.Dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
-            IOpDataElement deProgPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
+                IOpDataElement deSendToVistex = r.Dc.GetDataElement(AttributeCodes.SEND_TO_VISTEX);
+                IOpDataElement deRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+                IOpDataElement dealtype = r.Dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
+                IOpDataElement deProgPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
 
                 if (deSendToVistex == null || deRebateType == null) return;
 
-            string rebateType = deRebateType.AtrbValue.ToString().ToLower();
+                string rebateType = deRebateType.AtrbValue.ToString().ToLower();
 
-            if(rebateType== "tender accrual" || rebateType == "mdf spif/per unit activity" || rebateType == "co-marketing spif/per unit activity" || deProgPayment.AtrbValue.ToString().ToLower().Contains("frontend"))
-            {
-                deSendToVistex.AtrbValue = "No";
-                deSendToVistex.IsReadOnly = true;
+                if (rebateType == "tender accrual" || rebateType == "mdf spif/per unit activity" || rebateType == "co-marketing spif/per unit activity" || deProgPayment.AtrbValue.ToString().ToLower().Contains("frontend"))
+                {
+                    deSendToVistex.AtrbValue = "No";
+                    deSendToVistex.IsReadOnly = true;
                     if (deProgPayment.AtrbValue.ToString().ToLower().Contains("frontend"))
                     {
                         deSendToVistex.AtrbValue = "Yes";
                         deSendToVistex.IsHidden = true;
                     }
-                
-            }
-            else if (rebateType.ToString().ToUpper() != "NRE" && (rebateType != "tender accrual" || rebateType != "mdf spif/per unit activity" || rebateType == "co-marketing spif/per unit activity") && deRebateType.HasValueChanged)
-            {
-                    deSendToVistex.AtrbValue = "Yes";                   
-            }
-            else if (dealtype.AtrbValue.ToString().ToUpper() == "PROGRAM" || dealtype.AtrbValue.ToString().ToUpper() == "LUMP_SUM")
-            {
-                if (rebateType.ToString().ToUpper() == "NRE"  && deSendToVistex.State== OpDataElementState.Unchanged && (deSendToVistex.PrevAtrbValue == null || deSendToVistex.PrevAtrbValue.ToString() == "")) //
-                {
-                    deSendToVistex.AtrbValue = "";
-                    deSendToVistex.IsRequired = true;
+
                 }
-                if (rebateType.ToString().ToUpper() == "NRE" && deRebateType.HasValueChanged)
+                else if (rebateType.ToString().ToUpper() != "NRE" && (rebateType != "tender accrual" || rebateType != "mdf spif/per unit activity" || rebateType == "co-marketing spif/per unit activity") && deRebateType.HasValueChanged)
                 {
+                    deSendToVistex.AtrbValue = "Yes";
+                }
+                else if (dealtype.AtrbValue.ToString().ToUpper() == "PROGRAM")
+                {
+                    if (rebateType.ToString().ToUpper() == "NRE" && deSendToVistex.State == OpDataElementState.Unchanged && (deSendToVistex.PrevAtrbValue == null || deSendToVistex.PrevAtrbValue.ToString() == "")) //
+                    {
                         deSendToVistex.AtrbValue = "";
                         deSendToVistex.IsRequired = true;
+                    }
+                    if (rebateType.ToString().ToUpper() == "NRE" && deRebateType.HasValueChanged)
+                    {
+                        deSendToVistex.AtrbValue = "";
+                        deSendToVistex.IsRequired = true;
+                    }
+                }
+                else if (dealtype.AtrbValue.ToString().ToUpper() == "LUMP_SUM")
+                {
+                    if (rebateType.ToString().ToUpper() == "CO-ENGINEERING" && deSendToVistex.State == OpDataElementState.Unchanged && (deSendToVistex.PrevAtrbValue == null || deSendToVistex.PrevAtrbValue.ToString() == "")) //
+                    {
+                        deSendToVistex.AtrbValue = "";
+                        deSendToVistex.IsRequired = true;
+                    }
+                    if (rebateType.ToString().ToUpper() == "CO-ENGINEERING" && deRebateType.HasValueChanged)
+                    {
+                        deSendToVistex.AtrbValue = "";
+                        deSendToVistex.IsRequired = true;
+                    }
                 }
             }
-          }
-          catch (Exception ex)
-          {
+            catch (Exception ex)
+            {
                 OpLogPerf.Log(ex);
-          }
+            }
         }
 
         public static void HideSendToVistexTenders(params object[] args)
@@ -2572,7 +2585,7 @@ namespace Intel.MyDeals.BusinessRules
                 "MDF",
                 "MDF/NRE LUMP-SUM BUDGET",
                 "NRE LUMP-SUM BUDGET",
-                "TENDER ACCRUAL"
+                "TENDER ACCRUAL",
             };
             IOpDataElement rebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
             if (notRequiredProgramTypes.Contains(rebateType.AtrbValue)) return;  // If this is one of the above program types, it cannot be required, so bail.
