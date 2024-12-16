@@ -18,5 +18,11 @@ namespace Intel.MyDeals.BusinessLogic
             List<HealthCheckData> res = _healthCheckDataLib.GetDbHealthCheckStatus();
             return res;
         }
+
+        public int GetDbaasCpuHealthStatus()
+        {
+            int res = _healthCheckDataLib.GetDbaasCpuHealthStatus();
+            return res;
+        }
     }
 }

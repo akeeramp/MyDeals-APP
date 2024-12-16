@@ -37,5 +37,20 @@ namespace Intel.MyDeals.Controllers.API
                 return Content(HttpStatusCode.InternalServerError, res[0]);
             }
         }
+
+        [Route("GetCpuStatus")]
+        [HttpGet]
+        public NegotiatedContentResult <int> GetDbaasCpuHealthStatus()
+        {
+            int res = _healthCheckLib.GetDbaasCpuHealthStatus();
+            if (res == 200)
+            {
+                return Content(HttpStatusCode.OK, res);
+            }
+            else
+            {
+                return Content(HttpStatusCode.InternalServerError, res);
+            }
+        }
     }
 }

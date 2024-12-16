@@ -6,5 +6,6 @@ namespace Intel.MyDeals.IBusinessLogic
     public interface IHealthCheckLib
     {
         List<HealthCheckData> GetDbHealthCheckStatus();
+        int GetDbaasCpuHealthStatus();
     }
 }

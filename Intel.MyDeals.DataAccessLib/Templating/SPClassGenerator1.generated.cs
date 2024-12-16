@@ -19721,5 +19721,41 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 get { return (Int32)GetParameter("in_emp_wwid"); }
             }
         }
+
+        ///<summary>
+		/// ID: 1153035489
+		/// Modified: 12/5/2024 7:47:05 PM
+		/// Parameters: 2
+		///</summary>
+		public partial class PR_MYDL_HIGH_CPU_EMAIL : SP
+        {
+            public PR_MYDL_HIGH_CPU_EMAIL()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_HIGH_CPU_EMAIL]";
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Boolean CREATE_TICKET
+            {
+                set { SetParmeter("CREATE_TICKET", value); }
+                get { return (Boolean)GetParameter("CREATE_TICKET"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Boolean SEND_MAIL
+            {
+                set { SetParmeter("SEND_MAIL", value); }
+                get { return (Boolean)GetParameter("SEND_MAIL"); }
+            }
+        }
     }
 }

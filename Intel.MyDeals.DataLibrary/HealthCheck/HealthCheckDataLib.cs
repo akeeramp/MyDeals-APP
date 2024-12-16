@@ -45,5 +45,32 @@ namespace Intel.MyDeals.DataLibrary
             }
             return result;
         }
+
+        public int GetDbaasCpuHealthStatus()
+        {
+            int result = 0;
+            var cmd = new Procs.dbo.PR_MYDL_HIGH_CPU_EMAIL
+            {
+                @CREATE_TICKET = true ,
+                @SEND_MAIL = false
+            };
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_STATUS = DB.GetReaderOrdinal(rdr, "STATUS_CODE");
+                    while (rdr.Read())
+                    {
+                        result = (IDX_STATUS < 0 || rdr.IsDBNull(IDX_STATUS)) ? 0 : rdr.GetFieldValue<System.Int32>(IDX_STATUS);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw new ApplicationException("An error occurred while getting the DBaaS CPU health status.", ex);
+            }
+            return result;
+        }
     }
 }
