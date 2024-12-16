@@ -296,11 +296,13 @@ export class excludeDealGroupModalDialog implements OnDestroy{
         this.DEAL_GRP_CMNT = (this.dataItem.cellCurrValues.DEAL_GRP_CMNT === null || this.dataItem.cellCurrValues.DEAL_GRP_CMNT == undefined) ? "" : this.dataItem.cellCurrValues.DEAL_GRP_CMNT;
     }
     viewConsumptionOnly() {
-        if (this.isConsumptionToggleOn) {
-            this.loadExcludeDealGroupModel(true);
-        }
-        else {
-            this.loadExcludeDealGroupModel(false);
+        if (this.isSelected) {
+            if (this.isConsumptionToggleOn) {
+                this.loadExcludeDealGroupModel(true);
+            }
+            else {
+                this.loadExcludeDealGroupModel(false);
+            }
         }
     }
 

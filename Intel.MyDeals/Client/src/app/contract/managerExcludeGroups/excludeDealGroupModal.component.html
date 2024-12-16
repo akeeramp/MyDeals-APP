@@ -28,8 +28,8 @@
                                       title='Click to see Excluded/Included by USER'></mat-slide-toggle>
                 </div>
                 <div style="color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: right; right: 50px; position: relative;">
-                    Consumption deals only:
-                    <mat-slide-toggle [(ngModel)]="isConsumptionToggleOn" (change)="viewConsumptionOnly()" [color]="color" title='Show only consumption based deals' style="position: relative; left: 20px;"></mat-slide-toggle>
+                    Filter deals based on consumption parameters:
+                    <mat-slide-toggle [(ngModel)]="isConsumptionToggleOn" (change)="viewConsumptionOnly()" [color]="color" title="{{isConsumptionToggleOn ? 'Click to see all deals' : 'Click to see filtered deals based on consumption parameters'}}" style="position: relative; left: 20px;"></mat-slide-toggle>
                 </div>
                 <div class="row oppo-grids new-now-wrap" style="margin: 0px;width:100%">
                     <kendo-grid class="exclude-filter-style view_popup_height icon-changes" [data]="gridData" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
