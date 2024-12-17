@@ -542,6 +542,7 @@ namespace Intel.MyDeals.BusinessLogic
             string customerDivision = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].CustomerDivision == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].CustomerDivision; // SF will have to handle if this is needed or not for any given customer as a drop down
             string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedECAPPrice;
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedQuantity;
+            string payableQuantity = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].PayableQuantity;
             string userEnteredProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.Name;
             string productEpmId = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProductNameEPMID; // For lookup
             string dealDescription = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].DealDescription == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].DealDescription;
@@ -844,7 +845,6 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_ST].Data[initPsId].GetDataElement(AttributeCodes.SALESFORCE_ID), dealSfId);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_ST].Data[initPsId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
 
-
             myDealsData[OpDataElementType.PRC_TBL] = new OpDataPacket<OpDataElementType>
             {
                 PacketType = OpDataElementType.PRC_TBL,
@@ -966,6 +966,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.VOLUME), quantity);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PAYABLE_QUANTITY), payableQuantity);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL), customer);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.IS_PRIMED_CUST), isPrimedCustomer);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), primedCustomerL1Id);
@@ -1018,7 +1019,6 @@ namespace Intel.MyDeals.BusinessLogic
                 ContractId = contractId,
                 DeleteAllPTR = false
             });
-
 
             if (myDealsData.ValidationApplyRules(savePacket))
             {
@@ -1561,7 +1561,6 @@ namespace Intel.MyDeals.BusinessLogic
             string primedCustomerL2Id = null;
             string primedCustName = null;
 
-
             // TODO: Figure out what fields we will allow to change and place them here.  Let DEs drive the save and rules.  Bail on validation errors or empty required fields.
             // Update SalesForce IDs for new deal instance objects
             string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
@@ -1578,6 +1577,7 @@ namespace Intel.MyDeals.BusinessLogic
             string primedCustID = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_ID);
             string primedCustNM = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_NM);
             string primedCustCountry = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_CNTRY);
+            string payableQuantity = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PAYABLE_QUANTITY);
             bool isIQRUnified = workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer;
             string primedCtryId = workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId;
             string customer = null;
@@ -1662,6 +1662,7 @@ namespace Intel.MyDeals.BusinessLogic
                     UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
                     UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_RPL), isRPLedCustomer);
                     UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_CUST_OBJ), endCustomerObject);
+                    UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PAYABLE_QUANTITY), payableQuantity);
 
                     workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer = isPrimedCustomer == "1" ? true : false;
                     workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId = primedCustomerL1Id == "" ? null : primedCustomerL1Id;
@@ -1677,8 +1678,6 @@ namespace Intel.MyDeals.BusinessLogic
 
                 }
             }
-
-
 
             else
             {

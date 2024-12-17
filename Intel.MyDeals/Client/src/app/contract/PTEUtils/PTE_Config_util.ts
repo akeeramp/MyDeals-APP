@@ -1,15 +1,13 @@
 export class PTE_Config_Util {
-    static girdMaxRows:number=250;
-    static gridMinRows:number=199;
+    static girdMaxRows: number = 250;
+    static gridMinRows: number = 199;
     static maxKITproducts: number = 10;
     static maxNoofproducts: number = 50;
     static flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT", "REBATE_TYPE", "MRKT_SEG"];
-    static productValidationDependencies = [
-        "GEO_COMBINED", "PROGRAM_PAYMENT", "PROD_INCLDS", "REBATE_TYPE", "MRKT_SEG"
-    ];
+    static productValidationDependencies = ["GEO_COMBINED", "PROGRAM_PAYMENT", "PROD_INCLDS", "REBATE_TYPE", "MRKT_SEG"];
     static kitDimAtrbs: Array<string> = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
-    static tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
-    static densityTierAtrbs = ["DENSITY_RATE", "STRT_PB", "END_PB", "DENSITY_BAND", "TIER_NBR"];
+    static tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
+    static densityTierAtrbs = ["DENSITY_RATE", "DENSITY_BAND", "TIER_NBR"];
     static tenderOnlyColumns = ["CAP", "YCS2", "SERVER_DEAL_TYPE", "QLTR_BID_GEO"];
     static tenderRequiredColumns = ["VOLUME"];
     static vistextHybridOnlyColumns = ["REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT"];
@@ -20,7 +18,7 @@ export class PTE_Config_Util {
         { "title": "End Vol", "field": "END_VOL", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
         { "title": "Rate", "field": "RATE", "format": "currency", "align": "right" }
     ];
-    static nonvolTierFields= [
+    static nonvolTierFields = [
         { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
         { "title": "Start Vol", "field": "STRT_VOL", "format": "number", "align": "right" },
         { "title": "End Vol", "field": "END_VOL", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
@@ -35,18 +33,16 @@ export class PTE_Config_Util {
     static densityFields = [
         { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
         { "title": "Band", "field": "DENSITY_BAND", "format": "", "align": "right" },
-        { "title": "Start PB", "field": "STRT_PB", "format": "number", "align": "right" },
-        { "title": "End PB", "field": "END_PB", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
         { "title": "Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
     ];
-   
-    static tenderDropDownAtrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN", "CONSUMPTION_REASON", "MRKT_SEG", "QLTR_BID_GEO", "SETTLEMENT_PARTNER", "EXPIRE_FLG", "SERVER_DEAL_TYPE","EXPIRE_YCS2"];
-    static contractDropDownAtrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN", "CONSUMPTION_REASON", "MRKT_SEG", "SEND_TO_VISTEX", "SERVER_DEAL_TYPE", "SETTLEMENT_PARTNER", "EXPIRE_FLG", "CONSUMPTION_TYPE","EXPIRE_YCS2"];
+
+    static tenderDropDownAtrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN", "CONSUMPTION_REASON", "MRKT_SEG", "QLTR_BID_GEO", "SETTLEMENT_PARTNER", "EXPIRE_FLG", "SERVER_DEAL_TYPE", "EXPIRE_YCS2"];
+    static contractDropDownAtrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN", "CONSUMPTION_REASON", "MRKT_SEG", "SEND_TO_VISTEX", "SERVER_DEAL_TYPE", "SETTLEMENT_PARTNER", "EXPIRE_FLG", "CONSUMPTION_TYPE", "EXPIRE_YCS2"];
     static dimPrdBktFields = ["TRKR_NBR", "ECAP_PRICE", "CAP", "CAP_STRT_DT", "CAP_END_DT", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT"];
     static dropdownFilterColumns = ["TRKR_NBR", "ECAP_PRICE", "CAP", "CAP_STRT_DT", "CAP_END_DT", "EXPIRE_FLG", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT"];
     static tenderDashboardDropColumns = ["CUST_MBR_SID", "PAYOUT_BASED_ON", "PERIOD_PROFILE", "MRKT_SEG", "AR_SETTLEMENT_LVL", "PROGRAM_PAYMENT", "WF_STG_CD", "SERVER_DEAL_TYPE"];
     static tenderDashboardDateColumns = ["START_DT", "END_DT", "CAP_STRT_DT", "CAP_END_DT", "ON_ADD_DT", "REBATE_BILLING_START", "REBATE_BILLING_END", "YCS2_START_DT", "YCS2_END_DT", "BLLG_DT"];
-    static tenderDashboardNumericColumns = ["DC_ID", "ECAP_PRICE", "CAP", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "VOLUME", "CREDIT_VOLUME", "DEBIT_VOLUME", "CREDIT_AMT", "DEBIT_AMT", "TOTAL_DOLLAR_AMOUNT", "CONSUMPTION_LOOKBACK_PERIOD"];
+    static tenderDashboardNumericColumns = ["DC_ID", "ECAP_PRICE", "CAP", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "VOLUME", "PAYABLE_QUANTITY", "CREDIT_VOLUME", "DEBIT_VOLUME", "CREDIT_AMT", "DEBIT_AMT", "TOTAL_DOLLAR_AMOUNT", "CONSUMPTION_LOOKBACK_PERIOD"];
     static opGridTemplate = {
         "groups": {
             "ECAP": [
@@ -229,6 +225,9 @@ export class PTE_Config_Util {
                 },
                 "VOLUME": {
                     "Groups": ["Deal Info", "Payment"]
+                },
+                "PAYABLE_QUANTITY": {
+                    "Groups": ["Payment"]
                 },
                 "ON_ADD_DT": {
                     "Groups": ["Deal Info"]
@@ -1108,6 +1107,9 @@ export class PTE_Config_Util {
                 "VOLUME": {
                     "Groups": ["Deal Info", "Payment"]
                 },
+                "PAYABLE_QUANTITY": {
+                    "Groups": ["Payment"]
+                },
                 "PROD_INCLDS": {
                     "Groups": ["Deal Info"]
                 },
@@ -1639,9 +1641,9 @@ export class PTE_Config_Util {
                 }
             }
         },
-        "requiredForTender": ["VOLUME", "END_CUSTOMER_RETAIL"],
+        "requiredForTender": ["VOLUME", "PAYABLE_QUANTITY", "END_CUSTOMER_RETAIL"],
         "hideForTender": ["DEAL_SOLD_TO_ID", "EXPIRE_YCS2", "DC_PARENT_ID"],
-        "hideForNonTender": ["EXCLUDE_AUTOMATION", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "QUOTE_LN_ID"],
+        "hideForNonTender": ["EXCLUDE_AUTOMATION", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "QUOTE_LN_ID", "PAYABLE_QUANTITY"],
         "hideForStandardDealEditor": ["EXCLUDE_AUTOMATION", "tender_actions", "GEO_APPROVED_BY", "DIV_APPROVED_BY", "CNTRCT_OBJ_SID"],
     };
 }

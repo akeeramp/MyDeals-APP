@@ -18010,8 +18010,8 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
 
         ///<summary>
         /// ID: 954590589
-        /// Modified: 1/31/2022 8:20:03 PM
-        /// Parameters: 11
+        /// Modified: 12/5/2024 2:17:28 PM
+        /// Parameters: 12
         ///</summary>
         public partial class PR_MYDL_UPD_VISTEX_CUST_MAP : SP
         {
@@ -18131,6 +18131,17 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// Mode: IN
             ///</summary>
             [SQLParameterAttribute(10, "ParameterDirection.Input", 0, false)]
+            public Boolean in_dflt_enforce_payable_quantity
+            {
+                set { SetParmeter("in_dflt_enforce_payable_quantity", value); }
+                get { return (Boolean)GetParameter("in_dflt_enforce_payable_quantity"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(11, "ParameterDirection.Input", 0, false)]
             public Boolean in_dflt_dbl_cnsmptn
             {
                 set { SetParmeter("in_dflt_dbl_cnsmptn", value); }
@@ -18141,7 +18152,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// DataType: int
             /// Mode: IN
             ///</summary>
-            [SQLParameterAttribute(11, "ParameterDirection.Input", 0, false)]
+            [SQLParameterAttribute(12, "ParameterDirection.Input", 0, false)]
             public Int32 in_emp_wwid
             {
                 set { SetParmeter("in_emp_wwid", value); }

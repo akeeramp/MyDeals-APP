@@ -309,6 +309,7 @@ namespace Intel.MyDeals.Entities
                     public string ApprovedQuantity { get; set; }
                     public string ApprovedECAPPrice { get; set; }
                     public string AdditionalTandC { get; set; }
+                    public string PayableQuantity { get; set; }
                     public bool ExcludeAutomation { get; set; }
                     public string DealRFQStatus { get; set; }
                     public string DealRFQId { get; set; }

@@ -80,6 +80,18 @@
                     </div>
                 </ng-template>
             </kendo-grid-column>
+            <kendo-grid-column field="DFLT_ENFORCE_PAYABLE_QUANTITY" title="Enforce Payable Quantity" width="180" editor="boolean" filter="boolean" [headerClass]="{'headerClass':true}">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <div class="text-center">
+                        <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.DFLT_ENFORCE_PAYABLE_QUANTITY" disabled></mat-slide-toggle>
+                    </div>
+                </ng-template>
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                    <div class="text-center">
+                        <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.DFLT_ENFORCE_PAYABLE_QUANTITY" [formControl]="formGroup.get('DFLT_ENFORCE_PAYABLE_QUANTITY')"></mat-slide-toggle>
+                    </div>
+                </ng-template>
+            </kendo-grid-column>
             <kendo-grid-column field="DFLT_PERD_PRFL" title="Period Profile" width="190"
                                [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"

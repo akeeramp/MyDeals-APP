@@ -213,22 +213,19 @@ export class dealEditorEditTemplateComponent {
     }
     updateTierAttributes(dataItem: any, field: string, row: number) {
         let dimKey = "10___" + (row);
-        if (field === "END_VOL" || field === "END_REV" || field === "END_PB") {
+        if (field === "END_VOL" || field === "END_REV") {
             if (field === "END_REV" && (dataItem[field]["10___" + row] == 9999999999.99 || dataItem[field][dimKey] == "9999999999.99")) {
                 dataItem[field][dimKey] = 9999999999.99;
-            }
-            else if (field != "END_REV" && (dataItem[field][dimKey] === null || dataItem[field][dimKey] == 999999999 || dataItem[field][dimKey] == "999999999")) {
+            } else if (field != "END_REV" && (dataItem[field][dimKey] === null || dataItem[field][dimKey] == 999999999 || dataItem[field][dimKey] == "999999999")) {
                 dataItem[field][dimKey] = "Unlimited";
             }
             this.saveLinkedDataItem(dataItem, field, dataItem[field][dimKey], dimKey)
-        }
-        else if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE" || field === "INCENTIVE_RATE" || field === "STRT_PB") && dataItem[field][dimKey] === null) {
+        } else if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE" || field === "INCENTIVE_RATE") && dataItem[field][dimKey] === null) {
             dataItem[field][dimKey] = 0;
             this.saveLinkedDataItem(dataItem, field, 0, dimKey)
-        }
-        else
+        } else
             if (field === "DENSITY_RATE") {
-                for (var key in dataItem[field]) {
+                for (let key in dataItem[field]) {
                     if (key.indexOf("___") >= 0 && dataItem[field][key] == null) {
                         dataItem[field][key] = 0;
                         this.saveLinkedDataItem(dataItem, field, 0, key)
@@ -237,19 +234,16 @@ export class dealEditorEditTemplateComponent {
             }
         this.updateDataItem(dataItem, field);
         //if there is a next row/tier
-        let keys = ["STRT_VOL", "STRT_REV", "STRT_PB"];
+        let keys = ["STRT_VOL", "STRT_REV"];
         dimKey = "10___" + (row + 1);
-        each(keys, key => {
+        each(keys, (key) => {
             if (dataItem[key] && !!dataItem[key][dimKey]) {
-                if (field === "END_VOL" || field === "END_PB" || field === "END_REV") {
+                if (field === "END_VOL" || field === "END_REV") {
                     if (dataItem[field]["10___" + row].toString().toLowerCase() === "unlimited" || dataItem[field]["10___" + row] === "9999999999.99") {
                         dataItem[key][dimKey] = 0;
                     } else if (field === "END_VOL") {
                         //if end vol is a number, then set next start vol to that number + 1
                         dataItem[key][dimKey] = parseInt(dataItem[field]["10___" + row]) + 1;
-                    } else if (field === "END_PB") {
-                        //if end pb is a number, then set next start pb to that number + 0.001
-                        dataItem[key][dimKey] = (dataItem[field]["10___" + row] + .001).toFixed(3);
                     } else {// field === "END_REV"
                         //if end rev is a number, then set next start rev to that number + .01 (a penny)
                         dataItem[key][dimKey] = (dataItem[field]["10___" + row] + .01).toFixed(2);
@@ -258,8 +252,7 @@ export class dealEditorEditTemplateComponent {
                 this.saveLinkedDataItem(dataItem, key, dataItem[key][dimKey], dimKey);
                 this.updateDataItem(dataItem, key);
             }
-          
-        })
+        });
     }
     hasVertical(data) {
         TenderDashboardGridUtil.hasVertical(data);

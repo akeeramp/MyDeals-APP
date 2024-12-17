@@ -268,6 +268,25 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title = "Required Field: Payable Quantity for Tender Deals",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnRequired },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("TENDER")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {
+                                AttributeCodes.PAYABLE_QUANTITY
+                            }
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
                     Title="MUST BE LAST RULE: Fix Required if readonly or hidden",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},

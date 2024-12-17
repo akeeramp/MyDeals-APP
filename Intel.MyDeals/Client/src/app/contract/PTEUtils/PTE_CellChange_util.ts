@@ -854,22 +854,6 @@ export class PTE_CellChange_Util {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
                 currentString = row + ',' + val.prop + ',' + tier + ',' + 'no-edit';
                 updateRows.push(currentString.split(','));
-            } else if (val.prop == 'STRT_PB') {
-                if (tier == 1) {
-                    currentString = row + ',' + val.prop + ',' + 0.001 + ',' + 'no-edit';
-                    updateRows.push(currentString.split(','));
-                } else {
-                    currentString = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
-                    updateRows.push(currentString.split(','));
-                }
-            } else if (val.prop == 'END_PB') {
-                if (tier == numoftier) {
-                    currentString = row + ',' + val.prop + ',' + 'Unlimited' + ',' + 'no-edit';
-                    updateRows.push(currentString.split(','));
-                } else {
-                    currentString = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
-                    updateRows.push(currentString.split(','));
-                }
             } else if (val.prop == 'DENSITY_RATE') {
                 currentString = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
                 updateRows.push(currentString.split(','));
@@ -886,7 +870,7 @@ export class PTE_CellChange_Util {
         let startOffset = empRow;
         mergCells = this.hotTable.getSettings().mergeCells;
         each(pricingTableTemplates.columns, (colItem, ind) => {
-            if (colItem.field == 'TIER_NBR' || colItem.field == 'STRT_PB' || colItem.field == 'END_PB') {
+            if (colItem.field == 'TIER_NBR') {
                 for (let i = 1; i <= NUM_OF_TIERS; i++) {
                     mergCells.push({ row: startOffset, col: ind, rowspan: pivotDensity, colspan: 1 });
                     startOffset = startOffset + pivotDensity;
@@ -1325,43 +1309,7 @@ export class PTE_CellChange_Util {
         const OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
         const PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
 
-        if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'DENSITY') {
-            each(items, item => {
-                if (item.prop && item.prop == 'END_PB') {
-                    const val = this.hotTable.getDataAtRowProp(item.row, 'END_PB');
-                    const DCID = this.hotTable.getDataAtRowProp(item.row, 'DC_ID');
-                    const Tier = this.hotTable.getDataAtRowProp(item.row, 'TIER_NBR');
-                    const noofDensity = DCID < 0 ? curPricingTable.NUM_OF_DENSITY : this.hotTable.getDataAtRowProp(item.row, 'NUM_OF_DENSITY');
-                    const startPBInd = item.row + parseInt(noofDensity);
-                    const numOfTiers = (where(PTR, { DC_ID: DCID }).length) / noofDensity;
-                    if (Tier < numOfTiers) {
-                        if (val > 0 || val === 0) {
-                            this.hotTable.setDataAtRowProp(item.row, 'END_PB', val, 'no-edit');
-                            this.hotTable.setDataAtRowProp(startPBInd, 'STRT_PB', val + 0.001, 'no-edit');
-                        } else if (val < 0) {
-                            this.hotTable.setDataAtRowProp(item.row, 'END_PB', val, 'no-edit');
-                            this.hotTable.setDataAtRowProp(startPBInd, 'STRT_PB', (-val) + 0.001, 'no-edit');
-                        } else {
-                            this.hotTable.setDataAtRowProp(item.row, 'END_PB', '', 'no-edit');
-                            this.hotTable.setDataAtRowProp(startPBInd, 'STRT_PB', 0.001, 'no-edit');
-                        }
-                    } else if (Tier == numOfTiers) {
-                        if (val >= 0 || val < 0 || val.toLowerCase() == 'unlimited') {
-                            this.hotTable.setDataAtRowProp(item.row, 'END_PB', val, 'no-edit');
-                        } else {
-                            this.hotTable.setDataAtRowProp(item.row, 'END_PB', 0, 'no-edit');
-                        }
-                    }
-                } else if (item.prop && item.prop == 'STRT_PB') {
-                    const val = this.hotTable.getDataAtRowProp(item.row, 'STRT_PB');
-                    if (val >= 0 || val < 0) {
-                        this.hotTable.setDataAtRowProp(item.row, 'STRT_PB', val, 'no-edit');
-                    } else {
-                        this.hotTable.setDataAtRowProp(item.row, 'STRT_PB', '', 'no-edit');
-                    }
-                }
-            });
-        } else if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'REV_TIER') {
+        if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'REV_TIER') {
             each(items, item => {
                 if (item.prop && item.prop == 'END_REV') {
                     let val = this.hotTable.getDataAtRowProp(item.row, 'END_REV');

@@ -910,7 +910,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             const KIT_DSCNT = filter(changes, item => { return item.prop == 'DSCNT_PER_LN' || item.prop == 'QTY' });
             const KIT_name = where(changes, { prop: 'DEAL_GRP_NM' })
             //Voltier Changes
-            const tierChg = filter(changes, item => { return item.prop == 'END_PB' || item.prop == 'STRT_PB' || item.prop == 'END_REV' || item.prop == 'STRT_REV' || item.prop == 'END_VOL' || item.prop == 'STRT_VOL' });
+            const tierChg = filter(changes, item => { return item.prop == 'END_REV' || item.prop == 'STRT_REV' || item.prop == 'END_VOL' || item.prop == 'STRT_VOL' });
             const rateChg = filter(changes, item => { return item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'VOLUME' || item.prop == 'FRCST_VOL' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT' || item.prop == 'INCENTIVE_RATE' });
             const pgChg = filter(changes, item => { return item.prop == 'PROGRAM_PAYMENT' });
             // settlement level and period profile set to default value on delete

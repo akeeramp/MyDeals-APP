@@ -129,21 +129,17 @@ export class PTE_Helper_Util {
         let endVolIndex;
         let strtVolIndex;
         let rateIndex;
+
         if (objTypeCd === "VOL_TIER" || objTypeCd === "FLEX") {
             endVolIndex = (rootColToLetter["END_VOL"].charCodeAt(0) - intA);
             strtVolIndex = (rootColToLetter["STRT_VOL"].charCodeAt(0) - intA);
             rateIndex = (rootColToLetter["RATE"].charCodeAt(0) - intA);
-        }
-        else if (objTypeCd === "REV_TIER") {
+        } else if (objTypeCd === "REV_TIER") {
             endVolIndex = (rootColToLetter["END_REV"].charCodeAt(0) - intA);
             strtVolIndex = (rootColToLetter["STRT_REV"].charCodeAt(0) - intA);
             rateIndex = (rootColToLetter["INCENTIVE_RATE"].charCodeAt(0) - intA);
         }
-        else {
-            endVolIndex = (rootColToLetter["END_PB"].charCodeAt(0) - intA);
-            strtVolIndex = (rootColToLetter["STRT_PB"].charCodeAt(0) - intA);
-            rateIndex = (rootColToLetter["DENSITY_RATE"].charCodeAt(0) - intA);
-        }
+
         return { endVolIndex, strtVolIndex, rateIndex };
     }
 

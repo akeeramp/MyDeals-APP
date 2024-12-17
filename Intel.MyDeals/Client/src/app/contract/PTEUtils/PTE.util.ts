@@ -37,13 +37,14 @@ export class PTEUtil {
         if (templateColumnFields[item.field].type != null) {
             const ITEM_FIELD = templateColumnFields[item.field].type;
 
-            if (item.field == "END_VOL" || item.field == "END_PB" || item.field === 'STRT_VOL') {
+            if (item.field == "END_VOL" || item.field === 'STRT_VOL') {
                 currentColumnConfig.type = 'numeric';
                 currentColumnConfig.numericFormat = {
                     pattern: '0,0',
                     culture: 'en-US'
                 }
-                if (item.field == "END_VOL" || item.field == "END_PB") {
+
+                if (item.field == "END_VOL") {
                     currentColumnConfig.validator = this.EndValueValidator;
                 }
             } else if (item.field == "VOLUME") {

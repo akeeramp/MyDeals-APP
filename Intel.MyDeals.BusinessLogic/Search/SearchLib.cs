@@ -511,7 +511,6 @@ namespace Intel.MyDeals.BusinessLogic
             bool userDefCntrct = customSearchOptionUserPref?.PRFR_VAL != null && customSearchOptionUserPref.PRFR_VAL.IndexOf("CNTRCT_OBJ_SID") >= 0;
             bool userDefDeal = customSearchOptionUserPref?.PRFR_VAL != null && customSearchOptionUserPref.PRFR_VAL.IndexOf("DEAL_OBJ_SID") >= 0;
 
-
             // Build where clause from start/end date and search text
             string whereClause = BuildWhereClause(data, OpDataElementType.WIP_DEAL, initSearchCriteria, customSearchOption, userDefStart, userDefEnd, userDefCntrct, userDefDeal);
 
@@ -563,7 +562,6 @@ namespace Intel.MyDeals.BusinessLogic
                     prodMap[dc.DcID] = dc.GetDataElements(AttributeCodes.PRODUCT_FILTER).Select(d => (ProductEngName)d.PrevAtrbValue).ToList();
                 }
             }
-
 
             OpDataCollectorFlattenedDictList flatDictList = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, fromTenderDashboard);
             // Convert data to Client-Ready format
@@ -619,6 +617,7 @@ namespace Intel.MyDeals.BusinessLogic
                         item[AttributeCodes.WF_STG_CD] = "no access";
                         item[AttributeCodes.GEO_APPROVED_PRICE] = "no access";
                         item[AttributeCodes.VOLUME] = "no access";
+                        item[AttributeCodes.PAYABLE_QUANTITY] = "no access";
                         item[AttributeCodes.CREDIT_VOLUME] = "no access";
                         item[AttributeCodes.CREDIT_AMT] = "no access";
                         item[AttributeCodes.DEBIT_VOLUME] = "no access";
@@ -642,6 +641,7 @@ namespace Intel.MyDeals.BusinessLogic
                             item[AttributeCodes.WF_STG_CD] = "no access";
                             item[AttributeCodes.GEO_APPROVED_PRICE] = "no access";
                             item[AttributeCodes.VOLUME] = "no access";
+                            item[AttributeCodes.PAYABLE_QUANTITY] = "no access";
                             item[AttributeCodes.CREDIT_VOLUME] = "no access";
                             item[AttributeCodes.CREDIT_AMT] = "no access";
                             item[AttributeCodes.DEBIT_VOLUME] = "no access";
@@ -722,6 +722,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.TOTAL_DOLLAR_AMOUNT.ATRB_SID,
                 Attributes.TRKR_NBR.ATRB_SID,
                 Attributes.VOLUME.ATRB_SID,
+                Attributes.PAYABLE_QUANTITY.ATRB_SID,
                 Attributes.WF_STG_CD.ATRB_SID,
                 Attributes.AUTO_APPROVE_RULE_INFO.ATRB_SID
             },

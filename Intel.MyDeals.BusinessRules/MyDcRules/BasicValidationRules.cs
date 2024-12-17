@@ -75,7 +75,7 @@ namespace Intel.MyDeals.BusinessRules
                             Action = MyDeActions.AddMessage,
                             Args = new object[] { "{0} must be positive" },
                             Where = de => de.AtrbCdIn(new List<string> { 
-                                AttributeCodes.VOLUME 
+                                AttributeCodes.VOLUME,
                             }) && de.HasValue() && de.IsNegativeOrZero()
                         }
                     }
@@ -220,9 +220,7 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Target = new[] {
                                 AttributeCodes.STRT_REV,
-                                AttributeCodes.END_REV,
-                                AttributeCodes.STRT_PB,
-                                AttributeCodes.END_PB
+                                AttributeCodes.END_REV
                             }
                         }
                     }
@@ -553,6 +551,14 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title = "Payable Quantity Validation",
+                    ActionRule = MyDcActions.ValidatePayableQuantity,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate, MyRulesTrigger.OnSave }
+                },
+
+                new MyOpRule
+                {
                     Title="Tier and Forecast Max Volume Checks",
                     ActionRule = MyDcActions.CheckTierAndMaxVolumes,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
@@ -565,9 +571,7 @@ namespace Intel.MyDeals.BusinessRules
                             Target = new[] {
                                 AttributeCodes.FRCST_VOL,
                                 AttributeCodes.STRT_VOL, 
-                                AttributeCodes.END_VOL,
-                                AttributeCodes.STRT_PB,
-                                AttributeCodes.END_PB
+                                AttributeCodes.END_VOL
                             }
                         }
                     }
@@ -1270,7 +1274,6 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.TOTAL_DOLLAR_AMOUNT,
                                 AttributeCodes.END_VOL,
                                 AttributeCodes.END_REV,
-                                AttributeCodes.END_PB,
                                 AttributeCodes.RATE,
                                 AttributeCodes.DENSITY_RATE,
                                 AttributeCodes.TITLE // Product Title at Deal Level

@@ -18,7 +18,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         public Mock<IDataCollectionsDataLib> mockDataCollectionsDataLib = new Mock<IDataCollectionsDataLib>();
         private static readonly object[] _paramList =
         {
-            new object[] {33,"cst","level",false,true,"abc","xyz","geo",456,"id","prtn" }
+            new object[] {33,"cst","level",false,true,false,"abc","xyz","geo",456,"id","prtn" }
         };
 
         [Test,
@@ -55,12 +55,13 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
                 DFLT_AR_SETL_LVL = data[2] ,
                 VISTEX_CUST_FLAG = data[3],
                 DFLT_DOUBLE_CONSUMPTION = data[4],
-                DFLT_PERD_PRFL = data[5],
-                DFLT_TNDR_AR_SETL_LVL = data[6],
-                DFLT_CUST_RPT_GEO = data[7],
-                DFLT_LOOKBACK_PERD = data[8],
-                CUST_CIM_ID = data[9],
-                DFLT_SETTLEMENT_PARTNER = data[10]
+                DFLT_ENFORCE_PAYABLE_QUANTITY = data[5],
+                DFLT_PERD_PRFL = data[6],
+                DFLT_TNDR_AR_SETL_LVL = data[7],
+                DFLT_CUST_RPT_GEO = data[8],
+                DFLT_LOOKBACK_PERD = data[9],
+                CUST_CIM_ID = data[10],
+                DFLT_SETTLEMENT_PARTNER = data[11]
             };
             var crudMode = CrudModes.Update;
             mockVistexCustomerMappingDataLib.Setup(x=>x.SetVistexCustomerMapping(It.IsAny<CrudModes>(),It.IsAny<VistexCustomerMapping>())).Returns(mockData);
@@ -78,6 +79,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
                 DFLT_AR_SETL_LVL = "lvl" ,
                 VISTEX_CUST_FLAG = true,
                 DFLT_DOUBLE_CONSUMPTION = false,
+                DFLT_ENFORCE_PAYABLE_QUANTITY = false,
                 DFLT_PERD_PRFL = "pfrl",
                 DFLT_TNDR_AR_SETL_LVL = "lvl",
                 DFLT_CUST_RPT_GEO = "geo",
@@ -87,7 +89,6 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             } };
             return mockData;
         }
-        
 
     }
 }

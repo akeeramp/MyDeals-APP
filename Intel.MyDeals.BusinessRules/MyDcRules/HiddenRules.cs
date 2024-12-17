@@ -18,7 +18,6 @@ namespace Intel.MyDeals.BusinessRules
 					ActionRule = MyDcActions.SyncHiddenItems,
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate}
 				},
-
                 new MyOpRule
                 {
                     Title="Show Expire YCS2 if frontend deal is active",
@@ -33,7 +32,13 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString() },
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate}
                 },
-
+                new MyOpRule {
+                    Title="Hide Payment Quantity for Non-Tender Deals",
+                    ActionRule = MyDcActions.HidePaymentQuantityFromNonTender,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate  }
+                },
                 //            new MyOpRule
 				//{
 				//	Title="Hidden if NOT Consumption",
@@ -118,5 +123,4 @@ namespace Intel.MyDeals.BusinessRules
 			};
         }
     }
-
 }

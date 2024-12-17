@@ -1,4 +1,4 @@
-﻿import { Component, Input, ViewEncapsulation, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
+﻿import { Component, Input, ViewEncapsulation, ViewChild, Output, EventEmitter, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
 import { each, uniq } from 'underscore';
 import { MomentService, StaticMomentService } from "../../shared/moment/moment.service";
@@ -37,7 +37,7 @@ import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDeal
     styleUrls: ['Client/src/app/contract/dealEditor/dealEditor.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class dealEditorComponent implements OnDestroy{ 
+export class dealEditorComponent implements OnInit, OnDestroy, OnChanges { 
 
     constructor(private pteService: PricingTableEditorService,
                 private contractDetailsSvc: ContractDetailsService,
@@ -260,6 +260,7 @@ export class dealEditorComponent implements OnDestroy{
                 this.groups = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
                 this.groupsdefault = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
             }
+
             // Get template for the selected WIP_DEAL
             this.wipTemplate = this.UItemplate["ModelTemplates"]["WIP_DEAL"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
             if (this.in_Is_Tender_Dashboard) {
@@ -269,25 +270,33 @@ export class dealEditorComponent implements OnDestroy{
                         item.filterable = false;
                         item.sortable = false;
                     }
-                })
+                });
             }
 
             PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD, this.in_Is_Tender_Dashboard);
-            if (this.templates == undefined) this.templates = JSON.parse(JSON.stringify(opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`]));
+            if (this.templates == undefined) {
+                this.templates = JSON.parse(JSON.stringify(opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`]));
+            }
         }
-        if (!this.in_Is_Tender_Dashboard)//if DE not called from Tender Dashboard then we need call the service call to get WIP_DEAL data
+
+        if (!this.in_Is_Tender_Dashboard) {//if DE not called from Tender Dashboard then we need call the service call to get WIP_DEAL data
             await this.getWipDealData();
-        if (this.isInitialLoad)
+        }
+
+        if (this.isInitialLoad) {
             this.customLayout(false);
-        else 
-            if (this.in_Is_Tender_Dashboard) this.getTenderDashboardData(); //To reload the tender dashboard data on reload
+        } else {
+            if (this.in_Is_Tender_Dashboard) {
+                this.getTenderDashboardData(); //To reload the tender dashboard data on reload
+            }
             this.setBusy("", "", "", false);
+        }
     }
 
     //To invoke searched on state changes
     invokeTenderSearch(state) {
-        this.ruleData.take = state.take,
-        this.ruleData.skip = state.skip
+        this.ruleData.take = state.take;
+        this.ruleData.skip = state.skip;
         this.ruleData.filter = state.filter;
         this.ruleData.sort = state.sort;
         this.invokeSearchDatasource.emit(this.ruleData);
@@ -409,28 +418,28 @@ export class dealEditorComponent implements OnDestroy{
         this.isLoading = true;
         this.gridData.data = [];
         e.preventDefault();
+
         if (e.title != undefined) {
             this.searchFilter = "";
             this.clearSearch();
             this.selectedTab = e.title;
-            var group = this.groups.filter(x => x.name == this.selectedTab);
-            if (group[0].isTabHidden) {
-                var tabs = this.groups.filter(x => x.isTabHidden === false);
-                this.selectedTab = tabs[0].name;
+            const GROUP = this.groups.filter((x) => x.name == this.selectedTab);
+            if (GROUP[0].isTabHidden) {
+                const TABS = this.groups.filter((x) => x.isTabHidden === false);
+                this.selectedTab = TABS[0].name;
+                this.filterColumnbyGroup(this.selectedTab, this.fieldCols);
+            } else {
                 this.filterColumnbyGroup(this.selectedTab, this.fieldCols);
             }
-            else
-                this.filterColumnbyGroup(this.selectedTab, this.fieldCols);
-
             this.columns = this.columns.concat(this.pinnedColumns);
             this.columns = uniq(this.columns);
-
         } else {
             this.refreshGrid();
         }
+
         setTimeout(() => {
             if (this.in_Is_Tender_Dashboard) {
-                let state: State = {
+                const STATE: State = {
                     skip: 0,
                     take: this.state.take,
                     group: [],
@@ -439,13 +448,14 @@ export class dealEditorComponent implements OnDestroy{
                         filters: [],
                     },
                 };
-                this.gridData = process(this.gridResult, state);
+                this.gridData = process(this.gridResult, STATE);
                 this.gridData.total = this.in_Search_Count;
-            } else this.gridData = process(this.gridResult, this.state);
+            } else {
+                this.gridData = process(this.gridResult, this.state);
+            }
+
             this.isLoading = false;
-        },0)
-        
-        
+        }, 0);
     }
 
     refreshGrid() {
@@ -494,47 +504,44 @@ export class dealEditorComponent implements OnDestroy{
 
     filterColumnbyGroup(groupName: string, fieldChecked?) {
         this.columns = [];
-        if (this.groups.filter(x => x.name == groupName).length > 0) {
+        if (this.groups.filter((x) => x.name == groupName).length > 0) {
             each(this.wipTemplate.columns, column => {
                 if (groupName.toLowerCase() == "all" || groupName.toLowerCase() == this.allTabRename.toLowerCase()) {
                     if (this.templates[column.field] === undefined && (column.width === undefined || column.width == '0')) {
                         column.width = 1;
                     }
                     this.columns.push(column);
-                }
-                else {
+                } else {
                     if (this.templates[column.field] != undefined && this.templates[column.field].Groups.includes(groupName)) {
-                        if(column.field=="SEND_TO_VISTEX")
-                        {
-                            if(!column.hidden && !this.isTenderContract)
-                            {
+                        if (column.field == "SEND_TO_VISTEX") {
+                            if (!column.hidden && !this.isTenderContract) {
                                 this.columns.push(column);
-                            }      
+                            }
+                        } else if (column.field == 'PAYABLE_QUANTITY') {
+                            if (!column.hidden && this.isTenderContract) {  // Restrict new 'PAYABLE_QUANTITY' to Tender only
+                                this.columns.push(column);
+                            }
+                        } else {
+                            this.columns.push(column);
                         }
-                        else
-                        this.columns.push(column);
                     }
                 }
-            })
+            });
 
             if (fieldChecked && groupName.toLowerCase() == "all") {
                 if (fieldChecked.length > 0) {
-                    let columnNew = this.columns.filter(column => {
-                        return fieldChecked.indexOf(column.field) === -1
-                    });
-                    this.filterColumnNew(groupName, columnNew);
+                    const COLUMN_NEW = this.columns.filter((column) => fieldChecked.indexOf(column.field) === -1);
+                    this.filterColumnNew(groupName, COLUMN_NEW);
                 }
             }
-            
-            if( groupName.toLowerCase() == "all"){
-                this.columns.filter((column,i) => {
-                    if(column.field=="SEND_TO_VISTEX")
-                        {
-                            if(this.isTenderContract)
-                            {
-                                this.columns.splice(i,1);
-                            }      
+
+            if (groupName.toLowerCase() == "all") {
+                this.columns.filter((column, i) => {
+                    if (column.field == "SEND_TO_VISTEX") {
+                        if (this.isTenderContract) {
+                            this.columns.splice(i, 1);
                         }
+                    }
                 });
             }
 
@@ -698,9 +705,7 @@ export class dealEditorComponent implements OnDestroy{
         });
 
         dialogRef.afterClosed().subscribe((returnVal) => {
-
-                this.loggerService.success("Please wait for the result to be updated...");
-
+            this.loggerService.success("Please wait for the result to be updated...");
 
             if (!isMeetComp || (isMeetComp && returnVal && returnVal.length > 0)) {
                 this.refreshGridData.emit({ wipIds: [dataItem['DC_ID']] });
@@ -1078,13 +1083,14 @@ export class dealEditorComponent implements OnDestroy{
     }
 
     isColumnDisabled(field) {
-        if (this.columns.length == 1 && this.columns.filter(x => x.field == field).length > 0) {
+        if (this.columns.length == 1 && this.columns.filter((x) => x.field == field).length > 0) {
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
     onColumnChange(val) {
-        
         var col = this.wipTemplate.columns.filter(x => x.field == val.field);
         if (col == undefined || col == null || col.length == 0) return;
         var colGrp = this.templates[val.field];

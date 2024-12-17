@@ -614,7 +614,6 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "End Vol *"
             });
 
-
             items.Add(new UiTemplateContainerItem
             {
                 Id = 56,
@@ -1379,6 +1378,21 @@ namespace Intel.MyDeals.DataLibrary
 
 
             #region WIP DEAL
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 12,
+                AtrbCd = AttributeCodes.PAYABLE_QUANTITY,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                Width = 100,
+                Format = "{0:d}",
+                IsFilterable = true,
+                IsSortable = true,
+                UiType = "IntegerTextBox",
+                Template = "#=gridUtils.uiControlWrapper(data, 'PAYABLE_QUANTITY', 'number')#",
+                Label = "Payable Quantity"
+            });
 
             items.Add(new UiTemplateContainerItem  // Fake atrb since it is in all attribs headers, for display reasons only
             {

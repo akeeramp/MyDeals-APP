@@ -93,10 +93,6 @@ export class DE_Common_Util {
                     for (var i = 0; i < dataItem["NUM_OF_DENSITY"]; i++) {
                         dataItem["DENSITY_RATE"]["8___" + (i + 1) + "____" + key] = parseFloat(dataItem["DENSITY_RATE"]["8___" + (i + 1) + "____" + key] || 0);
                     }
-                    if (!Number.isNaN(Number(dataItem["STRT_PB"][key])))
-                        dataItem["STRT_PB"][key] = parseFloat(dataItem["STRT_PB"][key] || 0);
-                    if (!Number.isNaN(Number(dataItem["END_PB"][key])))
-                        dataItem["END_PB"][key] = parseFloat(dataItem["END_PB"][key] || 0);
                 }
             }
         }
@@ -132,17 +128,17 @@ export class DE_Common_Util {
         if (field == "VOLUME" || field == "FRCST_VOL" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "REBATE_OA_MAX_VOL" ||
             field == "USER_MAX_RPU" || field == "USER_AVG_RPU" || field == "TOTAL_DOLLAR_AMOUNT" || field == "ADJ_ECAP_UNIT"
             || field == "MAX_PAYOUT" || field == "REBATE_OA_MAX_AMT") {
-            if (dataItem[field] != undefined && dataItem[field] != null && dataItem[field] != "" && !Number.isNaN(Number(dataItem[field])))
+            if (dataItem[field] != undefined && dataItem[field] != null && dataItem[field] != "" && !Number.isNaN(Number(dataItem[field]))) {
                 if (field == "VOLUME") {
                     dataItem[field] = Math.round(dataItem[field]).toString();
-                }
-                else {
+                } else {
                     dataItem[field] = dataItem[field].toString();
                 }
-            else if (dataItem[field] === 0)
+            } else if (dataItem[field] === 0) {
                 dataItem[field] = "0";
-            else
+            } else {
                 dataItem[field] = "";
+            }
         }
         if (field == "TIER_NBR") {
             var tiers = dataItem.TIER_NBR;
@@ -169,10 +165,6 @@ export class DE_Common_Util {
                     for (var i = 0; i < dataItem["NUM_OF_DENSITY"]; i++) {
                         dataItem["DENSITY_RATE"]["8___" + (i + 1) + "____" + key] = dataItem["DENSITY_RATE"]["8___" + (i + 1) + "____" + key].toString();
                     }
-                    if (!Number.isNaN(Number(dataItem["STRT_PB"][key])))
-                        dataItem["STRT_PB"][key] = dataItem["STRT_PB"][key].toString();
-                    if (!Number.isNaN(Number(dataItem["END_PB"][key])))
-                        dataItem["END_PB"][key] = dataItem["END_PB"][key].toString();
                 }
             }
         }

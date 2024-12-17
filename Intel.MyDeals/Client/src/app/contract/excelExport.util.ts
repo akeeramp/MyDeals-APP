@@ -73,33 +73,30 @@ export class ExcelExport {
 
         return tmplt;
     }
+
     static exportControlScheduleWrapperDensity(passedData) {
-        var tmplt = 'Tier,Band, Start PB, End PB, Rate\n';
-        var fields = [
+        let tmplt = 'Tier,Band, Start PB, End PB, Rate\n';
+        const fields = [
             { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
             { "title": "Band", "field": "DENSITY_BAND", "format": "", "align": "right" },
-            { "title": "Start PB", "field": "STRT_PB", "format": "fixedpoint", "align": "right" },
-            { "title": "End PB", "field": "END_PB", "format": "fixedpoint", "align": "right" },
             { "title": "Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
         ];
 
-        var numTiers = 0;
-        var tiers = passedData.TIER_NBR;
-        for (var key in tiers) {
+        let numTiers = 0;
+        let tiers = passedData.TIER_NBR;
+        for (let key in tiers) {
             if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
                 numTiers++;
                 for (let b = 1; b <= parseInt(passedData.NUM_OF_DENSITY); b++) {
-                    var vals = [];
-                    for (var f = 0; f < fields.length; f++) {
-                        var dim = (fields[f].field == "DENSITY_BAND") ? "8___" + numTiers : "10___" + numTiers;
+                    let vals = [];
+                    for (let f = 0; f < fields.length; f++) {
+                        const dim = (fields[f].field == "DENSITY_BAND") ? "8___" + numTiers : "10___" + numTiers;
                         if (fields[f].field == "DENSITY_BAND") {
                             vals.push(ExcelExport.getFormattedData(passedData[fields[f].field]["8___" + b], fields[f].format));
-                        }
-                        else if (fields[f].field == "DENSITY_RATE") {
+                        } else if (fields[f].field == "DENSITY_RATE") {
                             vals.push(ExcelExport.getFormattedData(passedData[fields[f].field]["8___" + b + "____" + dim], fields[f].format));
-                        }
-                        else {
-                            var val = passedData[fields[f].field][dim];
+                        } else {
+                            let val = passedData[fields[f].field][dim];
                             if (val !== "Unlimited") {
                                 val = ExcelExport.getFormattedData(val, fields[f].format);
                             }
@@ -113,6 +110,7 @@ export class ExcelExport {
 
         return tmplt;
     }
+
     static exportControlScheduleWrapperRevTier(passedData) {
         var tmplt = 'Tier, Start Rev, End Rev, Incentive Rate (%)\n';
         var fields = [

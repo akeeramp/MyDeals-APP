@@ -8,8 +8,8 @@ import { Cust_Map } from "../CustomerVendors/admin.customerVendors.model";
 @Injectable({
     providedIn: 'root'
 })
-
 export class vistexCustomerMappingService {
+
     public readonly apiBaseUrl = "api/VistexCustomerMappings/";
     public readonly customerUrl = "api/Customers/";
     public readonly dropdownUrl = "api/Dropdown/";
@@ -31,13 +31,11 @@ export class vistexCustomerMappingService {
     public getDropdown(strDropDownType: string): Observable<UiDropdownResponseItem[]> {
         const apiUrl: string = this.dropdownUrl + strDropDownType;
         return this.httpClient.get<UiDropdownResponseItem[]>(apiUrl);
-
     }
 
     public getVendorDropDown(getVendorDropDowntypeUrl: string): Observable<Cust_Map[]> {
         const apiUrl: string = this.customerVendorApiBaseUrl + getVendorDropDowntypeUrl;
         return this.httpClient.get<Cust_Map[]>(apiUrl);
     }
-
 
 }

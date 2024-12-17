@@ -26,6 +26,7 @@ export interface Cust_Dropdown_Map {
 	DFLT_AR_SETL_LVL: string;
 	DFLT_CUST_RPT_GEO: string;
 	DFLT_DOUBLE_CONSUMPTION: boolean;
+	DFLT_ENFORCE_PAYABLE_QUANTITY: boolean;
 	DFLT_LOOKBACK_PERD: number;
 	DFLT_PERD_PRFL: string;
 	DFLT_SETTLEMENT_PARTNER: string;

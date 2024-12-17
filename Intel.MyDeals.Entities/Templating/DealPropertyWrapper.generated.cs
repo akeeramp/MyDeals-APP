@@ -1,7 +1,6 @@
-﻿
-/*
-File Updated: 2024-11-22 9:32:10 AM
-On: KBHARA2X-MOBL
+﻿/*
+File Updated: 12/2/2024 5:44:35 PM
+On: SOC-G3NTQW3
 From: sql3877-fm1-in.amr.corp.intel.com,3181, MYDEALS
 */
 
@@ -1498,7 +1497,23 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute DFLT_LOOKBACK_PERD = new MyDealsAttribute()
+        public static MyDealsAttribute DFLT_ENFORCE_PAYABLE_QUANTITY = new MyDealsAttribute()
+        {
+            ATRB_COL_NM = "DFLT_ENFORCE_PAYABLE_QUANTITY",
+            ATRB_DESC = "Enforce Entry of Payable Quantity for Customer",
+            ATRB_LBL = "Enforce Entry of Payable Quantity",
+            ATRB_MAX_LEN = 100,
+            ATRB_SID = 2032,
+            DATA_TYPE_CD = "INT",
+            DIM_CD = "CUST",
+            DIM_SID = 2,
+            DOT_NET_DATA_TYPE = "System.Int32",
+            FRMT_MSK = "{0:d}",
+            MJR_MNR_CHG = "na",
+            TGT_COL_TYPE = "INT",
+            UI_TYPE_CD = default(System.String)
+        };
+        public static MyDealsAttribute DFLT_LOOKBACK_PERD = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DFLT_LOOKBACK_PERD",
 			ATRB_DESC = "Vistex Customer Default Lookback Period",
@@ -1817,22 +1832,6 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
-		};
-		public static MyDealsAttribute END_PB = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "END_PB",
-			ATRB_DESC = "End Petabyte",
-			ATRB_LBL = "End PB",
-			ATRB_MAX_LEN = 0,
-			ATRB_SID = 13,
-			DATA_TYPE_CD = "VARCHAR",
-			DIM_CD = "DEAL",
-			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.String",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute END_REV = new MyDealsAttribute()
 		{
@@ -3642,7 +3641,23 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
-		public static MyDealsAttribute PAYOUT_BASED_ON = new MyDealsAttribute()
+        public static MyDealsAttribute PAYABLE_QUANTITY = new MyDealsAttribute()
+        {
+            ATRB_COL_NM = "PAYABLE_QUANTITY",
+            ATRB_DESC = "Payable Quantity",
+            ATRB_LBL = "Payable Quantity",
+            ATRB_MAX_LEN = 0,
+            ATRB_SID = 12,
+            DATA_TYPE_CD = "INT",
+            DIM_CD = "DEAL",
+            DIM_SID = 3,
+            DOT_NET_DATA_TYPE = "System.Int32",
+            FRMT_MSK = "{0:d}",
+            MJR_MNR_CHG = "MAJOR_FASTTRACK",
+            TGT_COL_TYPE = "INT",
+            UI_TYPE_CD = "TextBox"
+        };
+        public static MyDealsAttribute PAYOUT_BASED_ON = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PAYOUT_BASED_ON",
 			ATRB_DESC = "Payout based on",
@@ -4665,22 +4680,6 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MAJOR_DECREASE",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
-		};
-		public static MyDealsAttribute STRT_PB = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "STRT_PB",
-			ATRB_DESC = "Start Petabyte",
-			ATRB_LBL = "Start PB",
-			ATRB_MAX_LEN = 0,
-			ATRB_SID = 12,
-			DATA_TYPE_CD = "MONEY",
-			DIM_CD = "DEAL",
-			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Double",
-			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "MAJOR",
-			TGT_COL_TYPE = "MONEY",
-			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute STRT_REV = new MyDealsAttribute()
 		{

@@ -1,22 +1,24 @@
-﻿import { Component, Input, OnDestroy } from "@angular/core";
+﻿import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
+import { process, State } from "@progress/kendo-data-query";
+import { each, sortBy } from 'underscore';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+
 import { logger } from "../../shared/logger/logger"; 
 import { dealPopupService } from "./dealPopup.service";
 import { colorDictionary, opGridTemplate } from "../angular.constants";
 import { AppEvent, broadCastService } from "./broadcast.service";
 import { MomentService } from "../../shared/moment/moment.service";
 import { DE_Load_Util } from "../../contract/DEUtils/DE_Load_util";
-import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
-import { process, State } from "@progress/kendo-data-query";
 import { lnavService } from "../../contract/lnav/lnav.service"; 
-import { each, sortBy } from 'underscore';
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "deal-popup",
     templateUrl: "Client/src/app/core/dealPopup/dealPopup.component.html", 
 })
-export class dealPopupComponent implements OnDestroy {
+export class dealPopupComponent implements OnInit, OnDestroy {
+
     @Input() dealId: any;
     @Input() initLeft: any;
     @Input() initTop: any;
@@ -58,7 +60,7 @@ export class dealPopupComponent implements OnDestroy {
     private schedulegridData: GridDataResult;
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();   
-    propertiesInclude = ["RATE", "DENSITY_RATE", "STRT_VOL", "END_VOL", "STRT_REV", "END_REV", "STRT_PB", "END_PB"];
+    propertiesInclude = ["RATE", "DENSITY_RATE", "STRT_VOL", "END_VOL", "STRT_REV", "END_REV"];
     propertiesExclude = ["PASSED_VALIDATION", "DC_PARENT_ID", "TIER_NBR"];
 
     private state: State = {
@@ -146,13 +148,10 @@ export class dealPopupComponent implements OnDestroy {
 
             if (this.data.OBJ_SET_TYPE_CD === "VOL_TIER" || this.data.OBJ_SET_TYPE_CD === "FLEX" || this.data.OBJ_SET_TYPE_CD === "REV_TIER" || this.data.OBJ_SET_TYPE_CD === "DENSITY") {
                 numTiers = parseInt(this.data.NUM_OF_TIERS);
-                  rateKey = "RATE"; endKey = "END_VOL"; strtKey = "STRT_VOL"; addedSymbol = "$"; fixedPoints = 2; // Defaults for VOL_TIER/FLEX
+                rateKey = "RATE"; endKey = "END_VOL"; strtKey = "STRT_VOL"; addedSymbol = "$"; fixedPoints = 2; // Defaults for VOL_TIER/FLEX
 
                 if (this.data.OBJ_SET_TYPE_CD === "REV_TIER") { // Defaults for REV_TIER
                     rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV"; addedSymbol = ""; fixedPoints = 2;
-                }
-                if (this.data.OBJ_SET_TYPE_CD === "DENSITY") { // Defaults for DENSITY
-                    rateKey = "DENSITY_RATE"; endKey = "END_PB"; strtKey = "STRT_PB"; addedSymbol = ""; fixedPoints = 3;
                 }
 
                 for (t = 1; t <= numTiers; t++) {
@@ -160,8 +159,8 @@ export class dealPopupComponent implements OnDestroy {
                     let rate;
                     if (r == undefined) {
                         rate = '';
-                    }else
-                     rate = Number.isNaN(r) ? "" : "$" + parseFloat(r).toFixed(fixedPoints);
+                    } else
+                        rate = Number.isNaN(r) ? "" : "$" + parseFloat(r).toFixed(fixedPoints);
                     this.scheduleData.push({
                         STRT_VOL: this.data[strtKey]["10___" + t],
                         END_VOL: this.data[endKey]["10___" + t],
@@ -169,7 +168,6 @@ export class dealPopupComponent implements OnDestroy {
                         TIER_NBR: t
                     });
                 }
-
             } else if (this.data.OBJ_SET_TYPE_CD === "KIT") {
                 const prd = this.data.PRODUCT_NAME;
                 prd["20_____1"] = ""; // add KIT
@@ -197,9 +195,7 @@ export class dealPopupComponent implements OnDestroy {
             } 
 
             for (const k in this.data) {
-                
                 if (this.data.hasOwnProperty(k)) {
-                   
                     if (typeof this.data[k] !== 'function') {
                         if (this.propertiesInclude.indexOf(k) >= 0 || (this.groupColumns[k] !== undefined && this.propertiesExclude.indexOf(k) < 0))
                         {
@@ -220,11 +216,8 @@ export class dealPopupComponent implements OnDestroy {
                                 value: atrbVal,
                                 group: this.groupColumns[k] === undefined ? "All" : this.groupColumns[k].Groups[0]
                             });
-                           
-
                         }
                     }
-
                 }
             }
             this.openSearch();
@@ -249,7 +242,7 @@ export class dealPopupComponent implements OnDestroy {
         this.brdcstservice.dispatch(new AppEvent(dealdata.key, dealdata));
     }
 
-      refresh  () {
+    refresh() {
         const sel = this.sel;
         this.isOpen = false;
         this.openWithData = false;
@@ -270,12 +263,9 @@ export class dealPopupComponent implements OnDestroy {
         this.pieData = [];
         this.scheduleData = [];
         this.loadPopupdata(sel);
-
     }
 
-
     uiPropertyWrapper(data) {
-
         let dimkey: any;
         if (typeof data.value === 'object') {
             if (data.value === undefined || data.value === null) return "";
@@ -285,43 +275,41 @@ export class dealPopupComponent implements OnDestroy {
                 dimkey = sortedKeys[index];
                 if (data.value.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
                     const val = data.value[dimkey];
-                    tmplt +=  this.getDimLabel(dimkey) + ":" + val;
+                    tmplt += this.getDimLabel(dimkey) + ":" + val;
                 }
             }
             return tmplt;
-        } else return data.value;
+        } else {
+            return data.value;
+        }
     }  
-       
-      
+             
     focusMenu(event, id) {
-         this.sel = id;
+        this.sel = id;
         if (this.sel === 6) this.openTimeline();
         if (this.sel === 4) this.openProducts();
-         
         if (this.sel === 3) this.openSearch();
-
-        if (this.sel === 2) { 
-               
-                // NEED TO CHANGE THIS FOR REV_TIER/DENSITY
-                if ((this.data.OBJ_SET_TYPE_CD === "VOL_TIER" || this.data.OBJ_SET_TYPE_CD === "FLEX"
-                    || this.data.OBJ_SET_TYPE_CD === "REV_TIER" || this.data.OBJ_SET_TYPE_CD === "DENSITY"))
-                 this.showSedulecolums = true;
-            if ((this.data.OBJ_SET_TYPE_CD === "KIT"))
+        if (this.sel === 2) {
+            // NEED TO CHANGE THIS FOR REV_TIER/DENSITY
+            if ((this.data.OBJ_SET_TYPE_CD === "VOL_TIER" || this.data.OBJ_SET_TYPE_CD === "FLEX"
+                || this.data.OBJ_SET_TYPE_CD === "REV_TIER" || this.data.OBJ_SET_TYPE_CD === "DENSITY")) {
+                this.showSedulecolums = true;
+            } if ((this.data.OBJ_SET_TYPE_CD === "KIT")) {
                 this.showProductscolums = true;
-                    
+            }
+
             this.openSchedulegrid();
         }
 
         this.showPanel = true;
     }
 
-    
-    openTimeline = function () { 
+    openTimeline = function () {
         const pstdata = {
             objSid: this.dealId,
-          objTypeSid: 5,
-          objTypeIds: [5]
-        }
+            objTypeSid: 5,
+            objTypeIds: [5]
+        };
         this.dealPopupsvc.getTimelineDetails(pstdata).pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
             this.timelineLoaded = true;
             for (let d = 0; d < result.length; d++) {
@@ -333,27 +321,25 @@ export class dealPopupComponent implements OnDestroy {
         }, (error) => {
             this.loggerSvc.error('error in loading template details', error);
         });
-    }
+    };
 
     datateplateStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.timelinegridData = process(this.timelinegridResult, this.state);
     }
-     
 
     openProducts() {
-            const prdIds = [];
-            const prods = this.data.PRODUCT_FILTER;
-            each(prods, function (value, key) {
-                prdIds.push(value);
-            });
+        const prdIds = [];
+        const prods = this.data.PRODUCT_FILTER;
+        each(prods, function (value, key) {
+            prdIds.push(value);
+        });
         const productdata = {
             PrdIds: prdIds
-        }
-        
+        };
+
         this.dealPopupsvc.getProductsByIds(productdata).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
             this.productsLoaded = true;
-            
             this.productsgridData = process(result, this.state);
         }, (error) => {
             this.loggersvc.error('error in loading product details', error);
@@ -373,7 +359,6 @@ export class dealPopupComponent implements OnDestroy {
         this.searchgridData = process(this.properties, this.searchstate);
     }
 
-
     public onFilter(event): void {
         const inputValue = event.target.value;
         if (inputValue != "") {
@@ -383,7 +368,6 @@ export class dealPopupComponent implements OnDestroy {
             this.searchgridData = process(this.properties, this.searchstate);
         }
     }
-
 
     openSchedulegrid() {
         this.schedulegridData = process(this.scheduleData, this.schedulestate); 
@@ -424,8 +408,7 @@ export class dealPopupComponent implements OnDestroy {
         if (data.length > 0) {
             this.group = [];
             this.searchgridData = process(this.properties, this.newsearchstate);
-        }
-        else {
+        } else {
             this.group = [{ field: "group" }];
             this.searchgridData = process(this.properties, this.searchstate);
         }
@@ -435,8 +418,7 @@ export class dealPopupComponent implements OnDestroy {
         if (toggleserachgrid) {
             this.searchHeight = 140;
             this.toggleserachgrid = false;
-        }
-        else {
+        } else {
             this.searchHeight = 298;
             this.toggleserachgrid = true;
         }
@@ -459,25 +441,23 @@ export class dealPopupComponent implements OnDestroy {
     }
      
     getColor(k: string, c: string, colorDictionary): string {
-      
-            const status = c.toLowerCase();
-            switch (status) {
-                case "not run yet":
-                    return "#c7c7c7";
-                case "overridden":
-                    return "#0071c5";
-                case "pass":
-                    return "#c4d600";
-                case "incomplete":
-                    return "#F3D54E";
-                case "fail":
-                    return "#FF0000";
-                case "na":
-                    return "#c7c7c7";
-                default:
-                    return "#aaaaaa";
-            }
-        
+        const status = c.toLowerCase();
+        switch (status) {
+            case "not run yet":
+                return "#c7c7c7";
+            case "overridden":
+                return "#0071c5";
+            case "pass":
+                return "#c4d600";
+            case "incomplete":
+                return "#F3D54E";
+            case "fail":
+                return "#FF0000";
+            case "na":
+                return "#c7c7c7";
+            default:
+                return "#aaaaaa";
+        }
     }
 
     getTrackerTitle() {
@@ -485,10 +465,11 @@ export class dealPopupComponent implements OnDestroy {
             ? "Has a tracker number"
             : "No Tracker Yet";
     }
+
     getStageBgColorStyle(bgstyle) {
         return { backgroundColor: this.getColorStage(bgstyle) };
     }
-    
+
     getColorStage(d) {
         if (!d) d = "Draft";
         return this.getColorst('stage', d);
@@ -501,12 +482,11 @@ export class dealPopupComponent implements OnDestroy {
         return "#aaaaaa";
     }
 
-
     intializedata() {
         return {
             DC_ID: 0,
-            NOTES:'',
-            }
+            NOTES: '',
+        };
     }
 
     getDimLabel(key) {
@@ -537,7 +517,6 @@ export class dealPopupComponent implements OnDestroy {
         return dim;
     }
 
-
     downloadQuoteLetter() {
         const customerSid = this.data.CUST_MBR_SID;
         const objSid = this.data.DC_ID;
@@ -550,9 +529,11 @@ export class dealPopupComponent implements OnDestroy {
         this.loadPopupdata(this.sel);
        this. QuickDealOpenPanel();
     }
+
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
     }
+
 }

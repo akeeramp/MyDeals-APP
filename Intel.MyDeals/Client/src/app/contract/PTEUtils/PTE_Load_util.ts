@@ -282,7 +282,7 @@ export class PTE_Load_Util {
                 if (!colItem.isDimKey && !colItem.hidden && NUM_OF_TIERS != 1) {
                     mergCells.push({ row: rowIndex, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
                 }
-                if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && (colItem.field == 'TIER_NBR' || colItem.field == 'STRT_PB' || colItem.field == 'END_PB')) {
+                if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && colItem.field == 'TIER_NBR') {
                     const pivotDensity = parseInt(curPTR.NUM_OF_DENSITY);
                     const densityTiers = NUM_OF_TIERS / pivotDensity;
                     for (let i = 1; i <= densityTiers; i++) {
@@ -319,8 +319,7 @@ export class PTE_Load_Util {
                     let strtKey;
                     if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
                         endKey = "END_VOL"; strtKey = "STRT_VOL";
-                    }
-                    else if (curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER") {
+                    } else if (curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER") {
                         endKey = "END_REV"; strtKey = "STRT_REV";
                     }
 
@@ -336,14 +335,12 @@ export class PTE_Load_Util {
                             if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
                                 lData[endKey] = parseInt(lData[endKey] || 0);
                             }
-                        }
-                        else {
+                        } else {
                             // HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
                             if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
                                 lData[endKey] = parseFloat(lData[endKey] || 0);
                             }
                         }
-
                     }
                     // Disable all Start vols except the first if there is no tracker, else disable them all
                     if (!!data[d]._behaviors && ((t === 1 && data[d].HAS_TRACKER === "1") || t !== 1)) {
@@ -361,8 +358,7 @@ export class PTE_Load_Util {
                             lData._behaviors.isReadOnly[endKey] = true;
                         }
                     }
-                }
-                else if (dealType === "DENSITY") {
+                } else if (dealType === "DENSITY") {
                     let densityBands = parseInt(data[d]["NUM_OF_DENSITY"]);
                     let densityNumTiers = numTiers / densityBands;
 
@@ -374,8 +370,6 @@ export class PTE_Load_Util {
                     if (dt > densityNumTiers) {
                         dt = 1;
                     }
-                    // Set attribute Keys for adding dimensions
-                    let endKey = "END_PB", strtKey = "STRT_PB";
 
                     // Density specific cols with tiers
                     for (let i = 0; i < densityTierAtrbs.length; i++) {
@@ -385,24 +379,12 @@ export class PTE_Load_Util {
                             if (tieredItem != "DENSITY_BAND") {
                                 lData[tieredItem] = lData[tieredItem + dimKey + curTier];
                                 PTE_Common_Util.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, curTier);
-                            }
-                            else {
+                            } else {
                                 lData[tieredItem] = lData[tieredItem + dimKey + db];
                                 PTE_Common_Util.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, db);
 
                             }
-
-                            if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
-                                lData[endKey] = parseFloat(lData[endKey].replace(/[$,]/g, '') || 0);
-                            }
-
-                            if (tieredItem === strtKey && lData[strtKey] !== undefined) {
-                                //lData[strtKey] = thousands_separators((parseFloat(lData[strtKey].replace(/[$,]/g, ''))).toFixed(3));
-                                lData[strtKey] = parseFloat(lData[strtKey].replace(/[$,]/g, '') || 0);
-                            }
-
-                        }
-                        else {
+                        } else {
                             lData[tieredItem] = lData[tieredItem + "_____8___" + db + "____10___" + curTier];
                             PTE_Common_Util.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, curTier);
                         }
@@ -413,7 +395,6 @@ export class PTE_Load_Util {
                         if (!data[d]._behaviors.isReadOnly) {
                             data[d]._behaviors.isReadOnly = {};
                         }
-                        lData._behaviors.isReadOnly[strtKey] = true;
                     }
                     // Disable all End volumes except for the last tier if there is a tracker
                     if (!!data[d]._behaviors && data[d].HAS_TRACKER === "1") {
@@ -422,20 +403,16 @@ export class PTE_Load_Util {
                                 if (!data[d]._behaviors.isReadOnly) {
                                     data[d]._behaviors.isReadOnly = {};
                                 }
-                                lData._behaviors.isReadOnly[endKey] = true;
                             }
-                        }
-                        else {
+                        } else {
                             if (t != numTiers) {
                                 if (!data[d]._behaviors.isReadOnly) {
                                     data[d]._behaviors.isReadOnly = {};
                                 }
-                                lData._behaviors.isReadOnly[endKey] = true;
                             }
                         }
                     }
-                }
-                else if (dealType === "KIT") {
+                } else if (dealType === "KIT") {
                     // KIT specific cols with 'tiers'
                     for (let i = 0; i < kitDimAtrbs.length; i++) {
                         let tieredItem = kitDimAtrbs[i];
@@ -696,7 +673,7 @@ export class PTE_Load_Util {
                 if (findWhere(columnConfig, { data: prop }).readOnly) {
                     cellProperties['readOnly'] = true;
                 }
-                if ((prop == 'STRT_VOL' || prop == 'STRT_REV' || prop == 'STRT_PB') && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
+                if ((prop == 'STRT_VOL' || prop == 'STRT_REV') && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
                     cellProperties['readOnly'] = true;
                 }
 

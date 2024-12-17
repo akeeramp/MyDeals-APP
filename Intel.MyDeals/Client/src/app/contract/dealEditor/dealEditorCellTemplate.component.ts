@@ -30,7 +30,7 @@ export class dealEditorCellTemplateComponent {
         popoverConfig.triggers = 'mouseenter:mouseleave';   // Disabled to use default click behaviour to prevent multiple popover windows from appearing
         popoverConfig.openDelay = 500;   // milliseconds
         popoverConfig.closeDelay = 500; // milliseconds
-        }
+    }
 
     @Input() in_Field_Name: string = '';
     @Input() in_Template: string = '';
@@ -88,22 +88,25 @@ export class dealEditorCellTemplateComponent {
 
     uiControlWrapper(passedData, field) {
         let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
-        if (field == "VOLUME" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "FRCST_VOL" ||
+        if (field == "VOLUME" || field == "PAYABLE_QUANTITY" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "FRCST_VOL" ||
             field == "CREDIT_VOLUME" || field == "DEBIT_VOLUME" || field == "REBATE_OA_MAX_VOL") {
-            if (data[field] != undefined && data[field] != null && data[field] != "")
+            if (data[field] != undefined && data[field] != null && data[field] != "") {
                 data[field] = this.decimalPipe.transform(data[field], "1.0-0");
-        }
-        else if (field == "REBATE_OA_MAX_AMT" || field == "MAX_RPU" || field == "USER_MAX_RPU" ||
+            }
+        } else if (field == "REBATE_OA_MAX_AMT" || field == "MAX_RPU" || field == "USER_MAX_RPU" ||
             field == "AVG_RPU" || field == "USER_AVG_RPU" || field == "TOTAL_DOLLAR_AMOUNT" || field == "MAX_PAYOUT"
             || field == "ADJ_ECAP_UNIT" || field == "CREDIT_AMT" || field == "DEBIT_AMT") {
-            if (data[field] != undefined && data[field] != null && data[field] != "")
+            if (data[field] != undefined && data[field] != null && data[field] != "") {
                 data[field] = this.currencyPipe.transform(parseFloat(data[field]), 'USD', 'symbol', '1.2-2');
-        }
-        else if (field == "BLLG_DT" || field == "LAST_TRKR_START_DT_CHK" || field == "ON_ADD_DT"
+            }
+        } else if (field == "BLLG_DT" || field == "LAST_TRKR_START_DT_CHK" || field == "ON_ADD_DT"
             || field == "REBATE_BILLING_START" || field == "REBATE_BILLING_END") {
             if (data[field] != undefined) {
-                if (data[field] == "Invalid date") data[field] = "";
-                else if (data[field] != null && data[field] != "") data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
+                if (data[field] == "Invalid date") {
+                    data[field] = "";
+                } else if (data[field] != null && data[field] != "") {
+                    data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
+                }
             }
         }
         return data;
@@ -233,12 +236,8 @@ export class dealEditorCellTemplateComponent {
                         for (let bands = 1; bands <= passedData.NUM_OF_DENSITY; bands++) {
                             data[row.field][dim + bands + '____' + key] = this.currencyPipe.transform(data[row.field][dim + bands + '____' + key], 'USD', 'symbol', '1.2-2');
                         }
-                    } else if (row.field == "STRT_PB" || row.field == "END_PB") {
-                        if (!Number.isNaN(Number(data[row.field][key]))) {
-                            if (row.format == "number")  data[row.field][key] = this.decimalPipe.transform(data[row.field][key], "1.0-3");
-                        }
                     }
-                })
+                });
             }
         }
         return GridUtil.uiControlScheduleWrapperDensity(data);
@@ -276,15 +275,18 @@ export class dealEditorCellTemplateComponent {
     getColorStyle = function (result) {
         return PTE_Load_Util.getColorPct(result);
     }
+
     isReadonlyCell(passedData, field) {
-        if (passedData._behaviors != undefined && passedData._behaviors.isReadOnly != undefined && passedData._behaviors.isReadOnly[field] != undefined)
+        if (passedData._behaviors != undefined && passedData._behaviors.isReadOnly != undefined && passedData._behaviors.isReadOnly[field] != undefined) {
             return true;
-        else if (field == "KIT_ECAP") {
-            if (passedData._behaviors != undefined && passedData._behaviors.isReadOnly != undefined && passedData._behaviors.isReadOnly["ECAP_PRICE"] != undefined)
+        } else if (field == "KIT_ECAP") {
+            if (passedData._behaviors != undefined && passedData._behaviors.isReadOnly != undefined && passedData._behaviors.isReadOnly["ECAP_PRICE"] != undefined) {
                 return true;
+            }
         }
         return false;
     }
+
     isDirtyCell(passedData, field) {
         if (passedData._behaviors != undefined && passedData._behaviors.isDirty != undefined && passedData._behaviors.isDirty[field] != undefined)
             return true;

@@ -1,7 +1,6 @@
-﻿
-/*
-File Updated: 2024-11-22 9:31:12 AM
-On: KBHARA2X-MOBL
+﻿/*
+File Updated: 12/2/2024 5:16:55 PM
+On: SOC-G3NTQW3
 From: sql3877-fm1-in.amr.corp.intel.com,3181, MYDEALS
 */
 using System;
@@ -857,14 +856,23 @@ namespace Intel.MyDeals.Entities {
 		///</summary>
 		public const string DFLT_DOUBLE_CONSUMPTION = "DFLT_DOUBLE_CONSUMPTION";
 
-		///<summary>
-		/// DIM_SID: 2
-		/// DIM_CD: CUST
-		/// ATRB_SID: 2029
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Int32
-		///</summary>
-		public const string DFLT_LOOKBACK_PERD = "DFLT_LOOKBACK_PERD";
+        ///<summary>
+        /// DIM_SID: 2
+        /// DIM_CD: CUST
+        /// ATRB_SID: 2032
+        /// TGT_COL_TYPE: INT
+        /// DOT_NET_DATA_TYPE: System.Int32
+        ///</summary>
+        public const string DFLT_ENFORCE_PAYABLE_QUANTITY = "DFLT_ENFORCE_PAYABLE_QUANTITY";
+
+        ///<summary>
+        /// DIM_SID: 2
+        /// DIM_CD: CUST
+        /// ATRB_SID: 2029
+        /// TGT_COL_TYPE: INT
+        /// DOT_NET_DATA_TYPE: System.Int32
+        ///</summary>
+        public const string DFLT_LOOKBACK_PERD = "DFLT_LOOKBACK_PERD";
 
 		///<summary>
 		/// DIM_SID: 2
@@ -1036,15 +1044,6 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.DateTime
 		///</summary>
 		public const string END_DT = "END_DT";
-
-		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: DEAL
-		/// ATRB_SID: 13
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
-		///</summary>
-		public const string END_PB = "END_PB";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -2063,14 +2062,23 @@ namespace Intel.MyDeals.Entities {
 		///</summary>
 		public const string PASSED_VALIDATION = "PASSED_VALIDATION";
 
-		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: DEAL
-		/// ATRB_SID: 35
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
-		///</summary>
-		public const string PAYOUT_BASED_ON = "PAYOUT_BASED_ON";
+        ///<summary>
+        /// DIM_SID: 3
+        /// DIM_CD: DEAL
+        /// ATRB_SID: 12
+        /// TGT_COL_TYPE: INT
+        /// DOT_NET_DATA_TYPE: System.Int32
+        ///</summary>
+        public const string PAYABLE_QUANTITY = "PAYABLE_QUANTITY";
+
+        ///<summary>
+        /// DIM_SID: 3
+        /// DIM_CD: DEAL
+        /// ATRB_SID: 35
+        /// TGT_COL_TYPE: VARCHAR
+        /// DOT_NET_DATA_TYPE: System.String
+        ///</summary>
+        public const string PAYOUT_BASED_ON = "PAYOUT_BASED_ON";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -2638,15 +2646,6 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.DateTime
 		///</summary>
 		public const string START_DT = "START_DT";
-
-		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: DEAL
-		/// ATRB_SID: 12
-		/// TGT_COL_TYPE: MONEY
-		/// DOT_NET_DATA_TYPE: System.Double
-		///</summary>
-		public const string STRT_PB = "STRT_PB";
 
 		///<summary>
 		/// DIM_SID: 3

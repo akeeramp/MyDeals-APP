@@ -3,6 +3,7 @@
     public CUST_NM: string;
     public VISTEX_CUST_FLAG: boolean;
     public DFLT_DOUBLE_CONSUMPTION: boolean;
+    public DFLT_ENFORCE_PAYABLE_QUANTITY: boolean;
     public DFLT_PERD_PRFL: string;
     public DFLT_TNDR_AR_SETL_LVL: string;
     public DFLT_AR_SETL_LVL: string;

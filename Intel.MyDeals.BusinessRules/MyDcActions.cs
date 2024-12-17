@@ -1386,6 +1386,19 @@ namespace Intel.MyDeals.BusinessRules
                 deSendToVistex.IsHidden = true;
             }             
         }
+
+        public static void HidePaymentQuantityFromNonTender(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            string deRebateTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            IOpDataElement dePaymentQuantity = r.Dc.GetDataElement(AttributeCodes.PAYABLE_QUANTITY);
+            if (deRebateTypeValue != "TENDER" && dePaymentQuantity != null)
+            {
+                dePaymentQuantity.IsHidden = true;
+            }
+        }
+
         public static void CheckDropDownValues(params object[] args)
         {
             // Note: "DO_NOT_ALLOW_BLANK = True" forces a value to be required/populated, same as REQUIRED = TRUE
@@ -1872,6 +1885,62 @@ namespace Intel.MyDeals.BusinessRules
             if (!int.TryParse(de.AtrbValue.ToString(), out _))
             {
                 de.AddMessage("Volume must be a valid non-decimal number.");
+            }
+        }
+
+        public static void ValidatePayableQuantity(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deVolume = r.Dc.GetDataElement(AttributeCodes.VOLUME);
+            IOpDataElement dePayableQuantity = r.Dc.GetDataElement(AttributeCodes.PAYABLE_QUANTITY);
+            if (deVolume == null || deVolume.AtrbValue.ToString() == "") return;
+            if (dePayableQuantity == null) return;
+
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custId)) custId = 0;
+            MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
+            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
+
+            int volumeValue = int.Parse(deVolume.AtrbValue.ToString());
+
+            // Non-enforced customer should default to Ceiling Volume
+            if (!cust.DFLT_ENFORCE_PAYABLE_QUANTITY && dePayableQuantity.AtrbValue.ToString() == "")
+            {
+                dePayableQuantity.AtrbValue = volumeValue;
+            }
+
+            // Do not permit decimal numbers
+            if (!int.TryParse(dePayableQuantity.AtrbValue.ToString(), out _))
+            {
+                dePayableQuantity.AddMessage("Payable Quantity must be a valid non-decimal number.");
+                return;
+            }
+
+            // Payable Quantity must not be greater than (Ceiling) Volume
+            int payableQuantityValue = int.Parse(dePayableQuantity.AtrbValue.ToString());
+
+            if (cust.DFLT_ENFORCE_PAYABLE_QUANTITY)
+            {
+                if (payableQuantityValue > volumeValue)
+                {
+                    dePayableQuantity.AddMessage("Payable Quantity cannot be greater than Ceiling Volume.");
+                }
+            }
+            else
+            {
+                // Non-enforced customer should be readonly
+                if (payableQuantityValue != volumeValue)
+                {
+                    dePayableQuantity.AtrbValue = volumeValue;
+                }
+                dePayableQuantity.IsReadOnly = true;
+            }
+
+            if (payableQuantityValue < 0)
+            {
+                dePayableQuantity.AddMessage("Payable Quantity must be a positive number.");
+                return;
             }
         }
 
@@ -3546,7 +3615,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.Dc.HasTracker()) return; // If there is no tracker, stop and leave
 
             string objTypeCd = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
-            List<string> readonlyAtrbs = new List<string> { AttributeCodes.END_VOL, AttributeCodes.END_REV, AttributeCodes.END_PB };
+            List<string> readonlyAtrbs = new List<string> { AttributeCodes.END_VOL, AttributeCodes.END_REV };
             if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.NUM_OF_TIERS), out int numTiers)) numTiers = 0;
             string targetDim = "10:" + numTiers.ToString();
             int numDensity = 1;
@@ -3796,20 +3865,6 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
             ValidateVolTieredAttribute(AttributeCodes.END_REV.ToString(), "End Rev must be greater than 0.", IsGreaterThanZero, r, true);
-        }
-
-        public static void ValidateTierStartPb(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            ValidateVolTieredAttribute(AttributeCodes.STRT_PB.ToString(), "Start Petabytes must be greater than 0.", IsGreaterThanZero, r);
-        }
-
-        public static void ValidateTierEndPb(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            ValidateVolTieredAttribute(AttributeCodes.END_PB.ToString(), "End Petabytes must be greater than 0.", IsGreaterThanZero, r, true);
         }
 
         public static void ValidateTierQty(params object[] args)

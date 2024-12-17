@@ -2,7 +2,7 @@
 import { MomentService } from "../shared/moment/moment.service";
 import { contractStatusWidgetService } from "../dashboard/contractStatusWidget.service";
 import { logger } from "../shared/logger/logger";
-import { advancedSearchService } from "./advancedSearch.service";
+import { AdvancedSearchService } from "./advancedSearch.service";
 import { globalSearchResultsService } from "../advanceSearch/globalSearchResults/globalSearchResults.service";
 import { TenderDashboardConfig } from '../advanceSearch/tenderDashboard/tenderDashboard_config';
 import { AttributeBuilder } from '../core/attributeBuilder/attributeBuilder.component';
@@ -104,7 +104,7 @@ export class AdvancedSearchComponent implements OnInit, OnDestroy {
     constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
                 protected loggerSvc: logger,
                 protected globalSearchSVC: globalSearchResultsService,
-                private advancedSearchSvc: advancedSearchService,
+                private advancedSearchSvc: AdvancedSearchService,
                 private momentService: MomentService) { }
 
     onCustomerChange(custData) {
@@ -290,16 +290,18 @@ export class AdvancedSearchComponent implements OnInit, OnDestroy {
     //Excel Export
     async exportToExcel() {
         if (this.gridResult != undefined) {
-            if (this.totalCount > 2000) this.exportAll = true;
-            else {
+            if (this.totalCount > 2000) {
+                this.exportAll = true;
+            } else {
                 this.exportRows = true;
                 await this.searchDeals();
-                if (this.exportData && this.exportData.length > 0)
+                if (this.exportData && this.exportData.length > 0) {
                     GridUtil.dsToExcel(this.columns, this.exportData, "Search Export");
+                }
             }
-        } else
+        } else {
             this.loggerSvc.warn("No Records Found", "");
-
+        }
     }
 
     async exportAllOk() {

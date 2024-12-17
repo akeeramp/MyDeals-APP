@@ -602,6 +602,11 @@
             type: "number",
             width: 120
         }, {
+            field: "PAYABLE_QUANTITY",
+            title: "Payable Quantity",
+            type: "number",
+            width: 120
+        }, {
             field: "STRT_VOL",
             title: "Start Volume",
             type: "number",
@@ -953,6 +958,11 @@
         }, {
             field: "VOLUME",
             title: "Ceiling Vol",
+            type: "number",
+            width: 120
+        }, {
+            field: "PAYABLE_QUANTITY",
+            title: "Payable Quantity",
             type: "number",
             width: 120
         }, {

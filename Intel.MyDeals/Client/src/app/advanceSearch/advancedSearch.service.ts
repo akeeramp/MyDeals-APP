@@ -4,13 +4,15 @@ import { Injectable } from "@angular/core";
 @Injectable({
     providedIn: 'root'
 })
+export class AdvancedSearchService {
 
-export class advancedSearchService {
+    public readonly API_URL_DEAL_LIST = "/api/Search/GetDealList/";
+
     constructor(private httpClient: HttpClient) { }
-    public apiBaseUrl = "/api/Search/GetDealList/";
 
     public getSearchList(st, en, searchtext) {
-        const apiUrl: string = this.apiBaseUrl + st + "/" + en + "/" + searchtext;
+        const apiUrl: string = this.API_URL_DEAL_LIST + st + "/" + en + "/" + searchtext;
         return this.httpClient.get(apiUrl);
     }
+
 }

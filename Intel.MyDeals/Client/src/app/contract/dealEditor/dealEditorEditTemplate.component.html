@@ -3,26 +3,22 @@
                    (ngModelChange)="in_DataItem[in_Field_Name] = $event" class="k-textbox-design">
     </kendo-textbox>
 </div>
-<div *ngIf="(in_Field_Name == 'ECAP_PRICE' && in_Deal_Type == 'ECAP') || in_Field_Name == 'VOLUME' || in_Field_Name == 'FRCST_VOL' || in_Field_Name == 'KIT_ECAP' || in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD'
-     || in_Field_Name == 'USER_MAX_RPU' || in_Field_Name == 'USER_AVG_RPU' || in_Field_Name == 'TOTAL_DOLLAR_AMOUNT' || in_Field_Name == 'ADJ_ECAP_UNIT'
-     || in_Field_Name == 'MAX_PAYOUT' || in_Field_Name == 'REBATE_OA_MAX_VOL' || in_Field_Name == 'REBATE_OA_MAX_AMT'">
+<div *ngIf="(in_Field_Name == 'ECAP_PRICE' && in_Deal_Type == 'ECAP') || in_Field_Name == 'VOLUME' || in_Field_Name == 'PAYABLE_QUANTITY' || in_Field_Name == 'FRCST_VOL' || in_Field_Name == 'KIT_ECAP' || in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD' || in_Field_Name == 'USER_MAX_RPU' || in_Field_Name == 'USER_AVG_RPU' || in_Field_Name == 'TOTAL_DOLLAR_AMOUNT' || in_Field_Name == 'ADJ_ECAP_UNIT' || in_Field_Name == 'MAX_PAYOUT' || in_Field_Name == 'REBATE_OA_MAX_VOL' || in_Field_Name == 'REBATE_OA_MAX_AMT'">
     <div *ngIf="in_Field_Name == 'ECAP_PRICE' && in_Deal_Type == 'ECAP'" class="dimKey">{{translateDimKey(ecapDimKey)}}</div>
     <div *ngIf="in_Field_Name == 'KIT_ECAP'" class="dimKey">{{translateDimKey(kitEcapdim)}}</div>
-   <div *ngIf="in_Field_Name != 'CONSUMPTION_LOOKBACK_PERIOD'">
-    <kendo-numerictextbox [ngModel]="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] : in_DataItem[in_Field_Name]"
-                          (ngModelChange)="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] = $event : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] = $event : in_DataItem[in_Field_Name] = $event"
-                          [min]="0" (valueChange)="valueChange(in_DataItem, in_Field_Name)"
-                          [value]="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] : in_DataItem[in_Field_Name]"
-                          [format]="(in_Field_Name == 'VOLUME' || in_Field_Name == 'FRCST_VOL' || in_Field_Name != 'CONSUMPTION_LOOKBACK_PERIOD' || in_Field_Name == 'REBATE_OA_MAX_VOL') ? 'n0' : 'n2'"
-                          [autoCorrect]="autoCorrect"  [decimals]="decimals" class="k-numberbox-design">
-    </kendo-numerictextbox>
-</div>
+    <div *ngIf="in_Field_Name != 'CONSUMPTION_LOOKBACK_PERIOD'">
+        <kendo-numerictextbox [ngModel]="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] : in_DataItem[in_Field_Name]"
+                            (ngModelChange)="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] = $event : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] = $event : in_DataItem[in_Field_Name] = $event"
+                            [min]="0" (valueChange)="valueChange(in_DataItem, in_Field_Name)"
+                            [value]="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] : in_DataItem[in_Field_Name]"
+                            [format]="(in_Field_Name == 'VOLUME' || in_Field_Name == 'PAYABLE_QUANTITY' || in_Field_Name == 'FRCST_VOL' || in_Field_Name != 'CONSUMPTION_LOOKBACK_PERIOD' || in_Field_Name == 'REBATE_OA_MAX_VOL') ? 'n0' : 'n2'"
+                            [autoCorrect]="autoCorrect"  [decimals]="decimals" class="k-numberbox-design"></kendo-numerictextbox>
+    </div>
     <div *ngIf="in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD'">
     <kendo-numerictextbox [ngModel]="in_DataItem[in_Field_Name]" (ngModelChange)=" in_DataItem[in_Field_Name] = $event"
         [min]="0" (valueChange)="valueChange(in_DataItem, in_Field_Name)" [value]="in_DataItem[in_Field_Name]"
         [format]="in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD'" [autoCorrect]="autoCorrect" [decimals]="decimals"
-        [max]="24" class="k-numberbox-design">
-    </kendo-numerictextbox>
+        [max]="24" class="k-numberbox-design"></kendo-numerictextbox>
 </div>
 </div>
 <div *ngIf="((in_Field_Name == 'ECAP_PRICE' || in_Field_Name == 'DSCNT_PER_LN') && in_Deal_Type == 'KIT')">
@@ -33,8 +29,7 @@
                                   (ngModelChange)="in_DataItem[in_Field_Name][key] = $event"
                                   [min]="0" (valueChange)="valueChange(in_DataItem, in_Field_Name, key)"
                                   [value]="in_DataItem[in_Field_Name][key]"
-                                  autoCorrect="true" [decimals]="decimals" class="k-numberbox-design">
-            </kendo-numerictextbox>
+                                  autoCorrect="true" [decimals]="decimals" class="k-numberbox-design"></kendo-numerictextbox>
         </div>
     </div>
 </div>
@@ -75,8 +70,7 @@
                                               (ngModelChange)="in_DataItem[fieldDet.field][key] = $event"
                                               [value]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
                                               [min]="getMinValue(fieldDet.field)" (valueChange)="updateTierAttributes(in_DataItem, fieldDet.field,(i+1))"
-                                              [autoCorrect]="autoCorrect" [format]="(fieldDet.field.includes('RATE') || in_Deal_Type == 'REV_TIER' )? 'n2' : 'n0'">
-                        </kendo-numerictextbox>
+                                              [autoCorrect]="autoCorrect" [format]="(fieldDet.field.includes('RATE') || in_Deal_Type == 'REV_TIER' )? 'n2' : 'n0'"></kendo-numerictextbox>
                     </span>
                 </div>
             </div>
@@ -106,8 +100,7 @@
                                                           (ngModelChange)="in_DataItem[fieldDet.field]['8___' + (band+1) + '____' + key] = $event"
                                                           [min]="0" (valueChange)="updateTierAttributes(in_DataItem, fieldDet.field,(i+1))"
                                                           [value]="in_DataItem[fieldDet.field]['8___' + (band+1) + '____' + key]"
-                                                          [autoCorrect]="autoCorrect" format="n2" class="k-numberbox-design">
-                                    </kendo-numerictextbox>
+                                                          [autoCorrect]="autoCorrect" format="n2" class="k-numberbox-design"></kendo-numerictextbox>
                                 </span>
                             </div>
                             <div *ngIf="fieldDet.field == 'DENSITY_BAND'">
@@ -115,25 +108,6 @@
                                     {{in_DataItem[fieldDet.field]['8___' + (band+1)]}}
                                 </span>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div  class="tier-child-three" *ngIf="fieldDet.field == 'STRT_PB' || fieldDet.field == 'END_PB'">
-                    <div class="col-md-2 topPadding">
-                        <div *ngIf="(fieldDet.field == 'STRT_PB' && (i>0 || in_DataItem['HAS_TRACKER'] == '1')) || (fieldDet.field =='END_PB' && in_DataItem['HAS_TRACKER'] == '1' && i != ((in_DataItem['NUM_OF_TIERS']/in_DataItem['NUM_OF_DENSITY'])-1))">
-                            <span class="displayBlock densityPadding" [style.height.px]="47">
-                                {{in_DataItem[fieldDet.field][key]}}
-                            </span>
-                        </div>
-                        <div *ngIf="(fieldDet.field == 'STRT_PB' && i==0 && in_DataItem['HAS_TRACKER'] == '0') || (fieldDet.field =='END_PB' && (in_DataItem['HAS_TRACKER'] == '0' || (in_DataItem['HAS_TRACKER'] == '1' && i==((in_DataItem['NUM_OF_TIERS']/in_DataItem['NUM_OF_DENSITY'])-1))))">
-                            <span>
-                                <kendo-numerictextbox [ngModel]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
-                                                      (ngModelChange)="in_DataItem[fieldDet.field][key] = $event"
-                                                      [min]="0" (valueChange)="updateTierAttributes(in_DataItem, fieldDet.field,(i+1))"
-                                                      [value]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
-                                                      [autoCorrect]="autoCorrect" format="n3" class="k-numberbox-design">
-                                </kendo-numerictextbox>
-                            </span>
                         </div>
                     </div>
                 </div>
@@ -147,12 +121,10 @@
     <kendo-dropdownlist [data]="dropDowResponse[in_Field_Name]"
                         [ngModel]="in_DataItem[in_Field_Name]" (blur)='showToolTip(in_DataItem, in_Field_Name, contractType)'
                         (ngModelChange)="in_DataItem[in_Field_Name] = $event"
-                        (valueChange)="valueChange(in_DataItem, in_Field_Name)" class="k-dropdown-design">
-    </kendo-dropdownlist>
+                        (valueChange)="valueChange(in_DataItem, in_Field_Name)" class="k-dropdown-design"></kendo-dropdownlist>
     <div kendoTooltip showOn="none" position="bottom" style="margin-left:110px" tooltipClass="ctrct_typ">
         <span #contractType [title]="in_DataItem[in_Field_Name] == '' ? 'CONTRACT_TYPE is required' : ''"></span>
     </div>
-
     <kendo-dialog *ngIf="confirmDialog" [maxWidth]="600" class="paddingReducerExpire toolsartho-css k-dialog-popup-design">
         <div class="dealToolsKendoAlert" style="padding: 2.4em;">
             <h4 class="k-dialog-heading-four h4Style">Expire YCS2 Confirmation</h4>
@@ -174,24 +146,21 @@
                           tooltipClass="toolTipReq" 
                           triggers="manual" 
                           placement="bottom"
-                          container="body">
-    </kendo-dropdownlist>
+                          container="body"></kendo-dropdownlist>
 </div>
 <div *ngIf="in_Field_Name == 'EXPIRE_FLG'">
     <kendo-dropdownlist [data]="dropDowResponse[in_Field_Name]"
                         [(ngModel)]="in_DataItem[in_Field_Name]"
                         (valueChange)="valueChange(in_DataItem, in_Field_Name)"
                         textField="text"
-                        valueField="value" class="k-dropdown-design">
-    </kendo-dropdownlist>
+                        valueField="value" class="k-dropdown-design"></kendo-dropdownlist>
 </div>
 <div *ngIf="in_Field_Name == 'tender_actions' && bidActnsDropdownData.length > 0">
     <kendo-dropdownlist [data]="bidActnsDropdownData"
                         [(ngModel)]="selectedValue"
                         (valueChange)="actionChange(in_DataItem)"
                         [textField]="bidActnsDropDownText"
-                        [valueField]="bidActnsDropDownValue">
-    </kendo-dropdownlist>
+                        [valueField]="bidActnsDropDownValue"></kendo-dropdownlist>
 </div>
 <div *ngIf="in_Field_Name == 'tender_actions' && bidActnsDropdownData.length == 0">
     <div id='cb_actn_{{in_DataItem.DC_ID}}'>
@@ -224,8 +193,7 @@
 <div *ngIf="in_Field_Name == 'QLTR_BID_GEO'">
     <kendo-multiselect [data]="dropDowResponse[in_Field_Name]"
                        [(ngModel)]="in_DataItem[in_Field_Name]"
-                       (valueChange)="valueChange(in_DataItem, in_Field_Name)" class="divineo-one bidGeoMultiSelect">
-    </kendo-multiselect>
+                       (valueChange)="valueChange(in_DataItem, in_Field_Name)" class="divineo-one bidGeoMultiSelect"></kendo-multiselect>
 </div>
 <div *ngIf="in_Field_Name == 'CNTRCT_OBJ_SID'" class="dealCell">
     <div id="folioCell" class="uiControlDiv isReadOnlyCell">

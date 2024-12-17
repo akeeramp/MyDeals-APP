@@ -40,7 +40,7 @@ export const colorDictionary = {
         "Lost": "#FC4C02",
         "Won": "#c4d600"
     }
-}
+};
 
 export const opGridTemplate = {
     "groups": {
@@ -223,6 +223,9 @@ export const opGridTemplate = {
             },
             "VOLUME": {
                 "Groups": ["Deal Info", "Payment"]
+            },
+            "PAYABLE_QUANTITY": {
+                "Groups": ["Payment"]
             },
             "ON_ADD_DT": {
                 "Groups": ["Deal Info"]
@@ -1111,6 +1114,9 @@ export const opGridTemplate = {
             "VOLUME": {
                 "Groups": ["Deal Info", "Payment"]
             },
+            "PAYABLE_QUANTITY": {
+                "Groups": ["Payment"]
+            },
             "PROD_INCLDS": {
                 "Groups": ["Deal Info"]
             },
@@ -1648,14 +1654,14 @@ export const opGridTemplate = {
             }
         }
     },
-    "requiredForTender": ["VOLUME", "END_CUSTOMER_RETAIL"],
+    "requiredForTender": ["VOLUME", "PAYABLE_QUANTITY", "END_CUSTOMER_RETAIL"],
     "hideForTender": ["DEAL_SOLD_TO_ID", "EXPIRE_YCS2", "DC_PARENT_ID"],
-    "hideForNonTender": ["EXCLUDE_AUTOMATION", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "QUOTE_LN_ID"],
+    "hideForNonTender": ["EXCLUDE_AUTOMATION", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "QUOTE_LN_ID", "PAYABLE_QUANTITY"],
     "hideForStandardDealEditor": ["EXCLUDE_AUTOMATION", "tender_actions", "GEO_APPROVED_BY", "DIV_APPROVED_BY", "CNTRCT_OBJ_SID"],
-}
+};
 
 export const quickDealConstants = {
     "enabled": true,
     "maxQuickDeals": 6,
     "maxRecent": 10
-    }
+};
