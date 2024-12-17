@@ -177,7 +177,7 @@ export class lnavUtil {
         //initialize, hard coded for now, build into an admin page in future.
         var marketSegment = (isTenderContract) ? "Corp" : "All Direct Market Segments";
         if (currentPricingTable == null) {
-            if (!!newPricingTable._defaultAtrbs["REBATE_TYPE"]) newPricingTable._defaultAtrbs["REBATE_TYPE"].value = isTenderContract ? "TENDER" : "MCP";
+            if (!!newPricingTable._defaultAtrbs["REBATE_TYPE"]) newPricingTable._defaultAtrbs["REBATE_TYPE"].value = isTenderContract ? "TENDER" : "";
             if (!!newPricingTable._defaultAtrbs["MRKT_SEG"]) newPricingTable._defaultAtrbs["MRKT_SEG"].value = [marketSegment];
             if (!!newPricingTable._defaultAtrbs["GEO_COMBINED"]) newPricingTable._defaultAtrbs["GEO_COMBINED"].value = ["Worldwide"];
             if (!!newPricingTable._defaultAtrbs["PAYOUT_BASED_ON"]) dealType == 'FLEX' || dealType == 'REV_TIER' || dealType == 'DENSITY' ? newPricingTable._defaultAtrbs["PAYOUT_BASED_ON"].value = "Billings" : newPricingTable._defaultAtrbs["PAYOUT_BASED_ON"].value = "Consumption";
