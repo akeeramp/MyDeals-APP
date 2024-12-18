@@ -108,9 +108,9 @@ jobs:
       - name: Trigger Jmeter Performance Test
         shell: pwsh
         run: |
-          $repositoryOwner = "intel-innersource" # Replace with the owner of the target repository
-          $repositoryName = "applications.web.mydeals.performance-testing" # Replace with the name of the target repository
-          $workflowFileName = "TriggerJmeterTest.yml" # Replace with the name of the workflow file
+          $repositoryOwner = "intel-innersource" # owner of the target repository
+          $repositoryName = "applications.web.mydeals.performance-testing" # name of the target repository
+          $workflowFileName = "TriggerJmeterSanityTest.yml" # name of the workflow file
           $accessToken = "${{ secrets.CICD_ACCESSTOKEN }}" # Use the secret from GitHub Actions
 
           # Define the API endpoint
