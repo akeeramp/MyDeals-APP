@@ -615,11 +615,27 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                 args.column.field !== "TOTAL_CR_DB_PERC" && args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && !(args.dataItem._behaviors != undefined &&
                 args.dataItem._behaviors.isReadOnly != undefined && args.dataItem._behaviors.isReadOnly[args.column.field] != undefined && args.dataItem._behaviors.isReadOnly[args.column.field])) {
                 //to handle on-click action on kendogrid cells
-                args.sender.editCell(
-                    args.rowIndex,
-                    args.columnIndex
-                );
-                if (args.column.field == "SYS_PRICE_POINT") {
+                if (args.dataItem.HAS_TRACKER == "1" ) {
+
+                    if(args.column.field == "CONSUMPTION_LOOKBACK_PERIOD" || args.column.field == "CONSUMPTION_REASON"
+                    || args.column.field == "CONSUMPTION_TYPE" || args.column.field == "SYS_PRICE_POINT"
+                    || args.column.field == "QLTR_PROJECT" || args.column.field == "CONSUMPTION_REASON_CMNT") {
+
+                    }
+                    else{
+                        args.sender.editCell(
+                            args.rowIndex,
+                            args.columnIndex
+                        );
+                    }
+                }
+                else{
+                    args.sender.editCell(
+                        args.rowIndex,
+                        args.columnIndex
+                    );
+                }
+                if (args.dataItem.HAS_TRACKER!="1" && args.column.field == "SYS_PRICE_POINT") {
                     this.openSystemPriceModal(args.dataItem);
                 }
                 else if (args.column.field == "END_CUSTOMER_RETAIL") {

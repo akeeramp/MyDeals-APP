@@ -284,6 +284,12 @@ export class dealEditorCellTemplateComponent {
                 return true;
             }
         }
+        else if (passedData.HAS_TRACKER == "1") {
+            if (field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "CONSUMPTION_REASON" || field == "CONSUMPTION_REASON_CMNT"
+                || field == "CONSUMPTION_TYPE" || field == "SYS_PRICE_POINT" || field == "QLTR_PROJECT") {
+                return true;
+            }
+        }
         return false;
     }
 
