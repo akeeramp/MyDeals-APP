@@ -1834,21 +1834,6 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3594,
                 AtrbCd = AttributeCodes.DEAL_COMB_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.LUMP_SUM },
-                Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_COMB_TYPE')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE/PROGRAM",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN",
-                Label = "Group Type",
-                IsFilterable = true,
-                IsSortable = true,
-                Width = 140
-            });
-            items.Add(new UiTemplateContainerItem  // WIP All types
-            {
-                Id = 3594,
-                AtrbCd = AttributeCodes.DEAL_COMB_TYPE,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER },
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_COMB_TYPE')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE/VOL_TIER",
