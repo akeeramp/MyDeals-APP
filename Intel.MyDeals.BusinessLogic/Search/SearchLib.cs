@@ -210,7 +210,7 @@ namespace Intel.MyDeals.BusinessLogic
                     initListString = s.Replace("cnt.CUST_MBR_SID IN (", "").Replace(")","");
                     if (s.Contains("CNTRCT_TENDER_PUBLISHED"))
                     {
-                        initListString = s.Replace("cnt.CUST_MBR_SID IN (", "").Replace(")", "").Replace("AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD NOT IN ('PROGRAM','LUMP_SUM') AND CNTRCT_TENDER_PUBLISHED = 1", "");
+                        initListString = s.Replace("cnt.CUST_MBR_SID IN (", "").Replace(")", "").Replace("AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'LUMP_SUM' AND CNTRCT_TENDER_PUBLISHED = 1", "");
                         isTenderSearch = true;
                     }
                 }
@@ -240,7 +240,7 @@ namespace Intel.MyDeals.BusinessLogic
                     string newCustFilter = "cnt.CUST_MBR_SID IN (" + string.Join(", ", newData.Select(n => n.ToString()).ToArray()) + ") ";
                     if (isTenderSearch)
                     {
-                        newCustFilter += "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD NOT IN ('PROGRAM','LUMP_SUM') AND CNTRCT_TENDER_PUBLISHED = 1 ";
+                        newCustFilter += "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'LUMP_SUM' AND CNTRCT_TENDER_PUBLISHED = 1 ";
                     }
                     initSearchList.Add(newCustFilter);
                 }
@@ -772,7 +772,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.WF_STG_CD.ATRB_SID,
                 Attributes.YCS2_PRC_IRBT.ATRB_SID
             },
-            new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD NOT IN ('PROGRAM','LUMP_SUM')" + actvstr },
+            new List<string> { "WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'LUMP_SUM'" + actvstr },
             null,
             false,
             MyRulesTrigger.OnDealListLoad,
@@ -788,7 +788,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             SearchResultPacket ret= GetDealList(data,
                 new List<int>(),
-                new List<string> { SearchTools.BuildCustSecurityWhere() + "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD NOT IN ('PROGRAM','LUMP_SUM') AND CNTRCT_TENDER_PUBLISHED = 1" },    //AND TENDER_PUBLISHED = '1'
+                new List<string> { SearchTools.BuildCustSecurityWhere() + "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'LUMP_SUM' AND CNTRCT_TENDER_PUBLISHED = 1" },    //AND TENDER_PUBLISHED = '1'
                 new UserPreferencesLib().GetUserPreference("TenderDealSearch", "TenderSearchRules", "CustomSearch"),
                 true,
                 MyRulesTrigger.OnDealListLoad,
