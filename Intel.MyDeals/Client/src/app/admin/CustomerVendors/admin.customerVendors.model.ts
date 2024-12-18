@@ -1,16 +1,16 @@
 export class Cust_Map {
-    public ACTV_IND: boolean;
-    public ATRB_LKUP_DESC:string;
+	public ACTV_IND: boolean;
+	public ATRB_LKUP_DESC: string;
 	public ATRB_LKUP_SID: any;
-    public ATRB_SID:number;
-    public BUSNS_ORG_NM:string;
-    public CTRY_CD:string;
+	public ATRB_SID: number;
+	public BUSNS_ORG_NM: string;
+	public CTRY_CD: string;
 	public CTRY_NM: string;
 	public CUST_MBR_SID: any;
-    public CUST_NM:string;
+	public CUST_NM: string;
 	public DROP_DOWN: any;
-    public OBJ_SET_TYPE_SID:number
-    public VNDR_ID:any
+	public OBJ_SET_TYPE_SID: number;
+	public VNDR_ID: any;
 }
 
 export interface Cust_Dropdown_Map {

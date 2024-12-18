@@ -227,7 +227,7 @@ export class PTE_Config_Util {
                     "Groups": ["Deal Info", "Payment"]
                 },
                 "PAYABLE_QUANTITY": {
-                    "Groups": ["Payment"]
+                    "Groups": ["Deal Info", "Payment"]
                 },
                 "ON_ADD_DT": {
                     "Groups": ["Deal Info"]
@@ -1108,7 +1108,7 @@ export class PTE_Config_Util {
                     "Groups": ["Deal Info", "Payment"]
                 },
                 "PAYABLE_QUANTITY": {
-                    "Groups": ["Payment"]
+                    "Groups": ["Deal Info", "Payment"]
                 },
                 "PROD_INCLDS": {
                     "Groups": ["Deal Info"]

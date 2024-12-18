@@ -225,7 +225,7 @@ export const opGridTemplate = {
                 "Groups": ["Deal Info", "Payment"]
             },
             "PAYABLE_QUANTITY": {
-                "Groups": ["Payment"]
+                "Groups": ["Deal Info", "Payment"]
             },
             "ON_ADD_DT": {
                 "Groups": ["Deal Info"]
@@ -1115,7 +1115,7 @@ export const opGridTemplate = {
                 "Groups": ["Deal Info", "Payment"]
             },
             "PAYABLE_QUANTITY": {
-                "Groups": ["Payment"]
+                "Groups": ["Deal Info", "Payment"]
             },
             "PROD_INCLDS": {
                 "Groups": ["Deal Info"]
