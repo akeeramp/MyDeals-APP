@@ -1893,6 +1893,10 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
+            // Ignore if not Tender
+            IOpDataElement deRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+            if (!deRebateType.HasValue("TENDER")) return;
+
             IOpDataElement deVolume = r.Dc.GetDataElement(AttributeCodes.VOLUME);
             IOpDataElement dePayableQuantity = r.Dc.GetDataElement(AttributeCodes.PAYABLE_QUANTITY);
             if (deVolume == null || deVolume.AtrbValue.ToString() == "") return;
