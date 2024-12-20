@@ -107,7 +107,7 @@
                         <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN"
                                            [headerClass]="{'headerClass':true}" [width]="140" [hidden]="!pctGroupDealsView"></kendo-grid-column>
                         <!--adding consumption columns for pct grouping-->
-                        <div *ngIf="isConsumptionToggleOn">
+                        <div>
                             <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of Consumptioncolumns" field="{{column.field}}" title="{{column.title}}" [width]="140"></kendo-grid-column>
                          </div>
                         <ng-template *ngIf="isData" kendoGridDetailTemplate let-dataItem>
@@ -173,7 +173,7 @@
                                             <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN"
                                                                [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
                                             <!--adding consumption columns for pct grouping-->
-                                            <div *ngIf="isConsumptionToggleOn">
+                                            <div>
                                                 <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of Consumptioncolumns" field="{{column.field}}" title="{{column.title}}" [width]="140"></kendo-grid-column>
                                             </div>
                                         </kendo-grid>
