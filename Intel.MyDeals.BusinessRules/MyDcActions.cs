@@ -1893,10 +1893,6 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            // Ignore if not Tender
-            IOpDataElement deRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
-            if (!deRebateType.HasValue("TENDER")) return;
-
             IOpDataElement deVolume = r.Dc.GetDataElement(AttributeCodes.VOLUME);
             IOpDataElement dePayableQuantity = r.Dc.GetDataElement(AttributeCodes.PAYABLE_QUANTITY);
             if (deVolume == null || deVolume.AtrbValue.ToString() == "") return;
@@ -1908,10 +1904,16 @@ namespace Intel.MyDeals.BusinessRules
 
             int volumeValue = int.Parse(deVolume.AtrbValue.ToString());
 
-            // Non-enforced customer should default to Ceiling Volume
-            if (!cust.DFLT_ENFORCE_PAYABLE_QUANTITY && dePayableQuantity.AtrbValue.ToString() == "")
+            if (dePayableQuantity.AtrbValue.ToString() == "")
             {
-                dePayableQuantity.AtrbValue = volumeValue;
+                if (!cust.DFLT_ENFORCE_PAYABLE_QUANTITY)
+                {
+                    dePayableQuantity.AtrbValue = volumeValue;  // Non-enforced customer should default to Ceiling Volume
+                }
+                else
+                {
+                    dePayableQuantity.AtrbValue = 0;    // Enforced customer should default to 0 (TWC5971-294 - Prevent NULL insert issue from IQR)
+                }
             }
 
             // Do not permit decimal numbers

@@ -553,6 +553,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title = "Payable Quantity Validation",
                     ActionRule = MyDcActions.ValidatePayableQuantity,
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("TENDER")).Any(),
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate, MyRulesTrigger.OnSave }
                 },
