@@ -1577,7 +1577,7 @@ namespace Intel.MyDeals.BusinessLogic
             string primedCustID = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_ID);
             string primedCustNM = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_NM);
             string primedCustCountry = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_CNTRY);
-            string payableQuantity = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PAYABLE_QUANTITY);
+            string payableQuantity = workRecordDataFields.recordDetails.quote.quoteLine[i].PayableQuantity;
             bool isIQRUnified = workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer;
             string primedCtryId = workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId;
             string customer = null;
@@ -1662,7 +1662,6 @@ namespace Intel.MyDeals.BusinessLogic
                     UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
                     UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_RPL), isRPLedCustomer);
                     UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_CUST_OBJ), endCustomerObject);
-                    UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PAYABLE_QUANTITY), payableQuantity);
 
                     workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer = isPrimedCustomer == "1" ? true : false;
                     workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId = primedCustomerL1Id == "" ? null : primedCustomerL1Id;
@@ -1749,6 +1748,10 @@ namespace Intel.MyDeals.BusinessLogic
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedQuantity;
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.VOLUME), quantity);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.VOLUME), quantity);
+
+            //Payable Qty Update.
+            //Note: TWC5971-304 - Defect fixed - Payable Qty is not getting updated with IQR value for restricted customer
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PAYABLE_QUANTITY), payableQuantity);
 
             string terms = workRecordDataFields.recordDetails.quote.quoteLine[i].AdditionalTandC;
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.TERMS), terms);
