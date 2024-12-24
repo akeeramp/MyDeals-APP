@@ -1487,6 +1487,9 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                             }
                         }
                     }
+                    // clearing client side validation errors before save
+                    item._behaviors.isError={};
+                    item._behaviors.validMsg={};
                 })
                 let data = {
                     "Contract": [],

@@ -115,6 +115,18 @@ export class DE_Validation_Util {
                 isShowStopperError = true;
             }
 
+            if (item["REBATE_BILLING_START"] == undefined || item["REBATE_BILLING_START"] == null || item["REBATE_BILLING_START"] == "" || item["REBATE_BILLING_START"] == "Invalid date") {
+                item._behaviors.isError['REBATE_BILLING_START'] = true;
+                item._behaviors.validMsg['REBATE_BILLING_START'] = "Start date is required";
+                isShowStopperError = true;
+            }
+
+            if (item["REBATE_BILLING_END"] == undefined || item["REBATE_BILLING_END"] == null || item["REBATE_BILLING_END"] == "" || item["REBATE_BILLING_END"] == "Invalid date") {
+                item._behaviors.isError['REBATE_BILLING_END'] = true;
+                item._behaviors.validMsg['REBATE_BILLING_END'] = "End date is required";
+                isShowStopperError = true;
+            } 
+
             // Remove after validation error supressing rollback is corrected
             if (StaticMomentService.moment(item["REBATE_BILLING_START"]).isAfter(StaticMomentService.moment(item["START_DT"])) && item["PAYOUT_BASED_ON"].toUpperCase() === "CONSUMPTION") {
                 item._behaviors.isError['REBATE_BILLING_START'] = true;
@@ -347,6 +359,32 @@ export class DE_Validation_Util {
                     isShowStopperError = true;
                 }
             }
+
+            if (data[i]["START_DT"] == undefined || data[i]["START_DT"] == null || data[i]["START_DT"] == "" || data[i]["START_DT"] == "Invalid date") {
+               // delete  data[i]._behaviors.isError["START_DT"];
+               // delete  data[i]._behaviors.validMsg["START_DT"];
+                data[i]._behaviors.isError['START_DT'] = true;
+                data[i]._behaviors.validMsg['START_DT'] = "Start date is required";
+                isShowStopperError = true;
+            }
+
+            if (data[i]["END_DT"] == undefined || data[i]["END_DT"] == null || data[i]["END_DT"] == "" || data[i]["END_DT"] == "Invalid date") {
+                data[i]._behaviors.isError['END_DT'] = true;
+                data[i]._behaviors.validMsg['END_DT'] = "End date is required";
+                isShowStopperError = true;
+            } 
+            
+            if (data[i]["REBATE_BILLING_START"] == undefined || data[i]["REBATE_BILLING_START"] == null || data[i]["REBATE_BILLING_START"] == "" || data[i]["REBATE_BILLING_START"] == "Invalid date") {
+                data[i]._behaviors.isError['REBATE_BILLING_START'] = true;
+                data[i]._behaviors.validMsg['REBATE_BILLING_START'] = "Start date is required";
+                isShowStopperError = true;
+            }
+
+            if (data[i]["REBATE_BILLING_END"] == undefined || data[i]["REBATE_BILLING_END"] == null || data[i]["REBATE_BILLING_END"] == "" || data[i]["REBATE_BILLING_END"] == "Invalid date") {
+                data[i]._behaviors.isError['REBATE_BILLING_END'] = true;
+                data[i]._behaviors.validMsg['REBATE_BILLING_END'] = "End date is required";
+                isShowStopperError = true;
+            } 
 
             if((data[i].WF_STG_CD == "Won") && (data[i].PAYOUT_BASED_ON == "Consumption")){
                 let iserror =DE_Validation_Util.valideConsumptionParams(data[i],oldDEData);
