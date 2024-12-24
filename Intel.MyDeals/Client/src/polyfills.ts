@@ -19,3 +19,4 @@ import 'zone.js/dist/zone';
 
 // Required for ng-bootstrap (^v10)
 import '@angular/localize';
+import 'hammerjs/hammer';

@@ -22,6 +22,17 @@ namespace Intel.MyDeals.BusinessLogic
         {
             // TODO :Later need to decide caching will be apply or not
             return _reportingCollectorLib.GetReportDashboard();
-        }        
+        }
+        public List<ReportMissingCostData> GetReportMissingCostData()
+        {
+            // TODO :Later need to decide caching will be apply or not
+            return _reportingCollectorLib.GetReportMissingCostData();
+        }
+
+        public List<ReportNewProductMissingCostData> GetNewProductReportMissingCostData()
+        {
+            // TODO :Later need to decide caching will be apply or not
+            return _reportingCollectorLib.GetNewProductReportMissingCostData();
+        }
     }
 }

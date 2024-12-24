@@ -31,6 +31,29 @@ namespace Intel.MyDeals.Controllers.API
             );            
         }
 
-        
+        [Authorize]
+        [Route("GetReportMissingCostData")]
+        [HttpPost]
+        public List<ReportMissingCostData> GetReportMissingCostData()
+        {
+            return SafeExecutor(() => _reportingLib.GetReportMissingCostData()
+                , $"Unable to get {"Missing Cost Report"}"
+            );
+
+
+        }
+
+        [Authorize]
+        [Route("GetReportNewProductMissingCostData")]
+        [HttpPost]
+        public List<ReportNewProductMissingCostData> GetNewProductReportMissingCostData()
+        {
+            return SafeExecutor(() => _reportingLib.GetNewProductReportMissingCostData()
+                , $"Unable to get {"Missing Cost Report"}"
+            );
+
+
+        }
+
     }
 }

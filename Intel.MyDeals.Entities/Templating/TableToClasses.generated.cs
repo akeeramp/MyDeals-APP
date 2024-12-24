@@ -8311,6 +8311,94 @@ namespace Intel.MyDeals.Entities
 
     } // End of class ReportDealType
 
+    [DataContract]
+    public partial class ReportAllDealCount
+    {
+
+        [DataMember]
+        public System.Int32 Customer_Count { set; get; }
+
+
+        [DataMember]
+        public System.Int32 Deal_Count { set; get; }
+
+
+        [DataMember]
+        public System.String DEAL_TYPE { set; get; }
+
+
+        [DataMember]
+        public System.Int32 Distinct_Customer { set; get; }
+
+
+        [DataMember]
+        public System.Int32 Product_Count { set; get; }
+
+
+        [DataMember]
+        public System.String Total_Dollar_Amount { set; get; }
+
+    } // End of class ReportDealType
+
+    [DataContract]
+    public partial class ReportDealTypeStage
+    {
+
+        [DataMember]
+        public System.Int32 DEAL_COUNT { set; get; }
+
+
+        [DataMember]
+        public System.String DEAL_TYPE { set; get; }
+
+        [DataMember]
+        public System.String DEAL_STAGE { set; get; }
+
+    } // End of class ReportDealTypeStage
+
+    [DataContract]
+    public partial class ReportDealTypeQuarter
+    {
+
+        [DataMember]
+        public System.String DEAL_TYPE { set; get; }
+
+        [DataMember]
+        public System.String QUARTER { set; get; }
+
+        [DataMember]
+        public System.String DEAL_COUNT { set; get; }
+
+        [DataMember]
+        public System.String PERCENTAGE { set; get; }
+
+    } // End of class ReportDealTypeQuarter
+
+    [DataContract]
+    public partial class ReportProducts
+    {
+
+        [DataMember]
+        public System.String PRODUCT { set; get; }
+
+        [DataMember]
+        public System.Int32 DEAL_COUNT { set; get; }
+
+    } // End of class ReportProducts
+
+    [DataContract]
+    public partial class ReportCustomerReport
+    {
+
+        [DataMember]
+        public System.Int32 DEAL_COUNT { set; get; }
+
+
+        [DataMember]
+        public System.String CUSTOMER_NAME { set; get; }
+
+    } // End of class ReportCustomerReport
+
     ///<summary>
     /// Class created via template - Do Not Modify!
     /// To modify this code, re-execute the template, or extend as partial.
@@ -8320,15 +8408,17 @@ namespace Intel.MyDeals.Entities
     ///</summary>
 
     [DataContract]
-    public partial class ReportDealStage
-    {
+	public partial class ReportDealStage {
+	
+	[DataMember]
+	public System.String DEAL_STAGE {set;get;}
+	
+	
+	[DataMember]
+	public System.Int32 Deal_Stage_Count {set;get;}
 
         [DataMember]
-        public System.String DEAL_STAGE { set; get; }
-
-
-        [DataMember]
-        public System.Int32 Deal_Stage_Count { set; get; }
+        public System.String YEAR_WISE { set; get; }
 
 
         /*

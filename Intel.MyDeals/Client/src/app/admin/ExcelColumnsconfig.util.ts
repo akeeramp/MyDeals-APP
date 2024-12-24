@@ -38,6 +38,110 @@
             width: 75
         }
     ]
+
+    static GetReportMissingCostDataExcel = [
+        {
+            data: 'ProductName',
+            type: 'text',
+            readOnly: false,
+            width: 140
+        },
+        {
+            data: 'Vertical',
+            type: 'text',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'Processor',
+            type: 'text',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'MissingYearAndCost',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'ImpactedDeals',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'Family',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'Brand',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        }
+    ]
+
+    static GetReportNewProductMissingCostDataExcel = [
+
+        {
+            data: 'ProductName',
+            type: 'text',
+            readOnly: false,
+            width: 140
+        },
+        {
+            data: 'Vertical',
+            type: 'text',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'Brand',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'Family',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'Processor',
+            type: 'text',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'ProducID',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'Issue',
+            type: 'text',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'DaysAgo',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'MissingYearAndCost',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        }
+    ]
+
     static bulkUnifyColHeaders = ["Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "End Customer Retail", "End Customer Country/Region", "RPL Status Code", "Error Messages"]
     static bulkUnifyColumns = [
         {

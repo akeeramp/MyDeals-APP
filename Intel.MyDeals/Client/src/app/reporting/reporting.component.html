@@ -18,7 +18,9 @@
                                                 <h3>{{s.SUB_CTGR_NM}} </h3>
                                                 <ul>
                                                     <li class="reportLink" *ngFor="let d of ReportName | filter : s.SUB_CTGR_NM ">
-                                                        <a target="_blank" href="{{d.RPT_URL}}"><i class="fa fa-circle-o text-agreen"></i> {{d.RPT_UNIQ_NM}} </a>
+                                                        <a *ngIf="d.RPT_UNIQ_NM == 'iCost report'" (click)="downloadICostReport()" style="cursor: pointer;"><i class="fa fa-circle-o text-agreen"></i> {{d.RPT_UNIQ_NM}} </a>
+                                                        <a *ngIf="d.RPT_UNIQ_NM == 'New Product Missing Cost Report'" (click)="downloadGetReportNewProductMissingCostData()" style="cursor: pointer;"><i class="fa fa-circle-o text-agreen"></i> {{d.RPT_UNIQ_NM}} </a>
+                                                        <a target="_blank" href="{{d.RPT_URL}}" *ngIf="d.RPT_URL != ''"><i class="fa fa-circle-o text-agreen"></i> {{d.RPT_UNIQ_NM}} </a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -30,212 +32,214 @@
                     </aside>
                     <div class="content-wrapper">
                         <section class="content-header new-head">
-                            <h1>Dashboard <small>Version 1.0</small></h1>
+                            <h1>Dashboard</h1>
                             <ol class="breadcrumb first-look">
                                 <li><a href="#"><i class="fa fa-dashboard"></i>Report</a></li>
                                 <li class="active">Dashboard</li>
                             </ol>
                         </section>
                         <section class="content">
-                            <div class="rpt-row new-row">
-                                <div class="col-md-3 col-sm-6 col-xs-12">
-                                    <div class="info-box"><span class="info-box-icon bg-aqua"><i class="intelicon-gauge"
-                                                style="font-size:80px"></i></span>
-                                        <div class="info-box-content"><span class="info-box-text">Total
-                                                Deals</span><br />
-                                            <div><span class="info-box-number" class="info-box-number" title="{{dealCountTooltip}}">{{totalDealCount | number :
-                                                    fractionSize}}</span></div>
+                            <div class="rpt-row new-row" style="overflow-y: initial;">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <div class="nd-info-box">
+                                        <a class="info-icon" title="Click Here For More Details" (click)="inChart()">
+                                            <i class="fa fa-solid fa-exclamation"></i>
+                                        </a>
+                                        <div class="nd-icon-content">
+                                            <i class="intelicon-gauge icon-one-custom"></i>
+                                            <span>Total Deals</span>
+                                        </div>
+                                        <div class="count-details">
+                                            <p>{{totalAllDealCount | number : fractionSize}}</p>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="visibleChart" class="hover-chart-design chartCustomVal">
+                                        <div class="chart-alignment-hover">
+                                            <button class="btn-close-design" (click)="outChart()" title="Close">X</button>
+                                            <kendo-chart id="deal-stages-chart" style="height: 330px;">
+                                                <kendo-chart-area background="#00000000" color="#ffffff" fill="#ffffff"></kendo-chart-area>
+                                                <kendo-chart-series>
+                                                    <kendo-chart-series-item type="donut"
+                                                                             [data]="ReportAllDealCount"
+                                                                             categoryField="DEAL_TYPE"
+                                                                             field="Deal_Count">
+                                                        <kendo-chart-series-item-tooltip>
+                                                            <ng-template let-value="value" let-category="category" let-series="series">{{category}}: {{value}}</ng-template>
+                                                        </kendo-chart-series-item-tooltip>
+                                                    </kendo-chart-series-item>
+                                                </kendo-chart-series>
+                                                <kendo-chart-legend [visible]="true" position="left" color="#ffffff" fill="#ffffff"></kendo-chart-legend>
+                                            </kendo-chart>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-sm-6 col-xs-12">
-                                    <div class="info-box"><span class="info-box-icon bg-red"><i
-                                                class="intelicon-package"
-                                                style="font-size: 70px; line-height: 1.3;"></i></span>
-                                        <div class="info-box-content"><span class="info-box-text">Total Product
-                                                Used</span><br /><span class="info-box-number">{{productUsed}}</span>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <div class="nd-info-box">
+                                        <div class="nd-icon-content">
+                                            <i class="intelicon-package icon-two-custom"></i>
+                                            <span>Total Product Used</span>
+                                        </div>
+                                        <div class="count-details">
+                                            <p>{{productUsed}}</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix visible-sm-block"></div>
-                                <div class="col-md-3 col-sm-6 col-xs-12">
-                                    <div class="info-box"><span class="info-box-icon bg-green"><i
-                                                class="intelicon-user-account-outlined"
-                                                style="font-size:70px; line-height: 1.3;"></i></span>
-                                        <div class="info-box-content"><span class="info-box-text">Customer
-                                                Serviced</span><br /><span class="info-box-number">{{cutomerServiced}}</span></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-6 col-xs-12">
-                                    <div class="info-box"><span class="info-box-icon bg-yellow"><i
-                                                class="intelicon-time-lapse-solid"
-                                                style="font-size:70px; line-height: 1.3;"></i></span>
-                                        <div class="info-box-content"><span class="info-box-text">Reporting Time
-                                            </span><small class="info-box-small-text">Captured in Seconds</small>
-                                        <span class="info-box-number">{{SUM_AMOUNT}}</span></div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <div class="nd-info-box">
+                                        <div class="nd-icon-content">
+                                            <i class="intelicon-user-account-outlined icon-three-custom"></i>
+                                            <span>Customer Serviced</span>
+                                        </div>
+                                        <div class="count-details">
+                                            <p>{{cutomerServiced}}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="rpt-row" [hidden]="!isRecordAvailable">  
+                            <div class="rpt-row" style="padding-top: 5px; overflow: inherit;">
+                                <div class="col-md-3" *ngFor="let x of ReportDealType;let index = index">
+                                    <div class="new-info-box">
+                                        <span class="new-info-box-icon bg-{{x.COLOR}} border-{{x.COLOR}}" title="{{x.DEAL_TYPE}}">{{x.DEAL_TYPE | slice :0:1}}</span>
+                                        <a class="info-icon" title="Click Here For More Details" (click)="hoverIndex(index, x.DEAL_TYPE)">
+                                            <i class="fa fa-solid fa-exclamation"></i>
+                                        </a>
+                                        <div class="new-info-box-content-lower">
+                                            <div class="details-stages">
+                                                <span class="new-info-box-text-side">{{x.DEAL_TYPE}}</span>
+                                                <span class="new-info-box-number-side">{{x.Deal_Count | number : fractionSize}}</span>
+                                            </div>
+
+                                            <div class="new-progress">
+                                                <div class="progress-bar bg-{{x.COLOR}}" [ngStyle]="{'width':getWidthDT(x.Deal_Count)}"></div>
+                                            </div>
+                                            <div class="total-value-deals">
+                                                <span>Total Number of Deals</span>
+                                                <span>{{totalDealCount | number : fractionSize}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="visibleIndex === index" class="hover-chart-design" [ngClass]="{'right-align-box' : index > 1 }">
+                                        <div class="chart-alignment-hover">
+                                            <button class="btn-close-design" (click)="closeHover()" title="Close">X</button>
+                                            <kendo-chart id="deal-stages-chart" style="height: 330px;">
+                                                <kendo-chart-area background="#00000000" color="#ffffff" fill="#ffffff"></kendo-chart-area>
+                                                <kendo-chart-series>
+                                                    <kendo-chart-series-item type="donut"
+                                                                             [data]="dataDealTypeStages"
+                                                                             categoryField="DEAL_STAGE"
+                                                                             field="DEAL_COUNT">
+                                                        <kendo-chart-series-item-tooltip>
+                                                            <ng-template let-value="value" let-category="category" let-series="series">{{category}}: {{value}}</ng-template>
+                                                        </kendo-chart-series-item-tooltip>
+                                                    </kendo-chart-series-item>
+                                                </kendo-chart-series>
+                                                <kendo-chart-legend [visible]="true" position="left" color="#ffffff" fill="#ffffff"></kendo-chart-legend>
+                                            </kendo-chart>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="rpt-row">
                                 <div class="col-md-12">
                                     <div class="box">
                                         <div class="box-header with-border">
-                                            <h3 class="box-title">Report Usage Dashboard</h3>
-                                            <div class="box-tools pull-right"></div>
+                                            <h3 class="box-title">Deal breakdown by Quarter</h3>
                                         </div>
                                         <div class="box-body">
                                             <div class="rpt-row">
-                                                <div class="col-md-8">
-                                                    <div class="chart">
-                                                        <div id="chart" class="kendocontainer">
-                                                            <kendo-chart #chartkendo [popupSettings]="{ appendTo: chartContainer}" [title]="chartObj.title" [chartArea]="chartObj.chartArea" [seriesDefaults]="chartObj.seriesDefaults" [valueAxis]="chartObj.valueAxis" [categoryAxis]="chartObj.categoryAxis" [legend]="chartObj.legend">
-                                                                <kendo-chart-series>
-                                                                    <kendo-chart-series-item *ngFor="let series of chartSeriesObj" [name]="series.name" [data]="series.data">
-                                                                        <kendo-chart-series-item-tooltip>
-                                                                            <ng-template let-value="value" let-category="category" let-series="series">{{series.name}}:{{ value}} (seconds) </ng-template>
-                                                                        </kendo-chart-series-item-tooltip>
-                                                                    </kendo-chart-series-item>
-                                                                </kendo-chart-series>
-                                                            </kendo-chart>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="progress-group" *ngFor="let x of ReportDashboardData | slice : 0:5 ">
-                                                        <span class="progress-text">{{x.RPT_NM}}</span><span class="progress-number"><b>{{x.TOTAL_TIME}}/{{x.TOTAL_REPORT_TIME}}</b></span>
-                                                        <div class="progress sm">
-                                                            <div class="progress-bar progress-bar{{x.COLOR_CD}}" [ngStyle]="{'width':getWidthDB(x.TOTAL_TIME,x.TOTAL_REPORT_TIME)}">
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div class="col-md-12">
+                                                    <kendo-chart [style.height.px]="400">
+                                                        <kendo-chart-category-axis>
+                                                            <kendo-chart-category-axis-item [categories]="ReportQuarters">
+                                                            </kendo-chart-category-axis-item>
+                                                        </kendo-chart-category-axis>
+                                                        <kendo-chart-series>
+                                                            <kendo-chart-series-item type="column" [gap]="1.8" [spacing]="0.2" [data]="ReportEcapQuarter">
+                                                                <kendo-chart-series-item-tooltip>
+                                                                    <ng-template let-value="value">ECAP: {{value}}</ng-template>
+                                                                </kendo-chart-series-item-tooltip>
+                                                            </kendo-chart-series-item>
+                                                            <kendo-chart-series-item type="column" [gap]="1.8" [spacing]="0.2" [data]="ReportFlexQuarter">
+                                                                <kendo-chart-series-item-tooltip>
+                                                                    <ng-template let-value="value">FLEX: {{value}}</ng-template>
+                                                                </kendo-chart-series-item-tooltip>
+                                                            </kendo-chart-series-item>
+                                                            <kendo-chart-series-item type="column" [gap]="1.8" [spacing]="0.2" [data]="ReportKitQuarter">
+                                                                <kendo-chart-series-item-tooltip>
+                                                                    <ng-template let-value="value">KIT: {{value}}</ng-template>
+                                                                </kendo-chart-series-item-tooltip>
+                                                            </kendo-chart-series-item>
+                                                            <kendo-chart-series-item type="column" [gap]="1.8" [spacing]="0.2" [data]="ReportProgramQuarter">
+                                                                <kendo-chart-series-item-tooltip>
+                                                                    <ng-template let-value="value">PROGRAM: {{value}}</ng-template>
+                                                                </kendo-chart-series-item-tooltip>
+                                                            </kendo-chart-series-item>
+                                                            <kendo-chart-series-item type="column" [gap]="1.8" [spacing]="0.2" [data]="ReportRevtierQuarter">
+                                                                <kendo-chart-series-item-tooltip>
+                                                                    <ng-template let-value="value">REVTIER: {{value}}</ng-template>
+                                                                </kendo-chart-series-item-tooltip>
+                                                            </kendo-chart-series-item>
+                                                            <kendo-chart-series-item type="column" [gap]="1.8" [spacing]="0.2" [data]="ReportVoltierQuarter">
+                                                                <kendo-chart-series-item-tooltip>
+                                                                    <ng-template let-value="value">VOLTIER: {{value}}</ng-template>
+                                                                </kendo-chart-series-item-tooltip>
+                                                            </kendo-chart-series-item>
+                                                        </kendo-chart-series>
+                                                        <kendo-chart-tooltip></kendo-chart-tooltip>
+                                                    </kendo-chart>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="rpt-row" [hidden]="!isRecordAvailable">
-                                <div class="col-md-8">
-                                    <div class="box box-success">
-                                        <div class="box-header with-border">
-                                            <h3 class="box-title">Report Usage Log Chart</h3>
-                                            <div class="box-tools pull-right"></div>
-                                        </div>
-                                        <div class="box-body no-padding">
-                                            <div class="rpt-row">
-                                                <div class="col-md-6 col-sm-8">
-                                                    <div class="pad">
-                                                        <div id="chartPie" class="kendocontainer">
-                                                            <kendo-chart #piekendo [popupSettings]="{ appendTo: pieContainer}" [title]="chartPieObj.title" [legend]="chartPieObj.legend" [chartArea]="chartPieObj.chartArea" [seriesDefaults]="chartPieObj.seriesDefaults">
-                                                                <kendo-chart-series>
-                                                                    <kendo-chart-series-item type="pie" [data]="chartPieSeriesObj" field="value" categoryField="category" [labels]="{ visible: true, content: labelContent}">
-                                                                        <kendo-chart-series-item-tooltip>
-                                                                            <ng-template let-value="value" let-category="category" let-series="series">{{category}}:{{ value}}% </ng-template>
-                                                                        </kendo-chart-series-item-tooltip>
-                                                                    </kendo-chart-series-item>
-                                                                </kendo-chart-series>
-                                                            </kendo-chart>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-8">
-                                                    <div class="pad">
-                                                        <div id="chartPiee" class="kendocontainer">
-                                                            <kendo-chart #pieekendo [popupSettings]="{ appendTo: pieeContainer}" [title]="chartPieeObj.title" [legend]="chartPieeObj.legend" [chartArea]="chartPieeObj.chartArea" [seriesDefaults]="chartPieeObj.seriesDefaults" [tooltip]="chartPieeObj.tooltip">
-                                                                <kendo-chart-series>
-                                                                    <kendo-chart-series-item type="pie" [data]="chartPieeSeriesObj" field="value" categoryField="category" [labels]="{ visible: true, content: labelContent}">
-                                                                        <kendo-chart-series-item-tooltip>
-                                                                            <ng-template let-value="value" let-category="category">{{category}}:{{ value}} % </ng-template>
-                                                                        </kendo-chart-series-item-tooltip>
-                                                                    </kendo-chart-series-item>
-                                                                </kendo-chart-series>
-                                                            </kendo-chart>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 vfkd-align-fix" style="position: relative; padding-left: 15px; padding-right: 15px">
-                                    <div class="info-box bg-{{x.COLOR}}" *ngFor="let x of ReportDealType | slice :0:5 ">
-                                        <span class="info-box-icon"><i class="fa fa-circle-o text-white"></i></span>
-                                        <div class="info-box-content-lower">
-                                            <span class="info-box-text-side">{{x.DEAL_TYPE}}</span>
-                                            <span class="info-box-number-side">{{x.Deal_Count | number : fractionSize}}</span>
-                                            <div class="progress">
-                                                <div class="progress-bar" [ngStyle]="{'width':getWidthDT(x.Deal_Count)}"></div>
-                                            </div><span class="progress-description-side">
-                                                Total Number of Deals
-                                                -{{totalDealCount | number : fractionSize}}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="rpt-row" [hidden]="!isRecordAvailable"> 
-                                <div class="col-md-12">
+                            <div class="rpt-row">
+                                <div class="col-md-6">
                                     <div class="box box">
                                         <div class="box-header with-border">
-                                            <h3 class="box-title">Report(s) Log</h3><label class="switch" title='Excluded/Included by USER'>
-                                                <input type="checkbox"
-                                                       [(ngModel)]="reportLogView" title='Click to see Summarized view'
-                                                       checked><span class="slider" title='Click to see Summarized view'>
-                                                    <p class={{reportLogView}}></p>
-                                                </span>
-                                            </label>
-                                            <div class="box-tools pull-right"></div>
+                                            <h3 class="box-title">Top 11 customers by deal count</h3>
                                         </div>
                                         <div class="box-body">
-                                            <div class="table-responsive" style="height:430px">
-                                                <table class="table no-margin ReportAuditLog tableHeader tableHeaderReporting" *ngIf="reportLogView==false">
+                                            <div class="table-responsive">
+                                                <table class="table no-margin ReportAuditLog tableHeader tableHeaderReporting">
                                                     <thead>
                                                         <tr>
-                                                            <th>Report Name</th>
-                                                            <th title="Number of times">Count</th>
-                                                            <th title="Total Time Spend">Total Time</th>
-                                                            <th title="Average Time Spend">Average</th>
-                                                            <th title="Maximum Time Spend">Max Time</th>
-                                                            <th title="Minimum Time Spend">Min Time</th>
+                                                            <th>Customer Name</th>
+                                                            <th>Deal Count</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr *ngFor="let x of ReportDashboardData | slice :0:numberOfRecrods ">
-                                                            <td>{{x.RPT_NM}}</td>
-                                                            <td>{{x.RPT_COUNT}}</td>
-                                                            <td>{{x.TOTAL_TIME}}</td>
-                                                            <td>{{x.AVG_TIME}}</td>
-                                                            <td>{{x.MAX_TIME}}</td>
-                                                            <td>{{x.MIN_TIME}}</td>
+                                                        <tr *ngFor="let x of ReportCustomerReport">
+                                                            <td>{{x.CUSTOMER_NAME}}</td>
+                                                            <td>{{x.DEAL_COUNT}}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <table class="table no-margin ReportAuditLog tableHeader tableHeaderReporting" *ngIf="reportLogView==true">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="box box">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">Top 10 Products</h3>
+                                        </div>
+                                        <div class="box-body">
+                                            <div class="table-responsive">
+                                                <table class="table no-margin ReportAuditLog tableHeader tableHeaderReporting">
                                                     <thead>
                                                         <tr>
-                                                            <th style="width:2px"></th>
-                                                            <th>Report Name</th>
-                                                            <th title="Start Time">Start Time</th>
-                                                            <th title="End Time">End Time</th>
-                                                            <th title="Time Taken">Time Taken</th>
+                                                            <th>Product Name</th>
+                                                            <th>Count</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr *ngFor="let x of ReportLogDeatils | slice :0:numberOfRecrods ">
-                                                            <td title="{{x.TOTAL_REPORT_TIME_TAKEN >60 ? 'Check Filter before running the Report' : ''}}">
-                                                                <i *ngIf="x.TOTAL_REPORT_TIME_TAKEN >60" class="intelicon-information-outlined red" [ngClass]="{success : x.TOTAL_REPORT_TIME_TAKEN < 60, warning : x.TOTAL_REPORT_TIME_TAKEN >=60}"></i>
-                                                            </td>
-                                                            <td>Deal Management {{x.RPT_ALS_NM}}</td>
-                                                            <td>{{x.START_TIME}}</td>
-                                                            <td>{{x.END_TIME}}</td>
-                                                            <td>{{x.TOTAL_REPORT_TIME_TAKEN}}</td>
+                                                        <tr *ngFor="let x of ReportProducts">
+                                                            <td>{{x.PRODUCT}}</td>
+                                                            <td>{{x.DEAL_COUNT}}</td>
                                                         </tr>
                                                     </tbody>
-                                                </table><a *ngIf="ReportLogDeatils.length > 10 && reportLogView == true" (click)="showAll(numberOfRecrods)" class="showMoreCult" title={{btnText}}>
-                                                    {{btnText}} <i *ngIf="btnText=='Show more '"
-                                                                   class="intelicon-down"></i><i *ngIf="btnText=='Show less '"
-                                                                                                 class="intelicon-up"></i>
-                                                </a>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>

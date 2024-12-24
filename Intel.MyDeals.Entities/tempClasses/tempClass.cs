@@ -2363,6 +2363,75 @@ public partial class DealTemplateDataGram
 
         [DataMember]
         public List<ReportName> ReportName;
+
+        [DataMember]
+        public List<ReportDealTypeStage> ReportDealTypeStage;
+
+        [DataMember]
+        public List<ReportCustomerReport> ReportCustomerReport;
+
+        [DataMember]
+        public List<ReportDealTypeQuarter> ReportDealTypeQuarter;
+
+        [DataMember]
+        public List<ReportProducts> ReportProducts;
+
+        [DataMember]
+        public List<ReportAllDealCount> ReportAllDealCount;
+    }
+
+    public class ReportNewProductMissingCostData
+    {
+        [DataMember]
+        public string ProductName;
+
+        [DataMember]
+        public string Vertical;
+
+        [DataMember]
+        public string Brand;
+
+        [DataMember]
+        public string Family;
+
+        [DataMember]
+        public string Processor;
+
+        [DataMember]
+        public int ProducID;
+
+        [DataMember]
+        public string Issue;
+
+        [DataMember]
+        public int DaysAgo;
+
+        [DataMember]
+        public string MissingYearAndCost;
+    }
+
+    public class ReportMissingCostData
+    {
+        [DataMember]
+        public string ProductName;
+
+        [DataMember]
+        public string Vertical;
+
+        [DataMember]
+        public string Brand;
+
+        [DataMember]
+        public string Family;
+
+        [DataMember]
+        public string Processor;
+
+        [DataMember]
+        public string MissingYearAndCost;
+
+        [DataMember]
+        public string ImpactedDeals;
     }
 
     public class ValidateVistexR3Wrapper

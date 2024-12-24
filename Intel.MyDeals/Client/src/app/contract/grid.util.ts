@@ -618,6 +618,98 @@ export class GridUtil {
         else
             return "";
     }
+
+    static dsToExcelReport(data, response, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        for (var t = 0; t < data.length; t++) {
+            rows[0].cells.push({
+                value: data[t].data,
+                type: data[t].type,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true,
+                width: data[t].width
+            });
+            colWidths.push({ width: data[t].data == 'ImpactedDeals' ? 500 : 180 });
+        }
+        for (let i = 0; i < response.length; i++) {
+            rows.push({
+                cells: [
+                    { value: response[i]["ProductName"], wrap: true },
+                    { value: response[i]["Vertical"], wrap: true },
+                    { value: response[i]["Processor"], wrap: true },
+                    { value: response[i]["MissingYearAndCost"], wrap: true },
+                    { value: response[i]["ImpactedDeals"], wrap: true },
+                    { value: response[i]["Family"], wrap: true },
+                    { value: response[i]["Brand"], wrap: true },
+                ]
+            })
+        }
+        const sheets = [
+            {
+                columns: colWidths,
+                title: fileName,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
+
+    static dsToExcelReportNewProductMissingCostData(data, response, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        for (var t = 0; t < data.length; t++) {
+            rows[0].cells.push({
+                value: data[t].data,
+                type: data[t].type,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true,
+                width: data[t].width
+            });
+            //colWidths.push({ width: data[t].data == 'ImpactedDeals' ? 500 : 180 });
+        }
+        for (let i = 0; i < response.length; i++) {
+            rows.push({
+                cells: [
+                    { value: response[i]["ProductName"], wrap: true },
+                    { value: response[i]["Vertical"], wrap: true },
+                    { value: response[i]["Brand"], wrap: true },
+                    { value: response[i]["Family"], wrap: true },
+                    { value: response[i]["Processor"], wrap: true },
+                    { value: response[i]["ProducID"], wrap: true },
+                    { value: response[i]["Issue"], wrap: true },
+                    { value: response[i]["DaysAgo"], wrap: true },
+                    { value: response[i]["MissingYearAndCost"], wrap: true }
+                    
+                ]
+            })
+        }
+        const sheets = [
+            {
+                columns: colWidths,
+                title: fileName,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
+
     static applySoftWarnings(passedData, field) {
         var msg = "";
         var finalMsg = "";

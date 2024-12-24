@@ -4,6 +4,9 @@ import {reportingService} from "./reporting.service";
 import {List} from "linqts";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { SeriesLabelsContentArgs } from "@progress/kendo-angular-charts";
+import { ExcelColumnsConfig } from '../admin/ExcelColumnsconfig.util';
+import { GridUtil } from "../contract/grid.util";
 
 @Component({
   selector: "reporting-dashboard",
@@ -12,11 +15,29 @@ import { takeUntil } from "rxjs/operators";
 })
 export class ReportingComponent implements OnDestroy{
     constructor(private reportingSvc: reportingService,private loggerSvc:logger) { }
-  //created for Angular loader
-  public isLoading: string = 'true';
-  public loadMessage: string = "Report is Loading ...";
-  public moduleName:string ="Report Dashboard";
-
+    //created for Angular loader
+    public isLoading: string = 'true';
+    public loadMessage: string = "Report is Loading ...";
+    public moduleName: string = "Report Dashboard";
+    private GetReportMissingCostDataColumn = ExcelColumnsConfig.GetReportMissingCostDataExcel;
+    private GetReportNewProductMissingCostDataColumn = ExcelColumnsConfig.GetReportNewProductMissingCostDataExcel;
+    private colorStages = {
+        Complete: "#C4D600",
+        InComplete: "#FC4C02",
+        Draft: "#d8dddf",
+        Pending: "#FFA300",
+        Requested: "#f9eaa7",
+        Submitted: "#ffd180",
+        Approved: "#c4d600",
+        InProgress: "#d8dddf",
+        Processed: "#C4D600",
+        Active: "#c4d600",
+        Offer: "#FFA300",
+        Lost: "#FC4C02",
+        Won: "#acbc00",
+        Hold: "#aaaaaa",
+        Cancelled: "#aaaaaa"
+    }
 //*******************for chart purpose***************************//
  public chartPieeSeriesObj:any=null;
  public chartPieSeriesObj:any=null;
@@ -132,6 +153,8 @@ export class ReportingComponent implements OnDestroy{
   }
   //*******************for chart purpose***************************//
   private totalDealCount: number = 1;
+  private totalAllDealCount: number = 1;
+  visibleChart = false;
   dealCountTooltip: any;
   productUsed: any;
   cutomerServiced: any;
@@ -152,11 +175,16 @@ export class ReportingComponent implements OnDestroy{
   private reportLogView: boolean = true;
   private numberOfRecrods: number = 10;
   private masterData: any;
-  private ReportDealType :Array<any>=[]; ReportName:Array<any>=[];ReportSummary:Array<any>=[];ReportDashboardData:Array<any>=[];ReportLogDeatils:Array<any>=[];
+  private ReportDealType: Array<any> = []; ReportDealStage: Array<any> = []; ReportName: Array<any> = []; ReportSummary: Array<any> = []; ReportDashboardData: Array<any> = []; ReportLogDeatils: Array<any> = []; ReportDealTypeStage: Array<any> = [];
+  private ReportCustomerReport: Array<any> = [];
+  private ReportEcapQuarter: Array<any> = []; ReportFlexQuarter: Array<any> = []; ReportKitQuarter: Array<any> = []; ReportProgramQuarter: Array<any> = []; ReportRevtierQuarter: Array<any> = []; ReportVoltierQuarter: Array<any> = [];
+  private ReportDealTypeQuarter: Array<any> = [];ReportQuarters: Array<any> = []; ReportProducts: Array<any> = []; ReportAllDealCount: Array<any> = [];
   private btnText: string = "Show more ";
   private isRecordAvailable: boolean = false;
   private getReportCatagory: any;
   getReportSubCatagory: any;
+  visibleIndex = -1;
+    private dataDealTypeStages: Array<any> = [];
   //Creating Color Code Dictionary
   private colorNameDict = {
     "Search Report Deal": "ng-fluscnt",
@@ -205,26 +233,105 @@ export class ReportingComponent implements OnDestroy{
       this.btnText = "Show more ";
       this.numberOfRecrods = 10;
     }
-  }
+    }
+
+    labelContent(e: SeriesLabelsContentArgs): string {
+        return e.category;
+    }
+
+    colorAddedStage(dealStages) {
+        for (let i = 0; i < dealStages.length; i++) {
+            for (const key in this.colorStages) {
+                if (dealStages[i].DEAL_STAGE == key) {
+                    /*let color = { color: this.colorStages [key]}*/
+                    dealStages[i]["color"] = this.colorStages[key]
+                }
+            }
+        }
+        return dealStages
+    }
+
+    downloadICostReport() {
+        this.loggerSvc.warn("Please wait downloading inprogress","");
+        this.reportingSvc.GetReportMissingCostData().pipe(takeUntil(this.destroy$))
+            .subscribe((response: any) => {
+                if (response && response.length > 0) {
+                    GridUtil.dsToExcelReport(this.GetReportMissingCostDataColumn, response, "missingCostData");
+                    this.loggerSvc.success("Successfully downloaded the report data");
+                } else {
+                    this.loggerSvc.error("Unable to Download Report Data","");
+                }
+            }, (error) => {
+                this.loggerSvc.error("Unable to Download Report Data", error);
+            })
+    }
+
+    downloadGetReportNewProductMissingCostData() {
+        this.reportingSvc.GetReportNewProductMissingCostData().pipe(takeUntil(this.destroy$))
+            .subscribe((response: any) => {
+                if (response) {
+                    GridUtil.dsToExcelReportNewProductMissingCostData(this.GetReportNewProductMissingCostDataColumn, response, "New Product Missing Cost Report");
+                    this.loggerSvc.success("Successfully downloaded the report data");
+                } else {
+                    this.loggerSvc.error("Unable to Download Report Data", "");
+                }
+            }, (error) => {
+                this.loggerSvc.error("Unable to Download Report Data", error);
+            })
+    }
+
+    reportDealTypesBarChart() {
+        let Val = this.ReportDealTypeQuarter.filter(val => {
+            if (val.DEAL_TYPE == "ECAP") {
+                this.ReportEcapQuarter.push(val.DEAL_COUNT)
+            }
+            if (val.DEAL_TYPE == "FLEX") {
+                this.ReportFlexQuarter.push(val.DEAL_COUNT)
+            }
+            if (val.DEAL_TYPE == "KIT") {
+                this.ReportKitQuarter.push(val.DEAL_COUNT)
+            }
+            if (val.DEAL_TYPE == "PROGRAM") {
+                this.ReportProgramQuarter.push(val.DEAL_COUNT)
+            }
+            if (val.DEAL_TYPE == "REV TIER") {
+                this.ReportRevtierQuarter.push(val.DEAL_COUNT)
+            }
+            if (val.DEAL_TYPE == "VOLTIER") {
+                this.ReportVoltierQuarter.push(val.DEAL_COUNT)
+                this.ReportQuarters.push(val.QUARTER)
+            }
+        })
+        
+    }
+
   loadReportDashboard() {
     let vm = this;
     this.reportingSvc.getReportData()
-    .pipe(takeUntil(this.destroy$)).subscribe(response => {
+        .pipe(takeUntil(this.destroy$)).subscribe(response => {
         //loader stops
         vm.isLoading = 'false';
         //variable assignment
         vm.masterData = response; // changing to see all values
         vm.ReportDealType=vm.masterData["ReportDealType"];
-        vm.ReportName=vm.masterData["ReportName"]
+        vm.ReportName = vm.masterData["ReportName"]
+        vm.ReportDealStage = vm.masterData["ReportDealStage"]
+        vm.ReportDealTypeStage = this.colorAddedStage(vm.masterData["ReportDealTypeStage"])
         vm.ReportSummary = vm.masterData["ReportSummary"]
         vm.ReportDashboardData=vm.masterData["ReportDashboardData"]
-        vm.ReportLogDeatils= vm.masterData["ReportLogDeatils"]
-        vm.SUM_AMOUNT=vm.ReportSummary[0].SUM_AMOUNT;
+        vm.ReportLogDeatils = vm.masterData["ReportLogDeatils"]
 
+        vm.ReportCustomerReport = vm.masterData["ReportCustomerReport"]
+        vm.ReportDealTypeQuarter = vm.masterData["ReportDealTypeQuarter"];
+        vm.ReportProducts = vm.masterData["ReportProducts"]
+        vm.ReportAllDealCount = vm.masterData["ReportAllDealCount"]
+        vm.SUM_AMOUNT = vm.ReportSummary[0].SUM_AMOUNT;
+        this.reportDealTypesBarChart()
         if (vm.ReportLogDeatils.length > 0) {
           vm.isRecordAvailable = true;
         }
         vm.totalDealCount = 0;
+        vm.totalAllDealCount = 0;
         vm.dealCountTooltip = "";
         vm.productUsed = vm.ReportDealType[0]
           ? vm.ReportDealType[0].Product_Count
@@ -274,8 +381,8 @@ export class ReportingComponent implements OnDestroy{
               vm.totalDollarAmount =
                 vm.ReportDealType[cnt].Total_Dollar_Amount;
             }
-            vm.totalDealCount +=
-              vm.ReportDealType[cnt].Deal_Count;
+            vm.totalDealCount += vm.ReportDealType[cnt].Deal_Count;
+            vm.totalAllDealCount += vm.ReportAllDealCount[cnt].Deal_Count;
             vm.dealCountTooltip +=
               vm.ReportDealType[cnt].DEAL_TYPE +
               ": " +
@@ -370,16 +477,37 @@ export class ReportingComponent implements OnDestroy{
         this.loggerSvc.error("Unable to get Report Data.", err);
       }
     );
-  }
+    }
+    hoverIndex(ind, dealType) {
+        this.visibleIndex = ind;
+        this.dataDealTypeStages = [];
+        for (let j = 0; j < this.ReportDealTypeStage.length; j++) {
+            if (this.ReportDealTypeStage[j].DEAL_TYPE == dealType) {
+                this.dataDealTypeStages.push(this.ReportDealTypeStage[j])
+            }
+        }       
+    }
 
-  ngOnInit() {
-    this.loadReportDashboard();
-  }
+    closeHover() {
+        this.visibleIndex = -1
+    }
 
-//destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-ngOnDestroy() {
-  this.destroy$.next();
-  this.destroy$.complete();
-}
+    inChart() {
+        this.visibleChart = true;
+    }
+
+    outChart() {
+        this.visibleChart = false;
+    }
+
+    ngOnInit() {
+        this.loadReportDashboard();
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+      this.destroy$.next();
+      this.destroy$.complete();
+    }
 
 }

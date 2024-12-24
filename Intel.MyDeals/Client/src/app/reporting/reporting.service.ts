@@ -14,6 +14,18 @@ export class reportingService {
         let param =new HttpParams();
         param.set('cache','false');
         return this.httpClient.get(apiUrl,{params:param});
-    } 
+    }
+
+    public GetReportMissingCostData(): Observable<any> {
+        const headers = { 'content-type': 'application/json' };
+        const apiUrl: string = this.apiBaseUrl + 'GetReportMissingCostData';
+        return this.httpClient.post(apiUrl, { 'headers': headers });
+    }
+
+    public GetReportNewProductMissingCostData(): Observable<any> {
+        const headers = { 'content-type': 'application/json' };
+        const apiUrl: string = this.apiBaseUrl + 'GetReportNewProductMissingCostData';
+        return this.httpClient.post(apiUrl, { 'headers': headers });
+    }
 }
 

@@ -2933,3 +2933,7 @@ h3.intelicon-jobs-outlined.job-outline-process:before {
     border-left: none !important;
     border-top: none !important;
 }
+
+kendo-chart#deal-stages-chart svg text {
+    fill: #fff;
+}

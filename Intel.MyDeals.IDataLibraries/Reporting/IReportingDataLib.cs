@@ -6,5 +6,7 @@ namespace Intel.MyDeals.IDataLibrary
     public interface IReportingDataLib
     {
         ReportMasterData GetReportDashboard();
+        List<ReportMissingCostData> GetReportMissingCostData();
+        List<ReportNewProductMissingCostData> GetNewProductReportMissingCostData();
     }
 }

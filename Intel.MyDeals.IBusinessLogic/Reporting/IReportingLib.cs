@@ -9,7 +9,11 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IReportingLib
     {
-        ReportMasterData GetReportDashboard();        
+        ReportMasterData GetReportDashboard();
+
+        List<ReportMissingCostData> GetReportMissingCostData();
+
+        List<ReportNewProductMissingCostData> GetNewProductReportMissingCostData();
 
     }
 }
