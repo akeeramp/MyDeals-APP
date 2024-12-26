@@ -468,3 +468,10 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu .k-s
     kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu .k-state-active > .k-i-filter:hover {
         color: #0071C5 !important
     }
+#exclGrp .showToggle {
+    visibility: visible !important
+}
+
+#exclGrp .hideToggle {
+    visibility: hidden !important
+}

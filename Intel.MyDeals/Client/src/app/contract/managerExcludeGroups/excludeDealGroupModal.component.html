@@ -27,7 +27,7 @@
                     <mat-slide-toggle [color]="color" [(ngModel)]="isSelected" (change)="onToggleChange()"
                                       title='Click to see Excluded/Included by USER'></mat-slide-toggle>
                 </div>
-                <div style="color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: right; right: 50px; position: relative;">
+                <div [ngClass]="{ 'showToggle': isSelected, 'hideToggle': !isSelected }" style="color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: right; right: 50px; position: relative;">
                     Filter deals based on consumption parameters:
                     <mat-slide-toggle [(ngModel)]="isConsumptionToggleOn" (change)="viewConsumptionOnly()" [color]="color" title="{{isConsumptionToggleOn ? 'Click to see all deals' : 'Click to see filtered deals based on consumption parameters'}}" style="position: relative; left: 20px;"></mat-slide-toggle>
                 </div>
