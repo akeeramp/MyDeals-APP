@@ -37,7 +37,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    // In the rule, this acts against the following rebate types: ECAP ADJ, DEBIT MEMO, MDF, MDF/NRE LUMP-SUM BUDGET, NRE LUMP-SUM BUDGET, TENDER ACCRUAL
+                    // In the rule, this acts against the following rebate types: ECAP ADJ, DEBIT MEMO, MDF, MDF/NRE LUMP-SUM BUDGET, NRE LUMP-SUM BUDGET, TENDER ACCRUAL,CO-SELLING/CO-ENGINEERING BUDGET,CO-SELLING/CO-MARKETING/CO-ENGINEERING BUDGET,CO-MARKETING/CO-ENGINEERING BUDGET
                     Title="Forecast Volume required if L1",
                     ActionRule = MyDcActions.ForecastVolumeRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
@@ -85,26 +85,6 @@ namespace Intel.MyDeals.BusinessRules
                             }
                         }
 
-                    }
-                },
-                new MyOpRule
-                {
-                    // If deal type is Vol Tier and Type is CO-MARKETING SPIF/PER UNIT ACTIVITY, then ensure that user fills in VOLUME values - Used to be MDF ACTIVITY
-                    Title="Forecast Volume Required if Lump Sum Type is CO-MARKETING SPIF/PER UNIT ACTIVITY",
-                    ActionRule = MyDcActions.ExecuteActions,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("CO-MARKETING SPIF/PER UNIT ACTIVITY")).Any(),
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Action = BusinessLogicDeActions.SetRequired,
-                            Target = new[] {
-                                AttributeCodes.FRCST_VOL
-                            }
-                        }
                     }
                 },
 

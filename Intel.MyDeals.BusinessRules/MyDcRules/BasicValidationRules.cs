@@ -454,12 +454,48 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
+                 new MyOpRule
+                {
+                    Title="Deal End Date should be earlier than OEM EOL Platform Date",
+                    ActionRule = MyDcActions.ProgramNreDateChecks,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("CO-ENGINEERING")).Any()
+                        && dc.IsDateBefore(AttributeCodes.OEM_PLTFRM_EOL_DT, AttributeCodes.END_DT),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.AddMessage,
+                            Args = new object[] { "Deal End Date should be earlier than OEM EOL Platform Date." },
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.OEM_PLTFRM_EOL_DT })
+                        }
+                    }
+                },
+
                 new MyOpRule
                 {
                     Title="Make sure OEM Platform EOL Date is later than OEM Platform Launch Date",
                     ActionRule = MyDcActions.ProgramNreDateChecks,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any()
+                        && dc.IsDateBefore(AttributeCodes.OEM_PLTFRM_EOL_DT, AttributeCodes.OEM_PLTFRM_LNCH_DT),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.AddMessage,
+                            Args = new object[] { "OEM Platform EOL Date must be after the OEM Platform Launch Date." },
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.OEM_PLTFRM_EOL_DT })
+                        }
+                    }
+                },
+
+                 new MyOpRule
+                {
+                    Title="Make sure OEM Platform EOL Date is later than OEM Platform Launch Date",
+                    ActionRule = MyDcActions.ProgramNreDateChecks,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("CO-ENGINEERING")).Any()
                         && dc.IsDateBefore(AttributeCodes.OEM_PLTFRM_EOL_DT, AttributeCodes.OEM_PLTFRM_LNCH_DT),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -998,7 +1034,16 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Program NRE/MDF Deals default to Additive",
                     ActionRule = MyDcActions.DefaultProgramAdditive,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString(),OpDataElementSetType.LUMP_SUM.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+
+                new MyOpRule
+                {
+                    Title="Program CO-ENGINEERING/CO-MARKETING Deals default to Additive",
+                    ActionRule = MyDcActions.DefaultLumsumAdditive,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.LUMP_SUM.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
 

@@ -1336,18 +1336,18 @@ namespace Intel.MyDeals.BusinessRules
                     }
 
                 }
-                else if (rebateType.ToString().ToUpper() != "NRE" && (rebateType != "tender accrual" || rebateType != "mdf spif/per unit activity" || rebateType == "co-marketing spif/per unit activity") && deRebateType.HasValueChanged)
+                else if (rebateType.ToString().ToUpper() != "NRE" && rebateType.ToString().ToUpper() != "CO-ENGINEERING" && (rebateType != "tender accrual" || (rebateType != "mdf spif/per unit activity" && rebateType != "co-marketing spif/per unit activity")) && deRebateType.HasValueChanged)
                 {
                     deSendToVistex.AtrbValue = "Yes";
                 }
                 else if (dealtype.AtrbValue.ToString().ToUpper() == "PROGRAM")
                 {
-                    if (rebateType.ToString().ToUpper() == "NRE" && deSendToVistex.State == OpDataElementState.Unchanged && (deSendToVistex.PrevAtrbValue == null || deSendToVistex.PrevAtrbValue.ToString() == "")) //
+                    if ((rebateType.ToString().ToUpper() == "NRE" || rebateType.ToString().ToUpper() == "CO-ENGINEERING") && deSendToVistex.State == OpDataElementState.Unchanged && (deSendToVistex.PrevAtrbValue == null || deSendToVistex.PrevAtrbValue.ToString() == "")) //
                     {
                         deSendToVistex.AtrbValue = "";
                         deSendToVistex.IsRequired = true;
                     }
-                    if (rebateType.ToString().ToUpper() == "NRE" && deRebateType.HasValueChanged)
+                    if ((rebateType.ToString().ToUpper() == "NRE" || rebateType.ToString().ToUpper() == "CO-ENGINEERING") && deRebateType.HasValueChanged)
                     {
                         deSendToVistex.AtrbValue = "";
                         deSendToVistex.IsRequired = true;
@@ -2661,6 +2661,12 @@ namespace Intel.MyDeals.BusinessRules
                 "MDF/NRE LUMP-SUM BUDGET",
                 "NRE LUMP-SUM BUDGET",
                 "TENDER ACCRUAL",
+                "CO-MARKETING",
+                "CO-ENGINEERING BUDGET",
+                "CO-MARKETING/CO-ENGINEERING BUDGET",
+                "CO-SELLING/CO-ENGINEERING BUDGET",
+                "CO-SELLING/CO-MARKETING/CO-ENGINEERING BUDGET",
+
             };
             IOpDataElement rebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
             if (notRequiredProgramTypes.Contains(rebateType.AtrbValue)) return;  // If this is one of the above program types, it cannot be required, so bail.
@@ -2814,7 +2820,8 @@ namespace Intel.MyDeals.BusinessRules
             string programPaymentValue = programPayment.AtrbValue.ToString();
             string rebateTypeValue = rebateType.AtrbValue.ToString();
             // Period Profile has different blanking rules then Settlement Level
-            if (dealTypeValue == "PROGRAM" || dealTypeValue == "LUMP_SUM" || programPaymentValue != "Backend" || rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL")
+            if (dealTypeValue == "PROGRAM" || dealTypeValue == "LUMP_SUM" || programPaymentValue != "Backend" || rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL" 
+                || rebateTypeValue == "CO-MARKETING ACCRUAL" || rebateTypeValue == "CO-ENGINEERING ACCRUAL" || rebateTypeValue == "CO-SELLING ACCRUAL")
             {
                 if (periodProfile.AtrbValue.ToString() != "")
                 {
@@ -3257,6 +3264,22 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             List<string> targetTypes = new List<string> { "NRE", "MDF" };
+
+            IOpDataElement myRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+            IOpDataElement myCombType = r.Dc.GetDataElement(AttributeCodes.DEAL_COMB_TYPE);
+
+            if (myRebateType.DcID < 0 && targetTypes.Contains(myRebateType.AtrbValue)) // Only do this check initially to default value.
+            {
+                myCombType.AtrbValue = "Additive";
+            }
+        }
+
+        public static void DefaultLumsumAdditive(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            List<string> targetTypes = new List<string> { "CO-MARKETING", "CO-ENGINEERING" };
 
             IOpDataElement myRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
             IOpDataElement myCombType = r.Dc.GetDataElement(AttributeCodes.DEAL_COMB_TYPE);
