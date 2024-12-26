@@ -454,7 +454,7 @@ export class DE_Validation_Util {
                         if (!item._behaviors.isError) item._behaviors.isError = {};
                         if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
                         item._behaviors.isError[value] = true;
-                        item._behaviors.validMsg[value] = "We cannot remove existing Values";
+                           item._behaviors.validMsg[value] = "Can not remove existing consumption parameters after Tracker Number is generated";
                        }
                        else if(value== 'CONSUMPTION_COUNTRY_REGION' || value == 'CONSUMPTION_CUST_RPT_GEO' ||
                         value == 'CONSUMPTION_CUST_SEGMENT' || value == 'CONSUMPTION_SYS_CONFIG'||value == 'CONSUMPTION_CUST_PLATFORM')

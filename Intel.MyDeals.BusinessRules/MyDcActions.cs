@@ -2185,7 +2185,7 @@ namespace Intel.MyDeals.BusinessRules
                         var removedlist = oldlist.Except(newlist, StringComparer.OrdinalIgnoreCase).ToList();
                         if (removedlist.Count > 0)
                         {
-                            item.AddMessage("We cannot remove existing Values");
+                            item.AddMessage("Can not remove existing consumption parameters after Tracker Number is generated");
                             isremoved = true;
                         }
                         if (removedlist.Count == 0 && oldlist.Count==newlist.Count)
