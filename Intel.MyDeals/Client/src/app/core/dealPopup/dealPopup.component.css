@@ -901,11 +901,11 @@ i.cn-close-panel {
 .csstransforms .searchDivgrid {
     height: 328px
 }
-
+/*
 .accural_remove_1 .k-chart-surface svg g g g text {
     font-size: 12px !important
 }
-
+*/
 .micro-grid col.k-group-col {
     width: 0 !important
 }

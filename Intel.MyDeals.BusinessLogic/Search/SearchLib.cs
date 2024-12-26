@@ -470,17 +470,12 @@ namespace Intel.MyDeals.BusinessLogic
                     item[AttributeCodes.ECAP_PRICE] = "no access";
                     item[AttributeCodes.CAP] = "no access";
                     item[AttributeCodes.GEO_APPROVED_PRICE] = "no access";
-                    item[AttributeCodes.VOLUME] = "no access";
-                    item[AttributeCodes.CREDIT_VOLUME] = "no access";
-                    item[AttributeCodes.CREDIT_AMT] = "no access";
-                    item[AttributeCodes.DEBIT_VOLUME] = "no access";
-                    item[AttributeCodes.DEBIT_AMT] = "no access";
+                    item[AttributeCodes.VOLUME] = "no access";                    
                     item[AttributeCodes.YCS2_PRC_IRBT] = "no access";
                     item[AttributeCodes.TRKR_NBR] = "no access";
                     item["TOT_QTY_PAID"] = "no access";
                     item["NET_VOL_PAID"] = "no access";
                     item[AttributeCodes.DEAL_MSP_PRC] = "no access";
-                    //item[AttributeCodes.BLLG_DT] = "no access";
                 }
             }
 
@@ -616,18 +611,12 @@ namespace Intel.MyDeals.BusinessLogic
                         item[AttributeCodes.CAP] = "no access";
                         item[AttributeCodes.WF_STG_CD] = "no access";
                         item[AttributeCodes.GEO_APPROVED_PRICE] = "no access";
-                        item[AttributeCodes.VOLUME] = "no access";
-                        item[AttributeCodes.PAYABLE_QUANTITY] = "no access";
-                        item[AttributeCodes.CREDIT_VOLUME] = "no access";
-                        item[AttributeCodes.CREDIT_AMT] = "no access";
-                        item[AttributeCodes.DEBIT_VOLUME] = "no access";
-                        item[AttributeCodes.DEBIT_AMT] = "no access";
+                        item[AttributeCodes.VOLUME] = "no access";                       
                         item[AttributeCodes.YCS2_PRC_IRBT] = "no access";
                         item[AttributeCodes.TRKR_NBR] = "no access";
                         item["TOT_QTY_PAID"] = "no access";
                         item["NET_VOL_PAID"] = "no access";
                         item[AttributeCodes.DEAL_MSP_PRC] = "no access";
-                        //item[AttributeCodes.BLLG_DT] = "no access";
                     }
                     else
                     {
@@ -640,18 +629,12 @@ namespace Intel.MyDeals.BusinessLogic
                             item[AttributeCodes.CAP] = "no access";
                             item[AttributeCodes.WF_STG_CD] = "no access";
                             item[AttributeCodes.GEO_APPROVED_PRICE] = "no access";
-                            item[AttributeCodes.VOLUME] = "no access";
-                            item[AttributeCodes.PAYABLE_QUANTITY] = "no access";
-                            item[AttributeCodes.CREDIT_VOLUME] = "no access";
-                            item[AttributeCodes.CREDIT_AMT] = "no access";
-                            item[AttributeCodes.DEBIT_VOLUME] = "no access";
-                            item[AttributeCodes.DEBIT_AMT] = "no access";
+                            item[AttributeCodes.VOLUME] = "no access";                            
                             item[AttributeCodes.YCS2_PRC_IRBT] = "no access";
                             item[AttributeCodes.TRKR_NBR] = "no access";
                             item["TOT_QTY_PAID"] = "no access";
                             item["NET_VOL_PAID"] = "no access";
                             item[AttributeCodes.DEAL_MSP_PRC] = "no access";
-                            //item[AttributeCodes.BLLG_DT] = "no access";
                         }
 
                     }
@@ -682,17 +665,12 @@ namespace Intel.MyDeals.BusinessLogic
             return GetDealList(data, new List<int>
             {
                 Attributes.AR_SETTLEMENT_LVL.ATRB_SID,
-                Attributes.BLLG_DT.ATRB_SID,
                 Attributes.CAP.ATRB_SID,
-                Attributes.CONSUMPTION_LOOKBACK_PERIOD.ATRB_SID,
-                Attributes.CREDIT_AMT.ATRB_SID,
-                Attributes.CREDIT_VOLUME.ATRB_SID,
+                Attributes.CONSUMPTION_LOOKBACK_PERIOD.ATRB_SID,                
                 Attributes.CUST_ACCNT_DIV.ATRB_SID,
                 Attributes.CUST_MBR_SID.ATRB_SID,
                 Attributes.DEAL_GRP_NM.ATRB_SID,
                 Attributes.DEAL_DESC.ATRB_SID,
-                Attributes.DEBIT_AMT.ATRB_SID,
-                Attributes.DEBIT_VOLUME.ATRB_SID,
                 Attributes.DIV_APPROVED_BY.ATRB_SID,
                 Attributes.ECAP_PRICE.ATRB_SID,
                 Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
@@ -743,15 +721,10 @@ namespace Intel.MyDeals.BusinessLogic
             string actvstr = activeOnly ? " AND WIP_DEAL_WF_STG_CD IN ('" + WorkFlowStages.Won + "', '" + WorkFlowStages.Lost + "', '" + WorkFlowStages.Offer + "')" : "";
             return GetDealList(data, new List<int>
             {
-                Attributes.BLLG_DT.ATRB_SID,
-                Attributes.CAP.ATRB_SID,
-                Attributes.CREDIT_AMT.ATRB_SID,
-                Attributes.CREDIT_VOLUME.ATRB_SID,
+                Attributes.CAP.ATRB_SID,                
                 Attributes.CUST_ACCNT_DIV.ATRB_SID,
                 Attributes.CUST_MBR_SID.ATRB_SID,
-                Attributes.DEAL_DESC.ATRB_SID,
-                Attributes.DEBIT_AMT.ATRB_SID,
-                Attributes.DEBIT_VOLUME.ATRB_SID,
+                Attributes.DEAL_DESC.ATRB_SID,                
                 Attributes.ECAP_PRICE.ATRB_SID,
                 Attributes.END_CUSTOMER_RETAIL.ATRB_SID,
                 Attributes.END_DT.ATRB_SID,

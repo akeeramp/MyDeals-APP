@@ -210,21 +210,13 @@ export class DE_Load_Util {
 
     static getTotalDealVolume = function (passedData) {
 
-        var crVol = passedData.CREDIT_VOLUME === undefined || passedData.CREDIT_VOLUME === "" || passedData.CREDIT_VOLUME === null || isNaN(passedData.CREDIT_VOLUME)
-            ? 0
-            : parseFloat(passedData.CREDIT_VOLUME);
-        var dbVol = passedData.DEBIT_VOLUME === undefined || passedData.DEBIT_VOLUME === "" || passedData.DEBIT_VOLUME === null || isNaN(passedData.DEBIT_VOLUME)
-            ? 0
-            : parseFloat(passedData.DEBIT_VOLUME);
+        
         var vol = passedData.VOLUME === undefined || passedData.VOLUME === "" || passedData.VOLUME === null || isNaN(passedData.VOLUME)
             ? 0
             : parseFloat(passedData.VOLUME);
-
-        var numerator = crVol - dbVol;
-        if (numerator < 0) numerator = 0;
-        var perc = vol === 0 ? 0 : numerator / vol * 100;
-        perc = Math.round(perc * 100) / 100;
-
+        
+        var numerator = 0;
+        var perc = Math.round(vol * 100) / 100;
         return {
             numerator: numerator,
             vol: vol,
