@@ -409,7 +409,35 @@ export class excludeDealGroupModalDialog implements OnDestroy{
     }
 
     private generateChildRowData(childGridRowRaw) {
-        const definedRows = ['OVLP_DEAL_ID', 'OVLP_DEAL_TYPE', 'OVLP_REBT_TYPE', 'OVLP_CNTRCT_NM', 'OVLP_PTR_USER_PRD', 'OVLP_WF_STG_CD', 'OVLP_DEAL_STRT_DT', 'OVLP_DEAL_END_DT', 'OVLP_ADDITIVE', 'OVLP_DEAL_DESC', 'OVLP_ECAP_PRC', 'OVLP_MAX_RPU', 'OVLP_MKT_SEG', 'OVLP_CONSUMPTION_CUST_PLATFORM', 'OVLP_CONSUMPTION_SYS_CONFIG', 'OVLP_CONSUMPTION_COUNTRY_REGION', 'OVLP_CNSMPTN_RSN'];
+        const definedRows = [
+            'OVLP_DEAL_ID',
+            'OVLP_DEAL_TYPE',
+            'OVLP_REBT_TYPE',
+            'OVLP_CNTRCT_NM',
+            'OVLP_PTR_USER_PRD',
+            'OVLP_WF_STG_CD',
+            'OVLP_DEAL_STRT_DT',
+            'OVLP_DEAL_END_DT',
+            'OVLP_ADDITIVE',
+            'OVLP_DEAL_DESC',
+            'OVLP_ECAP_PRC',
+            'OVLP_MAX_RPU',
+            'OVLP_MKT_SEG',
+            'OVLP_CONSUMPTION_CUST_PLATFORM',
+            'OVLP_CONSUMPTION_SYS_CONFIG',
+            'OVLP_CONSUMPTION_COUNTRY_REGION',
+            'OVLP_CNSMPTN_RSN',
+            'OVLP_CONSUMPTION_PAYOUT_BASED_ON',
+            'OVLP_CONSUMPTION_REBATE_BILLING_STRT_DATE',
+            'OVLP_CONSUMPTION_REBATE_BILLING_END_DATE',
+            'OVLP_CONSUMPTION_LOOKBACK_PERIOD',
+            'OVLP_CONSUMPTION_TYPE',
+            'OVLP_CONSUMPTION_CUSTOMER_SEGMENT',
+            'OVLP_CONSUMPTION_RPT_GEO',
+            'OVLP_CONSUMPTION_SYSTEM_PRICE_POINT',
+            'OVLP_CONSUMPTION_PROJECT_NAME',
+            'OVLP_CONSUMPTION_REASON_CMNT'
+        ];
 
         let processedWorkbookRow = [];
         definedRows.forEach(rowField => {
