@@ -1545,7 +1545,7 @@ export const opGridTemplate = {
                 "Groups": ["All"]
             },
             "TOTAL_CR_DB_PERC": {
-                "Group*s": ["Payment"]
+                "Groups": ["Payment"]
             },
         }
     },
