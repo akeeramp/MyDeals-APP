@@ -205,7 +205,6 @@ namespace Intel.MyDeals.DataLibrary
                 int IDX_DEAL_TYPE_1 = DB.GetReaderOrdinal(rdr, "DEAL TYPE");
                 int IDX_QUARTER = DB.GetReaderOrdinal(rdr, "QUARTER");
                 int IDX_DEAL_COUNT_5 = DB.GetReaderOrdinal(rdr, "DEAL COUNT");
-                int IDX_PERCENTAGE = DB.GetReaderOrdinal(rdr, "PERCENTAGE");
 
                 while (rdr.Read())
                 {
@@ -214,7 +213,6 @@ namespace Intel.MyDeals.DataLibrary
                         DEAL_TYPE = (IDX_DEAL_TYPE_1 < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_1)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_1),
                         QUARTER = (IDX_QUARTER < 0 || rdr.IsDBNull(IDX_QUARTER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_QUARTER),
                         DEAL_COUNT = (IDX_DEAL_COUNT_5 < 0 || rdr.IsDBNull(IDX_DEAL_COUNT_5)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_COUNT_5),
-                        PERCENTAGE = (IDX_PERCENTAGE < 0 || rdr.IsDBNull(IDX_PERCENTAGE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PERCENTAGE)
                     });
                 } // while
 

@@ -177,8 +177,9 @@ export class ReportingComponent implements OnDestroy{
   private masterData: any;
   private ReportDealType: Array<any> = []; ReportDealStage: Array<any> = []; ReportName: Array<any> = []; ReportSummary: Array<any> = []; ReportDashboardData: Array<any> = []; ReportLogDeatils: Array<any> = []; ReportDealTypeStage: Array<any> = [];
   private ReportCustomerReport: Array<any> = [];
-  private ReportEcapQuarter: Array<any> = []; ReportFlexQuarter: Array<any> = []; ReportKitQuarter: Array<any> = []; ReportProgramQuarter: Array<any> = []; ReportRevtierQuarter: Array<any> = []; ReportVoltierQuarter: Array<any> = [];
+  private ReportEcapQuarter: Array<any> = []; ReportFlexQuarter: Array<any> = []; ReportKitQuarter: Array<any> = []; ReportProgramQuarter: Array<any> = []; ReportRevtierQuarter: Array<any> = []; ReportVoltierQuarter: Array<any> = []; ReportLumpSumQuarter: Array<any> = [];
   private ReportDealTypeQuarter: Array<any> = [];ReportQuarters: Array<any> = []; ReportProducts: Array<any> = []; ReportAllDealCount: Array<any> = [];
+  private customerGrandTotal: number = 1;
   private btnText: string = "Show more ";
   private isRecordAvailable: boolean = false;
   private getReportCatagory: any;
@@ -294,15 +295,18 @@ export class ReportingComponent implements OnDestroy{
             if (val.DEAL_TYPE == "PROGRAM") {
                 this.ReportProgramQuarter.push(val.DEAL_COUNT)
             }
-            if (val.DEAL_TYPE == "REV TIER") {
+            if (val.DEAL_TYPE == "REV_TIER") {
                 this.ReportRevtierQuarter.push(val.DEAL_COUNT)
             }
-            if (val.DEAL_TYPE == "VOLTIER") {
+            if (val.DEAL_TYPE == "LUMP_SUM") {
+                this.ReportLumpSumQuarter.push(val.DEAL_COUNT)
+            }
+            if (val.DEAL_TYPE == "VOL_TIER") {
                 this.ReportVoltierQuarter.push(val.DEAL_COUNT)
                 this.ReportQuarters.push(val.QUARTER)
             }
         })
-        
+
     }
 
   loadReportDashboard() {
@@ -345,6 +349,14 @@ export class ReportingComponent implements OnDestroy{
         vm.queryStudioTime = 0;
         vm.dealSheetTime = 0;
         vm.dealApprovedTime = 0;
+        //Customer grand total
+        this.customerGrandTotal = 0;
+        if (vm.ReportCustomerReport.length > 0) {
+            for (let i = 0; i < vm.ReportCustomerReport.length; i++) {
+                this.customerGrandTotal += vm.ReportCustomerReport[i].DEAL_COUNT;
+            }
+        }
+        
         //Only RA, SA will have access to Unified Customer Management Report
         if ((<any>window).usrRole != "SA" &&
           (<any>window).usrRole != "RA" &&

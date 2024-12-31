@@ -158,31 +158,50 @@
                                                                 <kendo-chart-series-item-tooltip>
                                                                     <ng-template let-value="value">ECAP: {{value}}</ng-template>
                                                                 </kendo-chart-series-item-tooltip>
+                                                                <kendo-chart-series-item-labels color="#0d6efd">
+                                                                </kendo-chart-series-item-labels>
                                                             </kendo-chart-series-item>
                                                             <kendo-chart-series-item type="column" [gap]="1.8" [spacing]="0.2" [data]="ReportFlexQuarter">
                                                                 <kendo-chart-series-item-tooltip>
                                                                     <ng-template let-value="value">FLEX: {{value}}</ng-template>
                                                                 </kendo-chart-series-item-tooltip>
+                                                                <kendo-chart-series-item-labels color="#6f42c1">
+                                                                </kendo-chart-series-item-labels>
                                                             </kendo-chart-series-item>
                                                             <kendo-chart-series-item type="column" [gap]="1.8" [spacing]="0.2" [data]="ReportKitQuarter">
                                                                 <kendo-chart-series-item-tooltip>
                                                                     <ng-template let-value="value">KIT: {{value}}</ng-template>
                                                                 </kendo-chart-series-item-tooltip>
+                                                                <kendo-chart-series-item-labels color="#20c997">
+                                                                </kendo-chart-series-item-labels>
                                                             </kendo-chart-series-item>
                                                             <kendo-chart-series-item type="column" [gap]="1.8" [spacing]="0.2" [data]="ReportProgramQuarter">
                                                                 <kendo-chart-series-item-tooltip>
                                                                     <ng-template let-value="value">PROGRAM: {{value}}</ng-template>
                                                                 </kendo-chart-series-item-tooltip>
+                                                                <kendo-chart-series-item-labels color="#198754">
+                                                                </kendo-chart-series-item-labels>
                                                             </kendo-chart-series-item>
                                                             <kendo-chart-series-item type="column" [gap]="1.8" [spacing]="0.2" [data]="ReportRevtierQuarter">
                                                                 <kendo-chart-series-item-tooltip>
-                                                                    <ng-template let-value="value">REVTIER: {{value}}</ng-template>
+                                                                    <ng-template let-value="value">REV_TIER: {{value}}</ng-template>
                                                                 </kendo-chart-series-item-tooltip>
+                                                                <kendo-chart-series-item-labels color="#ffc107">
+                                                                </kendo-chart-series-item-labels>
                                                             </kendo-chart-series-item>
                                                             <kendo-chart-series-item type="column" [gap]="1.8" [spacing]="0.2" [data]="ReportVoltierQuarter">
                                                                 <kendo-chart-series-item-tooltip>
-                                                                    <ng-template let-value="value">VOLTIER: {{value}}</ng-template>
+                                                                    <ng-template let-value="value">VOL_TIER: {{value}}</ng-template>
                                                                 </kendo-chart-series-item-tooltip>
+                                                                <kendo-chart-series-item-labels color="#dc3545">
+                                                                </kendo-chart-series-item-labels>
+                                                            </kendo-chart-series-item>
+                                                            <kendo-chart-series-item type="column" [gap]="1.8" [spacing]="0.2" [data]="ReportLumpSumQuarter">
+                                                                <kendo-chart-series-item-tooltip>
+                                                                    <ng-template let-value="value">LUMP_SUM: {{value}}</ng-template>
+                                                                </kendo-chart-series-item-tooltip>
+                                                                <kendo-chart-series-item-labels color="#6691d2">
+                                                                </kendo-chart-series-item-labels>
                                                             </kendo-chart-series-item>
                                                         </kendo-chart-series>
                                                         <kendo-chart-tooltip></kendo-chart-tooltip>
@@ -197,7 +216,7 @@
                                 <div class="col-md-6">
                                     <div class="box box">
                                         <div class="box-header with-border">
-                                            <h3 class="box-title">Top 11 customers by deal count</h3>
+                                            <h3 class="box-title">Top customers by deal count</h3>
                                         </div>
                                         <div class="box-body">
                                             <div class="table-responsive">
@@ -212,6 +231,14 @@
                                                         <tr *ngFor="let x of ReportCustomerReport">
                                                             <td>{{x.CUSTOMER_NAME}}</td>
                                                             <td>{{x.DEAL_COUNT}}</td>
+                                                        </tr>
+                                                        <tr class="border-top-customer">
+                                                            <td>
+                                                                <b>Grand Total</b>
+                                                            </td>
+                                                            <td>
+                                                                <b>{{customerGrandTotal}}</b>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
