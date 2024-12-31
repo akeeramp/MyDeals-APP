@@ -164,7 +164,7 @@ export class DE_Validation_Util {
                 }
             }
              //this check added for consumption lockdown US twc3167-9409
-            if((item.WF_STG_CD == "Active"  || item.WF_STG_CD == "Won") && (item.PAYOUT_BASED_ON == "Consumption")){
+            if((item.HAS_TRACKER == "1") && (item.PAYOUT_BASED_ON == "Consumption")){
                 let iserror =DE_Validation_Util.valideConsumptionParams(item,oldDEData);
                 if(iserror)
                     isShowStopperError = true;
@@ -386,7 +386,7 @@ export class DE_Validation_Util {
                 isShowStopperError = true;
             } 
 
-            if((data[i].WF_STG_CD == "Won") && (data[i].PAYOUT_BASED_ON == "Consumption")){
+            if((data[i].HAS_TRACKER == "1") && (data[i].PAYOUT_BASED_ON == "Consumption")){
                 let iserror =DE_Validation_Util.valideConsumptionParams(data[i],oldDEData);
                 if(iserror)
                     isShowStopperError = true;
@@ -400,7 +400,7 @@ export class DE_Validation_Util {
     static valideConsumptionParams(item,oldDEData) {
         let iserror=false;
         if ((item.HAS_TRACKER == "1" && item._behaviors != undefined && item._behaviors.isDirty != undefined)
-            && (item.WF_STG_CD == "Active"  || item.WF_STG_CD == "Won") && (item.PAYOUT_BASED_ON == "Consumption")) {
+             && (item.PAYOUT_BASED_ON == "Consumption")) {
                 each(item._behaviors.isDirty, (key,value) => {
                     let newlist=[];
                     let oldlist=[];

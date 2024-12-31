@@ -2144,11 +2144,11 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             AttributeCollection atrbMstr = DataCollections.GetAttributeData();
-            string wipStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+            string deHasTrkr = r.Dc.GetDataElementValue(AttributeCodes.HAS_TRACKER);
             List<MyDealsAttribute> onChangeFastItems = atrbMstr != null ? atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_FASTTRACK").ToList() : new List<MyDealsAttribute>();
             List<int> onChangeFastTrackIds = r.Dc.DataElements.Where(d => onChangeFastItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.AtrbValue != d.OrigAtrbValue).Select(d => d.DcID).ToList();
             List<IOpDataElement> onChangeFastTrackElements = r.Dc.GetDataElementsWhere(d => onChangeFastItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.AtrbValue != d.OrigAtrbValue).ToList();
-            if (onChangeFastTrackElements.Count > 0 && (wipStage == WorkFlowStages.Active || wipStage == WorkFlowStages.Won))
+            if (onChangeFastTrackElements.Count > 0 && (deHasTrkr == "1"))
             {
                 bool isremoved = false;
                 foreach (var item in onChangeFastTrackElements)
