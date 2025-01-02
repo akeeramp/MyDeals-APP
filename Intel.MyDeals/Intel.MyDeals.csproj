@@ -281,6 +281,7 @@
     <Compile Include="Controllers\API\ExpireYcs2Controller.cs" />
     <Compile Include="Controllers\API\HealthCheckController.cs" />
     <Compile Include="Controllers\API\IntegrationController.cs" />
+    <Compile Include="Controllers\API\JobMonitorController.cs" />
     <Compile Include="Controllers\API\MuleServiceController.cs" />
     <Compile Include="Controllers\API\PrimeCustomersController.cs" />
     <Compile Include="Controllers\API\PushDealstoVistexController.cs" />
@@ -829,6 +830,10 @@
     <TypeScriptCompile Include="Client\src\app\codingPractices\shared\breadcrumbs\breadcrumbs.component.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\shared\codingPracticesLeftNav\codingPracticesLeftNav.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\dropDownModal\dropDownModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\jobMonitorDetails\jobMonitorDetails.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\jobMonitorDetails\jobMonitorDetails.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\jobMonitor\jobMonitor.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\jobMonitor\jobMonitor.service.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\codingPractices.module.ts" />
     <TypeScriptCompile Include="Client\src\app\sdm\sdm.component.ts" />
     <TypeScriptCompile Include="Client\src\app\sdm\sdm.service.ts" />
@@ -996,6 +1001,10 @@
     <Content Include="Client\src\app\dashboard\widgetSettings\widgetSettings.component.css" />
     <Content Include="Client\src\app\dashboard\searchContract\searchContractWidget.component.css" />
     <Content Include="Client\src\app\dashboard\searchContract\searchContractWidget.component.html" />
+    <Content Include="Client\src\app\dashboard\jobMonitor\jobMonitor.component.css" />
+    <Content Include="Client\src\app\dashboard\jobMonitor\jobMonitor.component.html" />
+    <Content Include="Client\src\app\dashboard\jobMonitorDetails\jobMonitorDetails.component.css" />
+    <Content Include="Client\src\app\dashboard\jobMonitorDetails\jobMonitorDetails.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.css" />
     <Content Include="Client\src\app\shared\footer\footer.component.css" />

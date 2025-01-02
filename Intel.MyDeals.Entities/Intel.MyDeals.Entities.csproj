@@ -80,6 +80,8 @@
     <Compile Include="AsyncProcTrigger.cs" />
     <Compile Include="AtrbSaveItem.cs" />
     <Compile Include="AttributeCollection.cs" />
+    <Compile Include="BatchRunHealthSts.cs" />
+    <Compile Include="BatchStepRunHistory.cs" />
     <Compile Include="BulkPriceUpdate.cs" />
     <Compile Include="ContractToken.cs" />
     <Compile Include="CostTestDataItem.cs" />

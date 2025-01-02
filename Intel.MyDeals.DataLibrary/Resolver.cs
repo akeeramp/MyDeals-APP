@@ -55,6 +55,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IHealthCheckDataLib, HealthCheckDataLib>();
             registerService.RegisterType<IMuleServiceDataLib, MuleServiceDataLib>();
             registerService.RegisterType<IsdmDataLibrary, sdmDataLibrary>();
+            registerService.RegisterType<IJobMonitorDataLib, JobMonitorDataLib>();
             registerService.RegisterType<IDealUnificationDataLib, DealUnificationDataLib>();
         }
     }

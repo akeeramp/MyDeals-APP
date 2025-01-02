@@ -305,6 +305,9 @@
                 <li *ngIf="isSdmUser()">
                     <a class="mainMenu" href="RPD#/RpdDashboard" title="Retail Pull Dollar Dashboard"><i class="intelicon-payment"></i> <span class="hidden-xs"> RPD </span></a>
                 </li>
+                <li *ngIf="isDeveloper() || isAnySA()">
+                    <a class="mainMenu" href="Dashboard#/jobmonitor" title="Job Monitor"> <i class="intelicon-desktop"></i><span class="hidden-xs"> Job Monitor </span></a>
+                </li>
         </ul>
 
         <global-search-angular></global-search-angular>

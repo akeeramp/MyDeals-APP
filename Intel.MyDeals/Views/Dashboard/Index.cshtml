@@ -1,6 +1,11 @@
 ﻿@*<script src="~/Client/src/dist/dashboard.js" async></script>*@
 <script src='@Scripts.Url("~/bundles/dashboard")' async></script>
-@{ ViewBag.Title = "Dashboard"; }
+@{ 
+    ViewBag.Title = "Dashboard"; 
+}
+<script>
+    document.location.href = document.location.hash == '' || document.location.hash.includes('Index') ? 'Dashboard#/portal' : document.location.href;
+</script>
 <div class="loading-screen">
     <div class="jumbotron ng-scope">
         <div class="container">
@@ -12,6 +17,3 @@
         </div>
     </div>
 </div>
-<script>
-    document.location.href = "/Dashboard#/portal";
-</script>

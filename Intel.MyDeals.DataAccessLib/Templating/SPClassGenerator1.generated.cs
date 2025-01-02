@@ -5221,6 +5221,96 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
+        /// ID: 1608705129
+        /// Modified: 11/25/2024 2:15:53 AM
+        /// Parameters: 0
+        ///</summary>
+        public partial class PR_MYDL_GET_BTCH_RUN_HLTH_STS : SP
+        {
+            public PR_MYDL_GET_BTCH_RUN_HLTH_STS()            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_BTCH_RUN_HLTH_STS]";
+            }
+
+        }
+
+        ///<summary>
+        /// ID: 1592705072
+        /// Modified: 11/25/2024 2:24:48 AM
+        /// Parameters: 3
+        ///</summary>
+        public partial class PR_MYDL_GET_BTCH_STEP_RUN_HLTH_STS_HIST : SP
+        {
+            public PR_MYDL_GET_BTCH_STEP_RUN_HLTH_STS_HIST()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_BTCH_STEP_RUN_HLTH_STS_HIST]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(200)
+            /// Mode: IN
+            /// Max Length: 200
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 200, false)]
+            public String in_btch_nm
+            {
+                set { SetParmeter("in_btch_nm", value); }
+                get { return (String)GetParameter("in_btch_nm"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(200)
+            /// Mode: IN
+            /// Max Length: 200
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 200, false)]
+            public String in_step_nm
+            {
+                set { SetParmeter("in_step_nm", value); }
+                get { return (String)GetParameter("in_step_nm"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Int32 take
+            {
+                set { SetParmeter("take", value); }
+                get { return (Int32)GetParameter("take"); }
+            }
+        }
+
+        ///<summary>
+        /// ID: 1624705186
+        /// Modified: 11/25/2024 2:15:42 AM
+        /// Parameters: 1
+        ///</summary>
+        public partial class PR_MYDL_GET_BTCH_STEPS_RUN_HLTH_STS : SP
+        {
+            public PR_MYDL_GET_BTCH_STEPS_RUN_HLTH_STS()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_BTCH_STEPS_RUN_HLTH_STS]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(200)]
+            /// Mode: IN
+            /// Max Length: 200
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 200, false)]
+            public String in_job_nm
+            {
+                set { SetParmeter("in_job_nm", value); }
+                get { return (String)GetParameter("in_job_nm"); }
+            }
+        }
+
+
+        ///<summary>
         /// ID: 1357247890
         /// Modified: 11/14/2019 8:27:53 PM
         /// Parameters: 4

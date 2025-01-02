@@ -216,6 +216,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_TRGRD_BY = DB.GetReaderOrdinal(rdr, "TRGRD_BY");
 
 
+
                     while (rdr.Read())
                     {
                         ret.Add(new BatchJobConstants

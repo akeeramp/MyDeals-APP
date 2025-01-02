@@ -8,6 +8,8 @@ import { widgetSettingsComponent } from '../dashboard/widgetSettings/widgetSetti
 import { DealDeskWidgetComponent } from "../dashboard/dealDeskWidget/dealDeskWidget.component";
 import { NewContractWidgetComponent } from "../dashboard/newContractWidget/newContractWidget.component"
 import { CopyContractComponent } from "../dashboard/copyContract/copyContract.component";
+import { jobMonitorComponent } from "../dashboard/jobMonitor/jobMonitor.component";
+import { jobMonitorDetailsComponent } from "../dashboard/jobMonitorDetails/jobMonitorDetails.component";
 
 export let dashboardComponents =[
     DashboardComponent,
@@ -19,5 +21,7 @@ export let dashboardComponents =[
     SearchContractWidgetComponent,
     widgetSettingsComponent,
     DealDeskWidgetComponent,
-    CopyContractComponent
+    CopyContractComponent,
+    jobMonitorComponent,
+    jobMonitorDetailsComponent
 ]

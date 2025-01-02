@@ -1,0 +1,139 @@
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-md-4 k-header-alignment back-nav">
+        <a href="Dashboard#/jobmonitor" title="Redirects to Batch Job Screen" style="color:#0071c5 !important;">&#9664;  Back</a>
+    </div>
+</div>
+<div class="row">    
+    <div class="col-md-6 k-header-alignment head-right-shift">
+        <h3 style=" padding-left: 15px;" class="bottom-s-remove">Batch Job Steps - Health Monitoring</h3>
+    </div>
+    <div  class="col-md-6 k-header-alignment head-right-shift">
+        <span *ngIf="inputJobName && inputJobName.trim() !== ''" style="float: right;padding-right: 5%;font-size: 1.4rem;">
+            Job Name : {{ inputJobName }}
+        </span>
+    </div>
+</div>
+<div class="row" style="display: contents;">
+    <div class="col-md-12 kendo-grid-buttons admin-table-header bottom-s-remove"
+        style="padding-left: 15px !important; padding-right: 15px !important;">
+        <kendo-grid class="KendoCustomerMapping kAlignHeaders" [data]="gridData" [loading]="isLoading"
+                    [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+                    [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
+                    filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)">
+            <ng-template kendoGridToolbarTemplate>
+                <button (click)="clearFilter()" class="k-button clearButton">
+                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
+                </button>
+                <kendo-grid-spacer></kendo-grid-spacer>
+                <button (click)="refreshGrid()" class="k-button clearButton">
+                    <span class="k-icon k-i-reload k-icon-md"></span>Refresh
+                </button>
+            </ng-template>            
+            <kendo-grid-column field="PKG_NM" title="Step Name" width="300" [headerClass]="{'headerClass':true}"
+                               [editable]="false">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                             let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <span class="underline-on-hover"  kendoTooltip title="Please click here to view the history." style="color: #0071c5 !important;cursor: pointer;">
+                        <i style="color: black" class="intelicon-history" position="right"></i>
+                        <a (click)="getHistory(dataItem.PKG_NM)"> {{dataItem.PKG_NM}}</a>
+                    </span>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="START_DTM" title="Start Time (in PST)" width="170" [headerClass]="{'headerClass':true}"
+                               [editable]="false" filterable="false">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <div>{{formatDateTimeForDisplay(dataItem.START_DTM)}}</div>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="END_DTM" title="End Time (in PST)" width="170" [headerClass]="{'headerClass':true}"
+                               [editable]="false" filterable="false">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <div>{{formatDateTimeForDisplay(dataItem.END_DTM)}}</div>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="TIMEDIFF" title="Time Taken" width="150" [headerClass]="{'headerClass':true}"
+                               [editable]="false" filterable="false">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <div>{{formatTimeForDisplay(dataItem.TIMEDIFF)}}</div>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="THRESHOLD" title="Threshold Time" width="150" [headerClass]="{'headerClass':true}"
+                               [editable]="false" filterable="false">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <div>{{formatTimeForDisplay(dataItem.THRESHOLD)}}</div>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="HEALTH" title="Health Status" width="100" [headerClass]="{'headerClass':true}"
+                               [editable]="false" filterable="false">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div class="whole-cell" [style.backgroundColor]="dataItem.HEALTH" [style.color]="dataItem.HEALTH">
+                        {{ dataItem.HEALTH }}
+                    </div>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="ERR_MSG" title="Error Message" width="200" [headerClass]="{'headerClass':true}"
+                               [editable]="false" filterable="false">
+            </kendo-grid-column>
+
+        </kendo-grid>
+    </div>
+</div>
+
+<kendo-window *ngIf="isHistVisible" title="History Results" (close)="windowClose()" [height]="windowHeight"
+     [width]="windowWidth" [top]="windowTop" [left]="windowLeft">
+    <div class="row">
+        <div class="col-md-12 k-header-alignment head-right-shift">
+            <h3 style=" padding-left: 15px;" class="bottom-s-remove">Batch Job Step History</h3>
+        </div>
+    </div>
+    <div class="row" style="display: contents;">
+        <div class="col-md-12 kendo-grid-buttons admin-table-header bottom-s-remove"
+            style="padding-left: 15px !important; padding-right: 15px !important;">
+            <kendo-grid class="KendoCustomerMapping kAlignHeaders" [data]="gridHistData" [loading]="isHistLoading" style="height: 90% !important;">
+                <kendo-grid-column field="PKG_NM" title="Step Name" width="200" [headerClass]="{'headerClass':true}"
+                    [editable]="false">
+                </kendo-grid-column>
+                <kendo-grid-column field="START_DTM" title="Start Time" width="200" [headerClass]="{'headerClass':true}"
+                    [editable]="false">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <div>{{formatDateTimeForDisplay(dataItem.START_DTM)}}</div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="END_DTM" title="End Time" width="200" [headerClass]="{'headerClass':true}"
+                    [editable]="false">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <div>{{formatDateTimeForDisplay(dataItem.END_DTM)}}</div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="TIMEDIFF" title="Time Taken" width="150" [headerClass]="{'headerClass':true}"
+                    [editable]="false">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <div>{{formatTimeForDisplay(dataItem.TIMEDIFF)}}</div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="THRESHOLD" title="Threshold Time" width="150" [headerClass]="{'headerClass':true}"
+                                   [editable]="false">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <div>{{formatTimeForDisplay(dataItem.THRESHOLD)}}</div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="HEALTH" title="Health Status" width="100" [headerClass]="{'headerClass':true}"
+                [editable]="false">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <div class="whole-cell" [style.backgroundColor]="dataItem.HEALTH" [style.color]="dataItem.HEALTH">
+                            {{ dataItem.HEALTH }}
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="ERR_MSG" title="Error Message" width="200" [headerClass]="{'headerClass':true}"
+                    [editable]="false">
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+    </div>
+</kendo-window>
