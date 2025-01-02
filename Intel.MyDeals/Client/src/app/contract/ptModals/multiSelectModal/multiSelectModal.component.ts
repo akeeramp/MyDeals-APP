@@ -102,7 +102,7 @@ export class multiSelectModalComponent implements OnDestroy {
             if (response != null && response != undefined && response.length > 0) {
                 this.multiSelectData = response;
                 each(this.multiSelectData, row => {
-                    row.DROP_DOWN = row.DROP_DOWN.trimStart();
+                    row.DROP_DOWN = row.DROP_DOWN.trim();
                 })
                 if (this.colName == "DEAL_SOLD_TO_ID") {
                     this.checkedKeys = [];
