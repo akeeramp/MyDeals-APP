@@ -214,6 +214,8 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_LST_RUN = DB.GetReaderOrdinal(rdr, "LST_RUN");
                     int IDX_EMP_WWID = DB.GetReaderOrdinal(rdr, "EMP_WWID");
                     int IDX_TRGRD_BY = DB.GetReaderOrdinal(rdr, "TRGRD_BY");
+                    int IDX_JOB_HLTH_CNFG_DTL = DB.GetReaderOrdinal(rdr, "JOB_HLTH_CNFG_DTL");
+                    int IDX_PREDECESSOR_COND = DB.GetReaderOrdinal(rdr, "PREDECESSOR_COND");
 
 
 
@@ -230,7 +232,9 @@ namespace Intel.MyDeals.DataLibrary
                             STATUS = (IDX_STATUS < 0 || rdr.IsDBNull(IDX_STATUS)) ? default(string) : rdr.GetFieldValue<string>(IDX_STATUS),
                             LST_RUN = (IDX_LST_RUN < 0 || rdr.IsDBNull(IDX_LST_RUN)) ? default(DateTime) : rdr.GetFieldValue<DateTime>(IDX_LST_RUN),
                             EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(int) : rdr.GetFieldValue<int>(IDX_EMP_WWID),
-                            TRGRD_BY = (IDX_TRGRD_BY < 0 || rdr.IsDBNull(IDX_TRGRD_BY)) ? default(string) : rdr.GetFieldValue<string>(IDX_TRGRD_BY)
+                            TRGRD_BY = (IDX_TRGRD_BY < 0 || rdr.IsDBNull(IDX_TRGRD_BY)) ? default(string) : rdr.GetFieldValue<string>(IDX_TRGRD_BY),
+                            JOB_HLTH_CNFG_DTL = (IDX_JOB_HLTH_CNFG_DTL < 0 || rdr.IsDBNull(IDX_JOB_HLTH_CNFG_DTL)) ? default(string) : rdr.GetFieldValue<string>(IDX_JOB_HLTH_CNFG_DTL),
+                            PREDECESSOR_COND = (IDX_PREDECESSOR_COND < 0 || rdr.IsDBNull(IDX_PREDECESSOR_COND)) ? default(string) : rdr.GetFieldValue<string>(IDX_PREDECESSOR_COND)
                         }); ;
                     }
                 }
@@ -258,14 +262,17 @@ namespace Intel.MyDeals.DataLibrary
                 };
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
-                    if(mode.ToUpper()=="UPDATE")
+                    if (mode.ToUpper() == "UPDATE")
                     {
                         int ERR_MSG = DB.GetReaderOrdinal(rdr, "ERROR");
-                        while (rdr.Read()){
+                        while (rdr.Read())
+                        {
                             throw new Exception(rdr.GetFieldValue<string>(ERR_MSG));
                         }
 
-                    }else{
+                    }
+                    else
+                    {
                         int IDX_BTCH_STEP_SID = DB.GetReaderOrdinal(rdr, "BTCH_STEP_SID");
                         int IDX_BTCH_SID = DB.GetReaderOrdinal(rdr, "BTCH_SID");
                         int IDX_STEP_SRT_ORDR = DB.GetReaderOrdinal(rdr, "STEP_SRT_ORDR");
@@ -273,6 +280,7 @@ namespace Intel.MyDeals.DataLibrary
                         int IDX_STEP_TYPE = DB.GetReaderOrdinal(rdr, "STEP_TYPE");
                         int IDX_ADHC_RUN = DB.GetReaderOrdinal(rdr, "ADHC_RUN");
                         int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+                        int IDX_JOB_HLTH_CNFG_DTL = DB.GetReaderOrdinal(rdr, "JOB_HLTH_CNFG_DTL");
 
                         while (rdr.Read())
                         {
@@ -284,7 +292,8 @@ namespace Intel.MyDeals.DataLibrary
                                 STEP_NM = (IDX_STEP_NM < 0 || rdr.IsDBNull(IDX_STEP_NM)) ? default(string) : rdr.GetFieldValue<string>(IDX_STEP_NM),
                                 STEP_TYPE = (IDX_STEP_TYPE < 0 || rdr.IsDBNull(IDX_STEP_TYPE)) ? default(string) : rdr.GetFieldValue<string>(IDX_STEP_TYPE),
                                 ADHC_RUN = (IDX_ADHC_RUN < 0 || rdr.IsDBNull(IDX_ADHC_RUN)) ? default(bool) : rdr.GetFieldValue<bool>(IDX_ADHC_RUN),
-                                ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(bool) : rdr.GetFieldValue<bool>(IDX_ACTV_IND)
+                                ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(bool) : rdr.GetFieldValue<bool>(IDX_ACTV_IND),
+                                JOB_HLTH_CNFG_DTL = (IDX_JOB_HLTH_CNFG_DTL < 0 || rdr.IsDBNull(IDX_JOB_HLTH_CNFG_DTL)) ? default(string) : rdr.GetFieldValue<string>(IDX_JOB_HLTH_CNFG_DTL)
                             });
                         }
                     }

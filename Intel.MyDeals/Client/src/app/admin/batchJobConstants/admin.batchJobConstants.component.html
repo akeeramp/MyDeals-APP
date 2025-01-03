@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div *ngIf="allData" class="">
                 <kendo-grid class="grid-sizefix tt-grids kAlignHeaders" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
-                    [groupable]="true" [group]="state.group" filterable="menu" [data]="gridData" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)">
+                            [groupable]="true" [group]="state.group" filterable="menu" [data]="gridData" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)">
                     <ng-template kendoGridToolbarTemplate>
                         <kendo-grid-spacer></kendo-grid-spacer>
 
@@ -17,53 +17,55 @@
                             <span class="k-icon k-i-reload k-icon-md"></span>Refresh
                         </button>
                     </ng-template>
-                    <kendo-grid-command-column title="Command" [width]="220">
+                    <kendo-grid-command-column title="Command" [width]="50">
                         <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem>
                             <button id="command-icon" class="k-command-icon" (click)="editBatchJobData(dataItem)">
                                 <span class="k-icon k-i-edit k-icon-sm delete-space edited-icon-color"></span>
                             </button>
                         </ng-template>
                     </kendo-grid-command-column>
-                    <kendo-grid-column field="BTCH_NM" title="Batch Name" [width]="300"></kendo-grid-column>
-                    <kendo-grid-column field="BTCH_DSC" title="Batch Description" [width]="300"></kendo-grid-column>
-                    <kendo-grid-column field="RUN_SCHDL" title="Day" [width]="200">
-                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                            <div>{{getDays(dataItem.RUN_SCHDL)}}</div>
-                        </ng-template>
-                    </kendo-grid-column>
-                    <kendo-grid-column field="RUN_SCHDL" title="Start Time (in PST)" [width]="200">
+                    <kendo-grid-column field="BTCH_NM" title="Batch Name" [width]="150"></kendo-grid-column>
+                    <kendo-grid-column field="BTCH_DSC" title="Batch Description" [width]="200"></kendo-grid-column>
+                    <kendo-grid-column field="RUN_SCHDL" title="Start Time (in PST)" [width]="150">
                         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                             <div>{{getStart(dataItem.RUN_SCHDL,true)}}</div>
                         </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column field="RUN_SCHDL" title="End Time (in PST)" [width]="200">
+                    <kendo-grid-column field="RUN_SCHDL" title="End Time (in PST)" [width]="150">
                         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                             <div>{{getEnd(dataItem.RUN_SCHDL,true)}}</div>
                         </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column field="RUN_SCHDL" title="Interval" [width]="200">
+                    <kendo-grid-column field="RUN_SCHDL" title="Day" [width]="400">
+                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                            <div>{{getDays(dataItem.RUN_SCHDL)}}</div>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column field="RUN_SCHDL" title="Interval" [width]="100">
                         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                             <div>{{getInterval(dataItem.RUN_SCHDL,true)}}</div>
                         </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column field="ADHC_RUN" title="Adhoc Run" [width]="200">
+                    <kendo-grid-column field="ADHC_RUN" title="Adhoc Run" [width]="125">
                         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                             <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.ADHC_RUN" disabled></mat-slide-toggle>
                         </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column field="ACTV_IND" title="Active" [width]="200">
+                    <kendo-grid-column field="ACTV_IND" title="Active" [width]="100">
                         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                             <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
                         </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column field="STATUS" title="Status" [width]="200"></kendo-grid-column>
+                    <kendo-grid-column field="STATUS" title="Status" [width]="100"></kendo-grid-column>
                     <kendo-grid-column field="LST_RUN" title="Last Run" [width]="200">
                         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                             <div>{{getLastRun(dataItem.LST_RUN,true)}}</div>
                         </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column field="EMP_WWID" title="Last Modified By" [width]="200"></kendo-grid-column>
-                    <kendo-grid-column field="TRGRD_BY" title="Triggered By" [width]="200"></kendo-grid-column>
+                    <kendo-grid-column field="EMP_WWID" title="Last Modified By" [width]="150"></kendo-grid-column>
+                    <kendo-grid-column field="TRGRD_BY" title="Triggered By" [width]="150"></kendo-grid-column>
+                    <kendo-grid-column field="JOB_HLTH_CNFG_DTL" title="Job Health Configuration" [width]="400"></kendo-grid-column>
+                    <kendo-grid-column field="PREDECESSOR_COND" title="Predecessor" [width]="150"></kendo-grid-column>
                     <kendo-grid-excel fileName="BatchJobConstants.xlsx" [fetchData]="allData">
                         <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}" title="{{item.value}}" [width]="150" [cellOptions]="cellOptions" [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
                     </kendo-grid-excel>
@@ -71,6 +73,7 @@
                         <kendo-grid [data]="convertToChildGridArray(dataItem)" style="height: auto;">
                             <kendo-grid-column field="STEP_NM" title="Step Name" [width]="150"></kendo-grid-column>
                             <kendo-grid-column field="STEP_SRT_ORDR" title="Sort Order" [width]="100"></kendo-grid-column>
+                            <kendo-grid-column field="JOB_HLTH_CNFG_DTL" title="Job Health Configuration" [width]="100"></kendo-grid-column>
                             <kendo-grid-column field="STEP_TYPE" title="Step Type" [width]="100"></kendo-grid-column>
                             <kendo-grid-column field="ADHC_RUN" title="Adhoc Run" [width]="100">
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
@@ -90,14 +93,14 @@
                 <form name="batchJobConstants" class="batchJobConstants" [formGroup]="batchJobConstForm">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <button class="btn btn-primary batchJobConstantsBtn small" (click)="saveConstants()" type="button" [disabled]="!isFormValid">
+                            <button class="btn btn-primary batchJobConstantsBtn small"  (click)="saveConstants()" type="button" [disabled]="!isFormValid">
                                 <span class="intelicon-check fa-tan"></span>Save Changes
                             </button> &nbsp; &nbsp;
                             <button class="btn btn-primary batchJobConstantsBtn small" (click)="cancel()">
                                 <span class="fa fa-ban fa-tan"></span>Cancel Changes
                             </button>
                         </div>
-                        <div class="panel-body" style="padding-bottom: 40px;height:65vh;overflow-y:scroll">
+                        <div class="panel-body" style="padding-bottom: 40px; height: 65vh;  overflow-y: scroll;">
                             <div class="col-sm-12">
                                 <kendo-formerror *ngIf="isParentAdhocError">
                                     {{parentAdhocError}}
@@ -105,13 +108,13 @@
                                 <div class="row form-inline">
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <label for="batch-name" class="control-label alignLabels">Batch Name:</label><br/>
-                                            <input type="text" id="batch-name" class="form-control w-100" formControlName="BTCH_NM" placeholder="Enter the batch name" readonly/>
+                                            <label for="batch-name" class="control-label alignLabels">Batch Name:</label><br />
+                                            <input type="text" id="batch-name" class="form-control w-100" formControlName="BTCH_NM" placeholder="Enter the batch name" readonly />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <label for="batch-desc" class="control-label alignLabels">Batch Description:</label><br/>
+                                            <label for="batch-desc" class="control-label alignLabels">Batch Description:</label><br />
                                             <input type="text" id="batch-desc" class="form-control w-100" formControlName="BTCH_DSC" placeholder="Enter the batch description" />
                                             <kendo-formerror *ngIf="(batchJobConstForm.controls.BTCH_DSC?.errors?.required && batchJobConstForm.controls.BTCH_DSC?.touched)">
                                                 {{isRequiredMsg}}
@@ -119,31 +122,23 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-1">
-                                        <div class="form-group">
-                                            <label for="day" class="control-label alignLabels">Day:</label><br/>
-                                            <kendo-multiselect [data]="weeklyDays" textField="text" valueField="value" [(ngModel)]="selectedItems" (ngModelChange)="onDayChange()" [ngModelOptions]="{standalone: true}" id="selectedItems" [disabled]="inputsDisable"></kendo-multiselect>
-                                            <kendo-formerror *ngIf="isDayError">
-                                                {{isRequiredMsg}}
-                                            </kendo-formerror>
-                                        </div>
-                                    </div>
                                     <div class="col-md-2">
                                         <div class="form-group datepicker-job-const">
-                                            <label for="start-date" class="control-label alignLabels">Start Time:</label><br/>
+                                            <label for="start-date" class="control-label alignLabels">Start Time:</label><br />
                                             <kendo-timepicker id="start-date" #picker placeholder="Start Time" format="HH:mm:ss" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body" triggers="manual" #dateApprovedTooltip="ngbTooltip" [autoClose]="false"
-                                                calendarType="classic" class="datePickerWidth k-width" formControlName="START" calendarType="classic">
+                                                              calendarType="classic" class="datePickerWidth k-width" formControlName="START">
                                             </kendo-timepicker>
                                             <kendo-formerror *ngIf="(batchJobConstForm.controls.START?.errors?.required && batchJobConstForm.controls.START?.touched)">
                                                 {{isRequiredMsg}}
                                             </kendo-formerror>
                                         </div>
                                     </div>
+
                                     <div class="col-md-2">
                                         <div class="form-group datepicker-job-const">
-                                            <label for="end-date" class="control-label alignLabels">End Time:</label><br/>
+                                            <label for="end-date" class="control-label alignLabels">End Time:</label><br />
                                             <kendo-timepicker id="end-date" #picker placeholder="End Time" format="HH:mm:ss" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body" triggers="manual" #dateApprovedTooltip="ngbTooltip" [autoClose]="false"
-                                                calendarType="classic" class="datePickerWidth k-width" formControlName="END">
+                                                              calendarType="classic" class="datePickerWidth k-width" formControlName="END">
                                             </kendo-timepicker>
                                             <kendo-formerror *ngIf="(batchJobConstForm.controls.END?.errors?.required && batchJobConstForm.controls.END?.touched)">
                                                 {{isRequiredMsg}}
@@ -152,7 +147,16 @@
                                     </div>
                                     <div class="col-md-1">
                                         <div class="form-group">
-                                            <label for="interval" class="control-label alignLabels">Interval (in mins):</label><br/>
+                                            <label for="day" class="control-label alignLabels">Day:</label><br />
+                                            <kendo-multiselect [data]="weeklyDays" textField="text" valueField="value" [(ngModel)]="selectedItems" (ngModelChange)="onDayChange()" (blur)="onTouched()" [ngModelOptions]="{standalone: true}" id="selectedItems" [disabled]="inputsDisable"></kendo-multiselect>
+                                            <kendo-formerror *ngIf="isDayError">
+                                                {{isRequiredMsg}}
+                                            </kendo-formerror>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label for="interval" class="control-label alignLabels">Interval (in mins):</label><br />
                                             <input type="number" id="interval" class="form-control w-100" placeholder="Enter the Interval" formControlName="INTERVAL" />
                                             <kendo-formerror *ngIf="(batchJobConstForm.controls.INTERVAL?.errors?.required && batchJobConstForm.controls.INTERVAL?.touched)">
                                                 {{isRequiredMsg}}
@@ -161,7 +165,9 @@
                                                 Interval must be a positive integer.
                                             </kendo-formerror>
                                         </div>
+
                                     </div>
+
                                     <div class="col-md-2">
                                         <div class="toggle-aligner">
                                             <div class="form-group">
@@ -177,17 +183,49 @@
                                                     <mat-slide-toggle class="toggle-button-custom" [color]="color" formControlName="ACTV_IND"></mat-slide-toggle>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="triggered-by" class="control-label alignLabels">Triggered by:</label><br/>
-                                                <input type="text" id="triggered-by" class="form-control w-100" formControlName="TRGRD_BY" placeholder="Enter the Triggered by" readonly/>
+                                            <div class="form-group row-col-align">
+                                                <label for="triggered-by" class="control-label alignLabels">Triggered by:</label><br />
+                                                <select id="triggered-by" class="form-control w-100" formControlName="TRGRD_BY" (change)="onTriggeredByChange()">
+                                                    <option value="Autosys">Autosys</option>
+                                                    <option value="Sql Agent Job">Sql Agent Job</option>
+                                                </select>
                                             </div>
+
+                                            <div class="form-group row-col-align">
+                                                <label for="job_hlth_cnfg_dtl" class="control-label alignLabels">Job Health Configuration:</label>
+                                                <input type="text" id="job_hlth_cnfg_dtl" class="form-control w-100" formControlName="JOB_HLTH_CNFG_DTL" placeholder="Enter the Job Health Configuration" />
+                                            </div>
+
+                                            <div class="form-group row-col-align">
+                                                <label for="job_hlth_cnfg_dtl" class="control-label alignLabels">Predecessor:</label>
+                                                <input type="text" id="predecessor_dtl" class="form-control w-100" formControlName="PREDECESSOR_COND" placeholder="Enter the Predecessor Configuration" />
+                                            </div>
+
+
                                         </div>
                                     </div>
+
                                     <div class="col-sm-12">
                                         <div class="childElement">
                                             <div class="form-group">
                                                 <input type="checkbox" [(ngModel)]="secondRowCheckBox" [ngModelOptions]="{standalone: true}" (change)="secondRowEnable($event)" />&nbsp;
                                                 <label class="control-label alignLabels">Job Steps Enable</label>
+                                                <div class="col-md-2 width-two-optimize all-toggle">
+                                                    <div class="toggle-aligner">
+                                                        <div class="form-group">
+                                                            <label for="adhoc-run" class="control-label alignLabels">Adhoc All:</label>
+                                                            <div class="mat-design-toggle">
+                                                                <mat-slide-toggle class="toggle-button-custom" [color]="color" formControlName="ADHC_RUN_NEW" (change)="checkForAdhocConditionNewParent($event)"></mat-slide-toggle>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="active" class="control-label alignLabels">Active All:</label>
+                                                            <div class="mat-design-toggle">
+                                                                <mat-slide-toggle class="toggle-button-custom" [color]="color" formControlName="ACTV_IND_NEW" (change)="checkForActiveConditionNewParent($event)"></mat-slide-toggle>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -201,78 +239,90 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div *ngIf="rowForm">
-                                    <div class="step-container" *ngFor="let group of stepsArray.controls; let i = index" formArrayName="steps">
-                                        <div class="row form-inline" [formGroupName]="i">
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <label for="'step-name-' + i" class="control-label alignLabels">Step Name:</label><br/>
-                                                    <input type="text" id="'step-name-' + i" class="form-control w-100" placeholder="Enter the step name" formControlName="STEP_NM" />
-                                                    <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_NM'].touched && getStepsFormArr(i).controls['STEP_NM'].hasError('required')">
-                                                        {{isRequiredMsg}}
-                                                    </kendo-formerror>
-                                                    <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_NM'].hasError('uniqueStepName') && getStepsFormArr(i).controls['STEP_NM'].touched">
-                                                        Step name must be unique.
-                                                    </kendo-formerror>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <label for="'sort-order-' + i" class="control-label alignLabels">Sort Order:</label><br/>
-                                                    <input type="number" id="'sort-order-' + i" class="form-control w-100" placeholder="Enter the sort order" formControlName="STEP_SRT_ORDR" />
-                                                    <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_SRT_ORDR'].touched && getStepsFormArr(i).controls['STEP_SRT_ORDR'].hasError('required')">
-                                                        {{isRequiredMsg}}
-                                                    </kendo-formerror>
-                                                    <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_SRT_ORDR'].hasError('sortOrder') && getStepsFormArr(i).controls['STEP_SRT_ORDR'].touched">
-                                                        Sort order must be greater than 0.
-                                                    </kendo-formerror>
-                                                    <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_SRT_ORDR'].hasError('uniqueSortOrder') && getStepsFormArr(i).controls['STEP_SRT_ORDR'].touched">
-                                                        Sort order must be unique.
-                                                    </kendo-formerror>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <label for="step-type" class="control-label alignLabels">Step Type:</label><br/>
-                                                    <select id="step-type" class="form-control w-100" formControlName="STEP_TYPE">
-                                                        <option value="PROCEDURE">Procedure</option>
-                                                        <option value="Data Flow">Data Flow</option>
-                                                    </select>
-                                                    <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_TYPE'].touched && getStepsFormArr(i).controls['STEP_TYPE'].hasError('required')">
-                                                        {{isRequiredMsg}}
-                                                    </kendo-formerror>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 width-two-optimize">
-                                                <div class="toggle-aligner">
+                                    <div *ngIf="rowForm">
+                                        <div class="step-container" *ngFor="let group of stepsArray.controls; let i = index" formArrayName="steps">
+                                            <div class="row form-inline" [formGroupName]="i">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label for="adhoc-run" class="control-label alignLabels">Adhoc Run:</label>
-                                                        <div class="mat-design-toggle">
-                                                            <mat-slide-toggle class="toggle-button-custom" [color]="color" formControlName="ADHC_RUN" (change)="checkForAdhocConditionChild($event)"></mat-slide-toggle>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="active" class="control-label alignLabels">Active:</label>
-                                                        <div class="mat-design-toggle">
-                                                            <mat-slide-toggle class="toggle-button-custom" [color]="color" formControlName="ACTV_IND"></mat-slide-toggle>
-                                                        </div>
+                                                        <label for="'step-name-' + i" class="control-label alignLabels">Step Name:</label><br />
+                                                        <input type="text" id="'step-name-' + i" class="form-control w-100" placeholder="Enter the step name" formControlName="STEP_NM" />
+                                                        <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_NM'].touched && getStepsFormArr(i).controls['STEP_NM'].hasError('required')">
+                                                            {{isRequiredMsg}}
+                                                        </kendo-formerror>
+                                                        <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_NM'].hasError('uniqueStepName') && getStepsFormArr(i).controls['STEP_NM'].touched">
+                                                            Step name must be unique.
+                                                        </kendo-formerror>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="btn-add-remove">
-                                                    <button class="btn btn-primary btn-add-design" (click)="addStepOnUI()">
-                                                        <span class="intelicon-plus-outlined icon-intel-design"></span>
-                                                        <span>Add Step</span>
-                                                    </button>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label for="'sort-order-' + i" class="control-label alignLabels">Sort Order:</label><br />
+                                                        <input type="number" id="'sort-order-' + i" class="form-control w-100" placeholder="Enter the sort order" formControlName="STEP_SRT_ORDR" />
+                                                        <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_SRT_ORDR'].touched && getStepsFormArr(i).controls['STEP_SRT_ORDR'].hasError('required')">
+                                                            {{isRequiredMsg}}
+                                                        </kendo-formerror>
+                                                        <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_SRT_ORDR'].hasError('sortOrder') && getStepsFormArr(i).controls['STEP_SRT_ORDR'].touched">
+                                                            Sort order must be greater than 0.
+                                                        </kendo-formerror>
+                                                        <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_SRT_ORDR'].hasError('uniqueSortOrder') && getStepsFormArr(i).controls['STEP_SRT_ORDR'].touched">
+                                                            Sort order must be unique.
+                                                        </kendo-formerror>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label for="step-type" class="control-label alignLabels">Step Type:</label><br />
+                                                        <select id="step-type" class="form-control w-100" formControlName="STEP_TYPE">
+                                                            <option value="PROCEDURE">Procedure</option>
+                                                            <option value="Data Flow">Data Flow</option>
+                                                        </select>
+                                                        <kendo-formerror *ngIf="getStepsFormArr(i).controls['STEP_TYPE'].touched && getStepsFormArr(i).controls['STEP_TYPE'].hasError('required')">
+                                                            {{isRequiredMsg}}
+                                                        </kendo-formerror>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label for="'job-health-' + i" class="control-label alignLabels">Job Health Configuration:</label><br />
+                                                        <input type="text" id="'job-health-' + i" class="form-control w-100" placeholder="Enter the Job Health Configuration" formControlName="JOB_HLTH_CNFG_DTL" />
+                                                       
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 width-two-optimize">
+                                                    <div class="toggle-aligner">
+                                                        <div class="form-group">
+                                                            <label for="adhoc-run" class="control-label alignLabels">Adhoc Run:</label>
+                                                            <div class="mat-design-toggle">
+                                                                <mat-slide-toggle class="toggle-button-custom" [color]="color" formControlName="ADHC_RUN" (change)="checkForAdhocConditionChild($event)"></mat-slide-toggle>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="active" class="control-label alignLabels">Active:</label>
+                                                            <div class="mat-design-toggle">
+                                                                <mat-slide-toggle class="toggle-button-custom" [color]="color" formControlName="ACTV_IND"></mat-slide-toggle>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="btn-add-remove">
+                                                        <button class="btn btn-primary btn-add-design" (click)="addStepOnUI()">
+                                                            <span class="intelicon-plus-outlined icon-intel-design"></span>
+                                                            <span>Add Step</span>
+                                                        </button>
+                                                        <button class="btn btn-primary btn-remove-design" (click)="deleteStepOnUI(i)">
+                                                            <span class="intelicon-minus-outlined icon-intel-design"></span>
+                                                            <span>Remove Step</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                                </div>
                     </div>
                 </form>
             </div>

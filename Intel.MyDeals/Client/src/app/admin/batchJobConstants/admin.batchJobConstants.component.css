@@ -31,6 +31,7 @@
 
 .toggle-aligner .form-group label.control-label.alignLabels {
     margin-bottom: 5px;
+    white-space:nowrap;
 }
 
 .mat-design-toggle {
@@ -101,7 +102,7 @@ button.k-button.delete-btn-constants {
     gap: 10px;
     align-items: center;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 24px;
 }
 
 .icon-intel-design {
@@ -126,4 +127,26 @@ button.k-button.delete-btn-constants {
     border-color: #b1babf !important;
     cursor: not-allowed !important;
     pointer-events: all !important;
+}
+.col-md-2.width-two-optimize.all-toggle {
+    margin-left: 60% !important;
+    position: relative !important
+}
+
+button.btn.btn-primary.btn-remove-design {
+    background-color: #dc3545 !important;
+}
+.row.form-inline {
+    align-items: normal !important;
+}
+.form-group.row-col-align {
+    margin-top: 30% !important;
+    right: 121rem;
+    margin-right: 61%;
+}
+.row-col-align .w-100 {
+    min-width: 200%;
+}
+select#triggered-by {
+    margin-top: -19px;
 }

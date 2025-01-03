@@ -9,7 +9,6 @@ import { logger } from "../../shared/logger/logger";
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
-import { MomentService } from "../../shared/moment/moment.service";
 
 
 interface Item {
@@ -28,9 +27,8 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
       private formBuilder: FormBuilder, 
       private batchJobCnstSrvc: batchJobConstantsService,
       private constantsService: constantsService,
-      private momentService: MomentService,
       private loggerSvc: logger)
-  { }
+    { }
 
   public isFormValid = false;
   private readonly destroy$ = new Subject();
@@ -58,7 +56,7 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
   public inputsDisable = false;
   private hasAccess = false;
   private validWWID: string;
-
+    
   public weeklyDays: Array<{ text: string; value: number }> = [
     { text: "Sunday", value: 1 },
     { text: "Monday", value: 2 },
@@ -97,7 +95,8 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
     "STEP_TYPE" : "",
     "ADHC_RUN" : false,
     "ACTV_IND": false,
-    "TRGRD_BY":""
+    "TRGRD_BY": "",
+    "JOB_HLTH_CNFG_DTL": ""
   }
 
   private state: State = {
@@ -150,11 +149,12 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
       BTCH_STEP_SID : [],
       BTCH_SID : [],
       STEP_NM: ['', [Validators.required,this.uniqueStepNameValidator(stepsArray)]],
-        STEP_SRT_ORDR: ['', [Validators.required, this.sortValidator.bind(this),this.uniqueSortOrderValidator(stepsArray)]],
+      STEP_SRT_ORDR: ['', [Validators.required, this.sortValidator.bind(this),this.uniqueSortOrderValidator(stepsArray)]],
       STEP_TYPE:['', Validators.required],
       ADHC_RUN:[true, Validators.required],
       ACTV_IND:[true, Validators.required],
-      TRGRD_BY : []
+      TRGRD_BY: [],
+      JOB_HLTH_CNFG_DTL: ['', Validators.required]
     });
   }
 
@@ -162,7 +162,11 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
   addStepOnUI(): void {
     const newStepEntry = this.createStepFormGroup(this.stepsArray);
     this.stepsArray.push(newStepEntry);
-  }
+    }
+
+  deleteStepOnUI(id: number) {
+        this.stepsArray.removeAt(id);
+    }
 
   get stepsArray(): FormArray {
     return this.batchJobConstForm.get('steps') as FormArray;
@@ -195,7 +199,7 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
       return dateAdd;
   }
 
-  editBatchJobData(dataItem) {
+  editBatchJobData(dataItem){
     this.allData = false;
     this.addData = true;
     const getBatchID = dataItem.BTCH_SID;
@@ -226,8 +230,12 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
       INTERVAL: [intervalValues,[Validators.required,Validators.min(1),Validators.pattern(/^[1-9]\d*$/)]],
       ADHC_RUN: [dataItem.ADHC_RUN, Validators.required],
       ACTV_IND: [dataItem.ACTV_IND, Validators.required],
+      ADHC_RUN_NEW: [dataItem.ADHC_RUN, Validators.required],
+      ACTV_IND_NEW: [dataItem.ACTV_IND, Validators.required],
       STATUS: dataItem.STATUS,
-      TRGRD_BY : dataItem.TRGRD_BY,
+      TRGRD_BY: dataItem.TRGRD_BY,
+      JOB_HLTH_CNFG_DTL: dataItem.JOB_HLTH_CNFG_DTL,
+      PREDECESSOR_COND: dataItem.PREDECESSOR_COND,
       steps: this.formBuilder.array([]),
     });
 
@@ -244,7 +252,7 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
       this.secondRowCheckBox = false;
     }
 
-    if (dataItem.BTCH_NM === 'idfcdudeal301a' || dataItem.BTCH_NM === 'idfcdudealdsa301a' || dataItem.BTCH_NM == 'idfcdudealpic301a')
+      if (dataItem.TRGRD_BY =='Autosys')
     {
       this.batchJobConstForm.controls['START'].disable();
       this.batchJobConstForm.controls['END'].disable();
@@ -259,7 +267,28 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
     this.batchJobConstForm.statusChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.isFormValid = this.checkFormValidity();
     });
-  }
+    }
+
+    onTriggeredByChange() {
+        const selectedJobType = this.batchJobConstForm.get('TRGRD_BY')?.value;
+        if (selectedJobType === 'Sql Agent Job') {
+            this.batchJobConstForm.get('START')?.enable();
+            this.batchJobConstForm.get('END')?.enable();
+            this.batchJobConstForm.get('INTERVAL')?.enable();
+            this.inputsDisable = false;
+        } else if (selectedJobType === 'Autosys') {
+            this.batchJobConstForm.get('START')?.disable();
+            this.batchJobConstForm.get('END')?.disable();
+            this.batchJobConstForm.get('INTERVAL')?.disable();
+            this.batchJobConstForm.get('START').reset();
+            this.batchJobConstForm.get('END').reset();
+            this.batchJobConstForm.get('INTERVAL').reset();
+            this.inputsDisable = true;
+            this.selectedItems = [];
+            this.isDayError = false;
+        }
+}
+
 
   gettingDaysForUpdate(dataItem){
     const valSeperate = JSON.parse(dataItem.RUN_SCHDL);
@@ -290,7 +319,8 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
       STEP_TYPE: ['', Validators.required],
       ADHC_RUN: ['', Validators.required],
       ACTV_IND:['', Validators.required],
-      TRGRD_BY:['']
+      TRGRD_BY: [''],
+      JOB_HLTH_CNFG_DTL: ['', Validators.required]
     });
 
     lessonForm.patchValue(stepIndVal);
@@ -313,7 +343,7 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
   runScheduleVal(val){
     const dayVal = this.selectedItems.map(item => item.value).toString();
     const interval = val.INTERVAL;
-    if (val.BTCH_NM == 'idfcdudeal301a' || val.BTCH_NM == 'idfcdudealpic301a' || val.BTCH_NM === 'idfcdudealdsa301a') {
+      if (val.TRGRD_BY=='Autosys') {
         return null;
     } else {
         const startVal = this.timeZone(val.START);
@@ -368,7 +398,42 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
       }
     }
     this.isFormValid = this.checkFormValidity();
-  }
+    }
+
+    checkForAdhocConditionNewParent(e) {
+        this.stepsArray.controls.map(el => el.get('ADHC_RUN').setValue(e.checked));
+        const tmp = e.checked;
+        const batchJobConstVal = this.batchJobConstForm.value;
+        const adhocParent = batchJobConstVal.ADHC_RUN;
+        if (tmp) {
+            if (!adhocParent) {
+                this.isParentAdhocError = true;
+                this.parentAdhocError = 'Please make sure the Job AdHoc is enabled as the Step AdHoc is being enabled';
+            } else {
+                this.childAdhocError = this.parentAdhocError = '';
+                this.isChildAdhocError = this.isParentAdhocError = false;
+            }
+
+        }
+        else {
+            if (adhocParent) {
+                this.isChildAdhocError = true;
+                this.childAdhocError = 'Please make sure at least one Step is enabled for AdHoc as Job AdHoc is enabled';
+                this.isParentAdhocError = false;
+            }
+            else {
+
+                this.childAdhocError = this.parentAdhocError = '';
+                this.isChildAdhocError = this.isParentAdhocError = false;
+            }
+        }
+        this.isFormValid = this.checkFormValidity();
+    }
+
+    checkForActiveConditionNewParent(e) {
+        this.stepsArray.controls.map(el => el.get('ACTV_IND').setValue(e.checked));
+
+    }
 
   checkForAdhocConditionChild(e)
   {
@@ -478,7 +543,12 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
   onDayChange() {
     this.isDayError = this.selectedItems.length === 0;
     this.isFormValid = this.checkFormValidity();
-  }
+    }
+  onTouched() {
+        if (this.selectedItems.length === 0) {
+            this.isDayError = true;
+        }
+    }
 
   checkFormValidity() {
     const isFormDataValid = this.batchJobConstForm.valid && !this.isDayError && !this.isChildAdhocError && !this.isParentAdhocError;
@@ -589,98 +659,63 @@ export class batchJobConstantsComponent implements OnInit,OnDestroy {
     }
   }
 
-  padZero(value) {
-    return value.toString().padStart(2, '0');
-  }
-  
-  formatTime(time) {
-    const [hours, minutes, seconds] = time.split(':');
-    return `${this.padZero(hours)}:${this.padZero(minutes)}:${this.padZero(seconds)}`;
-  }
-  
-  getStart(start, isDisplay = false) {
-    if (start !== null) {
-      if (start === "Checking Schdl") {
-        return "Checking Schdl";
-      } else {
+  getStart(start){
+    if(start !== null){
+      if(start == "Checking Schdl"){
+        return "Checking Schdl"
+      }else{
         const startVal = JSON.parse(start);
         const startValInt = startVal[0]['START'];
-        return isDisplay ? this.formatTime(startValInt) : startValInt;
+        return startValInt;
       }
     }
   }
-  
-  getEnd(end, isDisplay = false) {
-    if (end !== null) {
-      if (end === "Checking Schdl") {
-        return "Checking Schdl";
-      } else {
+
+  getEnd(end){
+    if(end !== null){
+      if(end == "Checking Schdl"){
+        return "Checking Schdl"
+      }else{
         const endVal = JSON.parse(end);
         const endValInt = endVal[0]['END'];
-        return isDisplay ? this.formatTime(endValInt) : endValInt;
+        return endValInt;
       }
     }
   }
 
-  formatInterval(interval) {
-    const hours = Math.floor(interval / 60);
-    const minutes = interval % 60;
-    let formattedInterval = '';
-    if (hours > 0) {
-      formattedInterval += `${hours} Hr`;
-    }
-    if (minutes > 0) {
-      if (hours > 0) {
-        formattedInterval += ' ';
+  getInterval(interval){
+      if(interval !== null){
+        if(interval == "Checking Schdl"){
+          return "Checking Schdl"
+        }else{
+          const intervalVal = JSON.parse(interval);
+          const intervalVallInt = intervalVal[0]['INTERVAL'];
+          return intervalVallInt;
+        }
       }
-      formattedInterval += `${minutes} Min`;
-    }
-    return formattedInterval;
-  }
-  
-  getInterval(interval, isDisplay = false) {
-    if (interval !== null) {
-      if (interval === "Checking Schdl") {
-        return "Checking Schdl";
-      } else {
-        const intervalVal = JSON.parse(interval);
-        const intervalVallInt = intervalVal[0]['INTERVAL'];
-        return isDisplay ? this.formatInterval(intervalVallInt) : intervalVallInt;
-      }
-    }
   }
 
-  getLastRun(lastRun,isDisplay = false) {
-      const lastRunVal = this.momentService.moment(lastRun).format("MM/DD/YYYY,  HH:mm:ss");
-      return isDisplay ? lastRunVal : lastRun;
-  }
-
-  private redirectInvalidAccess(){
-    window.alert("User does not have access to the screen. Press OK to redirect to Dashboard.");
-    document.location.href = "/Dashboard#/portal";
-  }
-
-  async checkPageAccess() {
-    const response = await this.constantsService.getConstantsByName("SSIS_CNST_EMP_ID").toPromise().catch(error => {
-        this.loggerSvc.error("Unable to fetch Employee Id",error,error.statusText);
-    });
-
-    if(response) {
-      this.validWWID = response.CNST_VAL_TXT === "NA" ? "" : response.CNST_VAL_TXT;
-      this.hasAccess = this.validWWID.indexOf((<any>window).usrDupWwid) > -1;
-      if (this.hasAccess) {
-        this.getAllBatchJobConstants();
-      } else {
-        this.redirectInvalidAccess();
-      }
-    }else {
-      this.redirectInvalidAccess();
-    }
+  checkPageAcess() {
+      this.constantsService.getConstantsByName("SSIS_CNST_EMP_ID").pipe(takeUntil(this.destroy$)).subscribe((data) => {
+          if (data) {
+              this.validWWID = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
+              this.hasAccess = this.validWWID.indexOf((<any>window).usrDupWwid) > -1;
+              if (!this.hasAccess) {
+                  window.alert("User does not have access to the screen. Press OK to redirect to Dashboard.");
+                  document.location.href = "/Dashboard#/portal";
+              }else{
+                  this.isLoading = false;
+              }
+          }
+      }, (error) => {
+          this.loggerSvc.error("Unable to get Eomployee Id", error)
+      });
   }
 
   ngOnInit() {
       this.isLoading = true;
-      this.checkPageAccess();
+      this.checkPageAcess();
+      this.getAllBatchJobConstants();
   }
 
   ngOnDestroy() {

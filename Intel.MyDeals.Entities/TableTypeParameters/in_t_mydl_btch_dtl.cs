@@ -10,9 +10,9 @@ namespace Intel.MyDeals.Entities
         private const string DATA_TABLE_NAME = "dbo.t_mydl_btch_dtl";
         public in_t_mydl_btch_dtl() : base(DATA_TABLE_NAME)
         {
-                
+
         }
-        public in_t_mydl_btch_dtl(SerializationInfo info, StreamingContext context) : base(DATA_TABLE_NAME,info,context)
+        public in_t_mydl_btch_dtl(SerializationInfo info, StreamingContext context) : base(DATA_TABLE_NAME, info, context)
         {
 
         }
@@ -28,10 +28,13 @@ namespace Intel.MyDeals.Entities
             this.Columns.Add("STATUS", typeof(string));
             this.Columns.Add("LST_RUN", typeof(DateTime));
             this.Columns.Add("EMP_WWID", typeof(int));
+            this.Columns.Add("TRGRD_BY", typeof(string));
+            this.Columns.Add("JOB_HLTH_CNFG_DTL", typeof(string));
+            this.Columns.Add("PREDECESSOR_COND", typeof(string));
         }
         public void AddRow(BatchJobConstants itm)
         {
-            if(itm == null) { return; }
+            if (itm == null) { return; }
             var r = this.NewRow();
             r["BTCH_SID"] = itm.BTCH_SID;
             r["BTCH_NM"] = itm.BTCH_NM;
@@ -43,12 +46,15 @@ namespace Intel.MyDeals.Entities
             r["STATUS"] = itm.STATUS;
             r["LST_RUN"] = itm.LST_RUN;
             r["EMP_WWID"] = itm.EMP_WWID;
+            r["TRGRD_BY"] = itm.TRGRD_BY;
+            r["JOB_HLTH_CNFG_DTL"] = itm.JOB_HLTH_CNFG_DTL;
+            r["PREDECESSOR_COND"] = itm.PREDECESSOR_COND;
             this.Rows.Add(r);
         }
         public void AddRows(IEnumerable<BatchJobConstants> itms)
         {
-            if(itms == null) { return; }
-            foreach(var itm in itms)
+            if (itms == null) { return; }
+            foreach (var itm in itms)
             {
                 var r = this.NewRow();
                 r["BTCH_SID"] = itm.BTCH_SID;
@@ -61,6 +67,9 @@ namespace Intel.MyDeals.Entities
                 r["STATUS"] = itm.STATUS;
                 r["LST_RUN"] = itm.LST_RUN;
                 r["EMP_WWID"] = itm.EMP_WWID;
+                r["TRGRD_BY"] = itm.TRGRD_BY;
+                r["JOB_HLTH_CNFG_DTL"] = itm.JOB_HLTH_CNFG_DTL;
+                r["PREDECESSOR_COND"] = itm.PREDECESSOR_COND;
                 this.Rows.Add(r);
             }
         }

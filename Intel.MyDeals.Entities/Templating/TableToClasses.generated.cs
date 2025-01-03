@@ -11194,6 +11194,12 @@ namespace Intel.MyDeals.Entities
         public System.Int32 EMP_WWID { get; set; }
         [DataMember]
         public System.String TRGRD_BY { get; set; }
+
+        [DataMember]
+        public System.String JOB_HLTH_CNFG_DTL { get; set; }
+
+        [DataMember]
+        public System.String PREDECESSOR_COND { get; set; }
     }// End of class BatchJobConstants
 
     ///<summary>
@@ -11219,6 +11225,9 @@ namespace Intel.MyDeals.Entities
         public bool ACTV_IND { get; set; }
         [DataMember]
         public int EMP_WWID { get; set; }
+
+        [DataMember]
+        public System.String JOB_HLTH_CNFG_DTL { get; set; }
     }// End of class BatchJobStepConstants
 
 
