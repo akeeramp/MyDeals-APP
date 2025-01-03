@@ -28,7 +28,7 @@ export class actionSummaryModal {
             this.dialogRef.close('success');
         }
         cancel(){
-            this.dialogRef.close();
+            this.dialogRef.close('cancel');
         }
     
 

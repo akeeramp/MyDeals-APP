@@ -46,6 +46,7 @@ import { missingCapCostInfoModalComponent } from "../contract/ptModals/dealEdito
 import { dropDownModalComponent } from '../contract/ptModals/dropDownModal/dropDownModal.component';
 import { performanceBarsComponent } from "../contract/performanceBars/performanceBar.component";
 import { goToComponent } from "../contract/goTo.component";
+import { ComplexStackingModalComponent } from "../contract/contractManager/complexStackingModal/complexStackingModal.component";
 
 export let contractComponents = [
     ContractDetailsComponent,
@@ -95,5 +96,6 @@ export let contractComponents = [
     tenderGroupExclusionModalComponent,
     dropDownModalComponent,
     performanceBarsComponent,
-    goToComponent
+    goToComponent,
+    ComplexStackingModalComponent
 ]

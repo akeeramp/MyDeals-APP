@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, OnDestroy } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild, OnDestroy, OnInit } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { distinct,process, State } from "@progress/kendo-data-query";
@@ -16,6 +16,9 @@ import { performanceBarsComponent } from '../performanceBars/performanceBar.comp
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 import { Subject, Subscription } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { ComplexStackingModalComponent } from "./complexStackingModal/complexStackingModal.component";
+import { DynamicObj } from "../../admin/employee/admin.employee.model";
+import { ComplexStackingModalService } from "./complexStackingModal/complexStackingModal.service";
 
 export interface contractIds {
     Model: string;
@@ -32,7 +35,7 @@ export interface contractIds {
     templateUrl: "Client/src/app/contract/contractManager/contractManager.component.html",
     styleUrls: ['Client/src/app/contract/contractManager/contractManager.component.css']
 })
-export class contractManagerComponent implements OnDestroy{
+export class contractManagerComponent implements OnInit, OnDestroy{
     runIfStaleByHours = 3;
     forceRunValue = true;
     enabledPCT = false;
@@ -67,9 +70,11 @@ export class contractManagerComponent implements OnDestroy{
     allPTEData: any =[];
     isToggle: boolean;
     loadPerf: boolean;
+    csLoading: boolean = false;
     constructor(protected dialog: MatDialog,
                 private loggerSvc: logger,
                 private contractManagerSvc: contractManagerservice,
+                private complexStackingService: ComplexStackingModalService,
                 private lnavSvc: lnavService,
                 private momentService: MomentService) {}
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
@@ -317,7 +322,7 @@ export class contractManagerComponent implements OnDestroy{
             this.isPending = false;
             this.isToggle = false;
             this.contractData.CUST_ACCPT = "Accepted";
-            if (runActions) this.actionItems(true, true);
+            if (runActions) this.submitContract(true, true) //this.actionItems(true, true);
         }
     }
     closeDialog(){
@@ -537,7 +542,14 @@ export class contractManagerComponent implements OnDestroy{
         var title = result.length > 0 ? result[0].TITLE : "";
         var hasL1 = result.length > 0 ? result[0].HAS_L1 !== "0" : false;
 
-        return { "DC_ID": id, "WF_STG_CD": stage, "TITLE": title, "ACTN": actn, "HAS_L1": hasL1 };
+        //Handling Complex Stacking Review
+        let isCSReviewed = false;
+        if (result.length > 0) {
+            const cmplxReviewedBy = result[0].IS_CS_GRP_REVIEWED;
+            isCSReviewed = this.IsCSReviewed(cmplxReviewedBy);
+        }
+
+        return { "DC_ID": id, "WF_STG_CD": stage, "TITLE": title, "ACTN": actn, "HAS_L1": hasL1, isCSReviewed: isCSReviewed };
     }
 
     getActionItems(data, dataItem, actn, actnText) {
@@ -712,8 +724,93 @@ export class contractManagerComponent implements OnDestroy{
     public close(status: string): void {
         this.submitModal = false;
     }
-    submitContract(): void {
-        this.actionItems(null, null);
+
+    async callComplexStacking(complexOverlapObjs: DynamicObj[], fromSubmit = false, fromToggle = false, checkForRequirements = false) {
+        this.setBusy("Complex Stacking", "Fetching complex stacking details", "Info", true);
+        this.isLoading = this.csLoading = true;
+        const response = await this.complexStackingService.getComplexStackingGroup(complexOverlapObjs).toPromise().catch((error) => {
+            this.csLoading = this.isLoading = false;
+            this.loggerSvc.error('Get Complex Stacking Deal Group', error);
+        });
+        if (response.GroupItems && response.GroupItems.length > 0) {
+            this.csLoading = this.isLoading = false;
+            const DIALOG_REF = this.dialog.open(ComplexStackingModalComponent, {
+                maxWidth: '80%',
+                panelClass: 'complex-stacking-dialog',
+                data: {
+                    ovlpObjs: response
+                }
+            });
+            DIALOG_REF.afterClosed().subscribe(async (inputData: DynamicObj[]) => {
+                if (inputData.length > 0) {
+                    this.setBusy("Complex Stacking", "Updating Complex Stacking details", "Info", true);
+                    this.isLoading = true;
+                    const response = await this.complexStackingService.updateComplexStackingDealGroup(inputData).toPromise().catch((error) => {
+                        this.isLoading = false;
+                        this.loggerSvc.error('Get Update Complex Stacking Deal Group', error);
+                    });
+                    if (response) {
+                        this.isLoading = false;
+                        if (fromSubmit) {
+                            this.loggerSvc.success('Will continue with submitting state.', 'Accepted Complex Stacking')
+                            this.actionItems(null, null);   // Execute submission
+                        } else if (fromToggle) {
+                            this.loggerSvc.success('Will continue with submitting state.', 'Accepted Complex Stacking')
+                            this.actionItems(fromToggle, checkForRequirements);
+                        } else {
+                            this.loggerSvc.success('Complex Stacking was reviewed.', 'Accepted Complex Stacking')
+                            this.loadDetails();
+                        }
+                    }
+                } else {
+                    this.loggerSvc.warn('Must accept Complex Stacking to continue with submitting for Approval.', 'Submission Cancelled')
+                }
+            });
+        } else {
+            this.csLoading = this.isLoading = false;
+            this.loggerSvc.success('No complex grouping available.', 'Complex Stacking');
+            if (fromSubmit) {
+                this.actionItems(null, null);   // Execute submission
+            } else {
+                this.loadDetails();
+            }
+        }
+    }
+
+    /**
+     * The "submitContract" action triggers the opening of the Complex Stacking popup,
+     * which serves as a hard stop for the approval process.
+     * All approvals must go through the Complex Stacking step before proceeding.
+     */
+    async submitContract(fromToggle = false, checkForRequirements = false) {
+        // Opening Complex Stacking Modal
+        let data = {};  // Needed for `getActionItems()`
+        let dataItems = []; // To get Deal IDs from Pricing Strategies chosen for approval
+        this.getActionItems(data, dataItems, "Approve", "Send for Approval");
+        const complexOverlapObjs: DynamicObj[] = [];
+
+        dataItems.filter(itm => !itm.isCSReviewed).forEach((item) => complexOverlapObjs.push({ ObjId: item.DC_ID, ObjType: 2 }));
+
+        const APPROVED_ROLES_COMPLEX_STACKING = ['DA', 'GA'];   // Restrict Complex Grouping to DA & GA
+        const USER_ROLE = (<any>window).usrRole;
+        if (complexOverlapObjs.length > 0 && APPROVED_ROLES_COMPLEX_STACKING.includes(USER_ROLE)) {
+            const isFromSubmit = fromToggle ? false : true;
+            this.callComplexStacking(complexOverlapObjs, isFromSubmit, fromToggle, checkForRequirements)
+        }
+        else if (fromToggle) {
+            this.actionItems(fromToggle, checkForRequirements);
+        }
+        else {
+            this.actionItems(null, null);   // Execute submission
+        }
+    }
+    onComplexStackingReviewActn(e, ps) {
+        const APPROVED_ROLES_COMPLEX_STACKING = ['DA', 'GA'];   // Restrict Complex Grouping to DA & GA
+        const USER_ROLE = (<any>window).usrRole;
+        const complexOverlapObjs: DynamicObj[] = [{ ObjId: ps.DC_ID, ObjType: 2 }];
+        if (complexOverlapObjs.length > 0 && APPROVED_ROLES_COMPLEX_STACKING.includes(USER_ROLE)) {
+            this.callComplexStacking(complexOverlapObjs);
+        }
     }
     executePctViaBtn(text : string) {
         this.isLoading = true;
@@ -731,7 +828,7 @@ export class contractManagerComponent implements OnDestroy{
         this.isRunning = true;
         await this.contractManagerSvc.runPctContract(this.contractData.DC_ID).toPromise().catch((err) => {
             this.isRunning = false;
-            this.isLoading = false;
+            if (!this.csLoading) this.isLoading = false;
             this.pctClicked = false;
             this.mctClicked = false;
             this.loggerSvc.error("Could not run Cost Test for contract " + this.contractId, err);
@@ -829,7 +926,7 @@ export class contractManagerComponent implements OnDestroy{
                 this.isPending = false;
                 this.isToggle = false;
             }
-            this.isLoading = false;
+            if(!this.csLoading) this.isLoading = false;
             this.filteredData = this.contractData?.PRC_ST;
             this.isCustAcptReadOnly = (this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true) ? true : false;
             if (!this.isRunning) this.showData = true;
@@ -939,6 +1036,9 @@ export class contractManagerComponent implements OnDestroy{
                         await this.quickSaveContractFromDialog(this.requestBody);
                     } 
                     this.canBypassEmptyActions = false;
+                }
+                if (returnVal == 'cancel') {
+                    this.loadDetails();
                 }
             });
         }
@@ -1281,5 +1381,16 @@ export class contractManagerComponent implements OnDestroy{
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
+    }
+
+    IsCSReviewed(cmplxReviewedBy) {
+        const USER_ROLE = (<any>window).usrRole;
+        if (USER_ROLE === "DA" && cmplxReviewedBy === "DA_APPROVED") {
+            return true;
+        }
+        if (USER_ROLE !== "DA" && (cmplxReviewedBy === "GA_APPROVED" || cmplxReviewedBy === "DA_APPROVED")) {
+            return true;
+        }
+        return false;
     }
 }

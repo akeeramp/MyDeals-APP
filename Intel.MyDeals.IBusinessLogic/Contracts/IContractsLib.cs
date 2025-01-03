@@ -46,5 +46,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         QuoteLetterFile HtmlToPdf(string htmlBody);
 
+        ComplexStacking GetComplexStackingGroup(List<OvlpComplexObj> ovlpComplexObjs);
+
+        bool UpdateComplexStackingGroup(List<OvlpComplexUpdateObj> ovlpComplexObjs);
     }
 }

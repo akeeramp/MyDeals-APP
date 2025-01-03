@@ -61,6 +61,7 @@ import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loading
 import { ContractUtilComponents } from './contract-util.module';
 import { registerAllModules } from 'handsontable/registry';
 import { PendingChangesGuard } from '../../app/shared/util/gaurdprotectionDeactivate';
+import { IntlModule } from '@progress/kendo-angular-intl';
 
 // register Handsontable's modules
 registerAllModules();
@@ -102,7 +103,8 @@ registerAllModules();
         DragDropModule,
         ScrollingModule,
         MainPipe,
-        RouterModule.forRoot(routesContract, { useHash: true })
+        RouterModule.forRoot(routesContract, { useHash: true }),
+        IntlModule
     ],
     providers: [
         {

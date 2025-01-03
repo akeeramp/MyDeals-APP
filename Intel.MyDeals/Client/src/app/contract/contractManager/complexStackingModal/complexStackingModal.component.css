@@ -1,0 +1,391 @@
+﻿/* Layout */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.grid-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: -webkit-fill-available;
+}
+
+.footer-container {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    text-align: -webkit-center;
+    padding: 10px 0;
+}
+
+.footer-button-height {
+    height: 25px !important;
+}
+
+.footer-accept-button {
+    font-size: 12px !important;
+    margin-left: 10px;
+}
+
+.grid-container div.row {
+    margin-bottom: 20px;
+}
+
+kendo-grid {
+    height: -webkit-fill-available;
+}
+
+/* hot-table .wtHolder {
+    height: 100% !important;
+}
+hot-table div.handsontable {
+    height: -webkit-fill-available !important;
+} */
+
+/* Message Cell Background Color
+.hot-cell-background-grey {
+    background-color: gray;
+}
+.bolder-text {
+    font-weight: bolder;
+} */
+
+#OvrLp.windOverLaps .k-grid {
+    height: 100%
+}
+
+.windOverLaps button.btn.btn-sm.btn-primary.overlapBtnSelect {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    padding-top: 2px !important;
+    padding-bottom: 4px !important
+}
+
+.windOverLaps button.btn.btn-sm.btn-primary.lnk.btnSelect.overlapBtnSelect {
+    background: #003C71 !important
+}
+
+    .windOverLaps button.btn.btn-sm.btn-primary.lnk.btnSelect.overlapBtnSelect:hover {
+        color: black !important;
+        background: #00B1F1 !important;
+        text-decoration: none !important
+    }
+
+.windOverLaps button.btn.btn-sm.btn-primary.lnk.btnYes.btnselectAccept.overlapBtnSelect {
+    background: #a49d00 !important;
+    border: #a49d00 !important
+}
+
+.windOverLaps button.btnYNeedClr {
+    background: #a49d00 !important;
+    border: #a49d00 !important
+}
+
+    .windOverLaps button.btnYNeedClr:hover {
+        color: #004579 !important
+    }
+
+.windOverLaps .btnNoIssue {
+    background: #FC4C02 !important
+}
+
+    .windOverLaps .btnNoIssue:hover {
+        color: #004579 !important;
+        background: #FC4C02 !important
+    }
+
+.windOverLaps .btnSelect {
+    background: #003C71 !important;
+    color: white;
+}
+
+    .windOverLaps .btnSelect:hover {
+        color: black !important;
+        background: #00B1F1 !important;
+        text-decoration: none !important;
+    }
+
+.windOverLaps .btnYes {
+    background: #a49d00 !important;
+    color: white;
+    z-index: 999999
+}
+
+    .windOverLaps .btnYes:hover {
+        text-decoration: none !important
+    }
+
+.windOverLaps .btnNo:hover {
+    text-decoration: none !important
+}
+
+.windOverLaps .btnNo {
+    background: #FC4C02 !important;
+    color: white
+}
+
+.windOverLaps .lnk {
+    background: #00AEEF;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 4px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px
+}
+
+.windOverLaps .undolnk {
+    background: #FC4C02 !important;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 3px;
+    cursor: pointer
+}
+
+.windOverLaps .approve-open {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    position: relative
+}
+
+.windOverLaps .new-compo {
+    padding-left: 5px;
+    padding-right: 36px
+}
+
+.windOverLaps .spinner {
+    margin: 10px auto;
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    font-size: 10px
+}
+
+    .windOverLaps .spinner > div {
+        background-color: #0071C5;
+        height: 100%;
+        width: 6px;
+        display: inline-block;
+        -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+        animation: sk-stretchdelay 1.2s infinite ease-in-out
+    }
+
+    .windOverLaps .spinner .rect2 {
+        -webkit-animation-delay: -1.1s;
+        animation-delay: -1.1s
+    }
+
+    .windOverLaps .spinner .rect3 {
+        -webkit-animation-delay: -1.0s;
+        animation-delay: -1.0s
+    }
+
+    .windOverLaps .spinner .rect4 {
+        -webkit-animation-delay: -.9s;
+        animation-delay: -.9s
+    }
+
+    .windOverLaps .spinner .rect5 {
+        -webkit-animation-delay: -.8s;
+        animation-delay: -.8s
+    }
+
+.windOverLaps .ss-icon-lg {
+    font-size: 4em;
+    -webkit-animation: sk-zoom .3s 1 ease-in;
+    animation: sk-zoom .3s 1 ease-in
+}
+
+.windOverLaps .sky-blue {
+    color: #00AEEF !important
+}
+
+.windOverLaps .Draft {
+    color: #000000;
+    background-color: rgb(216, 221, 223);
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .Active {
+    color: #000000;
+    background-color: #C4D600;
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .Complete {
+    color: #000000;
+    background-color: #C4D600;
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .InComplete {
+    color: #000000;
+    background-color: #FC4C02;
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .Pending {
+    color: #000000;
+    background-color: #FFA300;
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .Requested {
+    color: #000000;
+    background-color: #f9eaa7;
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .Submitted {
+    color: #000000;
+    background-color: #ffd180;
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .Approved {
+    color: #000000;
+    background-color: #c4d600;
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .InProgress {
+    color: #000000;
+    background-color: #d8dddf;
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .Processed {
+    color: #000000;
+    background-color: #C4D600;
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .Offer {
+    color: #000000;
+    background-color: #FFA300;
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .Lost {
+    color: #000000;
+    background-color: #FC4C02;
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .Won {
+    color: #000000;
+    background-color: #c4d600;
+    min-width: 20px;
+    min-height: 20px;
+    margin-left: -5px;
+}
+
+.windOverLaps .k-grid th,
+.windOverLaps .k-grid td {
+    /*padding: 0 !important;*/
+    border-style: solid;
+    border-color: inherit;
+    outline: 0;
+    font-weight: inherit;
+    text-align: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.windOverLaps .centerText {
+    text-align: center;
+    padding-top: 4px;
+    font-weight: bold;
+}
+
+.windOverLaps .helpBtn:hover {
+    color: #0071c5;
+}
+
+.windOverLaps .helpBtn {
+    cursor: pointer;
+    background-color: transparent;
+    color: #00aeef;
+}
+
+.windOverLaps .check {
+    vertical-align: middle;
+}
+
+.windOverLaps input[type=checkbox].with-font + label:before {
+    font-family: FontAwesome;
+    display: inline-block;
+    content: "\f096";
+    font-size: 22px;
+    letter-spacing: 5px;
+    color: #00AEEF !important;
+    margin-left: 10px;
+    margin-top: 2px;
+    vertical-align: middle;
+}
+
+.windOverLaps input[type=checkbox].with-font:checked + label:before {
+    content: "\f046";
+    font-size: 22px;
+    letter-spacing: 5px;
+    margin-left: 10px;
+    margin-top: 2px;
+    vertical-align: middle;
+}
+
+.windOverLaps input[type=checkbox].with-font {
+    border: 0;
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 0;
+    width: 35px;
+    height: 20px;
+}
+
+.cmplx-row-grp {
+    border: 2px solid #e7e7e8;
+    justify-content: center;
+    border-radius: 5px;
+    background-color: #0071c5 !important;
+}
+
+.cmplx-col-grp {
+    margin: 10px;
+}

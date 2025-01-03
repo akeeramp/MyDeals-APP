@@ -503,6 +503,26 @@ namespace Intel.MyDeals.Controllers.API
             return result;
         }
 
+        [Authorize]
+        [Route("getComplexStackingGroup")]
+        [HttpPost]
+        public ComplexStacking GetComplexStackingGroup(List<OvlpComplexObj> ovlpComplexObjs)     //Get all Product with Alias from ProductAlias
+        {
+            ComplexStacking result = SafeExecutor(() => _contractsLib.GetComplexStackingGroup(ovlpComplexObjs)
+                , $"Unable to get Complex Stacking Group"
+             );
+            return result;
+        }
 
+        [Authorize]
+        [Route("updateComplexStackingDealGroup")]
+        [HttpPost]
+        public bool UpdateComplexStackingDealGroup(List<OvlpComplexUpdateObj> ovlpComplexObjs)     //Get all Product with Alias from ProductAlias
+        {
+            bool result = SafeExecutor(() => _contractsLib.UpdateComplexStackingGroup(ovlpComplexObjs)
+                , $"Unable to get Complex Stacking Group"
+             );
+            return result;
+        }
     }
 }

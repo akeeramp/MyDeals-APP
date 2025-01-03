@@ -2398,6 +2398,7 @@ namespace Intel.MyDeals.BusinessRules
                 bool setRedealFlag = false;
                 r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
                 r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, GetBackDateValue(r.Dc).ToString("MM/dd/yyyy"));
+                r.Dc.SetAtrb(AttributeCodes.IS_CS_GRP_REVIEWED, 0);
                 //string test = r.Dc.GetDataElementValue(AttributeCodes.LAST_REDEAL_DT);
                 foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.TRKR_NBR)) // Get all trackers for this object and update as needed
                 {

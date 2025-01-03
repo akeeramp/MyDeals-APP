@@ -964,5 +964,19 @@ namespace Intel.MyDeals.BusinessLogic
             }
             return dealList;
         }
+
+        public ComplexStacking GetComplexStackingGroup(List<OvlpComplexObj> ovlpComplexObjs)
+        {
+            OpDataCollectorDataLib OD = new OpDataCollectorDataLib();
+            ComplexStacking result = OD.GetComplexStackingGroup(ovlpComplexObjs);
+            return result;
+        }
+
+        public bool UpdateComplexStackingGroup(List<OvlpComplexUpdateObj> ovlpComplexObjs)
+        {
+            OpDataCollectorDataLib OD = new OpDataCollectorDataLib();
+            var result = OD.UpdateComplexStackingGroup(ovlpComplexObjs);
+            return result;
+        }
     }
 }

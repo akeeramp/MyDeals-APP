@@ -205,6 +205,11 @@
                     <td style="width: 100px; text-align: center;">Stage</td>
                     <td style="width: 50px; text-align: center;">Valid</td>
                     <td style="line-height: 1.1em;">Pricing Strategy / Pricing Table</td>
+                    <td style="width: 150px; text-align: center;">
+                        <div title='Is complex stacking reviewed.'>
+                            Complex Stacking
+                        </div>
+                    </td>
                     <td style="width: 150px; text-align: center;" *ngIf="userRole=='GA' || userRole=='SA'">
                         <div title='Deals missing Cost and/or CAP cannot be approved by Division Approvers until the missing data has been added. For urgent issues, contact TAC.'>
                             Missing Cost/CAP
@@ -254,17 +259,17 @@
                             <td style="width: 60px; text-align: center;" *ngIf="canEdit" class="approveChkBox">
                                 <div *ngIf="canAction('Approve', ps, true) && canActionIcon && hasVertical(ps) && !(ps._actions.Approve==true && ps.WF_STG_CD=='Approved')" [ngbTooltip]="ps._actionReasons.Approve" placement="right" [hidden]="!(ps.WF_STG_CD !=='Pending')">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" [ngClass]="{'disabled': !canAction('Approve', ps, false)}" [(ngModel)]="apprvCheck[ps.DC_ID]" [disabled]="!canAction('Approve', ps, false)" class="with-font psCheck psCheck-Approve"
-                                    id="rad_approve_{{ps.DC_ID}}" kendoCheckBox (click)="onCheckboxChange('approveCheckBox',$event,ps)" /><label for="rad_approve_{{ps.DC_ID}}"></label>
+                                           id="rad_approve_{{ps.DC_ID}}" kendoCheckBox (click)="onCheckboxChange('approveCheckBox',$event,ps)" /><label for="rad_approve_{{ps.DC_ID}}"></label>
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;" *ngIf="canEdit">
                                 <div *ngIf="canAction('Revise', ps, true) && canActionIcon && hasVertical(ps)" title="{{actionReason('Revise', ps)}}">
-                                    <input type="checkbox" name="radGrp{{ps.DC_ID}}" [(ngModel)]="reviseCheck[ps.DC_ID]" [ngClass]="{'disabled': !canAction('Revise', ps, false)}" [disabled]="!canAction('Revise', ps, false)"  class="with-font psCheck psCheck-Revise"
-                                          id="rad_revise_{{ps.DC_ID}}"  (click)="onCheckboxChange('reviseCheckBox',$event,ps)" kendoCheckBox /><label for="rad_revise_{{ps.DC_ID}}"></label>
+                                    <input type="checkbox" name="radGrp{{ps.DC_ID}}" [(ngModel)]="reviseCheck[ps.DC_ID]" [ngClass]="{'disabled': !canAction('Revise', ps, false)}" [disabled]="!canAction('Revise', ps, false)" class="with-font psCheck psCheck-Revise"
+                                           id="rad_revise_{{ps.DC_ID}}" (click)="onCheckboxChange('reviseCheckBox',$event,ps)" kendoCheckBox /><label for="rad_revise_{{ps.DC_ID}}"></label>
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <div *ngIf="canEmailIcon && hasVertical(ps)" title="email pricing strategy"><input  type="checkbox" name="radGrp{{ps.DC_ID}}" [(ngModel)]="emailCheck[ps.DC_ID]" class="with-font psCheck psCheck-Email"  id="rad_email_{{ps.DC_ID}}" (click)="onCheckboxChange('emailCheckBox',$event,ps)" /><label for="rad_email_{{ps.DC_ID}}"></label></div>
+                                <div *ngIf="canEmailIcon && hasVertical(ps)" title="email pricing strategy"><input type="checkbox" name="radGrp{{ps.DC_ID}}" [(ngModel)]="emailCheck[ps.DC_ID]" class="with-font psCheck psCheck-Email" id="rad_email_{{ps.DC_ID}}" (click)="onCheckboxChange('emailCheckBox',$event,ps)" /><label for="rad_email_{{ps.DC_ID}}"></label></div>
                             </td>
                             <td style="width: 100px; text-align: center;">
                                 <div class="stage">
@@ -279,11 +284,20 @@
                             <td>
                                 <div [textContent]="ps.TITLE" class="bolder linkable" title="Click to open the Pricing Strategy in the Contract Editor" (click)="openPTEeditor(ps)"></div>
                             </td>
+                            <td style="width: 150px; text-align: center;">
+                                <div *ngIf="IsCSReviewed(ps.IS_CS_GRP_REVIEWED);then rev_content else non_rev_content">here is ignored</div>
+                                <ng-template #rev_content>
+                                    <i class="intelicon-protection-checked-verified-solid bigIcon validf_Complete" title="Reviewed"></i>
+                                </ng-template>
+                                <ng-template #non_rev_content>
+                                    <i (click)="onComplexStackingReviewActn($event, ps)" style="cursor: pointer" class="intelicon-information-solid bigIcon validf_Valid" title="Not reviewed yet; Click to Review"></i>
+                                </ng-template>
+                            </td>
                             <td style="width: 160px; text-align: center;" *ngIf="userRole=='GA' || userRole=='SA'">
                                 <i *ngIf="ps.CAP_MISSING_FLG !=='0' && ps.COST_MISSING_FLG !=='0'"></i><i *ngIf="ps.CAP_MISSING_FLG==='1' || ps.COST_MISSING_FLG==='1'" style="color:#f3d54e"
                                                                                                           class="intelicon-help-solid bigIcon" title="{{getmissingCapCostTitle(ps)}}"></i>
                             </td>
-                            <td class="bigIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_COST_TEST || PCTResultView" (click)="loadModel('pctDiv')" >
+                            <td class="bigIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_COST_TEST || PCTResultView" (click)="loadModel('pctDiv')">
                                 <icon-mct-pct-angular ngDefaultControl [(ngModel)]="ps.COST_TEST_RESULT" [dataValue]="ps.COST_TEST_RESULT" [canEdit]="CAN_EDIT_COST_TEST" [iconClass]="bigIcon"></icon-mct-pct-angular>
                             </td>
                             <td class="bigIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_MEET_COMP" (click)="loadModel('MeetComp')">

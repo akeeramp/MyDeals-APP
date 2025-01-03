@@ -83,6 +83,7 @@
     <Compile Include="BatchRunHealthSts.cs" />
     <Compile Include="BatchStepRunHistory.cs" />
     <Compile Include="BulkPriceUpdate.cs" />
+    <Compile Include="ComplexStacking.cs" />
     <Compile Include="ContractToken.cs" />
     <Compile Include="CostTestDataItem.cs" />
     <Compile Include="CostTestDetails.cs" />

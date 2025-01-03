@@ -1608,14 +1608,23 @@ namespace Intel.MyDeals.Entities {
 		///</summary>
 		public const string IS_CHKOUT_USER = "IS_CHKOUT_USER";
 
-		///<summary>
-		/// DIM_SID: 50
-		/// DIM_CD: SECUR
-		/// ATRB_SID: 5041
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Boolean
-		///</summary>
-		public const string IS_DEV_USR = "IS_DEV_USR";
+        ///<summary>
+        /// DIM_SID: 3
+        /// DIM_CD: DEAL
+        /// ATRB_SID: 90013
+        /// TGT_COL_TYPE: INT
+        /// DOT_NET_DATA_TYPE: System.Int32
+        ///</summary>
+        public const string IS_CS_GRP_REVIEWED = "IS_CS_GRP_REVIEWED";
+
+        ///<summary>
+        /// DIM_SID: 50
+        /// DIM_CD: SECUR
+        /// ATRB_SID: 5041
+        /// TGT_COL_TYPE: INT
+        /// DOT_NET_DATA_TYPE: System.Boolean
+        ///</summary>
+        public const string IS_DEV_USR = "IS_DEV_USR";
 
 		///<summary>
 		/// DIM_SID: 3

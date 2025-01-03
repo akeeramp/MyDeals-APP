@@ -1,0 +1,56 @@
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<loading-panel-angular id="PTRLoading" class="ptrLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
+                       [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
+<kendo-window title="Overlapping Deals - Complex Stacking" [keepContent]="true" [(left)]="left" [(top)]="top" [width]="kendoWindowWidth" [height]="kendoWindowHeight" (close)="closeModal()" class="k-wind-design headerTitlesOver windOverLaps" style="z-index:10001 !important">
+    <div class="main-container">
+        <div class="grid-container">
+            <div *ngIf="hasMultipleGroupings">                
+                <div class="row" *ngFor="let currentDealGroup of grpDeals">
+                    <div class="col-md-1">
+                        <div>
+                            <div style="float: left">
+                                <strong>{{ currentDealGroup.label }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-11">
+                        <div class="row" [ngClass]="{'cmplx-row-grp': currentDealGroup.hasMoreThanOneGrp}">
+                            <div class="col-md-12" *ngFor="let curDealGroup of currentDealGroup.groupedDeals; let i = index" [ngClass]="{'cmplx-col-grp': currentDealGroup.hasMoreThanOneGrp}">
+                                <kendo-grid [data]="curDealGroup.gridData" [sortable]="true" [resizable]="true" (excelExport)="overrideExcelExport($event)" #groupingGrid>                                                                       
+                                    <kendo-grid-column *ngFor="let column of COLUMNS_CONFIG" field="{{ column.field }}" title="{{ column.title }}" [hidden]="column.hidden">
+                                        <!-- Numeric Cell Templates -->
+                                        <ng-template kendoGridCellTemplate *ngIf="column.field == 'ECAP_PRICE'" let-dataItem="dataItem">
+                                            {{ dataItem.ECAP_PRICE | kendoNumber: 'c' }}
+                                        </ng-template>
+                                        <ng-template kendoGridCellTemplate *ngIf="column.field == 'MAX_RPU'" let-dataItem="dataItem">
+                                            {{ dataItem.MAX_RPU | kendoNumber: 'c' }}
+                                        </ng-template>
+
+                                        <!-- Footer Templates -->
+                                        <ng-template kendoGridFooterTemplate *ngIf="column.field == 'MAX_RPU'">
+                                            Total RPU: {{ curDealGroup.rpuTotal["MAX_RPU"].sum | kendoNumber: 'c' }}
+                                        </ng-template>
+                                    </kendo-grid-column>
+
+                                    <!-- Excel Export Element -->
+                                    <kendo-grid-excel>
+                                        <kendo-excelexport-column *ngFor="let column of COLUMNS_CONFIG" field="{{ column.field }}" title="{{ column.title }}">                                            
+                                            <!-- Footer Templates -->
+                                            <ng-template kendoExcelExportFooterTemplate *ngIf="column.field == 'MAX_RPU'">
+                                                Total RPU: {{ curDealGroup.rpuTotal["MAX_RPU"].sum | kendoNumber: 'c' }}
+                                            </ng-template>
+                                        </kendo-excelexport-column>
+                                    </kendo-grid-excel>
+                                </kendo-grid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-container">
+            <button kendoButton class="btn btn-sm btn-primary lnk btnselectAccept overlapBtnSelect footer-button-height" icon="file-excel" (click)="excelExportAllGroupings()"> Export to Excel </button>
+            <button class='btn btn-sm btn-primary lnk btnYes btnselectAccept overlapBtnSelect footer-accept-button' (click)="acceptAllGroupings()"><i class='intelicon-check'></i> {{isAnyItemChecked() ? 'Accept Selected' : 'Accept All'}} </button>
+        </div>
+    </div>
+</kendo-window>
