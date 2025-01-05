@@ -152,10 +152,10 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
             STEP_NM: ['', [Validators.required, this.uniqueStepNameValidator(stepsArray)]],
             STEP_SRT_ORDR: ['', [Validators.required, this.sortValidator.bind(this), this.uniqueSortOrderValidator(stepsArray)]],
             STEP_TYPE: ['', Validators.required],
-            ADHC_RUN: [true, Validators.required],
+            ADHC_RUN: [false, Validators.required],
             ACTV_IND: [true, Validators.required],
             TRGRD_BY: [],
-            JOB_HLTH_CNFG_DTL: ['', Validators.required]
+            JOB_HLTH_CNFG_DTL: []
         });
     }
 
@@ -319,7 +319,7 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
             ADHC_RUN: ['', Validators.required],
             ACTV_IND: ['', Validators.required],
             TRGRD_BY: [''],
-            JOB_HLTH_CNFG_DTL: ['', Validators.required]
+            JOB_HLTH_CNFG_DTL: ['']
         });
 
         lessonForm.patchValue(stepIndVal);

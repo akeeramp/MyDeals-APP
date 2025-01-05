@@ -183,25 +183,31 @@
                                                     <mat-slide-toggle class="toggle-button-custom" [color]="color" formControlName="ACTV_IND"></mat-slide-toggle>
                                                 </div>
                                             </div>
-                                            <div class="form-group row-col-align">
-                                                <label for="triggered-by" class="control-label alignLabels">Triggered by:</label><br />
-                                                <select id="triggered-by" class="form-control w-100" formControlName="TRGRD_BY" (change)="onTriggeredByChange()">
-                                                    <option value="Autosys">Autosys</option>
-                                                    <option value="Sql Agent Job">Sql Agent Job</option>
-                                                </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="row form-inline">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label for="triggered-by" class="control-label alignLabels">Triggered by:</label>
+                                                    <select id="triggered-by" class="form-control w-100" formControlName="TRGRD_BY" (change)="onTriggeredByChange()">
+                                                        <option value="Autosys">Autosys</option>
+                                                        <option value="Sql Agent Job">Sql Agent Job</option>
+                                                    </select>
+                                                </div>
                                             </div>
-
-                                            <div class="form-group row-col-align">
-                                                <label for="job_hlth_cnfg_dtl" class="control-label alignLabels">Job Health Configuration:</label>
-                                                <input type="text" id="job_hlth_cnfg_dtl" class="form-control w-100" formControlName="JOB_HLTH_CNFG_DTL" placeholder="Enter the Job Health Configuration" />
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label for="job_hlth_cnfg_dtl" class="control-label alignLabels">Job Health Configuration:</label>
+                                                    <input type="text" id="job_hlth_cnfg_dtl" class="form-control w-100" formControlName="JOB_HLTH_CNFG_DTL" placeholder="Enter the Job Health Configuration" />
+                                                </div>
                                             </div>
-
-                                            <div class="form-group row-col-align">
-                                                <label for="job_hlth_cnfg_dtl" class="control-label alignLabels">Predecessor:</label>
-                                                <input type="text" id="predecessor_dtl" class="form-control w-100" formControlName="PREDECESSOR_COND" placeholder="Enter the Predecessor Configuration" />
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label for="job_hlth_cnfg_dtl" class="control-label alignLabels">Predecessor:</label>
+                                                    <input type="text" id="predecessor_dtl" class="form-control w-100" formControlName="PREDECESSOR_COND" placeholder="Enter the Predecessor Configuration" />
+                                                </div>
                                             </div>
-
-
                                         </div>
                                     </div>
 
@@ -210,18 +216,22 @@
                                             <div class="form-group">
                                                 <input type="checkbox" [(ngModel)]="secondRowCheckBox" [ngModelOptions]="{standalone: true}" (change)="secondRowEnable($event)" />&nbsp;
                                                 <label class="control-label alignLabels">Job Steps Enable</label>
-                                                <div class="col-md-2 width-two-optimize all-toggle">
-                                                    <div class="toggle-aligner">
-                                                        <div class="form-group">
-                                                            <label for="adhoc-run" class="control-label alignLabels">Adhoc All:</label>
-                                                            <div class="mat-design-toggle">
-                                                                <mat-slide-toggle class="toggle-button-custom" [color]="color" formControlName="ADHC_RUN_NEW" (change)="checkForAdhocConditionNewParent($event)"></mat-slide-toggle>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="active" class="control-label alignLabels">Active All:</label>
-                                                            <div class="mat-design-toggle">
-                                                                <mat-slide-toggle class="toggle-button-custom" [color]="color" formControlName="ACTV_IND_NEW" (change)="checkForActiveConditionNewParent($event)"></mat-slide-toggle>
+                                                <div class="col-sm-12">
+                                                    <div class="row form-inline">
+                                                        <div *ngIf="rowForm" class="col-md-2 width-two-optimize all-toggle">
+                                                            <div class="toggle-aligner">
+                                                                <div class="form-group">
+                                                                    <label for="adhoc-run" class="control-label alignLabels">Adhoc All:</label>
+                                                                    <div class="mat-design-toggle">
+                                                                        <mat-slide-toggle class="toggle-button-custom" [color]="color" formControlName="ADHC_RUN_NEW" (change)="checkForAdhocConditionNewParent($event)"></mat-slide-toggle>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="active" class="control-label alignLabels">Active All:</label>
+                                                                    <div class="mat-design-toggle">
+                                                                        <mat-slide-toggle class="toggle-button-custom" [color]="color" formControlName="ACTV_IND_NEW" (change)="checkForActiveConditionNewParent($event)"></mat-slide-toggle>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>

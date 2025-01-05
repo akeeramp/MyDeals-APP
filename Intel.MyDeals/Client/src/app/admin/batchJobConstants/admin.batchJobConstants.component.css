@@ -129,24 +129,10 @@ button.k-button.delete-btn-constants {
     pointer-events: all !important;
 }
 .col-md-2.width-two-optimize.all-toggle {
-    margin-left: 60% !important;
-    position: relative !important
+    margin-left: 67% !important;
 }
 
 button.btn.btn-primary.btn-remove-design {
     background-color: #dc3545 !important;
 }
-.row.form-inline {
-    align-items: normal !important;
-}
-.form-group.row-col-align {
-    margin-top: 30% !important;
-    right: 121rem;
-    margin-right: 61%;
-}
-.row-col-align .w-100 {
-    min-width: 200%;
-}
-select#triggered-by {
-    margin-top: -19px;
-}
+
