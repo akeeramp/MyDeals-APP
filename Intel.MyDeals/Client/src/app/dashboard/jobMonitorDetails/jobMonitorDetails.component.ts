@@ -107,8 +107,12 @@ export class jobMonitorDetailsComponent implements PendingChangesGuard, OnDestro
     }
 
     formatDateTimeForDisplay(inputDt) {
-        const formattedDt = this.momentService.moment(inputDt).format("MM/DD/YYYY,  hh:mm:ss a");
-        return formattedDt
+        if (inputDt.includes("1/1/1900"))
+            return "NULL";
+        else {
+            const formattedDt = this.momentService.moment(inputDt).format("MM/DD/YYYY,  hh:mm:ss a");
+            return formattedDt;
+        }
     }
 
     formatTimeForDisplay(inputTm) {
