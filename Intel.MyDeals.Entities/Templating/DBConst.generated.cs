@@ -181,24 +181,23 @@ namespace Intel.MyDeals.Entities {
 		///</summary>
 		public const string BLENDED_GEO = "BLENDED_GEO";
 
-        //TWC3179-5036: Removal of credits and debits fields
-        ///<summary>
-        /// DIM_SID: 3
-        /// DIM_CD: DEAL
-        /// ATRB_SID: 3521
-        /// TGT_COL_TYPE: DATETIME
-        /// DOT_NET_DATA_TYPE: System.DateTime
-        ///</summary>
-        //public const string BLLG_DT = "BLLG_DT";
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3521
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string BLLG_DT = "BLLG_DT";
 
-        ///<summary>
-        /// DIM_SID: 7
-        /// DIM_CD: PRD
-        /// ATRB_SID: 7039
-        /// TGT_COL_TYPE: VARCHAR
-        /// DOT_NET_DATA_TYPE: System.Object
-        ///</summary>
-        public const string BNB_STATUS = "BNB_STATUS";
+		///<summary>
+		/// DIM_SID: 7
+		/// DIM_CD: PRD
+		/// ATRB_SID: 7039
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string BNB_STATUS = "BNB_STATUS";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -542,34 +541,32 @@ namespace Intel.MyDeals.Entities {
 		///</summary>
 		public const string CPU_WATTAGE = "CPU_WATTAGE";
 
-        //TWC3179-5036: Removal of credits and debits fields
-        ///<summary>
-        /// DIM_SID: 3
-        /// DIM_CD: DEAL
-        /// ATRB_SID: 3510
-        /// TGT_COL_TYPE: MONEY
-        /// DOT_NET_DATA_TYPE: System.Double
-        ///</summary>
-        //public const string CREDIT_AMT = "CREDIT_AMT";
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3510
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string CREDIT_AMT = "CREDIT_AMT";
 
-        //TWC3179-5036: Removal of credits and debits fields
-        ///<summary>
-        /// DIM_SID: 3
-        /// DIM_CD: DEAL
-        /// ATRB_SID: 3488
-        /// TGT_COL_TYPE: INT
-        /// DOT_NET_DATA_TYPE: System.Int32
-        ///</summary>
-        //public const string CREDIT_VOLUME = "CREDIT_VOLUME";
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3488
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string CREDIT_VOLUME = "CREDIT_VOLUME";
 
-        ///<summary>
-        /// DIM_SID: 3
-        /// DIM_CD: DEAL
-        /// ATRB_SID: 3463
-        /// TGT_COL_TYPE: INT
-        /// DOT_NET_DATA_TYPE: System.Int32
-        ///</summary>
-        public const string CS_SHIP_AHEAD_END_DT = "CS_SHIP_AHEAD_END_DT";
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3463
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string CS_SHIP_AHEAD_END_DT = "CS_SHIP_AHEAD_END_DT";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -787,34 +784,32 @@ namespace Intel.MyDeals.Entities {
 		///</summary>
 		public const string DEAL_SOLD_TO_ID = "DEAL_SOLD_TO_ID";
 
-        //TWC3179-5036: Removal of credits and debits fields
-        ///<summary>
-        /// DIM_SID: 3
-        /// DIM_CD: DEAL
-        /// ATRB_SID: 3511
-        /// TGT_COL_TYPE: MONEY
-        /// DOT_NET_DATA_TYPE: System.Double
-        ///</summary>
-        //public const string DEBIT_AMT = "DEBIT_AMT";
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3511
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string DEBIT_AMT = "DEBIT_AMT";
 
-        //TWC3179-5036: Removal of credits and debits fields
-        ///<summary>
-        /// DIM_SID: 3
-        /// DIM_CD: DEAL
-        /// ATRB_SID: 3489
-        /// TGT_COL_TYPE: INT
-        /// DOT_NET_DATA_TYPE: System.Int32
-        ///</summary>
-        //public const string DEBIT_VOLUME = "DEBIT_VOLUME";
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3489
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string DEBIT_VOLUME = "DEBIT_VOLUME";
 
-        ///<summary>
-        /// DIM_SID: 3
-        /// DIM_CD: DEAL
-        /// ATRB_SID: 17
-        /// TGT_COL_TYPE: VARCHAR
-        /// DOT_NET_DATA_TYPE: System.String
-        ///</summary>
-        public const string DENSITY_BAND = "DENSITY_BAND";
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 17
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string DENSITY_BAND = "DENSITY_BAND";
 
 		///<summary>
 		/// DIM_SID: 3

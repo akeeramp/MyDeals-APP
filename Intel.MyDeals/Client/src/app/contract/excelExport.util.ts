@@ -330,9 +330,9 @@ export class ExcelExport {
                 return ExcelExport.uiDimInfoExcelControlWrapper(dataItem, 'CAP')
             if (field == "YCS2_INFO")
                 return ExcelExport.uiDimInfoExcelControlWrapper(dataItem, 'YCS2')
-        }/*
+        }
         else if (templateHtml.includes("uiCrDbPercExcelWrapper"))
-            return ExcelExport.uiCrDbPercExcelWrapper(dataItem)*/
+            return ExcelExport.uiCrDbPercExcelWrapper(dataItem)
         else if (templateHtml.includes("getMissingCostCapTitle"))
             return GridUtil.getMissingCostCapTitle(dataItem)
         else if (templateHtml.includes("stgFullTitleChar"))

@@ -42,6 +42,7 @@ export class dealPopupComponent implements OnInit, OnDestroy {
     disablePayment = true;
     helpTip :any;
     sel: any;
+    percData: any;
     pieData: any = []; 
     groups = [];
     groupColumns = {}; 
@@ -95,6 +96,7 @@ export class dealPopupComponent implements OnInit, OnDestroy {
         this.data = this.intializedata(); 
         this.isOpen = true;
         this.openWithData = false;
+        this.percData = null;
         this.CAN_VIEW_COST_TEST = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
         this.CAN_VIEW_MEET_COMP = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null);
             
@@ -131,7 +133,15 @@ export class dealPopupComponent implements OnInit, OnDestroy {
             if (!(this.data.WF_STG_CD !== 'Cancelled' && (this.data.WF_STG_CD === 'Active' || this.data.WF_STG_CD === 'Won' || this.data.WF_STG_CD === 'Offer' || this.data.WF_STG_CD === 'Pending' || this.data.HAS_TRACKER === '1'))) {
                 this.disableQoute = true;
             }
-            
+
+            if (this.data.CREDIT_VOLUME === "") this.data.CREDIT_VOLUME = 0;
+            if (this.data.DEBIT_VOLUME === "") this.data.DEBIT_VOLUME = 0;
+            if (this.data.CREDIT_AMT === "") this.data.CREDIT_AMT = 0;
+            if (this.data.DEBIT_AMT === "") this.data.DEBIT_AMT = 0;
+            this.percData = DE_Load_Util.getTotalDealVolume(this.data); 
+            this.pieData.push({ type: "Credit / Debit", percentage: this.percData.perc });
+            this.pieData.push({ type: "Accruable", percentage: (100 - this.percData.perc) });
+
             //shedule task
 
             let rateKey, endKey, strtKey, addedSymbol, fixedPoints: any;
@@ -244,6 +254,7 @@ export class dealPopupComponent implements OnInit, OnDestroy {
         this.showPanel = false;
         this.properties = [];
         this.helpTip = 0;
+        this.percData = {};
         this.groups = [];
         this.groupColumns = {};
         this.timelineLoaded = false;

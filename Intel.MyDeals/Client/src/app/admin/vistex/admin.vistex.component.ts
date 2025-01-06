@@ -35,7 +35,7 @@ export class adminVistexComponent implements PendingChangesGuard, OnDestroy {
         { API_ID: 6, API_NM: "Deal Failed", API_CD: "E" },
         { API_ID: 7, API_NM: "Prod Vertical Failed", API_CD: "F" },
         { API_ID: 7, API_NM: "Consumption Data", API_CD: "M" },
-        //{ API_ID: 8, API_NM: "Claim Data", API_CD: "L" },
+        { API_ID: 8, API_NM: "Claim Data", API_CD: "L" },
         { API_ID: 9, API_NM: "Tender Deals", API_CD: "T" },
         { API_ID: 10, API_NM: "IQR Consumption Data", API_CD: "N" }
     ];
@@ -61,7 +61,7 @@ export class adminVistexComponent implements PendingChangesGuard, OnDestroy {
         "E": 'GetVistexDealOutBoundData',
         "F": 'GetVistexDealOutBoundData',
         "M": 'GetVistexDealOutBoundData',
-        //"L": 'GetVistexDealOutBoundData',
+        "L": 'GetVistexDealOutBoundData',
         "T": 'ExecuteSalesForceTenderData',
         "N": 'GetVistexDealOutBoundData'
     };

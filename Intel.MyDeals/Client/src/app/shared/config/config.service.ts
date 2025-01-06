@@ -187,8 +187,32 @@ export class ConfigService {
         width: 100
     },
     {
+        field: "CREDIT_VOLUME",
+        title: "Credit Vol",
+        type: "number",
+        width: 120
+    },
+    {
+        field: "DEBIT_VOLUME",
+        title: "Debit Vol",
+        type: "number",
+        width: 120
+    },
+    {
         field: "NET_VOL_PAID",
         title: "Net Credited Volume",
+        type: "number",
+        width: 120
+    },
+    {
+        field: "CREDIT_AMT",
+        title: "Credit Amt",
+        type: "number",
+        width: 120
+    },
+    {
+        field: "DEBIT_AMT",
+        title: "Debit Amt",
         type: "number",
         width: 120
     },
@@ -197,6 +221,12 @@ export class ConfigService {
         title: "Total Qty Paid",
         type: "number",
         width: 120
+    },
+    {
+        field: "BLLG_DT",
+        title: "Last Credit Date",
+        type: "string",
+        width: 140
     },
     {
         field: "END_CUSTOMER_RETAIL",

@@ -6287,7 +6287,6 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         /// Modified: 5/11/2022 9:30:05 PM
         /// Parameters: 1
         ///</summary>
-        /*
         public partial class PR_MYDL_GET_IQR_CLAIM_DATA_JSON : SP
         {
             public PR_MYDL_GET_IQR_CLAIM_DATA_JSON()
@@ -6295,7 +6294,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 DatabaseName = "MyDeals";
                 StoredProdedureName = "[dbo].[PR_MYDL_GET_IQR_CLAIM_DATA_JSON]";
             }
-        
+
             ///<summary>
             /// DataType: int
             /// Mode: IN
@@ -6307,7 +6306,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 get { return (Int32)GetParameter("full_ld"); }
             }
         }
-        */
+
         ///<summary>
         /// ID: 1597248745
         /// Modified: 7/13/2018 1:54:11 AM
@@ -9385,8 +9384,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         /// Modified: 5/11/2022 9:29:51 PM
         /// Parameters: 0
         ///</summary>
-        /*
-         public partial class PR_MYDL_LOAD_PYMT_CR_DB : SP
+        public partial class PR_MYDL_LOAD_PYMT_CR_DB : SP
         {
             public PR_MYDL_LOAD_PYMT_CR_DB()
             {
@@ -9394,14 +9392,12 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 StoredProdedureName = "[dbo].[PR_MYDL_LOAD_PYMT_CR_DB]";
             }
         }
-        */
 
         ///<summary>
         /// ID: 795358098
         /// Modified: 5/30/2022 1:51:59 AM
         /// Parameters: 1
         ///</summary>
-        /*
         public partial class PR_MYDL_LOAD_PYMT_VSTX_DB : SP
         {
             public PR_MYDL_LOAD_PYMT_VSTX_DB()
@@ -9421,7 +9417,6 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 get { return (Boolean)GetParameter("full_ld"); }
             }
         }
-        */
 
         ///<summary>
         /// ID: 329768232
@@ -18869,7 +18864,6 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         /// Modified: 6/22/2022 9:58:33 PM
         /// Parameters: 3
         ///</summary>
-        /*
         public partial class PR_PYMT_DATA_REFRESH : SP
         {
             public PR_PYMT_DATA_REFRESH()
@@ -18911,7 +18905,6 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 get { return (Boolean)GetParameter("snd_iqr_json_flg"); }
             }
         }
-        */
 
         ///<summary>
         /// ID: 149783791

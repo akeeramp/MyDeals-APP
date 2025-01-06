@@ -296,7 +296,7 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
-		};/*
+		};
 		public static MyDealsAttribute BLLG_DT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "BLLG_DT",
@@ -312,7 +312,7 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "Label"
-		};*/
+		};
 		public static MyDealsAttribute BNB_STATUS = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "BNB_STATUS",
@@ -937,7 +937,38 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		
+		public static MyDealsAttribute CREDIT_AMT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CREDIT_AMT",
+			ATRB_DESC = "Credit Amount",
+			ATRB_LBL = "Credit Amount",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3510,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute CREDIT_VOLUME = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CREDIT_VOLUME",
+			ATRB_DESC = "Credit Volume",
+			ATRB_LBL = "Credit Volume",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3488,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "Label"
+		};
 		public static MyDealsAttribute CS_SHIP_AHEAD_END_DT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CS_SHIP_AHEAD_END_DT",
@@ -1338,7 +1369,7 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "SoldToPicker"
 		};
-		/*public static MyDealsAttribute DEBIT_AMT = new MyDealsAttribute()
+		public static MyDealsAttribute DEBIT_AMT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DEBIT_AMT",
 			ATRB_DESC = "Debit Amount",
@@ -1369,7 +1400,7 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
-		};*/
+		};
 		public static MyDealsAttribute DENSITY_BAND = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DENSITY_BAND",

@@ -423,7 +423,10 @@ export class AdvancedSearchComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.setBusy('', '');
         if (result != undefined) {
-            result.Items.forEach((row) => {                
+            result.Items.forEach((row) => {
+                let crtAmt, dbtAmt = 0
+                crtAmt = (Number(row.CREDIT_AMT) > 0) ? Number(row.CREDIT_AMT) : 0;
+                dbtAmt = (Number(row.DEBIT_AMT) > 0) ? Number(row.DEBIT_AMT) : 0;
                 Object.assign(row, {
                     Customer_NM: row.Customer.CUST_NM,
                     WF_STG_CD: row.WF_STG_CD === "Draft" ? row.PS_WF_STG_CD : row.WF_STG_CD,
@@ -433,6 +436,7 @@ export class AdvancedSearchComponent implements OnInit, OnDestroy {
                     STRT_VOL_VAL: row.STRT_VOL != undefined ? Object.values(row.STRT_VOL)[0] : '',
                     END_VOL_VAL: row.END_VOL != undefined ? Object.values(row.END_VOL)[0] : '',
                     RATE_VAL: row.RATE != undefined ? Object.values(row.RATE)[0] : '',
+                    TOT_QTY_PAID: ((crtAmt + dbtAmt) > 0) ? (crtAmt + dbtAmt) : ''
                 })
             })
             this.totalCount = result.Count;

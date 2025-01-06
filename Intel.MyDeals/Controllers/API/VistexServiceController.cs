@@ -112,7 +112,7 @@ namespace Intel.MyDeals.Controllers.API
             return _vistexServiceLib.CallProfiseeApi(CustNM, ACT_IND);
 
         }
-        /* TWC3179-5036: Removal of credits and debits API
+
         [Route("SentVistexClaimData/{packetType}/{runMode}")] //VTX_OBJ: CLAIM DATA
         [HttpGet]
         public VistexDFDataResponseObject SentVistexClaimData(string packetType, string runMode)
@@ -134,6 +134,5 @@ namespace Intel.MyDeals.Controllers.API
             }
             return responseObject;
         }
-        */
     }
 }

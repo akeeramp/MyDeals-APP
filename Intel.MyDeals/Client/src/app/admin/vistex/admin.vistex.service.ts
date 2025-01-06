@@ -29,9 +29,9 @@ export class dsaService {
             apiUrl = this.vistexApiBase + apiName + '/PROD_VERT_RULES/' + runMode;
         } else if (runMode == "M") {
             apiUrl = this.vistexApiBase + apiName + '/CNSMPTN_LD/' + runMode;
-        } /*else if (runMode == "L") {
+        } else if (runMode == "L") {
             apiUrl = this.vistexApiBase + apiName + '/IQR_CLM_DATA/' + runMode;
-        }*/ else if (runMode == "R" || runMode == "T") {
+        } else if (runMode == "R" || runMode == "T") {
             apiUrl = this.tenderApiBase + apiName;
         } else if (runMode == "N") {
             apiUrl = this.vistexApiBase + apiName + '/IQR_CONSUMPTION_DATA/' + runMode;

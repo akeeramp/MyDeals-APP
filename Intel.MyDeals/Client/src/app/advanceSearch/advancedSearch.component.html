@@ -143,11 +143,11 @@
                     <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
                     </date-range-filter>
                 </div>
-                <div *ngIf="this.advancedSearchDropdownFilter[column.field] == undefined && column.field != 'Customer_NM' && !(column.field == 'START_DT' || column.field == 'END_DT' || column.field == 'OEM_PLTFRM_LNCH_DT' || column.field == 'OEM_PLTFRM_EOL_DT' || column.field == 'DC_ID' || column.field == 'CAP_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'VOLUME' || column.field == 'STRT_VOL_VAL' || column.field == 'END_VOL_VAL' || column.field == 'RATE_VAL' || column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'TOT_QTY_PAID' || column.field == 'CONSUMPTION_LOOKBACK_PERIOD' )">
+                <div *ngIf="this.advancedSearchDropdownFilter[column.field] == undefined && column.field != 'Customer_NM' && !(column.field == 'START_DT' || column.field == 'END_DT' || column.field == 'OEM_PLTFRM_LNCH_DT' || column.field == 'OEM_PLTFRM_EOL_DT' || column.field == 'DC_ID' || column.field == 'CAP_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'VOLUME' || column.field == 'STRT_VOL_VAL' || column.field == 'END_VOL_VAL' || column.field == 'RATE_VAL' || column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'CREDIT_VOLUME' || column.field == 'DEBIT_VOLUME' || column.field == 'CREDIT_AMT' || column.field == 'DEBIT_AMT' || column.field == 'TOT_QTY_PAID' || column.field == 'CONSUMPTION_LOOKBACK_PERIOD' )">
                     <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService">
                     </kendo-grid-string-filter-menu>
                 </div>
-                <div *ngIf="column.field == 'DC_ID' || column.field == 'CAP_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'TOT_QTY_PAID' || column.field == 'VOLUME' || column.field == 'STRT_VOL_VAL' || column.field == 'END_VOL_VAL' || column.field == 'RATE_VAL' || column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'CONSUMPTION_LOOKBACK_PERIOD' ">
+                <div *ngIf="column.field == 'DC_ID' || column.field == 'CAP_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'TOT_QTY_PAID' || column.field == 'VOLUME' || column.field == 'STRT_VOL_VAL' || column.field == 'END_VOL_VAL' || column.field == 'RATE_VAL' || column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'CREDIT_VOLUME' || column.field == 'DEBIT_VOLUME' || column.field == 'CREDIT_AMT' || column.field == 'DEBIT_AMT' || column.field == 'CONSUMPTION_LOOKBACK_PERIOD' ">
                     <kendo-grid-numeric-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [format]="'#########'"></kendo-grid-numeric-filter-menu>
                 </div>
 
@@ -172,11 +172,11 @@
                 <div *ngIf="(column.field == 'CAP_VAL' && dataItem.CAP_VAL == 'No CAP' )">
                     <span>{{dataItem.CAP_VAL}}</span>
                 </div>
-                <div *ngIf="column.field == 'RATE_VAL' || column.field == 'TOT_QTY_PAID' || column.field == 'ECAP_PRICE_VAL' || (column.field == 'CAP_VAL' && dataItem.CAP_VAL != 'No CAP' ) ||column.field == 'TOTAL_DOLLAR_AMOUNT'">
+                <div *ngIf="column.field == 'RATE_VAL' || column.field == 'TOT_QTY_PAID' || column.field == 'ECAP_PRICE_VAL' || (column.field == 'CAP_VAL' && dataItem.CAP_VAL != 'No CAP' ) ||column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'CREDIT_AMT' || column.field == 'DEBIT_AMT'">
                     <span>{{dataItem[column.field] | currency:'USD' : 'symbol':'1.2-2' }}</span>
                 </div>
                 <div *ngIf="column.field != 'CNTRCT_OBJ_SID' && column.field != 'Customer' && column.field != 'DC_ID' && column.field != 'CNTRCT_TITLE' && column.field != 'PRC_ST_TITLE' && column.field != 'RATE_VAL' && column.field != 'ECAP_PRICE_VAL' && column.field != 'CAP_VAL'
-                && column.field != 'TOTAL_DOLLAR_AMOUNT' &&  column.field != 'TOT_QTY_PAID' && column.field != 'TOT_QTY_PAID'">
+                && column.field != 'TOTAL_DOLLAR_AMOUNT' &&  column.field != 'TOT_QTY_PAID' && column.field != 'CREDIT_AMT' && column.field != 'DEBIT_AMT' && column.field != 'TOT_QTY_PAID'">
                     <span>{{dataItem[column.field]}}</span>
                 </div>
 

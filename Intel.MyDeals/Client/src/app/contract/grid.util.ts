@@ -243,7 +243,7 @@ export class GridUtil {
 
                         // Replace special characters that are killers - do it here to catch templated items as well as normal ones.
                         val = String(val).replace(/[\x0b\x1a]/g, " ").replace(/[’]/g, "'");
-                        if (gridColumns[c].field == 'LAST_TRKR_START_DT_CHK' || gridColumns[c].field == 'LAST_REDEAL_DT' || /*gridColumns[c].field == "BLLG_DT" || */gridColumns[c].field == "OEM_PLTFRM_LNCH_DT" || gridColumns[c].field == "OEM_PLTFRM_EOL_DT") {
+                        if (gridColumns[c].field == 'LAST_TRKR_START_DT_CHK' || gridColumns[c].field == 'LAST_REDEAL_DT' || gridColumns[c].field == "BLLG_DT" || gridColumns[c].field == "OEM_PLTFRM_LNCH_DT" || gridColumns[c].field == "OEM_PLTFRM_EOL_DT") {
                             val = val == undefined || val.length == 0 ? '' : val;
                         }
                         if(gridColumns[c].field=='TIER_NBR'){
