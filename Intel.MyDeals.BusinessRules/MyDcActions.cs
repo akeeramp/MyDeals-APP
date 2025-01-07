@@ -16,6 +16,7 @@ using Intel.MyDeals.Entities.deal;
 using Kendo.Mvc.UI;
 using static Intel.MyDeals.Entities.TenderTransferRootObject.RecordDetails.Quote.QuoteLine;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace Intel.MyDeals.BusinessRules
 {
@@ -1885,6 +1886,30 @@ namespace Intel.MyDeals.BusinessRules
             if (!int.TryParse(de.AtrbValue.ToString(), out _))
             {
                 de.AddMessage("Volume must be a valid non-decimal number.");
+            }
+        }
+
+        // TWC5971-306 - If the PS / PT was created before 2025WW04, warn user that the Rebate Type may no longer be used
+        public static void ValidateRebateTypes(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+            IOpDataElement deDealStage = r.Dc.GetDataElement(AttributeCodes.WF_STG_CD);
+            if (deRebateType == null) return;
+            if (deDealStage != null)
+            {
+                List<string> dealstatus = new List<string> { "Active" };
+                if (deDealStage.AtrbValue.ToString() == "Draft") return;
+            }
+
+            // "MDF", "NRE", "NRE LUMP - SUM BUDGET", "MDF / NRE LUMP - SUM BUDGET", "MDF / NRE LUMP - SUM BUDGET", "MDF ACCRUAL", "MDF SPIF / PER UNIT ACTIVITY", "NRE ACCRUAL", "MDF / NRE ACCRUAL"
+            List<string> disabledRebateTypes = new List<string> { "MDF", "NRE", "NRELUMP-SUMBUDGET", "MDF/NRELUMP-SUMBUDGET", "MDF/NRELUMP-SUMBUDGET", "MDFACCRUAL", "MDFSPIF/PERUNITACTIVITY", "NREACCRUAL", "MDF/NREACCRUAL" };
+            string deRebateTypeSanitized = string.Join("", deRebateType.AtrbValue.ToString().ToUpper().Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            if (disabledRebateTypes.Contains(deRebateTypeSanitized))
+            {
+                deRebateType.AddMessage("Existing Rebate Type is not valid anymore, please make a valid selection");
             }
         }
 
