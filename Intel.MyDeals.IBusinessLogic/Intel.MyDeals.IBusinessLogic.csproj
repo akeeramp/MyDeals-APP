@@ -84,6 +84,7 @@
     <Compile Include="HealthCheck\IHealthCheckLib.cs" />
     <Compile Include="Integration\IIntegrationLib.cs" />
     <Compile Include="JMS\IJmsLib.cs" />
+    <Compile Include="JobAlert\IJobAlertLib.cs" />
     <Compile Include="JobMonitor\IJobMonitorLib.cs" />
     <Compile Include="MeetComp\IMeetCompLib.cs" />
     <Compile Include="ManualEngine\IManualEngineLib.cs" />

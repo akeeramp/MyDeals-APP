@@ -20012,5 +20012,21 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 get { return (Boolean)GetParameter("SEND_MAIL"); }
             }
         }
+
+        ///<summary>
+        /// ID: 1509944801
+        /// Modified: 12/30/2024 11:46:46 PM
+        /// Parameters: 0
+        ///</summary>
+        public partial class PR_MYDL_CHECK_JOB_HEALTH : SP
+        {
+            public PR_MYDL_CHECK_JOB_HEALTH()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_CHECK_JOB_HEALTH]";
+            }
+
+        }
+
     }
 }

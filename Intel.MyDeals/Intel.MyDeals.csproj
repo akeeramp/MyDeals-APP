@@ -282,6 +282,7 @@
     <Compile Include="Controllers\API\HealthCheckController.cs" />
     <Compile Include="Controllers\API\IntegrationController.cs" />
     <Compile Include="Controllers\API\JobMonitorController.cs" />
+    <Compile Include="Controllers\API\JobAlertController.cs" />
     <Compile Include="Controllers\API\MuleServiceController.cs" />
     <Compile Include="Controllers\API\PrimeCustomersController.cs" />
     <Compile Include="Controllers\API\PushDealstoVistexController.cs" />

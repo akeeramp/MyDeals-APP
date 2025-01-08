@@ -67,6 +67,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<ISDMLib, SDMLib>();
             registerService.RegisterType<IJobMonitorLib, JobMonitorLib>();
             registerService.RegisterType<IDealUnificationLib, DealUnificationLib>();
+            registerService.RegisterType<IJobAlertLib, JobAlertLib>();
         }
     }
 }

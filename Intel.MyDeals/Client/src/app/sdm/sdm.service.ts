@@ -25,7 +25,7 @@ export class sdmService {
         const apiUrl: string = this.apiBaseUrl + 'UpdtSdmData';
         return this.httpClient.post(apiUrl, data);
     }
-
+    
     public getFormattedTimestamp(): string {
         const date = new Date();
         const year = date.getFullYear();

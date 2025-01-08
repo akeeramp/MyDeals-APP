@@ -57,6 +57,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IsdmDataLibrary, sdmDataLibrary>();
             registerService.RegisterType<IJobMonitorDataLib, JobMonitorDataLib>();
             registerService.RegisterType<IDealUnificationDataLib, DealUnificationDataLib>();
+            registerService.RegisterType<IJobAlertDataLib, JobAlertDataLib>();
         }
     }
 }

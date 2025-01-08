@@ -122,6 +122,7 @@
     <Compile Include="ExpireYcs2\ExpireYcs2DataLib.cs" />
     <Compile Include="HealthCheck\HealthCheckDataLib.cs" />
     <Compile Include="JobMonitor\JobMonitorDataLib.cs" />
+    <Compile Include="JobAlert\JobAlertDataLib.cs" />
     <Compile Include="MeetComp\MeetCompDataLib.cs" />
     <Compile Include="MuleService\MuleServiceDataLib.cs" />
     <Compile Include="MyDealsManual\MyDealsManualDataLib.cs" />
