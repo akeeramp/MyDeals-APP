@@ -1,0 +1,44 @@
+name: Manage Downtime Page
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        description: 'Environment'
+        required: true
+        type: choice
+        options:
+          - 'CIN'
+          - 'DEV'
+          - 'IAO-DEV'
+          - 'DAY1'
+          - 'EUT'
+          - 'IAO-CONS01'
+          - 'IAO-CONS02'
+          - 'CONS1'
+          - 'CONS2'
+      Action:
+        description: 'Action'
+        required: true
+        type: choice
+        options:
+          - 'Deploy'
+          - 'Revert'
+      Downtime_Message:
+        description: 'Downtime Message'
+        required: true
+        type: string
+      Date_Time:
+        description: 'Date & Time'
+        required: true
+        type: string
+
+jobs:
+  manage-downtime-page:
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui')
+    runs-on: [self-hosted, mydeals-runner01]
+    steps:
+      - name: Run Downtime Page Script
+        run: |
+          echo "RUN Downtime Page Script for ${{github.event.inputs.ENV}}"
+          C:\Abhilash\manage_downtime_page.ps1 -ENV ${{ github.event.inputs.ENV }} -Action ${{ github.event.inputs.Action }} -DowntimeMessage "${{ github.event.inputs.Downtime_Message }}" -DateTime "${{ github.event.inputs.Date_Time }}"
