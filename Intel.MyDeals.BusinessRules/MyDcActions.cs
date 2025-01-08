@@ -1900,8 +1900,17 @@ namespace Intel.MyDeals.BusinessRules
             if (deRebateType == null) return;
             if (deDealStage != null)
             {
-                List<string> dealstatus = new List<string> { "Active" };
-                if (deDealStage.AtrbValue.ToString() == "Draft") return;
+                if (deDealStage.AtrbValue.ToString() != "Draft") return;
+            }
+            else
+            {
+                IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);  // Deals that passed the 'Draft' stage will have this field set to readonly
+
+                if (deStartDate.IsReadOnly && deRebateType.IsReadOnly)
+                {
+                    deRebateType.ValidationMessage = string.Empty;
+                    return;
+                }
             }
 
             // "MDF", "NRE", "NRE LUMP - SUM BUDGET", "MDF / NRE LUMP - SUM BUDGET", "MDF / NRE LUMP - SUM BUDGET", "MDF ACCRUAL", "MDF SPIF / PER UNIT ACTIVITY", "NRE ACCRUAL", "MDF / NRE ACCRUAL"
