@@ -32,6 +32,7 @@ export class AutoFillComponent implements OnDestroy {
     private multSlctMkgValues: Array<string> = [];
     private parentKeys: any = [];
     private opValidMsg: string = "";  
+    private opValidRebateMsg: string = "";
     private opValidMsgDollar: string = "";
     private isMultipleGeosSelected: boolean = false;
     private CurrPricingStrategy: any = {};
@@ -258,57 +259,70 @@ export class AutoFillComponent implements OnDestroy {
         this.dialogRef.close();
     }
 
+    isAutofillFormValid() {
+        if (this.opValidMsg || this.opValidMsgDollar || this.opValidRebateMsg) {
+            return false;
+        }
+        return true;
+    }
+
     onSave() {
-        this.ngZone.run(async () => {
-        this.isInitial = false;
-        this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "";
-        this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = false;
-        this.opValidMsg = "";
-        this.opValidMsgDollar = "";
-        if (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value != null && // Can't fill in both values
-            this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value !== "" &&
-            this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value != null &&
-            this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value !== "") {
+       this.ngZone.run(async () => {
+            this.isInitial = false;
+            this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "";
+            this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = false;
+            this.opValidMsg = "";
+            this.opValidMsgDollar = "";
+            this.opValidRebateMsg = "";
+
+            //Rebate Type validation
+            if (this.autofillData.DEFAULT.REBATE_TYPE.value == '' || this.autofillData.DEFAULT.REBATE_TYPE.value == null) {
+                this.opValidRebateMsg = "Please select Rebate Type";
+            }
+            //Rebate Max Amount & Max Volume validation
+           if (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value != null && // Can't fill in both values
+               this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value !== "" &&
+               this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value != null &&
+               this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value !== "") {
             this.opValidMsg =
                 "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be filled out.  Pick only one.";
-        } else if (this.autofillData.isVistexHybrid != null &&
-            this.autofillData.isVistexHybrid === true &&
-            ((this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "" || this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === null)
-                && (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "" || this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === null))) {
+           } else if (this.autofillData.isVistexHybrid != null &&
+               this.autofillData.isVistexHybrid === true &&
+               ((this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "" || this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === null)
+                   && (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "" || this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === null))) {
             this.opValidMsg =
                 "Hybrid Deals require either Overarching Maximum Dollars or Overarching Maximum Volume be filled out.  Pick one.";
-        } else if (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "0" || this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === 0) {
-            this.opValidMsgDollar = "Overarching Maximum Dollars must be blank or > 0";
-        } else if (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "0" ||
-            this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === 0) {
-            this.opValidMsg = "Overarching Maximum Volume must be blank or > 0";
-        } else if (this.autofillData.DEFAULT.REBATE_TYPE.value == '' || this.autofillData.DEFAULT.REBATE_TYPE.value == null) {
-            this.opValidMsg = "Please select Rebate Type";
-        }
-        else {
-            if (this.autofillData.ISTENDER) {
-                // For Tenders, default to blank and let priceTable.controller.js handle setting it
-                if (this.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value !== "") {
-                    this.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value = "";
+           } else if (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "0" || this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === 0) {
+               this.opValidMsgDollar = "Overarching Maximum Dollars must be blank or > 0";
+           } else if (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "0" ||
+               this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === 0) {
+               this.opValidMsg = "Overarching Maximum Volume must be blank or > 0";
+           }
+
+           if (this.isAutofillFormValid()) {
+                if (this.autofillData.ISTENDER) {
+                    // For Tenders, default to blank and let priceTable.controller.js handle setting it
+                    if (this.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value !== "") {
+                        this.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value = "";
+                    }
+                    if (this.autofillData.DEFAULT.PERIOD_PROFILE.value !== "Yearly") {
+                        this.autofillData.DEFAULT.PERIOD_PROFILE.value = "Yearly";
+                    }
                 }
-                if (this.autofillData.DEFAULT.PERIOD_PROFILE.value !== "Yearly") {
-                    this.autofillData.DEFAULT.PERIOD_PROFILE.value = "Yearly";
-                }
-            } 
-            if (((this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value != null && this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value !== "") ||
-            (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value != null && this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value !== "")) && 
-                this.dealType == 'VOL_TIER' && this.autofillData.isVistexHybrid == false) {
+                if (((this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value != null && this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value !== "") ||
+                    (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value != null && this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value !== "")) &&
+                    this.dealType == 'VOL_TIER' && this.autofillData.isVistexHybrid == false) {
                     this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value = "";
                     this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value = "";
                 }
-            this.isLoading = true;
-            this.setBusy("Saving...", "Saving your data...", "Info", false);
-            if (this.currPricingTable == null) {
-                this.addPricingTable();
-            } else {
-                this.editPricingTable();
+                this.isLoading = true;
+                this.setBusy("Saving...", "Saving your data...", "Info", false);
+                if (this.currPricingTable == null) {
+                    this.addPricingTable();
+                } else {
+                    this.editPricingTable();
+                }
             }
-        }
        })
     }
 

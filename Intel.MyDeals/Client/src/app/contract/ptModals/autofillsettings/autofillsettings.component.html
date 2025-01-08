@@ -48,7 +48,7 @@
                                                                 class="kendoInput noborderclass font-input contract-details-customer cd-input-bottom" (valueChange)="onRebateTypehange($event)" textField="DROP_DOWN" valueField="DROP_DOWN"
                                                                 name="Rebate Type" style="width:100%" required>
                                                 </kendo-combobox>
-                                                <kendo-formerror><a style="color: #ff6e77; font-family:'Intel Clear'; font-size: 11px !important; font-weight:bold !important;width:168px !important">{{opValidMsg}}</a></kendo-formerror>
+                                                <kendo-formerror><a style="color: #ff6e77; font-family:'Intel Clear'; font-size: 11px !important; font-weight:bold !important;width:168px !important">{{opValidRebateMsg}}</a></kendo-formerror>
                                             </div>
                                             <div *ngIf="(item.key == 'NUM_OF_TIERS' || item.key == 'NUM_OF_DENSITY') && item.value.opLookupText=='dropdownName'">
                                                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="matbutton mat-icon" style="width:100%; margin:1%">
