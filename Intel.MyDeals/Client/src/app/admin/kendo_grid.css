@@ -130,15 +130,6 @@ label {
     background-color: #0071c5 !important
 }
 
-.k-icon:hover,
-.k-icon:focus {
-    color: #00aeef
-}
-
-/* .k-pager-nav:hover {
-    background-color: #ecf8fb !important
-} */
-
 .k-header-alignment {
     padding-top: 50px;
     padding-left: 35px !important
@@ -343,15 +334,15 @@ body {
 }
 
 .k-button {
-    color: #fff;
+    /* color: #fff;
     background-color: #0071c5;
-    border-color: #0071c5;
+    border-color: #0071c5; */
     box-shadow: none;
     font-size: 18px
 }
 
 .k-button:hover {
-    background-color: #1187cb;
+    /* background-color: #1187cb; */
     border: none
 }
 

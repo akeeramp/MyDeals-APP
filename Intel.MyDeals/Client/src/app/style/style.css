@@ -897,6 +897,7 @@ kendo-dropdownlist.font-input .k-input-inner {
     border-color: #f0f0f0 !important;
     box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
+
 /* .k-input-inner */
 .dateclass.k-datepicker .k-input:focus-within,
 .dateclass.k-datepicker .k-input-inner:focus-within {
@@ -1376,10 +1377,6 @@ kendo-window#OvrLp.k-wind-design {
     height: 20px !important;
     left: -2.2px !important;
     border-radius: 3px !important
-}
-
-.contract-toggle .k-switch-container {
-    border-radius: 5px !important
 }
 
 .contract-toggle .k-switch-label-on,
@@ -2904,7 +2901,7 @@ i.icon-color-pipe {
 .rpd-excel-export-menu li:hover .k-active,
 .rpd-excel-export-menu li:active .k-active {
     color: #fff !important;
-    font: bold;    
+    font: bold;
     font-size: 18px;
 }
 
@@ -2936,4 +2933,37 @@ h3.intelicon-jobs-outlined.job-outline-process:before {
 
 kendo-chart#deal-stages-chart svg text {
     fill: #fff;
+}
+
+.k-textbox {
+    line-height: 1.5;
+    align-items: center;
+    display: inline-flex;
+    flex-flow: row nowrap;
+    border-radius: .25rem;
+    border-width: 1px;
+    border-style: solid;
+    vertical-align: middle;
+    position: relative;
+    margin: 0;
+    outline: 0;
+    padding: 0;
+}
+
+.k-autocomplete {
+    display: inline-flex;
+    flex-flow: row nowrap;
+}
+
+.k-switch-md .k-switch-thumb {
+    width: 18px !important;
+    background-color: #eee !important;
+}
+
+.k-switch-md.k-switch-off .k-switch-thumb-wrap {
+    left: 10px !important;
+}
+
+.k-switch-md.k-switch-on .k-switch-thumb-wrap {
+    left: calc(100% - 10px)
 }
