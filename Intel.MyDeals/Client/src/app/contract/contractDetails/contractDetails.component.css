@@ -1,6 +1,4 @@
-﻿@import '../../admin/kendo_grid.css';
-
-.new-bus-contract #secBasicContainerWrapper {
+﻿.new-bus-contract #secBasicContainerWrapper {
     height: 100%;
     padding: 2px 0 50px 0;
     -webkit-box-sizing: border-box;
@@ -347,11 +345,24 @@ kendo-dropdownlist.inputWidth.font-input.backdate_contract_style.k-widget.k-drop
 kendo-dropdownlist.inputWidth.font-input.backdate_contract_style.k-widget.k-dropdown.ng-pristine.ng-invalid.ng-touched {
     border: 1px solid #ed8282 !important;
 }
-.bg-cntrct-dtl{
+
+.bg-cntrct-dtl {
     background-color: #fafafa !important;
     background: #fafafa !important;
 }
-.bg-cntrct-dtl:hover{
+
+.bg-cntrct-dtl:hover {
     background-color: #fff !important;
     background: #fff !important;
+}
+
+.k-button {
+    color: unset !important;
+    background-color: unset !important;
+    border-color: unset !important;
+    border-inline-start-width: 0;
+}
+
+.k-button:hover {
+    background-color: unset !important;
 }

@@ -1,5 +1,6 @@
 ﻿<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<link rel="stylesheet" href="/Client/src/app/contract/contractDetails/contractDetails.component.css" />
 
 <loading-panel-angular class="contractDetailsLoader" id="CNTTRLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
@@ -24,10 +25,7 @@
                                     </div>
                                     <div class="col-md-11 display displayblock">
                                         <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.CUST_MBR_SID" class="isReqField">* </span>Customer:</div>
-                                        <kendo-combobox #CUST_MBR_SID_Combo [data]="CustomersFilterData" [filterable]="true" (filterChange)="customerFilter($event)"
-                                                        class="kendoInput noborderclass font-input contract-details-customer cd-input-bottom" textField="CUST_NM" valueField="CUST_SID" [disabled]="disableCustomer"
-                                                        name="Customer" #customer="ngModel" [(ngModel)]="Customer" (valueChange)="onCustomerChange($event)" required>
-                                        </kendo-combobox>
+                                        <kendo-combobox #CUST_MBR_SID_Combo [data]="CustomersFilterData" [filterable]="true" (filterChange)="customerFilter($event)" class="kendoInput noborderclass font-input contract-details-customer cd-input-bottom" textField="CUST_NM" valueField="CUST_SID" [disabled]="disableCustomer" name="Customer" #customer="ngModel" [(ngModel)]="Customer" (valueChange)="onCustomerChange($event)" required></kendo-combobox>
                                         <kendo-formerror *ngIf="contractDetailsForm.controls.Customer?.errors?.required && contractDetailsForm.controls.Customer?.touched">
                                             Please select a valid customer
                                         </kendo-formerror>
