@@ -13,6 +13,12 @@ namespace Intel.MyDeals.Entities
         [DataMember(Name = "BATCH_RUN_ID")]
         public Int32 BATCH_RUN_ID { get; set; }
 
+        [DataMember(Name = "BATCH_DSC")]
+        public string BATCH_DSC { get; set; }
+
+        [DataMember(Name = "BATCH_SCHDL")]
+        public string BATCH_SCHDL { get; set; }
+
         [DataMember(Name = "BATCH_RUN_STATUS")]
         public string BATCH_RUN_STATUS { get; set; }
 

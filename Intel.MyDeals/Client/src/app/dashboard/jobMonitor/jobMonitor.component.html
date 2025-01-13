@@ -10,14 +10,14 @@
         <kendo-grid class="KendoCustomerMapping kAlignHeaders" [data]="gridData" [loading]="isLoading"
                     [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
-                    [navigable]="true" (dataStateChange)="dataStateChange($event)">
-            <ng-template kendoGridToolbarTemplate>                
+                    [navigable]="true" (dataStateChange)="dataStateChange($event)" [resizable]="true">
+            <ng-template kendoGridToolbarTemplate>
                 <kendo-grid-spacer></kendo-grid-spacer>
                 <button (click)="refreshGrid()" class="k-button clearButton">
                     <span class="k-icon k-i-reload k-icon-md"></span>Refresh
                 </button>
-            </ng-template>            
-            <kendo-grid-column field="PKG_NM" title="Job Name" width="150" [headerClass]="{'headerClass':true}"
+            </ng-template>
+            <kendo-grid-column field="PKG_NM" title="Job Name" width="110" [headerClass]="{'headerClass':true}"
                                [editable]="false">
                 <ng-template kendoGridCellTemplate let-dataItem>
                     <span class="underline-on-hover" kendoTooltip title="Please click here to view the Batch Job Steps Detail.">
@@ -26,28 +26,34 @@
                             {{ dataItem.PKG_NM}}
                         </a>
                     </span>
-                    
+
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="START_DTM" title="Job Start Time (in PST)" width="200"
-                               [headerClass]="{'headerClass':true}" [editable]="false">                
+            <kendo-grid-column field="BATCH_DSC" title="Job Description" width="130" [headerClass]="{'headerClass':true}"
+                               [editable]="false">
+            </kendo-grid-column>
+            <kendo-grid-column field="BATCH_SCHDL" title="Batch Job Schedule Time (In PST)" width="200" [headerClass]="{'headerClass':true}"
+                               [editable]="false">
+            </kendo-grid-column>
+            <kendo-grid-column field="START_DTM" title="Job Start Time (in PST)" width="120"
+                               [headerClass]="{'headerClass':true}" [editable]="false">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <div>{{formatDateTimeForDisplay(dataItem.START_DTM)}}</div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="END_DTM" title="Job End Time (in PST)" width="200"
-                               [headerClass]="{'headerClass':true}" [editable]="false">                
+            <kendo-grid-column field="END_DTM" title="Job End Time (in PST)" width="120"
+                               [headerClass]="{'headerClass':true}" [editable]="false">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <div>{{formatDateTimeForDisplay(dataItem.END_DTM)}}</div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="TIMEDIFF" title="Time Taken" width="150"
-                               [headerClass]="{'headerClass':true}" [editable]="false"> 
+            <kendo-grid-column field="TIMEDIFF" title="Time Taken" width="90"
+                               [headerClass]="{'headerClass':true}" [editable]="false">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <div>{{formatTimeForDisplay(dataItem.TIMEDIFF)}}</div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="THRESHOLD" title="Threshold Time" width="150"
+            <kendo-grid-column field="THRESHOLD" title="Threshold Time" width="90"
                                [headerClass]="{'headerClass':true}" [editable]="false">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
@@ -58,10 +64,10 @@
                     <div>{{formatTimeForDisplay(dataItem.THRESHOLD)}}</div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="BATCH_RUN_STATUS" title="Execution Status" width="150" [headerClass]="{'headerClass':true}"
-                               [editable]="false">                
+            <kendo-grid-column field="BATCH_RUN_STATUS" title="Execution Status" width="90" [headerClass]="{'headerClass':true}"
+                               [editable]="false">
             </kendo-grid-column>
-            <kendo-grid-column field="HEALTH" title="Health Status" width="150" [headerClass]="{'headerClass':true}"
+            <kendo-grid-column field="HEALTH" title="Health" width="60" [headerClass]="{'headerClass':true}"
                                [editable]="false">
                 <ng-template kendoGridCellTemplate let-dataItem>
                     <div class="whole-cell" [style.backgroundColor]="dataItem.HEALTH" [style.color]="dataItem.HEALTH">
@@ -70,8 +76,8 @@
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="ERR_MSG" title="Error Message" width="200" [headerClass]="{'headerClass':true}"
-                               [editable]="false">               
-            </kendo-grid-column>           
+                               [editable]="false">
+            </kendo-grid-column>
         </kendo-grid>
     </div>
 </div>

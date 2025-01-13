@@ -31,6 +31,8 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     int IDX_BATCH_RUN_ID = DB.GetReaderOrdinal(rdr, "JOB_SID");
+                    int IDX_BATCH_DSC = DB.GetReaderOrdinal(rdr, "BTCH_DSC");
+                    int IDX_BATCH_SCHDL = DB.GetReaderOrdinal(rdr, "SCHDL");
                     int IDX_BATCH_RUN_STATUS = DB.GetReaderOrdinal(rdr, "STATUS");
                     int IDX_HEALTH = DB.GetReaderOrdinal(rdr, "HEALTH");
                     int IDX_END_DTM = DB.GetReaderOrdinal(rdr, "PKG_END_DTM");
@@ -47,6 +49,8 @@ namespace Intel.MyDeals.DataLibrary
                         ret.Add(new BatchRunHealthSts
                         {
                             BATCH_RUN_ID = (IDX_BATCH_RUN_ID < 0 || rdr.IsDBNull(IDX_BATCH_RUN_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_BATCH_RUN_ID),
+                            BATCH_DSC = (IDX_BATCH_DSC < 0 || rdr.IsDBNull(IDX_BATCH_DSC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BATCH_DSC),
+                            BATCH_SCHDL = (IDX_BATCH_SCHDL < 0 || rdr.IsDBNull(IDX_BATCH_SCHDL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BATCH_SCHDL),
                             BATCH_RUN_STATUS = (IDX_BATCH_RUN_STATUS < 0 || rdr.IsDBNull(IDX_BATCH_RUN_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BATCH_RUN_STATUS),
                             HEALTH = (IDX_HEALTH < 0 || rdr.IsDBNull(IDX_HEALTH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HEALTH),
                             END_DTM = (IDX_END_DTM < 0 || rdr.IsDBNull(IDX_END_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_END_DTM),
