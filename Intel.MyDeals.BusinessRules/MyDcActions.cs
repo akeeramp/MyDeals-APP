@@ -1883,7 +1883,7 @@ namespace Intel.MyDeals.BusinessRules
                 return;
             }
 
-            if (!int.TryParse(de.AtrbValue.ToString(), out _))
+            if (de.AtrbValue.ToString().Count() > 10 || !int.TryParse(de.AtrbValue.ToString(), out _))
             {
                 de.AddMessage("Volume must be a valid non-decimal number.");
             }
@@ -1936,7 +1936,11 @@ namespace Intel.MyDeals.BusinessRules
             MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
             MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
 
-            int volumeValue = int.Parse(deVolume.AtrbValue.ToString());
+            int volumeValue = 0;
+            if (int.TryParse(deVolume.AtrbValue.ToString(), out _))
+            {
+                volumeValue = int.Parse(deVolume.AtrbValue.ToString());
+            }
 
             if (dePayableQuantity.AtrbValue.ToString() == "")
             {
@@ -1951,7 +1955,7 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             // Do not permit decimal numbers
-            if (!int.TryParse(dePayableQuantity.AtrbValue.ToString(), out _))
+            if (dePayableQuantity.AtrbValue.ToString().Count() > 10 || !int.TryParse(dePayableQuantity.AtrbValue.ToString(), out _))
             {
                 dePayableQuantity.AddMessage("Payable Quantity must be a valid non-decimal number.");
                 return;
