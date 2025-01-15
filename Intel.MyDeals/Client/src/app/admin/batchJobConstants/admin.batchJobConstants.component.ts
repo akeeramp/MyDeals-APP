@@ -149,7 +149,7 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
         return this.formBuilder.group({
             BTCH_STEP_SID: [],
             BTCH_SID: [],
-            STEP_NM: ['', [Validators.required, this.uniqueStepNameValidator(stepsArray)]],
+            STEP_NM: ['', Validators.required],
             STEP_SRT_ORDR: ['', [Validators.required, this.sortValidator.bind(this), this.uniqueSortOrderValidator(stepsArray)]],
             STEP_TYPE: ['', Validators.required],
             ADHC_RUN: [false, Validators.required],
@@ -253,15 +253,7 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
             this.secondRowCheckBox = false;
         }
 
-        if (dataItem.TRGRD_BY == 'Autosys') {
-            this.batchJobConstForm.controls['START'].disable();
-            this.batchJobConstForm.controls['END'].disable();
-            this.batchJobConstForm.controls['INTERVAL'].disable();
-            this.inputsDisable = true;
-        }
-        else {
-            this.inputsDisable = false;
-        }
+        
 
         this.batchJobConstForm.statusChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.isFormValid = this.checkFormValidity();
@@ -269,23 +261,7 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
     }
 
     onTriggeredByChange() {
-        const selectedJobType = this.batchJobConstForm.get('TRGRD_BY')?.value;
-        if (selectedJobType === 'Sql Agent Job') {
-            this.batchJobConstForm.get('START')?.enable();
-            this.batchJobConstForm.get('END')?.enable();
-            this.batchJobConstForm.get('INTERVAL')?.enable();
-            this.inputsDisable = false;
-        } else if (selectedJobType === 'Autosys') {
-            this.batchJobConstForm.get('START')?.disable();
-            this.batchJobConstForm.get('END')?.disable();
-            this.batchJobConstForm.get('INTERVAL')?.disable();
-            this.batchJobConstForm.get('START').reset();
-            this.batchJobConstForm.get('END').reset();
-            this.batchJobConstForm.get('INTERVAL').reset();
-            this.inputsDisable = true;
-            this.selectedItems = [];
-            this.isDayError = false;
-        }
+        
     }
 
 
@@ -313,7 +289,7 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
         const lessonForm = this.formBuilder.group({
             BTCH_STEP_SID: [''],
             BTCH_SID: [''],
-            STEP_NM: ['', [Validators.required, this.uniqueStepNameValidator(stepsArray)]],
+            STEP_NM: ['', Validators.required],
             STEP_SRT_ORDR: ['', [Validators.required, this.sortValidator, this.uniqueSortOrderValidator(stepsArray)]],
             STEP_TYPE: ['', Validators.required],
             ADHC_RUN: ['', Validators.required],
@@ -342,13 +318,11 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
     runScheduleVal(val) {
         const dayVal = this.selectedItems.map(item => item.value).toString();
         const interval = val.INTERVAL;
-        if (val.TRGRD_BY == 'Autosys') {
-            return null;
-        } else {
+        
             const startVal = this.timeZone(val.START);
             const endVal = this.timeZone(val.END);
             return '[{"D":"' + dayVal + '","START":"' + startVal + '","END":"' + endVal + '","INTERVAL":"' + interval + '"}]';
-        }
+        
     }
 
     checkAdhocValStepsTrue() {
