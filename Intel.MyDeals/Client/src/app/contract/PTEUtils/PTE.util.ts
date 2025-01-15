@@ -370,26 +370,6 @@ export class PTEUtil {
     static massagingObjectsForJSON(key, transformResult) {
         for (let validKey in transformResult.ValidProducts[key]) {
             transformResult.ValidProducts[key][validKey] = transformResult.ValidProducts[key][validKey].map(function (x) {
-                let DERIVED_USR_INPUT = '';
-                if (x.PRD_ATRB_SID > 7005) {
-                    DERIVED_USR_INPUT = x.HIER_VAL_NM;
-                }
-                if (x.PRD_ATRB_SID == 7006) {
-                    DERIVED_USR_INPUT = (x.PRD_CAT_NM + " " + (x.BRND_NM === 'NA' ? "" : x.BRND_NM)
-                        + " " + (x.FMLY_NM === 'NA' ? "" : x.FMLY_NM) + " " + (x.PCSR_NBR === 'NA' ? "" : x.PCSR_NBR)).trim();
-                }
-                if (x.PRD_ATRB_SID == 7007) {
-                    DERIVED_USR_INPUT = (x.PRD_CAT_NM + " " + (x.BRND_NM === 'NA' ? "" : x.BRND_NM)
-                        + " " + (x.FMLY_NM === 'NA' ? "" : x.FMLY_NM) + " " + (x.PCSR_NBR === 'NA' ? "" : x.PCSR_NBR) + " " + x.DEAL_PRD_NM).trim();
-                }
-                if (x.PRD_ATRB_SID == 7008) {
-                    DERIVED_USR_INPUT = (x.PRD_CAT_NM + " " + (x.BRND_NM === 'NA' ? "" : x.BRND_NM)
-                        + " " + (x.FMLY_NM === 'NA' ? "" : x.FMLY_NM) + " " + (x.PCSR_NBR === 'NA' ? "" : x.PCSR_NBR) + " " + x.DEAL_PRD_NM
-                        + " " + x.MTRL_ID).trim();
-                }
-                if (DERIVED_USR_INPUT == '') {
-                    DERIVED_USR_INPUT = (x.PRD_CAT_NM + " " + (x.BRND_NM === 'NA' ? "" : x.BRND_NM) + " " + (x.FMLY_NM === 'NA' ? "" : x.FMLY_NM)).trim();
-                }
                 return {
                     BRND_NM: x.BRND_NM,
                     CAP: x.CAP,
@@ -397,7 +377,7 @@ export class PTEUtil {
                     CAP_START: x.CAP_START,
                     DEAL_PRD_NM: x.DEAL_PRD_NM,
                     DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
-                    DERIVED_USR_INPUT: DERIVED_USR_INPUT,
+                    DERIVED_USR_INPUT: x.DERIVED_USR_INPUT,
                     FMLY_NM: x.FMLY_NM,
                     HAS_L1: x.HAS_L1,
                     HAS_L2: x.HAS_L2,
