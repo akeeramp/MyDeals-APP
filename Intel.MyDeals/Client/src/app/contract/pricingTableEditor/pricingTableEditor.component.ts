@@ -830,7 +830,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         //In some redirection scenario the code is showing error so must make sure the binding is happening only if there is and instance
         if (this.hotRegisterer && this.hotRegisterer.getInstance(this.hotId)) {
             this.hotTable.loadData(PTR);
-            // Update settings  with new commented cells and erge cells
+            // Update settings  with new commented cells and merge cells
             this.hotTable.updateSettings({
                 columns: this.columns,
                 hiddenColumns: {
@@ -1558,9 +1558,40 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         if (tabNav) {
             this.enableDeTab.emit({ isEnableDeTab: false, enableDeTabInfmIcon: false });
         }
+
         let currentPricingTableRowData = this.newPTR.filter(x => x.DC_ID != null);
         let hasProductDependencyErr = false;
+
         if (currentPricingTableRowData && currentPricingTableRowData.length > 0) {
+            // TWC5971-318 - PROGRAM deals may no longer be created, warn user and do not allow Save and Validate if new rows were added
+            const DEAL_TYPE: string = this.curPricingTable['OBJ_SET_TYPE_CD'];
+            if (DEAL_TYPE && DEAL_TYPE.toUpperCase().includes('PROGRAM')) {
+                const NEW_DEAL_ROW_IDS: number[] = currentPricingTableRowData.map((rowData) => rowData.DC_ID).filter((dealId: number) => dealId <= 0);
+                if (NEW_DEAL_ROW_IDS && NEW_DEAL_ROW_IDS.length > 0) {  // See if any new rows were created
+                    this.isLoading = true;
+                    this.setBusy("Not saved. Please fix errors.", "Program deals cannot be created anymore. Instead, please use Lump Sum deals.", "Error", true);
+
+                    setTimeout(() => {
+                        this.isLoading = false;
+                        this.setBusy("", "", "", false);
+                    }, 5000);
+                    this.loggerService.warn('Mandatory validations failure.', 'Warning');
+
+                    const DC_ID_COLUMN_DATA = this.hotTable.getDataAtCol(0);
+                    this.hotTable.batch(() => {
+                        DC_ID_COLUMN_DATA.forEach((value: number, index: number) => {
+                            if (!isNaN(value) && value < 0) {
+                                this.hotTable.getCellMeta(index, 0).comment = { value: 'Program deals cannot be created anymore. Instead, please use Lump Sum deals. Please delete this row if you need to update data for an exsiting deal in this PS.' };
+                            }
+                        });
+
+                        this.hotTable.render();
+                    });
+
+                    return;
+                }
+            }
+
             hasProductDependencyErr = PTEUtil.hasProductDependency(currentPricingTableRowData, this.productValidationDependencies, hasProductDependencyErr);
             if (hasProductDependencyErr) {
                 // if errors are present this will terminate and save will not go forward
@@ -1573,6 +1604,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 this.loggerService.warn('Mandatory validations failure.', 'Warning');
                 return;
             }
+
             if (this.kitMergeDeleteDCIDs && this.kitMergeDeleteDCIDs.length > 0) {// if any rows got deleted because while merging the rows
                 if (!deleteDcIds) {
                     deleteDcIds = this.kitMergeDeleteDCIDs;
@@ -1583,6 +1615,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 }
                 this.kitMergeDeleteDCIDs = [];
             }
+
             //validate Products for non-deleted records, if any product is invalid it will stop deletion as well
             const isValidProd = await this.validateOnlyProducts('onSave', undefined, deleteDcIds);
             if (isValidProd != undefined) {
@@ -2210,30 +2243,6 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             await new Promise(resolve => {
                 setTimeout(resolve, 100);
             });
-        }
-    }
-
-    // TWC3119-682 - Currency cells have a max numeric value
-    private currencyValidatorMessageHandler(isValid: boolean, rowNumber: number, field: string | number) {
-        const COLUMN_DEFINITION: PRC_TBL_Model_Field = this.pricingTableTemplates.model.fields[field];
-        if (COLUMN_DEFINITION.type != undefined && COLUMN_DEFINITION.format != undefined) {
-            const CELL_TYPE: string = COLUMN_DEFINITION.type;
-            const CELL_FORMAT: string = COLUMN_DEFINITION.format;
-
-            if (CELL_TYPE === 'number' && CELL_FORMAT.toLowerCase().includes('0:c')) {
-                const COLUMN_NUMBER = this.hotTable.propToCol(field);
-                const COMMENT_PLUGIN = this.hotTable.getPlugin('comments'); // WIP: Can probably call this outside to make more efficient
-
-                if (!isValid) {
-                    COMMENT_PLUGIN.updateCommentMeta(rowNumber, COLUMN_NUMBER, {
-                        value: 'Not a valid number (too large).',
-                        readOnly: true
-                    });
-                    COMMENT_PLUGIN.showAtCell(rowNumber, COLUMN_NUMBER);
-                } else {
-                    COMMENT_PLUGIN.removeCommentAtCell(rowNumber, COLUMN_NUMBER, true);
-                }
-            }
         }
     }
 

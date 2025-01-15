@@ -146,10 +146,9 @@
                                                             <kendo-contextmenu [target]="targetPS" showOn="click" (select)="onSelectPtMenu($event,ps,pt)">
                                                                 <kendo-menu-item *ngIf="C_ADD_PRICING_STRATEGY && pt.OBJ_SET_TYPE_CD != 'PROGRAM'" icon="k-icon k-i-add" text="Add Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
                                                                 <kendo-menu-item *ngIf="ps._settings && ps._settings.C_ADD_PRICING_TABLE && ps.IS_HYBRID_PRC_STRAT !== '1' && pt.OBJ_SET_TYPE_CD != 'PROGRAM'" icon="k-icon k-i-add" text="Add Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
-                                                            <!-- pt.OBJ_SET_TYPE_CD != 'OBJ_SET_TYPE_CD' -->
                                                                 <kendo-menu-item *ngIf="ps._settings && ps._settings.C_ADD_PRICING_TABLE && ps.IS_HYBRID_PRC_STRAT !== '1' && pt.OBJ_SET_TYPE_CD != 'PROGRAM'" icon="k-icon k-i-copy" text="Copy Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
                                                                 <kendo-menu-item icon="k-icon k-i-edit" text="Edit Pricing Table Name" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
-                                                                <kendo-menu-item *ngIf="ps._settings && ps._settings.C_ADD_PRICING_TABLE" icon="k-icon k-i-edit" text="Edit Autofill Defaults" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
+                                                                <kendo-menu-item *ngIf="ps._settings && ps._settings.C_ADD_PRICING_TABLE && pt.OBJ_SET_TYPE_CD != 'PROGRAM'" icon="k-icon k-i-edit" text="Edit Autofill Defaults" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
                                                                 <kendo-menu-item *ngIf="ps._settings && ps._settings.C_DEL_PRICING_TABLE && pt.HAS_TRACKER !== '1'" icon="k-icon k-i-delete" text="Delete Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
                                                             </kendo-contextmenu>
                                                         </div>

@@ -28,8 +28,6 @@ export class CreateProcedureJobModalComponent implements OnInit {
 
     onSubmit(): void {
         if (this.formData.valid){
-            console.log('this.formData');
-            console.log(this.formData);
             this.emitService.emit(this.formData.value as CreateAsyncProcTriggerData);
             this.close();
         } else {

@@ -1896,8 +1896,15 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             IOpDataElement deRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
-            IOpDataElement deDealStage = r.Dc.GetDataElement(AttributeCodes.WF_STG_CD);
             if (deRebateType == null) return;
+
+            IOpDataElement deTrackerNumber = r.Dc.GetDataElement(AttributeCodes.TRKR_NBR);
+            if (deTrackerNumber != null && deTrackerNumber.AtrbValue != null)
+            {
+                if (!string.IsNullOrEmpty(deTrackerNumber.AtrbValue.ToString())) return;
+            }
+
+            IOpDataElement deDealStage = r.Dc.GetDataElement(AttributeCodes.WF_STG_CD);
             if (deDealStage != null)
             {
                 if (deDealStage.AtrbValue.ToString() != "Draft") return;
@@ -1905,7 +1912,6 @@ namespace Intel.MyDeals.BusinessRules
             else
             {
                 IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);  // Deals that passed the 'Draft' stage will have this field set to readonly
-
                 if (deStartDate.IsReadOnly && deRebateType.IsReadOnly)
                 {
                     deRebateType.ValidationMessage = string.Empty;

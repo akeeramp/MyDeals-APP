@@ -9,7 +9,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <button class="btn btn-sm btn-save ssToolbarBtn btn-disable-style" ssToolbarBtn (click)="validatePricingTableProducts(undefined, true )" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}" title="{{ isTenderContract ? 'Save your Tender Table, validate the products, and stay in your Tender Table Editor' : 'Save your Pricing Table, validate the products, and stay in your Pricing Table Editor'}}" [disabled]="!isSaveEnabled()">
+            <button class="btn btn-sm btn-save ssToolbarBtn btn-disable-style" ssToolbarBtn (click)="validatePricingTableProducts(undefined, true)" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}" title="{{ isTenderContract ? 'Save your Tender Table, validate the products, and stay in your Tender Table Editor' : 'Save your Pricing Table, validate the products, and stay in your Pricing Table Editor'}}" [disabled]="!isSaveEnabled()">
                 <i class="fa fa-floppy-o skyBlue floppy-icon-style" aria-hidden="true" style="font-size: 30px" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}"></i>
                 <span class="text save-validate-txtstyle" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}">
                       Save & Validate
@@ -148,7 +148,6 @@
         </div>
     </div>
 </div>
-
 <kendo-dialog *ngIf="isKitDialog" (close)="closeKitDialog()" class="kit-name-popup">
     <div class="all-merge-confirmation">
         <div *ngIf="kitNameObj.issueType=='notEditable'">
@@ -183,7 +182,6 @@
      
     </kendo-dialog-actions>
 </kendo-dialog>
-
 <kendo-dialog *ngIf="isDialogOpen" (close)="closeDialog('No')" [minWidth]="250" [width]="584" class="ptevalidopoup k-dialog-popup-design">
     <p style="margin: 20px; text-align: center; padding:12px;">
         Are you sure that you want to delete this product and the matching deal(s)?
@@ -208,14 +206,12 @@
         <button class='k-button mykbtnstyles' (click)="resetValidationMessage()">OK</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-
 <kendo-dialog *ngIf="isValidationMsg" class="ptevalidopoup valid-out-pop-ups k-dialog-popup-design">
     <p class="text-para-color">{{ validationMsg }}</p>
     <kendo-dialog-actions class="pteokbtnstyle alter-btns-ok">
         <button class='k-button ok-btn-pop-up' (click)="closeAlerts()">OK</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-
 <div hidden>
     <div #addProductTooltipTarget="ngbTooltip"
          ngbTooltip="Start by adding Products here"
