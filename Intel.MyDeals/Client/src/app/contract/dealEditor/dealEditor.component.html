@@ -280,8 +280,7 @@
                                               [in_DataSet]="gridResult" (iconUpdate)="updateSaveIcon($event)" (refresh_Contract_Data)="refreshContract($event)" (reLoad)="reloadFn($event)" (removeDeletedRow)="removeDeletedRowData($event)"></deal-editor-cell>
                         </ng-template>
                         <ng-template kendoGridEditTemplate let-dataItem="dataItem">
-                            <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses" [in_DataSet]="gridResult" [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard" (invalidField)="setInvalidField($event)"
-                                              (bidActionsUpdated)="bidActionUpdated($event)"></deal-editor-edit>
+                            <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses" [in_DataSet]="gridResult" [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard" (invalidField)="setInvalidField($event)" (bidActionsUpdated)="bidActionUpdated($event)"></deal-editor-edit>
                         </ng-template>
                     </kendo-grid-column>
                     <ng-template kendoGridNoRecordsTemplate>

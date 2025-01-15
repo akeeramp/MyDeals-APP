@@ -13,9 +13,9 @@
     float: right
 }
 
-    .missing_grid_h .excelText span {
-        text-align: left
-    }
+.missing_grid_h .excelText span {
+    text-align: left
+}
 
 .pp-excel-css {
     font-size: 25px
@@ -51,8 +51,6 @@
     padding-top: 27px
 }
 
-
-
 .missingSpinnersCap .spinner {
     margin: 10px auto;
     width: 50px;
@@ -61,34 +59,34 @@
     font-size: 10px
 }
 
-    .missingSpinnersCap .spinner > div {
-        background-color: #0071C5;
-        height: 100%;
-        width: 6px;
-        display: inline-block;
-        -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-        animation: sk-stretchdelay 1.2s infinite ease-in-out
-    }
+.missingSpinnersCap .spinner>div {
+    background-color: #0071C5;
+    height: 100%;
+    width: 6px;
+    display: inline-block;
+    -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+    animation: sk-stretchdelay 1.2s infinite ease-in-out
+}
 
-    .missingSpinnersCap .spinner .rect2 {
-        -webkit-animation-delay: -1.1s;
-        animation-delay: -1.1s
-    }
+.missingSpinnersCap .spinner .rect2 {
+    -webkit-animation-delay: -1.1s;
+    animation-delay: -1.1s
+}
 
-    .missingSpinnersCap .spinner .rect3 {
-        -webkit-animation-delay: -1.0s;
-        animation-delay: -1.0s
-    }
+.missingSpinnersCap .spinner .rect3 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s
+}
 
-    .missingSpinnersCap .spinner .rect4 {
-        -webkit-animation-delay: -.9s;
-        animation-delay: -.9s
-    }
+.missingSpinnersCap .spinner .rect4 {
+    -webkit-animation-delay: -.9s;
+    animation-delay: -.9s
+}
 
-    .missingSpinnersCap .spinner .rect5 {
-        -webkit-animation-delay: -.8s;
-        animation-delay: -.8s
-    }
+.missingSpinnersCap .spinner .rect5 {
+    -webkit-animation-delay: -.8s;
+    animation-delay: -.8s
+}
 
 .missingSpinnersCap .ss-icon-lg {
     font-size: 4em;
@@ -103,4 +101,8 @@
 .missingcost_grid {
     padding-right: 3px !important;
     padding-top: 8px !important
+}
+
+.k-button-text {
+    font-size: 18px;
 }

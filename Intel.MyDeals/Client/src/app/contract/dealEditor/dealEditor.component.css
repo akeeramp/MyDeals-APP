@@ -109,7 +109,7 @@
 
 .opDealEditorGrids.k-grid .uiControlDiv.isSoftWarnCell.capInfoWrapper {
     margin: 0;
-    line-height: 1 !important;    
+    line-height: 1 !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1067,7 +1067,7 @@ kendo-dialog-actions.add-tab-style.k-dialog-buttongroup {
     font-family: 'Intel Clear' !important
 }
 
-.add-tab-textbox-style.k-textbox {    
+.add-tab-textbox-style.k-textbox {
     box-shadow: none !important;
     width: 205px !important;
     border-color: #e6e6e6 !important
@@ -1677,4 +1677,15 @@ span.ng-binding.dataPadding.rate-value-fix {
     color: #444 !important;
     border-color: #ebebeb !important;
     background-color: #ebebeb !important;
+}
+
+.k-button {
+    color: #212529 !important;
+    background-color: #e4e7eb !important;
+    border-color: #e4e7eb !important;
+    border-inline-start-width: 0;
+}
+
+.k-button:hover {
+    background-color: unset !important;
 }

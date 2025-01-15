@@ -529,3 +529,14 @@ input.advanceSearchInput:focus {
 div#horizontal-search-advanced.padding-design-horizontal-advanced {
     max-width: 97vw !important;
 }
+
+.k-button {
+    color: #212529 !important;
+    background-color: #e4e7eb !important;
+    border-color: #e4e7eb !important;
+    border-inline-start-width: 0;
+}
+
+.k-button:hover {
+    background-color: unset !important;
+}

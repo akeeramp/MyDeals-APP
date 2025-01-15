@@ -313,3 +313,14 @@ div#horizontal-search-tenderDashboard.padding-design-horizontal-tenderDashboard 
     top: 0% !important;
     transform: translateY(0%) !important;
 }
+
+.k-button {
+    color: #212529 !important;
+    background-color: #e4e7eb !important;
+    border-color: #e4e7eb !important;
+    border-inline-start-width: 0;
+}
+
+.k-button:hover {
+    background-color: unset !important;
+}
