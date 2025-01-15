@@ -1,0 +1,52 @@
+name: Manage prod downtime page
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        description: 'Environment'
+        required: true
+        type: choice
+        options:
+            - 'CIAR'
+            - 'DR'
+            - 'PROD1'
+            - 'PROD2'
+      Action:
+        description: 'Action'
+        required: true
+        type: choice
+        options:
+          - 'Deploy'
+          - 'Revert'
+      Downtime_Message:
+        description: 'Downtime Message'
+        required: true
+        type: string
+        default: 'Scheduled maintenance is in progress.'
+      Date:
+        description: 'Date in PST (dd-MM-yyyy)'
+        required: true
+        type: string
+        default: '01-01-2023'
+      Start_Time:
+        description: 'Start Time in PST (hh:mm tt)'
+        required: true
+        type: string
+        default: '12:00 AM'
+      End_Time:
+        description: 'End Time in PST (hh:mm tt)'
+        required: true
+        type: string
+        default: '01:00 AM'
+
+jobs:
+  manage-downtime-page:
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui')
+    runs-on: [self-hosted, mydeals-prd-automation]
+    steps:
+      - name: Run Downtime Page Script
+        if: false
+        run: |
+          echo "testing - RUN Downtime Page Script for ${{github.event.inputs.ENV}}"
+        # path_to_actual_script -ENV ${{ github.event.inputs.ENV }} -Action ${{ github.event.inputs.Action }} -DowntimeMessage "${{ github.event.inputs.Downtime_Message }}" -Date "${{ github.event.inputs.Date }}" -StartTime "${{ github.event.inputs.Start_Time }}" -EndTime "${{ github.event.inputs.End_Time }}"

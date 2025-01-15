@@ -1,4 +1,4 @@
-name: Manage Downtime Page
+name: Manage pre-prod downtime page
 
 on:
   workflow_dispatch:
@@ -28,10 +28,22 @@ on:
         description: 'Downtime Message'
         required: true
         type: string
-      Date_Time:
-        description: 'Date & Time'
+        default: 'Scheduled maintenance is in progress.'
+      Date:
+        description: 'Date in PST (dd-MM-yyyy)'
         required: true
         type: string
+        default: '01-01-2023'
+      Start_Time:
+        description: 'Start Time in PST (hh:mm tt)'
+        required: true
+        type: string
+        default: '12:00 AM'
+      End_Time:
+        description: 'End Time in PST (hh:mm tt)'
+        required: true
+        type: string
+        default: '01:00 AM'
 
 jobs:
   manage-downtime-page:
@@ -41,4 +53,4 @@ jobs:
       - name: Run Downtime Page Script
         run: |
           echo "RUN Downtime Page Script for ${{github.event.inputs.ENV}}"
-          C:\Abhilash\manage_downtime_page.ps1 -ENV ${{ github.event.inputs.ENV }} -Action ${{ github.event.inputs.Action }} -DowntimeMessage "${{ github.event.inputs.Downtime_Message }}" -DateTime "${{ github.event.inputs.Date_Time }}"
+          C:\Abhilash\manage_downtime_page.ps1 -ENV ${{ github.event.inputs.ENV }} -Action ${{ github.event.inputs.Action }} -DowntimeMessage "${{ github.event.inputs.Downtime_Message }}" -Date "${{ github.event.inputs.Date }}" -StartTime "${{ github.event.inputs.Start_Time }}" -EndTime "${{ github.event.inputs.End_Time }}"

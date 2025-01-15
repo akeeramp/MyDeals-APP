@@ -2,7 +2,9 @@ param(
     [string]$ENV,
     [string]$Action,
     [string]$DowntimeMessage,
-    [string]$DateTime
+    [string]$Date,
+    [string]$StartTime,
+    [string]$EndTime
 )
 
 # Define the environment data
@@ -16,6 +18,10 @@ $ENV_DATA = @(
     [pscustomobject]@{env='IAO-CONS02';DEPLOY_PATH='\\HF2UTTMYDLW02.amr.corp.intel.com\MyDeals'}
     [pscustomobject]@{env='CONS1';DEPLOY_PATH='\\FM7CONMYDLW01.amr.corp.intel.com\MyDeals'}
     [pscustomobject]@{env='CONS2';DEPLOY_PATH='\\FM7CONMYDLW02.amr.corp.intel.com\MyDeals'}
+    [pscustomobject]@{env='CIAR';DEPLOY_PATH='\\FM7CIAMYDLW01.amr.corp.intel.com\MyDeals'}
+    [pscustomobject]@{env='DR';DEPLOY_PATH='\\CH2DRMYDLW01.amr.corp.intel.com\MyDeals'}
+    [pscustomobject]@{env='PROD1';DEPLOY_PATH='\\FM1PRDMYDLW01.amr.corp.intel.com\MyDeals'}
+    [pscustomobject]@{env='PROD2';DEPLOY_PATH='\\FM1PRDMYDLW02.amr.corp.intel.com\MyDeals'}
 )
 
 # Find the environment data
@@ -29,6 +35,31 @@ if ($null -eq $result) {
 $deployPath = $result.DEPLOY_PATH
 
 if ($Action -eq 'Deploy') {
+    # Validate date and time formats
+    $dateFormat = "dd-MM-yyyy"
+    $timeFormat = "hh:mm tt"
+
+    try {
+        $parsedDate = [datetime]::ParseExact($Date, $dateFormat, $null)
+    } catch {
+        Write-Host "Invalid date format. Please use dd-MM-yyyy." -BackgroundColor DarkRed
+        exit 1
+    }
+
+    try {
+        $parsedStartTime = [datetime]::ParseExact($StartTime, $timeFormat, $null)
+    } catch {
+        Write-Host "Invalid start time format. Please use hh:mm tt." -BackgroundColor DarkRed
+        exit 1
+    }
+
+    try {
+        $parsedEndTime = [datetime]::ParseExact($EndTime, $timeFormat, $null)
+    } catch {
+        Write-Host "Invalid end time format. Please use hh:mm tt." -BackgroundColor DarkRed
+        exit 1
+    }
+
     # Define the HTML content with placeholders
     $content = @"
     <!DOCTYPE html>
@@ -46,7 +77,7 @@ if ($Action -eq 'Deploy') {
                 padding: 50px;
             }
             .container {
-                max-width: 600px;
+                max-width: 900px;
                 margin: 0 auto;
                 background: #fff;
                 padding: 20px;
@@ -70,7 +101,10 @@ if ($Action -eq 'Deploy') {
             <h1>We'll be back soon!</h1>
             <p>{{DowntimeMessage}}</p>
             <p>Downtime scheduled for:</p>
-            <p class='time'>{{DateTime}}</p>
+            <p>Date: {{Date}} (PST)</p>
+            <p>Start Time: {{StartTime}} (PST)</p>
+            <p>End Time: {{EndTime}} (PST)</p>
+            <p>Once maintenance is completed, all services will be restored, and you can resume normal operations.</p>
             <p>Thank you for your patience.</p>
             <p>For any further support, reach out to <a href='mailto:MyDealsSupport@intel.com'>MyDealsSupport@intel.com</a></p>
         </div>
@@ -79,24 +113,26 @@ if ($Action -eq 'Deploy') {
 "@
 
     # Replace placeholders with actual values
-    $content = $content -replace "{{DateTime}}", $DateTime
+    $content = $content -replace "{{Date}}", $Date
+    $content = $content -replace "{{StartTime}}", $StartTime
+    $content = $content -replace "{{EndTime}}", $EndTime
     $content = $content -replace "{{DowntimeMessage}}", $DowntimeMessage
 
     # Write the content directly to the deploy path
     $offlineFilePathInDeployPath = Join-Path -Path $deployPath -ChildPath "app_offline.htm"
     Set-Content -Path $offlineFilePathInDeployPath -Value $content
 
-    Write-Host "Downtime page deployed successfully"
+    Write-Host "Downtime page deployed successfully" -BackgroundColor DarkGreen
 }
 elseif ($Action -eq 'Revert') {
     # Remove the app_offline.htm file from the deploy path
     $offlineFilePathInDeployPath = Join-Path -Path $deployPath -ChildPath "app_offline.htm"
     if (Test-Path -Path $offlineFilePathInDeployPath) {
         Remove-Item -Path $offlineFilePathInDeployPath -Force
-        Write-Host "Downtime page reverted successfully"
+        Write-Host "Downtime page reverted successfully" -BackgroundColor DarkGreen
     }
     else {
-        Write-Host "No downtime page found to revert"
+        Write-Host "No downtime page found to revert" -BackgroundColor DarkYellow
     }
 }
 else {
