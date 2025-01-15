@@ -89,6 +89,14 @@ namespace Intel.MyDeals.BusinessRules
             if (objsetActionItem.Settings[SecurityActns.C_CANCEL_DEAL]) possibleActions.Add("Cancel");
             possibleActions.Add("Hold");
 
+            //Complex Stacking - Added Actions
+            string isCmplxStkgRvwd = r.Dc.GetDataElementValue(AttributeCodes.IS_CS_GRP_REVIEWED);
+            if (r.Dc.DcType == "PRC_ST")
+            {
+                actions.Add("ComplexStacking");
+                possibleActions.Add("ComplexStacking");
+            }
+
             foreach (string action in actions.Where(a => possibleActions.Contains(a)))
             {
                 objsetActionItem.Actions[action] = true;
@@ -123,11 +131,11 @@ namespace Intel.MyDeals.BusinessRules
                 if (action == "Approve" && objsetActionItem.Actions[action] && hasL1)
                 {
                     string reasonPctMct = "Pricing Strategy did not pass " + (pctFailed && mctFailed
-                        ? "Price Cost Test and Meet Comp Test" 
+                        ? "Price Cost Test and Meet Comp Test."
                         : pctFailed 
-                            ? "Price Cost Test" 
+                            ? "Price Cost Test."
                             : mctFailed 
-                                ? "Meet Comp Test" 
+                                ? "Meet Comp Test."
                                 : "");
 
                     switch (role)
@@ -168,6 +176,29 @@ namespace Intel.MyDeals.BusinessRules
                                     : reasonPctMct;
                             }
                             break;
+                    }
+                }
+
+                //Complex Stacking
+                if (r.Dc.DcType == "PRC_ST" && action == "ComplexStacking")
+                {
+                    if (isCmplxStkgRvwd == "DA_APPROVED" || isCmplxStkgRvwd == "GA_APPROVED")
+                    {
+                        objsetActionItem.Actions[action] = true;
+                        if (isCmplxStkgRvwd == "GA_APPROVED" && role == RoleTypes.DA)
+                        {
+                            objsetActionItem.Actions[action] = false;
+                            objsetActionItem.ActionReasons[action] = objsetActionItem.ActionReasons.ContainsKey(action)
+                            ? objsetActionItem.ActionReasons[action] += "\nComplex Stacking must be reviewed."
+                            : "Complex Stacking must be reviewed.";
+                        }
+                    }
+                    else
+                    {
+                        objsetActionItem.Actions[action] = false;
+                        objsetActionItem.ActionReasons[action] = objsetActionItem.ActionReasons.ContainsKey(action)
+                            ? objsetActionItem.ActionReasons[action] += "\nComplex Stacking must be reviewed."
+                            : "Complex Stacking must be reviewed.";
                     }
                 }
 

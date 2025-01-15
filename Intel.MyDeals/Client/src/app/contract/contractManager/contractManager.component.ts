@@ -322,7 +322,7 @@ export class contractManagerComponent implements OnInit, OnDestroy{
             this.isPending = false;
             this.isToggle = false;
             this.contractData.CUST_ACCPT = "Accepted";
-            if (runActions) this.submitContract(true, true) //this.actionItems(true, true);
+            if (runActions) this.actionItems(true, true);
         }
     }
     closeDialog(){
@@ -542,14 +542,7 @@ export class contractManagerComponent implements OnInit, OnDestroy{
         var title = result.length > 0 ? result[0].TITLE : "";
         var hasL1 = result.length > 0 ? result[0].HAS_L1 !== "0" : false;
 
-        //Handling Complex Stacking Review
-        let isCSReviewed = false;
-        if (result.length > 0) {
-            const cmplxReviewedBy = result[0].IS_CS_GRP_REVIEWED;
-            isCSReviewed = this.IsCSReviewed(cmplxReviewedBy);
-        }
-
-        return { "DC_ID": id, "WF_STG_CD": stage, "TITLE": title, "ACTN": actn, "HAS_L1": hasL1, isCSReviewed: isCSReviewed };
+        return { "DC_ID": id, "WF_STG_CD": stage, "TITLE": title, "ACTN": actn, "HAS_L1": hasL1 };
     }
 
     getActionItems(data, dataItem, actn, actnText) {
@@ -613,7 +606,27 @@ export class contractManagerComponent implements OnInit, OnDestroy{
     }
 
     canAction(actn, dataItem, isExists) {
-        return dataItem._actions[actn] !== undefined && (isExists || dataItem._actions[actn] === true);
+        const arr = [];
+        const actionItems = [actn];
+        if (actn == "Approve") {
+            actionItems.push("ComplexStacking");
+        }
+        for (let i = 0; i < actionItems.length; i++) {
+            const action = actionItems[i];
+            if (dataItem._actions[action] !== undefined && (isExists || dataItem._actions[action] === true)) {
+                arr.push(true);
+            } else {
+                arr.push(false);
+            }
+        }
+        return !arr.includes(false);
+    }
+
+    actionTooltip(actn, tooltipMsgObj) {
+        if (actn == 'Approve' && tooltipMsgObj.ComplexStacking) {
+            return tooltipMsgObj[actn] ? tooltipMsgObj[actn] + '\n' + tooltipMsgObj.ComplexStacking : tooltipMsgObj.ComplexStacking;
+        }
+        return tooltipMsgObj[actn];
     }
 
     hasVertical(dataItem) {
@@ -725,85 +738,65 @@ export class contractManagerComponent implements OnInit, OnDestroy{
         this.submitModal = false;
     }
 
-    async callComplexStacking(complexOverlapObjs: DynamicObj[], fromSubmit = false, fromToggle = false, checkForRequirements = false) {
+    callComplexStacking(complexOverlapObjs: DynamicObj[], fromSubmit = false, fromToggle = false, checkForRequirements = false) {
         this.setBusy("Complex Stacking", "Fetching complex stacking details", "Info", true);
         this.isLoading = this.csLoading = true;
-        const response = await this.complexStackingService.getComplexStackingGroup(complexOverlapObjs).toPromise().catch((error) => {
-            this.csLoading = this.isLoading = false;
-            this.loggerSvc.error('Get Complex Stacking Deal Group', error);
-        });
-        if (response.GroupItems && response.GroupItems.length > 0) {
-            this.csLoading = this.isLoading = false;
-            const DIALOG_REF = this.dialog.open(ComplexStackingModalComponent, {
-                maxWidth: '80%',
-                panelClass: 'complex-stacking-dialog',
-                data: {
-                    ovlpObjs: response
-                }
-            });
-            DIALOG_REF.afterClosed().subscribe(async (inputData: DynamicObj[]) => {
-                if (inputData.length > 0) {
-                    this.setBusy("Complex Stacking", "Updating Complex Stacking details", "Info", true);
-                    this.isLoading = true;
-                    const response = await this.complexStackingService.updateComplexStackingDealGroup(inputData).toPromise().catch((error) => {
-                        this.isLoading = false;
-                        this.loggerSvc.error('Get Update Complex Stacking Deal Group', error);
-                    });
-                    if (response) {
-                        this.isLoading = false;
-                        if (fromSubmit) {
-                            this.loggerSvc.success('Will continue with submitting state.', 'Accepted Complex Stacking')
-                            this.actionItems(null, null);   // Execute submission
-                        } else if (fromToggle) {
-                            this.loggerSvc.success('Will continue with submitting state.', 'Accepted Complex Stacking')
-                            this.actionItems(fromToggle, checkForRequirements);
-                        } else {
-                            this.loggerSvc.success('Complex Stacking was reviewed.', 'Accepted Complex Stacking')
-                            this.loadDetails();
+        this.complexStackingService.getComplexStackingGroup(complexOverlapObjs).toPromise()
+            .then((response) => {
+                if (response.GroupItems && response.GroupItems.length > 0) {
+                    this.csLoading = this.isLoading = false;
+                    const DIALOG_REF = this.dialog.open(ComplexStackingModalComponent, {
+                        maxWidth: '80%',
+                        panelClass: 'complex-stacking-dialog',
+                        data: {
+                            ovlpObjs: response
                         }
-                    }
+                    });
+                    DIALOG_REF.afterClosed().subscribe(async (inputData: DynamicObj[]) => {
+                        if (inputData.length > 0) {
+                            this.setBusy("Complex Stacking", "Updating Complex Stacking details", "Info", true);
+                            this.isLoading = true;
+                            const response = await this.complexStackingService.updateComplexStackingDealGroup(inputData).toPromise().catch((error) => {
+                                this.isLoading = false;
+                                this.loggerSvc.error('Get Update Complex Stacking Deal Group', error);
+                            });
+                            if (response) {
+                                this.isLoading = false;
+                                if (fromSubmit) {
+                                    this.loggerSvc.success('Will continue with submitting state.', 'Accepted Complex Stacking')
+                                    this.actionItems(null, null);   // Execute submission
+                                } else if (fromToggle) {
+                                    this.loggerSvc.success('Will continue with submitting state.', 'Accepted Complex Stacking')
+                                    this.actionItems(fromToggle, checkForRequirements);
+                                } else {
+                                    this.loggerSvc.success('Complex Stacking was reviewed.', 'Accepted Complex Stacking')
+                                    this.loadDetails();
+                                }
+                            }
+                        } else {
+                            this.loggerSvc.warn('Must accept Complex Stacking to continue with submitting for Approval.', 'Submission Cancelled')
+                        }
+                    });
                 } else {
-                    this.loggerSvc.warn('Must accept Complex Stacking to continue with submitting for Approval.', 'Submission Cancelled')
+                    this.csLoading = this.isLoading = false;
+                    this.loggerSvc.success('No complex grouping available.', 'Complex Stacking');
+                    if (fromSubmit) {
+                        this.actionItems(null, null);   // Execute submission
+                    } else {
+                        this.loadDetails();
+                    }
                 }
+            })
+            .catch((error) => {
+                this.csLoading = this.isLoading = false;
+                this.loggerSvc.error('Get Complex Stacking Deal Group', error);
             });
-        } else {
-            this.csLoading = this.isLoading = false;
-            this.loggerSvc.success('No complex grouping available.', 'Complex Stacking');
-            if (fromSubmit) {
-                this.actionItems(null, null);   // Execute submission
-            } else {
-                this.loadDetails();
-            }
-        }
     }
 
-    /**
-     * The "submitContract" action triggers the opening of the Complex Stacking popup,
-     * which serves as a hard stop for the approval process.
-     * All approvals must go through the Complex Stacking step before proceeding.
-     */
-    async submitContract(fromToggle = false, checkForRequirements = false) {
-        // Opening Complex Stacking Modal
-        let data = {};  // Needed for `getActionItems()`
-        let dataItems = []; // To get Deal IDs from Pricing Strategies chosen for approval
-        this.getActionItems(data, dataItems, "Approve", "Send for Approval");
-        const complexOverlapObjs: DynamicObj[] = [];
-
-        dataItems.filter(itm => !itm.isCSReviewed).forEach((item) => complexOverlapObjs.push({ ObjId: item.DC_ID, ObjType: 2 }));
-
-        const APPROVED_ROLES_COMPLEX_STACKING = ['DA', 'GA'];   // Restrict Complex Grouping to DA & GA
-        const USER_ROLE = (<any>window).usrRole;
-        if (complexOverlapObjs.length > 0 && APPROVED_ROLES_COMPLEX_STACKING.includes(USER_ROLE)) {
-            const isFromSubmit = fromToggle ? false : true;
-            this.callComplexStacking(complexOverlapObjs, isFromSubmit, fromToggle, checkForRequirements)
-        }
-        else if (fromToggle) {
-            this.actionItems(fromToggle, checkForRequirements);
-        }
-        else {
-            this.actionItems(null, null);   // Execute submission
-        }
+    async submitContract() {
+        this.actionItems(null, null);   // Execute submission
     }
+
     onComplexStackingReviewActn(e, ps) {
         const APPROVED_ROLES_COMPLEX_STACKING = ['DA', 'GA'];   // Restrict Complex Grouping to DA & GA
         const USER_ROLE = (<any>window).usrRole;

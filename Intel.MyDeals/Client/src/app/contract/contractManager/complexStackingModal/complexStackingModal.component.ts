@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, QueryList, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, Inject, OnInit, QueryList, ViewChildren } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { GridComponent, GridDataResult } from "@progress/kendo-angular-grid";
 import { aggregateBy, AggregateDescriptor, AggregateResult } from "@progress/kendo-data-query";
@@ -23,7 +23,7 @@ export interface GroupingGridData {
     templateUrl: 'Client/src/app/contract/contractManager/complexStackingModal/complexStackingModal.component.html',
     styleUrls: ['Client/src/app/contract/contractManager/complexStackingModal/complexStackingModal.component.css']
 })
-export class ComplexStackingModalComponent implements AfterViewInit {
+export class ComplexStackingModalComponent implements OnInit {
 
     private isLoading = false;
     private readonly COLUMNS_CONFIG = [        
@@ -170,10 +170,6 @@ export class ComplexStackingModalComponent implements AfterViewInit {
         this.closeModal(acceptedList);
     }
 
-    ngAfterViewInit(): void {
-        this.formComplexStackingGroup();
-    }
-
     formComplexStackingGroup() {
         const ovlpObjs = this.data.ovlpObjs;
         if (ovlpObjs.GroupItems && ovlpObjs.GroupItems.length > 0) {            
@@ -206,7 +202,6 @@ export class ComplexStackingModalComponent implements AfterViewInit {
                 tempObj["groupedDeals"] = grpArr;
                 this.grpDeals.push(tempObj);
             });
-            this.isLoading = false;
         }
     }
 
@@ -222,7 +217,7 @@ export class ComplexStackingModalComponent implements AfterViewInit {
     }
 
     ngOnInit() {
-        this.isLoading = true;
+        this.formComplexStackingGroup()
     }
 
     isAnyItemChecked(): boolean {
