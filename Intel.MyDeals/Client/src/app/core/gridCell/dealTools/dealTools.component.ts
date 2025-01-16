@@ -537,7 +537,7 @@ export class dealToolsComponent implements OnDestroy {
     }
     actionWipDeal() {
         this.closeDialogs();
-        this.setBusy("Cancelling Wip Deal...", "Please wait as we cancel the Wip Deal!", "Info", true);
+        this.setBusy("Cancelling Deal...", "Please wait as we cancel the Deal!", "Info", true);
         let custId, dcId;
         if (!this.in_Is_Tender_Dashboard) {// If not Tender Dashboard Screen, take cust ID and contract ID from contract data 
             custId = this.contractData.CUST_MBR_SID;
