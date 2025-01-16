@@ -163,7 +163,9 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
             }
             if(this.showMultiSelect && !this.isCustomerDropdownHidden)
             {
+                if(this.massUpdateData.multiSelectValue != null || this.massUpdateData.multiSelectValue)
                 finalData["UPD_VAL"] = (this.massUpdateData.multiSelectValue).join("/");
+                if(finalData["UPD_VAL"] == "") finalData["UPD_VAL"] = null;
                 var custData = this.Customers.filter((cust) => cust.CUST_SID == this.massUpdateData.CUST_SID);                
                 finalData["CUST_NM"] = custData[0]?.["CUST_NM"];
             }
@@ -236,7 +238,7 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
         }
 
         // Validate multiselect Value
-        if (this.showMultiSelect && !this.massUpdateData.multiSelectValue) {
+        if (this.showMultiSelect && !this.massUpdateData.multiSelectValue && this.isCustomerDropdownHidden) {
             this.isError["multiSelectValue"] = true;
             this.errorMsg["multiSelectValue"] = "Please Select Valid Values";
             this.isDataValid = false;
