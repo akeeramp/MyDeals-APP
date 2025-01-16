@@ -507,7 +507,7 @@ namespace Intel.MyDeals.BusinessLogic
             bool isValidAMQResponse = res.customerAggregationType.Code == "UNFD_CTRY_CUST" && res.customerProcessEngagement.Where(data => data.Code == "DIR_PRC_EXCPT").Count() > 0;
             if (isValidAMQResponse)
             {
-                if (res != null && res.parentAccount != null && res.parentAccount.AccountName != null && res.primaryAddress != null && res.primaryAddress.CountryName != null && res.AccountId != null)
+                if (res != null && res.parentAccount != null && res.parentAccount.MasteredSimplifiedAccountName != null && res.primaryAddress != null && res.primaryAddress.CountryName != null && res.AccountId != null)
                 {
                     //call to save the AMQ response into the log table
                     var response = _primeCustomersDataLib.SaveUcdRequestData(res.AccountName, res.primaryAddress.CountryName,

@@ -171,6 +171,7 @@ namespace Intel.MyDeals.Entities
             public string BusinessPartyIdentifier { get; set; }
             public string AccountName { get; set; }
             public string AccountId { get; set; }
+            public string MasteredSimplifiedAccountName { get; set; }            
         }
         public string MasteredSimplifiedAccountName { get; set; }
         public class MasteredBusinessPhysicalAddress
