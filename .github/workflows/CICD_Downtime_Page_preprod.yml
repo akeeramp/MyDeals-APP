@@ -51,6 +51,7 @@ jobs:
     runs-on: [self-hosted, mydeals-runner01]
     steps:
       - name: Run Downtime Page Script
+        if: false
         run: |
-          echo "RUN Downtime Page Script for ${{github.event.inputs.ENV}}"
-          C:\Abhilash\manage_downtime_page.ps1 -ENV ${{ github.event.inputs.ENV }} -Action ${{ github.event.inputs.Action }} -DowntimeMessage "${{ github.event.inputs.Downtime_Message }}" -Date "${{ github.event.inputs.Date }}" -StartTime "${{ github.event.inputs.Start_Time }}" -EndTime "${{ github.event.inputs.End_Time }}"
+          echo "testing- RUN Downtime Page Script for ${{github.event.inputs.ENV}}"
+        # path_to_actual_script with input params

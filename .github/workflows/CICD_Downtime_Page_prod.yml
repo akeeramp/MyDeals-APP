@@ -49,4 +49,4 @@ jobs:
         if: false
         run: |
           echo "testing - RUN Downtime Page Script for ${{github.event.inputs.ENV}}"
-        # path_to_actual_script -ENV ${{ github.event.inputs.ENV }} -Action ${{ github.event.inputs.Action }} -DowntimeMessage "${{ github.event.inputs.Downtime_Message }}" -Date "${{ github.event.inputs.Date }}" -StartTime "${{ github.event.inputs.Start_Time }}" -EndTime "${{ github.event.inputs.End_Time }}"
+        # path_to_actual_script with input params
