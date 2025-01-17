@@ -11,7 +11,7 @@ import { logger } from "../../../shared/logger/logger";
 import * as _ from 'lodash-es';
 import { forEach } from "underscore";
 import { DynamicObj } from "../../../admin/employee/admin.employee.model";
-
+import { utils, writeFileXLSX, WritingOptions } from "xlsx";
 export interface GroupingGridData {
     groupingClass: string;
     gridData: GridDataResult;
@@ -68,6 +68,9 @@ export class ComplexStackingModalComponent implements OnInit {
     ]
 
     private groupedData = {};
+    public detailData = {};
+    public displayId = {};
+    public exportData = {};    
 
     // Deal Ids are in `data.dealIds: number[]`
     constructor(@Inject(MAT_DIALOG_DATA) public data,
@@ -177,33 +180,45 @@ export class ComplexStackingModalComponent implements OnInit {
             this.groupedData = _.mapValues(_.groupBy(ovlpObjs.GroupItems, 'PickedDeal'), gList => gList.map(grp => _.omit(grp, 'PickedDeal')));
             const dealIds = Object.keys(this.groupedData);
             forEach(dealIds, (dealId) => {
+                this.displayId[dealId] = false;
                 const tempObj = {};
-                const grpArr = this.groupedData[dealId];                
-                for (let i = 0; i < grpArr.length; i++) {
-                    const CURRENT_GROUPING_LETTER = String.fromCharCode(97 + i).toUpperCase();
-                    const groupedDeals = [];
-                    const assoDealIds = grpArr[i].AssociatedDeals.split(",").map(Number);
-                    groupedDeals.push(
-                        ...this.dealInfos.filter((deal: any) => assoDealIds.includes(deal.WIP_DEAL_OBJ_SID)).map((itm) => ({ ...itm, GROUPED_BY: grpArr.length > 1 ? "GROUP " + dealId + " " + CURRENT_GROUPING_LETTER : "DEAL " + dealId }))
-                    )
-                    grpArr[i]["gridData"] = groupedDeals;
-                    grpArr[i]["total"] = groupedDeals.length
-                    grpArr[i]["rpuTotal"] = aggregateBy(groupedDeals, this.GROUPING_AGGREGATES)                    
-                }
+                const grpArr = this.groupedData[dealId];
                 tempObj["label"] = "DEAL " + dealId;
+                tempObj["gridlabel"] = "Single Overlap";
                 tempObj["hasMoreThanOneGrp"] = false;
 
                 if (grpArr.length > 1) {
                     tempObj["label"] = "GROUP " + dealId;
+                    tempObj["gridlabel"] = "Multiple Overlaps";
                     tempObj["hasMoreThanOneGrp"] = true;
                 }
                 tempObj["dealId"] = dealId;
                 tempObj["psId"] = grpArr[0].ObjID;
-                tempObj["groupedDeals"] = grpArr;
                 this.grpDeals.push(tempObj);
             });
         }
     }
+
+    public expandDetailsBy = (dataItem): number => {
+        const dealId = dataItem.dealId;
+        if (!this.detailData.hasOwnProperty(dealId)) {
+            const grpArr = this.groupedData[dealId];
+            for (let i = 0; i < grpArr.length; i++) {
+                const CURRENT_GROUPING_LETTER = String.fromCharCode(97 + i).toUpperCase();
+                const groupedDeals = [];
+                const assoDealIds = grpArr[i].AssociatedDeals.split(",").map(Number);
+                groupedDeals.push(
+                    ...this.dealInfos.filter((deal: any) => assoDealIds.includes(deal.WIP_DEAL_OBJ_SID)).map((itm) => ({ ...itm, GROUPED_BY: grpArr.length > 1 ? "GROUP " + dealId + " " + CURRENT_GROUPING_LETTER : "DEAL " + dealId }))
+                )
+                grpArr[i]["gridData"] = groupedDeals;
+                grpArr[i]["total"] = groupedDeals.length
+                grpArr[i]["rpuTotal"] = aggregateBy(groupedDeals, this.GROUPING_AGGREGATES)
+            }
+            this.detailData[dealId] = grpArr;
+        }
+        this.displayId[dealId] = !this.displayId[dealId]
+        return dealId;
+    };
 
     private acceptedItems = {};
 
@@ -222,6 +237,64 @@ export class ComplexStackingModalComponent implements OnInit {
 
     isAnyItemChecked(): boolean {
         return (this.acceptedItems && (Object.keys(this.acceptedItems).filter(key => this.acceptedItems[key]).length > 0));
+    }
+
+    getExportData() {
+        const dealIds = Object.keys(this.groupedData);
+        forEach(dealIds, (dealId) => {
+            const tempObj = {};
+            const grpArr = this.groupedData[dealId];
+            for (let i = 0; i < grpArr.length; i++) {
+                const CURRENT_GROUPING_LETTER = String.fromCharCode(97 + i).toUpperCase();
+                const groupedDeals = [];
+                const assoDealIds = grpArr[i].AssociatedDeals.split(",").map(Number);
+                groupedDeals.push(
+                    ...this.dealInfos.filter((deal: any) => assoDealIds.includes(deal.WIP_DEAL_OBJ_SID)).map((itm) => ({ ...itm, GROUPED_BY: grpArr.length > 1 ? "GROUP " + dealId + " " + CURRENT_GROUPING_LETTER : "DEAL " + dealId }))
+                )
+                grpArr[i]["gridData"] = groupedDeals;
+                grpArr[i]["total"] = groupedDeals.length
+                grpArr[i]["rpuTotal"] = aggregateBy(groupedDeals, this.GROUPING_AGGREGATES)                    
+            }
+            tempObj["label"] = "DEAL " + dealId;
+            if (grpArr.length > 1) {
+                tempObj["label"] = "GROUP " + dealId;
+            }
+            tempObj["dealId"] = dealId;
+            tempObj["psId"] = grpArr[0].ObjID;
+            tempObj["groupedDeals"] = grpArr;
+            this.exportData[dealId] = tempObj;
+        });
+    }
+
+    exportDataToExcel(): void {
+        if (this.dealInfos != undefined && this.dealInfos.length > 0) {
+            this.getExportData();
+            const HEADER = this.COLUMNS_CONFIG.map((item) => item.field);
+            const COLUMN_WIDTHS = [{ wch: 16 }, { wch: 8 }, { wch: 18 }, { wch: 10 }, { wch: 12 }, { wch: 24 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 20 }, { wch: 10 }, { wch: 12 }, { wch: 10 }, { wch: 38 }, { wch: 100 }, { wch: 28 }, { wch: 26 }, { wch: 100 }, { wch: 28 }, { wch: 16 }];
+
+            const SHEET = utils.json_to_sheet([]);            
+            const dealIds = Object.keys(this.exportData);
+            for (let i = 0; i < dealIds.length; i++) {
+                const dealId = dealIds[i];
+                const dealData = this.exportData[dealId].groupedDeals;
+                for (let j = 0; j < dealData.length; j++) {
+                    const gridData = dealData[j].gridData;
+                    gridData.push({ WF_STG_CD: "Total RPU:", MAX_RPU: "$ " + dealData[j].rpuTotal.MAX_RPU.sum.toFixed(2) })
+                    gridData.push({});                    
+                    utils.sheet_add_json(SHEET, gridData, { header: HEADER, origin: -1, skipHeader: false });                    
+                }                
+            }
+            
+            SHEET["!cols"] = COLUMN_WIDTHS;
+
+            const WB = utils.book_new(SHEET);
+            const WB_OPTIONS: WritingOptions = {
+                compression: true,
+            };            
+            writeFileXLSX(WB, `MyDeals_Complex Grouping_${this.momentService.moment().format('MMDDYYYY_HHmm')}.xlsx`, WB_OPTIONS);            
+        } else {
+            this.loggerService.warn('', 'No data to export');
+        }
     }
 
 }

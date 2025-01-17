@@ -2,55 +2,94 @@
 <loading-panel-angular id="PTRLoading" class="ptrLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
 <kendo-window title="Overlapping Deals - Complex Stacking" [keepContent]="true" [(left)]="left" [(top)]="top" [width]="kendoWindowWidth" [height]="kendoWindowHeight" (close)="closeModal()" class="k-wind-design headerTitlesOver windOverLaps" style="z-index:10001 !important">
+    <kendo-window-titlebar>
+        <span class="k-window-title">Overlapping Deals - Complex Stacking</span>
+        <button kendoWindowMaximizeAction></button>
+        <button kendoWindowRestoreAction></button>
+        <button kendoWindowCloseAction></button>
+    </kendo-window-titlebar>
     <div class="main-container">
         <div class="grid-container">
-            <div *ngIf="hasMultipleGroupings">                
-                <div class="row" *ngFor="let currentDealGroup of grpDeals">
-                    <div class="col-md-1">
-                        <div>
-                            <div style="float: left">
-                                <strong>{{ currentDealGroup.label }}</strong>
-                            </div>
-                        </div>
+            <div id="sum-wrapper" class="contractManagerPlus" *ngIf="hasMultipleGroupings" style="padding-top: 75px;">
+                <div id="sum-header" style="min-width: 800px;height:50px">
+                    <div style="border-bottom: 1px solid #555; padding: 6px 0; background-color: #fff;">
+                        <table style="width: 100%; margin-top:0;" class="tbl-header">
+                            <tr>
+                                <td style="width: 30px;">&nbsp;</td>
+                                <td style="width: 60px;">
+                                    <div title='Deal ID'>
+                                        Deal ID
+                                    </div>
+                                </td>
+                                <td style="width: 60px;">
+                                    <div title='Grouped As'>
+                                        Overlaps / Multiple Overlaps
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <div class="col-md-11">
-                        <div class="row" [ngClass]="{'cmplx-row-grp': currentDealGroup.hasMoreThanOneGrp}">
-                            <div class="col-md-12" *ngFor="let curDealGroup of currentDealGroup.groupedDeals; let i = index" [ngClass]="{'cmplx-col-grp': currentDealGroup.hasMoreThanOneGrp}">
-                                <kendo-grid [data]="curDealGroup.gridData" [sortable]="true" [resizable]="true" (excelExport)="overrideExcelExport($event)" #groupingGrid>                                                                       
-                                    <kendo-grid-column *ngFor="let column of COLUMNS_CONFIG" field="{{ column.field }}" title="{{ column.title }}" [hidden]="column.hidden">
-                                        <!-- Numeric Cell Templates -->
-                                        <ng-template kendoGridCellTemplate *ngIf="column.field == 'ECAP_PRICE'" let-dataItem="dataItem">
-                                            {{ dataItem.ECAP_PRICE | kendoNumber: 'c' }}
-                                        </ng-template>
-                                        <ng-template kendoGridCellTemplate *ngIf="column.field == 'MAX_RPU'" let-dataItem="dataItem">
-                                            {{ dataItem.MAX_RPU | kendoNumber: 'c' }}
-                                        </ng-template>
-
-                                        <!-- Footer Templates -->
-                                        <ng-template kendoGridFooterTemplate *ngIf="column.field == 'MAX_RPU'">
-                                            Total RPU: {{ curDealGroup.rpuTotal["MAX_RPU"].sum | kendoNumber: 'c' }}
-                                        </ng-template>
-                                    </kendo-grid-column>
-
-                                    <!-- Excel Export Element -->
-                                    <kendo-grid-excel>
-                                        <kendo-excelexport-column *ngFor="let column of COLUMNS_CONFIG" field="{{ column.field }}" title="{{ column.title }}">                                            
-                                            <!-- Footer Templates -->
-                                            <ng-template kendoExcelExportFooterTemplate *ngIf="column.field == 'MAX_RPU'">
-                                                Total RPU: {{ curDealGroup.rpuTotal["MAX_RPU"].sum | kendoNumber: 'c' }}
-                                            </ng-template>
-                                        </kendo-excelexport-column>
-                                    </kendo-grid-excel>
-                                </kendo-grid>
+                </div>
+                <div id="sum-container">
+                    <div class="sum-main-body">
+                        <div class="sum-main-container collectContractManagers" style="line-height: 1 !important;">
+                            <div *ngFor="let ps of grpDeals;let psIndex=index" class="sumPsContainer">
+                                <table style="width: 100%;" class="tbl-header">
+                                    <tr>
+                                        <td style="width: 30px; height: 30px;" id="PRC_ST_{{psIndex}}" (click)="expandDetailsBy(ps)">
+                                            <i class="chevron linkable collapseALL" [ngClass]="{'intelicon-down': displayId[ps.dealId], 'intelicon-right-next': !displayId[ps.dealId]}"></i>
+                                        </td>
+                                        <td style="width: 60px;">
+                                            <div title="Deal ID">
+                                                <label>
+                                                    {{ps.dealId}}
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td style="width: 60px;">
+                                            <div title="Grouped As">
+                                                <label>
+                                                    {{ps.gridlabel}}
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div>
+                                    <div class="collapse multi-collapse" id="PSData_{{psIndex}}" [ngClass]="{show : displayId[ps.dealId]}">
+                                        <div class="col-md-12" *ngFor="let curDealGroup of detailData[ps.dealId]; let i = index">
+                                            <kendo-grid [data]="curDealGroup.gridData" [sortable]="true" [resizable]="true" #groupingGrid>
+                                                <kendo-grid-column *ngFor="let column of COLUMNS_CONFIG" field="{{ column.field }}" title="{{ column.title }}" [hidden]="column.hidden">
+                                                    <ng-template kendoGridCellTemplate *ngIf="column.field == 'PRODUCT_NM'" let-dataItem="dataItem">
+                                                        <div title="{{dataItem.PRODUCT_NM}}">
+                                                            {{ dataItem.PRODUCT_NM && dataItem.PRODUCT_NM.length > 20 ? (dataItem.PRODUCT_NM | slice:0:20) + '...' : dataItem.PRODUCT_NM }}
+                                                        </div>
+                                                    </ng-template>
+                                                    <ng-template kendoGridCellTemplate *ngIf="column.field == 'ECAP_PRICE'" let-dataItem="dataItem">
+                                                        {{ dataItem.ECAP_PRICE | kendoNumber: 'c' }}
+                                                    </ng-template>
+                                                    <ng-template kendoGridCellTemplate *ngIf="column.field == 'MAX_RPU'" let-dataItem="dataItem">
+                                                        {{ dataItem.MAX_RPU | kendoNumber: 'c' }}
+                                                    </ng-template>
+                                                    <ng-template kendoGridFooterTemplate *ngIf="column.field == 'MAX_RPU'">
+                                                        Total RPU: {{ curDealGroup.rpuTotal["MAX_RPU"].sum | kendoNumber: 'c' }}
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                            </kendo-grid>
+                                            <br />
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>    
         </div>
         <div class="footer-container">
-            <button kendoButton class="btn btn-sm btn-primary lnk btnselectAccept overlapBtnSelect footer-button-height" icon="file-excel" (click)="excelExportAllGroupings()"> Export to Excel </button>
+            <button kendoButton class="btn btn-sm btn-primary lnk btnselectAccept overlapBtnSelect footer-button-height" icon="file-excel" (click)="exportDataToExcel()"> Export to Excel </button>
             <button class='btn btn-sm btn-primary lnk btnYes btnselectAccept overlapBtnSelect footer-accept-button' (click)="acceptAllGroupings()"><i class='intelicon-check'></i> {{isAnyItemChecked() ? 'Accept Selected' : 'Accept All'}} </button>
         </div>
-    </div>
+                </div>
 </kendo-window>

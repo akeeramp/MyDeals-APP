@@ -389,3 +389,166 @@ hot-table div.handsontable {
 .cmplx-col-grp {
     margin: 10px;
 }
+
+.contractManagerPlus .sumGridOptionsExpand {
+    height: auto !important
+}
+
+.contractManagerPlus .k-grid th,
+.contractManagerPlus .k-grid td {
+    font-size: 12px !important
+}
+
+.contractManagerPlus#sum-wrapper {
+    height: 100%;
+    overflow: auto;
+    padding: 105px 0 0 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+.contractManagerPlus #sum-header {
+    height: 110px;
+    margin-top: -78px;
+    font-size: 14px;
+    font-family: "Intel Clear";
+    font-weight: 200;
+    font-style: normal;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    margin-left: 0;
+    margin-right: 0
+}
+
+.contractManagerPlus #sum-container {
+    height: 100%;
+    overflow: auto;
+}
+
+@media (max-width: 1555px) {
+    .contractManagerPlus #sum-container {
+        width: calc(100% - 50px);
+    }
+}
+
+@media (max-width: 1280px) {
+    .contractManagerPlus #sum-container {
+        width: calc(100% - 60px);
+    }
+}
+
+@media (max-width: 1170px) {
+    .contractManagerPlus #sum-container {
+        width: 90%;
+    }
+}
+
+@media (max-width: 730px) {
+    .contractManagerPlus #sum-container {
+        height: 67vh;
+    }
+}
+
+.contractManagerPlus .chevron {
+    color: #00aeef;
+    font-size: 25px
+}
+
+.contractManagerPlus table td {
+    border: 0 solid #ccc
+}
+
+.contractManagerPlus .tbl-header {
+    margin-top: 10px
+}
+
+.contractManagerPlus .k-tabstrip-wrapper {
+    border-bottom: 0 solid #eeeeee
+}
+
+.contractManagerPlus .sum-main-body {
+    margin: 5px 10px;
+    padding: 0 10px
+}
+
+.contractManagerPlus .sum-main-container {
+    height: 100%;
+    overflow: auto
+}
+
+.contractManagerPlus .sum-main-body .tbl-header {
+    margin-top: 6px
+}
+
+.contractManagerPlus #sum-header hr {
+    height: 1px;
+    margin: 6px 0;
+    border-top: 1px solid #555
+}
+
+.contractManagerPlus .sum-main-body .bold {
+    color: #00aeef;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 1em
+}
+
+.contractManagerPlus .sum-main-body .bolder {
+    color: #00aeef;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1em
+}
+
+.contractManagerPlus .linkable {
+    cursor: pointer
+}
+
+.contractManagerPlus .linkable:hover {
+    color: #003c71 !important
+}
+
+.contractManagerPlus .sum-main-body label {
+    margin-bottom: 0
+}
+
+.contractManagerPlus .k-tabstrip-items .k-item {
+    margin-right: 0 !important;
+    font-size: 15px !important;
+    font-weight: 400 !important
+}
+
+.contractManagerPlus .sum-filter-bar.add-sub-sum {
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 7px !important
+}
+
+.throw-css {
+    margin-top: -3px;
+    margin-left: -9px !important
+}
+
+.modalBlueBody {
+    background-color: #003c71 !important;
+    color: #ffffff !important
+}
+
+.contractManagerPlus .btn-full {
+    margin: 5px 0 !important;
+    width: 100% !important
+}
+
+.contractManagerPlus .all-labels {
+    font-weight: bold !important
+}
+
+.contractManagerPlus .k-textbox.design:hover {
+    background-color: #fff;
+    border-color: #f5f5f5;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%)
+}
