@@ -49,7 +49,7 @@
                                     <div class="bgBlueContainer" [ngClass]="{isErrorWrapper: isPsTitleBehaviorErrorState}">
                                         <!-- NOTE: If modifying this Input field, make sure both are configured identically. It is the same field but one contains the NgbTooltip attributes
                                             and will only display when there are no PSs avaliable -->
-                                        <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black;" maxlength="250" id="inptPrcTitle"
+                                        <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black; padding: .375rem .75rem;" maxlength="250" id="inptPrcTitle"
                                                [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: isPsTitleBehaviorErrorState}" (keydown.enter)="customAddPsValidate()"
                                                *ngIf="!isPricingStrategyTooltipEnabled" />
                                         <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black;" maxlength="250" id="inptPrcTitle"
@@ -69,8 +69,7 @@
                                 <div class="scaleTopAnim lnavMenuOption" [hidden]="isAddPricingTableHidden">
                                     <div class="fl ptLnavTitle isMandatory">Enter Pricing Table Name</div>
                                     <div class="clearboth"></div>
-                                    <input type="text" class="k-textbox fl" placeholder="" style="width: 276px;
-                                           color: black; border-bottom: 3px solid #f3d54e;" maxlength="250" id="inptPtTitle" [(ngModel)]="ptTITLE" />
+                                    <input type="text" class="k-textbox fl" placeholder="" style="width: 276px; color: black; border-bottom: 3px solid #f3d54e; padding: .375rem .75rem;" maxlength="250" id="inptPtTitle" [(ngModel)]="ptTITLE" />
                                     <div class="clearboth"></div>
                                     <div style="color: #F3D54E;">{{ getPtTitleBehaviorValidMessage }}</div>
                                     <div class="ptLnavTitle">Select Pricing Table Deal Type </div>
