@@ -37,7 +37,9 @@
                                 (dataStateChange)="dataStateChange($event)" style="height: calc(100vh - 400px); width:100%; line-height:10px;"
                                 [isDetailExpanded]="expandInStockProducts" (excelExport)="onExcelExport($event)">
                         <ng-template kendoGridToolbarTemplate>
-                            <button type="button" kendoGridExcelCommand ><span class="k-icon k-i-file-excel"></span>Export to Excel</button>
+                            <button type="button" kendoGridExcelCommand>
+                                <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+                            </button>
                         </ng-template>
                         <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="35">
                             <ng-template kendoGridHeaderTemplate>

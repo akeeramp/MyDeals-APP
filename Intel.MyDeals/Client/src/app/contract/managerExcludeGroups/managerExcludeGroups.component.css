@@ -7,37 +7,39 @@
     text-align: right
 }
 
-.manageExcludeGroupParent .ssToolbarBtn.btn-save, .manageExcludeGroupParent .ssToolbarBtn {
+.manageExcludeGroupParent .ssToolbarBtn.btn-save,
+.manageExcludeGroupParent .ssToolbarBtn {
     background-color: transparent
 }
 
-    .manageExcludeGroupParent .ssToolbarBtn.btn-save table tr td span.text {
-        font-size: 14px !important;
-        font-weight: 600;
-        line-height: 1em
-    }
+.manageExcludeGroupParent .ssToolbarBtn.btn-save table tr td span.text {
+    font-size: 14px !important;
+    font-weight: 600;
+    line-height: 1em
+}
 
-    .manageExcludeGroupParent .ssToolbarBtn.btn-save:hover {
-        background-color: #f2f2f2
-    }
+.manageExcludeGroupParent .ssToolbarBtn.btn-save:hover {
+    background-color: #f2f2f2
+}
 
-    .manageExcludeGroupParent .ssToolbarBtn.btn-save.notdirty {
-        cursor: not-allowed
-    }
+.manageExcludeGroupParent .ssToolbarBtn.btn-save.notdirty {
+    cursor: not-allowed
+}
 
-        .manageExcludeGroupParent .ssToolbarBtn.btn-save.notdirty table tr td span.text {
-            font-size: 11px !important;
-            font-weight: 400 !important;
-            line-height: 1.25em !important
-        }
+.manageExcludeGroupParent .ssToolbarBtn.btn-save.notdirty table tr td span.text {
+    font-size: 11px !important;
+    font-weight: 400 !important;
+    line-height: 1.25em !important
+}
 
-        .manageExcludeGroupParent .ssToolbarBtn.btn-save.notdirty table tr td, .ssToolbarBtn.notdirty table tr td i {
-            color: #ababab !important
-        }
+.manageExcludeGroupParent .ssToolbarBtn.btn-save.notdirty table tr td,
+.ssToolbarBtn.notdirty table tr td i {
+    color: #ababab !important
+}
 
-        .manageExcludeGroupParent .ssToolbarBtn.btn-save.notdirty:hover {
-            background-color: transparent
-        }
+.manageExcludeGroupParent .ssToolbarBtn.btn-save.notdirty:hover {
+    background-color: transparent
+}
 
 .dirtyIndicator {
     width: 5px;
@@ -62,12 +64,12 @@
     display: none !important
 }
 
-#ExcldGrid > .k-grid-content > table > tbody > tr:nth-child(1) {
+#ExcldGrid>.k-grid-content>table>tbody>tr:nth-child(1) {
     display: none
 }
 
-#ExcldGrid > .k-grid-content > table > tbody > tr:nth-child(2) > td {
-    border: 1px solid rgba(230,230,230,.40)
+#ExcldGrid>.k-grid-content>table>tbody>tr:nth-child(2)>td {
+    border: 1px solid rgba(230, 230, 230, .40)
 }
 
 #ExcldGrid.k-grid {
@@ -84,7 +86,8 @@
     height: calc(85vh - 290px) !important
 }
 
-#ExcldGrid tr.tr-disabled td span.ng-binding, #ExcldGrid tr.tr-disabled td {
+#ExcldGrid tr.tr-disabled td span.ng-binding,
+#ExcldGrid tr.tr-disabled td {
     color: #aaaaaa
 }
 
@@ -92,7 +95,8 @@
     background-color: #f4f4f4
 }
 
-#ExcldGrid tr.tr-current td span.ng-binding, #ExcldGrid tr.tr-current td {
+#ExcldGrid tr.tr-current td span.ng-binding,
+#ExcldGrid tr.tr-current td {
     color: #FFFFFF
 }
 
@@ -104,7 +108,7 @@
     white-space: nowrap !important
 }
 
-.exclude-filter-style .childGrid > .k-grid-content {
+.exclude-filter-style .childGrid>.k-grid-content {
     height: auto !important
 }
 
@@ -155,22 +159,22 @@
     margin-right: 8px !important
 }
 
-    .manageExcludeGroupParent .aligner-inputs i {
-        height: 100%;
-        font-size: 18px;
-        color: #00AEEF;
-        width: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #f9f9f9
-    }
+.manageExcludeGroupParent .aligner-inputs i {
+    height: 100%;
+    font-size: 18px;
+    color: #00AEEF;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9f9f9
+}
 
-    .manageExcludeGroupParent .aligner-inputs input {
-        width: 100%;
-        margin: 0;
-        border: none
-    }
+.manageExcludeGroupParent .aligner-inputs input {
+    width: 100%;
+    margin: 0;
+    border: none
+}
 
 .kendo-grid-buttons.there-grid {
     width: 100% !important;
@@ -186,9 +190,9 @@
 .excl-DG-modal mat-dialog-container {
     background: #1a3e6f;
     padding-bottom: 24px !important;
-    padding-top:15px;
-    padding-right:15px;
-    padding-left:15px;
+    padding-top: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
 #GroupExclusionTab {
@@ -196,55 +200,56 @@
     margin-left: 10px
 }
 
-    #GroupExclusionTab .k-tabstrip-items .k-item {
-        background: #fdfdfd;
-        background: -moz-linear-gradient(top,#fdfdfd 0%,#d9d9d9 100%);
-        background: -webkit-linear-gradient(top,#fdfdfd 0%,#d9d9d9 100%);
-        background: linear-gradient(to bottom,#fdfdfd 0%,#fff 100%);
-        color: #003C71 !important;
-        padding: 0 !important;
-        text-transform: none !important;
-        background-color: #fff;
-        border-bottom-width: 0
-    }
+#GroupExclusionTab .k-tabstrip-items .k-item {
+    background: #fdfdfd;
+    background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
+    background: -webkit-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
+    background: linear-gradient(to bottom, #fdfdfd 0%, #fff 100%);
+    color: #003C71 !important;
+    padding: 0 !important;
+    text-transform: none !important;
+    background-color: #fff;
+    border-bottom-width: 0
+}
 
-    #GroupExclusionTab .k-tabstrip-items .k-state-active {
-        background: -moz-linear-gradient(top,#fdfdfd 0%,#fff 100%);
-        background: -webkit-linear-gradient(top,#fdfdfd 0%,#fff 100%);
-        background: linear-gradient(to bottom,#fdfdfd 0%,#fff 100%);
-        border-color: #b1babf;
-        border-width: 1px;
-        border-left-width: 1px;
-        border-top-width: 1px;
-        border-right-width: 1px;
-        border-bottom-width: 0;
-        border-radius: 4px 4px 0 0;
-        color: #00aeef !important
-    }
+#GroupExclusionTab .k-tabstrip-items .k-state-active {
+    background: -moz-linear-gradient(top, #fdfdfd 0%, #fff 100%);
+    background: -webkit-linear-gradient(top, #fdfdfd 0%, #fff 100%);
+    background: linear-gradient(to bottom, #fdfdfd 0%, #fff 100%);
+    border-color: #b1babf;
+    border-width: 1px;
+    border-left-width: 1px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 0;
+    border-radius: 4px 4px 0 0;
+    color: #00aeef !important
+}
 
-    #GroupExclusionTab .k-tabstrip-items .k-item .k-link:hover {
-        color: #00AEEF !important
-    }
+#GroupExclusionTab .k-tabstrip-items .k-item .k-link:hover {
+    color: #00AEEF !important
+}
 
-    #GroupExclusionTab .k-tabstrip-items .k-state-disabled {
-        position: absolute !important;
-        width: auto !important;
-        right: 15px !important;
-        opacity: 1;
-    }
+#GroupExclusionTab .k-tabstrip-items .k-state-disabled {
+    position: absolute !important;
+    width: auto !important;
+    right: 15px !important;
+    opacity: 1;
+}
 
-    .manageExclGroupOvrLap mat-dialog-container {
-        padding: 0;
-    }
+.manageExclGroupOvrLap mat-dialog-container {
+    padding: 0;
+}
 
-        .manageExclGroupOvrLap mat-dialog-container .k-window {
-            min-height: auto !important;
-        }
+.manageExclGroupOvrLap mat-dialog-container .k-window {
+    min-height: auto !important;
+}
 
-    #GroupExclusionTab > .k-tabstrip-items-wrapper > .k-tabstrip-items > li > .k-link, #GroupExclusionTab .k-tabstrip-items-wrapper ul {
-        position: relative;
-        background: #f9f9f9 !important
-    }
+#GroupExclusionTab>.k-tabstrip-items-wrapper>.k-tabstrip-items>li>.k-link,
+#GroupExclusionTab .k-tabstrip-items-wrapper ul {
+    position: relative;
+    background: #f9f9f9 !important
+}
 
 #excelDropDownMenuExcludeGroup.show {
     transform: none !important;
@@ -262,9 +267,9 @@ kendo-dialog-actions.popup-dialog {
     cursor: pointer
 }
 
-    kendo-dialog-actions.popup-dialog:hover {
-        background: #ebebeb
-    }
+kendo-dialog-actions.popup-dialog:hover {
+    background: #ebebeb
+}
 
 .kendo-alrt-btn.popup-button {
     text-align: center !important
@@ -335,32 +340,32 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
     padding-top: 15px
 }
 
-    .ok-cancel-btns-deals .btn {
-        padding: 6px 12px;
-        font-size: 13px
-    }
+.ok-cancel-btns-deals .btn {
+    padding: 6px 12px;
+    font-size: 13px
+}
 
-    .ok-cancel-btns-deals .btn-warning {
-        background-color: #f39c12;
-        border-color: #e08e0b !important;
-        color: #0071c5 !important;
-    }
+.ok-cancel-btns-deals .btn-warning {
+    background-color: #f39c12;
+    border-color: #e08e0b !important;
+    color: #0071c5 !important;
+}
 
-        .ok-cancel-btns-deals .btn-warning:hover {
-            color: #0071c5;
-            background-color: #e08e0b;
-            border-color: #b1babf !important
-        }
+.ok-cancel-btns-deals .btn-warning:hover {
+    color: #0071c5;
+    background-color: #e08e0b;
+    border-color: #b1babf !important
+}
 
-    .ok-cancel-btns-deals .btn-primary {
-        background-color: #01AEEF !important;
-        border-color: #367fa9 !important
-    }
+.ok-cancel-btns-deals .btn-primary {
+    background-color: #01AEEF !important;
+    border-color: #367fa9 !important
+}
 
-        .ok-cancel-btns-deals .btn-primary:hover {
-            background-color: #01AEEF !important;
-            color: #1a3e6f
-        }
+.ok-cancel-btns-deals .btn-primary:hover {
+    background-color: #01AEEF !important;
+    color: #1a3e6f
+}
 
 .group-exclude-child {
     margin: 0 !important
@@ -377,22 +382,23 @@ kendo-grid.exclude-filter-style kendo-grid-list table tr td {
     font-size: 12px
 }
 
-    kendo-grid.exclude-filter-style kendo-grid-list table tr td .child-EDGM table tr td {
-        color: #aaaaaa !important;
-        background-color: #f4f4f4;
-        
-    }
-    kendo-grid.exclude-filter-style kendo-grid-list table tr td .childColor table tr td {
-        color: rgb(0,0,128) !important;
-        background-color: white !important;
-    }
+kendo-grid.exclude-filter-style kendo-grid-list table tr td .child-EDGM table tr td {
+    color: #aaaaaa !important;
+    background-color: #f4f4f4;
 
-    kendo-grid.exclude-filter-style kendo-grid-list table tr td .child-head table tr td {
-        color: rgb(0,0,128);
-        background-color: #f4f4f4;
-        border-bottom: 1px solid rgba(33, 37, 41, 0.125) !important;
-        border-left: none !important;
-    }
+}
+
+kendo-grid.exclude-filter-style kendo-grid-list table tr td .childColor table tr td {
+    color: rgb(0, 0, 128) !important;
+    background-color: white !important;
+}
+
+kendo-grid.exclude-filter-style kendo-grid-list table tr td .child-head table tr td {
+    color: rgb(0, 0, 128);
+    background-color: #f4f4f4;
+    border-bottom: 1px solid rgba(33, 37, 41, 0.125) !important;
+    border-left: none !important;
+}
 
 .k-grid tbody td .child-EDGM {
     white-space: nowrap;
@@ -400,16 +406,19 @@ kendo-grid.exclude-filter-style kendo-grid-list table tr td {
 }
 
 
-    kendo-grid.exclude-filter-style kendo-grid-list table tr td a.k-icon:hover, kendo-grid.exclude-filter-style kendo-grid-list table tr td a.k-icon:focus {
-        color: var(--white)
-    }
+kendo-grid.exclude-filter-style kendo-grid-list table tr td a.k-icon:hover,
+kendo-grid.exclude-filter-style kendo-grid-list table tr td a.k-icon:focus {
+    color: var(--white)
+}
 
 kendo-grid.exclude-filter-style kendo-grid-list table tr td.k-detail-cell table tbody tr td:nth-child(2) {
-    padding: 0!important;
+    padding: 0 !important;
 }
+
 .grping-exclusion-borderstyle kendo-grid.k-grid .k-grid-header-wrap table thead tr th {
     border-bottom: 3px solid rgb(0, 113, 197) !important;
 }
+
 .grping-exclusion-borderstyle .k-grid .k-grid-content {
     overflow: overlay !important
 }
@@ -422,34 +431,34 @@ kendo-grid.exclude-filter-style kendo-grid-list table tr td.k-detail-cell table 
     font-size: 10px
 }
 
-    .excludeGroupLoadingSpinners .spinner > div {
-        background-color: #0071C5;
-        height: 100%;
-        width: 6px;
-        display: inline-block;
-        -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-        animation: sk-stretchdelay 1.2s infinite ease-in-out
-    }
+.excludeGroupLoadingSpinners .spinner>div {
+    background-color: #0071C5;
+    height: 100%;
+    width: 6px;
+    display: inline-block;
+    -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+    animation: sk-stretchdelay 1.2s infinite ease-in-out
+}
 
-    .excludeGroupLoadingSpinners .spinner .rect2 {
-        -webkit-animation-delay: -1.1s;
-        animation-delay: -1.1s
-    }
+.excludeGroupLoadingSpinners .spinner .rect2 {
+    -webkit-animation-delay: -1.1s;
+    animation-delay: -1.1s
+}
 
-    .excludeGroupLoadingSpinners .spinner .rect3 {
-        -webkit-animation-delay: -1.0s;
-        animation-delay: -1.0s
-    }
+.excludeGroupLoadingSpinners .spinner .rect3 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s
+}
 
-    .excludeGroupLoadingSpinners .spinner .rect4 {
-        -webkit-animation-delay: -.9s;
-        animation-delay: -.9s
-    }
+.excludeGroupLoadingSpinners .spinner .rect4 {
+    -webkit-animation-delay: -.9s;
+    animation-delay: -.9s
+}
 
-    .excludeGroupLoadingSpinners .spinner .rect5 {
-        -webkit-animation-delay: -.8s;
-        animation-delay: -.8s
-    }
+.excludeGroupLoadingSpinners .spinner .rect5 {
+    -webkit-animation-delay: -.8s;
+    animation-delay: -.8s
+}
 
 .excludeGroupLoadingSpinners .ss-icon-lg {
     font-size: 4em;
@@ -461,13 +470,14 @@ kendo-grid.exclude-filter-style kendo-grid-list table tr td.k-detail-cell table 
     color: var(--light-blue)
 }
 
-kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu .k-state-active > .k-i-filter {
+kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu .k-state-active>.k-i-filter {
     color: #00AEEF !important;
 }
 
-    kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu .k-state-active > .k-i-filter:hover {
-        color: #0071C5 !important
-    }
+kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu .k-state-active>.k-i-filter:hover {
+    color: #0071C5 !important
+}
+
 #exclGrp .showToggle {
     visibility: visible !important
 }

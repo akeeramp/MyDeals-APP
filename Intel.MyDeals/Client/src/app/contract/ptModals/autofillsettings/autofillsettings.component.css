@@ -357,3 +357,14 @@ kendo-numerictextbox.autoFillSettingsNumDes.k-numberbox-design input.k-input-inn
     font-weight: 600;
     font-size: 13px;
 }
+
+.k-button-solid-base.k-hover, .k-button-solid-base:hover {
+    background-color: #ced3db;
+    border-color: #c7cdd5;
+}
+
+.k-button-solid-base {
+    background-color: #e4e7eb;
+    border-color: #e4e7eb;
+    color: #212529;
+}
