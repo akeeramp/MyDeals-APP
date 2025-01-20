@@ -98,7 +98,7 @@ jobs:
          run: |
            ./scripts/deploy_env.ps1 'copy_latest_prodENV' '${{ vars.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}'  
   Triggering-Jmeter-Test:
-    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && github.event.inputs.ENV == 'CIAR') 
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.ENV == 'CIAR') 
     runs-on: [self-hosted, mydeals-runner01]
     needs: Deploy-Angular
     steps:
