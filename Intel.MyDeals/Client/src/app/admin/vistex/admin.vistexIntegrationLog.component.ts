@@ -163,14 +163,14 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         if (event == false || event.checked == false) {
             this.showArchivedData = false;
             this.state.filter = {
-                logic: "or",
+                logic: "and",
                 filters: [{ field: "ARCHV_FLG", operator: "eq", value: false }]
             };
         }
         else {
             this.showArchivedData = true;
             this.state.filter = {
-                logic: "or",
+                logic: "and",
                 filters: []
             };
         }
