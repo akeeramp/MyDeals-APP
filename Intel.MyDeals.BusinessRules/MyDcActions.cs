@@ -1898,10 +1898,12 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
             if (deRebateType == null) return;
 
-            IOpDataElement deTrackerNumber = r.Dc.GetDataElement(AttributeCodes.TRKR_NBR);
-            if (deTrackerNumber != null && deTrackerNumber.AtrbValue != null)
+            IOpDataElement deHasTracker = r.Dc.GetDataElement(AttributeCodes.HAS_TRACKER);
+            if (deHasTracker != null && deHasTracker.AtrbValue != null)
             {
-                if (!string.IsNullOrEmpty(deTrackerNumber.AtrbValue.ToString())) return;
+                if (deHasTracker.AtrbValue.ToString() == "1") {
+                    return;
+                }
             }
 
             IOpDataElement deDealStage = r.Dc.GetDataElement(AttributeCodes.WF_STG_CD);
@@ -1911,8 +1913,8 @@ namespace Intel.MyDeals.BusinessRules
             }
             else
             {
-                IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);  // Deals that passed the 'Draft' stage will have this field set to readonly
-                if (deStartDate.IsReadOnly && deRebateType.IsReadOnly)
+                IOpDataElement deGeoCombined = r.Dc.GetDataElement(AttributeCodes.GEO_COMBINED);  // Deals that passed the 'Draft' stage will have this field set to readonly
+                if (deGeoCombined != null && deGeoCombined.IsReadOnly && deRebateType.IsReadOnly)
                 {
                     deRebateType.ValidationMessage = string.Empty;
                     return;
