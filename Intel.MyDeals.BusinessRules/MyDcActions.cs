@@ -1899,34 +1899,15 @@ namespace Intel.MyDeals.BusinessRules
             if (deRebateType == null) return;
 
             IOpDataElement deHasTracker = r.Dc.GetDataElement(AttributeCodes.HAS_TRACKER);
-            if (deHasTracker != null && deHasTracker.AtrbValue != null)
-            {
-                if (deHasTracker.AtrbValue.ToString() == "1") {
-                    return;
-                }
-            }
-
-            IOpDataElement deDealStage = r.Dc.GetDataElement(AttributeCodes.WF_STG_CD);
-            if (deDealStage != null)
-            {
-                if (deDealStage.AtrbValue.ToString() != "Draft") return;
-            }
-            else
-            {
-                IOpDataElement deGeoCombined = r.Dc.GetDataElement(AttributeCodes.GEO_COMBINED);  // Deals that passed the 'Draft' stage will have this field set to readonly
-                if (deGeoCombined != null && deGeoCombined.IsReadOnly && deRebateType.IsReadOnly)
-                {
-                    deRebateType.ValidationMessage = string.Empty;
-                    return;
-                }
-            }
 
             // "MDF", "NRE", "NRE LUMP - SUM BUDGET", "MDF / NRE LUMP - SUM BUDGET", "MDF / NRE LUMP - SUM BUDGET", "MDF ACCRUAL", "MDF SPIF / PER UNIT ACTIVITY", "NRE ACCRUAL", "MDF / NRE ACCRUAL"
             List<string> disabledRebateTypes = new List<string> { "MDF", "NRE", "NRELUMP-SUMBUDGET", "MDF/NRELUMP-SUMBUDGET", "MDF/NRELUMP-SUMBUDGET", "MDFACCRUAL", "MDFSPIF/PERUNITACTIVITY", "NREACCRUAL", "MDF/NREACCRUAL" };
             string deRebateTypeSanitized = string.Join("", deRebateType.AtrbValue.ToString().ToUpper().Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (disabledRebateTypes.Contains(deRebateTypeSanitized))
+            if (deHasTracker.AtrbValue.ToString() != "1" && disabledRebateTypes.Contains(deRebateTypeSanitized))
             {
                 deRebateType.AddMessage("Existing Rebate Type is not valid anymore, please make a valid selection");
+            } else {
+                deRebateType.ValidationMessage = string.Empty;  // To fix issue w/ messages persisting across multiple validation cycles
             }
         }
 
