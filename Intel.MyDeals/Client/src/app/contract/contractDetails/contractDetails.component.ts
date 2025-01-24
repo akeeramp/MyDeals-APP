@@ -399,13 +399,18 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
             this.contractData._behaviors.validMsg["END_DT"] = "Please select a date before 12/31/2099";
             this.contractData._behaviors.isError["END_DT"] = true;
             this.isValid = false;
-        } else if (this.momentService.moment(ct.END_DT).isBefore(ct.START_DT) || this.momentService.moment(ct.END_DT).isAfter(maximumDate)) {
+        }
+        // Modified by Karn Kumar 21-01-2025
+        // Purpose:- Modified based on defect (TWC3167-9808). To execute only when no end date checkbox is false
+        else if ((this.momentService.moment(ct.END_DT).isBefore(ct.START_DT) || this.momentService.moment(ct.END_DT).isAfter(maximumDate)) && this.NO_END_DT != true) {
             this.contractData._behaviors.validMsg['END_DT'] = this.momentService.moment(ct.END_DT).isAfter(maximumDate)
                 ? "End date cannot be greater than - " + maximumDate
                 : "End date cannot be less than Start Date";
             this.contractData._behaviors.isError["END_DT"] = true;
             this.isValid = false;
-        } else {
+        }
+        // End Karn Kumar
+        else {
             this.contractData._behaviors.validMsg["CUST_MBR_SID"] = "";
             this.contractData._behaviors.isError["CUST_MBR_SID"] = false;
             this.contractData._behaviors.validMsg["C2A_DATA_C2A_ID"] = "";
@@ -747,6 +752,13 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         this.contractData._behaviors.isRequired["NO_END_DT_RSN"] = this.NO_END_DT;
         this.contractData.NO_END_DT_RSN = this.NO_END_DT ? this.contractData.NO_END_DT_RSN : "";
         this.NO_END_DT_RSN = undefined;
+        // Added by karn Kumar 21-01-2025
+        // Purpose:- Modified based on defect (TWC3167-9808). To clear the valid message of end date.
+        if (this.contractData._behaviors.validMsg["END_DT"] != undefined) {
+            this.contractData._behaviors.validMsg["END_DT"] = "";
+        }
+        // End Karn Kumar
+
     }
 
     setSaveBtnName() {
