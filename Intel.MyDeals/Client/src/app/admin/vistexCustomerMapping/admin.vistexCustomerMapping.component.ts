@@ -98,7 +98,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
 
     public allData(): ExcelExportData {
         const excelState: State = {};
-        Object.assign(excelState, this.state)
+        Object.assign(excelState, this.state);
         excelState.take = this.gridResult.length;
 
         const result: ExcelExportData = {
@@ -148,23 +148,15 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
 
     loadCustomerMapping(): void {
         this.isLoading = true;
-        this.customerMapSvc.getVistexCustomersMapList().pipe(takeUntil(this.destroy$)).subscribe(
-            (result: Array<Vistex_Cust_Map>) => {
-                this.gridResult = result;
-                this.gridData = process(this.gridResult, this.state);
-                this.isLoading = false;
-            },
-
-            function (response) {
-                this.loggerSvc.error(
-                    "Unable to get Customers.",
-                    response,
-                    response.statusText
-                );
-
-            }
-        );
+        this.customerMapSvc.getVistexCustomersMapList().pipe(takeUntil(this.destroy$)).subscribe((result: Array<Vistex_Cust_Map>) => {
+            this.gridResult = result;
+            this.gridData = process(this.gridResult, this.state);
+            this.isLoading = false;
+        }, (error) => {
+            this.loggerSvc.error("Unable to get Customers.", error, error.statusText);
+        });
     }
+
     IsValidCustomerMapping(model: Vistex_Cust_Map): boolean {
         let retCond = false;
 
@@ -234,6 +226,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
     saveConfirmation(): void {
         this.isCombExists = false;
     }
+
     saveHandler({ sender, rowIndex, formGroup }: SaveEvent): void {
         const cust_map: Vistex_Cust_Map = formGroup.getRawValue();
         this.errorMsg = [];
@@ -241,36 +234,36 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
         if (cust_map.DFLT_LOOKBACK_PERD === null || cust_map.DFLT_LOOKBACK_PERD.toString() === "") {
             cust_map.DFLT_LOOKBACK_PERD = -1;
         }
+
         //check the combination exists
         if (this.isFormChange) {
-
             this.isCombExists = this.IsValidCustomerMapping(cust_map);
             if (!this.isCombExists) {
                 this.isLoading = true;
-                this.customerMapSvc.UpdateVistexCustomer(cust_map).pipe(takeUntil(this.destroy$)).subscribe(
-                    () => {
-                        this.isDirty = true;
-                        this.gridResult[rowIndex] = cust_map;
-                        this.gridResult.push(cust_map);
-                        this.loadCustomerMapping();
-                        this.loggerSvc.success("Vistex Customer Mapping updated.");
-                    },
-                    err => {
-                        this.loggerSvc.error("Unable to update Vistex Customer Mapping.", err.statusText);
-                        this.isLoading = false;
-                    }
-                );
+                this.customerMapSvc.UpdateVistexCustomer(cust_map).pipe(takeUntil(this.destroy$)).subscribe(() => {
+                    this.isDirty = true;
+                    this.gridResult[rowIndex] = cust_map;
+                    this.gridResult.push(cust_map);
+                    this.loadCustomerMapping();
+                    this.loggerSvc.success("Vistex Customer Mapping updated.");
+                }, (err) => {
+                    this.loadCustomerMapping();
+                    this.loggerSvc.error("Unable to update Vistex Customer Mapping.", err.statusText);
+                    this.isLoading = false;
+                });
             }
         }
+
         sender.closeRow(rowIndex);
     }
+
     refreshGrid(): void {
         this.isLoading = true;
         this.state.filter = {
             logic: "and",
             filters: [],
         };
-        this.loadCustomerMapping()
+        this.loadCustomerMapping();
     }
 
     canDeactivate(): Observable<boolean> | boolean {

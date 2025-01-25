@@ -129,20 +129,38 @@ namespace Intel.MyDeals.DataLibrary
             {
                 methodName = char.ToUpper(fieldName[1]) + fieldName.Substring(2);
             }
-            var method = typeof(DataCollections).GetMethod(methodName, BindingFlags.Static | BindingFlags.Public);
+
+            MethodInfo method = null;
+            if (fieldName.Contains("_getMyCustomers"))
+            {
+                /* TWC5971-320: _getMyCustomers throws Internal API Error
+                   `_getMyCustomers` has multiple functions, leading to an abiguous match error, we typically want to use 
+                   the one without parameters, so specifically call the one without parameters */
+                var methods = typeof(DataCollections).GetMethods(BindingFlags.Static | BindingFlags.Public);
+                foreach (MethodInfo curMethod in methods)
+                {
+                    if (curMethod.Name == methodName && curMethod.GetParameters().Length == 0)
+                    {
+                        method = curMethod;
+                    }
+                }
+            } else {
+                method = typeof(DataCollections).GetMethod(methodName, BindingFlags.Static | BindingFlags.Public);
+            }
 
             if (method == null) return false;
 
-            /* TWC3119-724: Admin Cache Manager - Internal Server Error
-                `_getProductSelectorWrapperDensity` does not accept generic null values since the earliest date in C# is 01/01/0001
-                while MSSQL can only accept 01/01/1753, thus it hung this function when it invoked the function because that exception
-                was not handled */
             if (fieldName.Contains("_getProductSelectorWrapperDensity"))
             {
+                /* TWC3119-724: Admin Cache Manager - Internal Server Error
+                   `_getProductSelectorWrapperDensity` does not accept generic null values since the earliest date in C# is 01/01/0001
+                   while MSSQL can only accept 01/01/1753, thus it hung this function when it invoked the function because that exception
+                   was not handled */
                 method.Invoke(null, new object[] { new DateTime(2000, 01, 01, 00, 00, 00), new DateTime(2000, 01, 01, 00, 00, 00), "" });
             } else {
                 method.Invoke(null, null);
             }
+
             return true;
         }
 
