@@ -98,3 +98,13 @@ kendo-grid.container-pct table tr th a.k-grid-filter.k-state-active {
 .pctModalBodyFilter .k-animation-container-shown kendo-grid-filter-menu-container kendo-grid-numeric-filter-menu kendo-dropdownlist {
     margin: 5px 0 !important;
 }
+#pct-export {
+    color: #fff !important;
+    background-color: #0071c5 !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-size: 18px;
+}
+#pct-export:focus {
+    box-shadow: none !important;
+}

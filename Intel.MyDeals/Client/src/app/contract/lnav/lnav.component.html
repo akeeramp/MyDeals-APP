@@ -52,7 +52,7 @@
                                         <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black; padding: .375rem .75rem;" maxlength="250" id="inptPrcTitle"
                                                [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: isPsTitleBehaviorErrorState}" (keydown.enter)="customAddPsValidate()"
                                                *ngIf="!isPricingStrategyTooltipEnabled" />
-                                        <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black;" maxlength="250" id="inptPrcTitle"
+                                        <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black; padding: .375rem .75rem;" maxlength="250" id="inptPrcTitle"
                                                [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: isPsTitleBehaviorErrorState}" (keydown.enter)="customAddPsValidate()" 
                                                *ngIf="isPricingStrategyTooltipEnabled" #pricingStrategyTooltipTarget="ngbTooltip" ngbTooltip="Start by adding a Pricing Strategy"
                                                tooltipClass="pricing-strategy-input-tooltip" placement="top" triggers="manual" [autoClose]="false" />
