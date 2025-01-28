@@ -63,7 +63,7 @@ export class ComplexStackingModalComponent implements OnInit {
             title: 'ECAP Price',
         }, {
             field: 'ECAP_TYPE',
-            title: 'ECAP Type',
+            title: 'Rebate Type',
         }
     ]
 
@@ -280,8 +280,9 @@ export class ComplexStackingModalComponent implements OnInit {
                 for (let j = 0; j < dealData.length; j++) {
                     const gridData = dealData[j].gridData;
                     gridData.push({ WF_STG_CD: "Total RPU:", MAX_RPU: "$ " + dealData[j].rpuTotal.MAX_RPU.sum.toFixed(2) })
-                    gridData.push({});                    
-                    utils.sheet_add_json(SHEET, gridData, { header: HEADER, origin: -1, skipHeader: false });                    
+                    gridData.push({});
+                    utils.sheet_add_aoa(SHEET, [this.COLUMNS_CONFIG.map((item) => item.title)], { origin: -1 });
+                    utils.sheet_add_json(SHEET, gridData, { header: HEADER, origin: -1, skipHeader: true });                    
                 }                
             }
             
