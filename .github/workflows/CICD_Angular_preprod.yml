@@ -165,7 +165,7 @@ jobs:
 
           # Create the headers
           $headers = @{
-              "Authorization" = "token $accessToken"
+              "Authorization" = "Bearer $accessToken"
               "Accept" = "application/vnd.github+json"
               "Content-Type" = "application/json"
           }
