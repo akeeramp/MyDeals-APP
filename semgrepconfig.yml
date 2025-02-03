@@ -1,0 +1,12 @@
+# Enter the tag for your scan. If you do not correctly tag the scan you may not be able to see the results and/or become non-compliant in ASPN.
+# Depending on the branch you are working in, you may need to update the tag in this file.
+
+# Example tags: only 1 tag needed
+# Test
+tags:
+  #- iapm-7504-dev
+  - iapm-14464-prod
+  # - iapm-<app_id>-dev
+
+# Tags that end in "-prod" will be considered in-scope for ASPN scoring. You need to have at least 1 scan tagged with prod to be compliant. 
+# Tags that end in "-dev" will not be calculated by ASPN. However the tag is needed for access to the findings in the Semgrep UI
