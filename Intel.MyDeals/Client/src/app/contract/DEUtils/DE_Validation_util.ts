@@ -115,6 +115,12 @@ export class DE_Validation_Util {
                 isShowStopperError = true;
             }
 
+            if (item["OEM_PLTFRM_LNCH_DT"] && item["OEM_PLTFRM_EOL_DT"] && item["OEM_PLTFRM_LNCH_DT"] !== "" && item["OEM_PLTFRM_EOL_DT"] !== "" && StaticMomentService.moment(item["OEM_PLTFRM_EOL_DT"]).isSameOrBefore(item["OEM_PLTFRM_LNCH_DT"])) {
+                item._behaviors.isError['OEM_PLTFRM_EOL_DT'] = true;
+                item._behaviors.validMsg['OEM_PLTFRM_EOL_DT'] = "OEM Platform EOL Date must be after the OEM Platform Launch Date";
+                isShowStopperError = true;
+            }
+
             if (item["REBATE_BILLING_START"] == undefined || item["REBATE_BILLING_START"] == null || item["REBATE_BILLING_START"] == "" || item["REBATE_BILLING_START"] == "Invalid date") {
                 item._behaviors.isError['REBATE_BILLING_START'] = true;
                 item._behaviors.validMsg['REBATE_BILLING_START'] = "Start date is required";

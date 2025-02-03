@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { MomentService } from "../../../shared/moment/moment.service";
+import { MomentService, StaticMomentService } from "../../../shared/moment/moment.service";
 
 @Component({
     selector: "kendo-calendar-angular",
@@ -99,7 +99,13 @@ import { MomentService } from "../../../shared/moment/moment.service";
 			}
 		}
 		if (this.data.isOEM) {
-			this.isValidDate = true;
+			if (this.errorMsg != undefined) { // Put in to clear out old error messages
+				this.errorMsg = undefined;
+			}
+			if (this.data.OEM_PLTFRM_LNCH_DT !== null && this.data.colName === "OEM_PLTFRM_EOL_DT" && (StaticMomentService.moment(value).isSameOrBefore(this.data.OEM_PLTFRM_LNCH_DT))) {
+				this.errorMsg = "OEM Platform EOL Date must be after the OEM Platform Launch Date";
+				this.isValidDate = false;
+			}
 		}
     }
 	onKeyDown(event) {

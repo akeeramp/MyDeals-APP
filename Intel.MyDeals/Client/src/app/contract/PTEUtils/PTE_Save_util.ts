@@ -194,6 +194,10 @@ export class PTE_Save_Util {
             if ((item["END_DT"] == "" || item["END_DT"] == null) && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1") && !isTenderContract) {
                 item["END_DT"] = contractData.END_DT;
             }
+            if (item["OEM_PLTFRM_LNCH_DT"] && item["OEM_PLTFRM_EOL_DT"] && item["OEM_PLTFRM_LNCH_DT"] !== "" && item["OEM_PLTFRM_EOL_DT"] !== "" && StaticMomentService.moment(item["OEM_PLTFRM_EOL_DT"]).isSameOrBefore(item["OEM_PLTFRM_LNCH_DT"])) {
+                item._behaviors.isError['OEM_PLTFRM_EOL_DT'] = true;
+                item._behaviors.validMsg['OEM_PLTFRM_EOL_DT'] = "OEM Platform EOL Date must be after the OEM Platform Launch Date";
+            }
             if ((item["PROD_INCLDS"] == null || item["PROD_INCLDS"] == undefined || item["PROD_INCLDS"] == '') && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1") && (item['NUM_OF_DENSITY'] == undefined || item['NUM_OF_DENSITY'] == "1")) {
                 item._behaviors.isError['PROD_INCLDS'] = true;
                 item._behaviors.validMsg['PROD_INCLDS'] = "Field is required";

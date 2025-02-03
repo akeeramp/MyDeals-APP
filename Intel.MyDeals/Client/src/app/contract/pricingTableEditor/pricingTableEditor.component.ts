@@ -232,6 +232,10 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     width = '600px';
                     name = this.field;
                     data = { colName: name, items: { data: this.source }, cellCurrValues: selVal, contractStartDate: CONTRACT_START_DATE, contractEndDate: CONTRACT_END_DATE, isConsumption: IS_CONSUMPTION, isOEM: IS_OEM, contractIsTender: VM.isTenderContract };
+                    if (IS_OEM) {
+                        data['OEM_PLTFRM_LNCH_DT'] = this.instance.getDataAtRowProp(this.selRow, 'OEM_PLTFRM_LNCH_DT') != null ? this.instance.getDataAtRowProp(this.selRow, 'OEM_PLTFRM_LNCH_DT') : null;
+                        data['OEM_PLTFRM_EOL_DT'] = this.instance.getDataAtRowProp(this.selRow, 'OEM_PLTFRM_EOL_DT') != null ? this.instance.getDataAtRowProp(this.selRow, 'OEM_PLTFRM_EOL_DT') : null;
+                    }
                     panelClass = 'date-calendar-pop-up';
                 }
                 VM.editorOpened = true;
