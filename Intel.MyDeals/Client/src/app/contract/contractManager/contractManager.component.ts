@@ -1378,10 +1378,10 @@ export class contractManagerComponent implements OnInit, OnDestroy{
 
     IsCSReviewed(cmplxReviewedBy) {
         const USER_ROLE = (<any>window).usrRole;
-        if (USER_ROLE === "DA" && cmplxReviewedBy === "DA_APPROVED") {
+        if (USER_ROLE === "DA" && cmplxReviewedBy === "2") {
             return true;
         }
-        if (USER_ROLE !== "DA" && (cmplxReviewedBy === "GA_APPROVED" || cmplxReviewedBy === "DA_APPROVED")) {
+        if (USER_ROLE !== "DA" && (cmplxReviewedBy === "1" || cmplxReviewedBy === "2")) {
             return true;
         }
         return false;

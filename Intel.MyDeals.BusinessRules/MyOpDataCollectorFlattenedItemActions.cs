@@ -182,10 +182,10 @@ namespace Intel.MyDeals.BusinessRules
                 //Complex Stacking
                 if (r.Dc.DcType == "PRC_ST" && action == "ComplexStacking")
                 {
-                    if (isCmplxStkgRvwd == "DA_APPROVED" || isCmplxStkgRvwd == "GA_APPROVED")
+                    if (isCmplxStkgRvwd == "2" || isCmplxStkgRvwd == "1")
                     {
                         objsetActionItem.Actions[action] = true;
-                        if (isCmplxStkgRvwd == "GA_APPROVED" && role == RoleTypes.DA)
+                        if (isCmplxStkgRvwd == "1" && role == RoleTypes.DA)
                         {
                             objsetActionItem.Actions[action] = false;
                             objsetActionItem.ActionReasons[action] = objsetActionItem.ActionReasons.ContainsKey(action)

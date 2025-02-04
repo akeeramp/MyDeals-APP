@@ -208,6 +208,7 @@ namespace Intel.MyDeals.Controllers.API
             foreach (OpDataCollectorFlattenedItem item in data)
             {
                 item[AttributeCodes.CAP_MISSING_FLG] = "0";
+                item[AttributeCodes.IS_CS_GRP_REVIEWED] = "0";
             }
 
             return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(data, savePacket)
