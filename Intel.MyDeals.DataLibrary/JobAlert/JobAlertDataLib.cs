@@ -19,7 +19,7 @@ namespace Intel.MyDeals.DataLibrary
         public string SendJobAlerts()
         {
 
-            Procs.dbo.PR_MYDL_CHECK_JOB_HEALTH cmd = new Procs.dbo.PR_MYDL_CHECK_JOB_HEALTH() { };
+            Procs.dbo.PR_MYDL_JOB_HLTH_ALERT cmd = new Procs.dbo.PR_MYDL_JOB_HLTH_ALERT() { };
 
             try
             {

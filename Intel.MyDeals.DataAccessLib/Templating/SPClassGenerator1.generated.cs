@@ -20014,18 +20014,17 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
-        /// ID: 1509944801
-        /// Modified: 12/30/2024 11:46:46 PM
-        /// Parameters: 0
-        ///</summary>
-        public partial class PR_MYDL_CHECK_JOB_HEALTH : SP
+		/// ID: 1013227010
+		/// Modified: 1/30/2025 3:57:28 AM
+		/// Parameters: 0
+		///</summary>
+		public partial class PR_MYDL_JOB_HLTH_ALERT : SP
         {
-            public PR_MYDL_CHECK_JOB_HEALTH()
+            public PR_MYDL_JOB_HLTH_ALERT()
             {
                 DatabaseName = "MyDeals";
-                StoredProdedureName = "[dbo].[PR_MYDL_CHECK_JOB_HEALTH]";
+                StoredProdedureName = "[dbo].[PR_MYDL_JOB_HLTH_ALERT]";
             }
-
         }
 
     }
