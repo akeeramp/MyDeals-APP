@@ -402,7 +402,7 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
 
-                    if (worksheet.Dimension != null)
+                    if (worksheet.Dimension != null & excelPackage.Workbook.Worksheets.Count == 1)
                     {
                         // get number of rows and columns in the sheet
                         int iRows = worksheet.Dimension.Rows;
