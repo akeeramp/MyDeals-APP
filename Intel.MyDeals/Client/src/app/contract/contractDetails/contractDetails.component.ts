@@ -369,7 +369,10 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         this.contractData["END_QTR"] = this.END_QTR;
         this.contractData["END_YR"] = this.END_YR;
         this.contractData["TITLE"] = this.TITLE;
-        this.contractData["CONTRACT_TYPE"] = this.CONTRACT_TYPE.DROP_DOWN;
+        if (this.CONTRACT_TYPE)
+            this.contractData["CONTRACT_TYPE"] = this.CONTRACT_TYPE.DROP_DOWN;
+        else
+            this.contractData["CONTRACT_TYPE"] = "";
         this.contractData["displayTitle"] = this.TITLE;
         this.contractData["START_DT"] = this.momentService.moment(this.START_DT).format("MM/DD/YYYY");
         this.contractData["START_QTR"] = this.START_QTR;
