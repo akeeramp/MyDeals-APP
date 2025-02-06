@@ -1903,7 +1903,7 @@ namespace Intel.MyDeals.BusinessRules
             // "MDF", "NRE", "NRE LUMP - SUM BUDGET", "MDF / NRE LUMP - SUM BUDGET", "MDF / NRE LUMP - SUM BUDGET", "MDF ACCRUAL", "MDF SPIF / PER UNIT ACTIVITY", "NRE ACCRUAL", "MDF / NRE ACCRUAL"
             List<string> disabledRebateTypes = new List<string> { "MDF", "NRE", "NRELUMP-SUMBUDGET", "MDF/NRELUMP-SUMBUDGET", "MDF/NRELUMP-SUMBUDGET", "MDFACCRUAL", "MDFSPIF/PERUNITACTIVITY", "NREACCRUAL", "MDF/NREACCRUAL" };
             string deRebateTypeSanitized = string.Join("", deRebateType.AtrbValue.ToString().ToUpper().Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            if (deHasTracker.AtrbValue.ToString() != "1" && disabledRebateTypes.Contains(deRebateTypeSanitized))
+            if (deHasTracker != null && deHasTracker.AtrbValue.ToString() != "1" && disabledRebateTypes.Contains(deRebateTypeSanitized))
             {
                 deRebateType.AddMessage("Existing Rebate Type is not valid anymore, please make a valid selection");
             } else {
