@@ -366,8 +366,10 @@ export class PTE_Validation_Util {
         }
         else if (cond == 'invalidDate' && elem == 'START_DT') {
             if (item._behaviors.validMsg[elem]) {
-                item._behaviors.validMsg[elem] += "\nAccrual Date needs to start on or before the Draining dates";
-            } else {
+                if (!(item._behaviors.validMsg[elem].includes('Accrual Date needs'))) {
+                    item._behaviors.validMsg[elem] += "\nAccrual Date needs to start on or before the Draining dates";
+                }
+        } else {
                 item._behaviors.validMsg[elem] = "Accrual Date needs to start on or before the Draining dates";
             }
         }
