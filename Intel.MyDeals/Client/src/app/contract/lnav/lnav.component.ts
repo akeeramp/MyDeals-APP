@@ -535,12 +535,6 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
         item.MEETCOMP_TEST_RESULT = "Not Run Yet";
         const custId = this.contractData.CUST_MBR_SID;
         const contractId = this.contractData.DC_ID;
-
-        // define new TITLE
-        while (titles.indexOf(item.TITLE) >= 0) {
-            item.TITLE += " (copy)";
-        }
-
         if (isPs == true) {
             const pctObject = item.PRC_TBL;
             const slectedProg = pctObject.filter(x => x.OBJ_SET_TYPE_CD == 'PROGRAM');
@@ -553,6 +547,14 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
             if (slectedProg.length > 0) {
                 alert('Copy for Program Deal is Prevented. Instead use Lump Sum Deal');
             }
+        }
+
+        // define new TITLE
+        while (titles.indexOf(item.TITLE) >= 0) {
+            item.TITLE += " (copy)";
+        }
+
+        if (isPs == true) {
             this.lnavService.copyPricingStrategy(custId, contractId, id, item).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                 this.loggerService.success("Copied the " + objType + ".", "Copy Successful");
                 this.refreshContractData(contractId);
