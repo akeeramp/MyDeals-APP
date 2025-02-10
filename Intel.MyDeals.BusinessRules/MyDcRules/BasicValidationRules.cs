@@ -883,7 +883,9 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                                 AttributeCodes.CONSUMPTION_REASON,
                                 AttributeCodes.CONSUMPTION_REASON_CMNT,
-                                AttributeCodes.CONSUMPTION_TYPE
+                                AttributeCodes.CONSUMPTION_TYPE,
+                                AttributeCodes.CONSUMPTION_SYS_CONFIG,
+                                AttributeCodes.SYS_PRICE_POINT
                             })
                         }
                     }
