@@ -79,7 +79,7 @@ export class CopyContractComponent implements OnDestroy {
                             }
                         }
                         if (isContractCntnnonprog == true) {
-                            alert('Copy for Program Deal is Prevented. Instead use Lump Sum Deal');
+                            alert('This contract can not be copied as it has only Program Deals');
                         }
                         else {
                             this.dialogRef.close(this.copyCntrctSelectedItem);
