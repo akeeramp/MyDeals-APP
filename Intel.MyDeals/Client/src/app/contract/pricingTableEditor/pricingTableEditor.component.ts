@@ -2089,6 +2089,17 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                                 }
                             }
                         } else {
+                            let selProd;  
+                            let deletedProd = undefined;
+                            
+                            selProd = savedResult.selectedProducts.filter(x => x.DCID == key)[0];
+                            if (selProd) {
+                                //Until all the invalid products are selected from product corrector , don’t update the handson table
+                                rowProdCorrectordat = PTE_CellChange_Util.getOperationProdCorr(selProd, deletedProd, products);
+                                PTE_CellChange_Util.autoFillCellOnProd(rowProdCorrectordat[0], this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, rowProdCorrectordat[1]);
+                            }
+
+
                             let deletedProds = savedResult.deletedProducts;
                             if (deletedProds && deletedProds.length > 0) {
                                 let deletedRowIdList = distinct(deletedProds, 'DC_ID').map(item => item['DC_ID']);
