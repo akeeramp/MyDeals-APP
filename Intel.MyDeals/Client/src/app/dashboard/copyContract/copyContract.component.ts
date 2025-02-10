@@ -62,9 +62,40 @@ export class CopyContractComponent implements OnDestroy {
         this.dialogRef.close();
     }
 
+    onCopyOkClick(): void {
+        let isContractCntnnonprog = true;
+        if (this.copyCntrctSelectedItem != null) {
+            this.ctrctWdgtSvc.readCopyContract(this.copyCntrctSelectedItem['CNTRCT_OBJ_SID'])
+                .pipe(takeUntil(this.destroy$))
+                .subscribe(async (response: Array<any>) => {
+                    if (response != null) {
+                        const selectedPrcSt = response[0].PRC_ST;
+                        for (let i = 0; i < selectedPrcSt.length; i++) {
+                            const prc_st = selectedPrcSt[i].PRC_TBL;
+                            const slectedProg = prc_st.filter(x => x.OBJ_SET_TYPE_CD != 'PROGRAM');
+                            if (slectedProg.length > 0) {
+                                isContractCntnnonprog = false;
+                                break;
+                            }
+                        }
+                        if (isContractCntnnonprog == true) {
+                            alert('Copy for Program Deal is Prevented. Instead use Lump Sum Deal');
+                        }
+                        else {
+                            this.dialogRef.close(this.copyCntrctSelectedItem);
+                        }
+                    }
+                },
+                    function (error) {
+                        this.logger.error("CopContract::loadCopyContract::Unable to GetMyCustomerNames.", error);
+                    });
+        }
+    }
+
     onCopyCntrctSearchTextChanged(searchValue): void {
         this.copyCntrctSelectedItem = {};
         this.isCreateDisabled = true;
+        
         if(this.orgGridData && this.orgGridData['data'] && this.orgGridData['data'].length>0){
             this.gridData['data'] = this.orgGridData['data'].filter(
                 item => ((item.TITLE.toLowerCase()).includes(searchValue.toLowerCase())
