@@ -216,6 +216,8 @@
                                 <div class="lnav-sum-menu-item" style="padding: 4px 4px 4px 22px !important">
                                     <div id="approvalDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'approvalDiv' || selectedModel === 'Manage'}" (click)="loadModel('approvalDiv')">Approvals</div>
                                     <div id="overlapDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'overlapDiv'}" (click)="loadModel('overlapDiv')">Overlapping Deals</div>
+                                    <div id="complexStackingDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'complexStackingDiv'}" (click)="loadModel('complexStackingDiv')">Complex Stacking</div>
+
                                     <div *ngIf="!CAN_VIEW_COST_TEST" id="groupExclusionDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'groupExclusionDiv'}" (click)="loadModel('groupExclusionDiv')">Grouping Exclusions</div>
                                     <div *ngIf="usrRole=='RA'" id="contractDetailsDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'contractDetailsDiv'}" (click)="openDealEntryTab('ViewContractDetails')">Details</div>
                                     <div id="historyDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'historyDiv'}" (click)="loadModel('historyDiv')">History</div>

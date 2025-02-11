@@ -1,0 +1,66 @@
+﻿<div class="row" style="padding-top: 35px;" >
+    <div class="col-md-12" >
+        <div class="col-md-9">
+            <h3>Complex Stacking</h3>
+        </div>
+    </div>
+</div>
+<div id="sum-wrapper" class="new-view" *ngIf="!isExcludeGroup" style="padding-top: 35px;">
+    <div id="sum-header" style="min-width: 800px; margin: 0px;height:40px">
+        <div style="margin-top: 3px;">
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 30px;"  *ngIf="!isTenderDashboard"></td>
+                    <td style="width: 120px; text-align: center; line-height: 1.1em;" *ngIf="!isTenderDashboard">Pricing Strategy ID</td>
+                    <td style="width: 140px; text-align: center; line-height: 1em;" *ngIf="!isTenderDashboard">Pricing Strategy</td>
+                    <td  style="line-height: 1.1em; padding-left: 10px; text-align: center;" *ngIf="!isTenderDashboard">Complex Stacking</td>
+                </tr>
+            </table>
+            <hr />
+        </div>
+    </div>
+    <div id="sum-container">
+        <div class="sum-main-body">
+            <div class="sum-main-container">
+                <div *ngFor="let ps of pricingStrategyFilter;let psIndex=index"
+                     class="sumPsContainer">
+                    <table style="width: 100%" *ngIf="!isTenderDashboard" class="sumPsContainer">
+                        <tr>
+                            <td id="PRC_ST_{{ps.DC_ID}}" style="width: 30px; height: 30px;"
+                                (click)="isPSExpanded[psIndex]=!isPSExpanded[psIndex]">
+                                <i class="collapseALL chevron linkable" [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
+                            </td>
+
+                            <td style="width: 120px; text-align: center;">
+                                <div>
+                                    {{ps.DC_ID}}
+                                </div>
+                            </td>
+
+                            <td style="width: 140px; text-align: center;">
+                                <div [textContent]="ps.TITLE" class="bolder"
+                                     title="Click to open the Pricing Strategy in the Contract Editor" ></div>
+                            </td>
+                            <td style="text-align: center;">
+                                <div *ngIf="IsCSReviewed(ps.IS_CS_GRP_REVIEWED);then rev_content else non_rev_content">here is ignored</div>
+                                <ng-template #rev_content>
+                                    <i class="intelicon-protection-checked-verified-solid bigIcon validf_Complete" title="Reviewed"></i>
+                                </ng-template>
+                                <ng-template #non_rev_content>
+                                    <i  class="intelicon-information-solid bigIcon validf_Valid" title="Not reviewed yet"></i>
+                                </ng-template>
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="PSData_{{psIndex}}" [ngClass]="{'show': isTenderDashboard || isPSExpanded[psIndex], 'collapse multi-collapse': !isTenderDashboard}">
+                        <complex-stacking-modal *ngIf="isPSExpanded[psIndex]" [isModel]="false" [inputData]="ps"></complex-stacking-modal>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <loading-panel-angular [show]="isPctLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription">
+    </loading-panel-angular>
+</div>
+

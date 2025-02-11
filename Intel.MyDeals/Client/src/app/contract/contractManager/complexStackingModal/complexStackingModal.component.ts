@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit, QueryList, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, Inject, Input, OnInit, Optional, QueryList, ViewChildren } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { GridComponent, GridDataResult } from "@progress/kendo-angular-grid";
 import { aggregateBy, AggregateDescriptor, AggregateResult } from "@progress/kendo-data-query";
@@ -23,7 +23,7 @@ export interface GroupingGridData {
     templateUrl: 'Client/src/app/contract/contractManager/complexStackingModal/complexStackingModal.component.html',
     styleUrls: ['Client/src/app/contract/contractManager/complexStackingModal/complexStackingModal.component.css']
 })
-export class ComplexStackingModalComponent implements OnInit {
+export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
 
     private isLoading = false;
     private readonly COLUMNS_CONFIG = [        
@@ -70,21 +70,27 @@ export class ComplexStackingModalComponent implements OnInit {
     private groupedData = {};
     public detailData = {};
     public displayId = {};
-    public exportData = {};    
+    public exportData = {};
 
+    @Input() isModel = true;
+    @Input() inputData :any;
     // Deal Ids are in `data.dealIds: number[]`
-    constructor(@Inject(MAT_DIALOG_DATA) public data,
-        public DIALOG_REF: MatDialogRef<ComplexStackingModalComponent>,
+    constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data,
+        @Optional() public DIALOG_REF: MatDialogRef<ComplexStackingModalComponent>,
         private complexStackingModalService: ComplexStackingModalService,
         private momentService: MomentService,
         private loggerService: logger) { }
+    
 
     private readonly offset = 25;
     private left = window.innerWidth / 3;
     private top = window.innerHeight / 3;
     private kendoWindowWidth = 950;
     private kendoWindowHeight = 430;
-
+    private spinnerMessageDescription = "Loading Complex Stacking Data."
+    public spinnerMessageHeader: any;
+    public isBusyShowFunFact: any;
+    public msgType: any;
     private kendoWindowOnEnd(): void {
         const CURRENT_WINDOW_WIDTH = window.innerWidth;
         const WINDOW_HEIGHT = window.innerHeight;
@@ -174,29 +180,21 @@ export class ComplexStackingModalComponent implements OnInit {
     }
 
     formComplexStackingGroup() {
-        const ovlpObjs = this.data.ovlpObjs;
-        if (ovlpObjs.GroupItems && ovlpObjs.GroupItems.length > 0) {            
-            this.dealInfos = ovlpObjs.DealInfos;
-            this.groupedData = _.mapValues(_.groupBy(ovlpObjs.GroupItems, 'PickedDeal'), gList => gList.map(grp => _.omit(grp, 'PickedDeal')));
-            const dealIds = Object.keys(this.groupedData);
-            forEach(dealIds, (dealId) => {
-                this.displayId[dealId] = false;
-                const tempObj = {};
-                const grpArr = this.groupedData[dealId];
-                tempObj["label"] = "DEAL " + dealId;
-                tempObj["gridlabel"] = "Single Overlap";
-                tempObj["hasMoreThanOneGrp"] = false;
-
-                if (grpArr.length > 1) {
-                    tempObj["label"] = "GROUP " + dealId;
-                    tempObj["gridlabel"] = "Multiple Overlaps";
-                    tempObj["hasMoreThanOneGrp"] = true;
-                }
-                tempObj["dealId"] = dealId;
-                tempObj["psId"] = grpArr[0].ObjID;
-                this.grpDeals.push(tempObj);
-            });
+        if (this.isModel) {
+            this.processResponse(this.data.ovlpObjs);
+            return;
         }
+        //this.setBusy("Complex Stacking", "Fetching complex stacking details", "Info", true);
+        this.isLoading = true;
+        const data = [{ ObjId: this.inputData.DC_ID, ObjType: 2 }] ;
+        this.complexStackingModalService.getComplexStackingGroup(data).toPromise()
+            .then((response) => {
+                this.processResponse(response);
+            })
+            .catch((error) => {
+                this.isLoading = false;
+                this.loggerService.error('Get Complex Stacking Deal Group', error);
+            });
     }
 
     public expandDetailsBy = (dataItem): number => {
@@ -221,6 +219,39 @@ export class ComplexStackingModalComponent implements OnInit {
     };
 
     private acceptedItems = {};
+
+    private processResponse(response: any) {
+        this.isLoading = false;
+        if (response.GroupItems && response.GroupItems.length > 0) {
+
+            this.data = {
+                ovlpObjs: response
+            };
+            const ovlpObjs = this.data.ovlpObjs;
+            if (ovlpObjs.GroupItems && ovlpObjs.GroupItems.length > 0) {
+                this.dealInfos = ovlpObjs.DealInfos;
+                this.groupedData = _.mapValues(_.groupBy(ovlpObjs.GroupItems, 'PickedDeal'), gList => gList.map(grp => _.omit(grp, 'PickedDeal')));
+                const dealIds = Object.keys(this.groupedData);
+                forEach(dealIds, (dealId) => {
+                    this.displayId[dealId] = false;
+                    const tempObj = {};
+                    const grpArr = this.groupedData[dealId];
+                    tempObj["label"] = "DEAL " + dealId;
+                    tempObj["gridlabel"] = "Single Overlap";
+                    tempObj["hasMoreThanOneGrp"] = false;
+
+                    if (grpArr.length > 1) {
+                        tempObj["label"] = "GROUP " + dealId;
+                        tempObj["gridlabel"] = "Multiple Overlaps";
+                        tempObj["hasMoreThanOneGrp"] = true;
+                    }
+                    tempObj["dealId"] = dealId;
+                    tempObj["psId"] = grpArr[0].ObjID;
+                    this.grpDeals.push(tempObj);
+                });
+            }
+        }
+    }
 
     onCheckboxChange(checkBoxType, event, data) {
         const dealId = data.dealId;
@@ -253,7 +284,7 @@ export class ComplexStackingModalComponent implements OnInit {
                 )
                 grpArr[i]["gridData"] = groupedDeals;
                 grpArr[i]["total"] = groupedDeals.length
-                grpArr[i]["rpuTotal"] = aggregateBy(groupedDeals, this.GROUPING_AGGREGATES)                    
+                grpArr[i]["rpuTotal"] = aggregateBy(groupedDeals, this.GROUPING_AGGREGATES)
             }
             tempObj["label"] = "DEAL " + dealId;
             if (grpArr.length > 1) {
@@ -298,4 +329,34 @@ export class ComplexStackingModalComponent implements OnInit {
         }
     }
 
+    setBusy(msg, detail, msgType, showFunFact) {
+        setTimeout(() => {
+            const newState = msg != undefined && msg !== "";
+            // if no change in state, simple update the text
+            if (this.isLoading === newState) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+                return;
+            }
+            this.isLoading = newState;
+            if (this.isLoading) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+            } else {
+                setTimeout(() => {
+                    this.spinnerMessageHeader = msg;
+                    this.spinnerMessageDescription = !detail ? "" : detail;
+                    this.msgType = msgType;
+                    this.isBusyShowFunFact = showFunFact;
+                }, 100);
+            }
+        });
+    }
+    ngAfterViewInit(): void {
+        
+    }
 }

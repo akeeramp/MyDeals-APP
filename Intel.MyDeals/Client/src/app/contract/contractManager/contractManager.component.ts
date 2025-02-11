@@ -19,6 +19,7 @@ import { takeUntil } from "rxjs/operators";
 import { ComplexStackingModalComponent } from "./complexStackingModal/complexStackingModal.component";
 import { DynamicObj } from "../../admin/employee/admin.employee.model";
 import { ComplexStackingModalService } from "./complexStackingModal/complexStackingModal.service";
+import { ComplexStackingDialogService } from "./complexStackingModal/complexStackingDialog.service";
 
 export interface contractIds {
     Model: string;
@@ -35,7 +36,7 @@ export interface contractIds {
     templateUrl: "Client/src/app/contract/contractManager/contractManager.component.html",
     styleUrls: ['Client/src/app/contract/contractManager/contractManager.component.css']
 })
-export class contractManagerComponent implements OnInit, OnDestroy{
+export class contractManagerComponent implements OnInit, OnDestroy {
     runIfStaleByHours = 3;
     forceRunValue = true;
     enabledPCT = false;
@@ -50,33 +51,33 @@ export class contractManagerComponent implements OnInit, OnDestroy{
     isRunning: boolean = false;
     messages: any;
     hideIfNotPending: boolean;
-    pendingWarningActions= false;
-    custAccptButton: any ='';
-    showPendingInfo: boolean= true;
-    showPendingFile: boolean= false;
-    showPendingC2A: boolean= false;
+    pendingWarningActions = false;
+    custAccptButton: any = '';
+    showPendingInfo: boolean = true;
+    showPendingFile: boolean = false;
+    showPendingC2A: boolean = false;
     showPendingWarning: boolean = false;
     showData: boolean = false;
-    requestBody: any ={};
-    showMeetCompDetails: boolean= false;
+    requestBody: any = {};
+    showMeetCompDetails: boolean = false;
     public uploadSaveUrl = "/FileAttachments/Save";
     grid_Result: any;
-    showMultipleDialog: boolean= false;
+    showMultipleDialog: boolean = false;
     pteTableData: any;
     files = [];
     psId = 0;
     ptId = 0;
     parent_dcId: any;
-    allPTEData: any =[];
+    allPTEData: any = [];
     isToggle: boolean;
     loadPerf: boolean;
     csLoading: boolean = false;
     constructor(protected dialog: MatDialog,
-                private loggerSvc: logger,
-                private contractManagerSvc: contractManagerservice,
-                private complexStackingService: ComplexStackingModalService,
-                private lnavSvc: lnavService,
-                private momentService: MomentService) {}
+        private loggerSvc: logger,
+        private contractManagerSvc: contractManagerservice,
+        private complexStackingDialogSvc: ComplexStackingDialogService,
+        private lnavSvc: lnavService,
+        private momentService: MomentService) { }
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
     private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
 
@@ -84,8 +85,8 @@ export class contractManagerComponent implements OnInit, OnDestroy{
     PCTResultView = false;
     public submitModal = false;
     OtherType = []; isECAP = []; isKIT = [];
-    @Input() public contractData:any;
-    @Input() UItemplate:any;
+    @Input() public contractData: any;
+    @Input() UItemplate: any;
     @Output() refreshedContractData = new EventEmitter<any>();
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
     @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
@@ -95,15 +96,15 @@ export class contractManagerComponent implements OnInit, OnDestroy{
     public isLoading = false;
     private dirty = false;
     userRole = ""; canEmailIcon = true;
-    isPTEToolsOpen =[];
+    isPTEToolsOpen = [];
     isPSExpanded = []; isPTExpanded = {}; TrackerNbr = {}; emailCheck = {}; reviseCheck = {}; apprvCheck = {};
     private isCustAcptReadOnly: boolean = false;
     public state: State[] = [];
-    grid = { isECAPGrid: false, KITGrid: false, OtherGrid:false}
-    public gridData: GridDataResult[]= [];
+    grid = { isECAPGrid: false, KITGrid: false, OtherGrid: false }
+    public gridData: GridDataResult[] = [];
     gridDataSet = {}; approveCheckBox = false; emailCheckBox = false; reviseCheckBox = false;
     titleFilter = ""; canActionIcon = true; public isAllCollapsed = true; canEdit = true;
-    private windowOpened= false;
+    private windowOpened = false;
     private windowTop = 170; windowLeft = 50; windowWidth = 620; windowHeight = 238; windowMinWidth = 90; windowMinHeight = 50;
     public filteredData: any;
     public uploadSuccess = false;
@@ -111,7 +112,7 @@ export class contractManagerComponent implements OnInit, OnDestroy{
     private filteringData: any[][] = [];
     public pctClicked: boolean = false;
     public mctClicked: boolean = false;
-    public performanceTimes: any=[];
+    public performanceTimes: any = [];
     public drawChart: boolean = false;
     public isDeveloper: boolean;
     public isTester: boolean;
@@ -152,7 +153,7 @@ export class contractManagerComponent implements OnInit, OnDestroy{
     checkAllSelected() {
         let grid_Data = this.grid_Result.filter(item => {
             return !(item.SALESFORCE_ID !== "" && item.WF_STG_CD === 'Offer')
-            
+
         })
         if (grid_Data.length == 0) {
             return false;
@@ -191,7 +192,7 @@ export class contractManagerComponent implements OnInit, OnDestroy{
         this.isAllCollapsed = !this.isAllCollapsed;
     }
 
-    actionReason (actn, dataItem) {
+    actionReason(actn, dataItem) {
         let rtn = "";
         if (!!dataItem._actionReasons && !!dataItem._actionReasons[actn]) {
             rtn = dataItem._actionReasons[actn];
@@ -206,7 +207,7 @@ export class contractManagerComponent implements OnInit, OnDestroy{
         if (!d) d = "Draft";
         return this.getColor('stage', d);
     }
-   getColor(k, c) {
+    getColor(k, c) {
         if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
             return colorDictionary[k][c];
         }
@@ -219,12 +220,12 @@ export class contractManagerComponent implements OnInit, OnDestroy{
         if (format === "currency") {
             const isDataNumber = /^\d + $/.test(item[dim]);
             if (isDataNumber) return item[dim];
-            return (item[dim].includes('No')) ? item[dim]:'$' + item[dim];
+            return (item[dim].includes('No')) ? item[dim] : '$' + item[dim];
         }
         return item[dim];
     }
 
-    getmissingCapCostTitle (item) {
+    getmissingCapCostTitle(item) {
         let ret = "";
         if (item.CAP_MISSING_FLG !== undefined && item.CAP_MISSING_FLG == "1") {
             ret = "Missing CAP";
@@ -252,13 +253,13 @@ export class contractManagerComponent implements OnInit, OnDestroy{
             var anyEmailChecked = false;
             const isItemChecked = event.target.checked;
             if (checkBoxType == "approveCheckBox" && this.canAction('Approve', data, false) && this.canAction('Approve', data, true) && this.canActionIcon) {
-                this.emailCheck= {}; this.reviseCheck={};
-                this.apprvCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : ''; 
+                this.emailCheck = {}; this.reviseCheck = {};
+                this.apprvCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
             } else if (checkBoxType == "reviseCheckBox" && this.canAction('Revise', data, false) && this.canAction('Revise', data, true) && this.canActionIcon) {
-                this.emailCheck= {}; this.apprvCheck={};
+                this.emailCheck = {}; this.apprvCheck = {};
                 this.reviseCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
             } else if (checkBoxType == "emailCheckBox" && this.canEmailIcon) {
-                this.reviseCheck= {}; this.apprvCheck={};
+                this.reviseCheck = {}; this.apprvCheck = {};
                 this.emailCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
             }
 
@@ -269,23 +270,23 @@ export class contractManagerComponent implements OnInit, OnDestroy{
                 this.canActionIcon = true;
                 this.canEmailIcon = true;
             }
-    
+
         }
         else {
             var anyActionChecked = false;
             const isItemChecked = event.target.checked;
             if (checkBoxType == "approveCheckBox" && this.canAction('Approve', data, false) && this.canAction('Approve', data, true) && this.canActionIcon) {
-                this.emailCheck= {};
+                this.emailCheck = {};
                 this.apprvCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
                 if (this.reviseCheck[data.DC_ID])
                     this.reviseCheck[data.DC_ID] = false;
             } else if (checkBoxType == "reviseCheckBox" && this.canAction('Revise', data, false) && this.canAction('Revise', data, true) && this.canActionIcon) {
-                this.emailCheck= {};
+                this.emailCheck = {};
                 this.reviseCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
                 if (this.apprvCheck[data.DC_ID])
                     this.apprvCheck[data.DC_ID] = false;
             } else if (checkBoxType == "emailCheckBox" && this.canEmailIcon) {
-            this.emailCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
+                this.emailCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
             }
             let anyReviseChecked = false;
             this.contractData.PRC_ST?.map(x => {
@@ -306,7 +307,7 @@ export class contractManagerComponent implements OnInit, OnDestroy{
                 this.canEmailIcon = true;
             }
         }
-    
+
     }
     pendingChange() {
         let fromToggle = true;
@@ -325,12 +326,12 @@ export class contractManagerComponent implements OnInit, OnDestroy{
             if (runActions) this.actionItems(true, true);
         }
     }
-    closeDialog(){
+    closeDialog() {
         this.showPendingWarning = false;
-        if(this.pendingWarningActions == true){
+        if (this.pendingWarningActions == true) {
             this.isPending = !this.isPending;
             this.isToggle = this.isPending;
-            if(this.isPending){
+            if (this.isPending) {
                 this.contractData.CUST_ACCPT = "Pending";
             } else {
                 this.contractData.CUST_ACCPT = "Accepted";
@@ -355,10 +356,10 @@ export class contractManagerComponent implements OnInit, OnDestroy{
     actionItems(fromToggle, checkForRequirements) {
         if (fromToggle == undefined && checkForRequirements == undefined) {
             var ids = [];
-            var anyEmailChecked = false;   
+            var anyEmailChecked = false;
             let items = document.getElementsByClassName('psCheck-Email');
             for (var i = 0; i < items.length; i++)
-                if ((items[i]  as HTMLInputElement).checked) {
+                if ((items[i] as HTMLInputElement).checked) {
                     let selectedIdarray = items[i].getAttribute('id').split('_');
                     ids.push(parseInt(selectedIdarray[2]));
                     anyEmailChecked = true;
@@ -367,7 +368,7 @@ export class contractManagerComponent implements OnInit, OnDestroy{
             if (anyEmailChecked) {
                 this.openEmailMsg(ids);
                 return;
-            }         
+            }
         }
 
         if (fromToggle === undefined || fromToggle === null) fromToggle = false;
@@ -474,9 +475,9 @@ export class contractManagerComponent implements OnInit, OnDestroy{
             eBodyHeader: eBodyHeader
         }
 
-        var itemListRowString=``;
-        for(let i=0; i<data.items.length; i++){
-                itemListRowString =itemListRowString+ `<tr>
+        var itemListRowString = ``;
+        for (let i = 0; i < data.items.length; i++) {
+            itemListRowString = itemListRowString + `<tr>
                 <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><p style='color:#00a;'><a href='${data.items[i].contractUrl}'>` + data.items[i].CNTRCT + `</a>*</p> </td>
                 <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span>`+ data.items[i].C2A_ID + `</span> </td>
                 <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><p style='color:#00a;'><a href='${data.items[i].url}'>` + data.items[i].DC_ID + `</a>*</p> </td>
@@ -503,12 +504,12 @@ export class contractManagerComponent implements OnInit, OnDestroy{
                         <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Action</strong></th>
                     </tr>
                 </thead>
-                <tbody>`+itemListRowString+`
+                <tbody>`+ itemListRowString + `
                 </tbody>
             </table>
     
             <p><span style='font-size: 11px; color: black; font-weight: bold;'>*Links are optimized for Google Chrome</span></p>
-            <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${data.from}' style="color: #00a; font-size:14px;">` + data.from +`</a>.</span></p>
+            <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${data.from}' style="color: #00a; font-size:14px;">` + data.from + `</a>.</span></p>
         
             <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
             </div>
@@ -534,10 +535,10 @@ export class contractManagerComponent implements OnInit, OnDestroy{
         var allPs = this.contractData.PRC_ST;
         let fullId = items.getAttribute('id')
         let idStringArray = fullId.split('_');
-        let idString:string = idStringArray[2];
+        let idString: string = idStringArray[2];
         var id = parseInt(idString);
 
-        var result:any = $.grep(allPs, function (e: any) { return e.DC_ID === id; });
+        var result: any = $.grep(allPs, function (e: any) { return e.DC_ID === id; });
         var stage = result.length > 0 ? result[0].WF_STG_CD : "";
         var title = result.length > 0 ? result[0].TITLE : "";
         var hasL1 = result.length > 0 ? result[0].HAS_L1 !== "0" : false;
@@ -564,45 +565,47 @@ export class contractManagerComponent implements OnInit, OnDestroy{
     }
 
     distinctPrimitive(fieldName: string, id) {
-        this.filteringData[id][fieldName] = distinct(this.gridDataSet[id], fieldName).map(item =>{ 
+        this.filteringData[id][fieldName] = distinct(this.gridDataSet[id], fieldName).map(item => {
             if (this.momentService.moment(item[fieldName], "MM/DD/YYYY", true).isValid()) {
                 return { Text: new Date(item[fieldName]).toString(), Value: item[fieldName] };
-            } else if(item[fieldName] != undefined && item[fieldName] != null ) {
-                return item[fieldName].toString()}});
+            } else if (item[fieldName] != undefined && item[fieldName] != null) {
+                return item[fieldName].toString()
+            }
+        });
     }
     clkAllRow(e, checkBoxType) {
         this.isDirty.emit(true);
         const isItemChecked = e.currentTarget.checked;
-        this.emailCheck = {}; 
+        this.emailCheck = {};
         this.reviseCheck = {};
         this.apprvCheck = {};
         // In the UI based on sone conditions checkboxes will be shown on hidden, so while checking the check boxes on click of All check box we have to check the conditions and then select the check box
         if (this.contractData.PRC_ST !== undefined) {
             this.contractData.PRC_ST.map((x) => {
                 if (this.hasVertical(x)) {
-                    if (checkBoxType == "Approve" && this.canAction('Approve', x, false) && this.canAction('Approve', x, true) && this.canActionIcon) { 
+                    if (checkBoxType == "Approve" && this.canAction('Approve', x, false) && this.canAction('Approve', x, true) && this.canActionIcon) {
                         this.apprvCheck[x.DC_ID] = isItemChecked ? true : false;
                         this.approveCheckBox = true;
                         this.reviseCheckBox = false;
                         this.emailCheckBox = false;
-                      }
+                    }
                     else if (checkBoxType == "Revise" && this.canAction('Revise', x, false) && this.canAction('Revise', x, true) && this.canActionIcon) {
                         this.reviseCheck[x.DC_ID] = isItemChecked ? true : false;
                         this.approveCheckBox = false;
                         this.reviseCheckBox = true;
                         this.emailCheckBox = false;
-                        }
+                    }
                     else if (checkBoxType == "Email" && this.canEmailIcon) {
-                        this.emailCheck[x.DC_ID] = isItemChecked ? true : false;                        
+                        this.emailCheck[x.DC_ID] = isItemChecked ? true : false;
                         this.approveCheckBox = false;
                         this.reviseCheckBox = false;
-                        this.emailCheckBox = true; 
-                     }
+                        this.emailCheckBox = true;
+                    }
                 }
 
             });
         }
-        
+
     }
 
     canAction(actn, dataItem, isExists) {
@@ -635,7 +638,7 @@ export class contractManagerComponent implements OnInit, OnDestroy{
             if ((<any>window).usrVerticals.length > 0) {
                 const userVerticals = (<any>window).usrVerticals.split(",");
                 const dataVerticals = dataItem.VERTICAL_ROLLUP.split(",");
-                psHasUserVerticals =  userVerticals.some((v) => dataVerticals.indexOf(v) >= 0);
+                psHasUserVerticals = userVerticals.some((v) => dataVerticals.indexOf(v) >= 0);
             }
             return psHasUserVerticals;
             // else, DA is All Verticals and gets a free pass
@@ -643,10 +646,10 @@ export class contractManagerComponent implements OnInit, OnDestroy{
         return psHasUserVerticals;
     }
 
-  
-    concatDimElements (passedData, field) {
+
+    concatDimElements(passedData, field) {
         const data = [];
-        const checkField=!!passedData[field];
+        const checkField = !!passedData[field];
         if (checkField) {
             Object.keys(passedData[field]).forEach(function (key, index) {
                 if (key.indexOf("___") >= 0) {
@@ -654,7 +657,7 @@ export class contractManagerComponent implements OnInit, OnDestroy{
                 }
             });
         }
-        this.TrackerNbr[passedData.DC_ID]= data.join(", ");
+        this.TrackerNbr[passedData.DC_ID] = data.join(", ");
         const tmplt = '<span class="ng-binding">' + this.TrackerNbr[passedData.DC_ID] + '</span>';
         return tmplt;
     }
@@ -716,8 +719,8 @@ export class contractManagerComponent implements OnInit, OnDestroy{
 
     dataStateChange(state: DataStateChangeEvent, id): void {
         this.state[id] = state;
-        let data =  process(this.gridData[id].data,  this.state[id]);
-        this.gridDataSet[id]= data.data;
+        let data = process(this.gridData[id].data, this.state[id]);
+        this.gridDataSet[id] = data.data;
     }
     needMct() {
         if (!this.contractData.PRC_ST || this.contractData.PRC_ST.length === 0) return false;
@@ -739,59 +742,43 @@ export class contractManagerComponent implements OnInit, OnDestroy{
     }
 
     callComplexStacking(complexOverlapObjs: DynamicObj[], fromSubmit = false, fromToggle = false, checkForRequirements = false) {
+
         this.setBusy("Complex Stacking", "Fetching complex stacking details", "Info", true);
         this.isLoading = this.csLoading = true;
-        this.complexStackingService.getComplexStackingGroup(complexOverlapObjs).toPromise()
-            .then((response) => {
-                if (response.GroupItems && response.GroupItems.length > 0) {
-                    this.csLoading = this.isLoading = false;
-                    const DIALOG_REF = this.dialog.open(ComplexStackingModalComponent, {
-                        maxWidth: '80%',
-                        panelClass: 'complex-stacking-dialog',
-                        data: {
-                            ovlpObjs: response
-                        }
-                    });
-                    DIALOG_REF.afterClosed().subscribe(async (inputData: DynamicObj[]) => {
-                        if (inputData.length > 0) {
+
+        this.complexStackingDialogSvc.fetchAndShowComplexStakingOverlappingDeals(complexOverlapObjs, fromSubmit, fromToggle)
+            .subscribe(response => {
+                console.log(response);
+                if (!response.isLoading) {
+                    this.isLoading = false;
+                }
+                if (response.isAccepted) {
+                    if (response.isUpdatingDetails) {
+                        if (response.isLoading) {
                             this.setBusy("Complex Stacking", "Updating Complex Stacking details", "Info", true);
                             this.isLoading = true;
-                            const response = await this.complexStackingService.updateComplexStackingDealGroup(inputData).toPromise().catch((error) => {
-                                this.isLoading = false;
-                                this.loggerSvc.error('Get Update Complex Stacking Deal Group', error);
-                            });
-                            if (response) {
-                                this.isLoading = false;
-                                if (fromSubmit) {
-                                    this.loggerSvc.success('Will continue with submitting state.', 'Accepted Complex Stacking')
-                                    this.actionItems(null, null);   // Execute submission
-                                } else if (fromToggle) {
-                                    this.loggerSvc.success('Will continue with submitting state.', 'Accepted Complex Stacking')
-                                    this.actionItems(fromToggle, checkForRequirements);
-                                } else {
-                                    this.loggerSvc.success('Complex Stacking was reviewed.', 'Accepted Complex Stacking')
-                                    this.loadDetails();
-                                }
-                            }
                         } else {
-                            this.loggerSvc.warn('Must accept Complex Stacking to continue with submitting for Approval.', 'Submission Cancelled')
+                            this.isLoading = false;
                         }
-                    });
-                } else {
-                    this.csLoading = this.isLoading = false;
-                    this.loggerSvc.success('No complex grouping available.', 'Complex Stacking');
-                    if (fromSubmit) {
-                        this.actionItems(null, null);   // Execute submission
-                    } else {
+                    } else if (response.isLoading) {
+                        this.isLoading = false;
+                    }
+
+                    if (response.GroupingCount > 0) {
                         this.loadDetails();
                     }
                 }
-            })
-            .catch((error) => {
-                this.csLoading = this.isLoading = false;
-                this.loggerSvc.error('Get Complex Stacking Deal Group', error);
+
+                if (response.isFormSubmit) {
+                    this.actionItems(null, null);
+                } else if (response.isFormToggle) {
+                    this.actionItems(fromToggle, checkForRequirements);
+                } else if (response.GroupingCount < 0 && !response.isAccepted) {
+                    this.loadDetails();
+                }
             });
     }
+
 
     async submitContract() {
         this.actionItems(null, null);   // Execute submission

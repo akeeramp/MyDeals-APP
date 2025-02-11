@@ -53,7 +53,7 @@
                                 </ng-template>
                                 <ng-template kendoTabContent>
                                     <div *ngIf="isDETab">
-                                        <deal-editor (loadPTEditor)="loadPTEditor($event)" [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (refreshedContractData)="refreshContractData($event)"  (perfComp)="perfCompFn($event)" (addPerfTimes)="addPerfTimes($event)" (deTabInfmIconUpdate)="isDeTabInfmIconUpdate($event)" (pteRedir)="RedirectFn($event)">
+                                        <deal-editor (loadPTEditor)="loadPTEditor($event)" [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (refreshedContractData)="refreshContractData($event)" (perfComp)="perfCompFn($event)" (addPerfTimes)="addPerfTimes($event)" (deTabInfmIconUpdate)="isDeTabInfmIconUpdate($event)" (pteRedir)="RedirectFn($event)">
                                         </deal-editor>
                                     </div>
                                 </ng-template>
@@ -126,11 +126,14 @@
                     <meet-comp-contract [objSid]="contractData.DC_ID" [isAdhoc]="'1'" [objTypeId]="'1'" [cId]="c_Id" [pageNm]="'WIDGET'" [meetCompRefresh]="meetCompRefresh" (contractRefresh)="refreshContract($event)" (isDirty)="isFormDirty($event)"></meet-comp-contract>
                 </div>
                 <div *ngIf="selLnav=='Manage' || selLnav=='approvalDiv'" class="few-oracle-css">
-                    <contract-manager [contractData]="contractData" [UItemplate]="UItemplate" (modelChange)="loadModel($event)" (refreshedContractData)="refreshContractData($event)"  (isDirty)="isFormDirty($event)" >
+                    <contract-manager [contractData]="contractData" [UItemplate]="UItemplate" (modelChange)="loadModel($event)" (refreshedContractData)="refreshContractData($event)" (isDirty)="isFormDirty($event)">
                     </contract-manager>
                 </div>
                 <div *ngIf="selLnav=='overlapDiv'" class="few-oracle-css">
-                    <overlapping-deals [contractData]="contractData" [UItemplate]="UItemplate" (isDirty)="isFormDirty($event)" ></overlapping-deals>
+                    <overlapping-deals [contractData]="contractData" [UItemplate]="UItemplate" (isDirty)="isFormDirty($event)"></overlapping-deals>
+                </div>
+                <div *ngIf="selLnav=='complexStackingDiv'" class="few-oracle-css">
+                    <complex-stacking [contractData]="contractData" [UItemplate]="UItemplate"  (refreshedContractData)="refreshContractData($event)" (modelChange)="loadModel($event)" (isDirty)="isFormDirty($event)"></complex-stacking>
                 </div>
                 <div *ngIf="selLnav=='groupExclusionDiv'" class="few-oracle-css">
                     <manager-exclude-groups (modelChange)="loadModel($event)" [contractData]="contractData" [UItemplate]="UItemplate" [groupTab]="selLnav" [showPCT]="isShowPCT"></manager-exclude-groups>

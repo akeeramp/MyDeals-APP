@@ -1,16 +1,11 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<loading-panel-angular id="PTRLoading" class="ptrLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
+<loading-panel-angular *ngIf="isModel" id="PTRLoading" class="ptrLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
-<kendo-window title="Overlapping Deals - Complex Stacking" [keepContent]="true" [(left)]="left" [(top)]="top" [width]="kendoWindowWidth" [height]="kendoWindowHeight" (close)="closeModal()" class="k-wind-design headerTitlesOver windOverLaps" style="z-index:10001 !important">
-    <kendo-window-titlebar>
-        <span class="k-window-title">Overlapping Deals - Complex Stacking</span>
-        <button kendoWindowMaximizeAction></button>
-        <button kendoWindowRestoreAction></button>
-        <button kendoWindowCloseAction></button>
-    </kendo-window-titlebar>
-    <div class="main-container">
+
+<ng-template #complexStackingGridTemplate>
+    <div class="main-container windOverLaps" *ngIf="hasMultipleGroupings">
         <div class="grid-container">
-            <div id="sum-wrapper" class="contractManagerPlus" *ngIf="hasMultipleGroupings" style="padding-top: 75px;">
+            <div id="sum-wrapper" class="contractManagerPlus"  style="padding-top: 75px;">
                 <div id="sum-header" style="min-width: 800px;height:50px">
                     <div style="border-bottom: 1px solid #555; padding: 6px 0; background-color: #fff;">
                         <table style="width: 100%; margin-top:0;" class="tbl-header">
@@ -85,11 +80,28 @@
                         </div>
                     </div>
                 </div>
-            </div>    
+            </div>
         </div>
-        <div class="footer-container">
+        <div class="footer-container" >
             <button kendoButton class="btn btn-sm btn-primary lnk btnselectAccept overlapBtnSelect footer-button-height" icon="file-excel" (click)="exportDataToExcel()"> Export to Excel </button>
-            <button class='btn btn-sm btn-primary lnk btnYes btnselectAccept overlapBtnSelect footer-accept-button' (click)="acceptAllGroupings()"><i class='intelicon-check'></i> {{isAnyItemChecked() ? 'Accept Selected' : 'Accept All'}} </button>
+            <button [ngStyle]="{'display': isModel ? 'inline':'none' }" class='btn btn-sm btn-primary lnk btnYes btnselectAccept overlapBtnSelect footer-accept-button' (click)="acceptAllGroupings()"><i class='intelicon-check'></i> {{isAnyItemChecked() ? 'Accept Selected' : 'Accept All'}} </button>
         </div>
-                </div>
+    </div>
+</ng-template>
+
+<div *ngIf="!isModel">
+    <span *ngIf="isLoading" class="k-i-loading loading-design-custom">
+        <span style="margin-left: 6em; font-size:10px; line-height: 1.0 !important; ">Loading.....</span>
+    </span>
+    <ng-container *ngTemplateOutlet="complexStackingGridTemplate"></ng-container>
+</div>
+
+<kendo-window title="Overlapping Deals - Complex Stacking"  *ngIf="isModel" [keepContent]="true" [(left)]="left" [(top)]="top" [width]="kendoWindowWidth" [height]="kendoWindowHeight" (close)="closeModal()" class="k-wind-design headerTitlesOver windOverLaps" style="z-index:10001 !important">
+    <kendo-window-titlebar >
+        <span class="k-window-title">Overlapping Deals - Complex Stacking</span>
+        <button kendoWindowMaximizeAction></button>
+        <button kendoWindowRestoreAction></button>
+        <button kendoWindowCloseAction></button>
+    </kendo-window-titlebar>
+    <ng-container *ngTemplateOutlet="complexStackingGridTemplate"></ng-container>
 </kendo-window>

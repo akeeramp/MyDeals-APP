@@ -47,6 +47,7 @@ import { dropDownModalComponent } from '../contract/ptModals/dropDownModal/dropD
 import { performanceBarsComponent } from "../contract/performanceBars/performanceBar.component";
 import { goToComponent } from "../contract/goTo.component";
 import { ComplexStackingModalComponent } from "../contract/contractManager/complexStackingModal/complexStackingModal.component";
+import { ComplexStackingComponent } from "../contract/complexStacking/complexStacking.component";
 
 export let contractComponents = [
     ContractDetailsComponent,
@@ -97,5 +98,6 @@ export let contractComponents = [
     dropDownModalComponent,
     performanceBarsComponent,
     goToComponent,
-    ComplexStackingModalComponent
+    ComplexStackingModalComponent,
+    ComplexStackingComponent
 ]
