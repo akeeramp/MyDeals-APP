@@ -33,6 +33,8 @@
               <kendo-grid id="copyCntrctGrid" [data]="gridData" [skip]="state.skip"
                           [height]="345" [sortable]="true" [sort]="state.sort" [group]="state.group" [navigable]="true"
                           [resizable]="true" (dataStateChange)="dataStateChange($event)" [selectable]="true"
+                          kendoGridSelectBy="CNTRCT_OBJ_SID"
+                          [(selectedKeys)]="gridSelectedKeys"
                           (selectionChange)="rowSelectionChange($event)" class="append-grid-changes">
                   <ng-template kendoGridNoRecordsTemplate>
                       <div *ngIf="copyCntrctList?.length==0">

@@ -48,6 +48,7 @@ export class CopyContractComponent implements OnDestroy {
     public gridData: GridDataResult;
     public orgGridData: GridDataResult;
     private isCreateDisabled = true;
+    public gridSelectedKeys: number[] = [];
 
     public state: State = {
         skip: 0,
@@ -95,7 +96,7 @@ export class CopyContractComponent implements OnDestroy {
     onCopyCntrctSearchTextChanged(searchValue): void {
         this.copyCntrctSelectedItem = {};
         this.isCreateDisabled = true;
-        
+        this.gridSelectedKeys = [];
         if(this.orgGridData && this.orgGridData['data'] && this.orgGridData['data'].length>0){
             this.gridData['data'] = this.orgGridData['data'].filter(
                 item => ((item.TITLE.toLowerCase()).includes(searchValue.toLowerCase())
