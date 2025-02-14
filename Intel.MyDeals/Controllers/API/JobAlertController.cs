@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web.Http;
@@ -22,14 +23,20 @@ namespace Intel.MyDeals.Controllers.API
         /// Checks the status and sends mail to users, if any job is having issues
         /// </summary>
         /// <returns></returns>
-        [Authorize]
-        [HttpGet]
-        [Route("SendJobAlerts")]
-        public string SendJobAlerts()
+
+        [HttpPost]
+        [Route("TrgrJobAlerts")]
+        public IHttpActionResult TrgrJobAlerts()
         {
-            return SafeExecutor(() => _iJobAlertLib.SendJobAlerts()
-                , "Unable to send Job alert."
-            );
+            try
+            {
+                _iJobAlertLib.SendJobAlerts();
+                return Ok("Alert Successfully Triggered");
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
     }
 }
