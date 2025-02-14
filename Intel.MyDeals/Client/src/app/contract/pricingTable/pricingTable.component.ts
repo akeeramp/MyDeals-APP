@@ -245,8 +245,8 @@ export class pricingTableComponent implements OnDestroy  {
                 const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
                 this.router.navigateByUrl(urlTree+'?loadtype=ViewContractDetails');
             }
-            if(this.loadtype =='Manage'&& (this.selLnav!='pctDiv' && this.selLnav!='ViewContractDetails' && this.selLnav!='groupExclusionDiv')){
-
+            if (this.loadtype == 'Manage' && (this.selLnav != 'pctDiv' && this.selLnav != 'ViewContractDetails' && this.selLnav != 'groupExclusionDiv')) {
+                this.contractData = contractModel.contractData;
                 this.selLnav=this.route.snapshot.queryParams.manageType;
                 this.selectedTab = 2;
             }
