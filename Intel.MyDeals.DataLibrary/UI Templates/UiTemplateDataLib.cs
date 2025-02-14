@@ -3184,59 +3184,7 @@ namespace Intel.MyDeals.DataLibrary
                 //UiType = "IntegerTextBox",
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_DEAL_ID')#"
             });
-
-            items.Add(new UiTemplateContainerItem  // WIP All Types
-            {
-                Id = 3488,
-                AtrbCd = AttributeCodes.CREDIT_VOLUME,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Label = "Credit Volume",
-                Width = 140,
-                Format = "{0:d}",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'CREDIT_VOLUME', 'number')#"
-            });
-
-            items.Add(new UiTemplateContainerItem  // WIP All Types
-            {
-                Id = 3489,
-                AtrbCd = AttributeCodes.DEBIT_VOLUME,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Label = "Debit Volume",
-                Width = 140,
-                Format = "{0:d}",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'DEBIT_VOLUME', 'number')#"
-            });
-
-            items.Add(new UiTemplateContainerItem  // WIP All Types
-            {
-                Id = 3510,
-                AtrbCd = AttributeCodes.CREDIT_AMT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Label = "Credit Dollar",
-                Width = 140,
-                Format = "{0:d}",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'CREDIT_AMT', 'currency')#"
-            });
-
-            items.Add(new UiTemplateContainerItem  // WIP All Types
-            {
-                Id = 3511,
-                AtrbCd = AttributeCodes.DEBIT_AMT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Label = "Debit Dollar",
-                Width = 140,
-                Format = "{0:d}",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'DEBIT_AMT', 'currency')#"
-            });
-
+            
             items.Add(new UiTemplateContainerItem  // WIP All Types
             {
                 Id = 9999,
@@ -3249,20 +3197,7 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiCrDbPercWrapper(data)#",
                 ExcelTemplate = "#=gridUtils.uiCrDbPercExcelWrapper(data)#"
             });
-
-            items.Add(new UiTemplateContainerItem  // WIP All Types
-            {
-                Id = 3521,
-                AtrbCd = AttributeCodes.BLLG_DT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Label = "Last Credit/Debit Payment Date",
-                Width = 150,
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'BLLG_DT', \"date:'MM/dd/yyyy'\")#",
-                ExcelTemplate = "#=gridUtils.formatDate(BLLG_DT)#"
-            });
-
+           
             items.Add(new UiTemplateContainerItem  // WIP All Types
             {
                 Id = 3651,

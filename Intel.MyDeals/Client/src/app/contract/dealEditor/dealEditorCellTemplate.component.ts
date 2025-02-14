@@ -88,18 +88,17 @@ export class dealEditorCellTemplateComponent {
 
     uiControlWrapper(passedData, field) {
         let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
-        if (field == "VOLUME" || field == "PAYABLE_QUANTITY" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "FRCST_VOL" ||
-            field == "CREDIT_VOLUME" || field == "DEBIT_VOLUME" || field == "REBATE_OA_MAX_VOL") {
-            if (data[field] != undefined && data[field] != null && data[field] != "") {
-                data[field] = this.decimalPipe.transform(data[field], "1.0-0");
-            }
+        if (field == "VOLUME" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "FRCST_VOL" ||
+            field == "REBATE_OA_MAX_VOL") {
+            if (data[field] != undefined && data[field] != null && data[field] != "")
+                data[field] = this.decimalPipe.transform(data[field], "1.0-0");            
         } else if (field == "REBATE_OA_MAX_AMT" || field == "MAX_RPU" || field == "USER_MAX_RPU" ||
             field == "AVG_RPU" || field == "USER_AVG_RPU" || field == "TOTAL_DOLLAR_AMOUNT" || field == "MAX_PAYOUT"
-            || field == "ADJ_ECAP_UNIT" || field == "CREDIT_AMT" || field == "DEBIT_AMT") {
-            if (data[field] != undefined && data[field] != null && data[field] != "") {
+            || field == "ADJ_ECAP_UNIT") {
+            if (data[field] != undefined && data[field] != null && data[field] != "")
                 data[field] = this.currencyPipe.transform(parseFloat(data[field]), 'USD', 'symbol', '1.2-2');
-            }
-        } else if (field == "BLLG_DT" || field == "LAST_TRKR_START_DT_CHK" || field == "ON_ADD_DT"
+        }
+        else if (field == "LAST_TRKR_START_DT_CHK" || field == "ON_ADD_DT"
             || field == "REBATE_BILLING_START" || field == "REBATE_BILLING_END") {
             if (data[field] != undefined) {
                 if (data[field] == "Invalid date") {

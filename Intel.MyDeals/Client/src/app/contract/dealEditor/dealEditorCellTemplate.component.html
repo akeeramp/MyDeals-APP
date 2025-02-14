@@ -25,13 +25,7 @@
     <div *ngIf="in_Field_Name == 'NUM_OF_TIERS' && in_DataItem['OBJ_SET_TYPE_CD'] == 'DENSITY'">
         <div class="err-bit" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
         <div class="ng-binding vert-center">{{(uiControlWrapper(in_DataItem, in_Field_Name)['NUM_OF_TIERS'] / uiControlWrapper(in_DataItem, in_Field_Name)['NUM_OF_DENSITY'])}}</div>
-    </div>
-   <!-- <div *ngIf="in_Field_Name == 'CREDIT_AMT'">
-        <div class="err-bit" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
-        <div class="uiControlDiv creditcolor" [ngClass]="getClassNm(in_DataItem, in_Field_Name)">
-            <div *ngIf="in_DataItem['CREDIT_AMT'] != undefined && in_DataItem['CREDIT_AMT'] != 0" class="ng-binding vert-center">{{uiControlWrapper(in_DataItem, in_Field_Name)[in_Field_Name]}}</div>
-        </div>
-    </div>-->
+    </div>    
     <div *ngIf="(in_Field_Name == 'REBATE_BILLING_START' || in_Field_Name == 'REBATE_BILLING_END') && in_DataItem[in_Field_Name] != 'Invalid date'" [ngClass]="applySoftWarnings(in_DataItem, in_Field_Name) != '' ? 'isSoftWarnCell' : ''" title="{{applySoftWarnings(in_DataItem, in_Field_Name)}}" class="ng-binding vert-center wordWrapTransform">{{uiControlWrapper(in_DataItem, in_Field_Name)[in_Field_Name] | date:'MM/dd/yyy'}}</div>
     <div class="err-bit" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip position="bottom" title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
     <div *ngIf="in_DataItem[in_Field_Name] != undefined && in_DataItem[in_Field_Name] != null && in_Field_Name !== 'REBATE_BILLING_START' && in_Field_Name !== 'REBATE_BILLING_END'"
@@ -201,7 +195,7 @@
             <div *ngIf="getPercData(in_DataItem).vol == 999999999">{{numberWithCommas(getPercData(in_DataItem).numerator)}}</div>
         </div>
     </div>
-</div>
+</div>    
 <div *ngIf="in_Field_Name == 'MEETCOMP_TEST_RESULT' || in_Field_Name == 'COST_TEST_RESULT'" id="{{in_Field_Name + '_' + in_DataItem['DC_ID']}}" class="dealCell">
     <div class="dealCell">
         <div *ngIf="in_Field_Name == 'MEETCOMP_TEST_RESULT' || in_Field_Name == 'COST_TEST_RESULT'" id="{{in_Field_Name + '_' + in_DataItem['DC_ID']}}" class="dealCell">

@@ -901,7 +901,7 @@ i.cn-close-panel {
 .csstransforms .searchDivgrid {
     height: 328px
 }
-
+/*
 .accural_remove_1 .k-chart-surface svg g g g text {
     font-size: 12px !important;
     transform: translate(11px,0);
@@ -910,7 +910,7 @@ i.cn-close-panel {
 .accural_remove_1 .k-chart-surface svg g g g g text {
     transform: translate(4px,-2px);
 }
-
+*/
 .micro-grid col.k-group-col {
     width: 0 !important
 }

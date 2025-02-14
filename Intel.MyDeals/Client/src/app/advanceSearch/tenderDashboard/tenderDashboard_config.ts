@@ -310,32 +310,10 @@
             title: "Geo",
             type: "string",
             width: 100
-        }, {
-            field: "CREDIT_VOLUME",
-            title: "Credit Vol",
-            type: "number",
-            width: 120
-        }, {
-            field: "DEBIT_VOLUME",
-            title: "Debit Vol",
-            type: "number",
-            width: 120
-        }, {
+        },{
             field: "NET_VOL_PAID",
             title: "Net Credited Volume",
             type: "number",
-            width: 120
-        }, {
-            field: "CREDIT_AMT",
-            title: "Credit Amt",
-            type: "number",
-            format: "{0:c}",
-            width: 120
-        }, {
-            field: "DEBIT_AMT",
-            title: "Debit Amt",
-            type: "number",
-            format: "{0:c}",
             width: 120
         }, {
             field: "TOT_QTY_PAID",
@@ -343,12 +321,7 @@
             type: "number",
             format: "{0:c}",
             width: 120
-        }, {
-            field: "BLLG_DT",
-            title: "Last Credit Date",
-            type: "string",
-            width: 140
-        }, {
+        },{
             field: "END_CUSTOMER_RETAIL",
             title: "End Customer",
             type: "string",
@@ -673,36 +646,13 @@
             format: "{0:c}",
             filterable: "moneyObjFilter"
         }, {
-            field: "CREDIT_VOLUME",
-            title: "Credit Vol",
-            type: "number",
-            width: 120
-        }, {
-            field: "DEBIT_VOLUME",
-            title: "Debit Vol",
-            type: "number",
-            width: 120
-        }, {
             field: "NET_VOL_PAID",
             title: "Net Credited Volume",
             type: "number",
             filterable: false,
             sortable: false,
             width: 120
-        }, {
-            field: "CREDIT_AMT",
-            title: "Credit Amt",
-            type: "number",
-            format: "{0:c}",
-            template: "<span ng-if='#=CREDIT_AMT# !== null && #=CREDIT_AMT# !== undefined && #=CREDIT_AMT# != 0'>(<span>#=gridUtils.tender(data, 'CREDIT_AMT', 'c')#</span>)</span>",
-            width: 120
-        }, {
-            field: "DEBIT_AMT",
-            title: "Debit Amt",
-            type: "number",
-            format: "{0:c}",
-            width: 120
-        }, {
+        },{
             field: "TOT_QTY_PAID",
             title: "Total Qty Paid",
             type: "number",
@@ -710,13 +660,7 @@
             filterable: false,
             sortable: false,
             width: 120
-        }, {
-            field: "BLLG_DT",
-            title: "Last Credit Date",
-            type: "string",
-            template: "# if (BLLG_DT !== undefined) { # #=momentService.moment(BLLG_DT).format('MM/DD/YYYY')# # } #",
-            width: 140
-        }, {
+        },{
             field: "END_CUSTOMER_RETAIL",
             title: "End Customer",
             type: "string",
@@ -1029,33 +973,11 @@
             format: "{0:c}",
             filterable: "moneyObjFilter"
         }, {
-            field: "CREDIT_VOLUME",
-            title: "Credit Vol",
-            type: "number",
-            width: 120
-        }, {
-            field: "DEBIT_VOLUME",
-            title: "Debit Vol",
-            type: "number",
-            width: 120
-        }, {
             field: "NET_VOL_PAID",
             title: "Net Credited Volume",
             type: "number",
             filterable: false,
             sortable: false,
-            width: 120
-        }, {
-            field: "CREDIT_AMT",
-            title: "Credit Amt",
-            type: "number",
-            format: "{0:c}",
-            width: 120
-        }, {
-            field: "DEBIT_AMT",
-            title: "Debit Amt",
-            type: "number",
-            format: "{0:c}",
             width: 120
         }, {
             field: "TOT_QTY_PAID",
@@ -1065,12 +987,7 @@
             filterable: false,
             sortable: false,
             width: 120
-        }, {
-            field: "BLLG_DT",
-            title: "Last Credit Date",
-            type: "string",
-            width: 140
-        }, {
+        },{
             field: "END_CUSTOMER_RETAIL",
             title: "End Customer",
             type: "string",

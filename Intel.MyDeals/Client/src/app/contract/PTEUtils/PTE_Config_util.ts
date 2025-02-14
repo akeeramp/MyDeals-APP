@@ -41,8 +41,8 @@ export class PTE_Config_Util {
     static dimPrdBktFields = ["TRKR_NBR", "ECAP_PRICE", "CAP", "CAP_STRT_DT", "CAP_END_DT", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT"];
     static dropdownFilterColumns = ["TRKR_NBR", "ECAP_PRICE", "CAP", "CAP_STRT_DT", "CAP_END_DT", "EXPIRE_FLG", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT"];
     static tenderDashboardDropColumns = ["CUST_MBR_SID", "PAYOUT_BASED_ON", "PERIOD_PROFILE", "MRKT_SEG", "AR_SETTLEMENT_LVL", "PROGRAM_PAYMENT", "WF_STG_CD", "SERVER_DEAL_TYPE"];
-    static tenderDashboardDateColumns = ["START_DT", "END_DT", "CAP_STRT_DT", "CAP_END_DT", "ON_ADD_DT", "REBATE_BILLING_START", "REBATE_BILLING_END", "YCS2_START_DT", "YCS2_END_DT", "BLLG_DT"];
-    static tenderDashboardNumericColumns = ["DC_ID", "ECAP_PRICE", "CAP", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "VOLUME", "PAYABLE_QUANTITY", "CREDIT_VOLUME", "DEBIT_VOLUME", "CREDIT_AMT", "DEBIT_AMT", "TOTAL_DOLLAR_AMOUNT", "CONSUMPTION_LOOKBACK_PERIOD"];
+    static tenderDashboardDateColumns = ["START_DT", "END_DT", "CAP_STRT_DT", "CAP_END_DT", "ON_ADD_DT", "REBATE_BILLING_START", "REBATE_BILLING_END", "YCS2_START_DT", "YCS2_END_DT"];
+    static tenderDashboardNumericColumns = ["DC_ID", "ECAP_PRICE", "CAP", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "VOLUME",  "TOTAL_DOLLAR_AMOUNT", "CONSUMPTION_LOOKBACK_PERIOD"];
     static opGridTemplate = {
         "groups": {
             "ECAP": [
@@ -334,22 +334,7 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "CREDIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "CREDIT_AMT": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_AMT": {
-                    "Groups": ["Payment"]
-                },
                 "TOTAL_CR_DB_PERC": {
-                    "Groups": ["Payment"]
-                },
-                "BLLG_DT": {
                     "Groups": ["Payment"]
                 },
                 "GEO_APPROVED_BY": {
@@ -537,24 +522,9 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "CREDIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "CREDIT_AMT": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_AMT": {
-                    "Groups": ["Payment"]
-                },
                 "TOTAL_CR_DB_PERC": {
                     "Groups": ["Payment"]
                 },
-                "BLLG_DT": {
-                    "Groups": ["Payment"]
-                }
             },
             "REV_TIER": {
                 "tools": {
@@ -713,24 +683,9 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "CREDIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "CREDIT_AMT": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_AMT": {
-                    "Groups": ["Payment"]
-                },
                 "TOTAL_CR_DB_PERC": {
                     "Groups": ["Payment"]
                 },
-                "BLLG_DT": {
-                    "Groups": ["Payment"]
-                }
             },
             "PROGRAM": {
                 "tools": {
@@ -922,24 +877,9 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "CREDIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "CREDIT_AMT": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_AMT": {
-                    "Groups": ["Payment"]
-                },
                 "TOTAL_CR_DB_PERC": {
                     "Groups": ["Payment"]
                 },
-                "BLLG_DT": {
-                    "Groups": ["Payment"]
-                }
             },
             "KIT": {
                 "EXCLUDE_AUTOMATION": {
@@ -1209,22 +1149,7 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "CREDIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "CREDIT_AMT": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_AMT": {
-                    "Groups": ["Payment"]
-                },
                 "TOTAL_CR_DB_PERC": {
-                    "Groups": ["Payment"]
-                },
-                "BLLG_DT": {
                     "Groups": ["Payment"]
                 },
                 "GEO_APPROVED_BY": {
@@ -1427,24 +1352,9 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "CREDIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "CREDIT_AMT": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_AMT": {
-                    "Groups": ["Payment"]
-                },
                 "TOTAL_CR_DB_PERC": {
                     "Groups": ["Payment"]
                 },
-                "BLLG_DT": {
-                    "Groups": ["Payment"]
-                }
             },
             "FLEX": {
                 "tools": {
@@ -1621,24 +1531,9 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "CREDIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_VOLUME": {
-                    "Groups": ["Payment"]
-                },
-                "CREDIT_AMT": {
-                    "Groups": ["Payment"]
-                },
-                "DEBIT_AMT": {
-                    "Groups": ["Payment"]
-                },
                 "TOTAL_CR_DB_PERC": {
                     "Groups": ["Payment"]
                 },
-                "BLLG_DT": {
-                    "Groups": ["Payment"]
-                }
             }
         },
         "requiredForTender": ["VOLUME", "PAYABLE_QUANTITY", "END_CUSTOMER_RETAIL"],

@@ -26,8 +26,7 @@
                     <li (click)="focusMenu($event, 7)" (mouseover)="helpTip=7" (mouseout)="helpTip=0" [class.disabled]="disableQoute" [ngClass]="{'active': sel == 7}">
                         <div><a><i class="fa fa-quote-right"></i></a></div>
                     </li>
-                    <li (click)="focusMenu($event, 8)" (mouseover)="helpTip=8" (mouseout)="helpTip=0"  [class.disabled]="disablePayment" [ngClass]="{'active': (sel == 8 ) }">
-                        <div><a><i class="fa fa-usd"></i></a></div>
+                    <li [class.disabled]="true" [ngClass]="{'active': sel == 8}">
                     </li>
                 </ul>
             </div>
@@ -102,12 +101,7 @@
                     <div *ngIf="helpTip == 7" class="help-tip">
                         <i class="fa fa-quote-right"></i>
                         <div>Quote Letter</div>
-                    </div>
-
-                    <div *ngIf="helpTip == 8" class="help-tip">
-                        <i class="fa fa-usd"></i>
-                        <div>Payment Details</div>
-                    </div>
+                    </div>                    
 
                 </div>
             </span>
@@ -399,72 +393,7 @@
                     <button class="btn btn-sm btn-primary" style="margin-top: 10px;" (click)="downloadQuoteLetter()">Open Quote Letter</button>
 
                 </div>
-            </div>
-
-            <div class="cn-panel cn-panel8" [ngClass]="{ 'cn-panel-open8': sel == 8 && showPanel }">
-                <div class="header">
-                    <i class="fa fa-usd"></i> Payment Details
-                    <div class="fr">
-                        <i class="fa fa-angle-double-left cn-close-panel" (click)="closePanel()" title="Close"></i>
-                    </div>
-                </div>
-                <div class="body">
-                    <div>
-                        <div class="fl">
-                            <div class="cn-deal-title" style="margin-top: 5px;">
-                                Ceiling Volume
-                                <span class="org" *ngIf="data.VOLUME == ''">Unlimited</span>
-                                <span class="org" *ngIf="data.VOLUME != ''">{{ (data.VOLUME | number) }}</span>
-                            </div>
-
-                            <table style="margin-top: 15px;">
-                                <tr>
-                                    <th style="width: 60px; text-align: right;">&nbsp;</th>
-                                    <th style="width: 80px; text-align: right;">Volume</th>
-                                    <th style="width: 80px; text-align: right;">Amount</th>
-                                </tr>
-                                <tr>
-                                    <th style="text-align: right;">Credit</th>
-                                    <td style="text-align: right;">{{data.CREDIT_VOLUME | number}}</td>
-                                    <td style="text-align: right;" *ngIf="data.CREDIT_AMT != null && data.CREDIT_AMT !=''">(<span>{{data.CREDIT_AMT | currency}}</span>)</td>
-                                    <td style="text-align: right;" *ngIf="data.CREDIT_AMT == null || data.CREDIT_AMT ==''">{{data.CREDIT_AMT | currency}}</td>
-                                </tr>
-                                <tr>
-                                    <th style="text-align: right;">Debit</th>
-                                    <td style="text-align: right;">{{data.DEBIT_VOLUME | number}}</td>
-                                    <td style="text-align: right;">{{data.DEBIT_AMT | currency}}</td>
-                                </tr>
-                                <tr *ngIf="percData!= null">
-                                    <th style="text-align: right;">Total</th>
-                                  
-                                    <td *ngIf="percData.vol != 0" colspan="2" style="text-align: right;"> {{ percData.numerator | number }} out of  {{percData.vol | number}} </td>
-                                <td *ngIf="percData.vol == 0" colspan="2" style="text-align: right;"> {{ percData.numerator | number }}  out of Unlimited</td>
-                                </tr>
-                            </table>
-
-                            <div style="margin-top: 10px;">
-                                <span class="cn-desc" style="margin-right: 8px;">Last Credit/Debit Payment Date:</span>
-                                <span class="cn-desc-black">{{ data.BLLG_DT || "none" }}</span>
-                            </div>
-                        </div>
-
-                        <div class="fr cn-info-container" *ngIf="data.VOLUME">
-                             <kendo-chart  class="accural_remove_1" kendoTooltip title="Accruable - 100%" style="position: relative; height: 160px; top: -11px;">
-                                <kendo-chart-legend position="bottom"></kendo-chart-legend>
-                                <kendo-chart-series>
-                                    <kendo-chart-series-item type="pie"
-                                                             [data]="pieData"
-                                                             field="percentage"
-                                                             categoryField="type"
-                                                             >                                        
-                                    </kendo-chart-series-item>
-                                </kendo-chart-series>
-                            </kendo-chart>
-                        </div>
-                        <div class="clearboth"></div>
-                    </div>
-                </div>
-            </div>
+            </div>            
         </div>
     </div>
  </div>

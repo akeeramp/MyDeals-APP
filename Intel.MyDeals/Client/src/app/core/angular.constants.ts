@@ -335,22 +335,7 @@ export const opGridTemplate = {
             "REBATE_OA_MAX_AMT": {
                 "Groups": ["All"]
             },
-            "CREDIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "CREDIT_AMT": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_AMT": {
-                "Groups": ["Payment"]
-            },
             "TOTAL_CR_DB_PERC": {
-                "Groups": ["Payment"]
-            },
-            "BLLG_DT": {
                 "Groups": ["Payment"]
             },
             "GEO_APPROVED_BY": {
@@ -541,24 +526,9 @@ export const opGridTemplate = {
             "REBATE_OA_MAX_AMT": {
                 "Groups": ["All"]
             },
-            "CREDIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "CREDIT_AMT": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_AMT": {
-                "Groups": ["Payment"]
-            },
             "TOTAL_CR_DB_PERC": {
                 "Groups": ["Payment"]
             },
-            "BLLG_DT": {
-                "Groups": ["Payment"]
-            }
         },
         "REV_TIER": {
             "tools": {
@@ -720,24 +690,9 @@ export const opGridTemplate = {
             "REBATE_OA_MAX_AMT": {
                 "Groups": ["All"]
             },
-            "CREDIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "CREDIT_AMT": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_AMT": {
-                "Groups": ["Payment"]
-            },
             "TOTAL_CR_DB_PERC": {
                 "Groups": ["Payment"]
             },
-            "BLLG_DT": {
-                "Groups": ["Payment"]
-            }
         },
         "PROGRAM": {
             "tools": {
@@ -929,24 +884,9 @@ export const opGridTemplate = {
             "REBATE_OA_MAX_AMT": {
                 "Groups": ["All"]
             },
-            "CREDIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "CREDIT_AMT": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_AMT": {
-                "Groups": ["Payment"]
-            },
             "TOTAL_CR_DB_PERC": {
                 "Groups": ["Payment"]
             },
-            "BLLG_DT": {
-                "Groups": ["Payment"]
-            }
         },
         "KIT": {
             "EXCLUDE_AUTOMATION": {
@@ -1219,22 +1159,7 @@ export const opGridTemplate = {
             "REBATE_OA_MAX_AMT": {
                 "Groups": ["All"]
             },
-            "CREDIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "CREDIT_AMT": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_AMT": {
-                "Groups": ["Payment"]
-            },
             "TOTAL_CR_DB_PERC": {
-                "Groups": ["Payment"]
-            },
-            "BLLG_DT": {
                 "Groups": ["Payment"]
             },
             "GEO_APPROVED_BY": {
@@ -1437,24 +1362,9 @@ export const opGridTemplate = {
             "REBATE_OA_MAX_AMT": {
                 "Groups": ["All"]
             },
-            "CREDIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "CREDIT_AMT": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_AMT": {
-                "Groups": ["Payment"]
-            },
             "TOTAL_CR_DB_PERC": {
                 "Groups": ["Payment"]
             },
-            "BLLG_DT": {
-                "Groups": ["Payment"]
-            }
         },
         "FLEX": {
             "tools": {
@@ -1634,24 +1544,9 @@ export const opGridTemplate = {
             "REBATE_OA_MAX_AMT": {
                 "Groups": ["All"]
             },
-            "CREDIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_VOLUME": {
-                "Groups": ["Payment"]
-            },
-            "CREDIT_AMT": {
-                "Groups": ["Payment"]
-            },
-            "DEBIT_AMT": {
-                "Groups": ["Payment"]
-            },
             "TOTAL_CR_DB_PERC": {
                 "Groups": ["Payment"]
             },
-            "BLLG_DT": {
-                "Groups": ["Payment"]
-            }
         }
     },
     "requiredForTender": ["VOLUME", "PAYABLE_QUANTITY", "END_CUSTOMER_RETAIL"],

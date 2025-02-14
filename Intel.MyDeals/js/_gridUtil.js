@@ -63,15 +63,6 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
         tmplt += '</div>';
         return tmplt;
     }
-    else if (field == 'CREDIT_AMT') {
-        var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
-        tmplt += '<div class="uiControlDiv"';
-        tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
-        if (passedData['CREDIT_AMT'] != undefined && passedData['CREDIT_AMT'] != 0)
-            tmplt += '    <div class="ng-binding vert-center">(<span ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></span>)</div>';
-        tmplt += '</div>';
-        return tmplt;
-    }
     else
     {
         // MUCH FASTER
@@ -264,21 +255,13 @@ gridUtils.uiStartDateWrapper = function (passedData, field, format) {
 }
 
 gridUtils.getTotalDealVolume = function (passedData) {
-
-    var crVol = passedData.CREDIT_VOLUME === undefined || passedData.CREDIT_VOLUME === "" || passedData.CREDIT_VOLUME === null || isNaN(passedData.CREDIT_VOLUME)
-        ? 0
-        : parseFloat(passedData.CREDIT_VOLUME);
-    var dbVol = passedData.DEBIT_VOLUME === undefined || passedData.DEBIT_VOLUME === "" || passedData.DEBIT_VOLUME === null || isNaN(passedData.DEBIT_VOLUME)
-        ? 0
-        : parseFloat(passedData.DEBIT_VOLUME);
+    
     var vol = passedData.VOLUME === undefined || passedData.VOLUME === "" || passedData.VOLUME === null || isNaN(passedData.VOLUME)
         ? 0
         : parseFloat(passedData.VOLUME);
-
-    var numerator = crVol - dbVol;
-    if (numerator < 0) numerator = 0;
-    var perc = vol === 0 ? 0 : numerator / vol * 100;
-    perc = Math.round(perc * 100) / 100;
+    
+    var numerator = 0;
+    var perc = Math.round(vol * 100) / 100;
 
     return {
         numerator: numerator,
