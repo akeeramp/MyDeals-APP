@@ -116,8 +116,7 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _primeCustomersLib.UnPrimeDealsLogs(dealId, endCustData),
                     $"Unable to Update UnUnified Deals Logs");
         }
-
-        [Authorize]
+        
         [HttpGet]
         [Route("RetryUCDRequest")]
         public bool RetryUCDRequest()
@@ -125,8 +124,7 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _primeCustomersLib.RetryUCDRequest(),
                     $"Unable to retry UCD request");
         }
-
-        [Authorize]
+        
         [HttpPost]
         [Route("SaveAMCResponceObject")]
         public string SaveAMCResponceObject()

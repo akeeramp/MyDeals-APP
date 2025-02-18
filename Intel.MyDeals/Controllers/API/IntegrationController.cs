@@ -69,8 +69,7 @@ namespace Intel.MyDeals.Controllers.API
                 , "Unable to process Salesforce Tender deals Bulk Mode"
             );
         }
-
-        [Authorize]
+        
         [Route("ExecuteBatchWiseSalesForceTenderData")]
         [HttpGet]
         public string ExecuteBatchWiseSalesForceTenderData()
@@ -90,8 +89,7 @@ namespace Intel.MyDeals.Controllers.API
                 , "Unable to process Salesforce Tender deals Single Mode"
             );
         }
-
-        [Authorize]
+        
         [Route("ReturnSalesForceTenderResults")]
         [HttpGet]
         public string ReturnSalesForceTenderResults()

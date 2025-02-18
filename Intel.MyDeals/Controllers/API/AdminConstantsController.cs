@@ -64,7 +64,6 @@ namespace Intel.MyDeals.Controllers.API
             return _constantsLookupsLib.UpdateAdminConstant(adminConstant);
         }
 
-        [Authorize]
         [HttpGet]
         [InvalidateCacheOutput("api/AdminConstants/v1/GetConstants")]
         [Route("api/AdminConstants/v1/UpdateRecycleCacheConstants/{CNST_NM}/{CNST_VAL}")]
