@@ -773,7 +773,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
                     this.actionItems(null, null);
                 } else if (response.isFormToggle) {
                     this.actionItems(fromToggle, checkForRequirements);
-                } else if (response.GroupingCount < 0 && !response.isAccepted) {
+                } else if (response.GroupingCount <= 0 && !response.isAccepted) {
                     this.loadDetails();
                 }
             });
