@@ -142,7 +142,8 @@
 }
 
 .new-view#sum-wrapper {
-    height:calc(100vh - 180px) !important;
+    height: calc(100vh - 180px) !important;
+    width: calc(100vw - 405px) !important;
 }
 
 @media (max-width: 1125px) {
