@@ -748,7 +748,6 @@ export class contractManagerComponent implements OnInit, OnDestroy {
 
         this.complexStackingDialogSvc.fetchAndShowComplexStakingOverlappingDeals(complexOverlapObjs, fromSubmit, fromToggle)
             .subscribe(response => {
-                console.log(response);
                 if (!response.isLoading) {
                     this.isLoading = false;
                 }

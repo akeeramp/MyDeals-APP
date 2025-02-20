@@ -37,6 +37,10 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
         }, {
             field: 'CONTRACT_NM',
             title: 'Contract Name',
+            hidden: true
+        }, {
+            field: 'DealType',
+            title: 'Deal Type',
         }, {
             field: 'WF_STG_CD',
             title: 'Stage',
@@ -71,6 +75,7 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
     public detailData = {};
     public displayId = {};
     public exportData = {};
+    public showNoGroupingAvailableMessage = false;
 
     @Input() isModel = true;
     @Input() inputData :any;
@@ -208,6 +213,8 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
                 groupedDeals.push(
                     ...this.dealInfos.filter((deal: any) => assoDealIds.includes(deal.WIP_DEAL_OBJ_SID)).map((itm) => ({ ...itm, GROUPED_BY: grpArr.length > 1 ? "GROUP " + dealId + " " + CURRENT_GROUPING_LETTER : "DEAL " + dealId }))
                 )
+                //Move the matching dealid with overlaping dealId on top
+                groupedDeals.unshift(groupedDeals.splice(groupedDeals.findIndex(item => item.WIP_DEAL_OBJ_SID == dealId), 1)[0])
                 grpArr[i]["gridData"] = groupedDeals;
                 grpArr[i]["total"] = groupedDeals.length
                 grpArr[i]["rpuTotal"] = aggregateBy(groupedDeals, this.GROUPING_AGGREGATES)
@@ -223,7 +230,7 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
     private processResponse(response: any) {
         this.isLoading = false;
         if (response.GroupItems && response.GroupItems.length > 0) {
-
+            this.showNoGroupingAvailableMessage = false;
             this.data = {
                 ovlpObjs: response
             };
@@ -250,6 +257,9 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
                     this.grpDeals.push(tempObj);
                 });
             }
+        }
+        else {
+            this.showNoGroupingAvailableMessage = true;
         }
     }
 
@@ -282,6 +292,8 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
                 groupedDeals.push(
                     ...this.dealInfos.filter((deal: any) => assoDealIds.includes(deal.WIP_DEAL_OBJ_SID)).map((itm) => ({ ...itm, GROUPED_BY: grpArr.length > 1 ? "GROUP " + dealId + " " + CURRENT_GROUPING_LETTER : "DEAL " + dealId }))
                 )
+                //Move the matching dealid with overlaping dealId on top
+                groupedDeals.unshift(groupedDeals.splice(groupedDeals.findIndex(item => item.WIP_DEAL_OBJ_SID == dealId), 1)[0])
                 grpArr[i]["gridData"] = groupedDeals;
                 grpArr[i]["total"] = groupedDeals.length
                 grpArr[i]["rpuTotal"] = aggregateBy(groupedDeals, this.GROUPING_AGGREGATES)
@@ -357,6 +369,6 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
         });
     }
     ngAfterViewInit(): void {
-        
+
     }
 }

@@ -53,22 +53,35 @@
                                 <div>
                                     <div class="collapse multi-collapse" id="PSData_{{psIndex}}" [ngClass]="{show : displayId[ps.dealId]}">
                                         <div class="col-md-12" *ngFor="let curDealGroup of detailData[ps.dealId]; let i = index">
-                                            <kendo-grid [data]="curDealGroup.gridData" [sortable]="true" [resizable]="true" #groupingGrid>
+                                            <kendo-grid [data]="curDealGroup.gridData" [sortable]="true" [resizable]="false" [selectable]="false" #groupingGrid>
                                                 <kendo-grid-column *ngFor="let column of COLUMNS_CONFIG" field="{{ column.field }}" title="{{ column.title }}" [hidden]="column.hidden">
+                                                    
+                                                    <ng-template kendoGridCellTemplate *ngIf="!['PRODUCT_NM','ECAP_PRICE','MAX_RPU'].includes(column.field)" let-dataItem="dataItem">
+                                                        <div title="{{dataItem[column.field]}}">
+                                                            {{dataItem[column.field]}}
+                                                        </div>
+                                                    </ng-template>
                                                     <ng-template kendoGridCellTemplate *ngIf="column.field == 'PRODUCT_NM'" let-dataItem="dataItem">
                                                         <div title="{{dataItem.PRODUCT_NM}}">
                                                             {{ dataItem.PRODUCT_NM && dataItem.PRODUCT_NM.length > 20 ? (dataItem.PRODUCT_NM | slice:0:20) + '...' : dataItem.PRODUCT_NM }}
                                                         </div>
                                                     </ng-template>
                                                     <ng-template kendoGridCellTemplate *ngIf="column.field == 'ECAP_PRICE'" let-dataItem="dataItem">
-                                                        {{ dataItem.ECAP_PRICE | kendoNumber: 'c' }}
+                                                        <div title="{{ dataItem.ECAP_PRICE | kendoNumber: 'c' }}">
+                                                            {{ dataItem.ECAP_PRICE | kendoNumber: 'c' }}
+                                                        </div>
                                                     </ng-template>
                                                     <ng-template kendoGridCellTemplate *ngIf="column.field == 'MAX_RPU'" let-dataItem="dataItem">
-                                                        {{ dataItem.MAX_RPU | kendoNumber: 'c' }}
+                                                        <div title=" {{ dataItem.MAX_RPU | kendoNumber: 'c' }}">
+                                                            {{ dataItem.MAX_RPU | kendoNumber: 'c' }}
+                                                        </div>
                                                     </ng-template>
-                                                    <ng-template kendoGridFooterTemplate *ngIf="column.field == 'MAX_RPU'">
-                                                        Total RPU: {{ curDealGroup.rpuTotal["MAX_RPU"].sum | kendoNumber: 'c' }}
+                                                    <ng-template kendoGridFooterTemplate  *ngIf="column.field == 'MAX_RPU'">
+                                                        <div title="Total RPU: {{ curDealGroup.rpuTotal['MAX_RPU'].sum | kendoNumber: 'c' }}">
+                                                            Total RPU: {{ curDealGroup.rpuTotal["MAX_RPU"].sum | kendoNumber: 'c' }}
+                                                        </div>
                                                     </ng-template>
+
                                                 </kendo-grid-column>
                                             </kendo-grid>
                                             <br />
@@ -92,6 +105,9 @@
 <div *ngIf="!isModel">
     <span *ngIf="isLoading" class="k-i-loading loading-design-custom">
         <span style="margin-left: 6em; font-size:10px; line-height: 1.0 !important; ">Loading.....</span>
+    </span>
+    <span *ngIf="showNoGroupingAvailableMessage">
+        <span style="margin-left: 6em; font-size:10px; line-height: 1.0 !important; ">No complex grouping available.</span>
     </span>
     <ng-container *ngTemplateOutlet="complexStackingGridTemplate"></ng-container>
 </div>

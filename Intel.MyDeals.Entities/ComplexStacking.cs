@@ -35,6 +35,7 @@ namespace Intel.MyDeals.Entities
         public decimal ECAP_PRICE { get; set; }
         public string CUST_ACCNT_DIV { get; set; }
         public string CONTRACT_NM { get; set; }
+        public string DealType { get; set; }
     }
 
     public class OvlpComplexObj

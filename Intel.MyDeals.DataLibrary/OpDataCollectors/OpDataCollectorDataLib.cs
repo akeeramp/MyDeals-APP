@@ -1061,6 +1061,7 @@ namespace Intel.MyDeals.DataLibrary
                     int CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
                     int CUST_DIV_NM = DB.GetReaderOrdinal(rdr, "CUST_DIV_NM");
                     int CTRCT_NM = DB.GetReaderOrdinal(rdr, "CTRCT_NM");
+                    int DealType = DB.GetReaderOrdinal(rdr, "DEAL_TYPE");
 
                     while (rdr.Read())
                     {
@@ -1077,7 +1078,8 @@ namespace Intel.MyDeals.DataLibrary
                             ECAP_PRICE = (ECAP_PRC < 0 || rdr.IsDBNull(ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(ECAP_PRC),
                             //CustomerName = (CUST_NM < 0 || rdr.IsDBNull(CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(CUST_NM),
                             CUST_ACCNT_DIV = (CUST_DIV_NM < 0 || rdr.IsDBNull(CUST_DIV_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(CUST_DIV_NM),
-                            CONTRACT_NM = (CTRCT_NM < 0 || rdr.IsDBNull(CTRCT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(CTRCT_NM)
+                            CONTRACT_NM = (CTRCT_NM < 0 || rdr.IsDBNull(CTRCT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(CTRCT_NM),
+                            DealType = (DealType < 0 || rdr.IsDBNull(DealType)) ? String.Empty : rdr.GetFieldValue<System.String>(DealType),
 
                         });
                     } // while
