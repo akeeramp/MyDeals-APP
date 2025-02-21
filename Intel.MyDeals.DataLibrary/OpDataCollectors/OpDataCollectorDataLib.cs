@@ -1003,7 +1003,7 @@ namespace Intel.MyDeals.DataLibrary
             return success;
         }
 
-        public ComplexStacking GetComplexStackingGroup(List<OvlpComplexObj> ovlpComplexObjs)
+        public ComplexStacking GetComplexStackingGroup(List<OvlpComplexObj> ovlpComplexObjs, string mode)
         {
             OpLog.Log("GetComplexStackingGroup - Started");
             var result = new ComplexStacking();
@@ -1020,70 +1020,76 @@ namespace Intel.MyDeals.DataLibrary
             {
                 @in_obj_keys = opPair,
                 @in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
-                @Role = OpUserStack.MyOpUserToken.Role.RoleTypeCd
+                @Role = OpUserStack.MyOpUserToken.Role.RoleTypeCd,
+                @mode = mode
             };
 
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
-                    //TABLE 1
-                    int OBJ_ID = DB.GetReaderOrdinal(rdr, "OBJ_ID");
-                    int OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
-                    int PICKED_DEAL = DB.GetReaderOrdinal(rdr, "PICKED_DEAL");
-                    int GRP = DB.GetReaderOrdinal(rdr, "GRP");
-                    int ASSOCIATED_DEAL = DB.GetReaderOrdinal(rdr, "ASSOCIATED_DEAL");
-
-                    while (rdr.Read())
+                    if(mode == "COMPLEX_GRP_DATA")
                     {
-                        complexStackingDealGroup.Add(new ComplexStackingDealGroup
+                        //TABLE 1
+                        int OBJ_ID = DB.GetReaderOrdinal(rdr, "OBJ_ID");
+                        int OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
+                        int PICKED_DEAL = DB.GetReaderOrdinal(rdr, "PICKED_DEAL");
+                        int GRP = DB.GetReaderOrdinal(rdr, "GRP");
+                        int ASSOCIATED_DEAL = DB.GetReaderOrdinal(rdr, "ASSOCIATED_DEAL");
+
+                        while (rdr.Read())
                         {
-                            ObjID = (OBJ_ID < 0 || rdr.IsDBNull(OBJ_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(OBJ_ID),
-                            ObjType = (OBJ_TYPE < 0 || rdr.IsDBNull(OBJ_TYPE)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(OBJ_TYPE),
-                            PickedDeal = (PICKED_DEAL < 0 || rdr.IsDBNull(PICKED_DEAL)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(PICKED_DEAL),
-                            Group = (GRP < 0 || rdr.IsDBNull(GRP)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(GRP),
-                            AssociatedDeals = (ASSOCIATED_DEAL < 0 || rdr.IsDBNull(ASSOCIATED_DEAL)) ? String.Empty : rdr.GetFieldValue<System.String>(ASSOCIATED_DEAL)
-                        });
-                    } // while
+                            complexStackingDealGroup.Add(new ComplexStackingDealGroup
+                            {
+                                ObjID = (OBJ_ID < 0 || rdr.IsDBNull(OBJ_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(OBJ_ID),
+                                ObjType = (OBJ_TYPE < 0 || rdr.IsDBNull(OBJ_TYPE)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(OBJ_TYPE),
+                                PickedDeal = (PICKED_DEAL < 0 || rdr.IsDBNull(PICKED_DEAL)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(PICKED_DEAL),
+                                Group = (GRP < 0 || rdr.IsDBNull(GRP)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(GRP),
+                                AssociatedDeals = (ASSOCIATED_DEAL < 0 || rdr.IsDBNull(ASSOCIATED_DEAL)) ? String.Empty : rdr.GetFieldValue<System.String>(ASSOCIATED_DEAL)
+                            });
+                        } // while
+                    }
 
-                    rdr.NextResult();
+                    //rdr.NextResult();
 
-                    //TABLE 2
-                    int DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
-                    int STAGE = DB.GetReaderOrdinal(rdr, "STAGE");
-                    int MAX_RPU = DB.GetReaderOrdinal(rdr, "MAX_RPU");
-                    int START_DT = DB.GetReaderOrdinal(rdr, "START_DT");
-                    int END_DT = DB.GetReaderOrdinal(rdr, "END_DT");
-                    int GEO = DB.GetReaderOrdinal(rdr, "GEO");
-                    int REBATE_TYPE = DB.GetReaderOrdinal(rdr, "REBATE_TYPE");
-                    int PRODUCT = DB.GetReaderOrdinal(rdr, "PRODUCT");
-                    int ECAP_PRC = DB.GetReaderOrdinal(rdr, "ECAP_PRC");
-                    int CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
-                    int CUST_DIV_NM = DB.GetReaderOrdinal(rdr, "CUST_DIV_NM");
-                    int CTRCT_NM = DB.GetReaderOrdinal(rdr, "CTRCT_NM");
-                    int DealType = DB.GetReaderOrdinal(rdr, "DEAL_TYPE");
-
-                    while (rdr.Read())
+                    if (mode == "DEAL_INFO")
                     {
-                        complexStackingDealInfo.Add(new ComplexStackingDealInfo
+                        //TABLE 2
+                        int DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+                        int STAGE = DB.GetReaderOrdinal(rdr, "STAGE");
+                        int MAX_RPU = DB.GetReaderOrdinal(rdr, "MAX_RPU");
+                        int START_DT = DB.GetReaderOrdinal(rdr, "START_DT");
+                        int END_DT = DB.GetReaderOrdinal(rdr, "END_DT");
+                        int GEO = DB.GetReaderOrdinal(rdr, "GEO");
+                        int REBATE_TYPE = DB.GetReaderOrdinal(rdr, "REBATE_TYPE");
+                        int PRODUCT = DB.GetReaderOrdinal(rdr, "PRODUCT");
+                        int ECAP_PRC = DB.GetReaderOrdinal(rdr, "ECAP_PRC");
+                        int CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+                        int CUST_DIV_NM = DB.GetReaderOrdinal(rdr, "CUST_DIV_NM");
+                        int CTRCT_NM = DB.GetReaderOrdinal(rdr, "CTRCT_NM");
+                        int DealType = DB.GetReaderOrdinal(rdr, "DEAL_TYPE");
+
+                        while (rdr.Read())
                         {
-                            WIP_DEAL_OBJ_SID = (DEAL_ID < 0 || rdr.IsDBNull(DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(DEAL_ID),
-                            WF_STG_CD = (STAGE < 0 || rdr.IsDBNull(STAGE)) ? String.Empty : rdr.GetFieldValue<System.String>(STAGE),
-                            MAX_RPU = (MAX_RPU < 0 || rdr.IsDBNull(MAX_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(MAX_RPU),
-                            START_DT = (START_DT < 0 || rdr.IsDBNull(START_DT)) ? String.Empty : Convert.ToDateTime(rdr["START_DT"]).ToString("MM-dd-yyyy"),
-                            END_DT = (END_DT < 0 || rdr.IsDBNull(END_DT)) ? String.Empty : Convert.ToDateTime(rdr["END_DT"]).ToString("MM-dd-yyyy"),
-                            GEO_COMBINED = (GEO < 0 || rdr.IsDBNull(GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(GEO),
-                            ECAP_TYPE = (REBATE_TYPE < 0 || rdr.IsDBNull(REBATE_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(REBATE_TYPE),
-                            PRODUCT_NM = (PRODUCT < 0 || rdr.IsDBNull(PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(PRODUCT),
-                            ECAP_PRICE = (ECAP_PRC < 0 || rdr.IsDBNull(ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(ECAP_PRC),
-                            //CustomerName = (CUST_NM < 0 || rdr.IsDBNull(CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(CUST_NM),
-                            CUST_ACCNT_DIV = (CUST_DIV_NM < 0 || rdr.IsDBNull(CUST_DIV_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(CUST_DIV_NM),
-                            CONTRACT_NM = (CTRCT_NM < 0 || rdr.IsDBNull(CTRCT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(CTRCT_NM),
-                            DealType = (DealType < 0 || rdr.IsDBNull(DealType)) ? String.Empty : rdr.GetFieldValue<System.String>(DealType),
+                            complexStackingDealInfo.Add(new ComplexStackingDealInfo
+                            {
+                                WIP_DEAL_OBJ_SID = (DEAL_ID < 0 || rdr.IsDBNull(DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(DEAL_ID),
+                                WF_STG_CD = (STAGE < 0 || rdr.IsDBNull(STAGE)) ? String.Empty : rdr.GetFieldValue<System.String>(STAGE),
+                                MAX_RPU = (MAX_RPU < 0 || rdr.IsDBNull(MAX_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(MAX_RPU),
+                                START_DT = (START_DT < 0 || rdr.IsDBNull(START_DT)) ? String.Empty : Convert.ToDateTime(rdr["START_DT"]).ToString("MM-dd-yyyy"),
+                                END_DT = (END_DT < 0 || rdr.IsDBNull(END_DT)) ? String.Empty : Convert.ToDateTime(rdr["END_DT"]).ToString("MM-dd-yyyy"),
+                                GEO_COMBINED = (GEO < 0 || rdr.IsDBNull(GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(GEO),
+                                ECAP_TYPE = (REBATE_TYPE < 0 || rdr.IsDBNull(REBATE_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(REBATE_TYPE),
+                                PRODUCT_NM = (PRODUCT < 0 || rdr.IsDBNull(PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(PRODUCT),
+                                ECAP_PRICE = (ECAP_PRC < 0 || rdr.IsDBNull(ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(ECAP_PRC),
+                                //CustomerName = (CUST_NM < 0 || rdr.IsDBNull(CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(CUST_NM),
+                                CUST_ACCNT_DIV = (CUST_DIV_NM < 0 || rdr.IsDBNull(CUST_DIV_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(CUST_DIV_NM),
+                                CONTRACT_NM = (CTRCT_NM < 0 || rdr.IsDBNull(CTRCT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(CTRCT_NM),
+                                DealType = (DealType < 0 || rdr.IsDBNull(DealType)) ? String.Empty : rdr.GetFieldValue<System.String>(DealType),
 
-                        });
-                    } // while
-
+                            });
+                        } // while
+                    }
                     result.GroupItems = complexStackingDealGroup;
                     result.DealInfos = complexStackingDealInfo;
                 }
@@ -1107,15 +1113,16 @@ namespace Intel.MyDeals.DataLibrary
                 type_int_pair opPair = new type_int_pair();
                 opPair.AddRows(ovlpComplexObjs.Select(obj => new OpPair<int, int>
                 {
-                    First = obj.PSId,
-                    Second = obj.Value
+                    First = obj.ObjType,
+                    Second = obj.ObjID
                 }));
                 DataAccess.ExecuteNonQuery(new Procs.dbo.PR_MYDL_CMPLX_STCKG_ACTN
                 {
                     @in_cs_actn = "UPDATE",
                     @in_atrb_nm = "IS_CS_GRP_REVIEWED",
                     @in_obj_keys = opPair,
-                    @in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
+                    @in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                    @role = OpUserStack.MyOpUserToken.Role.RoleTypeCd
                 });
                 result = true;
             }

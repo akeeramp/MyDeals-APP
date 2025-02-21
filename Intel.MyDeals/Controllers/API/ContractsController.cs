@@ -504,11 +504,11 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("getComplexStackingGroup")]
+        [Route("getComplexStackingGroup/{mode}")]
         [HttpPost]
-        public ComplexStacking GetComplexStackingGroup(List<OvlpComplexObj> ovlpComplexObjs)     //Get all Product with Alias from ProductAlias
+        public ComplexStacking GetComplexStackingGroup(string mode, List<OvlpComplexObj> ovlpComplexObjs)     //Get all Product with Alias from ProductAlias
         {
-            ComplexStacking result = SafeExecutor(() => _contractsLib.GetComplexStackingGroup(ovlpComplexObjs)
+            ComplexStacking result = SafeExecutor(() => _contractsLib.GetComplexStackingGroup(ovlpComplexObjs, mode)
                 , $"Unable to get Complex Stacking Group"
              );
             return result;

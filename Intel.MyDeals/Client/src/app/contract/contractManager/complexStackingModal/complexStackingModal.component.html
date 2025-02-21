@@ -52,6 +52,9 @@
                                 </table>
                                 <div>
                                     <div class="collapse multi-collapse" id="PSData_{{psIndex}}" [ngClass]="{show : displayId[ps.dealId]}">
+                                        <span *ngIf="expandedDealId == ps.dealId && isLoadingDealInfo" class="k-i-loading loading-design-custom">
+                                            <span style="margin-left: 6em; font-size:10px; line-height: 1.0 !important; ">Loading...</span>
+                                        </span>
                                         <div class="col-md-12" *ngFor="let curDealGroup of detailData[ps.dealId]; let i = index">
                                             <kendo-grid id="dealGroupingGrid" [data]="curDealGroup.gridData" [sortable]="true" [resizable]="false" [selectable]="false" #groupingGrid>
                                                 <kendo-grid-column *ngFor="let column of COLUMNS_CONFIG" field="{{ column.field }}" title="{{ column.title }}" [hidden]="column.hidden">
@@ -95,9 +98,9 @@
                 </div>
             </div>
         </div>
-        <div class="footer-container" >
-            <button kendoButton class="btn btn-sm btn-primary lnk btnselectAccept overlapBtnSelect footer-button-height" icon="file-excel" (click)="exportDataToExcel()"> Export to Excel </button>
-            <button [ngStyle]="{'display': isModel ? 'inline':'none' }" class='btn btn-sm btn-primary lnk btnYes btnselectAccept overlapBtnSelect footer-accept-button' (click)="acceptAllGroupings()"><i class='intelicon-check'></i> {{isAnyItemChecked() ? 'Accept Selected' : 'Accept All'}} </button>
+        <div class="footer-container">
+            <button [disabled]="isExportingData" kendoButton class="btn btn-sm btn-primary lnk btnselectAccept overlapBtnSelect footer-button-height" icon="file-excel" (click)="exportDataToExcel()"> {{isExportingData ? 'Exporting, Please wait...' : 'Export to Excel'}} </button>
+            <button [ngStyle]="{'display': isModel ? 'inline':'none' }" class='btn btn-sm btn-primary lnk btnYes btnselectAccept overlapBtnSelect footer-accept-button' (click)="acceptAllGroupings()"><i class='intelicon-check'></i> Accept All </button>
         </div>
     </div>
 </ng-template>

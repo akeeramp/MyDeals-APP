@@ -26,6 +26,9 @@ export interface GroupingGridData {
 export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
 
     private isLoading = false;
+    private isLoadingDealInfo = false;
+    private isExportingData = false;
+    private expandedDealId;
     private readonly COLUMNS_CONFIG = [        
         {
             field: 'GROUPED_BY',
@@ -124,63 +127,18 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
     }
 
     private get hasMultipleGroupings(): boolean {
-        return this.grpDeals != undefined && this.grpDeals.length > 0 && this.dealInfos.length > 0;
+        return this.grpDeals != undefined && this.grpDeals.length > 0;
     }
 
-    private grpDeals: any[] = []
-    private dealInfos: any[] = []
+    private grpDeals: any[] = [];
+    private dealInfos: any[] = [];
     private readonly GROUPING_AGGREGATES: AggregateDescriptor[] = [
         { field: 'MAX_RPU', aggregate: 'sum' }
     ];
 
-    @ViewChildren('groupingGrid') groupingGridElements: QueryList<GridComponent>
-    private triggerExcelExportForAllGrids(): void {
-        this.groupingGridElements.forEach((grid: GridComponent) => {
-            grid.saveAsExcel();
-        });
-    }
-
-    private allGridSheetData: WorkbookSheet[] = [];
-    private overrideExcelExport(event: any, grid: unknown): void {
-        event.preventDefault();
-
-        this.allGridSheetData.push(event.workbook.sheets[0]);
-    }
-
-    private excelExportAllGroupings(): void {
-        this.triggerExcelExportForAllGrids();
-
-        const ROWS: WorkbookSheetRow[] = [];        
-        for (const GRID_SHEET of this.allGridSheetData) {
-            ROWS.push(...GRID_SHEET.rows);
-            ROWS.push({ cells: [] });
-        }
-
-        const EXPORT_SHEET: WorkbookSheet = {
-            rows: ROWS
-        };
-
-        const EXPORT_WORKBOOK: Workbook = new Workbook({
-            sheets: [EXPORT_SHEET]
-        });
-
-        EXPORT_WORKBOOK.toDataURL().then((dataUrl) => {
-            saveAs(dataUrl, `MyDeals_Complex Grouping_${this.momentService.moment().format('MMDDYYYY_HHmm')}.xlsx`);
-        });
-    }
-
     private acceptAllGroupings(): void {        
         const acceptedList = [];
-        if (Object.keys(this.acceptedItems).filter(key => this.acceptedItems[key]).length > 0) {
-            for (const key in this.acceptedItems) {
-                if (this.acceptedItems[key]) {
-                    acceptedList.push({ dealId: key, value: 1 })
-                }
-            }
-        } else {
-            const approverValue = (<any>window).usrRole === 'DA' ? 2 : 1;
-            _.uniqBy(this.grpDeals, 'psId').forEach(obj => acceptedList.push({ psId: obj.psId, value: approverValue }))            
-        }
+        _.uniqBy(this.grpDeals, 'psId').forEach(obj => acceptedList.push({ ObjID: obj.psId, ObjType: 2 }))
         this.closeModal(acceptedList);
     }
 
@@ -189,10 +147,9 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
             this.processResponse(this.data.ovlpObjs);
             return;
         }
-        //this.setBusy("Complex Stacking", "Fetching complex stacking details", "Info", true);
         this.isLoading = true;
         const data = [{ ObjId: this.inputData.DC_ID, ObjType: 2 }] ;
-        this.complexStackingModalService.getComplexStackingGroup(data).toPromise()
+        this.complexStackingModalService.getComplexStackingGroup("COMPLEX_GRP_DATA", data).toPromise()
             .then((response) => {
                 this.processResponse(response);
             })
@@ -203,25 +160,17 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
     }
 
     public expandDetailsBy = (dataItem): number => {
-        const dealId = dataItem.dealId;
-        if (!this.detailData.hasOwnProperty(dealId)) {
-            const grpArr = this.groupedData[dealId];
-            for (let i = 0; i < grpArr.length; i++) {
-                const CURRENT_GROUPING_LETTER = String.fromCharCode(97 + i).toUpperCase();
-                const groupedDeals = [];
-                const assoDealIds = grpArr[i].AssociatedDeals.split(",").map(Number);
-                groupedDeals.push(
-                    ...this.dealInfos.filter((deal: any) => assoDealIds.includes(deal.WIP_DEAL_OBJ_SID)).map((itm) => ({ ...itm, GROUPED_BY: grpArr.length > 1 ? "GROUP " + dealId + " " + CURRENT_GROUPING_LETTER : "DEAL " + dealId }))
-                )
-                //Move the matching dealid with overlaping dealId on top
-                groupedDeals.unshift(groupedDeals.splice(groupedDeals.findIndex(item => item.WIP_DEAL_OBJ_SID == dealId), 1)[0])
-                grpArr[i]["gridData"] = groupedDeals;
-                grpArr[i]["total"] = groupedDeals.length
-                grpArr[i]["rpuTotal"] = aggregateBy(groupedDeals, this.GROUPING_AGGREGATES)
-            }
-            this.detailData[dealId] = grpArr;
+        const dealId = this.expandedDealId = dataItem.dealId;
+        if (!_.has(this.detailData, dealId)) {
+            this.isLoadingDealInfo = true;            
+            const inputDealIds = _.uniq(dataItem.assoDealIds.split(",").map(Number))
+            this.getComplexStackingDealInfo(inputDealIds).then(() => {
+                const nestedGridGrpArr = this.formatNestedGridData(dealId);
+                this.detailData[dealId] = nestedGridGrpArr;
+                this.isLoadingDealInfo = false;  
+            });                  
         }
-        this.displayId[dealId] = !this.displayId[dealId]
+        this.displayId[dealId] = !this.displayId[dealId];
         return dealId;
     };
 
@@ -241,20 +190,8 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
                 const dealIds = Object.keys(this.groupedData);
                 forEach(dealIds, (dealId) => {
                     this.displayId[dealId] = false;
-                    const tempObj = {};
-                    const grpArr = this.groupedData[dealId];
-                    tempObj["label"] = "DEAL " + dealId;
-                    tempObj["gridlabel"] = "Single Overlap";
-                    tempObj["hasMoreThanOneGrp"] = false;
-
-                    if (grpArr.length > 1) {
-                        tempObj["label"] = "GROUP " + dealId;
-                        tempObj["gridlabel"] = "Multiple Overlaps";
-                        tempObj["hasMoreThanOneGrp"] = true;
-                    }
-                    tempObj["dealId"] = dealId;
-                    tempObj["psId"] = grpArr[0].ObjID;
-                    this.grpDeals.push(tempObj);
+                    const parentGridInfo = this.formatParentGridData(dealId);
+                    this.grpDeals.push(parentGridInfo);
                 });
             }
         }
@@ -263,55 +200,79 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
         }
     }
 
-    onCheckboxChange(checkBoxType, event, data) {
-        const dealId = data.dealId;
-        if (event.currentTarget.checked) {
-            this.acceptedItems[dealId] = true;
-        } else {
-            delete this.acceptedItems[dealId];
-        }
-    }
-
     ngOnInit() {
         this.formComplexStackingGroup()
     }
 
-    isAnyItemChecked(): boolean {
-        return (this.acceptedItems && (Object.keys(this.acceptedItems).filter(key => this.acceptedItems[key]).length > 0));
+    async getComplexStackingDealInfo(dealIds: number[]): Promise<void> {
+        const payload = [];
+        _.forEach(_.uniq(dealIds), (val) => payload.push({ "ObjId": val, "ObjType": 5 }));
+        const apiRes = await this.complexStackingModalService.getComplexStackingGroup("DEAL_INFO", payload).toPromise().catch(error => {
+            this.loggerService.error('Get Complex Stacking Deal Group Info', error);
+        });
+        if (apiRes.DealInfos && apiRes.DealInfos.length > 0) {
+            this.dealInfos = apiRes.DealInfos;
+        }
     }
 
-    getExportData() {
+    formatParentGridData(dealId) {
+        const parentGridInfoObj = {};
+        const grpArr = this.groupedData[dealId];
+        parentGridInfoObj["label"] = "DEAL " + dealId;
+        parentGridInfoObj["gridlabel"] = "Single Overlap";
+        parentGridInfoObj["hasMoreThanOneGrp"] = false;
+        if (grpArr.length > 1) {
+            parentGridInfoObj["label"] = "GROUP " + dealId;
+            parentGridInfoObj["gridlabel"] = "Multiple Overlaps";
+            parentGridInfoObj["hasMoreThanOneGrp"] = true;
+        }
+        parentGridInfoObj["dealId"] = dealId;
+        parentGridInfoObj["psId"] = grpArr[0].ObjID;
+        parentGridInfoObj["assoDealIds"] = _.map(grpArr, (item) => item.AssociatedDeals).toString();
+        return parentGridInfoObj;
+    }
+
+    formatNestedGridData(dealId) {
+        const nestedGridGrpArr = this.groupedData[dealId]; //Copying values to new variable
+        for (let i = 0; i < nestedGridGrpArr.length; i++) {
+            const CURRENT_GROUPING_LETTER = String.fromCharCode(97 + i).toUpperCase();
+            const groupedDeals = [];
+            const assoDealIds = nestedGridGrpArr[i].AssociatedDeals.split(",").map(Number);
+            groupedDeals.push(
+                ...this.dealInfos.filter((deal: any) => assoDealIds.includes(deal.WIP_DEAL_OBJ_SID)).map((itm) => ({ ...itm, GROUPED_BY: nestedGridGrpArr.length > 1 ? "GROUP " + dealId + " " + CURRENT_GROUPING_LETTER : "DEAL " + dealId }))
+            )
+            //Move the matching dealid with overlaping dealId on top
+            groupedDeals.unshift(groupedDeals.splice(groupedDeals.findIndex(item => item.WIP_DEAL_OBJ_SID == dealId), 1)[0])
+            nestedGridGrpArr[i]["gridData"] = groupedDeals;
+            nestedGridGrpArr[i]["total"] = groupedDeals.length
+            nestedGridGrpArr[i]["rpuTotal"] = aggregateBy(groupedDeals, this.GROUPING_AGGREGATES)
+        }
+        return nestedGridGrpArr;
+    }
+
+    async getExportData() {
+        const inputDealIds = [];
+        _.forOwn(this.groupedData, (value) => {
+            _.forEach(value, (item) => {
+                inputDealIds.push(...item.AssociatedDeals.split(",").map(Number))
+            });
+        });
+        await this.getComplexStackingDealInfo(_.flatMap(inputDealIds));
         const dealIds = Object.keys(this.groupedData);
         forEach(dealIds, (dealId) => {
-            const tempObj = {};
-            const grpArr = this.groupedData[dealId];
-            for (let i = 0; i < grpArr.length; i++) {
-                const CURRENT_GROUPING_LETTER = String.fromCharCode(97 + i).toUpperCase();
-                const groupedDeals = [];
-                const assoDealIds = grpArr[i].AssociatedDeals.split(",").map(Number);
-                groupedDeals.push(
-                    ...this.dealInfos.filter((deal: any) => assoDealIds.includes(deal.WIP_DEAL_OBJ_SID)).map((itm) => ({ ...itm, GROUPED_BY: grpArr.length > 1 ? "GROUP " + dealId + " " + CURRENT_GROUPING_LETTER : "DEAL " + dealId }))
-                )
-                //Move the matching dealid with overlaping dealId on top
-                groupedDeals.unshift(groupedDeals.splice(groupedDeals.findIndex(item => item.WIP_DEAL_OBJ_SID == dealId), 1)[0])
-                grpArr[i]["gridData"] = groupedDeals;
-                grpArr[i]["total"] = groupedDeals.length
-                grpArr[i]["rpuTotal"] = aggregateBy(groupedDeals, this.GROUPING_AGGREGATES)
-            }
-            tempObj["label"] = "DEAL " + dealId;
-            if (grpArr.length > 1) {
-                tempObj["label"] = "GROUP " + dealId;
-            }
-            tempObj["dealId"] = dealId;
-            tempObj["psId"] = grpArr[0].ObjID;
-            tempObj["groupedDeals"] = grpArr;
-            this.exportData[dealId] = tempObj;
-        });
+            const parentGridInfo = {};
+            const nestedGridInfo = this.formatNestedGridData(dealId);            
+            parentGridInfo["groupedDeals"] = nestedGridInfo;
+            this.exportData[dealId] = parentGridInfo;            
+        });        
     }
 
-    exportDataToExcel(): void {
-        if (this.dealInfos != undefined && this.dealInfos.length > 0) {
-            this.getExportData();
+    async exportDataToExcel(): Promise<void> {
+        if (Object.keys(this.groupedData).length > 0) {
+            this.isExportingData = true;
+            if (Object.keys(this.exportData).length === 0) {
+                await this.getExportData();
+            }            
             const HEADER = this.COLUMNS_CONFIG.map((item) => item.field);
             const COLUMN_WIDTHS = [{ wch: 16 }, { wch: 8 }, { wch: 18 }, { wch: 10 }, { wch: 12 }, { wch: 24 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 20 }, { wch: 10 }, { wch: 12 }, { wch: 10 }, { wch: 38 }, { wch: 100 }, { wch: 28 }, { wch: 26 }, { wch: 100 }, { wch: 28 }, { wch: 16 }];
 
@@ -321,7 +282,7 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
                 const dealId = dealIds[i];
                 const dealData = this.exportData[dealId].groupedDeals;
                 for (let j = 0; j < dealData.length; j++) {
-                    const gridData = dealData[j].gridData;
+                    const gridData = new Array(...dealData[j].gridData);
                     gridData.push({ WF_STG_CD: "Total RPU:", MAX_RPU: "$ " + dealData[j].rpuTotal.MAX_RPU.sum.toFixed(2) })
                     gridData.push({});
                     utils.sheet_add_aoa(SHEET, [this.COLUMNS_CONFIG.map((item) => item.title)], { origin: -1 });
@@ -335,39 +296,13 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
             const WB_OPTIONS: WritingOptions = {
                 compression: true,
             };            
-            writeFileXLSX(WB, `MyDeals_Complex Grouping_${this.momentService.moment().format('MMDDYYYY_HHmm')}.xlsx`, WB_OPTIONS);            
+            writeFileXLSX(WB, `MyDeals_Complex Grouping_${this.momentService.moment().format('MMDDYYYY_HHmm')}.xlsx`, WB_OPTIONS);
+            this.isExportingData = false;
         } else {
             this.loggerService.warn('', 'No data to export');
         }
     }
-
-    setBusy(msg, detail, msgType, showFunFact) {
-        setTimeout(() => {
-            const newState = msg != undefined && msg !== "";
-            // if no change in state, simple update the text
-            if (this.isLoading === newState) {
-                this.spinnerMessageHeader = msg;
-                this.spinnerMessageDescription = !detail ? "" : detail;
-                this.msgType = msgType;
-                this.isBusyShowFunFact = showFunFact;
-                return;
-            }
-            this.isLoading = newState;
-            if (this.isLoading) {
-                this.spinnerMessageHeader = msg;
-                this.spinnerMessageDescription = !detail ? "" : detail;
-                this.msgType = msgType;
-                this.isBusyShowFunFact = showFunFact;
-            } else {
-                setTimeout(() => {
-                    this.spinnerMessageHeader = msg;
-                    this.spinnerMessageDescription = !detail ? "" : detail;
-                    this.msgType = msgType;
-                    this.isBusyShowFunFact = showFunFact;
-                }, 100);
-            }
-        });
-    }
+    
     ngAfterViewInit(): void {
 
     }

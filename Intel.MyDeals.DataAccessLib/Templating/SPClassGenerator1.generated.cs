@@ -3221,11 +3221,11 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
-		/// ID: 1708181481
-		/// Modified: 12/10/2024 9:10:05 PM
-		/// Parameters: 3
-		///</summary>
-		public partial class PR_MYDL_CMPLX_GRP_DTA : SP
+        /// ID: 2012182564
+        /// Modified: 2/7/2025 1:16:11 PM
+        /// Parameters: 3
+        ///</summary>
+        public partial class PR_MYDL_CMPLX_GRP_DTA : SP
         {
             public PR_MYDL_CMPLX_GRP_DTA()
             {
@@ -3234,14 +3234,14 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
 
             ///<summary>
-            /// DataType: varchar
+            /// DataType: int
             /// Mode: IN
             ///</summary>
-            [SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
-            public String DEAL_ID
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 DEAL_ID
             {
                 set { SetParmeter("DEAL_ID", value); }
-                get { return (String)GetParameter("DEAL_ID"); }
+                get { return (Int32)GetParameter("DEAL_ID"); }
             }
 
             ///<summary>
@@ -3268,11 +3268,11 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
-		/// ID: 1685945428
-		/// Modified: 12/30/2024 11:41:59 AM
-		/// Parameters: 3
-		///</summary>
-		public partial class PR_MYDL_CMPLX_STCKG : SP
+        /// ID: 2028182621
+        /// Modified: 2/21/2025 12:31:36 PM
+        /// Parameters: 4
+        ///</summary>
+        public partial class PR_MYDL_CMPLX_STCKG : SP
         {
             public PR_MYDL_CMPLX_STCKG()
             {
@@ -3313,12 +3313,24 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 set { SetParmeter("Role", value); }
                 get { return (String)GetParameter("Role"); }
             }
+
+            ///<summary>
+            /// DataType: varchar(50)
+            /// Mode: IN
+            /// Max Length: 50
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 50, false)]
+            public String mode
+            {
+                set { SetParmeter("mode", value); }
+                get { return (String)GetParameter("mode"); }
+            }
         }
 
         ///<summary>
-        /// ID: 552037398
-        /// Modified: 12/30/2024 11:49:57 AM
-        /// Parameters: 4
+        /// ID: 2044182678
+        /// Modified: 2/21/2025 12:30:05 PM
+        /// Parameters: 5
         ///</summary>
         public partial class PR_MYDL_CMPLX_STCKG_ACTN : SP
         {
@@ -3372,6 +3384,18 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             {
                 set { SetParmeter("in_emp_wwid", value); }
                 get { return (Int32)GetParameter("in_emp_wwid"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(50)
+            /// Mode: IN
+            /// Max Length: 50
+            ///</summary>
+            [SQLParameterAttribute(5, "ParameterDirection.Input", 50, false)]
+            public String role
+            {
+                set { SetParmeter("role", value); }
+                get { return (String)GetParameter("role"); }
             }
         }
 

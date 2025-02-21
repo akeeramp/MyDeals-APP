@@ -46,7 +46,7 @@ namespace Intel.MyDeals.Entities
 
     public class OvlpComplexUpdateObj
     {
-        public int PSId { get; set; }
-        public int Value { get; set; }
+        public int ObjID { get; set; }
+        public int ObjType { get; set; }
     }
 }

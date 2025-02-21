@@ -11,8 +11,8 @@ export class ComplexStackingModalService {
 
     public apiBaseContractUrl = "/api/Contracts/v1/";
 
-    public getComplexStackingGroup(ovlpObjs): Observable<any> {
-        const apiUrl: string = this.apiBaseContractUrl + 'getComplexStackingGroup';
+    public getComplexStackingGroup(mode, ovlpObjs): Observable<any> {
+        const apiUrl: string = this.apiBaseContractUrl + 'getComplexStackingGroup/' + mode
         return this.httpClient.post(apiUrl, ovlpObjs);
     }
 

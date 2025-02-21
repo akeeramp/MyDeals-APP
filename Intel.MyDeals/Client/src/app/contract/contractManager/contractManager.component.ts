@@ -741,41 +741,33 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         this.submitModal = false;
     }
 
-    callComplexStacking(complexOverlapObjs: DynamicObj[], fromSubmit = false, fromToggle = false, checkForRequirements = false) {
-
+    callComplexStacking(complexOverlapObjs: DynamicObj[]) {
         this.setBusy("Complex Stacking", "Fetching complex stacking details", "Info", true);
         this.isLoading = this.csLoading = true;
-
-        this.complexStackingDialogSvc.fetchAndShowComplexStakingOverlappingDeals(complexOverlapObjs, fromSubmit, fromToggle)
-            .subscribe(response => {
-                if (!response.isLoading) {
-                    this.isLoading = false;
-                }
-                if (response.isAccepted) {
-                    if (response.isUpdatingDetails) {
-                        if (response.isLoading) {
-                            this.setBusy("Complex Stacking", "Updating Complex Stacking details", "Info", true);
-                            this.isLoading = true;
-                        } else {
-                            this.isLoading = false;
-                        }
-                    } else if (response.isLoading) {
+        this.complexStackingDialogSvc.fetchAndShowComplexStakingOverlappingDeals(complexOverlapObjs).subscribe(response => {
+            if (!response.isLoading) {
+                this.isLoading = false;
+            }
+            if (response.isAccepted) {
+                if (response.isUpdatingDetails) {
+                    if (response.isLoading) {
+                        this.setBusy("Complex Stacking", "Updating Complex Stacking details", "Info", true);
+                        this.isLoading = true;
+                    } else {
                         this.isLoading = false;
                     }
-
-                    if (response.GroupingCount > 0) {
-                        this.loadDetails();
-                    }
+                } else if (response.isLoading) {
+                    this.isLoading = false;
                 }
 
-                if (response.isFormSubmit) {
-                    this.actionItems(null, null);
-                } else if (response.isFormToggle) {
-                    this.actionItems(fromToggle, checkForRequirements);
-                } else if (response.GroupingCount <= 0 && !response.isAccepted) {
+                if (response.GroupingCount > 0) {
                     this.loadDetails();
                 }
-            });
+            }
+            if (response.GroupingCount === 0 && !response.isAccepted) {
+                this.loadDetails();
+            }
+        });
     }
 
 
