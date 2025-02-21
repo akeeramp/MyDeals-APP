@@ -268,10 +268,17 @@ export class managerExcludeGroupsComponent implements OnDestroy {
     }
     togglePctFilter() {
         if (this.pctFilterEnabled) {
-                this.state.filter = {
-                    logic: "or",
-                    filters: [{ field: "COST_TEST_RESULT", operator: "eq", value: "Fail" },
-                    { field: "COST_TEST_RESULT", operator: "eq", value: "InComplete" }]
+
+            const filters = Array.from(new Set(this.gridData.data.map(i => i.COST_TEST_RESULT)))
+                .map(i => { return { field: "COST_TEST_RESULT", operator: "eq", value: i} });
+
+            this.state.filter = {
+                    logic: "and",
+                    filters: [{
+                        filters: filters,
+                        logic: "or"
+                    }
+                    ]
                 };
         } else {
             this.state.filter = {
@@ -331,6 +338,7 @@ export class managerExcludeGroupsComponent implements OnDestroy {
     }
 
     generateExcel(grid: GridComponent, rows: any, colWidths: any[], exportAll: boolean = false) {
+        this.savePagerState();
         let cells: any[] = [];
         grid.data = exportAll ? this.gridResult : JSON.parse(JSON.stringify(this.gridData.data));
         each(grid.data, (dataItem) => {
@@ -350,6 +358,7 @@ export class managerExcludeGroupsComponent implements OnDestroy {
                 cells: cells
             });
         });
+        this.restorePagerState(this.state);
         // sheets
         var sheets = [
             {
@@ -431,7 +440,17 @@ export class managerExcludeGroupsComponent implements OnDestroy {
             this.gridData = process(this.gridResult, this.state);
         }
     }
-
+    savePagerState() {
+        return {
+            skip: this.state.skip,
+            take: this.state.take
+        };
+    }
+    restorePagerState(state) {
+        this.state.skip = state.skip;
+        this.state.take = state.take;
+        this.gridData = process(this.gridResult, this.state);
+    }
     ngOnInit() {
         this.userRole = (<any>window).usrRole;
         this.loadExcludeGroups();

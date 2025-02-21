@@ -553,11 +553,11 @@ hot-table div.handsontable {
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%)
 }
 
-::ng-deep .k-grid-content tr:first-child  {
+::ng-deep #dealGroupingGrid .k-grid-content tr:first-child {
     background-color: #00aeef !important;
     color: #ffffff;
 }
-::ng-deep .k-grid-content tr:first-child:hover {
+::ng-deep #dealGroupingGrid .k-grid-content tr:first-child:hover {
     background-color: #0071c5 !important;
     color: #ffffff;
 }

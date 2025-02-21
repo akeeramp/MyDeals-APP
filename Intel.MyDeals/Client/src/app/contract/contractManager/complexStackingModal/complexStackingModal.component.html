@@ -53,7 +53,7 @@
                                 <div>
                                     <div class="collapse multi-collapse" id="PSData_{{psIndex}}" [ngClass]="{show : displayId[ps.dealId]}">
                                         <div class="col-md-12" *ngFor="let curDealGroup of detailData[ps.dealId]; let i = index">
-                                            <kendo-grid [data]="curDealGroup.gridData" [sortable]="true" [resizable]="false" [selectable]="false" #groupingGrid>
+                                            <kendo-grid id="dealGroupingGrid" [data]="curDealGroup.gridData" [sortable]="true" [resizable]="false" [selectable]="false" #groupingGrid>
                                                 <kendo-grid-column *ngFor="let column of COLUMNS_CONFIG" field="{{ column.field }}" title="{{ column.title }}" [hidden]="column.hidden">
                                                     
                                                     <ng-template kendoGridCellTemplate *ngIf="!['PRODUCT_NM','ECAP_PRICE','MAX_RPU'].includes(column.field)" let-dataItem="dataItem">
