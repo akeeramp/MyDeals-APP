@@ -269,17 +269,17 @@ export class managerExcludeGroupsComponent implements OnDestroy {
     togglePctFilter() {
         if (this.pctFilterEnabled) {
 
-            const filters = Array.from(new Set(this.gridData.data.map(i => i.COST_TEST_RESULT)))
-                .map(i => { return { field: "COST_TEST_RESULT", operator: "eq", value: i} });
-
+            const filters: { field: string, operator: string, value: string }[] = [];
+            filters.push({ field: "COST_TEST_RESULT", operator: "eq", value: "InComplete" });
+            filters.push({ field: "COST_TEST_RESULT", operator: "eq", value: "Fail" });
             this.state.filter = {
-                    logic: "and",
-                    filters: [{
-                        filters: filters,
-                        logic: "or"
-                    }
-                    ]
-                };
+                logic: "and",
+                filters: [{
+                    filters: filters,
+                    logic: "or"
+                }
+                ]
+            };
         } else {
             this.state.filter = {
                 logic: "and",
