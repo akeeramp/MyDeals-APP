@@ -66,6 +66,9 @@
                     <kendo-grid-column field="TRGRD_BY" title="Triggered By" [width]="150"></kendo-grid-column>
                     <kendo-grid-column field="JOB_HLTH_CNFG_DTL" title="Job Health Configuration" [width]="400"></kendo-grid-column>
                     <kendo-grid-column field="PREDECESSOR_COND" title="Predecessor" [width]="150"></kendo-grid-column>
+
+                    <kendo-grid-column field="ALRT_MAIL_CNT" title="Alerts Send" [width]="200"></kendo-grid-column>
+                    <kendo-grid-column field="SSIS_ALERT_TRGER_FLAG" title="DB Trigger Mail" [width]="200"></kendo-grid-column>
                     <kendo-grid-excel fileName="BatchJobConstants.xlsx" [fetchData]="allData">
                         <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}" title="{{item.value}}" [width]="150" [cellOptions]="cellOptions" [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
                     </kendo-grid-excel>

@@ -216,6 +216,8 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_TRGRD_BY = DB.GetReaderOrdinal(rdr, "TRGRD_BY");
                     int IDX_JOB_HLTH_CNFG_DTL = DB.GetReaderOrdinal(rdr, "JOB_HLTH_CNFG_DTL");
                     int IDX_PREDECESSOR_COND = DB.GetReaderOrdinal(rdr, "PREDECESSOR_COND");
+                    int IDX_ALRT_MAIL_CNT = DB.GetReaderOrdinal(rdr, "ALRT_MAIL_CNT");
+                    int IDX_SSIS_ALERT_TRGER_FLAG = DB.GetReaderOrdinal(rdr, "SSIS_ALERT_TRGER_FLAG");
 
 
 
@@ -234,6 +236,8 @@ namespace Intel.MyDeals.DataLibrary
                             EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(int) : rdr.GetFieldValue<int>(IDX_EMP_WWID),
                             TRGRD_BY = (IDX_TRGRD_BY < 0 || rdr.IsDBNull(IDX_TRGRD_BY)) ? default(string) : rdr.GetFieldValue<string>(IDX_TRGRD_BY),
                             JOB_HLTH_CNFG_DTL = (IDX_JOB_HLTH_CNFG_DTL < 0 || rdr.IsDBNull(IDX_JOB_HLTH_CNFG_DTL)) ? default(string) : rdr.GetFieldValue<string>(IDX_JOB_HLTH_CNFG_DTL),
+                            SSIS_ALERT_TRGER_FLAG = (IDX_SSIS_ALERT_TRGER_FLAG < 0 || rdr.IsDBNull(IDX_SSIS_ALERT_TRGER_FLAG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_SSIS_ALERT_TRGER_FLAG),
+                            ALRT_MAIL_CNT = (IDX_ALRT_MAIL_CNT < 0 || rdr.IsDBNull(IDX_ALRT_MAIL_CNT)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ALRT_MAIL_CNT),
                             PREDECESSOR_COND = (IDX_PREDECESSOR_COND < 0 || rdr.IsDBNull(IDX_PREDECESSOR_COND)) ? default(string) : rdr.GetFieldValue<string>(IDX_PREDECESSOR_COND)
                         }); ;
                     }

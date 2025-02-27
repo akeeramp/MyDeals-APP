@@ -11167,40 +11167,122 @@ namespace Intel.MyDeals.Entities
 		}
 		*/
     }// End of class DownloadExpireYcs2Data
+
     ///<summary>
     /// Class created via template - Do Not Modify!
-    /// To modify this code, re-execute the template, or extend as partial.	
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on SOC-PF4130FW
+    /// by akannamb
+    /// at 2/25/2025 9:27:33 AM
     ///</summary>
+
     [DataContract]
     public partial class BatchJobConstants
     {
         [DataMember]
-        public System.Int32 BTCH_SID { get; set; }
+        public System.Boolean ACTV_IND { set; get; }
         [DataMember]
-        public System.String BTCH_NM { get; set; }
+        public System.Boolean ADHC_RUN { set; get; }
         [DataMember]
-        public System.String BTCH_DSC { get; set; }
+        public System.Int32 ALRT_MAIL_CNT { set; get; }
         [DataMember]
-        public System.String RUN_SCHDL { get; set; }
+        public System.String BTCH_DSC { set; get; }
         [DataMember]
-        public System.Boolean ADHC_RUN { get; set; }
+        public System.String BTCH_NM { set; get; }
         [DataMember]
-        public System.Boolean ACTV_IND { get; set; }
+        public System.Int32 BTCH_SID { set; get; }
         [DataMember]
-        public System.String STATUS { get; set; }
+        public System.Int32 EMP_WWID { set; get; }
         [DataMember]
-        public System.DateTime LST_RUN { get; set; }
+        public System.String JOB_HLTH_CNFG_DTL { set; get; }
         [DataMember]
-        public System.Int32 EMP_WWID { get; set; }
+        public System.DateTime LST_RUN { set; get; }
         [DataMember]
-        public System.String TRGRD_BY { get; set; }
+        public System.String PREDECESSOR_COND { set; get; }
+        [DataMember]
+        public System.String RUN_SCHDL { set; get; }
+        [DataMember]
+        public System.Boolean SSIS_ALERT_TRGER_FLAG { set; get; }
+        [DataMember]
+        public System.String STATUS { set; get; }
+        [DataMember]
+        public System.String TRGRD_BY { set; get; }
+        /*
+        private static List<BatchJobConstants> BatchJobConstantsFromReader(SqlDataReader rdr){
+        // This helper method is template generated.
+        // Refer to that template for details to modify this code.
 
-        [DataMember]
-        public System.String JOB_HLTH_CNFG_DTL { get; set; }
+        var ret = new List<BatchJobConstants>();
+        int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+        int IDX_ADHC_RUN = DB.GetReaderOrdinal(rdr, "ADHC_RUN");
+        int IDX_ALRT_MAIL_CNT = DB.GetReaderOrdinal(rdr, "ALRT_MAIL_CNT");
+        int IDX_BTCH_DSC = DB.GetReaderOrdinal(rdr, "BTCH_DSC");
+        int IDX_BTCH_NM = DB.GetReaderOrdinal(rdr, "BTCH_NM");
+        int IDX_BTCH_SID = DB.GetReaderOrdinal(rdr, "BTCH_SID");
+        int IDX_EMP_WWID = DB.GetReaderOrdinal(rdr, "EMP_WWID");
+        int IDX_JOB_HLTH_CNFG_DTL = DB.GetReaderOrdinal(rdr, "JOB_HLTH_CNFG_DTL");
+        int IDX_LST_RUN = DB.GetReaderOrdinal(rdr, "LST_RUN");
+        int IDX_PREDECESSOR_COND = DB.GetReaderOrdinal(rdr, "PREDECESSOR_COND");
+        int IDX_RUN_SCHDL = DB.GetReaderOrdinal(rdr, "RUN_SCHDL");
+        int IDX_SSIS_ALERT_TRGER_FLAG = DB.GetReaderOrdinal(rdr, "SSIS_ALERT_TRGER_FLAG");
+        int IDX_STATUS = DB.GetReaderOrdinal(rdr, "STATUS");
+        int IDX_TRGRD_BY = DB.GetReaderOrdinal(rdr, "TRGRD_BY");
 
-        [DataMember]
-        public System.String PREDECESSOR_COND { get; set; }
-    }// End of class BatchJobConstants
+        while (rdr.Read()){
+        ret.Add(new BatchJobConstants {
+        ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_ACTV_IND),
+        ADHC_RUN = (IDX_ADHC_RUN < 0 || rdr.IsDBNull(IDX_ADHC_RUN)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_ADHC_RUN),
+        ALRT_MAIL_CNT = (IDX_ALRT_MAIL_CNT < 0 || rdr.IsDBNull(IDX_ALRT_MAIL_CNT)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ALRT_MAIL_CNT),
+        BTCH_DSC = (IDX_BTCH_DSC < 0 || rdr.IsDBNull(IDX_BTCH_DSC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BTCH_DSC),
+        BTCH_NM = (IDX_BTCH_NM < 0 || rdr.IsDBNull(IDX_BTCH_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BTCH_NM),
+        BTCH_SID = (IDX_BTCH_SID < 0 || rdr.IsDBNull(IDX_BTCH_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_BTCH_SID),
+        EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_EMP_WWID),
+        JOB_HLTH_CNFG_DTL = (IDX_JOB_HLTH_CNFG_DTL < 0 || rdr.IsDBNull(IDX_JOB_HLTH_CNFG_DTL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JOB_HLTH_CNFG_DTL),
+        LST_RUN = (IDX_LST_RUN < 0 || rdr.IsDBNull(IDX_LST_RUN)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_LST_RUN),
+        PREDECESSOR_COND = (IDX_PREDECESSOR_COND < 0 || rdr.IsDBNull(IDX_PREDECESSOR_COND)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PREDECESSOR_COND),
+        RUN_SCHDL = (IDX_RUN_SCHDL < 0 || rdr.IsDBNull(IDX_RUN_SCHDL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RUN_SCHDL),
+        SSIS_ALERT_TRGER_FLAG = (IDX_SSIS_ALERT_TRGER_FLAG < 0 || rdr.IsDBNull(IDX_SSIS_ALERT_TRGER_FLAG)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_SSIS_ALERT_TRGER_FLAG),
+        STATUS = (IDX_STATUS < 0 || rdr.IsDBNull(IDX_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_STATUS),
+        TRGRD_BY = (IDX_TRGRD_BY < 0 || rdr.IsDBNull(IDX_TRGRD_BY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TRGRD_BY)
+        });
+        } // while
+        return ret;
+        }
+        */
+
+    } // End of class BatchJobConstants
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.	
+    ///</summary>
+    //[DataContract]
+    //public partial class BatchJobConstants
+    //{
+    //    [DataMember]
+    //    public System.Int32 BTCH_SID { get; set; }
+    //    [DataMember]
+    //    public System.String BTCH_NM { get; set; }
+    //    [DataMember]
+    //    public System.String BTCH_DSC { get; set; }
+    //    [DataMember]
+    //    public System.String RUN_SCHDL { get; set; }
+    //    [DataMember]
+    //    public System.Boolean ADHC_RUN { get; set; }
+    //    [DataMember]
+    //    public System.Boolean ACTV_IND { get; set; }
+    //    [DataMember]
+    //    public System.String STATUS { get; set; }
+    //    [DataMember]
+    //    public System.DateTime LST_RUN { get; set; }
+    //    [DataMember]
+    //    public System.Int32 EMP_WWID { get; set; }
+    //    [DataMember]
+    //    public System.String TRGRD_BY { get; set; }
+    //    [DataMember]
+    //    public System.String JOB_HLTH_CNFG_DTL { get; set; }
+    //    [DataMember]
+    //    public System.String PREDECESSOR_COND { get; set; }
+    //}// End of class BatchJobConstants
 
     ///<summary>
     /// Class created via template - Do Not Modify!
