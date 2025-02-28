@@ -1028,7 +1028,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
-                    if(mode == "COMPLEX_GRP_DATA")
+                    if(mode == "COMPLEX_GRP_DATA" || mode == "COMPLEX_GRP_DATA_READONLY")
                     {
                         //TABLE 1
                         int OBJ_ID = DB.GetReaderOrdinal(rdr, "OBJ_ID");

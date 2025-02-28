@@ -12,6 +12,7 @@ import * as _ from 'lodash-es';
 import { forEach } from "underscore";
 import { DynamicObj } from "../../../admin/employee/admin.employee.model";
 import { utils, writeFileXLSX, WritingOptions } from "xlsx";
+import { ActivatedRoute } from "@angular/router";
 export interface GroupingGridData {
     groupingClass: string;
     gridData: GridDataResult;
@@ -87,7 +88,7 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
         @Optional() public DIALOG_REF: MatDialogRef<ComplexStackingModalComponent>,
         private complexStackingModalService: ComplexStackingModalService,
         private momentService: MomentService,
-        private loggerService: logger) { }
+        private loggerService: logger, private route: ActivatedRoute) { }
     
 
     private readonly offset = 25;
@@ -143,13 +144,17 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
     }
 
     formComplexStackingGroup() {
+        let csMode = "COMPLEX_GRP_DATA";
+        if (this.route.snapshot.queryParams.manageType == 'complexStackingDiv') {
+            csMode = "COMPLEX_GRP_DATA_READONLY";
+        }
         if (this.isModel) {
             this.processResponse(this.data.ovlpObjs);
             return;
         }
         this.isLoading = true;
         const data = [{ ObjId: this.inputData.DC_ID, ObjType: 2 }] ;
-        this.complexStackingModalService.getComplexStackingGroup("COMPLEX_GRP_DATA", data).toPromise()
+        this.complexStackingModalService.getComplexStackingGroup(csMode, data).toPromise()
             .then((response) => {
                 this.processResponse(response);
             })
