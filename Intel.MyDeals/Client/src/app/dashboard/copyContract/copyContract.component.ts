@@ -106,8 +106,10 @@ export class CopyContractComponent implements OnDestroy {
     }
 
     rowSelectionChange(selection): void {
-        Object.assign(this.copyCntrctSelectedItem, selection.selectedRows[0].dataItem);
-        this.isCreateDisabled = false;
+        this.isCreateDisabled = selection.selectedRows.length === 0;
+        if (!this.isCreateDisabled) {
+            Object.assign(this.copyCntrctSelectedItem, selection.selectedRows[0].dataItem);
+        }
     }
 
     dataStateChange(state: DataStateChangeEvent): void {
