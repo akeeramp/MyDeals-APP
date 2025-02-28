@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
 using System.Reflection;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using Intel.MyDeals.Entities;
 using Intel.Opaque.Utilities.Server;
@@ -53,17 +54,14 @@ namespace Intel.MyDeals.Controllers
 
             // mark as draft
             message.Headers.Add("X-Unsent", "1");
+            string opLogPath = WebConfigurationManager.AppSettings["opLogPath"];
 
             using (var client = new SmtpClient())
             {
                 var id = Guid.NewGuid();
 
-                var tempFolder = Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name);
-
-                tempFolder = Path.Combine(tempFolder, "MailMessageToEMLTemp");
-
                 // create a temp folder to hold just this .eml file so that we can find it easily.
-                tempFolder = Path.Combine(tempFolder, id.ToString());
+                var tempFolder = Path.Combine(opLogPath, Assembly.GetExecutingAssembly().GetName().Name, "MailMessageToEMLTemp", id.ToString());
 
                 if (!Directory.Exists(tempFolder))
                 {

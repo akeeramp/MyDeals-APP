@@ -1,7 +1,6 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.Helpers;
 using Intel.MyDeals.IBusinessLogic;
-using Intel.Opaque.Tools;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;

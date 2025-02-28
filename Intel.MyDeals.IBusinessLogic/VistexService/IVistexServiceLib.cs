@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using Intel.Opaque.Tools;
 using System.Collections;
 using System.Collections.Generic;
 using Intel.MyDeals.Entities;

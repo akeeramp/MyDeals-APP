@@ -11,6 +11,7 @@ using Intel.Opaque;
 using System.Configuration;
 using System.IO;
 using System.Data;
+using System.Web.Configuration;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -317,7 +318,7 @@ namespace Intel.MyDeals.BusinessLogic
 
 
                     String UCDReqJson = JsonConvert.SerializeObject(UCDReqDataList, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                    var tempFolder = ConfigurationManager.AppSettings["ucdLogPath"];
+                    var tempFolder = WebConfigurationManager.AppSettings["ucdLogPath"];
                     tempFolder = Path.Combine(tempFolder, "UCD Requests");
                     if (!Directory.Exists(tempFolder))
                     {

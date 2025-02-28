@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Intel.Opaque;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using Intel.Opaque.DBAccess;
-using Intel.Opaque.Tools;
 
 namespace Intel.MyDeals.DataAccessLib
 {

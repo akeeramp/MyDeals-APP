@@ -8,7 +8,6 @@ using System.Linq;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;
-using Intel.Opaque.Tools;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
 namespace Intel.MyDeals.DataLibrary

@@ -12,6 +12,7 @@ using Intel.Opaque;
 using System.Web.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Web.Configuration;
 
 namespace Intel.MyDeals
 {
@@ -28,8 +29,10 @@ namespace Intel.MyDeals
             AppHelper.SetupDataAccessLib();
 
             AntiForgeryConfig.SuppressXFrameOptionsHeader = true;
+            //Get Log File Path
+            string opLogPath = WebConfigurationManager.AppSettings["opLogPath"];
             // Init log writers
-            OpLogPerfHelper.InitWriters("DEBUG:DB:EVENTLOG:FILE:EMAILEX"); // TODO: Get this string of writers from db or config
+            OpLogPerfHelper.InitWriters("DEBUG:DB:EVENTLOG:FILE:EMAILEX",opLogPath); // TODO: Get this string of writers from db or config
 
             JsonSerializerSettings jSettings = new JsonSerializerSettings
             {

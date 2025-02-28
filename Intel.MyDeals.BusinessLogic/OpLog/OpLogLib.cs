@@ -51,7 +51,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (fileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1 && fileName.Contains(FILE_NAME))
             {
                 string _fileName = fileName.Replace("\\", string.Empty).Replace("..", string.Empty);
-                string path = @"C:\Windows\Temp\" + _fileName + fileExtention;                
+                string path = Path.Combine(opLogPath, _fileName + fileExtention);                
                 return System.Web.HttpUtility.HtmlEncode(System.IO.File.ReadAllText(path, Encoding.UTF8));
             }
             else

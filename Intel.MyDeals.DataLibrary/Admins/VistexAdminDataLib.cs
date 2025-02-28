@@ -5,7 +5,6 @@ using Intel.MyDeals.Entities;
 using Intel.Opaque.DBAccess;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using System.Linq;
-using Intel.Opaque.Tools;
 using Newtonsoft.Json;
 using System.Data;
 using Intel.Opaque;

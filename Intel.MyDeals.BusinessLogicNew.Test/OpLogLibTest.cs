@@ -1,36 +1,60 @@
 ﻿using Intel.MyDeals.BusinessLogic;
 using NUnit.Framework;
-using System;
 using System.IO;
-using System.Linq;
+using System.Text;
 
 namespace Intel.MyDeals.BusinessLogicNew.Test
 {
-    [TestFixture]
-    public class OpLogLibTest
-    {        
-        [Test,
-            TestCase("filelog"), TestCase("FileLogPerf"), TestCase("FileLogPerf..")]
-        public void GetDetailsOpaqueLog_ShouldReturnNotNull(string filename)
-        {
-            if (filename.Contains("FileLogPerf"))
-            {
-                //To run this TestCase, "FileLogPerf.txt" file needs to be created in system at location : C:\Windows\Temp
-                string path = @"C:\Windows\Temp\FileLogPerf.txt";                
-                using (StreamWriter sw = File.CreateText(path)) //The CreateText method returns a StreamWriter object
-                {
-                    sw.Write("test");
-                }
-                var res = new OpLogLib().GetDetailsOpaqueLog(filename);
-                Assert.NotNull(res);
-                Assert.AreEqual(res, "test");
-            }
-            else
-            {
-                var res = new OpLogLib().GetDetailsOpaqueLog(filename);
-                Assert.NotNull(res);
-                Assert.AreEqual(res, "Something went wrong");
-            }
-        }
-    }
+    [TestFixture]
+    public class OpLogLibTest
+    {
+        private string testFilePath;
+
+        [SetUp]
+        public void Setup()
+        {
+            // Set up the test file path
+            testFilePath = @"C:\Windows\Temp\FileLogPerf.txt";
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            // Clean up the test file
+            if (File.Exists(testFilePath))
+            {
+                File.Delete(testFilePath);
+            }
+        }
+
+        [Test,
+            TestCase("filelog"), TestCase("FileLogPerf"), TestCase("FileLogPerf..")]
+        public void GetDetailsOpaqueLog_ShouldReturnNotNull(string filename)
+        {
+            // Create an instance of OpLogLib
+            var opLogLib = new OpLogLib();
+
+            // Use reflection to set the private opLogPath field to the test directory
+            var originalOpLogPath = typeof(OpLogLib).GetField("opLogPath", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            originalOpLogPath.SetValue(opLogLib, @"C:\Windows\Temp");
+
+            if (filename.Contains("FileLogPerf"))
+            {
+                // Create a test file with content
+                File.WriteAllText(testFilePath, "test", Encoding.UTF8);
+
+                // Call the method and assert
+                var res = opLogLib.GetDetailsOpaqueLog(filename);
+                Assert.NotNull(res);
+                Assert.AreEqual("test", res);
+            }
+            else
+            {
+                // Call the method and assert
+                var res = opLogLib.GetDetailsOpaqueLog(filename);
+                Assert.NotNull(res);
+                Assert.AreEqual("Something went wrong", res);
+            }
+        }
+    }
 }
