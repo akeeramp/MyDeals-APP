@@ -1,0 +1,38 @@
+name: UI Path Extended Sanity Scheduled Scan
+on:
+  schedule:
+    - cron: '30 5 * * 1' # This will run at 5:30 AM UTC on Mondays, which is 11 AM IST / 9:30 PM PST (Sunday)
+
+jobs:
+  Triggering-UIPath-ExtendedSanity-Scan:
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui')
+    runs-on: [self-hosted,mydeals-runner01]
+    steps:
+        - name: Trigger UIPath Extended Sanity Suit
+          shell: pwsh
+          run: |
+            $repositoryOwner = "intel-innersource" # owner of the target repository
+            $repositoryName = "applications.robotics.uipath.testautomation.extended-sanitytestsuite-mydeals" # name of the target repository
+            $workflowFileName = "uipathtestmanager-ci.yml" # name of the workflow file
+            $accessToken = "${{ secrets.CICD_ACCESSTOKEN }}" # Use the secret from GitHub Actions
+
+            # Define the API endpoint
+            $apiUrl = "https://api.github.com/repos/$repositoryOwner/$repositoryName/actions/workflows/$workflowFileName/dispatches"
+
+            # Define the payload
+            $payload = @{
+                ref = "test" # Branch to run the workflow on
+            } | ConvertTo-Json
+
+            # Create the headers
+            $headers = @{
+                "Authorization" = "Bearer $accessToken"
+                "Accept" = "application/vnd.github+json"
+                "Content-Type" = "application/json"
+            }
+
+            # Send the request
+            $response = Invoke-RestMethod -Uri $apiUrl -Method Post -Headers $headers -Body $payload
+
+            # Output the response (for debugging purposes)
+            $response
