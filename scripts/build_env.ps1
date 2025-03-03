@@ -29,7 +29,7 @@ try {
      if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
       & robocopy Intel.MyDeals/Client/src/dist $ClienLocation /e /MT /copyall /secfix ;
       if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
-     & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/DEV $PATH Web.Config /MT /copyall /secfix;
+     & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/CINR $PATH Web.Config /MT /copyall /secfix;
      if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
     }
     elseif ($Operation -eq 'ClientZip' ){
