@@ -64,32 +64,38 @@ export class CopyContractComponent implements OnDestroy {
     }
 
     onCopyOkClick(): void {
-        let isContractCntnnonprog = true;
+        let hasNonProgramDeals  = false;
         if (this.copyCntrctSelectedItem != null) {
             this.ctrctWdgtSvc.readCopyContract(this.copyCntrctSelectedItem['CNTRCT_OBJ_SID'])
                 .pipe(takeUntil(this.destroy$))
-                .subscribe(async (response: Array<any>) => {
-                    if (response != null) {
+                .subscribe((response: Array<any>) => {
+                    if (response?.[0]) {
                         const selectedPrcSt = response[0].PRC_ST;
-                        for (let i = 0; i < selectedPrcSt.length; i++) {
-                            const prc_st = selectedPrcSt[i].PRC_TBL;
-                            const slectedProg = prc_st.filter(x => x.OBJ_SET_TYPE_CD != 'PROGRAM');
-                            if (slectedProg.length > 0) {
-                                isContractCntnnonprog = false;
+                        if (!selectedPrcSt) {
+                            this.loggerSvc.error("Cannot copy from contract having no pricing strategies","Error");
+                            return;
+                        }
+                        for (const prc_st of selectedPrcSt) {
+                            const prc_tbl = prc_st.PRC_TBL;
+                            if (!prc_tbl) {
+                                continue; // Skip this iteration if prc_tbl is undefined
+                            }
+                            const nonProgDeals = prc_tbl.filter(x => x.OBJ_SET_TYPE_CD != 'PROGRAM');
+                            if (nonProgDeals.length > 0) {
+                                hasNonProgramDeals  = true;
                                 break;
                             }
                         }
-                        if (isContractCntnnonprog == true) {
-                            alert('This contract can not be copied as it has only Program Deals');
-                        }
-                        else {
+                        if (!hasNonProgramDeals ) {
+                            alert('This contract cannot be copied as it has either Program Deals or No Deals');
+                        } else {
                             this.dialogRef.close(this.copyCntrctSelectedItem);
                         }
                     }
                 },
-                    function (error) {
-                        this.logger.error("CopContract::loadCopyContract::Unable to GetMyCustomerNames.", error);
-                    });
+                (error) => {
+                    this.loggerSvc.error("CopContract:: Unable to Copy Contract", "Error",error);
+                });
         }
     }
 
