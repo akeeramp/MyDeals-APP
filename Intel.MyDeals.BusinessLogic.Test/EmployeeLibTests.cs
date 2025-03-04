@@ -5,6 +5,8 @@ using System.Linq;
 using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
+using Intel.MyDeals.IDataLibrary;
+using Moq;
 
 namespace Intel.MyDeals.BusinessLogic.Test
 {
@@ -12,6 +14,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
     public class EmployeeLibTests
     {
         //private readonly OpUserToken _opUserToken = null;
+        public Mock<IEmployeeDataLib> mockUserRolePermissionsDataLib = new Mock<IEmployeeDataLib>();
         private OpUserToken PersonalizedOpUserToken { get; set; }
 
         [OneTimeSetUp]
@@ -59,6 +62,100 @@ namespace Intel.MyDeals.BusinessLogic.Test
         {
             List<UsrProfileRole> userProfiles = new EmployeesLib().GetUsrProfileRole();
             Assert.IsTrue(userProfiles != null && userProfiles.Count() > 0);
+        }
+
+        private List<UserRolePermission> GetUserRolePermissionsMockedData(int isFetch)
+        {
+            var GetUserRolePermissionMockedData = new List<UserRolePermission>();
+            GetUserRolePermissionMockedData.Add(new UserRolePermission
+            {
+                Database_Name = "MYDEALS_STG",
+                UserName = "MYDL_CICD_USR_SO",
+                UserType = "SQL User",
+                DatabaseUserName = "MYDL_CICD_USR_SO",
+                Role = "db_owner",
+                PermissionType = "ALTER ANY USER",
+                PermissionState = "DENY",
+                ObjectType = "USER_TABLE",
+                ObjectName = "STG_ICOST_HIST",
+                ColumnName = "",
+                ROW_REFRESH_DTM = "03/03/2025 02:15"
+            }
+            );
+            GetUserRolePermissionMockedData.Add(new UserRolePermission
+            {
+                Database_Name = "MYDEALS_LOCAL",
+                UserName = "MyDeals_WebConnect",
+                UserType = "SQL User",
+                DatabaseUserName = "MyDeals_WebConnect",
+                Role = "db_owner",
+                PermissionType = "CONNECT",
+                PermissionState = "GRANT",
+                ObjectType = "USER_TABLE",
+                ObjectName = "STG_PRFS_CUST_DTL",
+                ColumnName = "",
+                ROW_REFRESH_DTM = "03/02/2025 02:11"
+            }
+            );
+            GetUserRolePermissionMockedData.Add(new UserRolePermission
+            {
+                Database_Name = "MYDEALS",
+                UserName = "chips_reader",
+                UserType = "Windows User",
+                DatabaseUserName = "chips_reader",
+                Role = "db_datareader",
+                PermissionType = "VIEW DEFINITION",
+                PermissionState = "GRANT",
+                ObjectType = "USER_TABLE",
+                ObjectName = "STG_ICOST_HIST",
+                ColumnName = "",
+                ROW_REFRESH_DTM = "03/01/2025 01:33"
+            }
+            );
+            if(isFetch == 1)
+            {
+                GetUserRolePermissionMockedData.Add(new UserRolePermission
+                {
+                    Database_Name = "MYDEALS",
+                    UserName = "dbo",
+                    UserType = "SQL User",
+                    DatabaseUserName = "dbo",
+                    Role = "",
+                    PermissionType = "CONNECT",
+                    PermissionState = "GRANT",
+                    ObjectType = "SQL_SCALAR_FUNCTION",
+                    ObjectName = "fn_diagramobjects",
+                    ColumnName = "",
+                    ROW_REFRESH_DTM = "03/03/2025 10:33"
+                }
+);
+
+            }
+            return GetUserRolePermissionMockedData;
+        }
+
+        [TestCase]
+        public void EmpLib_GetUserRolePermission()
+        {
+            List<UserRolePermission> mockedUserRolePermissionsData = GetUserRolePermissionsMockedData(0);
+            var res = mockUserRolePermissionsDataLib.Setup(x => x.GetUserRolePermission(null, null, null, 0)).Returns(mockedUserRolePermissionsData);
+            Assert.IsNotNull(res);
+        }
+
+        [TestCase]
+        public void EmpLib_PostUserRolePermission()
+        {
+            List<UserRolePermission> mockedUserRolePermissionsData = GetUserRolePermissionsMockedData(0);
+            var res = mockUserRolePermissionsDataLib.Setup(x => x.GetUserRolePermission("MyDeals_WebConnect", "03/01/2025", "03/02/2025", 0)).Returns(mockedUserRolePermissionsData);
+            Assert.IsNotNull(res);
+        }
+
+        [TestCase]
+        public void EmpLib_FetchUserRolePermission()
+        {
+            List<UserRolePermission> mockedUserRolePermissionsData = GetUserRolePermissionsMockedData(1);
+            var res = mockUserRolePermissionsDataLib.Setup(x => x.GetUserRolePermission(null, null, null, 1)).Returns(mockedUserRolePermissionsData);
+            Assert.IsNotNull(res);
         }
 
         [TestCase]

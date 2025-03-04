@@ -6736,6 +6736,70 @@ namespace Intel.MyDeals.Entities
     ///</summary>
 
     [DataContract]
+    public partial class UserRolePermission
+    {
+
+        [DataMember]
+        public System.String Database_Name { set; get; }
+
+
+        [DataMember]
+        public System.String UserName { set; get; }
+
+
+        [DataMember]
+        public System.String UserType { set; get; }
+
+
+        [DataMember]
+        public System.String DatabaseUserName { set; get; }
+
+
+        [DataMember]
+        public System.String Role { set; get; }
+
+
+        [DataMember]
+        public System.String PermissionType { set; get; }
+
+
+        [DataMember]
+        public System.String PermissionState { set; get; }
+
+
+        [DataMember]
+        public System.String ObjectType { set; get; }
+
+        [DataMember]
+        public System.String ObjectName { set; get; }
+
+        [DataMember]
+        public System.String ColumnName { set; get; }
+
+
+        [DataMember]
+        public System.String ROW_REFRESH_DTM { set; get; }
+
+    } // End of class User Role Permission
+
+        
+    [DataContract]
+    public partial class PostUserRolePermission
+    {
+
+        [DataMember]
+        public System.String DatabaseUserName { set; get; }
+
+        [DataMember]
+        public System.String StartDate { set; get; }
+
+        [DataMember]
+        public System.String EndDate { set; get; }
+
+
+    } // End of class User Role Permission
+
+    [DataContract]
     public partial class UsrProfileRole
     {
 

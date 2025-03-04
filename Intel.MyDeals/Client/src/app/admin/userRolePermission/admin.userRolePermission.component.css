@@ -1,0 +1,29 @@
+﻿.container-fluid.permission-container-section {
+    margin-top: 0 !important;
+    padding: 0 15px !important;
+}
+
+.permission-heading {
+    padding-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.custom-filter-sections {
+    margin-top: 15px;
+}
+
+.custom-filter-sections label {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.btn-align-center button {
+    margin-top: 22px;
+}
+
+.table-design {
+    margin-top: 20px!important;
+}

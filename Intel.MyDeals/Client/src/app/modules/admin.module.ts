@@ -67,6 +67,7 @@ import { QuoteLetterRegenerationComponent } from "../admin/quoteLetter/admin.quo
 import { MonacoEditorComponent } from '../shared/monacoCustomEditor/monacoCustomEditor.component';
 import { ExpireYcs2Component } from "../admin/expireYcs2/admin.expireYcs2.component";
 import { DealUnificationReportComponent } from '../admin/dealUnificationReport/dealUnificationReport.component';
+import { userRolePermissionComponent } from '../admin/userRolePermission/admin.userRolePermission.component';
 
 export const AdminComponents =[
     EmployeeComponent,
@@ -138,5 +139,6 @@ export const AdminComponents =[
     MonacoEditorComponent,
     QuoteLetterRegenerationComponent,
     ExpireYcs2Component,
-    DealUnificationReportComponent
+    DealUnificationReportComponent,
+    userRolePermissionComponent
 ]

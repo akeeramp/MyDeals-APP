@@ -8051,6 +8051,62 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
         }
 
+        public partial class PR_GET_MYDL_DB_USR_ROLE_PERMISSION : SP
+        {
+            public PR_GET_MYDL_DB_USR_ROLE_PERMISSION()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_GET_MYDL_DB_USR_ROLE_PERMISSION]";
+            }
+
+            ///<summary>
+            /// DataType: nvarchar(256)
+            /// Mode: IN
+            /// Max Length: 256
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 256, false)]
+            public String USERNAME
+            {
+                set { SetParmeter("USERNAME", value); }
+                get { return (String)GetParameter("USERNAME"); }
+            }
+
+            ///<summary>
+            /// DataType: datetime
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public DateTime START_DATE
+            {
+                set { SetParmeter("START_DATE", value); }
+                get { return (DateTime)GetParameter("START_DATE"); }
+            }
+
+            ///<summary>
+            /// DataType: datetime
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public DateTime END_DATE
+            {
+                set { SetParmeter("END_DATE", value); }
+                get { return (DateTime)GetParameter("END_DATE"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 IS_FETCH_LATEST
+            {
+                set { SetParmeter("IS_FETCH_LATEST", value); }
+                get { return (Int32)GetParameter("IS_FETCH_LATEST"); }
+            }
+
+
+        }
+
         ///<summary>
         /// ID: 874590304
         /// Modified: 1/31/2022 8:20:02 PM

@@ -377,6 +377,9 @@
     <TypeScriptCompile Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.model.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.service.ts" />
     <Content Include="Client\Images\032.gif" />
     <Content Include="Client\Images\check-checked.png" />
     <Content Include="Client\Images\check.png" />
@@ -542,6 +545,8 @@
     <Content Include="Client\src\app\sdm\sdmMasterDataModal\sdmMasterDataModal.component.html" />
     <Content Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.component.css" />
     <Content Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.component.html" />
+    <Content Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.component.css" />
+    <Content Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.component.html" />
     <Content Include="Images\docs\PS1.png" />
     <Content Include="Images\docs\createContract.png" />
     <Content Include="Client\Images\docs\projController.png" />

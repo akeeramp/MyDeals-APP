@@ -20,6 +20,11 @@ namespace Intel.MyDeals.BusinessLogic
             return DataCollections.GetUsrProfileRole().Where(e => e.USR_ACTV_IND).OrderBy(e => e.LST_NM).ToList();
         }
 
+        public List<UserRolePermission> GetUserRolePermission(string databaseUserName, string startDate, string endDate, int isFetchLatest)
+        {
+            return new EmployeeDataLib().GetUserRolePermission(databaseUserName, startDate, endDate, isFetchLatest);
+        }
+
         public List<UsrProfileRole> GetUsrProfileRoleByRoleCode(string[] strRoleCode)
         {
             return DataCollections.GetUsrProfileRole().Where(e => strRoleCode.Contains(e.ROLE_NM)).Distinct(new DistinctItemComparerUsrProfileRole()).OrderBy(x=>x.NAME).ToList();
