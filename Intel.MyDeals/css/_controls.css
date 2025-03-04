@@ -327,7 +327,9 @@
 .opUiContainer.md.k-grid td { font-size: 12px !important; height: 33px !important;}
 .opUiContainer.md.k-grid .k-header a { font-size: 12px !important; }
 .opUiContainer.md.k-grid-header th.k-header { padding-left: 0; }
-
+.opUiContainer.md .k-input-inner {
+    font-size: 11px;
+}
 
 
 /* dark blue background */

@@ -305,6 +305,14 @@ kendo-datepicker.date-dashboard-search:focus-within {
     left: 54px !important;
 }
 
+.k-list .k-list-item {
+    font-family: Intel Clear !important;
+    font-size: 12px !important;
+    line-height: 16px !important;
+    min-height: auto !important;
+    padding: .5rem !important
+}
+
 .k-list-item.k-selected, .k-list-item.k-selected:hover,
 .k-selected.k-list-optionlabel, .k-selected.k-list-optionlabel:hover {
     background-color: #00aeef;
@@ -355,4 +363,100 @@ kendo-datepicker.date-dashboard-search:focus-within {
 .k-toolbar {
     padding: 12px
 }
+.k-rounded-md {
+    border-radius: .25rem;
+}
+.k-numerictextbox .k-button.k-icon-button.k-button-solid.k-button-solid-base {
+    background-color: transparent !important;
+    border: none !important;
+    color: #727578ed !important;
+}
+.k-numerictextbox span.k-button-icon.k-icon:hover {
+    color: #444 !important
+}
+kendo-dropdownlist.k-dropdown-design span.k-button-icon.k-icon {
+    color: #727578;
+    opacity: .45;
+}
+kendo-dropdownlist.k-dropdown-design:hover button.k-icon-button:hover,
+kendo-dropdownlist.k-dropdown-design:hover span.k-button-icon.k-icon:hover {
+    background-color: #fff;
+    border-color: #f5f5f5;
+    color: var(--light-blue)
+}
+kendo-searchbar.k-searchbar > .k-input-inner {
+    font-size: 12px !important;
+    height:calc(1.5em + 1.1rem)
+}
+kendo-tabstrip.tab-sec-add.tab-security-engine .k-tabstrip-items .k-active span.k-link {
+    color: #fff !important
+}
+.k-chip-solid-base {
+    background-color: #fafafa !important;
+}
+.k-chip, .k-chip .k-chip-label {
+    font-size: 12px;
+    border-radius: 1.071em !important;
+    border: none;
+    font-family: Intel Clear !important;
+    line-height: 1.86em !important;
+}
+.k-chip .k-i-x-circle {
+    font-size: 16px;
+    font-family: WebComponentsIcons;
+    opacity: .6;
+}
+.k-i-clear-circle:before, .k-i-close-circle:before, .k-i-times-circle:before, .k-i-x-circle:before {
+    content: "\e11b";
+}
+.k-chip:hover
+ {
+    background: #ced4da6b !important;
+}
+kendo-grid-toolbar.k-toolbar.k-grid-toolbar.ng-star-inserted {
+    padding: .5rem;
+}
+.k-button {
+    padding: 5.625px 11.250px;
+}
+kendo-grid-toolbar span.k-icon.k-i-file-excel.k-icon-md {
+    padding-right: 14.5px !important;
+}
+kendo-grid-toolbar span.k-button-text {
+    display: flex;
+    align-items: center;
+}
+kendo-grid-toolbar span.k-icon.k-i-plus-outline.k-icon-md {
+    padding-left: 16px !important;
+    padding-right: 23.5px !important;
+}
+kendo-grid-toolbar.k-toolbar.k-grid-toolbar {
+    padding: 7.5px !important;
+}
 
+.k-grid-header .k-grid-filter.k-active,
+.k-grid-header .k-grid-header-menu.k-active,
+.k-grid-header .k-header-column-menu.k-active,
+.k-grid-header .k-hierarchy-cell .k-icon.k-active {
+    background-color: #fff !important;
+    color: #003c71 !important;
+}
+.k-grid-filter.k-state-active, .k-state-active > .k-i-filter {
+    color: #003c71 !important;
+}
+
+kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level span.k-clear-value {
+    display: none;
+}
+
+kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hover span.k-clear-value {
+    background-color: #dbdbdb;
+    border-radius: 50%;
+    display: inline-flex !important;
+    height: 15px;
+    opacity: 1;
+    right: 7px;
+    top: 9px;
+    width: 15px;
+    position:absolute
+}

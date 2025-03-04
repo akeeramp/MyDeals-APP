@@ -422,6 +422,7 @@ kendo-dropdownlist.k-dropdown-design {
     border-color: #fafafa;
     border-radius: 2px;
     box-shadow: none;
+    height: calc(1.5em + .55rem);
 }
 
 kendo-dropdownlist.k-dropdown-design span.k-select .k-icon {
