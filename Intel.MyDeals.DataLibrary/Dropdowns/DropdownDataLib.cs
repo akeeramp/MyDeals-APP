@@ -213,6 +213,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
                     int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
                     int IDX_ORD = DB.GetReaderOrdinal(rdr, "ORD");
+                    int IDX_CHK_VALUE = DB.GetReaderOrdinal(rdr, "CHK_VALUE");
 
                     while (rdr.Read())
                     {
@@ -231,7 +232,8 @@ namespace Intel.MyDeals.DataLibrary
                             DROP_DOWN = (IDX_DROP_DOWN < 0 || rdr.IsDBNull(IDX_DROP_DOWN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DROP_DOWN),
                             OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
                             OBJ_SET_TYPE_SID = (IDX_OBJ_SET_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SET_TYPE_SID),
-                            ORD = (IDX_ORD < 0 || rdr.IsDBNull(IDX_ORD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ORD)
+                            ORD = (IDX_ORD < 0 || rdr.IsDBNull(IDX_ORD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ORD),
+                            CHK_VALUE = (IDX_CHK_VALUE < 0 || rdr.IsDBNull(IDX_CHK_VALUE)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHK_VALUE)
                         });
                     }
 

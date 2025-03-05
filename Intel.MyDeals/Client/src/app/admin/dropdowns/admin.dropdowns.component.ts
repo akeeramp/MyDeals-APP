@@ -310,29 +310,44 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
-        this.isDirty=true;
-        this.closeEditor(sender);
-        this.isFormChange = false;
-        this.formGroup = new FormGroup({
-            ACTV_IND: new FormControl(dataItem.ACTV_IND),
-            OBJ_SET_TYPE_CD: new FormControl({ value: dataItem.OBJ_SET_TYPE_CD, disabled: true }),
-            OBJ_SET_TYPE_SID: new FormControl(dataItem.OBJ_SET_TYPE_SID),
-            ATRB_CD: new FormControl({ value: dataItem.ATRB_CD, disabled: true }),
-            ATRB_SID: new FormControl(dataItem.ATRB_SID),
-            CUST_NM: new FormControl({ value: dataItem.CUST_NM, disabled: true }),
-            CUST_MBR_SID: new FormControl(dataItem.CUST_MBR_SID),
-            CUST_CIM_ID: new FormControl(dataItem.CUST_CIM_ID),
-            DROP_DOWN: new FormControl({ value: dataItem.DROP_DOWN, disabled: true }),
-            ATRB_LKUP_DESC: new FormControl(dataItem.ATRB_LKUP_DESC),
-            ATRB_LKUP_TTIP: new FormControl(dataItem.ATRB_LKUP_TTIP),
-            ORD: new FormControl(dataItem.ORD)
-        });
-        this.formGroup.valueChanges.subscribe(() => {
-            this.isFormChange = true;
-        });
-        this.editedRowIndex = rowIndex;
-        sender.editRow(rowIndex, this.formGroup);
-    }
+            this.isDirty = true;
+            this.closeEditor(sender);
+            this.isFormChange = false;
+            this.formGroup = new FormGroup({
+                ACTV_IND: new FormControl(dataItem.ACTV_IND),
+                OBJ_SET_TYPE_CD: new FormControl({ value: dataItem.OBJ_SET_TYPE_CD, disabled: true }),
+                OBJ_SET_TYPE_SID: new FormControl(dataItem.OBJ_SET_TYPE_SID),
+                ATRB_CD: new FormControl({ value: dataItem.ATRB_CD, disabled: true }),
+                ATRB_SID: new FormControl(dataItem.ATRB_SID),
+                CUST_NM: new FormControl({ value: dataItem.CUST_NM, disabled: true }),
+                CUST_MBR_SID: new FormControl(dataItem.CUST_MBR_SID),
+                CUST_CIM_ID: new FormControl(dataItem.CUST_CIM_ID),
+                DROP_DOWN: new FormControl({ value: dataItem.DROP_DOWN, disabled: true }),
+                ATRB_LKUP_DESC: new FormControl(dataItem.ATRB_LKUP_DESC),
+                ATRB_LKUP_TTIP: new FormControl(dataItem.ATRB_LKUP_TTIP),
+                ORD: new FormControl(dataItem.ORD)
+            });
+        //Unused cnsmptn edit for Account SA role only 
+        if ((<any>window).isCustomerAdmin && (<any>window).usrRole == "SA") {
+            //if CHK_VALUE is 1, Value column will be readonly
+            if (dataItem.CHK_VALUE == 1) {
+                this.formGroup.get('DROP_DOWN')?.disable();
+                this.loggerService.warn("Readonly, there is an existing deal with this value.", "Warning");
+            }
+            //if CHK_VALUE is 0, Value column will be editable, user can update new value
+            else {
+                this.formGroup.get('DROP_DOWN')?.enable();
+            }
+        
+        }
+        
+            this.formGroup.valueChanges.subscribe(() => {
+                this.isFormChange = true;
+            });
+            this.editedRowIndex = rowIndex;
+            sender.editRow(rowIndex, this.formGroup);
+        }
+    
 
     cancelHandler({ sender, rowIndex }) {
         this.closeEditor(sender, rowIndex);
@@ -340,7 +355,6 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
 
     saveHandler({ sender, rowIndex, formGroup, isNew, dataItem }) {
         let newUiDropdown: UiDropdownItem = formGroup.getRawValue();
-
         //for disabled formgroup, using the dropdown datasource to get the ID value as in dataItem the value coming as null
         const FILTERED_DROPDOWN = this.gridResult.filter(x => x.OBJ_SET_TYPE_CD === newUiDropdown.OBJ_SET_TYPE_CD);
         if (FILTERED_DROPDOWN.length > 0) {
@@ -386,6 +400,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
                         this.gridResult[rowIndex] = newUiDropdown;
                         this.gridResult.push(newUiDropdown);
                         this.loadUiDropdown();
+                        this.loggerService.success("Updated Successfully", "Success");
                     }, (error) => {
                         this.loggerService.error("Unable to update UI dropdown data.", error);
                         this.isLoading = false;

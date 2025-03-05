@@ -2097,6 +2097,10 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.Int32 ORD { set; get; }
 
+        [DataMember]
+        public System.Int32 CHK_VALUE { set; get; }
+
+
 
         /*
         private static List<BasicDropdown> BasicDropdownFromReader(SqlDataReader rdr){
