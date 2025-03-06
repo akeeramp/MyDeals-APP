@@ -254,6 +254,7 @@
     <Folder Include="Views\DealUnification\" />
     <Folder Include="Views\Email\" />
     <Folder Include="Views\FileUpload\" />
+    <Folder Include="Views\LogArchival\" />
     <Folder Include="Views\Timeline\" />
     <Folder Include="Views\ValidateVistexR3Checks\" />
   </ItemGroup>
@@ -283,6 +284,7 @@
     <Compile Include="Controllers\API\IntegrationController.cs" />
     <Compile Include="Controllers\API\JobMonitorController.cs" />
     <Compile Include="Controllers\API\JobAlertController.cs" />
+    <Compile Include="Controllers\API\LogArchivalController.cs" />
     <Compile Include="Controllers\API\MuleServiceController.cs" />
     <Compile Include="Controllers\API\PrimeCustomersController.cs" />
     <Compile Include="Controllers\API\PushDealstoVistexController.cs" />
@@ -532,6 +534,8 @@
     <Content Include="Client\Images\docs\pricingassoc.png" />
     <Content Include="Client\Images\docs\pricingstrategy.png" />
     <Content Include="Client\Images\docs\Pricingtable.png" />
+    <Content Include="Client\src\app\admin\logArchival\admin.logArchival.component.css" />
+    <Content Include="Client\src\app\admin\logArchival\admin.logArchival.component.html" />
     <Content Include="Client\src\app\advanceSearch\inactiveCustomerSearch\inactiveCustomerSearch.component.html" />
     <Content Include="Client\src\app\contract\complexStacking\complexStacking.component.css" />
     <Content Include="Client\src\app\contract\complexStacking\complexStacking.component.html" />
@@ -740,6 +744,8 @@
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.manageEmployee.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.manageEmployeeModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\ExcelColumnsconfig.util.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\logArchival\admin.logArchival.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\logArchival\admin.logArchival.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\meetComp\admin.bulkUploadMeetCompModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\legalException\admin.amendmentException.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\legalException\admin.compareExceptions.component.ts" />

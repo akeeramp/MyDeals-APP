@@ -576,6 +576,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "UnificationReconciliationReport";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
 
+	//Log Archival
+	var ds = dbobjects.ExecuteDataSet("dbo.PR_MANAGE_LOG_ARCHIVAL_ACTNS");
+	ds.Tables[0].TableName = "LogArchival";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

@@ -112,6 +112,7 @@
     <Compile Include="GeosLibTest.cs" />
     <Compile Include="HealthCheckLibTest.cs" />
     <Compile Include="IntegrationLibTest.cs" />
+    <Compile Include="LogArchivalLibTest.cs" />
     <Compile Include="LoggingLibTest.cs" />
     <Compile Include="ManualEngineLibTest.cs" />
     <Compile Include="MeetCompLibTest.cs" />

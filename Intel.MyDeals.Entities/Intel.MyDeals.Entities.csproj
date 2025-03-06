@@ -80,6 +80,7 @@
     <Compile Include="AsyncProcTrigger.cs" />
     <Compile Include="AtrbSaveItem.cs" />
     <Compile Include="AttributeCollection.cs" />
+    <Compile Include="LogArchivalDetails.cs" />
     <Compile Include="BatchRunHealthSts.cs" />
     <Compile Include="BatchStepRunHistory.cs" />
     <Compile Include="BulkPriceUpdate.cs" />
@@ -208,6 +209,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TableTypeParameters\in_t_mydl_btch_step_dtl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TableTypeParameters\in_t_log_archival.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TableTypeParameters\in_t_sdm.cs">

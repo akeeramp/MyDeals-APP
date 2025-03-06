@@ -69,6 +69,7 @@
     <Compile Include="ExpireYcs2\IExpireYcs2DataLib.cs" />
     <Compile Include="HealthCheck\IHealthCheckDataLib.cs" />
     <Compile Include="JMS\IJmsDataLib.cs" />
+    <Compile Include="LogArchival\ILogArchivalDataLib.cs" />
     <Compile Include="JobMonitor\IJobMonitorDataLib.cs" />
     <Compile Include="JobAlert\IJobAlertDataLib.cs" />
     <Compile Include="MuleService\IMuleServiceDataLib.cs" />

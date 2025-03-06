@@ -10,6 +10,7 @@ import { adminPrimeCustomersComponent } from '../admin/PrimeCustomers/admin.prim
 import { geoComponent } from '../admin/geo/admin.geo.component';
 import { adminDataFixComponent } from '../admin/dataFix/admin.dataFix.component';
 import { ConstantsComponent } from '../admin/constants/admin.constants.component';
+import { LogArchivalComponent } from '../admin/logArchival/admin.logArchival.component';
 import { adminProductAliasComponent } from '../admin/productAlias/admin.productAlias.component';
 import { adminProductsComponent } from '../admin/products/admin.products.component';
 import { adminProductCategoriesComponent } from '../admin/productCategories/admin.productCategories.component';
@@ -82,6 +83,7 @@ export const AdminComponents =[
     geoComponent,
     adminDataFixComponent,
     ConstantsComponent,
+    LogArchivalComponent,
     adminProductAliasComponent,
     adminProductsComponent,
     adminProductCategoriesComponent,

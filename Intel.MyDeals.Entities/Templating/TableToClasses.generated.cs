@@ -11681,4 +11681,53 @@ namespace Intel.MyDeals.Entities
 		}
 		*/
     } // End of class UnificationReconciliationReport
+
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on SOC-PF4130FW
+    /// by akannamb
+    /// at 2/21/2025 11:39:46 AM
+    ///</summary>
+
+    [DataContract]
+    public partial class LogArchival
+    {
+        [DataMember]
+        public System.Int32 LOG_ARCHVL_PRG_TBL_DTL_SID { set; get; }
+
+        [DataMember]
+        public System.Int32 SRT_ORDR { set; get; }
+
+        [DataMember]
+        public System.String DB_NAME { set; get; }
+
+        [DataMember]
+        public System.String SCHEMA { set; get; }
+
+        [DataMember]
+        public System.String LOG_TBL_NM { set; get; }
+
+        [DataMember]
+        public System.Boolean IS_PURGE { set; get; }
+
+        [DataMember]
+        public System.Boolean IS_ARCHV { set; get; }
+
+        [DataMember]
+        public System.String ARCHV_TBL_NM { set; get; }
+
+        [DataMember]
+        public System.String ARCHV_DB_NAME { set; get; }
+
+        [DataMember]
+        public System.String ARCHV_SCHEMA { set; get; }
+
+        [DataMember]
+        public System.String JSON_COND { set; get; }
+
+        [DataMember]
+        public System.Boolean ACTV_IND { set; get; }
+
+    }
 }

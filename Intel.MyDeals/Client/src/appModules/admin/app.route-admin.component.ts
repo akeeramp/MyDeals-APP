@@ -7,6 +7,7 @@ import { batchJobConstantsComponent } from "../../app/admin/batchJobConstants/ad
 import { BulkPricingUpdatesComponent } from "../../app/admin/bulkPricingUpdates/admin.bulkPricingUpdates.component";
 import { AdminCacheComponent } from "../../app/admin/cache/admin.cache.component";
 import { ConstantsComponent } from "../../app/admin/constants/admin.constants.component";
+import { LogArchivalComponent } from "../../app/admin/logArchival/admin.logArchival.component";
 import { adminConsumptionCountryComponent } from "../../app/admin/consumptionCountry/admin.consumptionCountry.component";
 import { adminCustomerComponent } from "../../app/admin/customer/admin.customer.component";
 import { adminCustomerVendorsComponent } from "../../app/admin/CustomerVendors/admin.customerVendors.component";
@@ -69,6 +70,7 @@ export const routesAdmin: Routes = [
     { path: 'adminGeo', component: geoComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'productCategories', component: adminProductCategoriesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] ,canDeactivate:[PendingChangesGuard]},
     { path: 'constants', component: ConstantsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] ,canDeactivate:[PendingChangesGuard]},
+    { path: 'logArchival', component: LogArchivalComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] ,canDeactivate:[PendingChangesGuard]},
     { path: 'productAlias', component: adminProductAliasComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] ,canDeactivate:[PendingChangesGuard]},
     { path: 'products', component: adminProductsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard]},
     { path: 'funfact', component: adminFunFactComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] ,canDeactivate:[PendingChangesGuard] },

@@ -20114,5 +20114,58 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
         }
 
+        ///<summary>
+        /// ID: 1575325022
+        /// Modified: 2/20/2025 9:32:20 PM
+        /// Parameters: 13
+        ///</summary>
+        public partial class PR_MANAGE_LOG_ARCHIVAL_ACTNS : SP
+        {
+            public PR_MANAGE_LOG_ARCHIVAL_ACTNS()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MANAGE_LOG_ARCHIVAL_ACTNS]";
+            }
+
+            ///<summary>
+            /// DataType: table type
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public SqlTableValueParameterBase logarch_inp
+            {
+                set { SetParmeter("logarch_inp", value); }
+                get { return (SqlTableValueParameterBase)GetParameter("logarch_inp"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(20)
+            /// Mode: IN
+            /// Max Length: 20
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 20, false)]
+            public String mode
+            {
+                set { SetParmeter("mode", value); }
+                get { return (String)GetParameter("mode"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Int32 emp_wwid
+            {
+                set { SetParmeter("emp_wwid", value); }
+                get { return (Int32)GetParameter("emp_wwid"); }
+            }
+
+           
+        }
+
     }
 }
+
+
+
