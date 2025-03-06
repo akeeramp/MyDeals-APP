@@ -1,7 +1,8 @@
 name: UI Path Extended Sanity Scheduled Scan
 on:
   schedule:
-    - cron: '30 5 * * 1' # This will run at 5:30 AM UTC on Mondays, which is 11 AM IST / 9:30 PM PST (Sunday)
+    # This will run at 10:00 PM UTC on Sundays, which is 3:30 AM IST (Monday) / 2:00 PM PST or 3:00 PM PDT (Sunday)
+    - cron: '0 22 * * 0' 
 
 jobs:
   Triggering-UIPath-ExtendedSanity-Scan:
