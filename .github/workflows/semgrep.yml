@@ -14,8 +14,8 @@ on:
   workflow_dispatch: {}
   # Scan mainline branches and report all findings:
   # Ensure you have the correct branch/es for your project
-  push:
-    branches: ["development"]
+  # push:
+  #   branches: ["development"]
        
   # Schedule the CI job (this method uses cron syntax):
   schedule:
