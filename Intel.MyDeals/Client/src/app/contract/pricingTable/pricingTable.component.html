@@ -53,7 +53,7 @@
                                 </ng-template>
                                 <ng-template kendoTabContent>
                                     <div *ngIf="isDETab">
-                                        <deal-editor (loadPTEditor)="loadPTEditor($event)" [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (refreshedContractData)="refreshContractData($event)" (perfComp)="perfCompFn($event)" (addPerfTimes)="addPerfTimes($event)" (deTabInfmIconUpdate)="isDeTabInfmIconUpdate($event)" (pteRedir)="RedirectFn($event)">
+                                        <deal-editor (loadPTEditor)="loadPTEditor($event)" [IsExpiredDealHighlighted]="true" [NumberOfDaysToExpireDeal]="NumberOfDaysToExpireDeal" [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (refreshedContractData)="refreshContractData($event)" (perfComp)="perfCompFn($event)" (addPerfTimes)="addPerfTimes($event)" (deTabInfmIconUpdate)="isDeTabInfmIconUpdate($event)" (pteRedir)="RedirectFn($event)">
                                         </deal-editor>
                                     </div>
                                 </ng-template>

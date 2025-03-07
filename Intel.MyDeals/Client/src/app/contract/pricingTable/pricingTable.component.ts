@@ -12,6 +12,7 @@ import { performanceBarsComponent } from '../performanceBars/performanceBar.comp
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { constantsService } from '../../admin/constants/admin.constants.service';
 
 export interface contractIds {
     Model: string;
@@ -31,7 +32,7 @@ export interface contractIds {
 
 export class pricingTableComponent implements OnDestroy  {
     public drawChart: boolean;
-    constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: TemplatesService,
+    constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: TemplatesService, private constantsSvc: constantsService,
         private pteService: PricingTableEditorService, private lnavSvc: lnavService, private route: ActivatedRoute, private router: Router) {}
     @ViewChild(PricingTableEditorComponent) private pteComp: PricingTableEditorComponent;
     @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
@@ -68,7 +69,9 @@ export class pricingTableComponent implements OnDestroy  {
     public error: boolean = false;
     public enablePerfChart:boolean = (<any>window).isDeveloper || (<any>window).isTester;
     public loadtype="";
-    public selectNavMenu:any;
+    public selectNavMenu: any;
+    public NumberOfDaysToExpireDeal: number;
+
     private isDirty=false;
     private readonly destroy$ = new Subject();
 
@@ -448,6 +451,20 @@ export class pricingTableComponent implements OnDestroy  {
         this.error = false;
         document.location.href = "/Dashboard#/portal";
     }
+    getDealExpireConstant() {
+        this.constantsSvc.getConstantsByName("HARD_EXPIRE_DEALS_AFTER_X_DAYS")
+            .subscribe(data => {
+                if (data) {
+                    const deal_expire_Const_Value = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
+                    const defaultDealExpireDays = 90;
+                    const dealExpiryDays = parseInt(deal_expire_Const_Value);
+                    this.NumberOfDaysToExpireDeal = isNaN(dealExpiryDays) ? defaultDealExpireDays : dealExpiryDays;
+                }
+
+            }, (err) => {
+                this.loggerSvc.error("Unable to get constants by name", "Error", err);
+            });
+    }
     ngOnInit() {
         try {
             document.title = "Contract - My Deals"; 
@@ -455,6 +472,8 @@ export class pricingTableComponent implements OnDestroy  {
             this.lnavSvc.isLnavHidden.pipe(takeUntil(this.destroy$)).subscribe((isLnavHidden: any) => {
                 this.isLnavHidden = isLnavHidden?.isLnavHid;
             });
+      
+            this.getDealExpireConstant();
         }
         catch(ex){
             this.loggerSvc.error('Something went wrong', 'Error');

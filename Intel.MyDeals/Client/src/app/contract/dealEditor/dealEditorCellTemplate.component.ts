@@ -41,6 +41,9 @@ export class dealEditorCellTemplateComponent {
     @Input() isInActCustSearch: boolean = false;
     @Input() in_Is_Tender_Dashboard: boolean = false;//will recieve true when DE Grid Used in Tender Dashboard Screen
     @Input() in_DataSet: any = '';
+    @Input() IsExpiredDealHighlighted: boolean = false;
+    @Input() NumberOfDaysToExpireDeal: number;
+
     @Output() iconUpdate: EventEmitter<any> = new EventEmitter<any>();
     @Output() refresh_Contract_Data: EventEmitter<any> = new EventEmitter<any>();
     @Output() reLoad: EventEmitter<any> = new EventEmitter<any>();

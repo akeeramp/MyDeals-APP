@@ -1689,6 +1689,9 @@ span.ng-binding.dataPadding.rate-value-fix {
 .k-button:hover {
     background-color: unset !important;
 }
+
+#dealEditorTab .k-grid-content-locked tr.expired-deal.k-master-row.ng-star-inserted > td:nth-child(2),
+#dealEditorTab .k-grid-content-locked tr.expired-deal.k-master-row.ng-star-inserted > td:nth-child(2):hover,
 .k-grid-content tr.expired-deal.k-master-row.ng-star-inserted > td {
     background-color: #FFD6D6 !important;
 }

@@ -35,6 +35,8 @@ export class dealToolsComponent implements OnDestroy {
     @Input() isManageTab;
     @Input() in_Is_Tender_Dashboard: boolean = false;//this will passed as true if its used in Tender Dashboard Screen
     @Input() gridResult: any = '';
+    @Input() IsExpiredDealHighlighted: boolean = false;
+    @Input() NumberOfDaysToExpireDeal: number;
     @Output() iconSaveUpdate: EventEmitter<any> = new EventEmitter<any>();
     @Output() refreshContract: EventEmitter<any> = new EventEmitter<any>();
     @Output() reloadFn = new EventEmitter<any>();
@@ -218,29 +220,28 @@ export class dealToolsComponent implements OnDestroy {
         });
     }
     stgFullTitleChar() {
-        return this.isExpiredDeal()
-            ? 'This deal is Expired'
-            : GridUtil.stgFullTitleChar(this.dataItem);
+
+    return this.IsExpiredDealHighlighted && this.isDealExpired(this.dataItem.END_DT)
+        ? 'This deal is Expired'
+        : GridUtil.stgFullTitleChar(this.dataItem);
     }
     stgOneChar() {
-        return this.isExpiredDeal()
+        return this.IsExpiredDealHighlighted && this.isDealExpired(this.dataItem.END_DT)
             ? 'X'
             : GridUtil.stgOneChar(this.dataItem);
     }
     getStageBgColorStyle = function (c) {
         return { backgroundColor: DE_Load_Util.getColorStage(c) };
     }
-    private isExpiredDeal(): boolean {
-        return this.dataItem.EXPIRE_FLG === '1' || this.isDealExpired(this.dataItem.END_DT);
-    }
+   
     private isDealExpired(endDate: string): boolean {
         const today = new Date();
         const dealEndDate = new Date(endDate);
-        const expirationDate = new Date(dealEndDate.setDate(dealEndDate.getDate() + 90));
+        const expirationDate = new Date(dealEndDate.setDate(dealEndDate.getDate() + this.NumberOfDaysToExpireDeal));
         return today >= expirationDate;
     }
     getDealStageStyle(): { [key: string]: string } {
-        return this.isExpiredDeal()
+        return this.IsExpiredDealHighlighted && this.isDealExpired(this.dataItem.END_DT)
             ? { 'background-color': 'red' }
             : this.getStageBgColorStyle(this.stgFullTitleChar());
     }

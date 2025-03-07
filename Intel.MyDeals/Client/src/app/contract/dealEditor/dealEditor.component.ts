@@ -62,7 +62,10 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
     @Input() in_Search_Count: any = 0;
     @Input() ruleData: any = {}
     @Input() in_Deal_Type: string = "";
-    @Input() filterData: any = {} ;
+    @Input() filterData: any = {};
+    @Input() IsExpiredDealHighlighted: boolean = false;
+    @Input() NumberOfDaysToExpireDeal: number;
+
     @ViewChild('dealEditor') private grid: GridComponent;
     @Output() perfComp = new EventEmitter;
     @Output() addPerfTimes = new EventEmitter;
@@ -1888,14 +1891,15 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         this.emailData.emit(this.gridData.data.filter(x => x.isLinked == true));
     }
     public rowCallback = (context: RowClassArgs): string | undefined => {
-        const { EXPIRE_FLG, END_DT } = context.dataItem;
-        return EXPIRE_FLG === '1' || this.isDealExpired(END_DT) ? 'expired-deal' : undefined;
+        return this.IsExpiredDealHighlighted && this.isDealExpired(context.dataItem.END_DT)
+            ? 'expired-deal'
+            : undefined;
     }
 
     private isDealExpired(endDate: string): boolean {
         const today = new Date();
         const dealEndDate = new Date(endDate);
-        const expirationDate = new Date(dealEndDate.setDate(dealEndDate.getDate() + 90));
+        const expirationDate = new Date(dealEndDate.setDate(dealEndDate.getDate() + this.NumberOfDaysToExpireDeal));
         return today >= expirationDate;
     }
 
