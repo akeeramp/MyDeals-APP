@@ -257,6 +257,8 @@ export class LogArchivalComponent implements PendingChangesGuard, OnDestroy {
                 this.formGroup.get('ARCHV_DB_NAME').disable();
                 this.formGroup.get('ARCHV_SCHEMA').setValue('');
                 this.formGroup.get('ARCHV_SCHEMA').disable();
+                this.formGroup.get('ARCHV_TBL_NM').setValue('');
+                this.formGroup.get('ARCHV_TBL_NM').disable();
             }
         });  
 
@@ -370,22 +372,19 @@ export class LogArchivalComponent implements PendingChangesGuard, OnDestroy {
 
     saveHandler({ sender, rowIndex, isNew, dataItem }: SaveEvent): void {
         const inData = [];
-        let res = null;
         inData.push(this.formGroup.value);
         inData[0]['LOG_ARCHVL_PRG_TBL_DTL_SID'] = dataItem.LOG_ARCHVL_PRG_TBL_DTL_SID ? dataItem.LOG_ARCHVL_PRG_TBL_DTL_SID : -1;
         const msg = isNew ? 'inserted' : 'updated';
-        if (res != null) {
-            this.logArchivalSvc.updateLogArchivalRecord(inData, 'update').subscribe(
-                () => {
-                    this.loggerSvc.success("The record " + msg + " successfully.")
-                    this.loadLogTable();
-                },
-                (err) => {
-                    this.loggerSvc.error("Unable to save the record.", err, err.statusText)
-                }
-            )
-            sender.closeRow(rowIndex);
-        }
+        this.logArchivalSvc.updateLogArchivalRecord(inData, 'update').subscribe(
+            () => {
+                this.loggerSvc.success("The record " + msg + " successfully.")
+                this.loadLogTable();
+            },
+            (err) => {
+                this.loggerSvc.error("Unable to save the record.", err, err.statusText)
+            }
+        )
+        sender.closeRow(rowIndex);        
     }
 
     refreshGrid(): void {                
