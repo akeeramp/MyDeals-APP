@@ -218,13 +218,31 @@ export class dealToolsComponent implements OnDestroy {
         });
     }
     stgFullTitleChar() {
-        return GridUtil.stgFullTitleChar(this.dataItem);
+        return this.isExpiredDeal()
+            ? 'This deal is Expired'
+            : GridUtil.stgFullTitleChar(this.dataItem);
     }
     stgOneChar() {
-        return GridUtil.stgOneChar(this.dataItem);
+        return this.isExpiredDeal()
+            ? 'X'
+            : GridUtil.stgOneChar(this.dataItem);
     }
     getStageBgColorStyle = function (c) {
         return { backgroundColor: DE_Load_Util.getColorStage(c) };
+    }
+    private isExpiredDeal(): boolean {
+        return this.dataItem.EXPIRE_FLG === '1' || this.isDealExpired(this.dataItem.END_DT);
+    }
+    private isDealExpired(endDate: string): boolean {
+        const today = new Date();
+        const dealEndDate = new Date(endDate);
+        const expirationDate = new Date(dealEndDate.setDate(dealEndDate.getDate() + 90));
+        return today >= expirationDate;
+    }
+    getDealStageStyle(): { [key: string]: string } {
+        return this.isExpiredDeal()
+            ? { 'background-color': 'red' }
+            : this.getStageBgColorStyle(this.stgFullTitleChar());
     }
     closeDialogs() {
         this.openSplitDialog = false;

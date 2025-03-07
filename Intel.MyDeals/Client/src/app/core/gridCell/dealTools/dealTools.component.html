@@ -3,7 +3,7 @@
 <div class="dealTools custom-deal-tools">
     <div *ngIf="isPublishable != true" class="tools-parent">
         <div class="dirtyTip" *ngIf="isModified" title="This deal has been modified"></div>
-        <div class='grid-status fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' [ngStyle]="getStageBgColorStyle(stgFullTitleChar())" [innerHTML]="stgOneChar()"></div>
+        <div class='grid-status fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' [ngStyle]="getDealStageStyle()" [innerHTML]="stgOneChar()"></div>
 
         <!-- Checkbox -->
         <div class='fl check-parent' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1) && (dataItem.WF_STG_CD !== 'Cancelled')

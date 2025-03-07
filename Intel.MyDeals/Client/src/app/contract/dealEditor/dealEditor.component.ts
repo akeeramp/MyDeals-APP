@@ -5,7 +5,7 @@ import { MomentService, StaticMomentService } from "../../shared/moment/moment.s
 import { MatDialog } from '@angular/material/dialog';
 import { opGridTemplate } from "../../core/angular.constants"
 import { SelectEvent } from "@progress/kendo-angular-layout";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent, RowClassArgs } from "@progress/kendo-angular-grid";
 import { process, State, distinct, FilterDescriptor, CompositeFilterDescriptor } from "@progress/kendo-data-query";
 import { PricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { DatePipe } from '@angular/common';
@@ -1887,7 +1887,18 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
     sendEmail(){
         this.emailData.emit(this.gridData.data.filter(x => x.isLinked == true));
     }
-    
+    public rowCallback = (context: RowClassArgs): string | undefined => {
+        const { EXPIRE_FLG, END_DT } = context.dataItem;
+        return EXPIRE_FLG === '1' || this.isDealExpired(END_DT) ? 'expired-deal' : undefined;
+    }
+
+    private isDealExpired(endDate: string): boolean {
+        const today = new Date();
+        const dealEndDate = new Date(endDate);
+        const expirationDate = new Date(dealEndDate.setDate(dealEndDate.getDate() + 90));
+        return today >= expirationDate;
+    }
+
     ngOnInit() {
         this.isInitialLoad = true;
         //adding 50 pagination in Deal editor
