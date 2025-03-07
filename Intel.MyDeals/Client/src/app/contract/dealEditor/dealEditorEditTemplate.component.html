@@ -51,7 +51,8 @@
                       container="body"
                       name="dealDate"
                       #dealDate="ngModel"
-                      calendarType="classic"></kendo-datepicker>
+                      calendarType="classic">
+    </kendo-datepicker>
 </div>
 <div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'VOL_TIER' || in_Deal_Type == 'REV_TIER' || in_Deal_Type == 'FLEX')">
     <div *ngFor="let fieldDet of fields">

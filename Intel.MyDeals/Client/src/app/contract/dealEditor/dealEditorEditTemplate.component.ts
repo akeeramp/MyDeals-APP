@@ -18,7 +18,9 @@ import { utils } from '../../shared/util/util';
 })
 export class dealEditorEditTemplateComponent {
 
-    constructor() {        
+    constructor() {
+        const today = new Date();
+        this.minDate = new Date(today.getFullYear() - 20, today.getMonth(), today.getDate());        
     }
     @Input() in_Field_Name: string = '';
     @Input() in_Deal_Type: string = '';
@@ -45,6 +47,10 @@ export class dealEditorEditTemplateComponent {
     private bidActnsDropDownValue: string = "value";
     private selectedValue: any;
     public confirmDialog: boolean = false;
+    // Calculate the minimum date as 20 years before today's date
+    public minDate: Date = new Date(new Date().getFullYear() - 20, new Date().getMonth(), new Date().getDate());
+    private minDateErrMessage = "The selected date cannot be beyond 20 years";
+
     translateDimKey(key) {
         switch (key) {
             case "20_____1":
@@ -144,11 +150,18 @@ export class dealEditorEditTemplateComponent {
         }
     }
     onBlur(dealDate) {
-        if (dealDate.status == "INVALID") {
+        // Check if the date is before the minimum date, show tooltip error
+        if (dealDate.value && new Date(dealDate.value) < this.minDate) {
+            this.message = this.minDateErrMessage;
             this.invalidField.emit(true);
             this.dealDateToolTip.open();
-        }
-        else {
+        } else if (dealDate.status === "INVALID") {
+            // Handle other invalid date scenarios
+            this.message = this.in_Field_Name + " is not a valid date.";
+            this.invalidField.emit(true);
+            this.dealDateToolTip.open();
+        } else {
+            // If the date is valid and not before the minimum date
             this.invalidField.emit(false);
             this.dealDateToolTip.close();
         }

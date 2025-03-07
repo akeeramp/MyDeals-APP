@@ -57,9 +57,14 @@ import { MomentService, StaticMomentService } from "../../../shared/moment/momen
 
   export class kendoCalendarComponent {
    public value: Date;
-    constructor(public dialogRef: MatDialogRef<kendoCalendarComponent>,
-				@Inject(MAT_DIALOG_DATA) public data: any,
-				private momentService: MomentService) { }
+   constructor(public dialogRef: MatDialogRef<kendoCalendarComponent>,
+		@Inject(MAT_DIALOG_DATA) public data: any,
+		private momentService: MomentService) {
+
+		// Calculate the minimum date as 20 years before today's date
+		const today = new Date();
+		this.minDate = new Date(today.getFullYear() - 20, today.getMonth(), today.getDate());
+	}
 
 	private isValidDate: boolean;
 	private isDateOverlap: boolean;
@@ -68,6 +73,8 @@ import { MomentService, StaticMomentService } from "../../../shared/moment/momen
 	private errorMsg: string;
 
 	private isStartDate: boolean;
+	// Calculate the minimum date as 20 years before today's date
+	public minDate: Date = new Date(new Date().getFullYear() - 20, new Date().getMonth(), new Date().getDate());
 
 	onChange(value) {
 		this.isValidDate = true;
@@ -75,13 +82,22 @@ import { MomentService, StaticMomentService } from "../../../shared/moment/momen
 		this.isConsumption = this.data.isConsumption;
 		this.validMsg = "";
 
+		// Check if the date is before the minimum date
+		if (StaticMomentService.moment(value).isBefore(this.minDate)) {
+			this.errorMsg = "The selected date cannot be beyond 20 years.";
+			this.isValidDate = false;
+			return; // Exit early if the date is invalid
+		}
+
+		if (this.errorMsg != undefined) { // Put in to clear out old error messages
+			this.errorMsg = undefined;
+		}
+
 		//check following validations are only for Start Date and End Date
 		if (this.data.colName == "START_DT" || this.data.colName == "END_DT") {
 			this.isStartDate = (this.data.colName === "START_DT");
 			// date must overlapp contract range... not inside of the range - Tender contracts don't observe start/end date within contract.
-			if (this.errorMsg != undefined) { // Put in to clear out old error messages
-				this.errorMsg = undefined;
-			}
+			
 			if (this.isStartDate && value > new Date(this.data.contractEndDate) && this.data.contractIsTender !== true) {
 				this.errorMsg = "Dates must overlap contract's date range (" + this.data.contractStartDate.split(' ')[0] + " - " + this.data.contractEndDate.split(' ')[0] + ").";
 				this.isValidDate = false;
@@ -99,9 +115,6 @@ import { MomentService, StaticMomentService } from "../../../shared/moment/momen
 			}
 		}
 		if (this.data.isOEM) {
-			if (this.errorMsg != undefined) { // Put in to clear out old error messages
-				this.errorMsg = undefined;
-			}
 			if (this.data.OEM_PLTFRM_LNCH_DT !== null && this.data.colName === "OEM_PLTFRM_EOL_DT" && (StaticMomentService.moment(value).isSameOrBefore(this.data.OEM_PLTFRM_LNCH_DT))) {
 				this.errorMsg = "OEM Platform EOL Date must be after the OEM Platform Launch Date";
 				this.isValidDate = false;
