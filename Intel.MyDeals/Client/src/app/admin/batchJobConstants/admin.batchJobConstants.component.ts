@@ -258,12 +258,7 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
         this.batchJobConstForm.statusChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.isFormValid = this.checkFormValidity();
         });
-    }
-
-    onTriggeredByChange() {
-        
-    }
-
+    }   
 
     gettingDaysForUpdate(dataItem) {
         const valSeperate = JSON.parse(dataItem.RUN_SCHDL);
