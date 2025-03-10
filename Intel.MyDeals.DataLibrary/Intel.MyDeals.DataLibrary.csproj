@@ -119,6 +119,7 @@
     <Compile Include="DealMassUpdate\DealMassUpdateDataLib.cs" />
     <Compile Include="DealUnification\DealUnificationDataLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerDataLib.cs" />
+    <Compile Include="Environments\EnvironmentsDataLib.cs" />
     <Compile Include="ExpireYcs2\ExpireYcs2DataLib.cs" />
     <Compile Include="HealthCheck\HealthCheckDataLib.cs" />
     <Compile Include="LogArchival\LogArchivalDataLib.cs" />

@@ -20115,6 +20115,102 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
+        /// ID: 1509944802
+        /// Modified: 2/4/2024 11:25:01 AM
+        /// Parameters: 2
+        ///</summary>
+        public partial class PR_MANAGE_ENVIRONMENT_VALUES : SP
+        {
+            public PR_MANAGE_ENVIRONMENT_VALUES()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MANAGE_ENVIRONMENT]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(20)
+            /// Mode: IN
+            /// Max Length: 20
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 50, false)]
+            public String mode
+            {
+                set { SetParmeter("MODE", value); }
+                get { return (String)GetParameter("MODE"); }
+            }
+
+            ///<summary>
+            /// DataType: table type
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public SqlTableValueParameterBase MYDL_ALL_ENVT_DTL
+            {
+                set { SetParmeter("MYDL_ALL_ENVT_DTL", value); }
+                get { return (SqlTableValueParameterBase)GetParameter("MYDL_ALL_ENVT_DTL"); }
+            }
+
+            ///<summary>
+            /// DataType: Int32
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 4, false)]
+            public Int32 CRE_EMP_WWID
+            {
+                set { SetParmeter("CRE_EMP_WWID", value); }
+                get { return (Int32)GetParameter("CRE_EMP_WWID"); }
+            }
+        }
+
+        ///<summary>
+        /// ID: 1509944803
+        /// Modified: 2/4/2024 11:25:01 AM
+        /// Parameters: 2
+        ///</summary>
+        public partial class PR_MANAGE_SERVERDETAILS_VALUES : SP
+        {
+            public PR_MANAGE_SERVERDETAILS_VALUES()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MANAGE_SERVERDETAILS]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(20)
+            /// Mode: IN
+            /// Max Length: 20
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 50, false)]
+            public String mode
+            {
+                set { SetParmeter("mode", value); }
+                get { return (String)GetParameter("mode"); }
+            }
+
+            ///<summary>
+            /// DataType: table type
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public SqlTableValueParameterBase MYDL_LNKD_SRVR_DTL
+            {
+                set { SetParmeter("MYDL_LNKD_SRVR_DTL", value); }
+                get { return (SqlTableValueParameterBase)GetParameter("MYDL_LNKD_SRVR_DTL"); }
+            }
+
+            ///<summary>
+            /// DataType: Int32
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 4, false)]
+            public Int32 CRE_EMP_WWID
+            {
+                set { SetParmeter("CRE_EMP_WWID", value); }
+                get { return (Int32)GetParameter("CRE_EMP_WWID"); }
+            }
+        }
+
+        ///<summary>
         /// ID: 1575325022
         /// Modified: 2/20/2025 9:32:20 PM
         /// Parameters: 13
@@ -20161,11 +20257,10 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 get { return (Int32)GetParameter("emp_wwid"); }
             }
 
-           
-        }
 
+        }
     }
 }
-
+        
 
 

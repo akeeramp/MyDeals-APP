@@ -131,6 +131,7 @@
     <Compile Include="DsaEngine\DsaEngineLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerLib.cs" />
     <Compile Include="Employees\EmployeeHelpers.cs" />
+    <Compile Include="Environments\EnvironmentsLib.cs" />
     <Compile Include="ExpireYcs2\ExpireYcs2Lib.cs" />
     <Compile Include="Files\FilesLib.cs" />
     <Compile Include="HealthCheck\HealthCheckLib.cs" />

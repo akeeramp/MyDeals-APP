@@ -1,0 +1,7 @@
+@import '../kendo_grid.css';
+@import '../CustomerVendors/admin.customerVendors.component.css';
+
+.dropDownSection {
+    padding-bottom: 15px;
+    padding-left: 15px;
+}

@@ -70,6 +70,8 @@ import { ExpireYcs2Component } from "../admin/expireYcs2/admin.expireYcs2.compon
 import { DealUnificationReportComponent } from '../admin/dealUnificationReport/dealUnificationReport.component';
 import { userRolePermissionComponent } from '../admin/userRolePermission/admin.userRolePermission.component';
 
+import { EnvironmentsComponent } from "../../app/admin/environmentDetails/admin.environments.component";
+
 export const AdminComponents =[
     EmployeeComponent,
     AdminCacheComponent,
@@ -141,6 +143,8 @@ export const AdminComponents =[
     MonacoEditorComponent,
     QuoteLetterRegenerationComponent,
     ExpireYcs2Component,
+    DealUnificationReportComponent,
+    EnvironmentsComponent,
     DealUnificationReportComponent,
     userRolePermissionComponent
 ]

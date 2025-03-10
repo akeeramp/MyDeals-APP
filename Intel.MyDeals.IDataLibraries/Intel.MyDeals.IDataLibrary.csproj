@@ -66,6 +66,7 @@
     <Compile Include="DealUnification\IDealUnificationDataLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerDataLib.cs" />
     <Compile Include="Employees\IEmployeeDataLib.cs" />
+    <Compile Include="Environments\IEnvironmentsDataLib.cs" />
     <Compile Include="ExpireYcs2\IExpireYcs2DataLib.cs" />
     <Compile Include="HealthCheck\IHealthCheckDataLib.cs" />
     <Compile Include="JMS\IJmsDataLib.cs" />

@@ -247,6 +247,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Helper Functions\" />
     <Folder Include="ViewModels\" />
+    <Folder Include="Views\AdminEnvironments\" />
     <Folder Include="Views\AsyncProcTrigger\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\DataQuality\" />
@@ -270,6 +271,7 @@
     <Compile Include="Classes\JsonNetResult.cs" />
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
+    <Compile Include="Controllers\API\AdminEnvironmentsController.cs" />
     <Compile Include="Controllers\API\AsyncProcTriggerController.cs" />
     <Compile Include="Controllers\API\BulkPriceUpdatesController.cs" />
     <Compile Include="Controllers\API\ConsumptionCountryController.cs" />
@@ -534,6 +536,8 @@
     <Content Include="Client\Images\docs\pricingassoc.png" />
     <Content Include="Client\Images\docs\pricingstrategy.png" />
     <Content Include="Client\Images\docs\Pricingtable.png" />
+    <Content Include="Client\src\app\admin\environmentDetails\admin.environments.component.css" />
+    <Content Include="Client\src\app\admin\environmentDetails\admin.environments.component.html" />
     <Content Include="Client\src\app\admin\logArchival\admin.logArchival.component.css" />
     <Content Include="Client\src\app\admin\logArchival\admin.logArchival.component.html" />
     <Content Include="Client\src\app\advanceSearch\inactiveCustomerSearch\inactiveCustomerSearch.component.html" />
@@ -736,6 +740,9 @@
     <Content Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.css" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\environmentDetails\admin.environments.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\environmentDetails\admin.environments.model.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\environmentDetails\admin.environments.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\expireYcs2\admin.expireYcs2.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\expireYcs2\admin.expireYcs2.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.manageEmployee.component.ts">

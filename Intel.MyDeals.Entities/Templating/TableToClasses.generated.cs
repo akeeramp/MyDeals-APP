@@ -11682,6 +11682,87 @@ namespace Intel.MyDeals.Entities
 		*/
     } // End of class UnificationReconciliationReport
 
+
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.    
+    ///</summary>
+    [DataContract]
+    public class AdminEnvironments
+    {
+        [DataMember]
+        public int ENVT_SID { get; set; }
+        [DataMember]
+        public string ENVT_NM { get; set; }
+        [DataMember]
+        public string DB_ENVT_NM { get; set; }
+        [DataMember]
+        public string DB_VANITY_CONN_STR { get; set; }
+        [DataMember]
+        public string DB_SRVR_DTL { get; set; }
+        [DataMember]
+        public string GRAFANA_DASHBOARD_LINK { get; set; }
+        [DataMember]
+        public string MANAGED_OWNERS { get; set; }
+        [DataMember]
+        public string WEBISTE_LINK { get; set; }
+        [DataMember]
+        public string APP_SERVER { get; set; }
+        [DataMember]
+        public string WIN_JOBS_HOSTED_MCHN { get; set; }
+        [DataMember]
+        public string SSIS_SRVR_CONN_STR { get; set; }
+        [DataMember]
+        public string SSIS_CATALOGUE_FOLDER { get; set; }
+        [DataMember]
+        public string SSIS_CATALOGUE_SRVR_DTL { get; set; }
+        [DataMember]
+        public bool ACTV_IND { get; set; }
+        [DataMember]
+        public int CRE_EMP_WWID { get; set; }
+        [DataMember]
+        public System.DateTime CRE_DTM { get; set; }
+        [DataMember]
+        public int CHG_EMP_WWID { get; set; }
+        [DataMember]
+        public System.DateTime CHG_DTM { get; set; } 
+    }// End of class AdminEnvironments
+
+
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.    
+    ///</summary>
+    [DataContract]
+    public class AdminServerDetails
+    { 
+        [DataMember]
+        public string LNKD_SRVR_NM { get; set; }
+        [DataMember]
+        public string ENVT { get; set; }
+        [DataMember]
+        public string LNKD_SRVR_CONN_DTL { get; set; }
+        [DataMember]
+        public string CHK_QUERY { get; set; }
+        [DataMember]
+        public System.DateTime LST_CHCKD_DTM { get; set; }
+        [DataMember]
+        public string LS_ERR_TXT { get; set; }
+        [DataMember]
+        public bool ACTV_IND { get; set; }
+        [DataMember]   
+        public int CRE_EMP_WWID { get; set; }
+        [DataMember]
+        public System.DateTime CRE_DTM { get; set; }
+        [DataMember]
+        public int CHG_EMP_WWID { get; set; }
+        [DataMember]
+        public System.DateTime CHG_DTM { get; set; }
+
+    }// End of class AdminServerDetails
+
+
+
     ///<summary>
     /// Class created via template - Do Not Modify!
     /// To modify this code, re-execute the template, or extend as partial.
