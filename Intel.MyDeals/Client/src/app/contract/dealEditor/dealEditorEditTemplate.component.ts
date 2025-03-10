@@ -153,12 +153,14 @@ export class dealEditorEditTemplateComponent {
         //check if invalid date format
         if (dealDate.status === "INVALID") {
             this.message = this.in_Field_Name + " is not a valid date.";
+            this.dealDateToolTip.ngbTooltip = this.message;
             this.invalidField.emit(true);
             this.dealDateToolTip.open();
         }
         // Check if the date is before the minimum date, show tooltip error
         else if (dealDate.value && new Date(dealDate.value) < this.minDate) {
             this.message = this.minDateErrMessage;
+            this.dealDateToolTip.ngbTooltip = this.message;
             this.invalidField.emit(true);
             this.dealDateToolTip.open();
         } else {
