@@ -150,14 +150,15 @@ export class dealEditorEditTemplateComponent {
         }
     }
     onBlur(dealDate) {
-        // Check if the date is before the minimum date, show tooltip error
-        if (dealDate.value && new Date(dealDate.value) < this.minDate) {
-            this.message = this.minDateErrMessage;
+        //check if invalid date format
+        if (dealDate.status === "INVALID") {
+            this.message = this.in_Field_Name + " is not a valid date.";
             this.invalidField.emit(true);
             this.dealDateToolTip.open();
-        } else if (dealDate.status === "INVALID") {
-            // Handle other invalid date scenarios
-            this.message = this.in_Field_Name + " is not a valid date.";
+        }
+        // Check if the date is before the minimum date, show tooltip error
+        else if (dealDate.value && new Date(dealDate.value) < this.minDate) {
+            this.message = this.minDateErrMessage;
             this.invalidField.emit(true);
             this.dealDateToolTip.open();
         } else {
@@ -317,7 +318,6 @@ export class dealEditorEditTemplateComponent {
             else
                 this.dropDowResponse[`${key}`] = this.in_DropDownResponses[key].map(a => a.dropdownName);
         });
-        this.message = this.in_Field_Name + " is not a valid date.";
         if (this.in_Field_Name == "tender_actions") {//dropdown values added for the field tender_actions(tender Dashboard)
             let approveActions = [];
             approveActions.push({ text: "Action", value: "Action" })  //placeholder dummy for a user non-selection
