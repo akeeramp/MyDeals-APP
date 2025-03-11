@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Intel.MyDeals.Entities.deal;
 using Intel.Opaque.DBAccess;
 
 namespace Intel.MyDeals.Entities
@@ -2444,6 +2445,36 @@ public partial class DealTemplateDataGram
 
         public List<R3CutoverResponse> R3CutoverResponses { get; set; }
         public List<R3CutoverResponsePassedDeals> R3CutoverResponsePassedDeals { get; set; }
+    }
+
+    public class UCMReportData
+    {
+        [DataMember]
+        public int DealId;
+        [DataMember]
+        public string CustomerName;
+        [DataMember]
+        public string DealStartDate;
+        [DataMember]
+        public string DealEndDate;
+        [DataMember]
+        public string DealStage;
+        [DataMember]
+        public string EndCustomerRetail;
+        [DataMember]
+        public string EndCustomerCountryRegion;
+        [DataMember]
+        public string UnifiedGlobalCustomerId;
+        [DataMember]
+        public string UnifiedGlobalCustomerName;
+        [DataMember]
+        public int UnifiedCountryRegionCustomerId;
+        [DataMember]
+        public string UnifiedCountryRegionCustomerName;
+        [DataMember]
+        public bool RplStatus;
+        [DataMember]
+        public string RplStatusCode;
     }
 
 }

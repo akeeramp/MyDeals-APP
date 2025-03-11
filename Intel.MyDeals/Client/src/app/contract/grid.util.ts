@@ -764,4 +764,54 @@ export class GridUtil {
         }
         return finalMsg;
     }
+
+    static dsToExcelGetUCMReportData(data, response, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        for (var t = 0; t < data.length; t++) {
+            rows[0].cells.push({
+                value: data[t].data,
+                type: data[t].type,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true,
+                width: data[t].width
+            });
+            colWidths.push({ width: data[t].data == 'EndCustomerRetail' ? 500 : 180 });
+        }
+        for (let i = 0; i < response.length; i++) {
+            rows.push({
+                cells: [ 
+                    { value: response[i]["DealId"], wrap: true },
+                    { value: response[i]["CustomerName"], wrap: true },	
+                    { value: response[i]["DealStartDate"], wrap: true },
+                    { value: response[i]["DealEndDate"], wrap: true },
+                    { value: response[i]["DealStage"], wrap: true },
+                    { value: response[i]["EndCustomerRetail"], wrap: true },
+                    { value: response[i]["EndCustomerCountryRegion"], wrap: true },	
+                    { value: response[i]["UnifiedGlobalCustomerId"], wrap: true },
+                    { value: response[i]["UnifiedGlobalCustomerName"], wrap: true },
+                    { value: response[i]["UnifiedCountryRegionCustomerId"], wrap: true },
+                    { value: response[i]["UnifiedCountryRegionCustomerName"], wrap: true },
+                    { value: response[i]["RplStatus"], wrap: true },	
+                    { value: response[i]["RplStatusCode"], wrap: true }
+                ]
+            })
+        }
+        const sheets = [
+            {
+                columns: colWidths,
+                title: fileName,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
 }

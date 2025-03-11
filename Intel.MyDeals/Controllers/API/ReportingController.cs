@@ -55,5 +55,15 @@ namespace Intel.MyDeals.Controllers.API
 
         }
 
+        [Authorize]
+        [Route("GetUCMReportData")]
+        [HttpPost]
+        public List<UCMReportData> GetUCMReportData()
+        {
+            return SafeExecutor(() => _reportingLib.GetUCMReportData()
+                , $"Unable to get {"Missing Cost Report"}"
+            );
+        }
+
     }
 }

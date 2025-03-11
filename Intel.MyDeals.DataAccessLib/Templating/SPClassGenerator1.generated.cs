@@ -20259,6 +20259,21 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
 
 
         }
+
+        ///<summary>
+        /// ID: 1575325023
+        /// Modified: 3/10/2025 12:00 PM
+        ///</summary>
+        public partial class PR_MYDEAL_UCM_RPT : SP
+        {
+            public PR_MYDEAL_UCM_RPT()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDEAL_UCM_RPT]";
+            }
+        }
+
+
     }
 }
         

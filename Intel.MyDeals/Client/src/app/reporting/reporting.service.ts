@@ -27,5 +27,13 @@ export class reportingService {
         const apiUrl: string = this.apiBaseUrl + 'GetReportNewProductMissingCostData';
         return this.httpClient.post(apiUrl, { 'headers': headers });
     }
+
+    public GetUCMReportData(): Observable<any> {
+        const headers = { 'content-type': 'application/json' };
+        const apiUrl: string = this.apiBaseUrl + 'GetUCMReportData';
+        return this.httpClient.post(apiUrl, { 'headers': headers });
+    }
+
+    
 }
 

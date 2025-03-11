@@ -21,6 +21,7 @@ export class ReportingComponent implements OnDestroy{
     public moduleName: string = "Report Dashboard";
     private GetReportMissingCostDataColumn = ExcelColumnsConfig.GetReportMissingCostDataExcel;
     private GetReportNewProductMissingCostDataColumn = ExcelColumnsConfig.GetReportNewProductMissingCostDataExcel;
+    private GetGetUCMReportDataColumn = ExcelColumnsConfig.GetUCMReportDataDataExcel;
     private colorStages = {
         Complete: "#C4D600",
         InComplete: "#FC4C02",
@@ -281,6 +282,22 @@ export class ReportingComponent implements OnDestroy{
             })
     }
 
+    downloadUCMReportData() {
+        this.loggerSvc.warn("Please wait downloading inprogress", "");
+        this.reportingSvc.GetUCMReportData().pipe(takeUntil(this.destroy$))
+            .subscribe((response: any) => {
+                if (response) {
+                    GridUtil.dsToExcelGetUCMReportData(this.GetGetUCMReportDataColumn, response, "UCMReport");
+                    this.loggerSvc.success("Successfully downloaded the report data");
+                } else {
+                    this.loggerSvc.error("Unable to Download Report Data", "");
+                }
+            }, (error) => {
+                this.loggerSvc.error("Unable to Download Report Data", error);
+            })
+    }
+
+ 
     reportDealTypesBarChart() {
         let Val = this.ReportDealTypeQuarter.filter(val => {
             if (val.DEAL_TYPE == "ECAP") {

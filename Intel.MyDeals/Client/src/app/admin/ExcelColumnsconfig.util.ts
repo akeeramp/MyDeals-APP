@@ -608,6 +608,83 @@ static bulkPriceUpdateColumnData =  [
         readOnly: true,
         width: 250,
     }
-]
+    ]
 
+    static GetUCMReportDataDataExcel = [
+        {
+            data: 'DealId',
+            type: 'numeric',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'CustomerName',
+            type: 'text',
+            readOnly: false,
+            width: 400
+        },
+
+        {
+            data: 'DealStartDate',
+            type: 'text',
+            readOnly: false,
+            width: 400
+        },
+        {
+            data: 'DealEndDate',
+            type: 'text',
+            readOnly: false,
+            width: 400
+        },
+        {
+            data: 'DealStage',
+            type: 'text',
+            readOnly: false,
+            width: 400
+        },
+
+        {
+            data: 'EndCustomerRetail',
+            type: 'text',
+            readOnly: false,
+            width: 500
+        },
+        {
+            data: 'EndCustomerCountryRegion',
+            type: 'text',
+            readOnly: false,
+            width: 500
+        }, {
+            data: 'UnifiedGlobalCustomerId',
+            type: 'text',
+            readOnly: false,
+            width: 500
+        }, {
+            data: 'UnifiedGlobalCustomerName',
+            type: 'text',
+            readOnly: false,
+            width: 500
+        }, {
+            data: 'UnifiedCountryRegionCustomerId',
+            type: 'numeric',
+            readOnly: false,
+            width: 500
+        }, {
+            data: 'UnifiedCountryRegionCustomerName',
+            type: 'text',
+            readOnly: false,
+            width: 500
+        }, {
+            data: 'RplStatus',
+            type: 'text',
+            readOnly: false,
+            width: 300
+        }, {
+            data: 'RplStatusCode',
+            type: 'text',
+            readOnly: false,
+            width: 300,
+        }
+    ]
+    
 }

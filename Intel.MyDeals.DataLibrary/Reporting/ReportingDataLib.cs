@@ -6,6 +6,13 @@ using Intel.Opaque.DBAccess;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.Entities.deal;
+using System.Net.NetworkInformation;
+using System.Xml.Linq;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using System.Drawing;
+using static Intel.MyDeals.Entities.EN;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -354,6 +361,53 @@ namespace Intel.MyDeals.DataLibrary
 
 
             return reportMissingCostData;
+        }
+
+        public List<UCMReportData> GetUCMReportData()
+        {
+            var cmd = new Procs.dbo.PR_MYDEAL_UCM_RPT{};
+            List<UCMReportData> objUCMReportData = new List<UCMReportData>();
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL ID");
+                int IDX_CUSTOMER_NAME = DB.GetReaderOrdinal(rdr, "CUSTOMER NAME");
+                int IDX_DEAL_START_DATE = DB.GetReaderOrdinal(rdr, "DEAL START DATE");
+                int IDX_DEAL_END_DATE = DB.GetReaderOrdinal(rdr, "DEAL END DATE");
+                int IDX_DEAL_STAGE = DB.GetReaderOrdinal(rdr, "DEAL STAGE");
+                int IDX_END_CUSTOMER_RETAIL = DB.GetReaderOrdinal(rdr, "END CUSTOMER/ RETAIL");
+                int IDX_END_CUSTOMER_COUNTRY_REGION = DB.GetReaderOrdinal(rdr, "END CUSTOMER COUNTRY/REGION");
+                int IDX_UNIFIED_GLOBAL_CUSTOMER_ID = DB.GetReaderOrdinal(rdr, "UNIFIED GLOBAL CUSTOMER ID");
+                int IDX_UNIFIED_GLOBAL_CUSTOMER_NAME = DB.GetReaderOrdinal(rdr, "UNIFIED GLOBAL CUSTOMER NAME");
+                int IDX_UNIFIED_COUNTRY_REGION_CUSTOMER_ID = DB.GetReaderOrdinal(rdr, "UNIFIED COUNTRY/REGION CUSTOMER ID");
+                int IDX_UNIFIED_COUNTRY_REGION_CUSTOMER_NAME = DB.GetReaderOrdinal(rdr, "UNIFIED COUNTRY/REGION CUSTOMER NAME");
+                int IDX_RPL_STATUS = DB.GetReaderOrdinal(rdr, "RPL STATUS");
+                int IDX_RPL_STATUS_CODE = DB.GetReaderOrdinal(rdr, "RPL STATUS CODE");
+
+                while (rdr.Read())
+                {
+                    objUCMReportData.Add(new UCMReportData
+                    {
+
+                        DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                        CustomerName = (IDX_CUSTOMER_NAME < 0 || rdr.IsDBNull(IDX_CUSTOMER_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUSTOMER_NAME),
+                        DealStartDate = (IDX_DEAL_START_DATE < 0 || rdr.IsDBNull(IDX_DEAL_START_DATE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_START_DATE),
+                        DealEndDate = (IDX_DEAL_END_DATE < 0 || rdr.IsDBNull(IDX_DEAL_END_DATE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_END_DATE),
+                        DealStage = (IDX_DEAL_STAGE < 0 || rdr.IsDBNull(IDX_DEAL_STAGE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_STAGE),
+                        EndCustomerRetail = (IDX_END_CUSTOMER_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_RETAIL),
+                        EndCustomerCountryRegion = (IDX_END_CUSTOMER_COUNTRY_REGION < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_COUNTRY_REGION)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_COUNTRY_REGION),
+                        UnifiedGlobalCustomerId = (IDX_UNIFIED_GLOBAL_CUSTOMER_ID < 0 || rdr.IsDBNull(IDX_UNIFIED_GLOBAL_CUSTOMER_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_UNIFIED_GLOBAL_CUSTOMER_ID),
+                        UnifiedGlobalCustomerName = (IDX_UNIFIED_GLOBAL_CUSTOMER_NAME < 0 || rdr.IsDBNull(IDX_UNIFIED_GLOBAL_CUSTOMER_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_UNIFIED_GLOBAL_CUSTOMER_NAME),
+                        UnifiedCountryRegionCustomerId= (IDX_UNIFIED_COUNTRY_REGION_CUSTOMER_ID < 0 || rdr.IsDBNull(IDX_UNIFIED_COUNTRY_REGION_CUSTOMER_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_UNIFIED_COUNTRY_REGION_CUSTOMER_ID),
+                        UnifiedCountryRegionCustomerName= (IDX_UNIFIED_COUNTRY_REGION_CUSTOMER_NAME < 0 || rdr.IsDBNull(IDX_UNIFIED_COUNTRY_REGION_CUSTOMER_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_UNIFIED_COUNTRY_REGION_CUSTOMER_NAME),
+                        RplStatus= (IDX_RPL_STATUS < 0 || rdr.IsDBNull(IDX_RPL_STATUS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_RPL_STATUS),
+                        RplStatusCode= (IDX_RPL_STATUS_CODE < 0 || rdr.IsDBNull(IDX_RPL_STATUS_CODE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RPL_STATUS_CODE),
+                    });
+                };
+            } // while
+
+
+            return objUCMReportData;
         }
     }
 }

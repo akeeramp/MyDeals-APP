@@ -8,5 +8,6 @@ namespace Intel.MyDeals.IDataLibrary
         ReportMasterData GetReportDashboard();
         List<ReportMissingCostData> GetReportMissingCostData();
         List<ReportNewProductMissingCostData> GetNewProductReportMissingCostData();
+        List<UCMReportData> GetUCMReportData();    
     }
 }

@@ -20,6 +20,7 @@
                                                     <li class="reportLink" *ngFor="let d of ReportName | filter : s.SUB_CTGR_NM ">
                                                         <a *ngIf="d.RPT_UNIQ_NM == 'iCost report'" (click)="downloadICostReport()" style="cursor: pointer;"><i class="fa fa-circle-o text-agreen"></i> {{d.RPT_UNIQ_NM}} </a>
                                                         <a *ngIf="d.RPT_UNIQ_NM == 'New Product Missing Cost Report'" (click)="downloadGetReportNewProductMissingCostData()" style="cursor: pointer;"><i class="fa fa-circle-o text-agreen"></i> {{d.RPT_UNIQ_NM}} </a>
+                                                        <a *ngIf="d.RPT_UNIQ_NM == 'Unified Customer Management Report' && s.SUB_CTGR_NM== 'Miscellaneous Report(s)'" (click)="downloadUCMReportData()" style="cursor: pointer;"><i class="fa fa-circle-o text-agreen"></i> {{d.RPT_UNIQ_NM}} </a>
                                                         <a target="_blank" href="{{d.RPT_URL}}" *ngIf="d.RPT_URL != ''"><i class="fa fa-circle-o text-agreen"></i> {{d.RPT_UNIQ_NM}} </a>
                                                     </li>
                                                 </ul>
