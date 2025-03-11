@@ -7,7 +7,7 @@ import { RowClassArgs, RowArgs } from "@progress/kendo-angular-grid";
 import { sortBy } from 'underscore';
 import { saveAs } from "@progress/kendo-file-saver";
 import { Workbook } from '@progress/kendo-angular-excel-export';
-import { Subject } from 'rxjs';
+import { Subject, forkJoin } from 'rxjs';
 import { takeUntil } from "rxjs/operators";
 
 import { managerExcludeGroupsService } from './managerExcludeGroups.service';
@@ -46,6 +46,8 @@ export class excludeDealGroupModalDialog implements OnDestroy{
     private childGridData2;
     private childGrid = [];
     private childGridResult;
+    private excludeGroupDetailsWithToggleOn;
+    private excludeGroupDetailsWithToggleOff;
     private color: ThemePalette = 'primary';
     private GRP_BY = 0;
     private enabledList = ["Pending", "Approved"];
@@ -172,8 +174,7 @@ export class excludeDealGroupModalDialog implements OnDestroy{
         this.showKendoAlert = false;
     }
 
-    loadExcludeDealGroupModel(isToggleOn: boolean = true) {
-        this.isLoading = true;
+    loadExcludeDealGroupModel(result: any) {
         this.hasCheckbox = true;
         this.gridResult = [];
         this.dealArray = [];
@@ -186,7 +187,6 @@ export class excludeDealGroupModalDialog implements OnDestroy{
         if (this.dataItem.cellCurrValues?.DEAL_ID) {
             this.pctGroupDealsView = true;
         }
-        this.dealId = this.dataItem.cellCurrValues?.DC_ID ? this.dataItem.cellCurrValues.DC_ID : this.dataItem.cellCurrValues.DEAL_ID;
         this.dealArray.push(this.dataItem.cellCurrValues);
         let groupData = JSON.parse(JSON.stringify(this.dealArray));
         for (let row of groupData) {
@@ -231,8 +231,6 @@ export class excludeDealGroupModalDialog implements OnDestroy{
             this.gridResult.push(a);
         }
         this.gridData = process(this.gridResult, this.state);
-        this.managerExcludeGrpSvc.getExcludeGroupDetails(this.dealId, isToggleOn).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
-            this.isLoading = false;;
             this.childGridResult = result;
             if (this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != undefined && this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != null && this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != '') {
                 const selectedDealIds = this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS.split(',').map(x=>x.trim());
@@ -278,10 +276,6 @@ export class excludeDealGroupModalDialog implements OnDestroy{
             if (this.childGridData1.length == 0 && this.childGridData2.length == 0) {
                 this.isData = false;
             }
-        }, (error) => {
-            this.isLoading = false;
-            this.loggerSvc.error('Customer service subgrid', error);
-        })
         this.enableCheckbox = this.enabledList.indexOf(this.dataItem.cellCurrValues.PS_WF_STG_CD);
         if (this.enableCheckbox < 0 && ((<any>window).usrRole !== "DA")) {
             this.hasCheckbox = true;
@@ -295,13 +289,35 @@ export class excludeDealGroupModalDialog implements OnDestroy{
             this.hasCheckbox = false;
         this.DEAL_GRP_CMNT = (this.dataItem.cellCurrValues.DEAL_GRP_CMNT === null || this.dataItem.cellCurrValues.DEAL_GRP_CMNT == undefined) ? "" : this.dataItem.cellCurrValues.DEAL_GRP_CMNT;
     }
+
+    loadExcludeGroupDetails() {
+        this.isLoading = true;
+        this.dealId = this.dataItem.cellCurrValues?.DC_ID ? this.dataItem.cellCurrValues.DC_ID : this.dataItem.cellCurrValues.DEAL_ID;
+        forkJoin({
+            ConsumptionToggleOn: this.managerExcludeGrpSvc.getExcludeGroupDetails(this.dealId, true),
+            ConsumptionToggleOff: this.managerExcludeGrpSvc.getExcludeGroupDetails(this.dealId, false)
+        }).pipe(takeUntil(this.destroy$))
+            .subscribe(({ ConsumptionToggleOn, ConsumptionToggleOff }) => {
+                this.isLoading = false;
+                this.excludeGroupDetailsWithToggleOn = ConsumptionToggleOn;
+                this.excludeGroupDetailsWithToggleOff = ConsumptionToggleOff;
+                this.loadExcludeDealGroupModel(this.excludeGroupDetailsWithToggleOn);
+            },
+             (error) => {
+                this.isLoading = false;
+                this.loggerSvc.error('Customer service subgrid', error);
+            })
+
+
+    }
+
     viewConsumptionOnly() {
         if (this.isSelected) {
             if (this.isConsumptionToggleOn) {
-                this.loadExcludeDealGroupModel(true);
+                this.loadExcludeDealGroupModel(this.excludeGroupDetailsWithToggleOn);
             }
             else {
-                this.loadExcludeDealGroupModel(false);
+                this.loadExcludeDealGroupModel(this.excludeGroupDetailsWithToggleOff);
             }
         }
     }
@@ -448,7 +464,7 @@ export class excludeDealGroupModalDialog implements OnDestroy{
     }
 
     ngOnInit() {
-        this.viewConsumptionOnly();
+        this.loadExcludeGroupDetails();
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
