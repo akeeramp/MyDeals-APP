@@ -541,7 +541,7 @@ namespace Intel.MyDeals.BusinessLogic
             marketSegment = marketSegment.Replace(";", ", ");
             string customerDivision = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].CustomerDivision == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].CustomerDivision; // SF will have to handle if this is needed or not for any given customer as a drop down
             string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedECAPPrice;
-            string quantity = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedQuantity;
+            string quantity = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedQuantity;  // CEILING_VOLUME
             string payableQuantity = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].PayableQuantity;
             string userEnteredProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.Name;
             string productEpmId = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProductNameEPMID; // For lookup
@@ -672,6 +672,30 @@ namespace Intel.MyDeals.BusinessLogic
             #endregion Product Check
 
             #region Deal Stability and Overlapping Check
+            // Payable Quantity - Overwrite w/ Ceiling Volume if (PQ > CV) or (PQ == NULL)
+            // WIP (TWC5971-411) - CONFIRM IF NEED TO ACTUALLY CHECK FOR 'VALID' ACCOUNT (i.e. enforced)?
+            if (int.TryParse(payableQuantity, out _))
+            {
+                int payableQuantityValue = int.Parse(payableQuantity);
+
+                int ceilingVolumeValue = 0;
+                if (int.TryParse(quantity, out _))
+                {
+                    ceilingVolumeValue = int.Parse(quantity); ;
+                }
+                if (payableQuantityValue > ceilingVolumeValue)
+                {
+                    payableQuantity = quantity; // Updated later in this function to quote line object
+
+                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(726, "Deal Warning: Payable Quantity has been reduced to quantity value (Ceiling Volume) as it is not allowed to be a larger value.", "Value replaced"));
+                }
+            } else if (payableQuantity == null)
+            {
+                payableQuantity = "0";  // Updated later in this function to quote line object
+
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(727, "Deal Warning: Payable Quantity has been reduced to zero as it is not allowed to be null or a negative value.", "Value replaced"));
+            }
+
             // Select IQR End Customer or Primed End Customer as End Customer for My Deals (Moved up prior to deal stability checks end)
             if (endCustomer != null && endCustomer != "") customer = endCustomer;
             else customer = unifiedEndCustomer;
@@ -702,7 +726,6 @@ namespace Intel.MyDeals.BusinessLogic
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(708, "Deal Error: failed to create the Tender Deal due to Overlapping Deal(s) [" + overlaps + "] already existing.", "Deal Overlaps Detected"));
                 return initWipId;
             }
-
             #endregion Deal Stability and Overlapping Check
 
             //Prime Customer Information 
@@ -878,7 +901,6 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[initPtId].GetDataElement(AttributeCodes.PROD_INCLDS), singleMedia); // From PTR_SYS_PRD single Product
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[initPtId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
 
-
             myDealsData[OpDataElementType.PRC_TBL_ROW] = new OpDataPacket<OpDataElementType>
             {
                 PacketType = OpDataElementType.PRC_TBL_ROW,
@@ -927,7 +949,6 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.RESET_VOLS_ON_PERIOD), "No");
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.DEAL_DESC), dealDescription);
-
 
             myDealsData[OpDataElementType.WIP_DEAL] = new OpDataPacket<OpDataElementType>
             {
@@ -1603,6 +1624,7 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             //continue the flow;
                         }
+
                         if (primedCustomerData != null && primedCustomerData.Rows.Count != 0)
                         {
                             //Use MyDeals data after the Master Data update in MyDeals
@@ -1615,8 +1637,6 @@ namespace Intel.MyDeals.BusinessLogic
                         }
                         else
                         {
-
-
                             isPrimedCustomer = workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer == true ? "1" : "0";
                             isRPLedCustomer = (workRecordDataFields.recordDetails.quote.ComplianceWatchList == null || workRecordDataFields.recordDetails.quote.ComplianceWatchList.ToString().Contains("NOSNCTN") || workRecordDataFields.recordDetails.quote.ComplianceWatchList.ToString().Contains("REVIEWWIP")) ? "0" : "1";
                             RPLStatusCode = workRecordDataFields.recordDetails.quote.ComplianceWatchList == null ? "" : workRecordDataFields.recordDetails.quote.ComplianceWatchList;
@@ -1634,7 +1654,6 @@ namespace Intel.MyDeals.BusinessLogic
                         primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? "" : endCustObj.UnifiedEndCustomerId.ToString();
                         primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
                         primedCustName = endCustObj.UnifiedEndCustomer;
-
                     }
 
                     //As END_CUST_OBJ is the one which is used to load data in the End customer pop up, Creating End customer obj to update deal level END_CUST_OBJ attribute 
@@ -1674,10 +1693,8 @@ namespace Intel.MyDeals.BusinessLogic
                     workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId = primedCustID;
                     workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId = primedCtryId;
                     workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName = primedCustNM;
-
                 }
             }
-
             else
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(723, "End Customer Error: Any is not a valid End Customer selection for IQR Tenders", "End Customer is not allowed"));
@@ -1907,11 +1924,42 @@ namespace Intel.MyDeals.BusinessLogic
             var isConsumptionCountryRegion = string.Compare(consumptionCountryRegion, oldmydealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_COUNTRY_REGION).AtrbValue.ToString(), StringComparison.OrdinalIgnoreCase);
             var isConsumptionReportedSalesGeo = string.Compare(iqrConsumptionReportedSalesGeo, oldmydealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO).AtrbValue.ToString(), StringComparison.OrdinalIgnoreCase);
 
+            string quantity = workRecordDataFields.recordDetails.quote.quoteLine[recordId].ApprovedQuantity;  // CEILING_VOLUME
+            string payableQuantity = workRecordDataFields.recordDetails.quote.quoteLine[recordId].PayableQuantity;
+
+            // Payable Quantity - Overwrite w/ Ceiling Volume if (PQ > CV) or (PQ == NULL)
+            // WIP (TWC5971-411) - CONFIRM IF NEED TO ACTUALLY CHECK FOR 'VALID' ACCOUNT (i.e. enforced)?
+            if (int.TryParse(payableQuantity, out _))
+            {
+                int payableQuantityValue = int.Parse(payableQuantity);
+
+                int ceilingVolumeValue = 0;
+                if (int.TryParse(quantity, out _))
+                {
+                    ceilingVolumeValue = int.Parse(quantity);
+                }
+                if (payableQuantityValue > ceilingVolumeValue)
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[recordId].PayableQuantity = quantity;
+
+                    workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(726, "Deal Warning: Payable Quantity has been reduced to quantity value (Ceiling Volume) as it is not allowed to be a larger value.", "Value replaced"));
+                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                }
+            }
+            else if (payableQuantity == null)
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].PayableQuantity = "0";
+
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(727, "Deal Warning: Payable Quantity has been reduced to zero as it is not allowed to be null or a negative value.", "Value replaced"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+            }
+
             if (workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQStatus=="Won" && (isplatformchange != 0 || isCustomerSegment != 0 || isConsumptionCountryRegion != 0 || isConsumptionReportedSalesGeo != 0))
             {
                 DateTime ReDealEffectiveDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[recordId].EffectivePricingStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
                 UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.LAST_REDEAL_DT), ReDealEffectiveDate.ToString("MM/dd/yyyy"));
             }
+
             // Break out update and validate checks, then come back and do the needed saves if everything is good.
             string validErrors = "";
             if (UpdateRecordsFromSfPackets(myDealsData, workRecordDataFields, recordId, custId, folioId, psId, dealId, reRunMode, ref validErrors)) // If validation errors, log and skip to next
@@ -1937,7 +1985,7 @@ namespace Intel.MyDeals.BusinessLogic
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
-             
+
             // Check post validation data to see if we triggered a hard or soft re-deal to set up for second save run.
             IOpDataElement OrigRedealBit = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IN_REDEAL);
             IOpDataElement OrigWfStg = myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.WF_STG_CD);
