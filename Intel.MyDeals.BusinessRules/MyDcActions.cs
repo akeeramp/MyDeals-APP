@@ -1337,7 +1337,7 @@ namespace Intel.MyDeals.BusinessRules
                     }
 
                 }
-                else if (rebateType.ToString().ToUpper() != "NRE" && rebateType.ToString().ToUpper() != "CO-ENGINEERING" && (rebateType != "tender accrual" || (rebateType != "mdf spif/per unit activity" && rebateType != "co-marketing spif/per unit activity")) && deRebateType.HasValueChanged)
+                else if (rebateType.ToString().ToUpper() != "NRE"  && (rebateType != "tender accrual" || (rebateType != "mdf spif/per unit activity" && rebateType != "co-marketing spif/per unit activity")) && deRebateType.HasValueChanged)
                 {
                     deSendToVistex.AtrbValue = "Yes";
                 }
@@ -1353,20 +1353,7 @@ namespace Intel.MyDeals.BusinessRules
                         deSendToVistex.AtrbValue = "";
                         deSendToVistex.IsRequired = true;
                     }
-                }
-                else if (dealtype.AtrbValue.ToString().ToUpper() == "LUMP_SUM")
-                {
-                    if (rebateType.ToString().ToUpper() == "CO-ENGINEERING" && deSendToVistex.State == OpDataElementState.Unchanged && (deSendToVistex.PrevAtrbValue == null || deSendToVistex.PrevAtrbValue.ToString() == "")) //
-                    {
-                        deSendToVistex.AtrbValue = "";
-                        deSendToVistex.IsRequired = true;
-                    }
-                    if (rebateType.ToString().ToUpper() == "CO-ENGINEERING" && deRebateType.HasValueChanged)
-                    {
-                        deSendToVistex.AtrbValue = "";
-                        deSendToVistex.IsRequired = true;
-                    }
-                }
+                }               
             }
             catch (Exception ex)
             {
