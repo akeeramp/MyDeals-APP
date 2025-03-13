@@ -40,6 +40,9 @@ namespace Intel.MyDeals.Entities
         [DataMember(Name = "ARCHV_TBL_NM")]
         public string ARCHV_TBL_NM { get; set; }
 
+        [DataMember(Name = "VIEW_NM")]
+        public string VIEW_NM { get; set; }
+
         [DataMember(Name = "JSON_COND")]
         public string JSON_COND { get; set; }
 

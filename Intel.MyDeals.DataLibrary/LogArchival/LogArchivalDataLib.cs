@@ -39,7 +39,8 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_IS_ARCHV = DB.GetReaderOrdinal(rdr, "IS_ARCHV");
                     int IDX_ARCHV_DB_NAME = DB.GetReaderOrdinal(rdr, "ARCHV_DB_NAME");
                     int IDX_ARCHV_SCHEMA = DB.GetReaderOrdinal(rdr, "ARCHV_SCHEMA");
-                    int IDX_ARCHV_TBL_NM = DB.GetReaderOrdinal(rdr, "ARCHV_TBL_NM");
+                    int IDX_ARCHV_TBL_NM = DB.GetReaderOrdinal(rdr, "ARCHV_TBL_NM"); 
+                    int IDX_VIEW_NM = DB.GetReaderOrdinal(rdr, "VIEW_NM");
                     int IDX_JSON_COND = DB.GetReaderOrdinal(rdr, "JSON_COND");
                     int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
                     int IDX_STATUS = DB.GetReaderOrdinal(rdr, "STATUS");
@@ -63,6 +64,7 @@ namespace Intel.MyDeals.DataLibrary
                             ARCHV_DB_NAME = (IDX_ARCHV_DB_NAME < 0 || rdr.IsDBNull(IDX_ARCHV_DB_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ARCHV_DB_NAME),
                             ARCHV_SCHEMA = (IDX_ARCHV_SCHEMA < 0 || rdr.IsDBNull(IDX_ARCHV_SCHEMA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ARCHV_SCHEMA),
                             ARCHV_TBL_NM = (IDX_ARCHV_TBL_NM < 0 || rdr.IsDBNull(IDX_ARCHV_TBL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ARCHV_TBL_NM),
+                            VIEW_NM = (IDX_VIEW_NM < 0 || rdr.IsDBNull(IDX_VIEW_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_VIEW_NM),
                             JSON_COND = (IDX_JSON_COND < 0 || rdr.IsDBNull(IDX_JSON_COND)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSON_COND),
                             ACTV_IND = rdr.IsDBNull(IDX_ACTV_IND) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
                             STATUS = (IDX_STATUS < 0 || rdr.IsDBNull(IDX_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_STATUS),

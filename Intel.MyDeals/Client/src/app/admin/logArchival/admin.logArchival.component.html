@@ -46,7 +46,7 @@
             <kendo-grid-column field="SRT_ORDR" title="Sort Order" [width]="100"
                                [headerClass]="{'headerClass':true}" [editable]="true">
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-numerictextbox [decimals]=0 [format]="'n0'"[formControl]="formGroup.get('SRT_ORDR')" (blur)="onSortBlur(formGroup.get('SRT_ORDR').value)" [min]=1 [autoCorrect]=true title="Sort Order should be greater than 0 and unique"></kendo-numerictextbox>
+                    <kendo-numerictextbox [decimals]=0 [format]="'n0'"[formControl]="formGroup.get('SRT_ORDR')" (blur)="onSortBlur(formGroup.get('SRT_ORDR').value)" [min]=1 [autoCorrect]=true title="Sort order should be greater than 0 and unique"></kendo-numerictextbox>
                 </ng-template>
                 
             </kendo-grid-column>
@@ -163,7 +163,7 @@
                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-textbox [formControl]="formGroup.get('JSON_COND')" title="JSON is reqired with proper template"></kendo-textbox>
+                    <kendo-textbox [formControl]="formGroup.get('JSON_COND')" title="JSON is required with proper template"></kendo-textbox>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="ACTV_IND" title="Active" editor="boolean" [width]="100" filter="boolean"

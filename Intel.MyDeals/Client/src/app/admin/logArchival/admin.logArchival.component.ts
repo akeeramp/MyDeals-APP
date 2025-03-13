@@ -84,7 +84,7 @@ export class LogArchivalComponent implements PendingChangesGuard, OnDestroy {
                 this.isLoading = false;              
             },
             (err) => {
-                this.loggerSvc.error("Unable to load the Log Archival Data.", err, err.statusText);
+                this.loggerSvc.error("Something went wrong, unable to load the Log Archival Data. Please check and try again.", err, err.statusText);
             }
         )
     }
@@ -223,8 +223,8 @@ export class LogArchivalComponent implements PendingChangesGuard, OnDestroy {
     onSortBlur(val) {
         let ind = this.gridResult.findIndex(x => x.SRT_ORDR == val);
         if (ind > -1) {
-            this.loggerSvc.error("SortOrder already exists.", "Validation Error"); //sort order already exists error message
-            this.formGroup.controls['SRT_ORDR'].setErrors({ 'error': "SortOrder already exists." });
+            this.loggerSvc.error("Sort order already exists.", "Validation Error"); //sort order already exists error message
+            this.formGroup.controls['SRT_ORDR'].setErrors({ 'error': "Sort order already exists." });
         }
     }
 
@@ -247,7 +247,7 @@ export class LogArchivalComponent implements PendingChangesGuard, OnDestroy {
             ACTV_IND: new FormControl(dataItem.ACTV_IND)
         });
 
-        this.formGroup.get('IS_ARCHV').valueChanges.subscribe((isArchv) => {
+     this.formGroup.get('IS_ARCHV').valueChanges.subscribe((isArchv) => {
             if (isArchv == true) {
                 this.formGroup.get('ARCHV_DB_NAME').enable();
                 this.formGroup.get('ARCHV_SCHEMA').enable();
@@ -375,13 +375,16 @@ export class LogArchivalComponent implements PendingChangesGuard, OnDestroy {
         inData.push(this.formGroup.value);
         inData[0]['LOG_ARCHVL_PRG_TBL_DTL_SID'] = dataItem.LOG_ARCHVL_PRG_TBL_DTL_SID ? dataItem.LOG_ARCHVL_PRG_TBL_DTL_SID : -1;
         const msg = isNew ? 'inserted' : 'updated';
+        this.isLoading = true;
         this.logArchivalSvc.updateLogArchivalRecord(inData, 'update').subscribe(
             () => {
+                this.isLoading = false;
                 this.loggerSvc.success("The record " + msg + " successfully.")
                 this.loadLogTable();
             },
             (err) => {
-                this.loggerSvc.error("Unable to save the record.", err, err.statusText)
+                this.loggerSvc.error("Unable to save the record.", err, err.statusText);
+                this.isLoading = false;
             }
         )
         sender.closeRow(rowIndex);        
