@@ -689,14 +689,14 @@ namespace Intel.MyDeals.BusinessLogic
                     workRecordDataFields.recordDetails.quote.quoteLine[currentRec].PayableQuantity = quantity;
                     payableQuantity = quantity; // Updated later in this function to quote line object
 
-                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(726, "Deal Warning: Payable Quantity has been reduced to quantity value (Ceiling Volume) as it is not allowed to be a larger value.", "Value replaced"));
+                    //workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(726, "Deal Warning: Payable Quantity has been reduced to quantity value (Ceiling Volume) as it is not allowed to be a larger value.", "Value replaced"));
                 }
             } else if (payableQuantity == null)
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].PayableQuantity = "0";
                 payableQuantity = "0";  // Updated later in this function to quote line object
 
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(727, "Deal Warning: Payable Quantity has been reduced to zero as it is not allowed to be null or a negative value.", "Value replaced"));
+                //workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(727, "Deal Warning: Payable Quantity has been reduced to zero as it is not allowed to be null or a negative value.", "Value replaced"));
             }
 
             // Select IQR End Customer or Primed End Customer as End Customer for My Deals (Moved up prior to deal stability checks end)
@@ -1945,16 +1945,16 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     workRecordDataFields.recordDetails.quote.quoteLine[recordId].PayableQuantity = quantity;
 
-                    workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(726, "Deal Warning: Payable Quantity has been reduced to quantity value (Ceiling Volume) as it is not allowed to be a larger value.", "Value replaced"));
-                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                    //workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(726, "Deal Warning: Payable Quantity has been reduced to quantity value (Ceiling Volume) as it is not allowed to be a larger value.", "Value replaced"));
+                    //executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 }
             }
             else if (payableQuantity == null)
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[recordId].PayableQuantity = "0";
 
-                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(727, "Deal Warning: Payable Quantity has been reduced to zero as it is not allowed to be null or a negative value.", "Value replaced"));
-                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                //workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(727, "Deal Warning: Payable Quantity has been reduced to zero as it is not allowed to be null or a negative value.", "Value replaced"));
+                //executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
             }
 
             if (workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQStatus=="Won" && (isplatformchange != 0 || isCustomerSegment != 0 || isConsumptionCountryRegion != 0 || isConsumptionReportedSalesGeo != 0))
