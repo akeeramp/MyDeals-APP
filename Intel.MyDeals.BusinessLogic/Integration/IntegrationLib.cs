@@ -683,14 +683,17 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     ceilingVolumeValue = int.Parse(quantity); ;
                 }
+
                 if (payableQuantityValue > ceilingVolumeValue)
                 {
+                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].PayableQuantity = quantity;
                     payableQuantity = quantity; // Updated later in this function to quote line object
 
                     workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(726, "Deal Warning: Payable Quantity has been reduced to quantity value (Ceiling Volume) as it is not allowed to be a larger value.", "Value replaced"));
                 }
             } else if (payableQuantity == null)
             {
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].PayableQuantity = "0";
                 payableQuantity = "0";  // Updated later in this function to quote line object
 
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(727, "Deal Warning: Payable Quantity has been reduced to zero as it is not allowed to be null or a negative value.", "Value replaced"));
