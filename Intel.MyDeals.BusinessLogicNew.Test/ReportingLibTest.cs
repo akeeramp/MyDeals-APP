@@ -25,6 +25,16 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             Assert.IsNotNull(result);
         }
 
+        [Test]
+        public void GetUCMReportData_Returns_NotNull()
+        {
+            var mockUCMReportDashboardData = GetUCMReportDataMockData();
+            mockReportingDataLib.Setup(m => m.GetUCMReportData()).Returns(mockUCMReportDashboardData);
+            var result = new ReportingLib(mockReportingDataLib.Object).GetUCMReportData();
+            Assert.IsNotNull(result);
+        }
+
+
         public ReportMasterData GetReportDashboardMockData()
         {
             var mockReportMasterData = new ReportMasterData();
@@ -98,6 +108,63 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             mockReportMasterData.ReportName = ReportName;
 
             return mockReportMasterData;
+        }
+
+        public List<UCMReportData> GetUCMReportDataMockData()
+        {
+            var objUCMReportData = new List<UCMReportData>();
+            objUCMReportData.Add(new UCMReportData
+            {    
+                DealId= 209133,
+                CustomerName= "Huawei",
+                DealStartDate= "05/23/2015",
+                DealEndDate= "12/28/2025",
+                DealStage= "Won",
+                EndCustomerRetail= "Yunnan Hongxiang Pharmaceutical",
+                EndCustomerCountryRegion= "China",
+                UnifiedGlobalCustomerId= "1000006014",
+                UnifiedGlobalCustomerName= "Yunnan University",
+                UnifiedCountryRegionCustomerId= 1000007433,
+                UnifiedCountryRegionCustomerName= "Yunnan University",
+                RplStatus= Boolean.Parse("false"),
+                RplStatusCode= "NOSNCTN",
+            }
+            );
+            objUCMReportData.Add(new UCMReportData
+            {
+                DealId = 209909,
+                CustomerName = "IEIT",
+                DealStartDate = "03/12/2015",
+                DealEndDate = "12/31/9999",
+                DealStage = "Won",
+                EndCustomerRetail = "Fudan University",
+                EndCustomerCountryRegion = "China",
+                UnifiedGlobalCustomerId = "1000006081",
+                UnifiedGlobalCustomerName = "Fudan University",
+                UnifiedCountryRegionCustomerId = 1000006901,
+                UnifiedCountryRegionCustomerName = "Fudan University",
+                RplStatus = Boolean.Parse("false"),
+                RplStatusCode = "NOSNCTN",
+            }
+            );
+            objUCMReportData.Add(new UCMReportData
+            {
+                DealId = 207266,
+                CustomerName = "Dell",
+                DealStartDate = "03/03/2015",
+                DealEndDate = "03/03/2025",
+                DealStage = "Won",
+                EndCustomerRetail = "Sony",
+                EndCustomerCountryRegion = "United States",
+                UnifiedGlobalCustomerId = "1000006593",
+                UnifiedGlobalCustomerName = "Sony",
+                UnifiedCountryRegionCustomerId = 1000006811,
+                UnifiedCountryRegionCustomerName = "Sony",
+                RplStatus = Boolean.Parse("false"),
+                RplStatusCode = "NOSNCTN",
+            }
+            );
+            return objUCMReportData;
         }
     }
 }

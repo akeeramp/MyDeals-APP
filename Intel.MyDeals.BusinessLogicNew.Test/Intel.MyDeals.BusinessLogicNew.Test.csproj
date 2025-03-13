@@ -106,6 +106,7 @@
     <Compile Include="DealMassUpdateLibTest.cs" />
     <Compile Include="DropdownLibTest.cs" />
     <Compile Include="EcapTrackerLibTest.cs" />
+    <Compile Include="EnvironmentsLibTest.cs" />
     <Compile Include="ExpireYcs2LibTest.cs" />
     <Compile Include="FilesLibTest.cs" />
     <Compile Include="FunFactLibTest.cs" />

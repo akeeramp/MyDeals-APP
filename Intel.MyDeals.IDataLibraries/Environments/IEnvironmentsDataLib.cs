@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace Intel.MyDeals.IDataLibraries
+namespace Intel.MyDeals.IDataLibrary
 {
     public interface IEnvironmentsDataLib
     {
