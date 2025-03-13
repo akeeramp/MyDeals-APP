@@ -394,6 +394,11 @@ kendo-tabstrip.tab-sec-add.tab-security-engine .k-tabstrip-items .k-active span.
 .k-chip-solid-base {
     background-color: #fafafa !important;
 }
+#rplStsCdDropDown .k-chip-solid-base {
+    background-color: #00aeef !important;
+    color: #fff !important;
+}
+
 .k-chip, .k-chip .k-chip-label {
     font-size: 12px;
     border-radius: 1.071em !important;

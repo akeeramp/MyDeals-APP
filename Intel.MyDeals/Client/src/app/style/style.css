@@ -2967,3 +2967,11 @@ kendo-chart#deal-stages-chart svg text {
 .k-switch-md.k-switch-on .k-switch-thumb-wrap {
     left: calc(100% - 10px)
 }
+
+#genUCDBtn {
+    display: flex !important;
+}
+
+#genUCDBtn .k-button-text {
+    padding-left: 0px !important;
+}

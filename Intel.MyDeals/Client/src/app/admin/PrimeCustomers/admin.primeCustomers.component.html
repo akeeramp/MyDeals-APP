@@ -130,7 +130,7 @@
                     </kendo-grid-string-filter-menu>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-multiselect #rplStsCdDropDown [data]="distinctRplCd" [autoClose]="false"
+                    <kendo-multiselect id="rplStsCdDropDown" #rplStsCdDropDown [data]="distinctRplCd" [autoClose]="false"
                                        [formControl]="formGroup.get('RPL_STS_CD')" style="width: 170px;" class="rpl_statusMultiselect"></kendo-multiselect>
                 </ng-template>
             </kendo-grid-column>
