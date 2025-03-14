@@ -2089,42 +2089,6 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                                 }
                             }
                         } else {
-
-                            // Updating single or multiple invalid products are selected from product corrector
-                            let selProd, resVal;  
-                            let derivedVal;
-                            let deletedProd = undefined;
-                            
-                            selProd = savedResult.selectedProducts.filter(x => x.DCID == key)[0];
-                            if (selProd) {
-                                // getting product transform result from the products
-                                resVal = products.ProdctTransformResults[selProd.DCID]["I"];
-                                let strdSavedResult = savedResult.ProductCorrectorData.ValidProducts;
-
-                                if (strdSavedResult && Object.keys(strdSavedResult).length > 0) {
-                                    for (let key in strdSavedResult) {
-                                        let newRes = strdSavedResult[key]
-                                        for (let key_1 in newRes) {
-                                            let userInput = newRes[key_1][0]["USR_INPUT"]
-                                            if (userInput != selProd.name) {
-                                                derivedVal = newRes[key_1][0]["DERIVED_USR_INPUT"]
-                                                for (let key_2 in resVal) {
-                                                    if (resVal[key_2] == userInput) {
-                                                        // updating product transform result
-                                                        resVal.splice(key_2, 1)
-                                                        resVal.push(derivedVal)
-                                                    }
-                                                }
-                                            }
-                                        }
-
-                                    }
-                                }
-                                rowProdCorrectordat = PTE_CellChange_Util.getOperationProdCorr(selProd, deletedProd, products);
-                                PTE_CellChange_Util.autoFillCellOnProd(rowProdCorrectordat[0], this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, rowProdCorrectordat[1]);
-                            }
-
-
                             let deletedProds = savedResult.deletedProducts;
                             if (deletedProds && deletedProds.length > 0) {
                                 let deletedRowIdList = distinct(deletedProds, 'DC_ID').map(item => item['DC_ID']);
