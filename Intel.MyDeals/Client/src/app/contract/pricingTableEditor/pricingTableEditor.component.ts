@@ -2287,9 +2287,17 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
     }
 
     hoverPTE() {
-        $(".pricing_table_celltext .handsontable .ht_clone_inline_start .wtHolder table.htCore tr td.error-cell").hover(function () {
-            $(".htCommentsContainer .htComments").toggleClass("commentHover");
-        });
+        if (this.isTenderContract) {
+            $(".pricing_table_celltext .handsontable .ht_clone_inline_start .wtHolder table.htCore tr td.error-cell").hover(function () {
+                $(".htCommentsContainer .htComments").toggleClass("commentHover");
+                $('.htCommentsContainer').addClass('added-pricing-table-editor-tender');
+            });
+        } else {
+            $(".pricing_table_celltext .handsontable .ht_clone_inline_start .wtHolder table.htCore tr td.error-cell").hover(function () {
+                $(".htCommentsContainer .htComments").toggleClass("commentHover");
+                $('.htCommentsContainer').addClass('added-pricing-table-editor');
+            });
+        }
     }
 
     // Attributes for first contract product cell in new contract 

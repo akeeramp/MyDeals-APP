@@ -301,10 +301,6 @@ kendo-datepicker.date-dashboard-search:focus-within {
     box-shadow: none !important
 }
 
-.added-tender .htCommentsContainer .htComments.commentHover {
-    left: 54px !important;
-}
-
 .k-list .k-list-item {
     font-family: Intel Clear !important;
     font-size: 12px !important;
