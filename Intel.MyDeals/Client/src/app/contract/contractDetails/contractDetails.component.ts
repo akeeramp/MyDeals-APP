@@ -113,7 +113,9 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
             filters: [],
         },
     };
-
+    get isBackDateReasonRequired(): boolean {
+        return this.isBackDate && this.ngForm.controls['contract_START_DT'].dirty; 
+    }
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.gridData = process(this.attachmentsDataSource, this.state);
@@ -337,6 +339,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
     pastDateFieldsenable() {
         this.isBackdatePopupOpen = false;
         this.isBackDate = true;
+        this.ngForm.controls['contract_START_DT'].markAsDirty();
         this.contractData._behaviors.isHidden["BACK_DATE_RSN"] = false;
         this.contractData._behaviors.isRequired["BACK_DATE_RSN"] = true;
     }

@@ -142,7 +142,7 @@
                                         </div>
                                         <div class="blockdisplay enddateblock">
                                             <kendo-dropdownlist [data]="dropdownFieldsData?.BACK_DATE_RSN" textField="DROP_DOWN"
-                                                                name="BACK_DATE_RSN" #backDateRsn="ngModel" valueField="DROP_DOWN" [(ngModel)]="BACK_DATE_RSN" class="inputWidth font-input backdate_contract_style" [required]="isBackDate">
+                                                                name="BACK_DATE_RSN" #backDateRsn="ngModel" valueField="DROP_DOWN" [(ngModel)]="BACK_DATE_RSN" class="inputWidth font-input backdate_contract_style" [required]="isBackDateReasonRequired">
                                             </kendo-dropdownlist>
                                             <kendo-formerror *ngIf="contractDetailsForm.controls.BACK_DATE_RSN?.errors?.required && isSubmitted">
                                                 {{isRequiredMsg}}
@@ -350,7 +350,7 @@
         You have Selected a date in the past which means the dates you will enter will be considered
         backdated
     </p>
-    <div style="display:flex">
+    <div style="display:flex"> 
         <kendo-dialog-actions style="flex-grow:1;">
             <button kendoButton (click)="pastDateFieldsenable()" class="ok-btn-pop-up">OK</button>
         </kendo-dialog-actions>
