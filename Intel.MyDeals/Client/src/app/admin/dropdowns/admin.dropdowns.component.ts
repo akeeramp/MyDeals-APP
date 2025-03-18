@@ -327,16 +327,21 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
                 ATRB_LKUP_TTIP: new FormControl(dataItem.ATRB_LKUP_TTIP),
                 ORD: new FormControl(dataItem.ORD)
             });
-        //Unused cnsmptn edit for Account SA role only 
-        if ((<any>window).isCustomerAdmin && (<any>window).usrRole == "SA") {
-            //if CHK_VALUE is 1, Value column will be readonly
-            if (dataItem.CHK_VALUE == 1) {
-                this.formGroup.get('DROP_DOWN')?.disable();
-                this.loggerService.warn("Readonly, there is an existing deal with this value.", "Warning");
-            }
-            //if CHK_VALUE is 0, Value column will be editable, user can update new value
-            else {
-                this.formGroup.get('DROP_DOWN')?.enable();
+        //Unused cnsmptn edit for Account SA,Account SA-D & SA-D only
+        if ((<any>window).usrRole == "SA" && ((<any>window).isCustomerAdmin || (<any>window).isDeveloper)) {
+            //for Account SA-D & SA-D, only restrictedGroupList can edit value field
+            for (let i = 0; i < this.restrictedGroupList.length; i++) {
+                if (this.restrictedGroupList[i] === dataItem.ATRB_SID) {
+                    //if CHK_VALUE is 1, Value column will be readonly
+                    if (dataItem.CHK_VALUE == 1) {
+                        this.formGroup.get('DROP_DOWN')?.disable();
+                        this.loggerService.warn("Readonly, there is an existing deal with this value.", "Warning");
+                    }
+                    //if CHK_VALUE is 0, Value column will be editable, user can update new value
+                    else {
+                        this.formGroup.get('DROP_DOWN')?.enable();
+                    }
+                }
             }
         
         }
@@ -396,11 +401,17 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
                     });
                 } else {
                     this.isLoading = true;
-                    this.dropdownService.updateBasicDropdowns(newUiDropdown).pipe(takeUntil(this.destroy$)).subscribe(() => {
+                    this.dropdownService.updateBasicDropdowns(newUiDropdown).pipe(takeUntil(this.destroy$)).subscribe((response) => {
                         this.gridResult[rowIndex] = newUiDropdown;
                         this.gridResult.push(newUiDropdown);
                         this.loadUiDropdown();
-                        this.loggerService.success("Updated Successfully", "Success");
+                        //check if the value is existing or not while clicking on savehandler
+                        if (response.CHK_VALUE == 1) {
+                            this.loggerService.warn("Unable to update as deal with this value is existing", "Warning");
+                        }
+                        else {
+                            this.loggerService.success("Updated Successfully", "Success");
+                        }
                     }, (error) => {
                         this.loggerService.error("Unable to update UI dropdown data.", error);
                         this.isLoading = false;
