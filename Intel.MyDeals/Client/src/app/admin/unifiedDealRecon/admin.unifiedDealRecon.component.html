@@ -1,11 +1,12 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> 
 <div class="row">
-    <div class="col-md-9" style="padding-left: 30px; padding-top: 24px">
+    <div class="col-md-6" style="padding-left: 30px; padding-top: 24px">
         <h3>Unified Deal Reconciliation</h3>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-6"> 
         <button class="btn btn-primary" (click)="OpenRetriggerUnifyModal()" *ngIf="retrigger" style="float:right;margin-top:20px; margin-right:19px;">Retrigger UCD</button>
         <button class="btn btn-primary" (click)="OpenBulkUploadUnifyModal()" *ngIf="uploadUnifiedData" style="float:right;margin-top:20px; margin-right:41px;">Upload Unified Data</button>
+        <button class="btn btn-primary" (click)="OpenUCDReprocessModal()" style="float:right;margin-top:20px; margin-right:41px;">Reprocess UCD</button>
     </div>
 </div>
 <div class="row" style="display: contents;">

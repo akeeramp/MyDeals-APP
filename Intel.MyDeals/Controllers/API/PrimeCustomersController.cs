@@ -163,5 +163,13 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _primeCustomersLib.ResubmissionDeals(dealId, endcustomerdata.ToString()),
                   $"Unable to Resubmitt");
         }
+        [Authorize]
+        [HttpPost]
+        [Route("ReprocessUCD")]
+        public string ReprocessUCD([FromBody] object objReprocessUCD_OBJ)
+        {
+            return SafeExecutor(() => _primeCustomersLib.ReprocessUCD(objReprocessUCD_OBJ.ToString()),
+                  $"Unable to Resubmitt");
+        }
     }
 }

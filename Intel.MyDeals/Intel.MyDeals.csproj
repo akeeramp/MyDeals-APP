@@ -381,6 +381,7 @@
     <TypeScriptCompile Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.UCDReprocessModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.service.ts" />
@@ -536,6 +537,7 @@
     <Content Include="Client\Images\docs\pricingassoc.png" />
     <Content Include="Client\Images\docs\pricingstrategy.png" />
     <Content Include="Client\Images\docs\Pricingtable.png" />
+    <Content Include="Client\src\app\admin\unifiedDealRecon\admin.UCDReprocessModal.component.html" />
     <Content Include="Client\src\app\admin\environmentDetails\admin.environments.component.css" />
     <Content Include="Client\src\app\admin\environmentDetails\admin.environments.component.html" />
     <Content Include="Client\src\app\admin\logArchival\admin.logArchival.component.css" />

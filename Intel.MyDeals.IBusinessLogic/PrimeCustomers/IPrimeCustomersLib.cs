@@ -36,5 +36,8 @@ namespace Intel.MyDeals.IBusinessLogic
         List<DealReconInvalidRecords> updateDealRecon(List<DealRecon> lstDealRecon);
 
         string ResubmissionDeals(string dealId, string endCustomerData);
+
+        string ReprocessUCD(string objReprocessUCD_OBJ);
+
     }
 }

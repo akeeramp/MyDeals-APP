@@ -161,5 +161,59 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             var result = new PrimeCustomersLib(mockIPrimeCustomersDataLib.Object, mockIDataCollectionsDataLib.Object, mockIIntegrationLib.Object, mockIJmsDataLib.Object).ResubmissionDeals(dealId, endCustObj);
             Assert.IsNotNull(result);
         }
+
+
+        public List<UCD_RQST_RSPN> GetReprocessUCDMockedData()
+        {
+            var objUCD_RQST_RSPN = new List<UCD_RQST_RSPN>();
+            objUCD_RQST_RSPN.Add(new UCD_RQST_RSPN
+            {
+                END_CUST_SID = 30925,
+                DEAL_ID = 814998,
+                END_CUST_NM = "Yunda Express",
+                END_CUST_CTRY = "China",
+                RQST_JSON_MSG = "",
+                ACCT_ID = "0013b00001z8nzqAAA",
+                AMQ_RSPN = "",
+                STS = "AMQ_rplprocessing_complete",
+                CRE_EMP_WWID = 10713710,
+                CRE_DTM = System.DateTime.Parse("2023-06-14 04:05:46.140"),
+                CHG_EMP_WWID = 10713710,
+                CHG_DTM = System.DateTime.Parse("2023-06-14 04:05:46.140"),
+                RETRY_COUNT = 0,
+                ERR_RES_COMMENT = "",
+                END_CUST_OBJ = "[{\"END_CUSTOMER_RETAIL\":\"Yunda Express\",\"IS_EXCLUDE\":\"0\",\"IS_PRIMED_CUST\":\"1\",\"IS_RPL\":\"0\",\"PRIMED_CUST_CNTRY\":\"China\",\"PRIMED_CUST_ID\":\"1000005117\",\"PRIMED_CUST_NM\":\"Yunda Express\",\"RPL_STS_CD\":\"NOSNCTN\"}]",
+            });
+            objUCD_RQST_RSPN.Add(new UCD_RQST_RSPN
+            {
+                END_CUST_SID = 30926,
+                DEAL_ID = 814948,
+                END_CUST_NM = "Yunda Express",
+                END_CUST_CTRY = "China",
+                RQST_JSON_MSG = "",
+                ACCT_ID = "0013b00001z8nzqAAA",
+                AMQ_RSPN = "",
+                STS = "AMQ_rplprocessing_complete",
+                CRE_EMP_WWID = 10713710,
+                CRE_DTM = System.DateTime.Parse("2023-06-14 04:05:46.140"),
+                CHG_EMP_WWID = 10713710,
+                CHG_DTM = System.DateTime.Parse("2023-06-14 04:05:46.140"),
+                RETRY_COUNT = 0,
+                ERR_RES_COMMENT = "",
+                END_CUST_OBJ = "[{\"END_CUSTOMER_RETAIL\":\"Yunda Express\",\"IS_EXCLUDE\":\"0\",\"IS_PRIMED_CUST\":\"1\",\"IS_RPL\":\"0\",\"PRIMED_CUST_CNTRY\":\"China\",\"PRIMED_CUST_ID\":\"1000005117\",\"PRIMED_CUST_NM\":\"Yunda Express\",\"RPL_STS_CD\":\"NOSNCTN\"}]",
+            });
+            return objUCD_RQST_RSPN;
+        }
+
+      
+        [Test]
+        public void GetReprocessUCDData_ShouldReturnNotNull()
+        {
+            List<UCD_RQST_RSPN> mockdata = GetReprocessUCDMockedData();
+            mockIPrimeCustomersDataLib.Setup(x => x.GetReprocessUCDData(It.IsAny<Int32>(), It.IsAny<string>(), It.IsAny<string>())).Returns(mockdata);
+            var result = new PrimeCustomersLib(mockIPrimeCustomersDataLib.Object, mockIDataCollectionsDataLib.Object, mockIIntegrationLib.Object, mockIJmsDataLib.Object).ReprocessUCD(null);
+            Assert.IsNotNull(result);
+        }
+
     }
 }

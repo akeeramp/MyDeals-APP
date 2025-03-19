@@ -1,0 +1,63 @@
+﻿<div style="margin-top: 0;" class="form-horizontal">
+
+    <div class="modal-content unifi-popup-full-style" id="endCustomerUnifyModal">
+        <div class="modal-header modalBlueBody">
+            <h3 class="modal-title unifi-title" id="modal-titleBulkUnifyModal">Reprocess UCD</h3>
+            <i id="btnClose" class="intelicon-close unify-close-btn" (click)="closeWindow()" title="Close this window"></i>
+        </div>
+
+        <div id="modalBodyDiv" class="modal-body bulkUnifyModalBody">
+            <div class="form-group">
+                <kendo-formerror style="padding-left:200px" *ngIf="isErrordeal">
+                    *Please enter Deal Ids separated by ','
+                </kendo-formerror>
+                <div class="col-md-12" style="display: flex; align-items:center">
+                    <label for="dealId" style="padding-left: 10px; width: 25%"><strong>Deal ID:</strong></label>
+                    <kendo-textbox style="width:60%" [formControl]="formGroup.get('DEAL_ID')" id="dealId" name="dealId" placeholder="Deal ID" [(ngModel)]="dealId"></kendo-textbox>
+                </div>
+            </div>
+            <div class="form-group">
+                <kendo-formerror style="padding-left:200px" *ngIf="isErrorCust">
+                    *Please enter valid customer
+                </kendo-formerror>
+                <div class="col-md-12" style="display: flex; align-items:center">
+                    <label style="padding-left: 10px; width: 25%" for="endCustomer"><strong>End Customer:</strong></label>
+                    <kendo-textbox style="width:60%;" [formControl]="formGroup.get('END_CUSTOMER')" id="endCustomer" name="endCustomer" placeholder="End Customer" [(ngModel)]="endCustomer"></kendo-textbox>
+                </div>
+            </div>
+            <div class="form-group">
+                <kendo-formerror style="padding-left:200px" *ngIf="isErrorctry">
+                    *Please select valid End Customer Country
+                </kendo-formerror>
+                <div class="col-md-12">
+                    <label style="padding-left: 10px; width: 25%; float:left" for="endCustCountry"><strong>End Customer Country:</strong></label>
+                    <span class="fl" style="width: 75%; height: 37.75px;">
+                        <kendo-combobox id="endCustCountry" [formControl]="formGroup.get('END_CUSTOMER_COUNTRY')" name="endCustCountry" style="width: 80%; height: 37.75px;" placeholder="End Customer Country" [filterable]="true" (filterChange)="filter($event)" [data]="endCustCountries" [(ngModel)]="endCustCountry"></kendo-combobox>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row action_btns bulkUnifyModalActionBtns">
+            <div class="col-md-12" style="right:20px; padding-left:450px;">
+                <button (click)="submit()" class="btn btn-primary" style="margin-left: 15px">
+                    Reprocess
+                </button>
+
+                <button (click)="closeWindow()" class="btn btn-primary" style="margin-left: 15px">
+                    Cancel /
+                    Close
+                </button>
+            </div>
+        </div>
+
+        <br />
+    </div>
+    <!--</form>-->
+</div>
+<kendo-dialog (close)="closeAlert()" class="bulk-uplod-full-popup" *ngIf="isAlert" id="retriggerAlert">
+    <p>{{alertMsg}}</p>
+    <kendo-dialog-actions class="bulk-action-style">
+        <button kendoButton class="bulk-ok-modal" (click)="closeAlert()" themeColor="primary">OK</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
 import { Countires, EndCustomer, PrimeCust_Map, RplStatusCode, UnPrimeAtrbs, UnPrimeDeals, UnifiedDealsSummary, UnifyDeal } from "../PrimeCustomers/admin.primeCustomers.model";
 import { DynamicObj } from "../employee/admin.employee.model";
-import { DealRecon, DealReconInvalidRecords, END_CUST_OBJ } from "./admin.unifiedDealRecon.model";
+import { DealRecon, DealReconInvalidRecords, END_CUST_OBJ, ReprocessUCD_OBJ } from "./admin.unifiedDealRecon.model";
 
 @Injectable({
     providedIn: 'root'
@@ -98,6 +98,12 @@ export class unifiedDealReconService {
         const apiUrl: string = this.apiBaseUrl + 'ResubmissionDeals/' + dealId;
         const headers = { 'content-type': 'application/json' };
         return this.httpClient.post<string>(apiUrl, JSON.stringify(endCustomerData), { 'headers': headers });
+    }
+
+    public ReprocessUCD(objReprocessUCD_OBJ: ReprocessUCD_OBJ): Observable<string> {
+        const apiUrl: string = this.apiBaseUrl + 'ReprocessUCD';
+        const headers = { 'content-type': 'application/json' };
+        return this.httpClient.post<string>(apiUrl, JSON.stringify(objReprocessUCD_OBJ), { 'headers': headers });
     }
 
 }

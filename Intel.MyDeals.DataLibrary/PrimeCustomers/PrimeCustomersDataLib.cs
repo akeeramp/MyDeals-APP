@@ -774,5 +774,63 @@ namespace Intel.MyDeals.DataLibrary
                 return false;
             }
         }
+
+        public List<UCD_RQST_RSPN> GetReprocessUCDData(int Deal_Id = 0, string End_Cust_NM = "", string End_Cust_Ctry = "")
+        {
+            var ret = new List<UCD_RQST_RSPN>();
+            var cmd = new Procs.dbo.PR_UCD_RQST_RSPN_LOG 
+            {
+                DEAL_ID = Deal_Id,
+                END_CUST_NM = End_Cust_NM,
+                END_CUST_CTRY = End_Cust_Ctry
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                { 
+                    int IDX_END_CUST_SID = DB.GetReaderOrdinal(rdr, "END_CUST_SID");
+                    int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+                    int IDX_END_CUST_NM = DB.GetReaderOrdinal(rdr, "END_CUST_NM");
+                    int IDX_END_CUST_CTRY = DB.GetReaderOrdinal(rdr, "END_CUST_CTRY");
+                    int IDX_RQST_JSON_MSG = DB.GetReaderOrdinal(rdr, "RQST_JSON_MSG");
+                    int IDX_ACCT_ID = DB.GetReaderOrdinal(rdr, "ACCT_ID");
+                    int IDX_AMQ_RSPN = DB.GetReaderOrdinal(rdr, "AMQ_RSPN");
+                    int IDX_STS = DB.GetReaderOrdinal(rdr, "STS");
+                    int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
+                    int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+                    int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
+                    int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+                    int IDX_RETRY_COUNT = DB.GetReaderOrdinal(rdr, "RETRY_COUNT");
+                    int IDX_ERR_RES_COMMENT = DB.GetReaderOrdinal(rdr, "ERR_RES_COMMENT");
+                    int IDX_END_CUST_OBJ = DB.GetReaderOrdinal(rdr, "END_CUST_OBJ");
+                    while (rdr.Read())
+                    {
+                        ret.Add(new UCD_RQST_RSPN
+                        {
+                            END_CUST_SID = (IDX_END_CUST_SID < 0 || rdr.IsDBNull(IDX_END_CUST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_END_CUST_SID),
+                            DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                            END_CUST_NM = (IDX_END_CUST_NM < 0 || rdr.IsDBNull(IDX_END_CUST_NM)) ? System.String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_NM),
+                            END_CUST_CTRY = (IDX_END_CUST_CTRY < 0 || rdr.IsDBNull(IDX_END_CUST_CTRY)) ? System.String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_CTRY),
+                            RQST_JSON_MSG = (IDX_RQST_JSON_MSG < 0 || rdr.IsDBNull(IDX_RQST_JSON_MSG)) ? System.String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_MSG),
+                            ACCT_ID = (IDX_ACCT_ID < 0 || rdr.IsDBNull(IDX_ACCT_ID)) ? System.String.Empty : rdr.GetFieldValue<System.String>(IDX_ACCT_ID),
+                            AMQ_RSPN = (IDX_AMQ_RSPN < 0 || rdr.IsDBNull(IDX_AMQ_RSPN)) ? System.String.Empty : rdr.GetFieldValue<System.String>(IDX_AMQ_RSPN),
+                            STS = (IDX_STS < 0 || rdr.IsDBNull(IDX_STS)) ? System.String.Empty : rdr.GetFieldValue<System.String>(IDX_STS),
+                            END_CUST_OBJ= (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? System.String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_OBJ),
+                            CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID)
+                        });
+                    }
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return ret;
+        }
     }
 }

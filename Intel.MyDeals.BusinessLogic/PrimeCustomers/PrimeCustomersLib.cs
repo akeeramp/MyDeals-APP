@@ -12,6 +12,8 @@ using System.Configuration;
 using System.IO;
 using System.Data;
 using System.Web.Configuration;
+using static Intel.MyDeals.Entities.EN;
+using System.Diagnostics;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -765,6 +767,83 @@ namespace Intel.MyDeals.BusinessLogic
                 OpLogPerf.Log("UCD - ERROR: " + ex);
             }
             return success;
+        }
+
+        public string ReprocessUCD(string objReprocessUCD_OBJ)
+        {
+            string message = "";
+            try
+            {
+                if (objReprocessUCD_OBJ != null)
+                { 
+                    ReProcessUCD objReProcessUCD = new ReProcessUCD();
+                    objReProcessUCD = JsonConvert.DeserializeObject<ReProcessUCD>(objReprocessUCD_OBJ);
+                    if (objReProcessUCD.DEAL_ID != "")
+                    { 
+                        objReProcessUCD.DEAL_ID.Split(',');
+                        foreach (var item in objReProcessUCD.DEAL_ID.Split(','))
+                        {
+                            if (item != null)
+                            {
+                                List<UCD_RQST_RSPN> objUCD_RQST_RSPNList = new List<UCD_RQST_RSPN>();
+                                objUCD_RQST_RSPNList = _primeCustomersDataLib.GetReprocessUCDData(System.Convert.ToInt32(item), null, null);
+                                if (objUCD_RQST_RSPNList.Count > 0)
+                                {
+                                    foreach(var ele in objUCD_RQST_RSPNList)
+                                    {
+                                        if (ele.DEAL_ID != 0 && (ele.END_CUST_OBJ != "" || ele.END_CUST_OBJ != null))
+                                        {
+                                            List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(ele.END_CUST_OBJ);
+                                            //check whether the deal is already unified or not. if deal is already unified then no need to trigger unification mail after saving end customer attributes
+                                            //below line of code is to check the END_CUST_OBJ if it has any un-unified end customer 
+                                            var isUnificationMailRequired = endCustomerList.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
+                                            saveDealEndCustomerAtrbs(ele.DEAL_ID, ele.END_CUST_OBJ, isUnificationMailRequired, ele.CRE_EMP_WWID);
+                                            message = "UCD Reprocess successfully";
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    message = "Data not found";
+                                }
+                            } 
+                        }
+                    }
+                    else
+                    { 
+                        if(objReProcessUCD.END_CUSTOMER !="" && objReProcessUCD.END_CUSTOMER_COUNTRY != "")
+                        {
+                            List<UCD_RQST_RSPN> objUCD_RQST_RSPNList = new List<UCD_RQST_RSPN>();
+                            objUCD_RQST_RSPNList = _primeCustomersDataLib.GetReprocessUCDData(0, objReProcessUCD.END_CUSTOMER, objReProcessUCD.END_CUSTOMER_COUNTRY);
+                             if (objUCD_RQST_RSPNList.Count > 0)
+                             {
+                                    foreach(var ele in objUCD_RQST_RSPNList)
+                                    {
+                                        if (ele.DEAL_ID != 0 && (ele.END_CUST_OBJ != "" || ele.END_CUST_OBJ != null))
+                                        {
+                                            List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(ele.END_CUST_OBJ);
+                                            //check whether the deal is already unified or not. if deal is already unified then no need to trigger unification mail after saving end customer attributes
+                                            //below line of code is to check the END_CUST_OBJ if it has any un-unified end customer 
+                                            var isUnificationMailRequired = endCustomerList.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
+                                            saveDealEndCustomerAtrbs(ele.DEAL_ID, ele.END_CUST_OBJ, isUnificationMailRequired, ele.CRE_EMP_WWID);
+                                            message = "UCD Reprocess successfully";
+                                        }
+                                }
+                            }
+                            else
+                            {
+                                message = "Data not found";
+                            }
+                        }  
+                    }
+                }
+                return message;
+            }
+            catch(Exception ex)
+            {         
+                return ex.ToString();
+            }
+                 
         }
     }
 }

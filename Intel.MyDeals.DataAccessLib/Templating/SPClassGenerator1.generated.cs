@@ -20273,9 +20273,53 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
         }
 
+        ///<summary>
+        /// ID: 1013227011
+        /// Modified: 03/12/2025 3:57:28 AM
+        /// Parameters: 3
+        ///</summary>
+        public partial class PR_UCD_RQST_RSPN_LOG : SP
+        {
+            public PR_UCD_RQST_RSPN_LOG()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_UCD_RQST_RSPN_LOG]";
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: Select
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 DEAL_ID
+            {
+                set { SetParmeter("DEAL_ID", value); }
+                get { return (Int32)GetParameter("DEAL_ID"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: Select
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 100, false)]
+            public String END_CUST_NM
+            {
+                set { SetParmeter("END_CUST_NM", value); }
+                get { return (String)GetParameter("END_CUST_NM"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: Select
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+            public String END_CUST_CTRY
+            {
+                set { SetParmeter("END_CUST_CTRY", value); }
+                get { return (String)GetParameter("END_CUST_CTRY"); }
+            }
+        }
 
     }
 }
-        
-
-
+       

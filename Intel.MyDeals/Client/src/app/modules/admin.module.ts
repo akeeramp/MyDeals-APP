@@ -69,6 +69,8 @@ import { MonacoEditorComponent } from '../shared/monacoCustomEditor/monacoCustom
 import { ExpireYcs2Component } from "../admin/expireYcs2/admin.expireYcs2.component";
 import { DealUnificationReportComponent } from '../admin/dealUnificationReport/dealUnificationReport.component';
 import { userRolePermissionComponent } from '../admin/userRolePermission/admin.userRolePermission.component';
+import { reprocessUCDModalComponent } from '../admin/unifiedDealRecon/admin.UCDReprocessModal.component';
+
 
 import { EnvironmentsComponent } from "../../app/admin/environmentDetails/admin.environments.component";
 
@@ -144,6 +146,8 @@ export const AdminComponents =[
     QuoteLetterRegenerationComponent,
     ExpireYcs2Component,
     DealUnificationReportComponent,
+    userRolePermissionComponent,
+    reprocessUCDModalComponent,
     EnvironmentsComponent,
     DealUnificationReportComponent,
     userRolePermissionComponent

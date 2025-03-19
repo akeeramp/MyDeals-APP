@@ -11811,4 +11811,70 @@ namespace Intel.MyDeals.Entities
         public System.Boolean ACTV_IND { set; get; }
 
     }
+
+    [DataContract]
+    public partial class ReProcessUCD
+    {
+        [DataMember]
+        public System.String DEAL_ID { set; get; }
+
+        [DataMember]
+        public System.String END_CUSTOMER { set; get; }
+
+        [DataMember]
+        public System.String END_CUSTOMER_COUNTRY { set; get; }
+    }
+
+    [DataContract]
+    public partial class UCD_RQST_RSPN
+    {
+        [DataMember]
+        public System.Int32 END_CUST_SID { set; get; }
+
+        [DataMember]
+        public System.Int32 DEAL_ID { set; get; }
+
+        [DataMember]
+        public System.String END_CUST_NM { set; get; }
+
+        [DataMember]
+        public System.String END_CUST_CTRY { set; get; }
+
+        [DataMember]
+        public System.String RQST_JSON_MSG { set; get; }
+
+        [DataMember]
+        public System.String ACCT_ID { set; get; }
+
+        [DataMember]
+        public System.String AMQ_RSPN { set; get; }
+
+        [DataMember]
+        public System.String STS { set; get; }
+
+        [DataMember]
+        public System.Int32 CRE_EMP_WWID { set; get; }
+
+        [DataMember]
+        public System.DateTime CRE_DTM { set; get; }
+
+        [DataMember]
+        public System.Int32 CHG_EMP_WWID { set; get; }
+
+        [DataMember]
+        public System.DateTime CHG_DTM { set; get; }
+
+        [DataMember]
+        public System.Int32 RETRY_COUNT { set; get; }
+
+        [DataMember]
+        public System.String ERR_RES_COMMENT { set; get; }
+
+        [DataMember]
+        public System.String END_CUST_OBJ { set; get; }
+    }
+
+
+
+
 }

@@ -26,6 +26,7 @@ import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactiva
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { UnPrimeAtrbs, UnPrimeDeals } from "../PrimeCustomers/admin.primeCustomers.model";
+import { reprocessUCDModalComponent } from "./admin.UCDReprocessModal.component";
 
 @Component({
     selector: "admin-unified-dealrecon",
@@ -313,6 +314,15 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
 
         });
     }
+
+
+    OpenUCDReprocessModal(): void {
+        const dialogRef = this.dialog.open(reprocessUCDModalComponent, {
+            height: 'auto',
+            panelClass: 'unified-bulk-popup'
+        });
+    }
+
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
     ngOnDestroy(): void {
         this.destroy$.next();

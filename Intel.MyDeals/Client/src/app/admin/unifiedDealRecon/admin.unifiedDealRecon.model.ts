@@ -48,3 +48,9 @@ export interface END_CUST_OBJ {
     END_CUSTOMER: string;
     END_CUSTOMER_COUNTRY: string;
 }
+
+export interface ReprocessUCD_OBJ {
+    DEAL_ID: string;
+    END_CUSTOMER: string;
+    END_CUSTOMER_COUNTRY: string;
+}
