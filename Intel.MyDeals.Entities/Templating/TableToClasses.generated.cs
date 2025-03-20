@@ -11275,6 +11275,11 @@ namespace Intel.MyDeals.Entities
         public System.String STATUS { set; get; }
         [DataMember]
         public System.String TRGRD_BY { set; get; }
+
+        [DataMember]
+        public System.String BTCH_TYPE { set; get; }
+        [DataMember]
+        public System.Int32 SRT_ORDR { set; get; }
         /*
         private static List<BatchJobConstants> BatchJobConstantsFromReader(SqlDataReader rdr){
         // This helper method is template generated.

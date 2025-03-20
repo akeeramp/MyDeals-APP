@@ -30,7 +30,8 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
         private constantsService: constantsService,
         private momentService: MomentService,
         private loggerSvc: logger) { }
-
+    public formGroup: FormGroup;
+    public isFormChange = false;
     public isFormValid = false;
     private readonly destroy$ = new Subject();
     public batchJobConstForm: FormGroup;
@@ -57,6 +58,7 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
     public inputsDisable = false;
     private hasAccess = false;
     private validWWID: string;
+    private editedRowIndex: number;
 
     public weeklyDays: Array<{ text: string; value: number }> = [
         { text: "Sunday", value: 1 },
@@ -78,7 +80,9 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
         "ACTV_IND": false,
         "STATUS": "COMPLETED",
         "LST_RUN": null,
-        "TRGRD_BY": ""
+        "TRGRD_BY": "",
+        "SRT_ORDR": "",
+        "BTCH_TYPE": ""
     }
 
     public runSchedule = {
@@ -199,65 +203,147 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
         const dateAdd = new Date(0, 0, 0, timer[0], timer[1], timer[2])
         return dateAdd;
     }
-
-    editBatchJobData(dataItem) {
-        this.allData = false;
-        this.addData = true;
-        const getBatchID = dataItem.BTCH_SID;
-        this.arrayStepData = this.childrenGridResult.filter(x => x.BTCH_SID === getBatchID);
-        let updateStart;
-        let updateEnd;
-        let intervalValues;
-
-        if (dataItem.RUN_SCHDL == null) {
-            updateStart = '';
-            updateEnd = '';
-            intervalValues = '';
-        } else {
-            this.gettingDaysForUpdate(dataItem);
-            const startTime = this.getStart(dataItem.RUN_SCHDL);
-            updateStart = this.getTimerNew(startTime)
-            const endTime = this.getEnd(dataItem.RUN_SCHDL);
-            updateEnd = this.getTimerNew(endTime)
-            intervalValues = this.getInterval(dataItem.RUN_SCHDL);
-        }
-
-        this.batchJobConstForm = this.formBuilder.group({
-            BTCH_SID: dataItem.BTCH_SID,
-            BTCH_NM: [dataItem.BTCH_NM, { disabled: true }],
-            BTCH_DSC: [dataItem.BTCH_DSC, Validators.required],
-            START: [updateStart, Validators.required],
-            END: [updateEnd, Validators.required],
-            INTERVAL: [intervalValues, [Validators.required, Validators.min(1), Validators.pattern(/^[1-9]\d*$/)]],
-            ADHC_RUN: [dataItem.ADHC_RUN, Validators.required],
-            ACTV_IND: [dataItem.ACTV_IND, Validators.required],
-            ADHC_RUN_NEW: [dataItem.ADHC_RUN, Validators.required],
-            ACTV_IND_NEW: [dataItem.ACTV_IND, Validators.required],
-            STATUS: dataItem.STATUS,
-            TRGRD_BY: dataItem.TRGRD_BY,
-            JOB_HLTH_CNFG_DTL: dataItem.JOB_HLTH_CNFG_DTL,
-            PREDECESSOR_COND: dataItem.PREDECESSOR_COND,
-            steps: this.formBuilder.array([]),
+    closeEditor(grid, rowIndex = this.editedRowIndex) {
+        grid.closeRow(rowIndex);
+        this.editedRowIndex = undefined;
+        this.formGroup = undefined;
+    }
+    addHandler({ sender }) {
+        this.isDirty = true;
+        this.closeEditor(sender);
+        this.formGroup = new FormGroup({
+            BTCH_SID: new FormControl(""),
+            BTCH_NM: new FormControl("", Validators.required),
+            BTCH_DSC: new FormControl("", Validators.required),
+            START: new FormControl("", Validators.required),
+            END: new FormControl("", Validators.required),
+            INTERVAL: new FormControl("", [Validators.required, Validators.min(1), Validators.pattern(/^[1-9]\d*$/)]),
+            ADHC_RUN: new FormControl("", Validators.required),
+            ACTV_IND: new FormControl("", Validators.required),
+            ADHC_RUN_NEW: new FormControl("", Validators.required),
+            ACTV_IND_NEW: new FormControl("", Validators.required),
+            STATUS: new FormControl("", Validators.required),
+            TRGRD_BY: new FormControl("", Validators.required),
+            JOB_HLTH_CNFG_DTL: new FormControl("", Validators.required),
+            PREDECESSOR_COND: new FormControl("", Validators.required),
+            BTCH_TYPE: new FormControl("", Validators.required),
+            SRT_ORDR: new FormControl("", [Validators.required, Validators.min(1), Validators.pattern(/^[1-9]\d*$/)]),
+            steps: this.formBuilder.array([])
+        });
+        this.formGroup.valueChanges.subscribe(() => {
+            this.isFormChange = true;
         });
 
-        for (const stepIndVal of this.arrayStepData) {
-            this.addStepDataForm(stepIndVal);
+        sender.addRow(this.formGroup);
+    }
+
+    editBatchJobData(dataItem, i) {
+        if (i == 1) {
+            this.allData = false;
+            this.addData = true;
+            const getBatchID = dataItem.BTCH_SID;
+            this.arrayStepData = this.childrenGridResult.filter(x => x.BTCH_SID === getBatchID);
+            let updateStart;
+            let updateEnd;
+            let intervalValues;
+
+            if (dataItem.RUN_SCHDL == null) {
+                updateStart = '';
+                updateEnd = '';
+                intervalValues = '';
+            } else {
+                this.gettingDaysForUpdate(dataItem);
+                const startTime = this.getStart(dataItem.RUN_SCHDL);
+                updateStart = this.getTimerNew(startTime)
+                const endTime = this.getEnd(dataItem.RUN_SCHDL);
+                updateEnd = this.getTimerNew(endTime)
+                intervalValues = this.getInterval(dataItem.RUN_SCHDL);
+            }
+
+            this.batchJobConstForm = this.formBuilder.group({
+                BTCH_SID: dataItem.BTCH_SID,
+                BTCH_NM: [dataItem.BTCH_NM, {disabled: true}],
+                BTCH_DSC: [dataItem.BTCH_DSC, Validators.required],
+                START: [updateStart, Validators.required],
+                END: [updateEnd, Validators.required],
+                INTERVAL: [intervalValues, [Validators.required, Validators.min(1), Validators.pattern(/^[1-9]\d*$/)]],
+                ADHC_RUN: [dataItem.ADHC_RUN, Validators.required],
+                ACTV_IND: [dataItem.ACTV_IND, Validators.required],
+                ADHC_RUN_NEW: [dataItem.ADHC_RUN, Validators.required],
+                ACTV_IND_NEW: [dataItem.ACTV_IND, Validators.required],
+                STATUS: dataItem.STATUS,
+                TRGRD_BY: dataItem.TRGRD_BY,
+                JOB_HLTH_CNFG_DTL: dataItem.JOB_HLTH_CNFG_DTL,
+                PREDECESSOR_COND: dataItem.PREDECESSOR_COND,
+                BTCH_TYPE: dataItem.BTCH_TYPE,
+                SRT_ORDR: [dataItem.SRT_ORDR, [Validators.required, Validators.min(1), Validators.pattern(/^[1-9]\d*$/)]],
+                steps: this.formBuilder.array([]),
+            });
+
+            for (const stepIndVal of this.arrayStepData) {
+                this.addStepDataForm(stepIndVal);
+            }
+
+            const arrLength = this.arrayStepData.length;
+            if (arrLength > 0) {
+                this.rowForm = true;
+                this.secondRowCheckBox = true;
+            }
+            else {
+                this.addStepOnUI();
+                //this.rowForm = false;
+                //this.secondRowCheckBox = false;
+            }
+
+
+
+            this.batchJobConstForm.statusChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+                this.isFormValid = this.checkFormValidity();
+            });
         }
+        else {
+            this.allData = false;
+            this.addData = true;
+            this.arrayStepData = this.initialSteps;
+             
+            const runschdl = '[{"D":"1,2,3,4,5,6,7","START":"0:0:0","END":"0:0:0","INTERVAL":"60"}]';
+            
+            const startTime = this.getStart(runschdl);
+            const updateStart = this.getTimerNew(startTime)
+            const endTime = this.getEnd(runschdl);
+            const  updateEnd = this.getTimerNew(endTime)
+            const  intervalValues = this.getInterval(runschdl);
+            
 
-        const arrLength = this.arrayStepData.length;
-        if (arrLength > 0) {
-            this.rowForm = true;
-            this.secondRowCheckBox = true;
-        } else {
-            this.rowForm = false;
-            this.secondRowCheckBox = false;
+            this.batchJobConstForm = this.formBuilder.group({
+                BTCH_SID: 0,
+                BTCH_NM: ['', Validators.required],
+                BTCH_DSC: ['', Validators.required],
+                START: [updateStart, Validators.required],
+                END: [updateEnd, Validators.required],
+                INTERVAL: [intervalValues, [Validators.required, Validators.min(1), Validators.pattern(/^[1-9]\d*$/)]],
+                ADHC_RUN: ['', Validators.required],
+                ACTV_IND: ['', Validators.required],
+                //ADHC_RUN_NEW: ['', Validators.required],
+                //ACTV_IND_NEW: ['', Validators.required],
+                STATUS: ['COMPLETED'],
+                TRGRD_BY: ['', Validators.required],
+                JOB_HLTH_CNFG_DTL: ['', Validators.required],
+                PREDECESSOR_COND: ['', Validators.required],
+                BTCH_TYPE: ['', Validators.required],
+                SRT_ORDR: ['', [Validators.required, Validators.min(1), Validators.pattern(/^[1-9]\d*$/)]],
+                steps: this.formBuilder.array([]),
+            });
+
+             
+
+
+
+            this.batchJobConstForm.statusChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+                this.isFormValid = this.checkFormValidity();
+            });
+
         }
-
-        
-
-        this.batchJobConstForm.statusChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-            this.isFormValid = this.checkFormValidity();
-        });
     }   
 
     gettingDaysForUpdate(dataItem) {

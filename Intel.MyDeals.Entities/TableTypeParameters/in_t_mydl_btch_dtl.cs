@@ -31,6 +31,8 @@ namespace Intel.MyDeals.Entities
             this.Columns.Add("TRGRD_BY", typeof(string));
             this.Columns.Add("JOB_HLTH_CNFG_DTL", typeof(string));
             this.Columns.Add("PREDECESSOR_COND", typeof(string));
+            this.Columns.Add("BTCH_TYPE", typeof(string));
+            this.Columns.Add("SRT_ORDR", typeof(int));
         }
         public void AddRow(BatchJobConstants itm)
         {
@@ -49,6 +51,8 @@ namespace Intel.MyDeals.Entities
             r["TRGRD_BY"] = itm.TRGRD_BY;
             r["JOB_HLTH_CNFG_DTL"] = itm.JOB_HLTH_CNFG_DTL;
             r["PREDECESSOR_COND"] = itm.PREDECESSOR_COND;
+            r["BTCH_TYPE"] = itm.BTCH_TYPE;
+            r["SRT_ORDR"] = itm.SRT_ORDR;
             this.Rows.Add(r);
         }
         public void AddRows(IEnumerable<BatchJobConstants> itms)
@@ -70,6 +74,8 @@ namespace Intel.MyDeals.Entities
                 r["TRGRD_BY"] = itm.TRGRD_BY;
                 r["JOB_HLTH_CNFG_DTL"] = itm.JOB_HLTH_CNFG_DTL;
                 r["PREDECESSOR_COND"] = itm.PREDECESSOR_COND;
+                r["BTCH_TYPE"] = itm.BTCH_TYPE;
+                r["SRT_ORDR"] = itm.SRT_ORDR;
                 this.Rows.Add(r);
             }
         }

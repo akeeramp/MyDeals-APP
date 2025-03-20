@@ -9,8 +9,11 @@
         <div class="col-md-12">
             <div *ngIf="allData" class="">
                 <kendo-grid class="grid-sizefix tt-grids kAlignHeaders" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
-                            [groupable]="true" [group]="state.group" filterable="menu" [data]="gridData" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)">
+                            [groupable]="true" [group]="state.group" filterable="menu" (add)="editBatchJobData(dataItem,0)" [data]="gridData" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)">
                     <ng-template kendoGridToolbarTemplate>
+                        <button kendoGridAddCommand class="k-button addButton">
+                            <span class="k-icon k-i-plus-outline k-icon-md" style="font-size:24px;"></span>Add New Record
+                        </button>
                         <kendo-grid-spacer></kendo-grid-spacer>
 
                         <button (click)="refreshGrid()" class="k-button clearButton">
@@ -19,7 +22,7 @@
                     </ng-template>
                     <kendo-grid-command-column title="Command" [width]="50">
                         <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem>
-                            <button id="command-icon" class="k-command-icon" (click)="editBatchJobData(dataItem)">
+                            <button id="command-icon" class="k-command-icon" (click)="editBatchJobData(dataItem,1)">
                                 <span class="k-icon k-i-edit k-icon-sm delete-space edited-icon-color"></span>
                             </button>
                         </ng-template>
@@ -66,9 +69,10 @@
                     <kendo-grid-column field="TRGRD_BY" title="Triggered By" [width]="150"></kendo-grid-column>
                     <kendo-grid-column field="JOB_HLTH_CNFG_DTL" title="Job Health Configuration" [width]="400"></kendo-grid-column>
                     <kendo-grid-column field="PREDECESSOR_COND" title="Predecessor" [width]="150"></kendo-grid-column>
-
                     <kendo-grid-column field="ALRT_MAIL_CNT" title="Alerts Send" [width]="200"></kendo-grid-column>
                     <kendo-grid-column field="SSIS_ALERT_TRGER_FLAG" title="DB Trigger Mail" [width]="200"></kendo-grid-column>
+                    <kendo-grid-column field="BTCH_TYPE" title="Batch Type" [width]="200"></kendo-grid-column>
+                    <kendo-grid-column field="SRT_ORDR" title="Batch Sort Order" [width]="200"></kendo-grid-column>
                     <kendo-grid-excel fileName="BatchJobConstants.xlsx" [fetchData]="allData">
                         <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}" title="{{item.value}}" [width]="150" [cellOptions]="cellOptions" [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
                     </kendo-grid-excel>
@@ -112,7 +116,7 @@
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="batch-name" class="control-label alignLabels">Batch Name:</label><br />
-                                            <input type="text" id="batch-name" class="form-control w-100" formControlName="BTCH_NM" placeholder="Enter the batch name" readonly />
+                                            <input type="text" id="batch-name" class="form-control w-100" formControlName="BTCH_NM" placeholder="Enter the batch name" />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -209,6 +213,27 @@
                                                 <div class="form-group">
                                                     <label for="job_hlth_cnfg_dtl" class="control-label alignLabels">Predecessor:</label>
                                                     <input type="text" id="predecessor_dtl" class="form-control w-100" formControlName="PREDECESSOR_COND" placeholder="Enter the Predecessor Configuration" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label for="btch_type" class="control-label alignLabels">Batch Type:</label>
+                                                    <select id="btch_type" class="form-control w-100" formControlName="BTCH_TYPE">
+                                                        <option value="CUSTOM">CUSTOM</option>
+                                                        <option value="GENERIC">GENERIC</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label for="sortorder" class="control-label alignLabels">Batch Sort Order:</label>
+                                                    <input type="number" id="sortorder" class="form-control w-100" placeholder="Enter the Sort Order" formControlName="SRT_ORDR" />
+                                                    <kendo-formerror *ngIf="(batchJobConstForm.controls.SRT_ORDR?.errors?.required && batchJobConstForm.controls.SRT_ORDR?.touched)">
+                                                        {{isRequiredMsg}}
+                                                    </kendo-formerror>
+                                                    <kendo-formerror *ngIf="batchJobConstForm.controls.SRT_ORDR?.errors?.pattern && batchJobConstForm.controls.SRT_ORDR?.touched">
+                                                        Sort Order must be a positive integer.
+                                                    </kendo-formerror>
                                                 </div>
                                             </div>
                                         </div>
