@@ -382,7 +382,27 @@ export class ReportingComponent implements OnDestroy{
           vm.ReportName = vm.ReportName.filter(
             x => x.RPT_UNIQ_NM != "Unified Customer Management Report"
           );
-        }
+            }
+
+        //Only RA, SA will have access to Unified Customer Management Report
+        if ((<any>window).usrRole != "SA" &&
+                !((<any>window).isSuper || (<any>window).isDeveloper)
+            ) {
+                vm.ReportName = vm.ReportName.filter(
+                    x => x.RPT_UNIQ_NM != "iCost report"
+                );
+            }
+
+            //Only RA, SA will have access to Unified Customer Management Report
+            if ((<any>window).usrRole != "SA" &&
+                !((<any>window).isSuper || (<any>window).isDeveloper)
+            ) {
+                vm.ReportName = vm.ReportName.filter(
+                    x => x.RPT_UNIQ_NM != "New Product Missing Cost Report"
+                );
+            }
+
+        
 
         let reportName = new List<any>(vm.ReportName);
         //Report Name Group

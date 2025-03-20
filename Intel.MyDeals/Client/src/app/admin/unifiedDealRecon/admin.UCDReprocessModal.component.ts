@@ -72,16 +72,12 @@ export class reprocessUCDModalComponent implements OnDestroy {
 
     ngOnInit(): void {
         this.formGroup = new FormGroup({
-
-            DEAL_ID: new FormControl(""),
+            DEAL_ID: new FormControl("",
+                Validators.compose([
+                    Validators.pattern("^[0-9]*$")
+            ])),
             END_CUSTOMER: new FormControl(""),
-            END_CUSTOMER_COUNTRY: new FormControl(
-                "",
-                Validators.compose([ 
-                    Validators.pattern("^[0-9]+(,[0-9]+)*$")
-
-                ]))
-
+            END_CUSTOMER_COUNTRY: new FormControl("")
         });
         this.loadDetails();
     }
@@ -96,31 +92,40 @@ export class reprocessUCDModalComponent implements OnDestroy {
             this.isError = true;
             this.isAlert = true;
         } else {
-            if (this.dealId == "" && this.endCustomer == "" && this.endCustCountry == "") {
+            if (this.dealId == "" && this.endCustomer == "" && (this.endCustCountry == "" || this.endCustCountry == undefined)) {
                 this.isErrordeal = true;
                 this.isErrorCust = true;
                 this.isErrorctry = true;
                 this.isError = true;
             }
-            if (this.dealId != "" && this.endCustomer == "" && this.endCustCountry == "") {
-                this.isErrordeal = false;
-                this.isErrorCust = false;
-                this.isErrorctry = false;
-                this.isError = false;
+            if (this.dealId != "" && this.endCustomer == "" && (this.endCustCountry == "" || this.endCustCountry == undefined)) {
+                const exactMatch = new RegExp("^[0-9]*$");
+                if (!exactMatch.test(this.dealId)) {
+                    this.isErrordeal = true; 
+                    this.isErrorCust = false;
+                    this.isErrorctry = false;
+                    this.isError = true;
+                }
+                else {
+                    this.isErrordeal = false;
+                    this.isErrorCust = false;
+                    this.isErrorctry = false;
+                    this.isError = false;
+                } 
             }
-            if (this.dealId == "" && this.endCustomer != "" && this.endCustCountry == "") {
+            if (this.dealId == "" && this.endCustomer != "" && (this.endCustCountry == "" || this.endCustCountry == undefined)) {
                 this.isErrordeal = false;
                 this.isErrorCust = false;
                 this.isErrorctry = true;
                 this.isError = true;
             }
-            if (this.dealId == "" && this.endCustomer == "" && this.endCustCountry != "") {
+            if (this.dealId == "" && this.endCustomer == "" && this.endCustCountry != "" && this.endCustCountry != undefined) {
                 this.isErrordeal = false;
                 this.isErrorCust = true;
                 this.isErrorctry = false;
                 this.isError = true;
             }
-            if (this.dealId == "" && this.endCustomer != "" && this.endCustCountry != "") {
+            if (this.dealId == "" && this.endCustomer != "" && this.endCustCountry != "" && this.endCustCountry != undefined) {
                 this.isErrordeal = false;
                 this.isErrorCust = false;
                 this.isErrorctry = false;
@@ -129,6 +134,7 @@ export class reprocessUCDModalComponent implements OnDestroy {
         } 
     }
 
+  
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
     ngOnDestroy(): void {
         this.destroy$.next();

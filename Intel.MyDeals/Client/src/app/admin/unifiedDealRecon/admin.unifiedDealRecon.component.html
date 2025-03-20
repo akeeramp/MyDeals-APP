@@ -6,7 +6,7 @@
     <div class="col-md-6"> 
         <button class="btn btn-primary" (click)="OpenRetriggerUnifyModal()" *ngIf="retrigger" style="float:right;margin-top:20px; margin-right:19px;">Retrigger UCD</button>
         <button class="btn btn-primary" (click)="OpenBulkUploadUnifyModal()" *ngIf="uploadUnifiedData" style="float:right;margin-top:20px; margin-right:41px;">Upload Unified Data</button>
-        <button class="btn btn-primary" (click)="OpenUCDReprocessModal()" style="float:right;margin-top:20px; margin-right:41px;">Reprocess UCD</button>
+        <button class="btn btn-primary" (click)="OpenUCDReprocessModal()" *ngIf="retrigger" style="float:right;margin-top:20px; margin-right:41px;">Reprocess UCD</button>
     </div>
 </div>
 <div class="row" style="display: contents;">
