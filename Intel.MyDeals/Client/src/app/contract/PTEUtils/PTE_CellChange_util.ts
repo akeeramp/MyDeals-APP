@@ -1286,21 +1286,6 @@ export class PTE_CellChange_Util {
                     }
                 }
             }
-            if(item.prop =='PROGRAM_PAYMENT'  || item.prop == 'REBATE_TYPE'){
-                const propvalue= this.hotTable.getDataAtRowProp(item.row, item.prop);
-                if(propvalue==null){
-                 const invalidname = 'This field is required';
-                 let colSPIdx = findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: item.prop }).col;
-                 this.hotTable.setCellMetaObject(item.row, colSPIdx, { 'className': 'error-product error-border', comment: { value: invalidname } });
-                 this.hotTable.render();
-                }
-                else
-                {
-                 let colSPIdx = findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: item.prop }).col;
-                 this.hotTable.setCellMetaObject(item.row, colSPIdx, { 'className': '', comment: { value: '' } });
-                 this.hotTable.render();
-                }
-             }
         }
         this.hotTable.render()
     }
@@ -1742,65 +1727,90 @@ export class PTE_CellChange_Util {
         }
     }
     
-    static checkinputvalueisvalid(changes, columns,dropdownResponses){
-            each(changes, obj => {
-                if (obj.prop == 'QLTR_BID_GEO' || obj.prop == 'MRKT_SEG') {
-                    let isvalid = true;
-                    let list = obj.new && obj.new != null ? obj.new.split(',') : '';
-                    const col = findIndex(columns, { data: obj.prop });
-                    if(list=="" && obj.prop != 'QLTR_BID_GEO'){
-                        isvalid = false;
-                    }
-                    each(list, name => {
-                        name = name.replace(/[\[\]']+/g, '');
-                        let isvalidtype = null;
-                       
-                        if (obj.prop == 'QLTR_BID_GEO') {
-                            isvalidtype = dropdownResponses.QLTR_BID_GEO.find(x => x.dropdownName == name);
-                        } else if (obj.prop == 'MRKT_SEG') {
-                            //here we are checking for market segment and embeded list in market segment
-                            isvalidtype = dropdownResponses.MRKT_SEG.find(x => x.DROP_DOWN == name)==undefined?dropdownResponses.MRKT_SEG.find(x => x.items  != null).items.find(y => y.DROP_DOWN == name):
+    static checkInputValueIsValid(changes, columns, dropdownResponses) {
+        each(changes, obj => {
+            if (obj.prop == 'QLTR_BID_GEO' || obj.prop == 'MRKT_SEG') {
+                let isvalid = true;
+                let list = obj.new && obj.new != null ? obj.new.split(',') : '';
+                const col = findIndex(columns, { data: obj.prop });
+
+                if (list == "" && obj.prop != 'QLTR_BID_GEO') {
+                    isvalid = false;
+                }
+
+                each(list, name => {
+                    name = name.replace(/[\[\]']+/g, '');
+                    let isvalidtype = null;
+
+                    if (obj.prop == 'QLTR_BID_GEO') {
+                        isvalidtype = dropdownResponses.QLTR_BID_GEO.find(x => x.dropdownName == name);
+                    } else if (obj.prop == 'MRKT_SEG') {
+                        //here we are checking for market segment and embeded list in market segment
+                        isvalidtype = dropdownResponses.MRKT_SEG.find(x => x.DROP_DOWN == name) == undefined ? dropdownResponses.MRKT_SEG.find(x => x.items != null).items.find(y => y.DROP_DOWN == name) :
                             dropdownResponses.MRKT_SEG.find(x => x.DROP_DOWN == name);
-                        }
-                        if (isvalidtype == undefined) {
-                            isvalid = false;
-                            this.hotTable.setCellMetaObject(obj.row, col, { 'className': 'error-border', comment: { value: 'This field is required' } });
-                            this.hotTable.setDataAtRowProp(obj.row, obj.prop, '', 'no-edit');
-                            this.hotTable.render();
-                            return;
-                        }
-                    })
-                    if(list=="" && obj.prop == 'MRKT_SEG'){
+                    }
+
+                    if (isvalidtype == undefined) {
+                        isvalid = false;
                         this.hotTable.setCellMetaObject(obj.row, col, { 'className': 'error-border', comment: { value: 'This field is required' } });
                         this.hotTable.setDataAtRowProp(obj.row, obj.prop, '', 'no-edit');
                         this.hotTable.render();
+                        return;
                     }
-                    if (isvalid) {
-                            this.hotTable.setCellMetaObject(obj.row, col, { 'className': '', comment: { value: '' } });
-                            this.hotTable.render();
-                    }
+                });
+
+                if (list == "" && obj.prop == 'MRKT_SEG') {
+                    this.hotTable.setCellMetaObject(obj.row, col, { 'className': 'error-border', comment: { value: 'This field is required' } });
+                    this.hotTable.setDataAtRowProp(obj.row, obj.prop, '', 'no-edit');
+                    this.hotTable.render();
                 }
-                if (obj.prop == 'PAYOUT_BASED_ON' || obj.prop == 'PROD_INCLDS') {
-                    const col = findIndex(columns, { data: obj.prop });
-                    let isvalid = null;
-                     
-                    if (obj.prop == 'PAYOUT_BASED_ON') {
-                        isvalid = dropdownResponses.PAYOUT_BASED_ON.find(x => x.DROP_DOWN == obj.new);
-                    }
-                    else if (obj.prop == 'PROD_INCLDS') {
-                        isvalid = dropdownResponses.PROD_INCLDS.find(x => x.DROP_DOWN == obj.new);
-                    }
-                    if (isvalid == undefined) {
-                        this.hotTable.setCellMetaObject(obj.row, col, { 'className': 'error-border', comment: { value: 'This field is required' } });
-                        this.hotTable.setDataAtRowProp(obj.row, obj.prop, '', 'no-edit');
-                        this.hotTable.render();
-                    } else {
-                        this.hotTable.setCellMetaObject(obj.row, col, { 'className': '', comment: { value: '' } });
-                        this.hotTable.render();
-                    }
+
+                if (isvalid) {
+                    this.hotTable.setCellMetaObject(obj.row, col, { 'className': '', comment: { value: '' } });
+                    this.hotTable.render();
                 }
-            })
-        
+            }
+
+            if (obj.prop == 'PAYOUT_BASED_ON' || obj.prop == 'PROD_INCLDS') {
+                const col = findIndex(columns, { data: obj.prop });
+                let isvalid = null;
+
+                if (obj.prop == 'PAYOUT_BASED_ON') {
+                    isvalid = dropdownResponses.PAYOUT_BASED_ON.find(x => x.DROP_DOWN == obj.new);
+                } else if (obj.prop == 'PROD_INCLDS') {
+                    isvalid = dropdownResponses.PROD_INCLDS.find(x => x.DROP_DOWN == obj.new);
+                }
+
+                if (isvalid == undefined) {
+                    this.hotTable.setCellMetaObject(obj.row, col, { 'className': 'error-border', comment: { value: 'This field is required' } });
+                    this.hotTable.setDataAtRowProp(obj.row, obj.prop, '', 'no-edit');
+                    this.hotTable.render();
+                } else {
+                    this.hotTable.setCellMetaObject(obj.row, col, { 'className': '', comment: { value: '' } });
+                    this.hotTable.render();
+                }
+            }
+
+            if (obj.prop == 'PROGRAM_PAYMENT' || obj.prop == 'REBATE_TYPE') {
+                const col = findIndex(columns, { data: obj.prop });
+                let isvalid = null;
+
+                if (obj.prop == 'REBATE_TYPE') {
+                    isvalid = dropdownResponses.REBATE_TYPE.find(x => x.DROP_DOWN == obj.new);
+                } else if (obj.prop == 'PROGRAM_PAYMENT') {
+                    isvalid = dropdownResponses.PROGRAM_PAYMENT.find(x => x.DROP_DOWN == obj.new);
+                }
+
+                if (isvalid == undefined) {
+                    this.hotTable.setCellMetaObject(obj.row, col, { 'className': 'error-border', comment: { value: 'This field is required' } });
+                    this.hotTable.setDataAtRowProp(obj.row, obj.prop, '', 'no-edit');
+                    this.hotTable.render();
+                } else {
+                    this.hotTable.setCellMetaObject(obj.row, col, { 'className': '', comment: { value: '' } });
+                    this.hotTable.render();
+                }
+            }
+        });
     }
 
     static geoInputValidationCheck(changes, columns,dropdownResponses){

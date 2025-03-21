@@ -956,8 +956,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             if (restprd && restprd.length > 0) {
                 this.setDeafultARSettlementAndRestPeriod(restprd);
             }
-            if (bidgeo.length>0 ||mrktseg.length>0 ||payoutbasedon.length>0 || media.length>0) {
-                PTE_CellChange_Util.checkinputvalueisvalid(changes,this.columns,this.dropdownResponses);
+            if (bidgeo.length > 0 || mrktseg.length > 0 || payoutbasedon.length > 0 || media.length > 0 || rebateType.length > 0 || pgChg.length > 0) {
+                PTE_CellChange_Util.checkInputValueIsValid(changes, this.columns, this.dropdownResponses);
             }
             //KIT on change events
             if (KIT_ECAP && KIT_ECAP.length > 0) {
