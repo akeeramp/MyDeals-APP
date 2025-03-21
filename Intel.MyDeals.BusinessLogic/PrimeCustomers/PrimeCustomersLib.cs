@@ -791,7 +791,7 @@ namespace Intel.MyDeals.BusinessLogic
                                 {
                                     foreach(var ele in objUCD_RQST_RSPNList)
                                     {
-                                        if (ele.DEAL_ID != 0 && (ele.END_CUST_OBJ != "" || ele.END_CUST_OBJ != null))
+                                        if (ele.DEAL_ID != 0 && (ele.END_CUST_OBJ != "" && ele.END_CUST_OBJ != null))
                                         {
                                             List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(ele.END_CUST_OBJ);
                                             //check whether the deal is already unified or not. if deal is already unified then no need to trigger unification mail after saving end customer attributes
@@ -819,7 +819,7 @@ namespace Intel.MyDeals.BusinessLogic
                              {
                                     foreach(var ele in objUCD_RQST_RSPNList)
                                     {
-                                        if (ele.DEAL_ID != 0 && (ele.END_CUST_OBJ != "" || ele.END_CUST_OBJ != null))
+                                        if (ele.DEAL_ID != 0 && (ele.END_CUST_OBJ != "" && ele.END_CUST_OBJ != null))
                                         {
                                             List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(ele.END_CUST_OBJ);
                                             //check whether the deal is already unified or not. if deal is already unified then no need to trigger unification mail after saving end customer attributes
