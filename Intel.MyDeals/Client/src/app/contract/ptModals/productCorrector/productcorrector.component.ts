@@ -74,6 +74,8 @@ export class ProductCorrectorComponent implements OnDestroy{
     private deletedProductDetails: any[] = [];
     public selection: SelectableSettings = { mode: "multiple" };
     private readonly destroy$ = new Subject();
+    public showNumIssueRows: boolean = true;
+
     public rowCallback = (args) => ({
         'hide-row': (args.dataItem.PRD_MBR_SID == 0)
     });
@@ -1172,6 +1174,11 @@ export class ProductCorrectorComponent implements OnDestroy{
             })
         this.state.filter.filters = this.dataFilter;
         this.applyFilterAndGrouping();        
+    }
+    
+
+    closeBanner(): void {
+        this.showNumIssueRows = false;
     }
     ngOnInit() {
         this.isLoading = true;

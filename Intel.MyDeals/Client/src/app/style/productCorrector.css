@@ -65,7 +65,7 @@
 
 .corrector-one-details,
 .corrector-two-details {
-    height: calc(87vh - 260px) !important;
+    height: calc(60vh - 270px) !important;
 }
 
 .correcting-product.k-grid td:first-child {

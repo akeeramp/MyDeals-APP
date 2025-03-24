@@ -208,6 +208,8 @@
     width: 100%;
     height: auto;
     display: flex;
+    margin: 10px 10px 10px 0px !important;
+    padding-bottom: 10px
 }
 
 .productCorrectParent .miniNav {
@@ -548,7 +550,7 @@
     padding-top: 2px;
     padding-bottom: 0;
     min-height: calc(90vh - 167px);
-    max-height: calc(90vh - 135px);
+    max-height: calc(90vh - 90px);
 }
 
 
@@ -892,4 +894,26 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn {
 ::ng-deep .filtertreeview .k-treeview .k-in {
     background: #00aeef !important;
     cursor: pointer;
+}
+.alert-dismissible {
+    font-weight: bold;
+    background: #f3d54e;
+    text-align: center !important;
+    padding: 0px;
+}
+.alert-dismissible .close span {
+    top: 20px;
+    right: 20px;
+    color: #dc3545 !important;
+    position: absolute;
+    font-size: small;
+    padding-right: 15px
+}
+.alert-dismissible span {
+    font-size: 14px;
+    color: black
+}
+kendo-treeview ul.k-treeview-lines {
+    display: flex;
+    flex-direction:row;
 }
