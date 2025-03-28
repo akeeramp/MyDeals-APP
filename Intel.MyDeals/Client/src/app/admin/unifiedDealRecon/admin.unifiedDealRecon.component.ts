@@ -51,6 +51,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
     private errorMsg: string[] = [];
     public editAccess = true;
     private retrigger = ((<any>window).isCustomerAdmin || (<any>window).usrRole == "SA" || (<any>window).isDeveloper) ? true : false;
+    private reprocessucd = (<any>window).isDeveloper ? true: false;
     public uploadUnifiedData = (((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).usrRole == "SA" || (<any>window).isDeveloper) ? true : false;
     private isNew: boolean;
     public dataItems: any;

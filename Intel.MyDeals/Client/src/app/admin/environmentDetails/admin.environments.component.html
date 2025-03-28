@@ -221,9 +221,9 @@
 
 <div *ngIf="SvrGrid" class="row" style="display: contents;">
     <div class="col-md-12 kendo-grid-buttons table-left-rightsizefix">
-        <kendo-grid class="grid-heightsize customerVendorsTable kAlignHeaders" [data]="servergridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                    [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-                    [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
+        <kendo-grid class="grid-heightsize customerVendorsTable kAlignHeaders" [data]="servergridData" [loading]="isLoading" [pageSize]="svrstate.take" [skip]="svrstate.skip"
+                    [sort]="svrstate.sort" [filter]="svrstate.filter" [sortable]="true"
+                    [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="svrstate.group"
                     filterable="menu" [navigable]="true" (dataStateChange)="datasvrStateChange($event)" (add)="svraddHandler($event)"
                     (edit)="svreditHandler($event)" (cancel)="svrcancelHandler($event)" (save)="svrsaveHandler($event)"
                     (remove)="svrremoveHandler($event)" [columnMenu]="true" (excelExport)="onsvrExcelExport($event)">

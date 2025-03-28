@@ -78,6 +78,18 @@ export class EnvironmentsComponent implements PendingChangesGuard, OnDestroy {
             filters: [],
         },
     };
+
+    public svrstate: State = {
+        skip: 0,
+        take: 25,
+        group: [],
+        // Initial filter descriptor
+        filter: {
+            logic: "and",
+            filters: [],
+        },
+    };
+
     public pageSizes: PageSizeItem[] = [
         {
             text: "25",
@@ -344,7 +356,7 @@ export class EnvironmentsComponent implements PendingChangesGuard, OnDestroy {
 
     public svrallData(): ExcelExportData {
         const excelState: State = {};
-        Object.assign(excelState, this.state)
+        Object.assign(excelState, this.svrstate)
         excelState.take = this.servergridResult.length;
 
         const result: ExcelExportData = {
@@ -359,11 +371,11 @@ export class EnvironmentsComponent implements PendingChangesGuard, OnDestroy {
     }
 
     svrclearFilter(): void {
-        this.state.filter = {
+        this.svrstate.filter = {
             logic: "and",
             filters: [],
         };
-        this.servergridData = process(this.servergridResult, this.state);
+        this.servergridData = process(this.servergridResult, this.svrstate);
     }
 
     loadsvrDetails(): void {
@@ -373,7 +385,7 @@ export class EnvironmentsComponent implements PendingChangesGuard, OnDestroy {
                 (result: Array<Svr_Map>) => {
                     this.servergridResult = result;
                     this.serverconstData = result;
-                    this.servergridData = process(this.servergridResult, this.state);
+                    this.servergridData = process(this.servergridResult, this.svrstate);
                     this.isLoading = false;
                 },
                 function (response) {
@@ -394,8 +406,8 @@ export class EnvironmentsComponent implements PendingChangesGuard, OnDestroy {
     }
 
     datasvrStateChange(state: DataStateChangeEvent): void {
-        this.state = state;
-        this.servergridData = process(this.servergridResult, this.state);
+        this.svrstate = state;
+        this.servergridData = process(this.servergridResult, this.svrstate);
     }
 
     svrcloseEditor(grid: GridComponent, rowIndex = this.servereditedRowIndex): void {
@@ -527,7 +539,7 @@ export class EnvironmentsComponent implements PendingChangesGuard, OnDestroy {
 
     svrrefreshGrid(): void {
         this.isLoading = true;
-        this.state.filter = {
+        this.svrstate.filter = {
             logic: "and",
             filters: [],
         };

@@ -72,10 +72,7 @@ export class reprocessUCDModalComponent implements OnDestroy {
 
     ngOnInit(): void {
         this.formGroup = new FormGroup({
-            DEAL_ID: new FormControl("",
-                Validators.compose([
-                    Validators.pattern("^[0-9]*$")
-            ])),
+            DEAL_ID: new FormControl(""),
             END_CUSTOMER: new FormControl(""),
             END_CUSTOMER_COUNTRY: new FormControl("")
         });
@@ -92,45 +89,50 @@ export class reprocessUCDModalComponent implements OnDestroy {
             this.isError = true;
             this.isAlert = true;
         } else {
-            if (this.dealId == "" && this.endCustomer == "" && (this.endCustCountry == "" || this.endCustCountry == undefined)) {
-                this.isErrordeal = true;
-                this.isErrorCust = true;
-                this.isErrorctry = true;
-                this.isError = true;
-            }
-            if (this.dealId != "" && this.endCustomer == "" && (this.endCustCountry == "" || this.endCustCountry == undefined)) {
-                const exactMatch = new RegExp("^[0-9]*$");
-                if (!exactMatch.test(this.dealId)) {
-                    this.isErrordeal = true; 
+            let item = [];
+            item = this.dealId.split(","); 
+            for (let ele in item) {
+                let dealid = item[ele];
+                if (dealid == "" && this.endCustomer == "" && (this.endCustCountry == "" || this.endCustCountry == undefined)) {
+                    this.isErrordeal = true;
+                    this.isErrorCust = true;
+                    this.isErrorctry = true;
+                    this.isError = true;
+                }
+                if (dealid != "" && this.endCustomer == "" && (this.endCustCountry == "" || this.endCustCountry == undefined)) {
+                    const exactMatch = new RegExp("^[0-9]*$");
+                    if (!exactMatch.test(dealid)) {
+                        this.isErrordeal = true;
+                        this.isErrorCust = false;
+                        this.isErrorctry = false;
+                        this.isError = true;
+                    }
+                    else {
+                        this.isErrordeal = false;
+                        this.isErrorCust = false;
+                        this.isErrorctry = false;
+                        this.isError = false;
+                    }
+                }
+                if (dealid == "" && this.endCustomer != "" && (this.endCustCountry == "" || this.endCustCountry == undefined)) {
+                    this.isErrordeal = false;
                     this.isErrorCust = false;
+                    this.isErrorctry = true;
+                    this.isError = true;
+                }
+                if (dealid == "" && this.endCustomer == "" && this.endCustCountry != "" && this.endCustCountry != undefined) {
+                    this.isErrordeal = false;
+                    this.isErrorCust = true;
                     this.isErrorctry = false;
                     this.isError = true;
                 }
-                else {
+                if (dealid == "" && this.endCustomer != "" && this.endCustCountry != "" && this.endCustCountry != undefined) {
                     this.isErrordeal = false;
                     this.isErrorCust = false;
                     this.isErrorctry = false;
                     this.isError = false;
-                } 
-            }
-            if (this.dealId == "" && this.endCustomer != "" && (this.endCustCountry == "" || this.endCustCountry == undefined)) {
-                this.isErrordeal = false;
-                this.isErrorCust = false;
-                this.isErrorctry = true;
-                this.isError = true;
-            }
-            if (this.dealId == "" && this.endCustomer == "" && this.endCustCountry != "" && this.endCustCountry != undefined) {
-                this.isErrordeal = false;
-                this.isErrorCust = true;
-                this.isErrorctry = false;
-                this.isError = true;
-            }
-            if (this.dealId == "" && this.endCustomer != "" && this.endCustCountry != "" && this.endCustCountry != undefined) {
-                this.isErrordeal = false;
-                this.isErrorCust = false;
-                this.isErrorctry = false;
-                this.isError = false;
-            }
+                }
+            }    
         } 
     }
 
