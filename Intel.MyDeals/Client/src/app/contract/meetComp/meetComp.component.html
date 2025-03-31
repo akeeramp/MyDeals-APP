@@ -36,7 +36,7 @@
                             [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys" [initiallyExpanded]="isTender || PAGE_NM == 'MCTPOPUP'">
                     <kendo-grid-column width="70px" [columnMenu]="false">
                         <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
-                            <div class='dealTools'>
+                            <div class='dealTools' style="position:absolute;left:0px;">
                                 <input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk_header' [checked]="isSelectAllChecked" (change)="selectProducts('all', $event)" />
                                 <label class="all-labels" for='lnkChk_header' style='margin: 5px 0 0 0;' title='Check to apply changes to all checked rows'></label>
                             </div>

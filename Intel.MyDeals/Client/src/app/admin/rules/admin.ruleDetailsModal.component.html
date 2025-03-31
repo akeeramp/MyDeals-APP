@@ -107,7 +107,7 @@
                             </div>
                             <div class="divTableCell kdropdownlist" *ngIf="dataItem.field != ''">
                                 <kendo-dropdownlist [data]="dataItem.opvalues"
-                                                    class="equalto-dropdwn-style"
+                                                    [ngClass]="i == 0 ? 'equalto-dropdwn-style' : 'equalto-dropdwn-addl-style'"
                                                     textField="label"
                                                     valueField="operator"
                                                     [disabled]="i==0"

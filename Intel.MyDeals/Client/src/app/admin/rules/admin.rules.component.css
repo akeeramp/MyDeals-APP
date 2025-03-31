@@ -562,33 +562,8 @@ kendo-textarea.admin-notes-style.k-textarea:focus-within {
     background-color: #cccccc !important
 }
 
-.dealtype-dropdwn-style.k-dropdown .k-dropdown-wrap {
+.dealtype-dropdwn-style {
     border: 1px solid #e5e5e5 !important;
-    border-radius: 3px !important;
-    font-size: 10px !important;
-    font-weight: 500 !important;
-    opacity: .7 !important;
-    background: #fafafa !important;
-    width: 100% !important;
-    color: #212529 !important;
-    top: 0 !important;
-    left: 0 !important
-}
-
-kendo-dropdownlist.equalto-dropdwn-style.k-dropdown .k-dropdown-wrap {
-    border: 1px solid #e5e5e5 !important;
-    border-radius: 3px !important;
-    width: 135px !important;
-    font-size: 10px !important;
-    font-weight: 500 !important;
-    opacity: .7 !important;
-    background: #fafafa !important;
-    color: #212529 !important;
-    top: 0 !important;
-    left: 0 !important
-}
-
-kendo-combobox.ecap-combo-style.k-combobox.k-combobox-clearable {
     border-radius: 3px !important;
     font-size: 10px !important;
     font-weight: 500 !important;
@@ -596,16 +571,68 @@ kendo-combobox.ecap-combo-style.k-combobox.k-combobox-clearable {
     background: #fafafa !important;
     width: 200px !important;
     color: #212529 !important;
-    left: 382px !important;
+    position: relative !important;
+    top: 4px !important;
+    left: 3px !important;
+    box-shadow: none !important;
+    height: 30px !important;
+}
+
+kendo-dropdownlist.equalto-dropdwn-style {
+    position: relative !important;
+    top: -26px !important;
+    left: 250px !important;
+    width: 150px !important;
+    height: 30px !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 3px !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    opacity: .7 !important;
+    background: #fafafa !important;
+    color: #212529 !important;
+}
+
+kendo-dropdownlist.equalto-dropdwn-addl-style {
+    position: relative !important;
+    top: -26px !important;
+    left: 280px !important;
+    width: 150px !important;
+    height: 30px !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 3px !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    opacity: .7 !important;
+    background: #fafafa !important;
+    color: #212529 !important;
+}
+
+kendo-combobox.ecap-combo-style {
+    border-radius: 3px !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    opacity: .7 !important;
+    background: #fafafa !important;
+    width: 200px !important;
+    color: #212529 !important;
+    left: 372px !important;
     top: 0 !important;
     height: 30px !important;
     box-shadow: none !important;
     border-color: #e5e5e5 !important
 }
 
-.ecap-combo-style.k-combobox .k-dropdown-wrap .k-select {
+kendo-combobox.ecap-combo-style .k-searchbar {
+    align-items: center !important;
     background-color: transparent !important;
     border-left: none !important
+}
+
+kendo-combobox.ecap-combo-style .k-button {
+    background-color: #fafafa !important;
+    border-color: #fafafa !important;
+    color: #212529 !important;
 }
 
 input.form-control.ruledet-boxes-style {
@@ -638,10 +665,10 @@ input.form-control.ruledet-boxes-style:focus {
     margin-left: 5px !important
 }
 
-.dealtype-dropdwn-style.k-dropdown .k-dropdown-wrap:hover,
-.equalto-dropdwn-style.k-dropdown .k-dropdown-wrap:hover,
-kendo-textbox.extra-box-style.k-textbox:hover,
-.box_style_dropdwn.k-dropdown .k-dropdown-wrap:hover kendo-multiselect.multi_kendo_style.k-multiselect:hover {
+.dealtype-dropdwn-style:hover,
+.equalto-dropdwn-style:hover,
+.extra-box-style:hover,
+.box_style_dropdwn:hover {
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
@@ -691,17 +718,23 @@ kendo-textbox.box-style-numeric.k-textbox {
     font-size: 13px !important
 }
 
-kendo-numerictextbox.numerictextbox-style.k-widget.k-numerictextbox {
+kendo-numerictextbox.numerictextbox-style {
     position: relative !important;
     left: 382px !important;
     height: 30px !important;
     border: 1px solid #e5e5e5 !important;
-    opacity: .7 !important;
+    /*opacity: .7 !important;*/
     background: #fafafa !important;
     width: 183px !important;
     border-radius: 3px !important;
     box-shadow: none !important;
     top: 0 !important
+}
+
+.k-numerictextbox .k-input-spinner {
+    background-color: #e4e7eb;
+    border-color: #e4e7eb;
+    color: #212529;
 }
 
 #ruleModal .ht_master .wtHolder {
@@ -758,6 +791,10 @@ button.price-rule-retry:hover {
     font-size: 11px !important
 }
 
+.calender-row-style kendo-dateinput.k-dateinput .k-input-inner {
+    font-size: 11px !important
+}
+
 .calender-row-style.k-datepicker .k-picker-wrap {
     left: -1px !important;
     width: 182px !important;
@@ -803,33 +840,43 @@ button.price-rule-retry:hover {
     background-color: rgb(238, 238, 238) !important
 }
 
-kendo-multiselect.multi_kendo_style.k-multiselect {
+kendo-multiselect.multi_kendo_style {
     border-radius: 3px !important;
     font-size: 10px !important;
     font-weight: 500 !important;
     opacity: .7 !important;
-    background: #f1f1f1 !important;
-    color: #212529 !important;
     left: 382px !important;
     top: 0 !important;
-    box-shadow: none !important;
     width: fit-content !important;
     max-width: 700px !important;
-    min-width: 182px !important
+    min-width: 182px !important;
+    display: flex;
+    align-items: center !important;
+    line-height: 1.86em !important;
+    color: #212529 !important;
+    background-color: #fff !important;
+    box-shadow: none !important;
+    border-color: #ced4da !important;
 }
 
-kendo-dropdownlist.box_style_dropdwn.k-dropdown .k-dropdown-wrap {
+kendo-dropdownlist.box_style_dropdwn {
     border: 1px solid #e5e5e5 !important;
     border-radius: 3px !important;
+    height: 30px !important;
     width: 65px !important;
     font-size: 10px !important;
     font-weight: 500 !important;
     opacity: .7 !important;
     background: #fafafa !important;
     color: #212529 !important;
+    position: relative !important;
     top: 0 !important;
-    left: 0 !important;
-    box-shadow: none !important
+    left: 382px !important;
+    box-shadow: none !important;
+}
+
+kendo-dropdownlist.box_style_dropdwn .k-input-inner {
+    overflow: visible !important;
 }
 
 kendo-dialog-actions.price-rule-dialog-sty {
@@ -880,26 +927,32 @@ button.btn.btn-primary.validate-price-rule-style {
     border-radius: 4px !important
 }
 
-.multi_kendo_style.k-multiselect .k-multiselect-wrap li.k-button {
-    float: left !important;
-    font-size: 10px !important;
-    border-radius: 1.071em !important;
-    padding: 0 1.6em 0 .857em !important;
-    line-height: 1.86em !important;
-    color: #fff !important;
-    background-color: #0071c5 !important;
-    border-color: #0071c5 !important;
-    box-shadow: none !important
+.multi_kendo_style kendo-taglist.k-chip-list {
+    padding: 0px !important;
+    /*margin-top: -3.5px !important;
+    margin-bottom: -3.5px !important;*/
 }
 
-.multi_kendo_style.k-multiselect .k-multiselect-wrap li.k-button:hover {
+/*.multi_kendo_style.k-multiselect kendo-taglist .k-chip {*/
+.multi_kendo_style kendo-taglist .k-chip {
+    height: 20px !important;
+    background-color: #0071c5 !important;
+    color: #fff;        
+    padding: 0px;
+}
+
+.multi_kendo_style kendo-taglist .k-chip:hover {
     background-color: #00AEEF !important
 }
 
-.multi_kendo_style.k-multiselect .k-multiselect-wrap .k-button .k-icon {
+.multi_kendo_style kendo-taglist .k-chip .k-chip-actions .k-icon {
     opacity: .6 !important;
     font-size: 12px !important;
-    right: -10px !important
+    color: #fff !important;
+}
+
+.multi_kendo_style kendo-taglist .k-chip .k-chip-actions .k-chip-label {
+    color: #fff !important;
 }
 
 .alertHeader {
@@ -967,24 +1020,6 @@ div[index="1"] .modal-dialog {
     cursor: pointer
 }
 
-kendo-dropdownlist.equalto-dropdwn-style {
-    top: -26px !important;
-    left: 220px !important;
-    border: none !important;
-    background: none !important;
-    position: relative !important;
-    width: 150px !important;
-}
-
-kendo-dropdownlist.dealtype-dropdwn-style {
-    left: 8px !important;
-    top: 3px !important;
-    border: none !important;
-    background: none !important;
-    position: relative !important;
-    box-shadow: none !important;
-    width: 200px !important;
-}
 
 .ecap-combo-style span.k-icon.k-clear-value {
     width: calc(0px + .75rem) !important;
@@ -1012,16 +1047,6 @@ kendo-dropdownlist.dealtype-dropdwn-style {
     font-size: 13px !important
 }
 
-kendo-dropdownlist.box_style_dropdwn {
-    left: 382px !important;
-    background: transparent !important;
-    width: 60px !important;
-    height: 30px !important;
-    border-radius: 0 !important;
-    border-radius: 0 !important;
-    border: none !important;
-    position: relative !important
-}
 
 kendo-dropdownlist.box_style_dropdwn:hover {
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
