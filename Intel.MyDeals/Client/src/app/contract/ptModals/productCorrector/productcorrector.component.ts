@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, GridComponent } from "@progress/kendo-angular-grid";
-import { distinct, process, State } from "@progress/kendo-data-query";
+import { CompositeFilterDescriptor, distinct, process, State } from "@progress/kendo-data-query";
 import { each, uniq, findWhere } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectableSettings } from '@progress/kendo-angular-treeview';
@@ -90,6 +90,10 @@ export class ProductCorrectorComponent implements OnDestroy{
     selectedProducts: any = [];
     private rowsCorrected = [];
 
+   selectedFilterProd = [];
+   selectedFilterProdLvl = [];
+   selectedFilterProdVrt = [];
+
     private state: State = {
         skip: 0,
         take: 25,
@@ -100,6 +104,17 @@ export class ProductCorrectorComponent implements OnDestroy{
             filters: [],
         },       
     };
+    private filterState = {
+        skip: 0,
+        take: 25,
+        group: [{ field: "USR_INPUT" }],
+        // Initial filter descriptor
+        filter: {
+            logic: "and",
+            filters: [],
+        },
+    };
+
     private pageSizes: PageSizeItem[] = [
         {
             text: "10",
@@ -999,14 +1014,23 @@ export class ProductCorrectorComponent implements OnDestroy{
         this.selectRow(indx);
         this.dataFilter=[];
         this.applyFilterAndGrouping();
+        this.clearFilterState();
         return true;
+    }
+
+    private clearFilterState() {
+        this.filterState.filter.filters = [];
+        this.selectedFilterProd = [];
+        this.selectedFilterProdLvl = [];
+        this.selectedFilterProdVrt = [];
     }
 
     prevRow() {
         const indx = this.curRowIndx - 1;
         if (indx < 1) return false;
         this.selectRow(indx);
-        this.dataFilter=[];
+        this.dataFilter = [];
+        this.clearFilterState();
         this.applyFilterAndGrouping();
         return true;
     }
@@ -1159,23 +1183,100 @@ export class ProductCorrectorComponent implements OnDestroy{
     onNoClick() {
         this.dialogRef.close();
     }
+
     applyFilterAndGrouping() {
         this.state.filter.filters = this.dataFilter;
         this.state.group = [];
         this.state.group.push({ field: "USR_INPUT", dir: "asc" });
         this.selGridData = process(this.selGridResult, this.state);
     }
-    clickFilter(event, field) {
-        this.dataFilter = [];
-            this.dataFilter.push({
+
+    clickFilter(evt: any[], field: string): void {
+        const filters = this.filterState.filter.filters;
+
+        // Find the existing filter group by field
+        const existingFilterGroupIndex = filters.findIndex(
+            (group: any) => group.filters.length > 0 && group.filters[0].field === field
+        );
+
+        let existingFilterGroup = existingFilterGroupIndex !== -1 ? filters[existingFilterGroupIndex] : null;
+
+        // Handle clearing or creating the filter group
+        if (existingFilterGroup) {
+            existingFilterGroup.filters = []; // Clear existing filters
+            if (evt.length === 0) {
+                filters.splice(existingFilterGroupIndex, 1); // Remove group if no filters left
+            }
+        } else if (evt.length > 0) {
+            // Create new filter group only if evt has values
+            existingFilterGroup = { filters: [], logic: "or" };
+            filters.push(existingFilterGroup);
+        }
+
+        // Add new filters if evt is not empty and avoid duplicates
+        if (evt.length > 0) {
+            const newFilters = evt.map((value) => ({
                 field: field,
                 operator: "eq",
-                value: event.dataItem.value
-            })
-        this.state.filter.filters = this.dataFilter;
-        this.applyFilterAndGrouping();        
+                value: value,
+            }));
+
+            // Add filters, skipping duplicates
+            existingFilterGroup.filters.push(
+                ...newFilters.filter(
+                    (filter) =>
+                        !existingFilterGroup.filters.some(
+                            (existing: any) =>
+                                existing.field === filter.field && existing.value === filter.value
+                        )
+                )
+            );
+        }
+
+        // Update state and processed grid data
+        this.state.filter.filters = filters;
+        this.selGridData = process(this.selGridResult, this.state);
     }
-    
+
+    dynamicGridHeight(): string {
+        let gridHeight = 60; 
+        const decrement = 10;    
+
+        if (this.curRowIssues.length > 0) {
+            gridHeight -= decrement;
+        }
+        if (this.curRowLvl.length > 1) {
+            gridHeight -= decrement;
+        }
+        if (this.curRowCategories.length > 1) {
+            gridHeight -= decrement;
+        }
+        return `${gridHeight}vh`
+    }
+    public onGridFilterChange(filter: CompositeFilterDescriptor): void {
+
+        this.selectedFilterProd = this.getFieldValues(filter, 'USR_INPUT');
+        this.selectedFilterProdVrt = this.getFieldValues(filter, 'PRD_CAT_NM');
+        this.selectedFilterProdLvl = this.getFieldValues(filter, 'PRD_ATRB_SID');
+        this.filterState.filter = filter;
+    }
+
+    getFieldValues(filter: any, fieldName: string): any[] {
+
+        const values: any[] = [];
+
+        if (filter.field === fieldName) {
+            values.push(filter.value);
+        }
+
+        if (filter.filters && Array.isArray(filter.filters)) {
+            filter.filters.forEach((nestedFilter) => {
+                values.push(...this.getFieldValues(nestedFilter, fieldName));
+            });
+        }
+        return values;
+    }
+
 
     closeBanner(): void {
         this.showNumIssueRows = false;
@@ -1204,4 +1305,4 @@ export class ProductCorrectorComponent implements OnDestroy{
         this.destroy$.next();
         this.destroy$.complete();
       }
-}
+    }

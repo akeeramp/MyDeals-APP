@@ -915,5 +915,22 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn {
 }
 kendo-treeview ul.k-treeview-lines {
     display: flex;
-    flex-direction:row;
+    flex-direction: row;
+}
+.subHeaderNavContainer .miniProdNav ul {
+    overflow: auto;
+    max-height: calc(20vh - 110px)
+}
+kendo-treeview {
+    margin: 0px 10px 0px 10px;
+}
+
+.corrector-checkbox.k-grid td,
+.corrector-checkbox.k-grid td div,
+.corrector-checkbox.k-grid td span {
+    white-space: nowrap !important;
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
 }
