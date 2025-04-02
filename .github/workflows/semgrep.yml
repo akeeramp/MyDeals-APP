@@ -23,39 +23,26 @@ on:
     # The cron job will run on UTC so this will run on 8am IST on Tuesday and Thursday
 
 jobs:
-  semgrep:
-    name: SAST Scan
-
-    # Uncomment the runs-on statement for your GitHub organization
-
-    # intel-restricted
-    # runs-on: restricted.prod.amr.dind
-
-    # intel-innersource
-    runs-on: innersource.prod.amr.dind
-
-    # intel-sandbox
-    # runs-on: sandbox.prod.amr.dind
-
-    container:
-      # A Docker image with Semgrep installed. Do not change this.
-      image: cache-registry.caas.intel.com/cache/semgrep/semgrep
-
-    # Skip any PR created by dependabot to avoid permission issues:
-    if: (github.actor != 'dependabot[bot]')
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Semgrep CI for pull request
-      run: semgrep ci
-      if: github.event_name == 'pull_request'
-      env:
-        SEMGREP_REPO_URL: ${{github.server_url}}/${{github.repository}}
-        SEMGREP_REPO_DISPLAY_NAME: ${{ github.repository }}/${{ github.base_ref }}
-        SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-    - name: Semgrep CI for others
-      run: semgrep ci
-      if: github.event_name != 'pull_request'
-      env:
-        SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-        SEMGREP_REPO_DISPLAY_NAME: ${{ github.repository }}/${{ github.ref_name }}
+  Call-Workflow:
+    uses: intel-innersource/frameworks.actions.semgrep-static-code-scan/.github/workflows/semgrep.yml@v1.5.0
+    with:
+      # (Required) Please insert the runner group for your project
+      # Example: runner-group: 'innersource.prod.amr.dind'
+      runner-group: 'innersource.prod.amr.dind'
+      # (Optional) Please insert the IAPM ID of the application here
+      # If the ID not entered the auto-tagging feature will not work
+      iapm-id: 'iapm-14464-prod'
+      # (Optional) Please insert the branch that should be tagged as "prod"
+      #prod-branch: ''
+      # (Optional) Please indicate if this should be calculated for ASPN scoring entering true
+      # If set to true, the default branch will be tagged as prod and all other branches will be tagged as dev
+      prod-scan: 'true'
+      # (Optional) Enter any option command flags for debugging the scan or obtaining additional details
+      # Example: '--verbose --max-target-bytes=500000'
+      #semgrep-flags: ''
+      # (Optional) Enter the max number of high serverity findings to tolerate before failing a PR
+      #max-high-severity: ''
+      # (Optional) Enter the max number of medium severity findings to tolerate before failing a PR
+      #max-medium-severity: ''
+    secrets:
+      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
