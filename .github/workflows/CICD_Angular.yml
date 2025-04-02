@@ -9,6 +9,10 @@ env:
   CINR_DEPLOY_PATH: \\HF2CINMYDLW01.amr.corp.intel.com\MyDeals
   CINR_DEPLOY_SERVER: HF2CINMYDLW01.amr.corp.intel.com
 
+concurrency:
+  group: ${{ github.workflow }}-Angular-Automation-Build
+  cancel-in-progress: true
+
 jobs:     
   Restore-packages:
      if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
