@@ -673,9 +673,9 @@ namespace Intel.MyDeals.BusinessLogic
 
             #region Deal Stability and Overlapping Check
             // Payable Quantity - Overwrite w/ Ceiling Volume if (PQ > CV) or (PQ == NULL)
-            MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
-            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
-            if (cust.DFLT_ENFORCE_PAYABLE_QUANTITY)
+            List<VistexCustomerMapping> custs = DataCollections.GetVistexCustomerMappings();
+            VistexCustomerMapping cust = custs.FirstOrDefault(c => c.CUST_MBR_SID == custId);
+            if (cust != null && cust.DFLT_ENFORCE_PAYABLE_QUANTITY)
             {
                 /* Enforced Customer
                         NULL / 0 :: Mydeals PQ == 0 == IQR Response PQ

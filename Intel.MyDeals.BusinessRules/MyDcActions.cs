@@ -1911,8 +1911,12 @@ namespace Intel.MyDeals.BusinessRules
             if (dePayableQuantity == null) return;
 
             if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custId)) custId = 0;
-            MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
-            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
+            List<VistexCustomerMapping> custs = DataCollections.GetVistexCustomerMappings();
+            VistexCustomerMapping cust = null;
+            if (custId != 0)
+            {
+                cust = custs.FirstOrDefault(c => c.CUST_MBR_SID == custId);
+            }
 
             int volumeValue = 0;
             if (int.TryParse(deVolume.AtrbValue.ToString(), out _))
@@ -1922,7 +1926,7 @@ namespace Intel.MyDeals.BusinessRules
 
             if (dePayableQuantity.AtrbValue.ToString() == "")
             {
-                if (!cust.DFLT_ENFORCE_PAYABLE_QUANTITY)
+                if (cust != null && !cust.DFLT_ENFORCE_PAYABLE_QUANTITY)
                 {
                     dePayableQuantity.AtrbValue = volumeValue;  // Non-enforced customer should default to Ceiling Volume
                 }
@@ -1942,7 +1946,7 @@ namespace Intel.MyDeals.BusinessRules
             // Payable Quantity must not be greater than (Ceiling) Volume
             int payableQuantityValue = int.Parse(dePayableQuantity.AtrbValue.ToString());
 
-            if (cust.DFLT_ENFORCE_PAYABLE_QUANTITY)
+            if (cust != null && cust.DFLT_ENFORCE_PAYABLE_QUANTITY)
             {
                 if (payableQuantityValue > volumeValue)
                 {
