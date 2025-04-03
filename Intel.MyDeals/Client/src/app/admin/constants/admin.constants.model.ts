@@ -4,4 +4,5 @@
     public CNST_DESC: string;
     public CNST_VAL_TXT: string;
     public UI_UPD_FLG: boolean;
+    public TRK_HIST_FLG: boolean;
 }

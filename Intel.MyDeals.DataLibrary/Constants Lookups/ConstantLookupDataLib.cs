@@ -104,6 +104,7 @@ namespace Intel.MyDeals.DataLibrary
                 int IDX_CNST_NM = DB.GetReaderOrdinal(rdr, "CNST_NM");
                 int IDX_CNST_SID = DB.GetReaderOrdinal(rdr, "CNST_SID");
                 int IDX_CNST_VAL_TXT = DB.GetReaderOrdinal(rdr, "CNST_VAL_TXT");
+                int IDX_TRK_HIST_FLG = DB.GetReaderOrdinal(rdr, "TRK_HIST_FLG");
                 int IDX_UI_UPD_FLG = DB.GetReaderOrdinal(rdr, "UI_UPD_FLG");
 
                 while (rdr.Read())
@@ -114,6 +115,7 @@ namespace Intel.MyDeals.DataLibrary
                         CNST_NM = (IDX_CNST_NM < 0 || rdr.IsDBNull(IDX_CNST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_NM),
                         CNST_SID = (IDX_CNST_SID < 0 || rdr.IsDBNull(IDX_CNST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNST_SID),
                         CNST_VAL_TXT = (IDX_CNST_VAL_TXT < 0 || rdr.IsDBNull(IDX_CNST_VAL_TXT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_VAL_TXT),
+                        TRK_HIST_FLG = (IDX_TRK_HIST_FLG < 0 || rdr.IsDBNull(IDX_TRK_HIST_FLG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_TRK_HIST_FLG),
                         UI_UPD_FLG = rdr.IsDBNull(IDX_UI_UPD_FLG) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_UI_UPD_FLG),
                     });
                 }
@@ -137,6 +139,7 @@ namespace Intel.MyDeals.DataLibrary
                     cnst_sid = adminValues.CNST_SID,
                     cnst_desc = adminValues.CNST_DESC,
                     cnst_val_txt = adminValues.CNST_VAL_TXT,
+                    trk_hist_flg = adminValues.TRK_HIST_FLG,
                     ui_upd_flg = adminValues.UI_UPD_FLG,
                 }))
                 {
@@ -144,6 +147,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_cnst_nm = DB.GetReaderOrdinal(rdr, "CNST_NM");
                     int IDX_cnst_sid = DB.GetReaderOrdinal(rdr, "CNST_SID");
                     int IDX_cnst_val_txt = DB.GetReaderOrdinal(rdr, "CNST_VAL_TXT");
+                    int IDX_TRK_HIST_FLG = DB.GetReaderOrdinal(rdr, "TRK_HIST_FLG");
                     int IDX_UI_UPD_FLG = DB.GetReaderOrdinal(rdr, "UI_UPD_FLG");
 
                     while (rdr.Read())
@@ -154,6 +158,7 @@ namespace Intel.MyDeals.DataLibrary
                             CNST_NM = rdr.IsDBNull(IDX_cnst_nm) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_nm),
                             CNST_SID = rdr.IsDBNull(IDX_cnst_sid) ? default(Int32) : rdr.GetFieldValue<Int32>(IDX_cnst_sid),
                             CNST_VAL_TXT = rdr.IsDBNull(IDX_cnst_val_txt) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_val_txt),
+                            TRK_HIST_FLG = (IDX_TRK_HIST_FLG < 0 || rdr.IsDBNull(IDX_TRK_HIST_FLG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_TRK_HIST_FLG),
                             UI_UPD_FLG = rdr.IsDBNull(IDX_UI_UPD_FLG) ? default(Boolean) : rdr.GetFieldValue<Boolean>(IDX_UI_UPD_FLG)
                         });
                     } // while

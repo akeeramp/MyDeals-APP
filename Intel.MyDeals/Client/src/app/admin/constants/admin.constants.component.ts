@@ -155,6 +155,7 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
             CNST_DESC: new FormControl("", Validators.required),
             CNST_VAL_TXT: new FormControl("", Validators.required),
             UI_UPD_FLG: new FormControl(false, Validators.required),
+            TRK_HIST_FLG: new FormControl(true, Validators.required),
         });
         this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
@@ -173,6 +174,7 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
             CNST_DESC: new FormControl(dataItem.CNST_DESC, Validators.required),
             CNST_VAL_TXT: new FormControl(dataItem.CNST_VAL_TXT, Validators.required),
             UI_UPD_FLG: new FormControl(dataItem.UI_UPD_FLG, Validators.required),
+            TRK_HIST_FLG: new FormControl(dataItem.TRK_HIST_FLG, Validators.required),
         });
         this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;

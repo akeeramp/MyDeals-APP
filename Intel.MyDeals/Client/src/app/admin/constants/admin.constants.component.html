@@ -96,6 +96,20 @@
                     </div>
                 </ng-template>
             </kendo-grid-column>
+            <kendo-grid-column field="TRK_HIST_FLG" title="Track History" editor="boolean" width="60" filter="boolean"
+                               [headerClass]="{'headerClass':true}">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <div class="text-center">
+                        <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.TRK_HIST_FLG" disabled></mat-slide-toggle>
+                    </div>
+                </ng-template>
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                    <div class="text-center">
+                        <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.TRK_HIST_FLG"
+                                          [formControl]="formGroup.get('TRK_HIST_FLG')"></mat-slide-toggle>
+                    </div>
+                </ng-template>
+            </kendo-grid-column>
             <kendo-grid-excel fileName="MyDealsConstants.xlsx" [fetchData]="allData">
                 <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
                                           title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"

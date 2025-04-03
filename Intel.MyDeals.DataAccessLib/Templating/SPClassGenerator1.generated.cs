@@ -2433,6 +2433,18 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 set { SetParmeter("ui_upd_flg", value); }
                 get { return (Boolean)GetParameter("ui_upd_flg"); }
             }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(8, "ParameterDirection.Input", 0, false)]
+            public Boolean trk_hist_flg
+            {
+                set { SetParmeter("trk_hist_flg", value); }
+                get { return (Boolean)GetParameter("trk_hist_flg"); }
+            }
+
         }
 
         ///<summary>

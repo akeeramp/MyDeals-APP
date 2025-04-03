@@ -372,62 +372,57 @@ namespace Intel.MyDeals.Entities
     } // End of class AtrbMstr
 
     ///<summary>
-    /// Class created via template - Do Not Modify!
-    /// To modify this code, re-execute the template, or extend as partial.
-    /// on MHTIPPIN-MOBL1
-    /// by mhtippin
-    /// at 10/17/2023 3:47:03 PM
-    ///</summary>
-
-    [DataContract]
+	/// Class created via template - Do Not Modify!
+	/// To modify this code, re-execute the template, or extend as partial.
+	/// on KBHARA2X-MOBL
+	/// by kbhara2x
+	/// at 2025-04-01 11:19:21 AM
+	///</summary>
+	[DataContract]
     public partial class AdminConstant
     {
-
         [DataMember]
         public System.String CNST_DESC { set; get; }
-
 
         [DataMember]
         public System.String CNST_NM { set; get; }
 
-
         [DataMember]
         public System.Int32 CNST_SID { set; get; }
-
 
         [DataMember]
         public System.String CNST_VAL_TXT { set; get; }
 
+        [DataMember]
+        public System.Boolean TRK_HIST_FLG { set; get; }
 
         [DataMember]
         public System.Boolean UI_UPD_FLG { set; get; }
-
 
         /*
         private static List<AdminConstant> AdminConstantFromReader(SqlDataReader rdr){
         // This helper method is template generated.
         // Refer to that template for details to modify this code.
-
         var ret = new List<AdminConstant>();
         int IDX_CNST_DESC = DB.GetReaderOrdinal(rdr, "CNST_DESC");
         int IDX_CNST_NM = DB.GetReaderOrdinal(rdr, "CNST_NM");
         int IDX_CNST_SID = DB.GetReaderOrdinal(rdr, "CNST_SID");
         int IDX_CNST_VAL_TXT = DB.GetReaderOrdinal(rdr, "CNST_VAL_TXT");
+        int IDX_TRK_HIST_FLG = DB.GetReaderOrdinal(rdr, "TRK_HIST_FLG");
         int IDX_UI_UPD_FLG = DB.GetReaderOrdinal(rdr, "UI_UPD_FLG");
-
         while (rdr.Read()){
         ret.Add(new AdminConstant {
         CNST_DESC = (IDX_CNST_DESC < 0 || rdr.IsDBNull(IDX_CNST_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_DESC),
         CNST_NM = (IDX_CNST_NM < 0 || rdr.IsDBNull(IDX_CNST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_NM),
         CNST_SID = (IDX_CNST_SID < 0 || rdr.IsDBNull(IDX_CNST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNST_SID),
         CNST_VAL_TXT = (IDX_CNST_VAL_TXT < 0 || rdr.IsDBNull(IDX_CNST_VAL_TXT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_VAL_TXT),
+        TRK_HIST_FLG = (IDX_TRK_HIST_FLG < 0 || rdr.IsDBNull(IDX_TRK_HIST_FLG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_TRK_HIST_FLG),
         UI_UPD_FLG = (IDX_UI_UPD_FLG < 0 || rdr.IsDBNull(IDX_UI_UPD_FLG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_UI_UPD_FLG)
         });
         } // while
         return ret;
         }
         */
-
     } // End of class AdminConstant
 
     ///<summary>
