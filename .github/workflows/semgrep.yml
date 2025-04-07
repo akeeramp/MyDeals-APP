@@ -31,7 +31,7 @@ jobs:
       runner-group: 'innersource.prod.amr.dind'
       # (Optional) Please insert the IAPM ID of the application here
       # If the ID not entered the auto-tagging feature will not work
-      iapm-id: 'iapm-14464-prod'
+      iapm-id: '14464'
       # (Optional) Please insert the branch that should be tagged as "prod"
       prod-branch: 'intel-innersource/applications.web.mydeals.webui/developement'
       # (Optional) Please indicate if this should be calculated for ASPN scoring entering true
