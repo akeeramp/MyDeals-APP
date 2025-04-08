@@ -33,7 +33,7 @@ jobs:
       # If the ID not entered the auto-tagging feature will not work
       iapm-id: '14464'
       # (Optional) Please insert the branch that should be tagged as "prod"
-      prod-branch: 'intel-innersource/applications.web.mydeals.webui/developement'
+      prod-branch: 'intel-innersource/applications.web.mydeals.webui/development'
       # (Optional) Please indicate if this should be calculated for ASPN scoring entering true
       # If set to true, the default branch will be tagged as prod and all other branches will be tagged as dev
       prod-scan: 'true'
