@@ -158,7 +158,7 @@ jobs:
     runs-on: ["innersource.prod.amr.dind"]
     needs: Triggering-Jmeter-Test
     container: "amr-registry.caas.intel.com/squirrels/nodelts-alpine-git-cf:latest"
-    timeout-minutes: 5
+    timeout-minutes: 1
     continue-on-error: true
     steps:
        - name:  Squawk for TWC CICD
