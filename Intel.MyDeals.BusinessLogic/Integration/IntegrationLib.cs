@@ -116,12 +116,13 @@ namespace Intel.MyDeals.BusinessLogic
                     newQL.Clear();
                 }
             }
-
-            var result = _jmsDataLib.CheckProcessedIQRDeals(firstInListGuid, true);
-            if (result)
-            {
-                TestAsyncProcess(firstInListGuid);
-            }
+            //Krishna - This code is commented as part of optimizing the process of IQR deals on the go..
+            //this change is  only for testing in CONS for now... based on the testing result we will take a call to procced/Revert the change 
+            //var result = _jmsDataLib.CheckProcessedIQRDeals(firstInListGuid, true);
+            //if (result)
+            //{
+            //   TestAsyncProcess(firstInListGuid);
+            //}
 
             return firstInListGuid;
         }
