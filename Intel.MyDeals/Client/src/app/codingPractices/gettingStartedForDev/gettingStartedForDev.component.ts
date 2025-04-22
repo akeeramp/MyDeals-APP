@@ -1,4 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
+import { GLOBAL_EMAIL_ADDRESSES } from '../../core/angular.constants';
 
 @Component({
     selector: 'app-gettingStarted-dev',
@@ -6,6 +7,10 @@
     styleUrls: ['Client/src/app/codingPractices/gettingStartedForDev/gettingStartedForDev.component.css'],
 })
 export class GettingStartedForDevComponent implements OnInit {
+
+    // Global Variable
+    private readonly mydealsAccessRequest = GLOBAL_EMAIL_ADDRESSES.mydealsAccessRequest;
+
     public list_breadcrumbs: any;
     public left_nav: any;
     public isVisible: boolean = true;

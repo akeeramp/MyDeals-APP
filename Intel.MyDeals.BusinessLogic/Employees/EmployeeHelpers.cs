@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -42,11 +43,11 @@ namespace Intel.MyDeals.BusinessLogic.Employees
             if (env != "PROD")
             {
                 disclaimer = "If this was in Production, the email would have gone to: " + string.Join(", ", toDistinctList) + "<br/><br/>";
-                toDistinctList = new List<string> { OpUserStack.MyOpUserToken.Usr.Email != null? OpUserStack.MyOpUserToken.Usr.Email: "michael.h.tipping@intel.com" }; // Testing incomplete token safety net
+                toDistinctList = new List<string> { OpUserStack.MyOpUserToken.Usr.Email != null ? OpUserStack.MyOpUserToken.Usr.Email : ConfigurationManager.AppSettings["emailTestingDeveloper"] }; // Testing incomplete token safety net
             }
             var message = new MailMessage
             {
-                From = new MailAddress("mydeals.notification@intel.com"),
+                From = new MailAddress(ConfigurationManager.AppSettings["emailMydealsNotifications"]),
                 Subject = "My Deals customer account access granted - Review Required",
                 Body = disclaimer + data.EmailBody,
                 IsBodyHtml = true,
@@ -60,7 +61,7 @@ namespace Intel.MyDeals.BusinessLogic.Employees
 
             if (env != "PROD")
             {
-                message.CC.Add(OpUserStack.MyOpUserToken.Usr.Email != null ? OpUserStack.MyOpUserToken.Usr.Email : "michael.h.tipping@intel.com"); // Testing incomplete token safety net
+                message.CC.Add(OpUserStack.MyOpUserToken.Usr.Email != null ? OpUserStack.MyOpUserToken.Usr.Email : ConfigurationManager.AppSettings["emailTestingDeveloper"]); // Testing incomplete token safety net
             }
 
             using (var client = new SmtpClient())

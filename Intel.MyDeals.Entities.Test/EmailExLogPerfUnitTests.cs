@@ -5,6 +5,7 @@ using Intel.MyDeals.Entities.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using Intel.Opaque;
+using System.Configuration;
 
 namespace Intel.MyDeals.Entities.Test
 {
@@ -12,7 +13,7 @@ namespace Intel.MyDeals.Entities.Test
 	public class EmailExLogPerfUnitTests
 	{
 		public EmailExLogPerf emailExLogPerf;
-		private string emailTo = "josephine.a.juang@intel.com"; // TODO: this shoud be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
+		private string emailTo = ConfigurationManager.AppSettings["emailPerformanceTest"];
 
 		/// <summary>
 		/// Runs before the current test fixture

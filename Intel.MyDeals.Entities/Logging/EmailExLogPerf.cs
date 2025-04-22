@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net;
 using System.Net.Mail;
 using Intel.Opaque;
@@ -10,9 +11,8 @@ namespace Intel.MyDeals.Entities.Logging
 {
     public class EmailExLogPerf : IOpLogPerf
     {
-        //private static string _toEmailList = "michael.h.tipping@intel.com, saurav.kundu@intel.com"; // TODO: this should be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
-        private static string _toEmailList = "my.deals.developer.support@intel.com"; // Set to support PDL
-        private static string _fromEmail = "MyDealsSupport@intel.com";
+        private static string _toEmailList = ConfigurationManager.AppSettings["emailDeveloperSupport"] as string; // Set to support PDL
+        private static string _fromEmail = ConfigurationManager.AppSettings["emailFromAddressSupport"];
         public string EmailEmailSubject = "MyDeals Error [{0}] - {1}";
 
         #region Constructors
@@ -63,7 +63,7 @@ namespace Intel.MyDeals.Entities.Logging
             // if it is a local environment, only send it to the current user, otherwise, set it to the standard developers list above.
             if (env == "LOCAL")
             {
-                _toEmailList = opUserToken.Usr.Email != null? opUserToken.Usr.Email: "my.deals.developer.support@intel.com";
+                _toEmailList = opUserToken.Usr.Email != null? opUserToken.Usr.Email: ConfigurationManager.AppSettings["emailDeveloperSupport"];
             }
 
             // construct message

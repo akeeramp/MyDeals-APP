@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angu
 import { MatDialog } from '@angular/material/dialog';
 import { GridDataResult } from "@progress/kendo-angular-grid";
 import { emailModal } from "../emailModal/emailModal.component";
+import { GLOBAL_EMAIL_ADDRESSES } from "../../../core/angular.constants";
 
 @Component({
     selector: "message-board-dialog",
@@ -11,7 +12,6 @@ import { emailModal } from "../emailModal/emailModal.component";
     //To override the default css for the mat dialog and remove the extra padding then encapsulation should be set to none 
     encapsulation: ViewEncapsulation.None
 })
-
 export class messageBoardModal {
     constructor(protected dialog: MatDialog) {
     }
@@ -157,8 +157,8 @@ export class messageBoardModal {
             <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
             </div>
         `;
-            var dataItem = {
-                from: "mydeals.notification@intel.com",
+            const dataItem = {
+                from: GLOBAL_EMAIL_ADDRESSES.emailMydealsNotifications,
                 to: "",
                 subject: subject,
                 body: valuemsg

@@ -4,7 +4,7 @@ import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-gr
 import { distinct,process, State } from "@progress/kendo-data-query";
 import { contractManagerservice } from "./contractManager.service";
 import { MomentService } from "../../shared/moment/moment.service";
-import { colorDictionary } from "../../core/angular.constants";
+import { colorDictionary, GLOBAL_EMAIL_ADDRESSES } from "../../core/angular.constants";
 import { ThemePalette } from "@angular/material/core";
 import { lnavService } from "../lnav/lnav.service";
 import { MatDialog } from "@angular/material/dialog";
@@ -514,8 +514,8 @@ export class contractManagerComponent implements OnInit, OnDestroy {
             <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
             </div>
         `;
-        var dataItem = {
-            from: "mydeals.notification@intel.com",
+        const dataItem = {
+            from: GLOBAL_EMAIL_ADDRESSES.emailMydealsNotifications,
             to: "",
             subject: subject,
             body: valuemsg

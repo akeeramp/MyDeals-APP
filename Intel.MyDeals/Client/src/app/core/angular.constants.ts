@@ -1,3 +1,10 @@
+// Email Addresses Used in MyDeals UI
+export const GLOBAL_EMAIL_ADDRESSES = {
+    emailMydealsNotifications: 'mydeals.notification@intel.com',
+    icostErrorGroup: 'icost.dba@intel.com;michael.h.tipping@intel.com;rohit.tandon@intel.com;Mitusha.Rani@intel.com;melissa.chyo@intel.com;harpreet1.kaur@intel.com',
+    mydealsAccessRequest: 'michael.h.tipping@intel.com,abhilash.keerampara@intel.com,sudeepx.hegde@intel.com,pulkit.gupta@intel.com'
+};
+
 export const colorDictionary = {
     "pct": {
         "Fail": "#FC4C02",

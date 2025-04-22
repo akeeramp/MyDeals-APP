@@ -32,8 +32,7 @@ namespace Intel.MyDeals.Controllers
 
             emailMessage.Body = emailMessage.Body.Replace("MAILTO_TOKEN", from);
 
-            from = "mydeals.notification@intel.com";
-
+            from = ConfigurationManager.AppSettings["emailMydealsNotifications"];
 
             var message = new MailMessage
             {
@@ -109,7 +108,7 @@ namespace Intel.MyDeals.Controllers
             var result = new HttpResponseMessage(HttpStatusCode.OK);
             var message = new MailMessage
             {
-                From = new MailAddress("mydeals.notification@intel.com"),
+                From = new MailAddress(ConfigurationManager.AppSettings["emailMydealsNotifications"]),
                 Subject = emailMessage.Subject,
                 Body = emailMessage.Body,
                 IsBodyHtml = true,

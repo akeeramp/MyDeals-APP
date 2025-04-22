@@ -21,6 +21,7 @@ import { constantsService } from "../../admin/constants/admin.constants.service"
 import { Subject, forkJoin } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { AttributeBuilder } from "../../core/attributeBuilder/attributeBuilder.component";
+import { GLOBAL_EMAIL_ADDRESSES } from "../../core/angular.constants";
 
 @Component({
     selector: 'app-tender-dashboard',
@@ -941,8 +942,8 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
         <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
         </div>
     `;
-        var dataItem = {
-            from: "mydeals.notification@intel.com",
+        const dataItem = {
+            from: GLOBAL_EMAIL_ADDRESSES.emailMydealsNotifications,
             to: "",
             subject: subject,
             body: valuemsg

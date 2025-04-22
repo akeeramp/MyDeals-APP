@@ -2,6 +2,7 @@
 import { Router, NavigationExtras } from '@angular/router';
 import { logger } from '../../shared/logger/logger';
 import { ProjectFlowService } from './projectFlow.service';
+import { GLOBAL_EMAIL_ADDRESSES } from '../../core/angular.constants';
 
 @Component({
     selector: 'app-project-flow',
@@ -768,7 +769,7 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
         { name: "iCOST_PRODUCTS", description: "Will get icost data for the mentioned productVerticals in CNST_VAL_TXT.", value: "3, 4, 5, 7502, 7503, 7507, 7, 8,7516,7517,7518" },
         { name: "ICOST_HIST_LOG_DAYS", description: "Days to keep ICOST import history logging details.", value: "455" },
         { name: "ICOST_ERROR_LOG_DAYS", description: "Days to keep ICOST error logging details.", value: "180" },
-        { name: "ICOST_ERROR_CONTACTS_MYDL", description: "Contacts to send emails to for iCost errors (Separator is ;)", value: "icost.dba@intel.com;michael.h.tipping@intel.com;rohit.tandon@intel.com;Mitusha.Rani@intel.com;melissa.chyo@intel.com;harpreet1.kaur@intel.com" },
+        { name: "ICOST_ERROR_CONTACTS_MYDL", description: "Contacts to send emails to for iCost errors (Separator is ;)", value: GLOBAL_EMAIL_ADDRESSES.icostErrorGroup },
         { name: "CUTOFF_DATE", description: "CUTOFF_DATE", value: "2018-07-12" },
         { name: "MISC_MM_LIST", description: "List of misc mtrl_id to bring in during product refresh batch", value: "IGNORMM" },
         { name: "SSPEC_PRD_TYPES", description: "SSPEC_PRD_TYPES", value: "CPU,CS" },
