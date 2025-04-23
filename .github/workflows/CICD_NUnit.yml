@@ -32,6 +32,7 @@ jobs:
 
   Upload-artifacts:
       runs-on: [self-hosted, mydeals-runner01]
+      needs: Run-NUnitTests
       steps:
        - uses: jfrog/setup-jfrog-cli@v4
          env:
