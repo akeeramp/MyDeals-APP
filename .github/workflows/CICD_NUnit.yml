@@ -29,7 +29,10 @@ jobs:
        - name: Run NUnit Tests
          run: |
            ./scripts/nunit.ps1 '${{github.workspace}}'
-       
+
+  Upload-artifacts:
+      runs-on: [self-hosted, mydeals-runner01]
+      steps:
        - uses: jfrog/setup-jfrog-cli@v4
          env:
             JF_URL: ${{ vars.JFROG_URL }} 
