@@ -269,7 +269,7 @@ namespace Intel.MyDeals.Entities
                 {
                     public string Id { get; set; }
                     public string Name { get; set; }
-                    public string CIMId { get; set; }
+                    public string CustomerMappingId { get; set; }
                 }
 
                 public class QuoteLine
@@ -409,7 +409,7 @@ namespace Intel.MyDeals.Entities
 
     public class TenderCapRequestObject
     {
-        public string CustomerCIMId { get; set; }
+        public string CustomerMappingId { get; set; }
         public string ProductNameEPMID { get; set; }
         public string RangeStartDate { get; set; }
         public string RangeEndDate { get; set; }
@@ -441,7 +441,7 @@ namespace Intel.MyDeals.Entities
 
             public class ConsumptionData
             {
-                public string CIMId { get; set; }
+                public string CustomerMappingId { get; set; }
                 public string ConsumptionType { get; set; }
                 public string Value { get; set; }
                 public string Mode { get; set; }

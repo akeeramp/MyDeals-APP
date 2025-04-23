@@ -60,7 +60,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
                 DFLT_TNDR_AR_SETL_LVL = data[7],
                 DFLT_CUST_RPT_GEO = data[8],
                 DFLT_LOOKBACK_PERD = data[9],
-                CUST_CIM_ID = data[10],
+                CUST_MAP_ID = data[10],
                 DFLT_SETTLEMENT_PARTNER = data[11]
             };
             var crudMode = CrudModes.Update;
@@ -84,7 +84,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
                 DFLT_TNDR_AR_SETL_LVL = "lvl",
                 DFLT_CUST_RPT_GEO = "geo",
                 DFLT_LOOKBACK_PERD = 23,
-                CUST_CIM_ID = "id",
+                CUST_MAP_ID = "id",
                 DFLT_SETTLEMENT_PARTNER = "prtnr"
             } };
             return mockData;
