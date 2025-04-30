@@ -101,6 +101,7 @@ export class adminlegalExceptionComponent implements PendingChangesGuard, OnDest
                 if (result.length > 0) {
                     for (let i = 0; i < result.length; i++) {
                         result[i]["IS_SELECTED"] = false;
+                        this.changedateformat(result[i]);
                     }
                      
                 }
