@@ -163,14 +163,14 @@
                     </kendo-numerictextbox>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="CUST_MAP_ID" title="Customer Mapping ID" width="200" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="CUST_CIM_ID" title="CIM ID" width="200" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-textbox [formControl]="formGroup.get('CUST_MAP_ID')" [clearButton]="true"></kendo-textbox>
+                    <kendo-textbox [formControl]="formGroup.get('CUST_CIM_ID')" [clearButton]="true"></kendo-textbox>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="DFLT_SETTLEMENT_PARTNER" title="Default Settlement Partner" width="250"

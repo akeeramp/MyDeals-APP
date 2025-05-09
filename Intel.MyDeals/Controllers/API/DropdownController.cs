@@ -456,7 +456,7 @@ namespace Intel.MyDeals.Controllers.API
         private void UpdateIqrValues(BasicDropdown data, string mode)
         {
             // If no CIM ID and customer is not all customers, don't bother and bail, not an IQR customer
-            if (data == null || (data.CUST_MAP_ID == "" && data.CUST_MBR_SID != 1)) return;
+            if (data == null || (data.CUST_CIM_ID == "" && data.CUST_MBR_SID != 1)) return;
 
             List<string> IqrDropdownAtrbs = new List<string>() {
                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
@@ -488,7 +488,7 @@ namespace Intel.MyDeals.Controllers.API
                     body.IsActive = "0";
                 }
                 body.Mode = mode;
-                body.CustomerMappingId = data.CUST_MAP_ID != "" ? data.CUST_MAP_ID : "0";
+                body.CIMId = data.CUST_CIM_ID != "" ? data.CUST_CIM_ID : "0";
 
                 jsonData.recordDetails.consumptionData.Add(body);
 
@@ -536,7 +536,7 @@ namespace Intel.MyDeals.Controllers.API
 
                 foreach (BasicDropdown dropdown in blah)
                 {
-                    if (dropdown.CUST_MBR_SID == 1 || dropdown.CUST_MAP_ID != "")
+                    if (dropdown.CUST_MBR_SID == 1 || dropdown.CUST_CIM_ID != "")
                     {
                         jsonData.recordDetails.consumptionData.Add(
                             new ConsumptionData()
@@ -546,7 +546,7 @@ namespace Intel.MyDeals.Controllers.API
                                 IsActive = dropdown.ACTV_IND == true ? "1" : dropdown.ACTV_IND == false ? "0" : "0",
                                 // Assuming select in this case.
                                 Mode = CrudModes.Select.ToString(),
-                                CustomerMappingId = dropdown.CUST_MAP_ID != "" ? dropdown.CUST_MAP_ID : "0"
+                                CIMId = dropdown.CUST_CIM_ID != "" ? dropdown.CUST_CIM_ID : "0"
                             });
                         recordCount++;
                     }

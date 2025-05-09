@@ -650,7 +650,7 @@ namespace Intel.MyDeals.Entities {
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
-		public const string CUST_MAP_ID = "CUST_MAP_ID";
+		public const string CUST_CIM_ID = "CUST_CIM_ID";
 
 		///<summary>
 		/// DIM_SID: 2

@@ -859,7 +859,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
             "ATRB_LKUP_SID": 1318,
             "ATRB_LKUP_TTIP": "",
             "ATRB_SID": 3595,
-            "CUST_MAP_ID": "",
+            "CUST_CIM_ID": "",
             "CUST_MBR_SID": 1,
             "CUST_NM": "ALL CUSTOMERS",
             "DFLT_FLG": 0,

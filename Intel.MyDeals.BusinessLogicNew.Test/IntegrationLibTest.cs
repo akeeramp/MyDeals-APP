@@ -26,14 +26,14 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         private static readonly object[] _IqrFetchCapData_TenderCapRequestObject_Params =
         {
             new object[] {new TenderCapRequestObject{
-                    CustomerMappingId = "CustomerMappingId",
+                    CustomerCIMId = "CustomerCIMId",
                     ProductNameEPMID = "prdEmpID",
                     RangeEndDate = "",
                     RangeStartDate = null,
                     Region = "America"
             }},
             new object[] {new TenderCapRequestObject{
-                    CustomerMappingId = "",
+                    CustomerCIMId = "",
                     ProductNameEPMID = "prdEmpID",
                     RangeEndDate = null,
                     RangeStartDate = "",
@@ -44,14 +44,14 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         private static readonly object[] _IqrFetchCapData_InvalidDates_Params =
         {
             new object[] {new TenderCapRequestObject{
-                    CustomerMappingId = "CustomerMappingId",
+                    CustomerCIMId = "CustomerCIMId",
                     ProductNameEPMID = "prdEmpID",
                     RangeEndDate = null,
                     RangeStartDate = null,
                     Region = "America"
             }},
             new object[] {new TenderCapRequestObject{
-                    CustomerMappingId = "iuefgseouf",
+                    CustomerCIMId = "iuefgseouf",
                     ProductNameEPMID = "prdEmpID",
                     RangeEndDate = "",
                     RangeStartDate = "",
@@ -76,21 +76,21 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
 
         [Test,
             TestCaseSource("_IqrFetchCapData_TenderCapRequestObject_Params")]
-        public void IqrFetchCapData_ReturnsErrorCustomerMappingIdString_forEmptyCustomerCustomerMappingIdInput_orZeroCustId(dynamic data)
+        public void IqrFetchCapData_ReturnsErrorCimIdString_forEmptyCustomerCIMIdInput_orZeroCustId(dynamic data)
         {
             TenderCapRequestObject TenderCapRequestObject_input = data;
             var res = "";
-            if (TenderCapRequestObject_input.CustomerMappingId == "")
+            if (TenderCapRequestObject_input.CustomerCIMId == "")
             {
-                mockJmsDataLib.Setup(x=>x.FetchCustFromCustomerMappingId(It.IsAny<string>())).Returns(2);
+                mockJmsDataLib.Setup(x=>x.FetchCustFromCimId(It.IsAny<string>())).Returns(2);
                 res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).IqrFetchCapData(TenderCapRequestObject_input);
             }
             else
             {
-                mockJmsDataLib.Setup(x => x.FetchCustFromCustomerMappingId(It.IsAny<string>())).Returns(0);
+                mockJmsDataLib.Setup(x => x.FetchCustFromCimId(It.IsAny<string>())).Returns(0);
                 res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).IqrFetchCapData(TenderCapRequestObject_input);
             }
-            Assert.AreEqual(res, "ERROR: Failed on Customer Mapping Id Lookup");
+            Assert.AreEqual(res, "ERROR: Failed on CIM ID Lookup");
         }
 
         [Test,
@@ -100,14 +100,14 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         {
             TenderCapRequestObject TenderCapRequestObject_input = new TenderCapRequestObject
             {
-                CustomerMappingId = "23",
+                CustomerCIMId = "23",
                 ProductNameEPMID = "prdEmpID",
                 RangeEndDate = "",
                 RangeStartDate = "",
                 Region = "America"
             };
             var mockData = FetchProdFromProcessorEpmMap_getMockData(type);
-            mockJmsDataLib.Setup(x => x.FetchCustFromCustomerMappingId(It.IsAny<string>())).Returns(2);
+            mockJmsDataLib.Setup(x => x.FetchCustFromCimId(It.IsAny<string>())).Returns(2);
             mockJmsDataLib.Setup(x=>x.FetchProdFromProcessorEpmMap(It.IsAny<int>(),It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(mockData);
             var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).IqrFetchCapData(TenderCapRequestObject_input);
             Assert.AreEqual(res, "ERROR: Failed on EPM ID Lookup");
@@ -119,7 +119,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         {
             TenderCapRequestObject TenderCapRequestObject_input = data;
             var mockData = FetchProdFromProcessorEpmMap_getMockData("mockData");
-            mockJmsDataLib.Setup(x => x.FetchCustFromCustomerMappingId(It.IsAny<string>())).Returns(2);
+            mockJmsDataLib.Setup(x => x.FetchCustFromCimId(It.IsAny<string>())).Returns(2);
             mockJmsDataLib.Setup(x => x.FetchProdFromProcessorEpmMap(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(mockData);
             if(TenderCapRequestObject_input.RangeStartDate == null || TenderCapRequestObject_input.RangeEndDate == null)
             {
@@ -136,14 +136,14 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         //{
         //    TenderCapRequestObject TenderCapRequestObject_input = new TenderCapRequestObject
         //    {
-        //        CustomerMappingId = "23",
+        //        CustomerCIMId = "23",
         //        ProductNameEPMID = "prdEmpID",
         //        RangeEndDate = "2012-04-05",
         //        RangeStartDate = "2012-06-05",
         //        Region = "America"
         //    };
         //    var mockData = FetchProdFromProcessorEpmMap_getMockData("mockData");
-        //    mockJmsDataLib.Setup(x => x.FetchCustFromCustomerMappingId(It.IsAny<string>())).Returns(2);
+        //    mockJmsDataLib.Setup(x => x.FetchCustFromCimId(It.IsAny<string>())).Returns(2);
         //    mockJmsDataLib.Setup(x => x.FetchProdFromProcessorEpmMap(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(mockData);
         //    mockProductDataLib.Setup(x => x.GetProductCAPYCS2Data(It.IsAny<List<ProductCAPYCS2Calc>>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new List<ProductCAPYCS2>());
         //    var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object).IqrFetchCapData(TenderCapRequestObject_input);
@@ -155,7 +155,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         //{
         //    TenderCapRequestObject TenderCapRequestObject_input = new TenderCapRequestObject
         //    {
-        //        CustomerMappingId = "23",
+        //        CustomerCIMId = "23",
         //        ProductNameEPMID = "prdEmpID",
         //        RangeEndDate = "2012-04-05",
         //        RangeStartDate = "2012-06-05",
@@ -164,7 +164,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         //    Add 2 dummy items in the list 
         //    var productCapYcs2_mockData = new List<ProductCAPYCS2>();
         //    var mockData = FetchProdFromProcessorEpmMap_getMockData("mockData");
-        //    mockJmsDataLib.Setup(x => x.FetchCustFromCustomerMappingId(It.IsAny<string>())).Returns(2);
+        //    mockJmsDataLib.Setup(x => x.FetchCustFromCimId(It.IsAny<string>())).Returns(2);
         //    mockJmsDataLib.Setup(x => x.FetchProdFromProcessorEpmMap(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(mockData);
         //    mockProductDataLib.Setup(x => x.GetProductCAPYCS2Data(It.IsAny<List<ProductCAPYCS2Calc>>(), It.IsAny<string>(), It.IsAny<string>())).Returns(productCapYcs2_mockData);
         //    var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object).IqrFetchCapData(TenderCapRequestObject_input);

@@ -9,6 +9,6 @@
     public DFLT_AR_SETL_LVL: string;
     public DFLT_CUST_RPT_GEO: string;
     public DFLT_LOOKBACK_PERD: number;
-    public CUST_MAP_ID: string;
+    public CUST_CIM_ID: string;
     public DFLT_SETTLEMENT_PARTNER: string;
 }

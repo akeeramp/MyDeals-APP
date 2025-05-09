@@ -209,7 +209,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
             DFLT_AR_SETL_LVL: new FormControl(dataItem.DFLT_AR_SETL_LVL),
             DFLT_CUST_RPT_GEO: new FormControl(dataItem.DFLT_CUST_RPT_GEO),
             DFLT_LOOKBACK_PERD: new FormControl(dataItem.DFLT_LOOKBACK_PERD),
-            CUST_MAP_ID: new FormControl(dataItem.CUST_MAP_ID),
+            CUST_CIM_ID: new FormControl(dataItem.CUST_CIM_ID),
             DFLT_SETTLEMENT_PARTNER: new FormControl(dataItem.DFLT_SETTLEMENT_PARTNER),
         });
         this.InitiateDropDowns(this.formGroup);
