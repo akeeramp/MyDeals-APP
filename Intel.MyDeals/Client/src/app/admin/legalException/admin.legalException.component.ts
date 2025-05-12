@@ -184,6 +184,7 @@ export class adminlegalExceptionComponent implements PendingChangesGuard, OnDest
                 this.adminlegalExceptionSrv.createLegalException(returnVal).pipe(takeUntil(this.destroy$))
                     .subscribe((result: any) => {
                     this.isDirty=false; 
+                   this.changedateformat(result);
                     this.gridResult.push(result);
                     this.gridData = process(this.gridResult, this.state);
                     this.loggersvc.success('Legal Exception added.');
