@@ -1045,6 +1045,15 @@ export class ProductCorrectorComponent implements OnDestroy{
     saveProducts() {
         for (let r = 0; r < this.numIssueRows; r++) {
             const key = this.issueRowKeys[r];
+
+            var prodKeys = this.curRowIncProd.map(x => x.name);
+            var validProdKeys = Object.keys(this.ProductCorrectorData.ValidProducts[key]);
+
+            var allKeysValid = prodKeys.every(p => validProdKeys.includes(p));
+            if (!allKeysValid) {
+                continue;
+            }
+
             let invalidCopy = [];
             if (!!this.ProductCorrectorData.InValidProducts[key] && this.ProductCorrectorData.InValidProducts[key].length === 0) {
                 delete this.ProductCorrectorData.InValidProducts[key];
