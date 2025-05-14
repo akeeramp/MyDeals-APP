@@ -1,5 +1,6 @@
 ﻿using Intel.MyDeals.DependencyResolver;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.IBusinessLogic.PricingTableException;
 using Intel.MyDeals.IDataLibrary;
 using System.ComponentModel.Composition;
 
@@ -70,6 +71,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IJobAlertLib, JobAlertLib>();
             registerService.RegisterType<IEnvironmentsLib, EnvironmentsLib>();
             registerService.RegisterType<ILogArchivalLib, LogArchivalLib>();
+            registerService.RegisterType<IPricingTableExceptionLib, PricingTableExceptionLib>();
         }
     }
 }

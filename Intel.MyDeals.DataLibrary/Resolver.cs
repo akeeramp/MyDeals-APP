@@ -59,7 +59,8 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IDealUnificationDataLib, DealUnificationDataLib>();
             registerService.RegisterType<IJobAlertDataLib, JobAlertDataLib>();
             registerService.RegisterType<IEnvironmentsDataLib, EnvironmentsDataLib>();
-            
+            registerService.RegisterType<IPricingTableExceptionDataLib, PricingTableExceptionDataLib>();
+
             registerService.RegisterType<ILogArchivalDataLib, LogArchivalDataLib>();
         }
     }

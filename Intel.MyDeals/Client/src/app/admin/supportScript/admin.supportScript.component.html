@@ -10,18 +10,15 @@
                 Select Start Year Quarter:
             </div>
             <div class="col-md-2">
-               
                 <kendo-slider [min]="1" [max]="4" [smallStep]="1" [largeStep]="1" [showButtons]="true"
                               [vertical]="false" name="START_QTR" formControlName="START_QTR"
                               class="sliderwidth"></kendo-slider>
             </div>
             <div class="col-md-2">
-
                 <kendo-numerictextbox [min]="supportScriptDataForm.get('MinYear').value" 
                                       [max]="supportScriptDataForm.get('MaxYear').value" [autoCorrect]="false" format="#" formControlName="START_YR"
                                       name="START_YR" (change)="startYearChange()" class="dateboxborder font-input" required>
                 </kendo-numerictextbox>
-                
                 <kendo-formerror class="col-md-10 p-0">
                     {{ titleErrorMsg}}
                 </kendo-formerror>

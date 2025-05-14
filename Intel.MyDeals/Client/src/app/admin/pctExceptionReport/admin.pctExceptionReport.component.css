@@ -1,0 +1,32 @@
+.dateInput {
+    font-family: Intel Clear !important;
+    height: 100%;
+    -webkit-appearance: none;
+    background: none;
+    border: 0;
+    color: #495057;
+    outline: 0;
+    padding: .375rem .75rem;
+    position: relative;
+    text-overflow: ellipsis;
+    width: 100%;
+    z-index: 1;
+}
+
+.inputMessage {
+    font-weight: bold;
+}
+
+.execute-button {
+    padding: 0 10px;
+    border-radius: 5px;
+}
+
+kendo-grid td {
+    white-space: normal !important;
+    height: 100% !important;
+}
+
+.k-grid {
+    height: calc(100vh - 450px) !important;
+}

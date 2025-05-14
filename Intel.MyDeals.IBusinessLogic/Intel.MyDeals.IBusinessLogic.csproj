@@ -92,6 +92,7 @@
     <Compile Include="ManualEngine\IManualEngineLib.cs" />
     <Compile Include="MuleService\IMuleServiceLib.cs" />
     <Compile Include="Notifications\INotificationsLib.cs" />
+    <Compile Include="PricingTableException\IPricingTableExceptionLib.cs" />
     <Compile Include="PrimeCustomers\IPrimeCustomersLib.cs" />
     <Compile Include="PushDealstoVistex\IPushDealstoVistexLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterLib.cs" />

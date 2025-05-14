@@ -1,0 +1,65 @@
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<div>
+    <div style="margin-top: 25px;">
+        <h2 class="col-md-12">PCT Exception Report</h2>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-2 inputMessage">
+                    Select START Year & Quarter:
+                </div>
+                <div class="col-md-2">
+                    <!-- Year Numeric Textbox -->
+                    <kendo-numerictextbox class="dateboxborder font-input" [min]="MIN_YEAR" [max]="MAX_YEAR" [autoCorrect]="false" format="#" name="startYear" id="startYear" [(ngModel)]="startYearValue" (ngModelChange)="updateSelectedQuarters()" required></kendo-numerictextbox>
+                </div>
+                <div class="col-md-2">
+                    <!-- Quarter Slider -->
+                    <kendo-slider class="sliderwidth" name="startQuarter" id="startQuarter" [min]="1" [max]="4" [smallStep]="1" [largeStep]="1" [showButtons]="true" [vertical]="false"  [(ngModel)]="startQuarterValue" (ngModelChange)="updateSelectedQuarters()" required></kendo-slider>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 25px;">
+            <div class="col-md-12">
+                <div class="col-md-2 inputMessage">
+                    Select END Year & Quarter:
+                </div>
+                <div class="col-md-2 k-input-solid">
+                    <!-- Year Numeric Textbox -->
+                    <kendo-numerictextbox class="dateboxborder font-input" [min]="MIN_YEAR" [max]="MAX_YEAR" [autoCorrect]="false" format="#" name="endYear" id="endYear" [(ngModel)]="endYearValue" (ngModelChange)="updateSelectedQuarters()" required></kendo-numerictextbox>
+                </div>
+                <div class="col-md-2">
+                    <!-- Quarter Slider -->
+                    <kendo-slider class="sliderwidth" name="endQuarter" id="endQuarter" [min]="1" [max]="4" [smallStep]="1" [largeStep]="1" [showButtons]="true" [vertical]="false"  [(ngModel)]="endQuarterValue" (ngModelChange)="updateSelectedQuarters()" required></kendo-slider>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 25px;" [hidden]="calculatedQuarters.length <= 0">
+            <div class="col-md-12">
+                <div class="col-md-2 inputMessage">
+                    Quarters Included:
+                </div>
+                <div class="col-md-4" style="font-style: italic;">
+                    {{ calculatedQuarters }}
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 25px;">
+            <div class="col-md-2 inputMessage" style="padding-left: 30px;">
+                <button type="button" class="k-button execute-button" (click)="executeReportLookup()" [disabled]="isYearQuarterSelectionInvalid && !isLoading">Execute</button>
+            </div>
+        </div>    
+    </div>
+    <div [hidden]="!hasExecuteRun" style="padding-top: 50px;">
+        <kendo-grid #grid [data]="gridData" [loading]="isLoading" [sort]="state.sort" [resizable]="true" (dataStateChange)="onDataStateChange()">
+            <ng-template kendoGridToolbarTemplate>
+                <kendo-grid-spacer></kendo-grid-spacer>
+                <button type="button" kendoGridExcelCommand>
+                    <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+                </button>
+            </ng-template>
+            <kendo-grid-column *ngFor="let column of columnsConfig" field="{{ column.field }}" title="{{ column.title }}" width="250"></kendo-grid-column>
+            <kendo-grid-excel [fileName]="excelFileName" [fetchData]="allData"></kendo-grid-excel>
+        </kendo-grid>
+    </div>
+</div>

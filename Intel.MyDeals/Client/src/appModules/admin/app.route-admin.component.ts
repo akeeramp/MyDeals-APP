@@ -55,6 +55,7 @@ import { DealUnificationReportComponent } from "../../app/admin/dealUnificationR
 import { EnvironmentsComponent } from "../../app/admin/environmentDetails/admin.environments.component";
 
 import { userRolePermissionComponent } from "../../app/admin/userRolePermission/admin.userRolePermission.component";
+import { PctExceptionReportComponent } from "../../app/admin/pctExceptionReport/admin.pctExceptionReport.component";
 //added for security check
 import { SecurityResolver } from "../../app/shared/security.resolve";
 
@@ -112,6 +113,7 @@ export const routesAdmin: Routes = [
     { path: 'DealUnificationReport', component: DealUnificationReportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'environments', component: EnvironmentsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard], canDeactivate: [PendingChangesGuard] },
 
-    { path: 'DealUnificationReport', component: DealUnificationReportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard]},
-    { path: 'userRolePermission', component: userRolePermissionComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard]}
+    { path: 'DealUnificationReport', component: DealUnificationReportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
+    { path: 'userRolePermission', component: userRolePermissionComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
+    { path: 'pctExceptionReport', component: PctExceptionReportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] }
 ];
