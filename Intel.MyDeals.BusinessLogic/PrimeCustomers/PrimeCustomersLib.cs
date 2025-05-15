@@ -797,7 +797,7 @@ namespace Intel.MyDeals.BusinessLogic
                                             //check whether the deal is already unified or not. if deal is already unified then no need to trigger unification mail after saving end customer attributes
                                             //below line of code is to check the END_CUST_OBJ if it has any un-unified end customer 
                                             var isUnificationMailRequired = endCustomerList.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
-                                            saveDealEndCustomerAtrbs(ele.DEAL_ID, ele.END_CUST_OBJ, isUnificationMailRequired, ele.CRE_EMP_WWID);
+                                            saveDealEndCustomerAtrbs(ele.DEAL_ID, ele.END_CUST_OBJ, isUnificationMailRequired, OpUserStack.MyOpUserToken.Usr.WWID);
                                             message = "UCD Reprocess successfully";
                                         }
                                     }
@@ -825,7 +825,7 @@ namespace Intel.MyDeals.BusinessLogic
                                             //check whether the deal is already unified or not. if deal is already unified then no need to trigger unification mail after saving end customer attributes
                                             //below line of code is to check the END_CUST_OBJ if it has any un-unified end customer 
                                             var isUnificationMailRequired = endCustomerList.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
-                                            saveDealEndCustomerAtrbs(ele.DEAL_ID, ele.END_CUST_OBJ, isUnificationMailRequired, ele.CRE_EMP_WWID);
+                                            saveDealEndCustomerAtrbs(ele.DEAL_ID, ele.END_CUST_OBJ, isUnificationMailRequired, OpUserStack.MyOpUserToken.Usr.WWID);
                                             message = "UCD Reprocess successfully";
                                         }
                                 }
