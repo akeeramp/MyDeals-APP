@@ -44,13 +44,13 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_Division_Approved_Date = DB.GetReaderOrdinal(rdr, "Division Approved Date");
                     int IDX_Division_Approver = DB.GetReaderOrdinal(rdr, "Division Approver");
                     int IDX_ECAP_Price = DB.GetReaderOrdinal(rdr, "ECAP Price");
+                    int IDX_Forcast_Alt_Id = DB.GetReaderOrdinal(rdr, "Forcast Alt Id");
                     int IDX_Geo = DB.GetReaderOrdinal(rdr, "Geo");
                     int IDX_Geo_Approved_Date = DB.GetReaderOrdinal(rdr, "Geo Approved Date");
                     int IDX_Geo_Approver = DB.GetReaderOrdinal(rdr, "Geo Approver");
                     int IDX_Group_type = DB.GetReaderOrdinal(rdr, "Group type");
-                    int IDX_L4 = DB.GetReaderOrdinal(rdr, "L4");
-                    int IDX_Legal_Exception = DB.GetReaderOrdinal(rdr, "Legal Exception #");
                     int IDX_Legal_Exception_Description = DB.GetReaderOrdinal(rdr, "Legal Exception Description");
+                    int IDX_Legal_Exception_Id = DB.GetReaderOrdinal(rdr, "Legal Exception Id");
                     int IDX_Lowest_Net_Price = DB.GetReaderOrdinal(rdr, "Lowest Net Price");
                     int IDX_Market_Segment = DB.GetReaderOrdinal(rdr, "Market Segment");
                     int IDX_MAX_RPU = DB.GetReaderOrdinal(rdr, "MAX_RPU");
@@ -87,13 +87,13 @@ namespace Intel.MyDeals.DataLibrary
                             Division_Approved_Date = (IDX_Division_Approved_Date < 0 || rdr.IsDBNull(IDX_Division_Approved_Date)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_Division_Approved_Date),
                             Division_Approver = (IDX_Division_Approver < 0 || rdr.IsDBNull(IDX_Division_Approver)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Division_Approver),
                             ECAP_Price = (IDX_ECAP_Price < 0 || rdr.IsDBNull(IDX_ECAP_Price)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_Price),
+                            Forcast_Alt_Id = (IDX_Forcast_Alt_Id < 0 || rdr.IsDBNull(IDX_Forcast_Alt_Id)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Forcast_Alt_Id),
                             Geo = (IDX_Geo < 0 || rdr.IsDBNull(IDX_Geo)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Geo),
                             Geo_Approved_Date = (IDX_Geo_Approved_Date < 0 || rdr.IsDBNull(IDX_Geo_Approved_Date)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_Geo_Approved_Date),
                             Geo_Approver = (IDX_Geo_Approver < 0 || rdr.IsDBNull(IDX_Geo_Approver)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Geo_Approver),
                             Group_type = (IDX_Group_type < 0 || rdr.IsDBNull(IDX_Group_type)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Group_type),
-                            L4 = (IDX_L4 < 0 || rdr.IsDBNull(IDX_L4)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_L4),
-                            Legal_Exception = (IDX_Legal_Exception < 0 || rdr.IsDBNull(IDX_Legal_Exception)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Legal_Exception),
                             Legal_Exception_Description = (IDX_Legal_Exception_Description < 0 || rdr.IsDBNull(IDX_Legal_Exception_Description)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Legal_Exception_Description),
+                            Legal_Exception_Id = (IDX_Legal_Exception_Id < 0 || rdr.IsDBNull(IDX_Legal_Exception_Id)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Legal_Exception_Id),
                             Lowest_Net_Price = (IDX_Lowest_Net_Price < 0 || rdr.IsDBNull(IDX_Lowest_Net_Price)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_Lowest_Net_Price),
                             Market_Segment = (IDX_Market_Segment < 0 || rdr.IsDBNull(IDX_Market_Segment)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Market_Segment),
                             MAX_RPU = (IDX_MAX_RPU < 0 || rdr.IsDBNull(IDX_MAX_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_MAX_RPU),
@@ -121,53 +121,5 @@ namespace Intel.MyDeals.DataLibrary
 
             return ret;
         }
-
-
-        //public List<PrimeCustomers> GetPrimeCustomerDetails()
-        //{
-        //    var ret = new List<PrimeCustomers>();
-        //    var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL { };
-
-        //    try
-        //    {
-        //        using (var rdr = DataAccess.ExecuteReader(cmd))
-        //        {
-        //            int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "IS_ACTV");
-        //            int IDX_PRIM_CUST_CTRY = DB.GetReaderOrdinal(rdr, "PRIM_CUST_CTRY");
-        //            int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
-        //            int IDX_PRIM_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIM_CUST_NM");
-        //            int IDX_PRIM_LVL_ID = DB.GetReaderOrdinal(rdr, "PRIM_LVL_ID");
-        //            int IDX_PRIM_LVL_NM = DB.GetReaderOrdinal(rdr, "PRIM_LVL_NM");
-        //            int IDX_PRIM_SID = DB.GetReaderOrdinal(rdr, "PRIM_SID");
-        //            int IDX_RPL_STS = DB.GetReaderOrdinal(rdr, "RPL_STS");
-        //            int IDX_RPL_STS_CD = DB.GetReaderOrdinal(rdr, "RPL_STS_CD");
-
-        //            while (rdr.Read())
-        //            {
-        //                ret.Add(new PrimeCustomers
-        //                {
-        //                    IS_ACTV = (IDX_IS_ACTV < 0 || rdr.IsDBNull(IDX_IS_ACTV)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTV),
-        //                    PRIM_CUST_CTRY = (IDX_PRIM_CUST_CTRY < 0 || rdr.IsDBNull(IDX_PRIM_CUST_CTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_CTRY),
-        //                    PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID),
-        //                    PRIM_CUST_NM = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM),
-        //                    PRIM_LVL_ID = (IDX_PRIM_LVL_ID < 0 || rdr.IsDBNull(IDX_PRIM_LVL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_LVL_ID),
-        //                    PRIM_LVL_NM = (IDX_PRIM_LVL_NM < 0 || rdr.IsDBNull(IDX_PRIM_LVL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_LVL_NM),
-        //                    PRIM_SID = (IDX_PRIM_SID < 0 || rdr.IsDBNull(IDX_PRIM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_SID),
-        //                    RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_RPL_STS),
-        //                    RPL_STS_CD = (IDX_RPL_STS_CD < 0 || rdr.IsDBNull(IDX_RPL_STS_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RPL_STS_CD)
-        //                });
-        //            }
-        //        }
-
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        OpLogPerf.Log(ex);
-        //        throw;
-        //    }
-
-        //    return ret;
-        //}
     }
 }

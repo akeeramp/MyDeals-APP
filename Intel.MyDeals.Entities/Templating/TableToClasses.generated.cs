@@ -11879,164 +11879,125 @@ namespace Intel.MyDeals.Entities
     /// To modify this code, re-execute the template, or extend as partial.
     /// on SOC-G3NTQW3
     /// by jlopezre
-    /// at 5/9/2025 10:20:26 AM
+    /// at 5/15/2025 2:06:31 PM
     ///</summary>
 
     [DataContract]
     public partial class PctException
     {
-
-        [DataMember]
-        public System.Decimal Avrrage_Net_Price { set; get; }
-
-
-        [DataMember]
-        public System.Decimal CAP { set; get; }
-
-
-        [DataMember]
-        public System.String Ceiling_Volume { set; get; }
-
-
         [DataMember]
         public System.Int32 Contract_ID { set; get; }
-
-
-        [DataMember]
-        public System.String Cost_Test_Ovrride { set; get; }
-
-
-        [DataMember]
-        public System.String Cost_Type { set; get; }
-
-
-        [DataMember]
-        public System.String Customer { set; get; }
-
-
-        [DataMember]
-        public System.String Deal_Created_By { set; get; }
-
-
-        [DataMember]
-        public System.DateTime Deal_Created_Date { set; get; }
-
-
-        [DataMember]
-        public System.DateTime Deal_End_Date { set; get; }
-
 
         [DataMember]
         public System.Int32 Deal_ID { set; get; }
 
-
         [DataMember]
-        public System.String Deal_Product_Processor_Number { set; get; }
-
+        public System.String Deal_Type { set; get; }
 
         [DataMember]
         public System.String Deal_Stage { set; get; }
 
-
         [DataMember]
         public System.DateTime Deal_Start_Date { set; get; }
 
+        [DataMember]
+        public System.DateTime Deal_End_Date { set; get; }
 
         [DataMember]
-        public System.String Deal_Type { set; get; }
-
-
-        [DataMember]
-        public System.DateTime Division_Approved_Date { set; get; }
-
+        public System.String Forcast_Alt_Id { set; get; }
 
         [DataMember]
-        public System.String Division_Approver { set; get; }
-
-
-        [DataMember]
-        public System.Decimal ECAP_Price { set; get; }
-
-
-        [DataMember]
-        public System.String Geo { set; get; }
-
-
-        [DataMember]
-        public System.DateTime Geo_Approved_Date { set; get; }
-
-
-        [DataMember]
-        public System.String Geo_Approver { set; get; }
-
-
-        [DataMember]
-        public System.String Group_type { set; get; }
-
-
-        [DataMember]
-        public System.String L4 { set; get; }
-
-
-        [DataMember]
-        public System.Int32 Legal_Exception { set; get; }
-
-
-        [DataMember]
-        public System.String Legal_Exception_Description { set; get; }
-
-
-        [DataMember]
-        public System.Decimal Lowest_Net_Price { set; get; }
-
-
-        [DataMember]
-        public System.String Market_Segment { set; get; }
-
-
-        [DataMember]
-        public System.Decimal MAX_RPU { set; get; }
-
-
-        [DataMember]
-        public System.Decimal Meet_Comp_Price { set; get; }
-
-
-        [DataMember]
-        public System.String Meet_Comp_Test_Result { set; get; }
-
-
-        [DataMember]
-        public System.String Payout_Based_On { set; get; }
-
-
-        [DataMember]
-        public System.String Price_Cost_Test_Result { set; get; }
-
+        public System.String Deal_Product_Processor_Number { set; get; }
 
         [DataMember]
         public System.String Product_Bucket { set; get; }
 
-
         [DataMember]
-        public System.Decimal Product_Cost { set; get; }
-
+        public System.String Market_Segment { set; get; }
+        
+        [DataMember]
+        public System.String Geo { set; get; }
+        
+        [DataMember]
+        public System.String Payout_Based_On { set; get; }
 
         [DataMember]
         public System.String Program_Payment { set; get; }
 
-
+        [DataMember]
+        public System.String Cost_Type { set; get; }
+       
         [DataMember]
         public System.String Rebate_Type { set; get; }
-
-
+        
         [DataMember]
-        public System.Decimal Retail_Pull_Dollar { set; get; }
-
-
+        public System.String Group_type { set; get; }
+        
+        [DataMember]
+        public System.Decimal CAP { set; get; }
+        
+        [DataMember]
+        public System.Decimal MAX_RPU { set; get; }
+        
         [DataMember]
         public System.Decimal YCS2 { set; get; }
+        
+        [DataMember]
+        public System.Decimal ECAP_Price { set; get; }
+        
+        [DataMember]
+        public System.Decimal Retail_Pull_Dollar { set; get; }
+        
+        [DataMember]
+        public System.Decimal Product_Cost { set; get; }
+        
+        [DataMember]
+        public System.Decimal Lowest_Net_Price { set; get; }
+        
+        [DataMember]
+        public System.String Price_Cost_Test_Result { set; get; }
+        
+        [DataMember]
+        public System.String Cost_Test_Ovrride { set; get; }
+        
+        [DataMember]
+        public System.Int32 Legal_Exception_Id { set; get; }
+        
+        [DataMember]
+        public System.String Legal_Exception_Description { set; get; }
+        
+        [DataMember]
+        public System.Decimal Meet_Comp_Price { set; get; }
+        
+        [DataMember]
+        public System.Decimal Avrrage_Net_Price { set; get; }
 
+        [DataMember]
+        public System.String Meet_Comp_Test_Result { set; get; }
+        
+        [DataMember]
+        public System.String Division_Approver { set; get; }
+        
+        [DataMember]
+        public System.DateTime Division_Approved_Date { set; get; }
+        
+        [DataMember]
+        public System.String Geo_Approver { set; get; }
+        
+        [DataMember]
+        public System.DateTime Geo_Approved_Date { set; get; }
+        
+        [DataMember]
+        public System.String Deal_Created_By { set; get; }
+
+        [DataMember]
+        public System.DateTime Deal_Created_Date { set; get; }
+
+        [DataMember]
+        public System.String Customer { set; get; }
+
+        [DataMember]
+        public System.String Ceiling_Volume { set; get; }
 
         /*
         private static List<PctException> PctExceptionFromReader(SqlDataReader rdr){
@@ -12062,13 +12023,13 @@ namespace Intel.MyDeals.Entities
         int IDX_Division_Approved_Date = DB.GetReaderOrdinal(rdr, "Division Approved Date");
         int IDX_Division_Approver = DB.GetReaderOrdinal(rdr, "Division Approver");
         int IDX_ECAP_Price = DB.GetReaderOrdinal(rdr, "ECAP Price");
+        int IDX_Forcast_Alt_Id = DB.GetReaderOrdinal(rdr, "Forcast Alt Id");
         int IDX_Geo = DB.GetReaderOrdinal(rdr, "Geo");
         int IDX_Geo_Approved_Date = DB.GetReaderOrdinal(rdr, "Geo Approved Date");
         int IDX_Geo_Approver = DB.GetReaderOrdinal(rdr, "Geo Approver");
         int IDX_Group_type = DB.GetReaderOrdinal(rdr, "Group type");
-        int IDX_L4 = DB.GetReaderOrdinal(rdr, "L4");
-        int IDX_Legal_Exception = DB.GetReaderOrdinal(rdr, "Legal Exception #");
         int IDX_Legal_Exception_Description = DB.GetReaderOrdinal(rdr, "Legal Exception Description");
+        int IDX_Legal_Exception_Id = DB.GetReaderOrdinal(rdr, "Legal Exception Id");
         int IDX_Lowest_Net_Price = DB.GetReaderOrdinal(rdr, "Lowest Net Price");
         int IDX_Market_Segment = DB.GetReaderOrdinal(rdr, "Market Segment");
         int IDX_MAX_RPU = DB.GetReaderOrdinal(rdr, "MAX_RPU");
@@ -12103,13 +12064,13 @@ namespace Intel.MyDeals.Entities
         Division_Approved_Date = (IDX_Division_Approved_Date < 0 || rdr.IsDBNull(IDX_Division_Approved_Date)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_Division_Approved_Date),
         Division_Approver = (IDX_Division_Approver < 0 || rdr.IsDBNull(IDX_Division_Approver)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Division_Approver),
         ECAP_Price = (IDX_ECAP_Price < 0 || rdr.IsDBNull(IDX_ECAP_Price)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_Price),
+        Forcast_Alt_Id = (IDX_Forcast_Alt_Id < 0 || rdr.IsDBNull(IDX_Forcast_Alt_Id)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Forcast_Alt_Id),
         Geo = (IDX_Geo < 0 || rdr.IsDBNull(IDX_Geo)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Geo),
         Geo_Approved_Date = (IDX_Geo_Approved_Date < 0 || rdr.IsDBNull(IDX_Geo_Approved_Date)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_Geo_Approved_Date),
         Geo_Approver = (IDX_Geo_Approver < 0 || rdr.IsDBNull(IDX_Geo_Approver)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Geo_Approver),
         Group_type = (IDX_Group_type < 0 || rdr.IsDBNull(IDX_Group_type)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Group_type),
-        L4 = (IDX_L4 < 0 || rdr.IsDBNull(IDX_L4)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_L4),
-        Legal_Exception = (IDX_Legal_Exception < 0 || rdr.IsDBNull(IDX_Legal_Exception)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Legal_Exception),
         Legal_Exception_Description = (IDX_Legal_Exception_Description < 0 || rdr.IsDBNull(IDX_Legal_Exception_Description)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Legal_Exception_Description),
+        Legal_Exception_Id = (IDX_Legal_Exception_Id < 0 || rdr.IsDBNull(IDX_Legal_Exception_Id)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Legal_Exception_Id),
         Lowest_Net_Price = (IDX_Lowest_Net_Price < 0 || rdr.IsDBNull(IDX_Lowest_Net_Price)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_Lowest_Net_Price),
         Market_Segment = (IDX_Market_Segment < 0 || rdr.IsDBNull(IDX_Market_Segment)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Market_Segment),
         MAX_RPU = (IDX_MAX_RPU < 0 || rdr.IsDBNull(IDX_MAX_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_MAX_RPU),
