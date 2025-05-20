@@ -513,6 +513,16 @@ export class ProductCorrectorComponent implements OnDestroy{
             this.curRowIncProd = [];
             this.curRowExcludeProd = [];
         }
+        each(this.curRowData, (item) => {
+            if (this.ProductCorrectorData.ValidProducts[this.curRowId] &&
+                this.ProductCorrectorData.ValidProducts[this.curRowId][item.USR_INPUT] &&
+                this.ProductCorrectorData.ValidProducts[this.curRowId][item.USR_INPUT]
+                .filter(i => i.DERIVED_USR_INPUT == item.DERIVED_USR_INPUT).length > 0
+            ) {
+                item.IS_SEL = true
+            }
+        })
+
         this.selGridResult = this.curRowData;
         this.selGridData = process(this.curRowData, this.state);
         if (!bypassFilter) this.applyFilterAndGrouping();
@@ -694,9 +704,13 @@ export class ProductCorrectorComponent implements OnDestroy{
             if (!this.ProductCorrectorData.ValidProducts[this.curRowId]) this.ProductCorrectorData.ValidProducts[this.curRowId] = {};
             if (!this.ProductCorrectorData.ValidProducts[this.curRowId][item.name]) this.ProductCorrectorData.ValidProducts[this.curRowId][item.name] = [];
 
-            this.ProductCorrectorData.ValidProducts[this.curRowId][item.name] = this.ProductCorrectorData.ValidProducts[this.curRowId][item.name].filter( (obj)=> {
+            const filterDuplicateProducts = this.ProductCorrectorData.ValidProducts[this.curRowId][item.name].filter((obj) => {
                 return obj.PRD_MBR_SID != foundItem.PRD_MBR_SID;
             });
+
+            this.ProductCorrectorData.ValidProducts[this.curRowId][item.name] = filterDuplicateProducts;
+            this.data.ProductCorrectorData.ValidProducts[this.curRowId][item.name] = filterDuplicateProducts;
+
             if (this.ProductCorrectorData.ValidProducts[this.curRowId][item.name].length === 0) delete this.ProductCorrectorData.ValidProducts[this.curRowId][item.name];
             this.curRowData.forEach((item)=> {
                 if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID && item.USR_INPUT==foundItem.USR_INPUT) {

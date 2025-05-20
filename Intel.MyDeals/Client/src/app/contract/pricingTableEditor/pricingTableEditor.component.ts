@@ -1694,7 +1694,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 }
                 if (translateResult['Data'].DuplicateProducts[data.DC_ID] != undefined && Object.keys(translateResult['Data'].DuplicateProducts[data.DC_ID]).length > 0) {
                     each(translateResult['Data'].DuplicateProducts[data.DC_ID], (item) => {
-                        if (item[0].EXCLUDE) {
+                        if (Array.isArray(item) && item.length > 0  && item[0].EXCLUDE) {
                             isexcludeDuplicate = true;
                         }
                         else {
