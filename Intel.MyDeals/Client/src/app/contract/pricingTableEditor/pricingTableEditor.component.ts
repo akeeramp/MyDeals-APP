@@ -467,6 +467,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
     private isPRDPaste = false;
     isDirty = false;
     private readonly destroy$ = new Subject();
+    private wipDealData :any;
     // To get the selected row and col for product selector
     private multiRowDelete: Array<any> = [];
     // Handsontable Variables basic hottable structure
@@ -766,6 +767,9 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             this.loggerService.error('Something went wrong.', 'error');
             console.error('PricingTableEditorComponent::readPricingTable::readTemplates:: service::', err);
         });
+        if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
+            this.wipDealData=response.WIP_DEAL;
+        }
 
         if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
             // The thing about Tender contract, they can be created from a copy which will NOT create WIP deals and
@@ -843,7 +847,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 },
                 mergeCells: mergCells,
                 cells: (row: number, col: number, prop: string) => {
-                    return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable, this.isTenderContract, this.curPricingStrategy.IS_HYBRID_PRC_STRAT);
+                    return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable, this.isTenderContract, this.curPricingStrategy.IS_HYBRID_PRC_STRAT,this.wipDealData);
                 },
                 cell: this.cellComments,
                 readOnlyCellClassName: 'readonly-cell',

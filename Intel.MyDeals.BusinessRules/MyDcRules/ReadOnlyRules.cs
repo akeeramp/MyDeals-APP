@@ -80,6 +80,14 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
+                 new MyOpRule
+                {
+                    Title="Readonly for Submitted Deals",
+                    ActionRule = MyDcActions.ReadonlySubmittedFields,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL,OpDataElementType.PRC_TBL_ROW },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly }
+                },
+
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER and the value has been populated
                 {
                     Title="Readonly if Tracker Exists and Value is Populated",
@@ -275,7 +283,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.PRC_TBL_ROW },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
-
+              
                 new MyOpRule
                 {
                     Title="Readonly if Not Backend and has tracker",
@@ -821,7 +829,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
-
+            
             };
         }
     }
