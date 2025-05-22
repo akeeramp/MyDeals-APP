@@ -744,12 +744,14 @@ export class PTE_Load_Util {
 
         if (!(hotTable.getDataAtRowProp(row, 'DC_ID') == undefined || hotTable.getDataAtRowProp(row, 'DC_ID') == null || hotTable.getDataAtRowProp(row, 'DC_ID') == '')) {
             var dcid = hotTable.getDataAtRowProp(row, 'DC_ID');
+          if(wipDealData!=undefined && wipDealData!=null ){
             var isExist = wipDealData.filter(x => (x.GEO_APPROVED_BY != null && x.GEO_APPROVED_BY != '') && x.DC_PARENT_ID == dcid).length;
             if (isExist > 0) {
                 if ((prop == 'PERIOD_PROFILE' || prop == 'PAYOUT_BASED_ON')) {
                     cellProperties['readOnly'] = true;
                 }
             }
+          }
         }
 
         
