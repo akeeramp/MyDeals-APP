@@ -76,39 +76,14 @@ export class ProdSel_Util {
             title: 'SKU Name',
             width: "180px",
             filterable: { multi: true, search: true }
-        }, {
-            field: 'NAND_FAMILY',
-            title: 'NAND FAMILY',
-            width: "150px",
-            filterable: { multi: true, search: true }
-        }, {
+        },  {
             field: 'CPU_CACHE',
             title: 'CPU CACHE',
             width: "150px",
             filterable: { multi: true, search: true }
         }, {
-            field: 'CPU_PACKAGE',
-            title: 'CPU PACKAGE',
-            width: "150px",
-            filterable: { multi: true, search: true }
-        }, {
-            field: 'CPU_WATTAGE',
-            title: 'CPU WATTAGE',
-            width: "150px",
-            filterable: { multi: true, search: true }
-        }, {
-            field: 'CPU_VOLTAGE_SEGMENT',
-            title: 'Voltage Segment',
-            width: "150px",
-            filterable: { multi: true, search: true }
-        }, {
             field: 'PRICE_SEGMENT',
             title: 'Price Segment',
-            width: "150px",
-            filterable: { multi: true, search: true }
-        }, {
-            field: 'SBS_NM',
-            title: 'SBS Name',
             width: "150px",
             filterable: { multi: true, search: true }
         }]
@@ -217,50 +192,15 @@ export class ProdSel_Util {
                 filterable: { multi: true, search: true }
             },
             {
-                field: "NAND_FAMILY",
-                title: "NAND FAMILY",
-                width: "150px",
-                filterable: { multi: true, search: true }
-            },
-            {
-                field: "NAND_Density",
-                title: "Nand Density",
-                width: "150px",
-                filterable: { multi: true, search: true }
-            },
-            {
                 field: "CPU_CACHE",
                 title: "CPU CACHE",
                 width: "150px",
                 filterable: { multi: true, search: true }
             },
-            {
-                field: "CPU_PACKAGE",
-                title: "CPU PACKAGE",
-                width: "150px",
-                filterable: { multi: true, search: true }
-            },
-            {
-                field: "CPU_WATTAGE",
-                title: "CPU WATTAGE",
-                width: "150px",
-                filterable: { multi: true, search: true }
-            },
-            {
-                field: "CPU_VOLTAGE_SEGMENT",
-                title: "Voltage Segment",
-                width: "150px",
-                filterable: { multi: true, search: true }
-            },
+
             {
                 field: "PRICE_SEGMENT",
                 title: "Price Segment",
-                width: "150px",
-                filterable: { multi: true, search: true }
-            },
-            {
-                field: "SBS_NM",
-                title: "SBS Name",
                 width: "150px",
                 filterable: { multi: true, search: true }
             }

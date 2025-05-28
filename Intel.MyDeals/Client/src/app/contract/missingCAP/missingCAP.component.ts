@@ -73,10 +73,7 @@ export class missingCAPComponent implements OnDestroy{
         "PRD_END_DTM": "Prod End Date",
         "YCS2": "YCS2",
         "CPU_CACHE": "CPU Cache",
-        "CPU_PACKAGE": "CPU Package",
-        "CPU_PROCESSOR_NUMBER": "CPU Processor",
-        "CPU_VOLTAGE_SEGMENT": "CPU Voltage",
-        "CPU_WATTAGE": "CPU Wattage",
+        "CPU_PROCESSOR_NUMBER": "CPU Processor"
     }
     public headerCellOptions = {
         textAlign: "center",

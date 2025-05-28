@@ -395,13 +395,8 @@ export class ProductSelectorComponent implements OnDestroy {
             if (this.items.length == 1 && this.items[0].name == 'NA' && this.items[0].path.startsWith('CPU SvrWS NA')) { return } // Forced breakout for CPU Q-Spec items forced into products load
 
             if (this.items.length == 1 && this.items[0].name == 'NA') {
-                let drillLevel5 = uniq(this.prdSelLvlAtrbsForCategory, 'PRD_FMLY_TXT');
-                // Check if we have prd_fmly_txt
-
-                if ((drillLevel5.length == 1 && drillLevel5[0].PRD_FMLY_TXT == "") ||
-                    ProdSel_Util.arrayContainsString(this.verticalsWithGDMFamlyAsDrillLevel5, drillLevel5[0].PRD_CAT_NM)) {
-                    // If null or empty fall back to GDM_FMLY_NM
-                    drillLevel5 = uniq(this.prdSelLvlAtrbsForCategory, 'GDM_FMLY_NM');
+              
+                    let drillLevel5 = uniq(this.prdSelLvlAtrbsForCategory, 'GDM_FMLY_NM');
                     if (this.selectedPathParts[3].drillDownFilter4 != undefined && this.selectedPathParts[3].drillDownFilter4 != "Blank_GDM") {
                         drillLevel5 = drillLevel5.filter((x) => {
                             return x.GDM_BRND_NM == this.selectedPathParts[3].drillDownFilter4;
@@ -417,23 +412,7 @@ export class ProductSelectorComponent implements OnDestroy {
                             selected: item.selected
                         }
                     }).sort((a, b) => a['name'].toUpperCase() > b['name'].toUpperCase() ? 1 : a['name'].toUpperCase() === b['name'].toUpperCase() ? 0 : -1);
-                } else {
-                    if (this.selectedPathParts[3].drillDownFilter4 != undefined && this.selectedPathParts[3].drillDownFilter4 != "Blank_GDM") {
-                        drillLevel5 = drillLevel5.filter((x) => {
-                            return x.PRD_FMLY_TXT == this.selectedPathParts[3].drillDownFilter4;
-                        })
-                    }
-                    this.items = map(drillLevel5, (i) => {
-                        return {
-                            name: i.PRD_FMLY_TXT,
-                            path: this.items[0].path,
-                            drillDownFilter5: i.PRD_FMLY_TXT == "" ? 'Blank_PRD' : i.PRD_FMLY_TXT,
-                            drillDownFilter4: this.selectedPathParts[3].drillDownFilter4,
-                            parentSelected: item.parentSelected,
-                            selected: item.selected
-                        }
-                    }).sort((a, b) => a['name'].toUpperCase() > b['name'].toUpperCase() ? 1 : a['name'].toUpperCase() === b['name'].toUpperCase() ? 0 : -1);
-                }
+                
                 if (this.items.length == 1) {
                     this.selectItem(this.items[0]);
                 }
@@ -1329,8 +1308,7 @@ export class ProductSelectorComponent implements OnDestroy {
                 YCS2: x.YCS2,
                 YCS2_END: x.YCS2_END,
                 YCS2_START: x.YCS2_START,
-                EXCLUDE: false,
-                NAND_TRUE_DENSITY: x.NAND_TRUE_DENSITY ? x.NAND_TRUE_DENSITY : ''
+                EXCLUDE: false
             }
         });
 
@@ -1360,8 +1338,7 @@ export class ProductSelectorComponent implements OnDestroy {
                 YCS2: x.YCS2,
                 YCS2_END: x.YCS2_END,
                 YCS2_START: x.YCS2_START,
-                EXCLUDE: true,
-                NAND_TRUE_DENSITY: x.NAND_TRUE_DENSITY ? x.NAND_TRUE_DENSITY : ''
+                EXCLUDE: true
             }
         });
 

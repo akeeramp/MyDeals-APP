@@ -156,10 +156,5 @@ namespace Intel.MyDeals.Entities
         [Description("Family")]
         GDM_FMLY_NM = 2,
 
-        [Description("NAND Family")]
-        NAND_FAMILY = 3,
-
-        [Description("NAND Density")]
-        NAND_DENSITY = 4
     }
 }

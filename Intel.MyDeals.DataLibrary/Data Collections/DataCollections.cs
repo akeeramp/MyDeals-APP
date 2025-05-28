@@ -222,19 +222,15 @@ namespace Intel.MyDeals.DataLibrary
                     var searchGDMFamily = products.Where(x => !string.IsNullOrEmpty(x.GDM_FMLY_NM)).
                             Select(x => new SearchString { Name = x.GDM_FMLY_NM, Type = ProductHierarchyLevelsEnum.GDM_FMLY_NM.ToString() });
 
-                    var searchNandFamily = products.Where(x => !string.IsNullOrEmpty(x.NAND_FAMILY) && x.PRD_ATRB_SID == 7008).
-                                       Select(x => new SearchString { Name = x.NAND_FAMILY, Type = ProductHierarchyLevelsEnum.NAND_FAMILY.ToString() });
-
-                    var searchNandDensity = products.Where(x => !string.IsNullOrEmpty(x.NAND_Density) && x.PRD_ATRB_SID == 7008).
-                                       Select(x => new SearchString { Name = x.NAND_Density, Type = ProductHierarchyLevelsEnum.NAND_DENSITY.ToString() });
+                  
+          
 
                     var searchEPM = products.Where(x => !string.IsNullOrEmpty(x.EPM_NM) && x.PRD_ATRB_SID == 7008).
                                        Select(x => new SearchString { Name = x.EPM_NM, Type = ProductHierarchyLevelsEnum.EPM_NM.ToString() });
 
                     _getSearchStringList.AddRange(searchHierColumns);
                     _getSearchStringList.AddRange(searchGDMFamily);
-                    _getSearchStringList.AddRange(searchNandFamily);
-                    _getSearchStringList.AddRange(searchNandDensity);
+                   
                     _getSearchStringList.AddRange(searchEPM);
 
                     _getSearchString = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);

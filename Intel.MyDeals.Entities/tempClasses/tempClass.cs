@@ -878,16 +878,10 @@ public partial class DealTemplateDataGram
         public System.String CPU_MKT_SEGMENT { set; get; }
 
         [DataMember]
-        public System.String CPU_PACKAGE { set; get; }
-
-        [DataMember]
         public System.String CPU_PSLV { set; get; }
 
         [DataMember]
         public System.String CPU_SPEED { set; get; }
-
-        [DataMember]
-        public System.String CPU_VOLTAGE_SEGMENT { set; get; }
 
         [DataMember]
         public System.String DEAL_PRD_NM { set; get; }
@@ -1004,10 +998,8 @@ public partial class DealTemplateDataGram
         int IDX_CHLD_NM_HASH = DB.GetReaderOrdinal(rdr, "CHLD_NM_HASH");
         int IDX_CHLD_SID_HASH = DB.GetReaderOrdinal(rdr, "CHLD_SID_HASH");
         int IDX_CPU_MKT_SEGMENT = DB.GetReaderOrdinal(rdr, "CPU_MKT_SEGMENT");
-        int IDX_CPU_PACKAGE = DB.GetReaderOrdinal(rdr, "CPU_PACKAGE");
         int IDX_CPU_PSLV = DB.GetReaderOrdinal(rdr, "CPU_PSLV");
         int IDX_CPU_SPEED = DB.GetReaderOrdinal(rdr, "CPU_SPEED");
-        int IDX_CPU_VOLTAGE_SEGMENT = DB.GetReaderOrdinal(rdr, "CPU_VOLTAGE_SEGMENT");
         int IDX_DEAL_PRD_NM = DB.GetReaderOrdinal(rdr, "DEAL_PRD_NM");
         int IDX_DEAL_PRD_NM_SID = DB.GetReaderOrdinal(rdr, "DEAL_PRD_NM_SID");
         int IDX_DEAL_PRD_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE");
@@ -1052,10 +1044,8 @@ public partial class DealTemplateDataGram
         CHLD_NM_HASH = (IDX_CHLD_NM_HASH < 0 || rdr.IsDBNull(IDX_CHLD_NM_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHLD_NM_HASH),
         CHLD_SID_HASH = (IDX_CHLD_SID_HASH < 0 || rdr.IsDBNull(IDX_CHLD_SID_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHLD_SID_HASH),
         CPU_MKT_SEGMENT = (IDX_CPU_MKT_SEGMENT < 0 || rdr.IsDBNull(IDX_CPU_MKT_SEGMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_MKT_SEGMENT),
-        CPU_PACKAGE = (IDX_CPU_PACKAGE < 0 || rdr.IsDBNull(IDX_CPU_PACKAGE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_PACKAGE),
         CPU_PSLV = (IDX_CPU_PSLV < 0 || rdr.IsDBNull(IDX_CPU_PSLV)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_PSLV),
         CPU_SPEED = (IDX_CPU_SPEED < 0 || rdr.IsDBNull(IDX_CPU_SPEED)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_SPEED),
-        CPU_VOLTAGE_SEGMENT = (IDX_CPU_VOLTAGE_SEGMENT < 0 || rdr.IsDBNull(IDX_CPU_VOLTAGE_SEGMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_VOLTAGE_SEGMENT),
         DEAL_PRD_NM = (IDX_DEAL_PRD_NM < 0 || rdr.IsDBNull(IDX_DEAL_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_NM),
         DEAL_PRD_NM_SID = (IDX_DEAL_PRD_NM_SID < 0 || rdr.IsDBNull(IDX_DEAL_PRD_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_PRD_NM_SID),
         DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
@@ -1123,8 +1113,7 @@ public partial class DealTemplateDataGram
         [DataMember]
         public System.String CHLD_SID_HASH { set; get; }
 
-        [DataMember]
-        public System.String CPU_PACKAGE { set; get; }
+       
 
         [DataMember]
         public System.String CPU_PSLV { set; get; }
@@ -1215,7 +1204,6 @@ public partial class DealTemplateDataGram
         int IDX_BRND_NM = DB.GetReaderOrdinal(rdr, "BRND_NM");
         int IDX_CHLD_NM_HASH = DB.GetReaderOrdinal(rdr, "CHLD_NM_HASH");
         int IDX_CHLD_SID_HASH = DB.GetReaderOrdinal(rdr, "CHLD_SID_HASH");
-        int IDX_CPU_PACKAGE = DB.GetReaderOrdinal(rdr, "CPU_PACKAGE");
         int IDX_CPU_PSLV = DB.GetReaderOrdinal(rdr, "CPU_PSLV");
         int IDX_DEAL_NBR = DB.GetReaderOrdinal(rdr, "DEAL_NBR");
         int IDX_DEAL_PRD_NM = DB.GetReaderOrdinal(rdr, "DEAL_PRD_NM");
@@ -1250,7 +1238,6 @@ public partial class DealTemplateDataGram
         BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
         CHLD_NM_HASH = (IDX_CHLD_NM_HASH < 0 || rdr.IsDBNull(IDX_CHLD_NM_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHLD_NM_HASH),
         CHLD_SID_HASH = (IDX_CHLD_SID_HASH < 0 || rdr.IsDBNull(IDX_CHLD_SID_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHLD_SID_HASH),
-        CPU_PACKAGE = (IDX_CPU_PACKAGE < 0 || rdr.IsDBNull(IDX_CPU_PACKAGE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_PACKAGE),
         CPU_PSLV = (IDX_CPU_PSLV < 0 || rdr.IsDBNull(IDX_CPU_PSLV)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_PSLV),
         DEAL_NBR = (IDX_DEAL_NBR < 0 || rdr.IsDBNull(IDX_DEAL_NBR)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_NBR),
         DEAL_PRD_NM = (IDX_DEAL_PRD_NM < 0 || rdr.IsDBNull(IDX_DEAL_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_NM),
@@ -2105,17 +2092,13 @@ public partial class DealTemplateDataGram
         [DataMember]
         public System.String CPU_CACHE { set; get; }
 
-        [DataMember]
-        public System.String CPU_PACKAGE { set; get; }
 
         [DataMember]
         public System.String CPU_PROCESSOR_NUMBER { set; get; }
 
-        [DataMember]
-        public System.String CPU_VOLTAGE_SEGMENT { set; get; }
+     
 
-        [DataMember]
-        public System.String CPU_WATTAGE { set; get; }
+       
 
         [DataMember]
         public System.DateTime DEAL_END_DT { set; get; }
@@ -2177,15 +2160,6 @@ public partial class DealTemplateDataGram
         [DataMember]
         public System.String MTRL_TYPE_CD { set; get; }
         
-        [DataMember]
-        public System.String NAND_Density { set; get; }
-
-        [DataMember]
-        public System.String NAND_FAMILY { set; get; }
-
-
-        [DataMember]
-        public System.String NAND_TRUE_DENSITY { set; get; }
 
         [DataMember]
         public System.String PCSR_NBR { set; get; }
@@ -2208,8 +2182,7 @@ public partial class DealTemplateDataGram
         [DataMember]
         public System.String PRICE_SEGMENT { set; get; }
 
-        [DataMember]
-        public System.String SBS_NM { set; get; }
+
 
         [DataMember]
         public System.String SKU_MARKET_SEGMENT { set; get; }

@@ -396,8 +396,7 @@ export class PTEUtil {
                     YCS2: x.YCS2,
                     YCS2_END: x.YCS2_END,
                     YCS2_START: x.YCS2_START,
-                    EXCLUDE: x.EXCLUDE,
-                    NAND_TRUE_DENSITY: x.NAND_TRUE_DENSITY ? x.NAND_TRUE_DENSITY : ''
+                    EXCLUDE: x.EXCLUDE
                 }
             });
         }

@@ -309,54 +309,23 @@
                                 </div>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="NAND_FAMILY" title="NAND FAMILY" [width]="150">
-                            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
-                                </multicheck-filter>
-                            </ng-template>
-                        </kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="NAND_Density" title="Nand Density" [width]="150">
-                            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
-                                </multicheck-filter>
-                            </ng-template>
-                        </kendo-grid-column>
+                      
+                        
                         <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_CACHE" title="CPU CACHE" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_PACKAGE" title="CPU PACKAGE" [width]="150">
-                            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
-                                </multicheck-filter>
-                            </ng-template>
-                        </kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_WATTAGE" title="CPU WATTAGE" [width]="150">
-                            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
-                                </multicheck-filter>
-                            </ng-template>
-                        </kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_VOLTAGE_SEGMENT" title="Voltage Segment" [width]="150">
-                            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
-                                </multicheck-filter>
-                            </ng-template>
-                        </kendo-grid-column>
+                    
+                       
                         <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRICE_SEGMENT" title="Price Segment" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="SBS_NM" title="SBS Name" [width]="150">
-                            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
-                                </multicheck-filter>
-                            </ng-template>
-                        </kendo-grid-column>
+                       
                     </kendo-grid>
                 </div>
                 <div>

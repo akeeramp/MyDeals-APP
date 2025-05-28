@@ -506,14 +506,7 @@ namespace Intel.MyDeals.Entities {
 		///</summary>
 		public const string CPU_CACHE = "CPU_CACHE";
 
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7025
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
-		///</summary>
-		public const string CPU_PACKAGE = "CPU_PACKAGE";
+		
 
 		///<summary>
 		/// DIM_SID: 7
@@ -524,23 +517,9 @@ namespace Intel.MyDeals.Entities {
 		///</summary>
 		public const string CPU_PROCESSOR_NUMBER = "CPU_PROCESSOR_NUMBER";
 
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7043
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
-		///</summary>
-		public const string CPU_VOLTAGE_SEGMENT = "CPU_VOLTAGE_SEGMENT";
+		
 
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7023
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
-		///</summary>
-		public const string CPU_WATTAGE = "CPU_WATTAGE";
+		
 
         //TWC3179-5036: Removal of credits and debits fields
         ///<summary>
@@ -1896,23 +1875,9 @@ namespace Intel.MyDeals.Entities {
 		///</summary>
 		public const string NA = "NA";
 
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7077
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
-		///</summary>
-		public const string NAND_DENSITY = "NAND_DENSITY";
+		
 
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7076
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
-		///</summary>
-		public const string NAND_FAMILY = "NAND_FAMILY";
+		
 
 		///<summary>
 		/// DIM_SID: 7
@@ -1923,14 +1888,7 @@ namespace Intel.MyDeals.Entities {
 		///</summary>
 		public const string NAND_INTERFACE = "NAND_INTERFACE";
 
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7094
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
-		///</summary>
-		public const string NAND_TRUE_DENSITY = "NAND_TRUE_DENSITY";
+		
 
 		///<summary>
 		/// DIM_SID: 3
@@ -2211,14 +2169,7 @@ namespace Intel.MyDeals.Entities {
 		///</summary>
 		public const string PRD_EXCLDS_IDS = "PRD_EXCLDS_IDS";
 
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7083
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
-		///</summary>
-		public const string PRD_FMLY_TXT = "PRD_FMLY_TXT";
+		
 
 		///<summary>
 		/// DIM_SID: 3
@@ -2535,14 +2486,6 @@ namespace Intel.MyDeals.Entities {
 		///</summary>
 		public const string SALESFORCE_ID = "SALESFORCE_ID";
 
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7079
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
-		///</summary>
-		public const string SBS_NM = "SBS_NM";
 
 		///<summary>
 		/// DIM_SID: 3

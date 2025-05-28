@@ -873,22 +873,7 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute CPU_PACKAGE = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "CPU_PACKAGE",
-			ATRB_DESC = "CPU Package",
-			ATRB_LBL = default(System.String),
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 7025,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "PRD",
-			DIM_SID = 7,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "na",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
+		
 		public static MyDealsAttribute CPU_PROCESSOR_NUMBER = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CPU_PROCESSOR_NUMBER",
@@ -905,38 +890,8 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute CPU_VOLTAGE_SEGMENT = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "CPU_VOLTAGE_SEGMENT",
-			ATRB_DESC = "CPU Voltage Segment",
-			ATRB_LBL = default(System.String),
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 7043,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "PRD",
-			DIM_SID = 7,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "na",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
-		public static MyDealsAttribute CPU_WATTAGE = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "CPU_WATTAGE",
-			ATRB_DESC = "CPU Wattage",
-			ATRB_LBL = default(System.String),
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 7023,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "PRD",
-			DIM_SID = 7,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "na",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
+		
+		
 		
 		public static MyDealsAttribute CS_SHIP_AHEAD_END_DT = new MyDealsAttribute()
 		{
@@ -3290,38 +3245,8 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute NAND_DENSITY = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "NAND_DENSITY",
-			ATRB_DESC = "Nand Density",
-			ATRB_LBL = default(System.String),
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 7077,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "PRD",
-			DIM_SID = 7,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "na",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
-		public static MyDealsAttribute NAND_FAMILY = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "NAND_FAMILY",
-			ATRB_DESC = "Nand Family",
-			ATRB_LBL = default(System.String),
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 7076,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "PRD",
-			DIM_SID = 7,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "na",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
+
+	
 		public static MyDealsAttribute NAND_INTERFACE = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "NAND_INTERFACE",
@@ -3338,22 +3263,7 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute NAND_TRUE_DENSITY = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "NAND_TRUE_DENSITY",
-			ATRB_DESC = "True NAND Density",
-			ATRB_LBL = default(System.String),
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 7094,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "PRD",
-			DIM_SID = 7,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "na",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
+	
 		public static MyDealsAttribute NO_END_DT_RSN = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "NO_END_DT_RSN",
@@ -3849,22 +3759,6 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
-		};
-		public static MyDealsAttribute PRD_FMLY_TXT = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "PRD_FMLY_TXT",
-			ATRB_DESC = "PRD_FMLY_TXT",
-			ATRB_LBL = default(System.String),
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 7083,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "PRD",
-			DIM_SID = 7,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "na",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
 		};
 		public static MyDealsAttribute PRD_LEVEL = new MyDealsAttribute()
 		{
@@ -4426,22 +4320,7 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
 		};
-		public static MyDealsAttribute SBS_NM = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "SBS_NM",
-			ATRB_DESC = "SBS Nm",
-			ATRB_LBL = default(System.String),
-			ATRB_MAX_LEN = 40,
-			ATRB_SID = 7079,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "PRD",
-			DIM_SID = 7,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "na",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
+	
 		public static MyDealsAttribute SDS_DEAL_RULES_OVERRIDE = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "SDS_DEAL_RULES_OVERRIDE",

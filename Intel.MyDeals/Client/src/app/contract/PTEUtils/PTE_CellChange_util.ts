@@ -1657,18 +1657,7 @@ export class PTE_CellChange_Util {
                             delete DensityMissingProd[dcid];
                         }
                         let Nand_Den = [];
-                        each(item, (prdDet) => {
-                            // Handle single product with multiple density_band
-                            let densities = prdDet[0].NAND_TRUE_DENSITY ? prdDet[0].NAND_TRUE_DENSITY.split(",").map(function (el) { return el.trim(); }) : [];
-                            if (densities.length == 0 && !prdDet[0].EXCLUDE) {
-                                densities.push("null");
-                            }
-                            densities.sort();
-                            if (densities.length > 0 || densities.length == 0) {
-                                //underscore union creates a single array without duplicates.
-                                Nand_Den = union(Nand_Den, densities);
-                            }
-                        });
+                       
                         if (Nand_Den.indexOf("null") > -1) {
                             DensityMissingProd[(selProd.DC_ID).toString()] = ({ DCID: selProd.DC_ID, selDen: selProd.NUM_OF_DENSITY, actDen: Nand_Den.length, cond: 'nullDensity' });
                             return;

@@ -1106,10 +1106,7 @@ namespace Intel.MyDeals.BusinessLogic
                                                       CAP_PRC_COND = d.CAP_PRC_COND,
                                                       CAP_START = d.CAP_START,
                                                       CPU_CACHE = r.CPU_CACHE,
-                                                      CPU_PACKAGE = r.CPU_PACKAGE,
                                                       CPU_PROCESSOR_NUMBER = r.CPU_PROCESSOR_NUMBER,
-                                                      CPU_VOLTAGE_SEGMENT = r.CPU_VOLTAGE_SEGMENT,
-                                                      CPU_WATTAGE = r.CPU_WATTAGE,
                                                       DEAL_END_DT = d.DEAL_END_DT,
                                                       DEAL_PRD_NM = r.DEAL_PRD_NM,
                                                       DEAL_PRD_TYPE = r.DEAL_PRD_TYPE,
@@ -1127,8 +1124,6 @@ namespace Intel.MyDeals.BusinessLogic
                                                       MM_CUST_CUSTOMER = r.MM_CUST_CUSTOMER,
                                                       MTRL_ID = r.MTRL_ID,
                                                       MTRL_TYPE_CD = r.MTRL_TYPE_CD,
-                                                      NAND_Density = r.NAND_Density,
-                                                      NAND_FAMILY = r.NAND_FAMILY,
                                                       PCSR_NBR = r.PCSR_NBR,
                                                       PRD_ATRB_SID = r.PRD_ATRB_SID,
                                                       PRD_CAT_NM = r.PRD_CAT_NM,
@@ -1136,7 +1131,6 @@ namespace Intel.MyDeals.BusinessLogic
                                                       PRD_MBR_SID = r.PRD_MBR_SID,
                                                       PRD_STRT_DTM = r.PRD_STRT_DTM,
                                                       PRICE_SEGMENT = r.PRICE_SEGMENT,
-                                                      SBS_NM = r.SBS_NM,
                                                       SKU_MARKET_SEGMENT = r.SKU_MARKET_SEGMENT,
                                                       SKU_NM = r.SKU_NM,
                                                       USR_INPUT = d.USR_INPUT,
@@ -1196,19 +1190,14 @@ namespace Intel.MyDeals.BusinessLogic
             var searchGDMFamily = products.Where(x => !string.IsNullOrEmpty(x.GDM_FMLY_NM)).
                     Select(x => new SearchString { Name = x.GDM_FMLY_NM, Type = ProductHierarchyLevelsEnum.GDM_FMLY_NM.ToString() });
 
-            var searchNandFamily = products.Where(x => !string.IsNullOrEmpty(x.NAND_FAMILY) && x.PRD_ATRB_SID == 7008).
-                               Select(x => new SearchString { Name = x.NAND_FAMILY, Type = ProductHierarchyLevelsEnum.NAND_FAMILY.ToString() });
-
-            var searchNandDensity = products.Where(x => !string.IsNullOrEmpty(x.NAND_Density) && x.PRD_ATRB_SID == 7008).
-                               Select(x => new SearchString { Name = x.NAND_Density, Type = ProductHierarchyLevelsEnum.NAND_DENSITY.ToString() });
+  
+          
 
             var searchEPM = products.Where(x => !string.IsNullOrEmpty(x.EPM_NM) && x.PRD_ATRB_SID == 7008).
                                Select(x => new SearchString { Name = x.EPM_NM, Type = ProductHierarchyLevelsEnum.EPM_NM.ToString() });
 
             _getSearchStringList.AddRange(searchHierColumns);
             _getSearchStringList.AddRange(searchGDMFamily);
-            _getSearchStringList.AddRange(searchNandFamily);
-            _getSearchStringList.AddRange(searchNandDensity);
             _getSearchStringList.AddRange(searchEPM);
 
             var _getSearchString = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
