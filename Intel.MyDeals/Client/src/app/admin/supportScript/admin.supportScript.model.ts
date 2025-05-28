@@ -39,7 +39,7 @@ export interface Quote {
 export interface Account {
     Id: string;
     Name: string;
-    CIMId: string;
+    CustomerMappingId: string;
 }
 
 export interface QuoteLine {

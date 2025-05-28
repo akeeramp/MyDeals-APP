@@ -21,7 +21,7 @@ export class UiDropdownResponseItem {
     public ATRB_LKUP_SID: number;
     public ATRB_LKUP_TTIP: string;
     public ATRB_SID: number;
-    public CUST_CIM_ID: string;
+    public CUST_MAP_ID: string;
     public CUST_NM: string;
     public CUST_MBR_SID: number;
     public DFLT_FLG: number;

@@ -23,7 +23,7 @@ namespace Intel.MyDeals.DataLibrary
             using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_GET_GEO_SOLD_TO_ID()))
             {
                 int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
-                int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
+                int IDX_CUST_MAP_ID = DB.GetReaderOrdinal(rdr, "CUST_MAP_ID");
                 int IDX_CUST_DIV_NM = DB.GetReaderOrdinal(rdr, "CUST_DIV_NM");
                 int IDX_CUST_DIV_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_DIV_NM_SID");
                 int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
@@ -39,7 +39,7 @@ namespace Intel.MyDeals.DataLibrary
                     ret.Add(new SoldToIds
                     {
                         ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
-                        CUST_CIM_ID = (IDX_CUST_CIM_ID < 0 || rdr.IsDBNull(IDX_CUST_CIM_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CIM_ID),
+                        CUST_MAP_ID = (IDX_CUST_MAP_ID < 0 || rdr.IsDBNull(IDX_CUST_MAP_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_MAP_ID),
                         CUST_DIV_NM = (IDX_CUST_DIV_NM < 0 || rdr.IsDBNull(IDX_CUST_DIV_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_DIV_NM),
                         CUST_DIV_NM_SID = (IDX_CUST_DIV_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_DIV_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_DIV_NM_SID),
                         CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),

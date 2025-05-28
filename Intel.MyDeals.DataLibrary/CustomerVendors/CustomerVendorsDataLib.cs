@@ -132,7 +132,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_ATRB_LKUP_SID = DB.GetReaderOrdinal(rdr, "ATRB_LKUP_SID");
                     int IDX_ATRB_LKUP_TTIP = DB.GetReaderOrdinal(rdr, "ATRB_LKUP_TTIP");
                     int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
-                    int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
+                    int IDX_CUST_MAP_ID = DB.GetReaderOrdinal(rdr, "CUST_MAP_ID");
                     int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
                     int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
                     int IDX_DFLT_FLG = DB.GetReaderOrdinal(rdr, "DFLT_FLG");
@@ -151,7 +151,7 @@ namespace Intel.MyDeals.DataLibrary
                             ATRB_LKUP_SID = (IDX_ATRB_LKUP_SID < 0 || rdr.IsDBNull(IDX_ATRB_LKUP_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_LKUP_SID),
                             ATRB_LKUP_TTIP = (IDX_ATRB_LKUP_TTIP < 0 || rdr.IsDBNull(IDX_ATRB_LKUP_TTIP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_LKUP_TTIP),
                             ATRB_SID = (IDX_ATRB_SID < 0 || rdr.IsDBNull(IDX_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SID),
-                            CUST_CIM_ID = (IDX_CUST_CIM_ID < 0 || rdr.IsDBNull(IDX_CUST_CIM_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CIM_ID),
+                            CUST_MAP_ID = (IDX_CUST_MAP_ID < 0 || rdr.IsDBNull(IDX_CUST_MAP_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_MAP_ID),
                             CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
                             CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
                             DFLT_FLG = (IDX_DFLT_FLG < 0 || rdr.IsDBNull(IDX_DFLT_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DFLT_FLG),

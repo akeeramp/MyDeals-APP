@@ -1082,9 +1082,9 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute CUST_CIM_ID = new MyDealsAttribute()
+		public static MyDealsAttribute CUST_MAP_ID = new MyDealsAttribute()
 		{
-			ATRB_COL_NM = "CUST_CIM_ID",
+			ATRB_COL_NM = "CUST_MAP_ID",
 			ATRB_DESC = "Customer CIM ID",
 			ATRB_LBL = "Customer CIM ID",
 			ATRB_MAX_LEN = 1000,

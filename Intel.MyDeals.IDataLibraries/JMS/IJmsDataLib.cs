@@ -49,7 +49,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal, int custId);
 
-        int FetchCustFromCimId(string custCimId);
+        int FetchCustFromCustomerMappingId(string CustomerMappingId);
 
         TenderXidObject FetchTendersReturnByXid(string xid);
 

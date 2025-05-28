@@ -1019,21 +1019,21 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public int FetchCustFromCimId(string custCimId)
+        public int FetchCustFromCustomerMappingId(string CustomerMappingId)
         {
             int retCustId = 0;
             // TO DO: Fill in with correct passed data after verification
 
             var cmd = new Procs.dbo.PR_MYDL_CUST_CIM_ID_MAP_DTL()
             {
-                in_cust_cim_id = custCimId
+                in_cust_cim_id = CustomerMappingId
             };
 
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
-                    //int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
+                    //int IDX_CUST_MAP_ID = DB.GetReaderOrdinal(rdr, "CUST_MAP_ID");
                     int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
                     //int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
 

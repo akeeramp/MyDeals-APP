@@ -837,7 +837,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (requestedCustomerInfo == null)
             {
                 string idsid = OpUserStack.MyOpUserToken != null ? OpUserStack.MyOpUserToken.Usr.Idsid : "";
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CIMId + "] to Create/Update Deal", "User missing customer access"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CustomerMappingId + "] to Create/Update Deal", "User missing customer access"));
                 return initWipId;
             }
 
@@ -1223,17 +1223,17 @@ namespace Intel.MyDeals.BusinessLogic
                 // Start Create Request Action for the current quoteline item
                 string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
                 string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
-                string custCimId = workRecordDataFields.recordDetails.quote.account.CIMId; // empty string still returns Dell ID
+                string CustomerMappingId = workRecordDataFields.recordDetails.quote.account.CustomerMappingId; // empty string still returns Dell ID
 
                 // TODO: Do a record stability check first and if no error messages, continue, catch things like ECAP/GEO/ETC
 
                 executionResponse += "Processing [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
-                int custId = _jmsDataLib.FetchCustFromCimId(custCimId); // set the customer ID based on Customer CIM ID
+                int custId = _jmsDataLib.FetchCustFromCustomerMappingId(CustomerMappingId); // set the customer ID based on Customer CIM ID
 
-                if ((custCimId == null || custCimId == "") || custId == 0) // Need to have a working customer for this request and failed, skip!
+                if ((CustomerMappingId == null || CustomerMappingId == "") || custId == 0) // Need to have a working customer for this request and failed, skip!
                 {
-                    if (custCimId == null) custCimId = "null";
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(701, "Customer error: Unable to find the customer with CIMId {" + custCimId + "}.  Please contact My Deals Support for Invalid Customer", "Invalid Customer"));
+                    if (CustomerMappingId == null) CustomerMappingId = "null";
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(701, "Customer error: Unable to find the customer with CustomerMappingId {" + CustomerMappingId + "}.  Please contact My Deals Support for Invalid Customer", "Invalid Customer"));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, 0, dealId);
                     continue;
                 }
@@ -1475,7 +1475,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (requestedCustomerInfo == null)
             {
                 string idsid = OpUserStack.MyOpUserToken != null ? OpUserStack.MyOpUserToken.Usr.Idsid : "";
-                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CIMId + "] to Create/Update/Delete Deal", "User missing customer access"));
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CustomerMappingId + "] to Create/Update/Delete Deal", "User missing customer access"));
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
@@ -1926,7 +1926,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (requestedCustomerInfo == null)
             {
                 string idsid = OpUserStack.MyOpUserToken != null ? OpUserStack.MyOpUserToken.Usr.Idsid : "";
-                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CIMId + "] to Create/Update Deal", "User missing customer access"));
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CustomerMappingId + "] to Create/Update Deal", "User missing customer access"));
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
@@ -2498,12 +2498,12 @@ namespace Intel.MyDeals.BusinessLogic
 
         public string IqrFetchCapData(TenderCapRequestObject jsonDataPacket) // Fetch CAP data for Customer/Product/Dates for IQR
         {
-            string custCimId = jsonDataPacket.CustomerCIMId; // empty string still returns Dell ID
-            int custId = _jmsDataLib.FetchCustFromCimId(custCimId); // set the customer ID based on Customer CIM ID
+            string CustomerMappingId = jsonDataPacket.CustomerMappingId; // empty string still returns Dell ID
+            int custId = _jmsDataLib.FetchCustFromCustomerMappingId(CustomerMappingId); // set the customer ID based on Customer CIM ID
 
-            if (custCimId == "" || custId == 0) // Need to have a working customer for this request and failed, skip!
+            if (CustomerMappingId == "" || custId == 0) // Need to have a working customer for this request and failed, skip!
             {
-                return "ERROR: Failed on CIM ID Lookup"; // Bail out - no customers matched
+                return "ERROR: Failed on Customer Mapping Id Lookup"; // Bail out - no customers matched
             }
 
 
