@@ -95,12 +95,12 @@
                 <span title={{column.title}}>{{column.title}}</span>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="IA_BNCH" title="IA Bench" [groupable]="false" filter="numeric">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="IA_BNCH" title="IA Bench" format="{0:c}" [groupable]="false" filter="numeric">
             <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                 <span title={{column.title}}>{{column.title}}</span>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="COMP_BNCH" title="Comp Bench" [groupable]="false" filter="numeric">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="COMP_BNCH" title="Comp Bench" format="{0:c}" [groupable]="false" filter="numeric">
             <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                 <span title={{column.title}}>{{column.title}}</span>
             </ng-template>

@@ -123,7 +123,7 @@
                             </multicheck-filter>
                         </ng-template>
                         <ng-template kendoGridCellTemplate let-dataItem>
-                            <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}">{{dataItem.MC_AVG_RPU}}</div>
+                            <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}"><span *ngIf="dataItem.MC_AVG_RPU != null">$</span>{{dataItem.MC_AVG_RPU}}</div>
                         </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column field="COMP_SKU" title="Meet Comp SKU" width="170" [headerClass]="{'headerClass':true}">
@@ -167,7 +167,7 @@
                             <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.IA_BNCH) }">
                                 <div *ngIf="(dataItem.IA_BNCH==0 || dataItem.IA_BNCH==null );else Ia_Bnch"></div>
                                 <ng-template #Ia_Bnch>
-                                    <div>{{dataItem.IA_BNCH}}</div>
+                                    <div>${{dataItem.IA_BNCH}}</div>
                                 </ng-template>
                             </div>
                         </ng-template>
@@ -184,7 +184,7 @@
                             <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_BNCH) }">
                                 <div *ngIf="(dataItem.COMP_BNCH==0 || dataItem.COMP_BNCH==null );else Comp_Bnch"></div>
                                 <ng-template #Comp_Bnch>
-                                    <div>{{dataItem.COMP_BNCH}}</div>
+                                    <div>${{dataItem.COMP_BNCH}}</div>
                                 </ng-template>
                             </div>
                         </ng-template>
@@ -374,7 +374,7 @@
                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field, dataItem)"></multicheck-filter>
                                     </ng-template>
                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                        <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}">{{dataItem.MC_AVG_RPU}}</div>
+                                        <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}"><span *ngIf="dataItem.MC_AVG_RPU != null">$</span>{{dataItem.MC_AVG_RPU}}</div>
                                     </ng-template>
                                 </kendo-grid-column>
                                 <kendo-grid-column field="COMP_SKU" title="Meet Comp SKU" width="155" [headerClass]="{'headerClass':true}">
@@ -415,7 +415,7 @@
                                             <div *ngIf="(dataItem.IA_BNCH==0 || dataItem.IA_BNCH==null );else Ia_Bnch">
                                             </div>
                                             <ng-template #Ia_Bnch>
-                                                <div>{{dataItem.IA_BNCH}}</div>
+                                                <div>${{dataItem.IA_BNCH}}</div>
                                             </ng-template>
                                         </div>
                                     </ng-template>
@@ -432,7 +432,7 @@
                                             <div *ngIf="(dataItem.COMP_BNCH==0 || dataItem.COMP_BNCH==null );else Comp_Bnch">
                                             </div>
                                             <ng-template #Comp_Bnch>
-                                                <div>{{dataItem.COMP_BNCH}}</div>
+                                                <div>${{dataItem.COMP_BNCH}}</div>
                                             </ng-template>
                                         </div>
                                     </ng-template>
