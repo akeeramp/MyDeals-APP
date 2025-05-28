@@ -24,17 +24,21 @@ namespace Intel.MyDeals.BusinessLogic
         private readonly IDropdownDataLib _dropdownDataLib;
         private readonly IPrimeCustomersDataLib _primeCustomerLib;
         private readonly IConstantsLookupsLib _constantsLookupsLib;
-        private readonly IDataFixDataLib _dataFixDataLib;        
+        private readonly IDataFixDataLib _dataFixDataLib;
+        //private readonly IPrimeCustomersLib _primeCustomersLib;
         private List<int> UserTokenErrorCodes = new List<int> { 704, 705 }; // Known abort messages for User Token Security
 
         public IntegrationLib(IJmsDataLib jmsDataLib, IOpDataCollectorLib dataCollectorLib, IPrimeCustomersDataLib primeCustomerLib,
-            IConstantsLookupsLib constantsLookupsLib, IDataFixDataLib dataFixDataLib)
+            IConstantsLookupsLib constantsLookupsLib, IDataFixDataLib dataFixDataLib
+            //, IPrimeCustomersLib primeCustomersLib
+            )
         {
             _jmsDataLib = jmsDataLib;
             _dataCollectorLib = dataCollectorLib;
             _primeCustomerLib = primeCustomerLib;
             _constantsLookupsLib = constantsLookupsLib;
-            _dataFixDataLib = dataFixDataLib;            
+            _dataFixDataLib = dataFixDataLib;
+            //_primeCustomersLib = primeCustomersLib;
         }
 
         public void TestAsyncProcess(Guid myGuid)
@@ -121,7 +125,7 @@ namespace Intel.MyDeals.BusinessLogic
             //var result = _jmsDataLib.CheckProcessedIQRDeals(firstInListGuid, true);
             //if (result)
             //{
-            //   TestAsyncProcess(firstInListGuid);
+            //    TestAsyncProcess(firstInListGuid);
             //}
 
             return firstInListGuid;
@@ -824,6 +828,78 @@ namespace Intel.MyDeals.BusinessLogic
                         PRIMED_CUST_NM = primedCustName
                     });
                     endCustomerObject = JsonConvert.SerializeObject(endCustData);
+                    try
+                    {
+                        //TWC3167-10375
+                        //Checking if endCustomerObject is already insterted in log table.
+                        List<UnPrimedDealLogs> result = new List<UnPrimedDealLogs>();
+                        result = _primeCustomerLib.UnPrimeDealsLogs(0, endCustomerObject);
+                        if (result != null && result.Count > 0)
+                        {
+                            var PRIMED_CUST_ID = result.First(o => o.END_CUSTOMER_RETAIL == customer && o.PRIMED_CUST_CNTRY == endCustomerCountry)?.PRIMED_CUST_ID;
+                            if (PRIMED_CUST_ID != null && PRIMED_CUST_ID == 0)
+                            {                                
+                                //circular dependency issue is occuring because of dependency injection in constructor, that is why object created manually..
+                                IPrimeCustomersLib _primeCustomersLib = new PrimeCustomersLib(_primeCustomerLib,null,null,_jmsDataLib);
+                                //registering endCustomerObject in MYDL_UCD_RQST_RSPN_LOG table and calling JMS - Request to UCD.
+                                var ucdResponseString = _primeCustomersLib.UnPrimeDealsLogs("0", endCustomerObject);
+                                //from the above method if we receive return value as YES/NA then we might have a data in MYDL_PRIM_CUST_DTL table..                    
+                                if (ucdResponseString != "" && ucdResponseString != null && (ucdResponseString.ToLower() == "yes" || ucdResponseString.ToLower() == "na"))
+                                {
+                                    List<EndCustomer> endCustomers = new List<EndCustomer>();
+                                    endCustomers = _primeCustomerLib.ValidateEndCustomer(endCustomerObject);
+                                    if (endCustomers != null && endCustomers.Count > 0)
+                                    {
+                                        EndCustomer endCustomerObj = new EndCustomer();
+                                        endCustomerObj = endCustomers.First(o => o.END_CUSTOMER_RETAIL == customer && o.PRIMED_CUST_CNTRY == endCustomerCountry);
+                                        if (endCustomerObj != null && endCustomerObj.IS_PRIMED_CUST == "1")
+                                        {
+                                            var unifiedRetailData = new List<EndCustomer>() { new EndCustomer {
+                                                    END_CUSTOMER_RETAIL = endCustomerObj.END_CUSTOMER_RETAIL,
+                                                    PRIMED_CUST_CNTRY = endCustomerObj.PRIMED_CUST_CNTRY,
+                                                    IS_EXCLUDE = endCustomerObj.IS_EXCLUDE,
+                                                    IS_PRIMED_CUST = endCustomerObj.IS_PRIMED_CUST,
+                                                    PRIMED_CUST_ID = endCustomerObj.PRIMED_CUST_ID,
+                                                    RPL_STS_CD = endCustomerObj.RPL_STS_CD,
+                                                    IS_RPL = endCustomerObj.IS_RPL,
+                                                    PRIMED_CUST_NM = endCustomerObj.PRIMED_CUST_NM
+                                            }};
+                                            endCustomerObject = JsonConvert.SerializeObject(unifiedRetailData);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        //when result is null, we might have data in log table or else might have data in master table, if data present in master table, needs to read it
+                        if (result == null || result.Count == 0)
+                        {
+                            List<EndCustomer> endCustomers = new List<EndCustomer>();
+                            endCustomers = _primeCustomerLib.ValidateEndCustomer(endCustomerObject);
+                            if (endCustomers != null && endCustomers.Count > 0)
+                            {
+                                EndCustomer endCustomerObj = new EndCustomer();
+                                endCustomerObj = endCustomers.First(o => o.END_CUSTOMER_RETAIL == customer && o.PRIMED_CUST_CNTRY == endCustomerCountry);
+                                if (endCustomerObj != null && endCustomerObj.IS_PRIMED_CUST == "1")
+                                {
+                                    var unifiedRetailData = new List<EndCustomer>() { new EndCustomer {
+                                                    END_CUSTOMER_RETAIL = endCustomerObj.END_CUSTOMER_RETAIL,
+                                                    PRIMED_CUST_CNTRY = endCustomerObj.PRIMED_CUST_CNTRY,
+                                                    IS_EXCLUDE = endCustomerObj.IS_EXCLUDE,
+                                                    IS_PRIMED_CUST = endCustomerObj.IS_PRIMED_CUST,
+                                                    PRIMED_CUST_ID = endCustomerObj.PRIMED_CUST_ID,
+                                                    RPL_STS_CD = endCustomerObj.RPL_STS_CD,
+                                                    IS_RPL = endCustomerObj.IS_RPL,
+                                                    PRIMED_CUST_NM = endCustomerObj.PRIMED_CUST_NM
+                                    }};
+                                    endCustomerObject = JsonConvert.SerializeObject(unifiedRetailData);
+                                }
+                            }
+                        }                        
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Exception while logging the unprim data: {ex.Message}");
+                    }
                 }
             }
             else
@@ -1350,7 +1426,7 @@ namespace Intel.MyDeals.BusinessLogic
             
             if(!(currentWippsWfStg == WorkFlowStages.Submitted || currentWippsWfStg == WorkFlowStages.Requested))
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(724, "Update Error: Deal is not at Submitted stage where rollback is not allowed", "Rollback is not allowed when Deal is at Submitted stage"));
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(724, "Update Error: Deal is not at Submitted/Requested stage where rollback is not allowed", "Rollback is not allowed when Deal is not at Submitted/Requested stage"));
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse;
             }

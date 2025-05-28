@@ -248,21 +248,16 @@ namespace Intel.MyDeals.BusinessLogic
             int batchSize = int.Parse(ConfigurationManager.AppSettings["acmBatchSize"]);
             try
             {
-
-
                 result = _primeCustomersDataLib.UnPrimeDealsLogs(dealId, endCustData);
-                requestCount = result.Count;
+                requestCount = result.Count;                
                 while (result.Any())
                 {
                     var batch = result.Take(batchSize);
                     result = result.Skip(batchSize).ToList();
-
                     var UCDReqDataList = new UCDRequest
                     {
                         accountRequests = new List<UCDRequest.AccountRequests>()
                     };
-
-
                     foreach (UnPrimedDealLogs Customer in batch)
                     {
                         var UCDReqData = new UCDRequest.AccountRequests
@@ -296,9 +291,9 @@ namespace Intel.MyDeals.BusinessLogic
                         }
                         UCDReqDataList.accountRequests.Add(UCDReqData);
                         String UCDJson = JsonConvert.SerializeObject(UCDReqData, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                        
+                        //dealId != 0 condition is removed since we're depending on end_customer_retail and country and not depending on this dealId in stored procedure.
                         if ((Customer.END_CUSTOMER_RETAIL != null && Customer.END_CUSTOMER_RETAIL != "") &&
-                            (Customer.PRIMED_CUST_CNTRY != null && Customer.PRIMED_CUST_CNTRY != "") && dealId != 0)
+                            (Customer.PRIMED_CUST_CNTRY != null && Customer.PRIMED_CUST_CNTRY != ""))
                         {
                             //In the case of Retry API request,below line of code is to update retry count for the re-tried End customer-country record
                             if (isRetry)
@@ -315,7 +310,6 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             OpLogPerf.Log("UCD - Error in saving AMQ request ");
                         }
-
                     }
 
 
@@ -349,8 +343,9 @@ namespace Intel.MyDeals.BusinessLogic
                             string UCDJsonResponse = JsonConvert.SerializeObject(Response);
                             if (Response.status.ToLower() == "success")
                             {
+                                //for @in_sts = "API_accountid_received" dealId is not required that is why dealId condition is removed in if condition
                                 if ((Response.data.Name != null && Response.data.Name != "") &&
-                                  (Response.data.CountryName != null && Response.data.CountryName != "") && dealId != 0)
+                                  (Response.data.CountryName != null && Response.data.CountryName != ""))
                                 {
                                     _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
                                 dealId, null, UCDJsonResponse, Response.data.AccountId, "API_accountid_received");
@@ -366,8 +361,9 @@ namespace Intel.MyDeals.BusinessLogic
                             }
                             else if (Response.errormessage.ToLower() == "duplicate account" && Response.data.DuplicateAccountRecordType.ToLower() == "requested account")
                             {
+                                //for @in_sts = "API_accountid_received" dealId is not required that is why dealId condition is removed in if condition
                                 if ((Response.data.Name != null && Response.data.Name != "") &&
-                                 (Response.data.CountryName != null && Response.data.CountryName != "") && dealId != 0)
+                                 (Response.data.CountryName != null && Response.data.CountryName != ""))
                                 {
                                     _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
                                 dealId, null, UCDJsonResponse, Response.data.DuplicateAccountId, "API_accountid_received");
@@ -382,17 +378,18 @@ namespace Intel.MyDeals.BusinessLogic
                                 
                                 var dealEndCustomerResponse = _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
                          dealId, null, UCDJsonResponse, Response.data.DuplicateAccountId, "API_Response_received");
-                                
-                                
-                                if (dealEndCustomerResponse != null && dealEndCustomerResponse.Count() > 0)
-                                {
-                                    if (dealEndCustomerResponse[0].DEAL_ID > 0)
-                                    {
-                                        //sending this status back to UI to re-validate End customer again so that Unified atributes and END_CUST_OBJ gets updated for the newly unified record.
-                                        isEndCustRecordUnified = "Yes";
-                                    }
-                                }
 
+
+                                //if (dealEndCustomerResponse != null && dealEndCustomerResponse.Count() > 0)
+                                //{
+                                //Commented DEAL_ID > 0 condition since this method is being called from IQR creation method. Anyhow this deal_id is not being used in anywhere.
+                                //if (dealEndCustomerResponse[0].DEAL_ID > 0)
+                                //{
+                                //sending this status back to UI to re-validate End customer again so that Unified atributes and END_CUST_OBJ gets updated for the newly unified record.
+                                //        isEndCustRecordUnified = "Yes";
+                                //    }
+                                //}
+                                if (dealEndCustomerResponse != null) isEndCustRecordUnified = "Yes";
                             }
                             else
                             {
@@ -426,7 +423,6 @@ namespace Intel.MyDeals.BusinessLogic
                     success = "NA";
                 }
                 else if (responseCount == requestCount)
-
                 {
                     success = "true";
                 }
