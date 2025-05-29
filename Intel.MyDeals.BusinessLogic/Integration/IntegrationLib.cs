@@ -865,6 +865,17 @@ namespace Intel.MyDeals.BusinessLogic
                                                     PRIMED_CUST_NM = endCustomerObj.PRIMED_CUST_NM
                                             }};
                                             endCustomerObject = JsonConvert.SerializeObject(unifiedRetailData);
+                                            //The below part is to append values for deal attributes.
+                                            isPrimedCustomer = endCustomerObj.IS_PRIMED_CUST;
+                                            isRPLedCustomer = endCustomerObj.IS_RPL;
+                                            RPLStatusCode = endCustomerObj.RPL_STS_CD;
+                                            primedCustomerL1Id = endCustomerObj.PRIMED_CUST_ID;
+                                            primedCustName = endCustomerObj.PRIMED_CUST_NM;
+                                            //TWC3167-10518
+                                            //The below part is to get the PRIM_LVL_ID and including that value in IQR response JSON packet..
+                                            EndCustomerObject endCustObjs = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry, primedCustomerL1Id);
+                                            if (endCustObjs != null && endCustObjs.UnifiedEndCustomerId.ToString() == endCustomerObj.PRIMED_CUST_ID)
+                                                primedCustomerL2Id = endCustObjs.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObjs.UnifiedCountryEndCustomerId.ToString();
                                         }
                                     }
                                 }
@@ -892,6 +903,17 @@ namespace Intel.MyDeals.BusinessLogic
                                                     PRIMED_CUST_NM = endCustomerObj.PRIMED_CUST_NM
                                     }};
                                     endCustomerObject = JsonConvert.SerializeObject(unifiedRetailData);
+                                    //The below part is to append values for deal attributes.
+                                    isPrimedCustomer = endCustomerObj.IS_PRIMED_CUST;
+                                    isRPLedCustomer = endCustomerObj.IS_RPL;
+                                    RPLStatusCode = endCustomerObj.RPL_STS_CD;
+                                    primedCustomerL1Id = endCustomerObj.PRIMED_CUST_ID;
+                                    primedCustName = endCustomerObj.PRIMED_CUST_NM;
+                                    //TWC3167-10518
+                                    //The below part is to get the PRIM_LVL_ID and including that value in IQR response JSON packet..
+                                    EndCustomerObject endCustObjs = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry, primedCustomerL1Id);
+                                    if (endCustObjs != null && endCustObjs.UnifiedEndCustomerId.ToString() == endCustomerObj.PRIMED_CUST_ID)
+                                        primedCustomerL2Id = endCustObjs.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObjs.UnifiedCountryEndCustomerId.ToString();
                                 }
                             }
                         }                        
