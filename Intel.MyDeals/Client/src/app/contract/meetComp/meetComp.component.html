@@ -123,7 +123,7 @@
                             </multicheck-filter>
                         </ng-template>
                         <ng-template kendoGridCellTemplate let-dataItem>
-                            <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}"><span *ngIf="dataItem.MC_AVG_RPU != null">$</span>{{dataItem.MC_AVG_RPU}}</div>
+                            <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}"><span *ngIf="(dataItem.MC_AVG_RPU != null && dataItem.MC_AVG_RPU != '' && dataItem.MC_AVG_RPU > 0)">$</span>{{dataItem.MC_AVG_RPU}}</div>
                         </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column field="COMP_SKU" title="Meet Comp SKU" width="170" [headerClass]="{'headerClass':true}">
@@ -374,7 +374,7 @@
                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field, dataItem)"></multicheck-filter>
                                     </ng-template>
                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                        <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}"><span *ngIf="dataItem.MC_AVG_RPU != null">$</span>{{dataItem.MC_AVG_RPU}}</div>
+                                        <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}"><span *ngIf="(dataItem.MC_AVG_RPU != null && dataItem.MC_AVG_RPU != '' && dataItem.MC_AVG_RPU > 0)">$</span>{{dataItem.MC_AVG_RPU}}</div>
                                     </ng-template>
                                 </kendo-grid-column>
                                 <kendo-grid-column field="COMP_SKU" title="Meet Comp SKU" width="155" [headerClass]="{'headerClass':true}">
