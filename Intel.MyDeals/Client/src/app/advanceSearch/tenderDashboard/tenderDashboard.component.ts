@@ -850,37 +850,47 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
             }
         }    }
 
-    openEmail(items){
-        let rootUrl = window.location.protocol + "//" + window.location.host;
-        var custNames = [];
-        var endCustomers = [];
+    
+    private getHostname(): string {
+        const IS_PRODUCTION = ((<any> window).env).includes('PROD');
+        if (IS_PRODUCTION) {    // All production hosts will use the load balanced address
+            return `https://mydeals.intel.com`;
+        }
+
+        return `${ window.location.protocol }//${ window.location.host }`;
+    }
+
+    openEmail(items) {
+        const HOST_URL = this.getHostname();
+        let custNames = [];
+        let endCustomers = [];
         // Check unique stages as per role
-        var stageToCheck = "";
+        let stageToCheck = "";
         if ((<any>window).usrRole == "DA") {
-            stageToCheck = "Approved"
+            stageToCheck = "Approved";
         } else if ((<any>window).usrRole == "GA") {
-            stageToCheck = "Submitted"
+            stageToCheck = "Submitted";
         }
 
         // set this flag to false when stages are not unique as per role
         let stagesOK = true;
 
-        for (var x = 0; x < items.length; x++) {
+        for (let x = 0; x < items.length; x++) {
             if (custNames.indexOf(items[x].Customer.CUST_NM) < 0)
                 custNames.push(items[x].Customer.CUST_NM);
             if (endCustomers.indexOf(items[x].END_CUSTOMER_RETAIL) < 0)
                 endCustomers.push(items[x].END_CUSTOMER_RETAIL);
-            items[x].url = rootUrl + "/advancedSearch#/tenderDashboard?DealType=" + this.dealType + "&Deal=" + items[x].DC_ID + "&search=true&approvedeals=true"
-            items[x].folioUrl = rootUrl + "/advancedSearch#/tenderDashboard?DealType=" + this.dealType + "&FolioId=" + items[x].CNTRCT_OBJ_SID + "&search=true&approvedeals=true"
+            items[x].url = HOST_URL + "/advancedSearch#/tenderDashboard?DealType=" + this.dealType + "&Deal=" + items[x].DC_ID + "&search=true&approvedeals=true";
+            items[x].folioUrl = HOST_URL + "/advancedSearch#/tenderDashboard?DealType=" + this.dealType + "&FolioId=" + items[x].CNTRCT_OBJ_SID + "&search=true&approvedeals=true";
 
             if (stageToCheck != "" && stageToCheck != items[x].PS_WF_STG_CD) {
                 stagesOK = false;
             }
         }
 
-        if (items.length === 0) {           
+        if (items.length === 0) {
             this.isSearchFailed = true;
-            this.errorMsg = "No items were selected to email."
+            this.errorMsg = "No items were selected to email.";
             return;
         }
 
@@ -891,7 +901,7 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
             subject = "My Deals Deals Approved for ";
             eBodyHeader = "My Deals Deals Approved!";
         } else if (stagesOK && (<any>window).usrRole === "GA") {
-            subject = "My Deals Approval Required for "
+            subject = "My Deals Approval Required for ";
             eBodyHeader = "My Deals Approval Required!";
         } else {
             subject = "My Deals Action Required for ";
@@ -900,53 +910,52 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
 
         subject = subject + custNames.join(', ');
 
-        let data = {
+        const DATA = {
             from: (<any>window).usrEmail,
             items: items,
             eBodyHeader: eBodyHeader
-        }
+        };
 
-        var itemListRowString=``;
-        for(let i=0; i<items.length; i++){
-                itemListRowString =itemListRowString+ `<tr>
-                <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><p style='color:#00a;'><a href='${items[i].folioUrl}'>`+ items[i].CNTRCT_OBJ_SID+ ' ' + items[i].CNTRCT_TITLE +`*</a></p></td>
-                <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><p style='color:#00a;'><a href='${items[i].url}'>` + items[i].DC_ID + `*</a></p> </td>
-                <td style='width:160px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span>`+ items[i].END_CUSTOMER_RETAIL + `</span> </td>
-                <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#1f4e79;'>` + items[i].PRODUCT_CATEGORIES + `</span> </td>
-                <td style='width:200px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#767171;'>` + items[i].PS_WF_STG_CD + `</span> </td>
-                <td style='width:200px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><p style='color:#00a'><a href='${items[i].url}'>View Deal*</a></p> </td>
-            </tr>`
-        }
-        let valuemsg = `
-        <div style='font-family:sans-serif;'>
-        <p><span style='font-size:20px; color:#00AEEF; font-weight: 600'>` +  data.eBodyHeader + `</span></p>
-        <p><span style='font-size:18px;'>Tender Deals</span></p>
-        <p><span style='font-size: 12px;'>The following list of Tender Deals have changed.  Click <strong><span style='color:#00AEEF;font-size: 12px;'>View Tender Deal</span></strong> <span style='font-size:12px'>in order to view details in My Deals.</span></p>
-        <table>
-            <thead>
+        let itemListRow = ``;
+        for (let i = 0; i < items.length; i++) {
+            itemListRow = itemListRow + `
                 <tr>
-                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Tender Folio</strong></th>
-                    <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Deal #</strong></th>
-                    <th style='text-align: left; width:160px; font-size: 12px; font-family: sans-serif;'><strong>End Customer</strong></th>
-                    <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Verticals</strong></th>
-                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Stage</strong></th>
-                    <th style='text-align: left; width:150px; font-size: 12px; font-family: sans-serif;'><strong>Action</strong></th>
-                </tr>
-            </thead>
-            <tbody>`+itemListRowString+`
-            </tbody>
-        </table>
-        <p><span style='font-size: 11px; color: black; font-weight: bold;'>*Links are optimized for Google Chrome</span></p>
-        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${data.from}' style="color: #00a; font-size:14px;">` + data.from +`</a>.</span></p>
- 
-        <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
-        </div>
-    `;
+                    <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><p style='color:#00a;'><a href='${ items[i].folioUrl }'>${ items[i].CNTRCT_OBJ_SID } ${ items[i].CNTRCT_TITLE }*</a></p></td>
+                    <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><p style='color:#00a;'><a href='${ items[i].url }'>${ items[i].DC_ID }*</a></p> </td>
+                    <td style='width:160px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span>${ items[i].END_CUSTOMER_RETAIL }</span> </td>
+                    <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#1f4e79;'>${ items[i].PRODUCT_CATEGORIES }</span> </td>
+                    <td style='width:200px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#767171;'>${ items[i].PS_WF_STG_CD }</span> </td>
+                    <td style='width:200px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><p style='color:#00a'><a href='${ items[i].url }'>View Deal*</a></p> </td>
+                </tr>`;
+        }
+        const VALUE_MESSAGE = `
+            <div style='font-family:sans-serif;'>
+                <p><span style='font-size:20px; color:#00AEEF; font-weight: 600'>${ DATA.eBodyHeader}</span></p>
+                <p><span style='font-size:18px;'>Tender Deals</span></p>
+                <p><span style='font-size: 12px;'>The following list of Tender Deals have changed.  Click <strong><span style='color:#00AEEF;font-size: 12px;'>View Tender Deal</span></strong> <span style='font-size:12px'>in order to view details in My Deals.</span></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Tender Folio</strong></th>
+                            <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Deal #</strong></th>
+                            <th style='text-align: left; width:160px; font-size: 12px; font-family: sans-serif;'><strong>End Customer</strong></th>
+                            <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Verticals</strong></th>
+                            <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Stage</strong></th>
+                            <th style='text-align: left; width:150px; font-size: 12px; font-family: sans-serif;'><strong>Action</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>${ itemListRow }</tbody>
+                </table>
+                <p><span style='font-size: 11px; color: black; font-weight: bold;'>*Links are optimized for Google Chrome</span></p>
+                <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${ DATA.from }' style="color: #00a; font-size:14px;">${ DATA.from }</a>.</span></p>
+        
+                <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
+            </div>`;
         const dataItem = {
             from: GLOBAL_EMAIL_ADDRESSES.emailMydealsNotifications,
             to: "",
             subject: subject,
-            body: valuemsg
+            body: VALUE_MESSAGE
         };
 
         if (endCustomers.length > 0) {
@@ -960,8 +969,7 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
                 cellCurrValues: dataItem
             }
         });
-        dialogRef.afterClosed().pipe(takeUntil(this.destroy$)).subscribe((returnVal) => {
-        });
+        dialogRef.afterClosed().pipe(takeUntil(this.destroy$)).subscribe((returnVal) => { });
     }
 
 
