@@ -34,7 +34,7 @@ export class excludeDealGroupModalDialog implements OnDestroy{
                 private loggerSvc: logger,
                 private momentService: MomentService) {}
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isSelected: boolean = true;    
     public loading = true;
     public emailTable: any = "<b>Loading...</b>";

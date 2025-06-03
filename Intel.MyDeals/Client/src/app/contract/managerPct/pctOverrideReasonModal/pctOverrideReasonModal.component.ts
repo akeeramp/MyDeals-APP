@@ -23,7 +23,7 @@ export class pctOverrideReasonModal implements OnDestroy {
                 private loggerSvc: logger,
                 private momentService: MomentService) {}
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private state: State = {
         skip: 0,
         take: 25,

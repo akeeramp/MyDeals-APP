@@ -20,9 +20,19 @@ namespace Intel.MyDeals.BusinessLogic
             _pricingTablesLib = pricingTablesLib;
         }
 
-        public List<DashboardContractSummary> GetDashboardContractSummary(List<int> custIds, DateTime startDate, DateTime endDate, List<int> vertIds = null)
+        public List<DashboardContractSummary> GetDashboardContractSummary(List<int> custIds, DateTime startDate, DateTime endDate, string filter, string grpFltr, string sort, int take, int skip, List<int> vertIds = null)
         {
-            return new DashboardDataLib().GetDashboardContractSummary(custIds, startDate, endDate, vertIds);
+            return _dashboardDataLib.GetDashboardContractSummary(custIds, startDate, endDate, filter, grpFltr, sort, take, skip, vertIds);
+        }
+
+        public List<string> GetDashboardContractSummaryFltr(List<int> custIds, DateTime startDate, DateTime endDate, string filter, string grpFltr, string sort, int take, int skip, List<int> vertIds = null)
+        {
+            return _dashboardDataLib.GetDashboardContractSummaryFltr(custIds, startDate, endDate, filter, grpFltr, sort, take, skip, vertIds);
+        }
+
+        public List<DashboardContractSummaryCount> GetDashboardContractSummaryCount(List<int> custIds, DateTime startDate, DateTime endDate, string filter, string grpFltr, string sort, int take, int skip, List<int> vertIds = null)
+        {
+            return _dashboardDataLib.GetDashboardContractSummaryCount(custIds, startDate, endDate, filter, grpFltr, sort, take, skip, vertIds);
         }
 
         public OpDataCollectorFlattenedDictList GetWipSummary(int ptId)

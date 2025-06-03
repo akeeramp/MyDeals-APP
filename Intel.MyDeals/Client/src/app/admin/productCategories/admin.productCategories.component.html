@@ -10,9 +10,21 @@
 		</div>
 	</div>
 	<div class="col-md-12 kendo-grid-buttons">
-		
-		<kendo-grid class="tt-product-cat legal-exception-design kAlignHeaders" [data]="gridData" [loading]="isLoading" 
-					[pageSize]="state.take" [skip]="state.skip"	[sort]="state.sort" [filter]="state.filter" [sortable]="true"
+		<div class="excel-sections">
+			<button class="btn btn-sm dropdown-toggle tool-hover" style="padding-right: .5rem;" type="button" data-toggle="dropdown">
+				<div class="excel-btn-update">
+					<i class="intelicon-ms-excel-outlined" style="font-size: 30px;color: #fff"></i>
+					<span>Excel Export</span>
+					<span class="caret" style="color: #fff; width: 10px;"></span>
+				</div>
+			</button>
+			<ul class="dropdown-menu" id="excelDropDownMenu">
+				<li (click)="exportToExcel()" style="cursor: pointer;"><a>Export All Columns, All Data</a></li>
+				<li (click)="exportToExcelCustomColumns()" style="cursor: pointer;"><a>Export Current View</a></li>
+			</ul>
+		</div>
+		<kendo-grid class="tt-product-cat productvertical-optimize legal-exception-design kAlignHeaders" [data]="gridData" [loading]="isLoading"
+					[pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
 					[pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" filterable="menu"
 					(dataStateChange)="dataStateChange($event)" [navigable]="true" (edit)="editHandler($event)"
 					(cancel)="cancelHandler($event)" (save)="saveHandler($event)" [resizable]="true" (excelExport)="onExcelExport($event)">
@@ -21,9 +33,9 @@
 					<span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
 				</button>
 				<kendo-grid-spacer></kendo-grid-spacer>
-				<button type="button" kendoGridExcelCommand>
-					<span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
-				</button>
+				<!--<button type="button" kendoGridExcelCommand>
+			<span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+		</button>-->
 				<button (click)="refreshGrid()" class="k-button clearButton">
 					<span class="k-icon k-i-reload k-icon-md"></span>Refresh
 				</button>
@@ -65,7 +77,7 @@
 				<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
 							 let-filterService="filterService">
 					<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-									   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+									   [filterService]="filterService" (valueChange)="filterLoad(column.field)" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
 				</ng-template>
 			</kendo-grid-column>
 			<kendo-grid-column [headerClass]="{'headerClass':true}" field="GDM_VRT_NM" title="GDM Vertical Name"
@@ -73,7 +85,7 @@
 				<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
 							 let-filterService="filterService">
 					<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-									   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+									   [filterService]="filterService" (valueChange)="filterLoad(column.field)" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
 				</ng-template>
 			</kendo-grid-column>
 			<kendo-grid-column [headerClass]="{'headerClass':true}" field="DIV_NM" title="Division Short Name"
@@ -81,7 +93,7 @@
 				<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
 							 let-filterService="filterService">
 					<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-									   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+									   [filterService]="filterService" (valueChange)="filterLoad(column.field)" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
 				</ng-template>
 			</kendo-grid-column>
 			<kendo-grid-column [headerClass]="{'headerClass':true}" field="OP_CD" title="Op Code" width="120"
@@ -89,14 +101,14 @@
 				<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
 							 let-filterService="filterService">
 					<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-									   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+									   [filterService]="filterService" (valueChange)="filterLoad(column.field)" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
 				</ng-template>
 			</kendo-grid-column>
 			<kendo-grid-column [headerClass]="{'headerClass':true}" field="DEAL_PRD_TYPE" title="Deal Product Type">
 				<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
 							 let-filterService="filterService">
 					<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-									   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+									   [filterService]="filterService" (valueChange)="filterLoad(column.field)" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
 				</ng-template>
 				<ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
 					<kendo-textbox ngbTooltip="Deal Product Type is required when row is active." (mouseover)="openTooltip()"
@@ -110,7 +122,7 @@
 				<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
 							 let-filterService="filterService">
 					<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-									   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+									   [filterService]="filterService" (valueChange)="filterLoad(column.field)" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
 				</ng-template>
 				<ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
 					<kendo-textbox ngbTooltip="Product Vertical is required when row is active." (mouseover)="productVerticalTooltipOpen()"
@@ -125,7 +137,7 @@
 				<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
 							 let-filterService="filterService">
 					<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-									   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+									   [filterService]="filterService" (valueChange)="filterLoad(column.field)" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
 				</ng-template>
 			</kendo-grid-column>
 			<kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_DTM" title="Last Update Date"
@@ -139,11 +151,11 @@
 					{{dataItem.CHG_DTM | date: 'M/d/yyyy h:mm a'}}
 				</ng-template>
 			</kendo-grid-column>
-			<kendo-grid-excel fileName="MyDealsProductVerticals.xlsx" [fetchData]="allData">
-                <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
-                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
-                                          [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
-			</kendo-grid-excel>
+			<!--<kendo-grid-excel fileName="MyDealsProductVerticals.xlsx" [fetchData]="allData">
+				<kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
+										  title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+										  [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
+			</kendo-grid-excel>-->
 		</kendo-grid>
 	</div>
 </div>

@@ -23,7 +23,7 @@ export class tenderMCTPCTModalComponent implements OnDestroy {
     private selectedTab: number = 0;
     private modifieddata: any;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     loadAllContractDetails() {
         this.pricingTableSvc.readContract(this.c_Id).pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {

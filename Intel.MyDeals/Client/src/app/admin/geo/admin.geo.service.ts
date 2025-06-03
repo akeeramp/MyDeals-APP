@@ -19,4 +19,9 @@ export class geoService {
         return this.httpClient.get<GeoDimension[]>(apiUrl);
     }
 
+    public getGeosNew(data): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'GetGeos';
+        return this.httpClient.post(apiUrl, data);
+    }
+
 }

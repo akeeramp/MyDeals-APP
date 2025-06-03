@@ -31,7 +31,7 @@ export class SearchComponent implements OnDestroy {
     @Input() titleText: string = " ";
     @Output() isDirty = new EventEmitter();
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
                 protected loggerSvc: logger,

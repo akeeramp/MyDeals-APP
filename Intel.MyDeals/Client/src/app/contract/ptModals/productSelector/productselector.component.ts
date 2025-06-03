@@ -85,7 +85,7 @@ export class ProductSelectorComponent implements OnDestroy {
     private searchProcessed = false;
     private excludeProductMessage = "";
     private gridFullData: any[] = [];
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private state: State = {
         skip: 0,
         take: 25,

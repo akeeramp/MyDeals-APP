@@ -13,7 +13,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
 //Helper and utility modules
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { OrderModule } from 'ngx-order-pipe';
@@ -62,6 +61,8 @@ import { ContractUtilComponents } from './contract-util.module';
 import { registerAllModules } from 'handsontable/registry';
 import { PendingChangesGuard } from '../../app/shared/util/gaurdprotectionDeactivate';
 import { IntlModule } from '@progress/kendo-angular-intl';
+import { SearchFilterModule } from '../shared/searchFilter.module';
+
 
 // register Handsontable's modules
 registerAllModules();
@@ -73,7 +74,7 @@ registerAllModules();
         ReactiveFormsModule,
         BrowserModule,
         HttpClientModule,
-        Ng2SearchPipeModule,
+        SearchFilterModule,
         BrowserAnimationsModule,
         ToastrModule.forRoot(),
         ChartsModule,

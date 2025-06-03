@@ -41,7 +41,7 @@ export class CopyContractComponent implements OnDestroy {
     private selectedCustomerIds: Array<any> = [];
     private copyCntrctList: any;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private spinnerMessageHeader = "Loading contracts";
     private spinnerMessageDescription = "Please wait while we load your contracts.";
 

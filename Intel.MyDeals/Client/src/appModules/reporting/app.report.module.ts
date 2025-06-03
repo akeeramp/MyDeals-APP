@@ -19,7 +19,6 @@ import { MatListModule } from '@angular/material/list';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { NgPipesModule } from 'ngx-pipes';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
 //Authentication purpose for token
 import { AuthInterceptor } from '../../app/shared/authorization/auth.interceptor';
 //kendo components
@@ -47,6 +46,8 @@ import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.c
 import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/globalSearch.component';
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingSpinner.component';
 import { POPUP_CONTAINER } from '@progress/kendo-angular-popup';
+import { SearchFilterModule } from '../shared/searchFilter.module';
+
 
 @NgModule({
     imports: [
@@ -72,7 +73,7 @@ import { POPUP_CONTAINER } from '@progress/kendo-angular-popup';
         NgPipesModule,
         DragDropModule,
         ScrollingModule,
-        Ng2SearchPipeModule,
+        SearchFilterModule,
         RouterModule.forRoot(routesReport, { useHash: true })
     ],
     providers: [

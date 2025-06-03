@@ -22,7 +22,7 @@ export class pctChildGridComponent implements OnDestroy{
 
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     //public view: Observable<GridDataResult>;
     public isLoading: boolean;
     public skip = 0;

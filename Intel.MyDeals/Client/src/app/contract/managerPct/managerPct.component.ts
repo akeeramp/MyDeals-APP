@@ -61,7 +61,7 @@ export class ManagerPctComponent implements OnInit, OnDestroy {
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
     @Output() isDirty = new EventEmitter<any>();
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private spinnerMessageHeader = "Complete"; 
     private spinnerMessageDescription = "Reloading the page now.";
     public isPctLoading = false;

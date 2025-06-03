@@ -20,5 +20,12 @@ namespace Intel.MyDeals.Entities
         public string StrSorts { get; set; }
         public int Skip { get; set; }
         public int Take { get; set; }
+        public string Mode { get; set; }
+        public string Filter { get; set; }
+        public string Field { get; set; }
+
+
     }
+
+
 }

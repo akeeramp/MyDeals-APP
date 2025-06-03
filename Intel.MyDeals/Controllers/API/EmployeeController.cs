@@ -32,6 +32,21 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _employeeLib.GetUserRolePermission(), "Unable to get User Role Permission");
         }
 
+        // Have to modify to allow for querying / searching
+        [Authorize]
+        [Route("GetUserRolePermissionByFilter")]
+        public IEnumerable<UserRolePermission> GetUserRolePermissionByFilter(int skipRows = 0, int takeRows = 25, string databaseUserName = null, string startDate = null, string endDate = null, int isFetchLatest = 0, string group = null, string filter = null)
+        {
+            return SafeExecutor(() => _employeeLib.GetUserRolePermissionsByFilter(databaseUserName: databaseUserName,
+                                                                                  startDate: startDate, 
+                                                                                  endDate: endDate, 
+                                                                                  skipRows: skipRows, 
+                                                                                  takeRows: takeRows, 
+                                                                                  isFetchLatest: isFetchLatest,
+                                                                                  group: group,
+                                                                                  filter: filter), "Unable to get User Role Permission");
+        }
+
         [Authorize]
         [Route("GetUsrProfileRoleByRoleCd/{strRoles}")]
         public IEnumerable<UsrProfileRole> GetUsrProfileRoleByRoleCd(string strRoles)
@@ -40,22 +55,12 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _employeeLib.GetUsrProfileRoleByRoleCode(lstRoles), "Unable to get User Profiles");
         }
 
-
-        [Authorize]
-        [AntiForgeryValidate]
-        [HttpPost]
-        [Route("PostUserRolePermission")]
-        public IEnumerable<UserRolePermission> PostUserRolePermission([FromBody] PostUserRolePermission userFormData)
-        {
-            return SafeExecutor(() => _employeeLib.GetUserRolePermission(userFormData.DatabaseUserName, userFormData.StartDate, userFormData.EndDate), "Unable to get User Role Permission");
-        }
-
-        [Authorize]
-        [HttpGet]
-        [Route("FetchUserRolePermission")]
-        public IEnumerable<UserRolePermission> FetchUserRolePermission(int isFetchLatest)
-        {
-            return SafeExecutor(() => _employeeLib.GetUserRolePermission(isFetchLatest: isFetchLatest), "Unable to get User Role Permission - Add New Record");
-        }
+        //[Authorize]
+        //[HttpGet]
+        //[Route("FetchUserRolePermission")]
+        //public IEnumerable<UserRolePermission> FetchUserRolePermission(int isFetchLatest)
+        //{
+        //    return SafeExecutor(() => _employeeLib.GetUserRolePermission(isFetchLatest: isFetchLatest), "Unable to get User Role Permission - Add New Record");
+        //}
     }
 }

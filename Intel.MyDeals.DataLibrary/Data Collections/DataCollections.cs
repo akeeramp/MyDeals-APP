@@ -663,10 +663,23 @@ namespace Intel.MyDeals.DataLibrary
                 return _getProductCategories ?? (_getProductCategories = new ProductCategoriesDataLib().GetProductCategories());
             }
         }
-
-        private static List<ProductCategory> _getProductCategories;
+         private static List<ProductCategory> _getProductCategories;
 
         #endregion Product Vertical
+        public static List<ProductCategory> GetProductCategoriesByPagination(string filter, string sort, int take, int skip)
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return new ProductCategoriesDataLib().GetProductCategoriesByPagination(filter,sort,take,skip);
+            }
+        }
+        public static List<string> GetProductCategoriesByFilter(string filterName)
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return new ProductCategoriesDataLib().GetProductCategoriesByFilter(filterName);
+            }
+        }
 
         #region Settlement_Partner
         public static List<CustomerVendors> GetCustomerVendors()

@@ -18,7 +18,7 @@ export class LogArchivalComponent implements PendingChangesGuard, OnDestroy {
     }
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isLoading = false;
     private color: ThemePalette = "primary";
     isDirty = false;

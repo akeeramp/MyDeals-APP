@@ -16,6 +16,7 @@ import { DropdownService } from './admin.dropdowns.service';
 import { UiDropdownItem } from "./admin.dropdowns.model";
 import { PendingChangesGuard } from "../../shared/util/gaurdprotectionDeactivate";
 import { DropdownBulkUploadDialogComponent } from "./dropdownBulkUploadDialog/admin.dropdowns.bulkUploadDialog.component";
+import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
 
 /**
  * WIP: IQR
@@ -43,7 +44,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     @ViewChild("custDropDown") private custDdl;
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     //Private Varibales
     isDirty = false;
@@ -77,7 +78,10 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     public checkRestrictionFlag: boolean = false;
     private isDeveloperFlag = false;
     public restrictedGroupList = [3456, 3457, 3458, 3454];
-
+    private sortData = "";
+    private filterData = "";
+    private columnFilterDataList: Map<string, Array<string>> = new Map();
+    private dataforfilter: object;
     //For header filter
     public state: State = {
         skip: 0,
@@ -102,9 +106,6 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     async initialization() {
         //loading data
         try {
-            await this.getDealTypeDataSource();
-            await this.getGroupsDataSource();
-            await this.getCustomersDataSource();
             await this.loadUiDropdown();
         } catch (ex) {
             //in catching any errors on loading
@@ -119,14 +120,9 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
         const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
+            data: this.gridResult
         };
-
         return result;
     }
 
@@ -173,35 +169,103 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         );
     }
 
-    async loadUiDropdown() {
+    loadUiDropdown() {
         this.COMP_ATRB_SIDS.push(3456, 3457, 3458, 3464, 3454); // Removed [] from this since it was making push value a single value of array
         this.selectedInheritanceGroup = "";
         //let checkRestrictionFlag = false;
-        let result: any = await this.dropdownService.getBasicDropdowns(true).toPromise().catch((error) => {
-            this.loggerService.error("Unable to get UI Dropdown Values.", error, error.statusText);
-        })
-        this.setNonCorpInheritableValues(result);
-        result = result.filter(ob => ob.ATRB_CD !== "SETTLEMENT_PARTNER");
-        //checkRestrictionFlag = this.checkRestrictions(result);
-        //this to restrict SA users to have only restricted values
-        this.gridResult = result;
-        if (this.checkRestrictionFlag) {
-            this.gridData = process(this.gridResult, this.state);
-            this.isLoading = false;
-        } else {
-            this.gridResult = filter(this.gridResult, (item) => {
-                let id = (item.dropdownID === undefined) ? item.ATRB_SID : item.dropdownID;
-                if (this.restrictedGroupList.includes(id)) return item
-            })
-            this.gridData = process(this.gridResult, this.state);
-            this.isLoading = false;
+
+        this.settingFilter();
+        this.isLoading = true;
+
+        this.dropdownService.getBasicDropdownsNew(this.dataforfilter).pipe(takeUntil(this.destroy$))
+            .subscribe(result => {
+                this.setNonCorpInheritableValues(result.Items);
+                const items = result.Items.filter(ob => ob.ATRB_CD !== "SETTLEMENT_PARTNER");
+                //checkRestrictionFlag = this.checkRestrictions(result);
+                //this to restrict SA users to have only restricted values
+                this.gridResult = items;
+                const state: State = {
+                    skip: 0,
+                    take: this.state.take,
+                    group: [],
+                    filter: {
+                        logic: "and",
+                        filters: [],
+                    }
+                };
+                if (this.checkRestrictionFlag) {
+                    this.gridData = process(this.gridResult, state);
+                    this.gridData.total = result.TotalRows;
+                    this.isLoading = false;
+                } else {
+                    this.gridResult = filter(this.gridResult, (item) => {
+                        let id = (item.dropdownID === undefined) ? item.ATRB_SID : item.dropdownID;
+                        if (this.restrictedGroupList.includes(id)) return item
+                    })
+                    this.gridData = process(this.gridResult, state);
+                    this.gridData.total = result.TotalRows;
+                    this.isLoading = false;
+                }
+            });
+    }
+
+    settingFilter() {
+        this.sortData = "";
+        this.filterData = "";
+        if (this.state.sort) {
+            this.state.sort.forEach((value, ind) => {
+                if (value.dir) {
+                    this.sortData = ind == 0 ? `ORDER BY ${value.field} ${value.dir}` : `${this.sortData} , ${value.field} ${value.dir}`;
+                }
+            });
+        }
+        const filterExpression = FilterExpressBuilder.createSqlExpression(JSON.stringify(this.state.filter));
+        this.filterData = filterExpression;
+        this.dataforfilter = {
+            InFilters: this.filterData,
+            Sort: this.sortData,
+            Skip: this.state.skip,
+            Take: this.state.take
+        };
+    }
+
+    GetColumnFilterData(fieldName: string): any {
+        return this.columnFilterDataList.has(fieldName) ? this.columnFilterDataList.get(fieldName) : [];
+    }
+
+    filterLoad(fieldName: string) {
+        if (fieldName == 'ATRB_LKUP_DESC' || fieldName == 'ATRB_LKUP_TTIP' || fieldName == 'DROP_DOWN') {
+            this.dropdownService.getBasicDropdownsFilterData(fieldName).subscribe(data => {
+                this.columnFilterDataList.set(fieldName, data);
+            });
+        }
+        else if (fieldName == 'OBJ_SET_TYPE_CD') {
+            this.dropdownService.getDealTypesDropdowns(true).subscribe(data => {
+                const dataValues: Array<any> = distinct(data, "dropdownName").map(
+                    (item: any) => item.dropdownName
+                );
+                this.columnFilterDataList.set(fieldName, dataValues);
+            });
+        }
+        else if (fieldName == 'CUST_NM') {
+            this.dropdownService.getCustsDropdowns(true).subscribe(data => {
+                const dataValues: Array<any> = distinct(data, "dropdownName").map(
+                    (item: any) => item.dropdownName
+                );
+                this.columnFilterDataList.set(fieldName, dataValues);
+
+            });
+        }
+        else if (fieldName == 'ATRB_CD') {
+            this.dropdownService.getDropdownGroups(true).subscribe(data => {
+                const dataValues: Array<any> = distinct(data, "dropdownName").map(
+                    (item: any) => item.dropdownName
+                );
+                this.columnFilterDataList.set(fieldName, dataValues);
+
+            });
         }
     }
-
-    distinctPrimitive(fieldName: string): any {
-        return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
-    }
-
     setNonCorpInheritableValues(data: Array<any>) {
         for (let i = 0; i <= data.length; i++) {
             if (data[i] != null && data[i].ATRB_CD == "MRKT_SEG_COMBINED") {
@@ -284,9 +348,15 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     //End of functions
 
     //Events called via html : Starts
-    addHandler({ sender }) {
+    async addHandler({ sender }) {
         this.isDirty=true;
         this.closeEditor(sender);
+        this.isLoading = true
+        await this.getDealTypeDataSource();
+        await this.getGroupsDataSource();
+        await this.getCustomersDataSource();
+        this.isLoading = false
+
         this.formGroup = new FormGroup({
             ACTV_IND: new FormControl(false, Validators.required),
             OBJ_SET_TYPE_CD: new FormControl(this.distinctSetTypeCd[0], Validators.required),
@@ -313,6 +383,9 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
             this.isDirty = true;
             this.closeEditor(sender);
             this.isFormChange = false;
+            this.distinctSetTypeCd = [dataItem.OBJ_SET_TYPE_CD];
+            this.distinctAtributeCd = [dataItem.ATRB_CD];
+            this.distinctCustomerName = [dataItem.CUST_NM];
             this.formGroup = new FormGroup({
                 ACTV_IND: new FormControl(dataItem.ACTV_IND),
                 OBJ_SET_TYPE_CD: new FormControl({ value: dataItem.OBJ_SET_TYPE_CD, disabled: true }),
@@ -343,9 +416,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
                     }
                 }
             }
-        
         }
-        
             this.formGroup.valueChanges.subscribe(() => {
                 this.isFormChange = true;
             });
@@ -434,20 +505,24 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
 
     //UI button click : Starts
     clearFilter() {
+        this.state.skip = 0;
+        this.state.take = 25;
         this.state.filter = {
             logic: "and",
             filters: [],
         };
-        this.gridData = process(this.gridResult, this.state);
+        this.loadUiDropdown();
     }
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
-        this.gridData = process(this.gridResult, this.state);
+        this.loadUiDropdown();
     }
 
     refreshGrid() {
         this.isLoading = true;
+        this.state.skip = 0;
+        this.state.take = 25;
         this.state.filter = {
             logic: "and",
             filters: [],
@@ -490,7 +565,12 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     }
     // UI button click ends
 
-    openBulkUploadDialog() {
+    async openBulkUploadDialog() {
+        this.isLoading = true;
+        await this.getDealTypeDataSource();
+        await this.getGroupsDataSource();
+        await this.getCustomersDataSource();
+        this.isLoading = false;
         const DIALOG_REF = this.dialogService.open(DropdownBulkUploadDialogComponent, {
             width: '80%',
             disableClose: true,

@@ -116,6 +116,10 @@ namespace Intel.MyDeals.DataLibrary
         {
             return DataCollections.GetGeoData();
         }
+        public GeoDetails GetGeoData(string filter, string sort, int take, int skip)
+        {
+            return new GeoDataLib().GetGeoDimensions(filter, sort, take, skip);
+        }
 
         public UiTemplates GetUiTemplates()
         {
@@ -150,6 +154,16 @@ namespace Intel.MyDeals.DataLibrary
         {
             return DataCollections.GetProductCategories();
         }
+        public List<ProductCategory> GetProductCategoriesByPagination(string filter, string sort, int take, int skip)
+        {
+            return DataCollections.GetProductCategoriesByPagination(filter,sort,take,skip);
+
+        }
+        public List<string> GetProductCategoriesByFilter(string filterName)
+        {
+            return DataCollections.GetProductCategoriesByFilter(filterName);
+
+        }
 
         public List<ProductAlias> GetProductsFromAlias()
         {
@@ -169,6 +183,16 @@ namespace Intel.MyDeals.DataLibrary
         public List<BasicDropdown> GetBasicDropdowns()
         {
             return DataCollections.GetBasicDropdowns();
+        }
+
+        public DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip)
+        {
+            return new DropdownDataLib().GetBasicDropdowns(filter, sort, take, skip);
+        }
+
+        public List<string> GetBasicDropdownsFilterData(string filterName)
+        {
+            return new DropdownDataLib().GetBasicDropdownsFilterData(filterName);
         }
 
         public Dictionary<string, string> GetDropdownDict(string lookupText)

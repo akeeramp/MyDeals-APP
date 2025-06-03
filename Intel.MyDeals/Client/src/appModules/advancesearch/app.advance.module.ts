@@ -16,7 +16,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
 //Helper and utility modules
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { OrderModule } from 'ngx-order-pipe';
@@ -61,6 +60,8 @@ import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/glob
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingSpinner.component';
 import { POPUP_CONTAINER } from '@progress/kendo-angular-popup';
 import { AdvanceUtilComponents } from './advance-util.module';
+import { SearchFilterModule } from '../shared/searchFilter.module';
+
 
 @NgModule({
     imports: [
@@ -69,7 +70,7 @@ import { AdvanceUtilComponents } from './advance-util.module';
         ReactiveFormsModule,
         BrowserModule,
         HttpClientModule,
-        Ng2SearchPipeModule,
+        SearchFilterModule,
         BrowserAnimationsModule,
         ToastrModule.forRoot(),
         ChartsModule,

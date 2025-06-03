@@ -7,6 +7,7 @@ namespace Intel.MyDeals.IDataLibrary
 	public interface IDropdownDataLib
 	{
 		List<BasicDropdown> GetBasicDropdowns();
+        DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip);
         List<DropDowns> GetOpDataElements();
 
         List<ConsumptionCountry> GetConsumptionCountryHierarchy();

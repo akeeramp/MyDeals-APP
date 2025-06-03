@@ -12,7 +12,6 @@ import { MomentService } from "../../shared/moment/moment.service";
 export class DealDeskWidgetComponent implements OnInit, OnDestroy, OnChanges {
     @Input() widget;
     @Input() resizeEvent: EventEmitter<GridsterItem>;
-
     @Input() private custIds: string;
     @Input() private startDt: string;
     @Input() private endDt: string;

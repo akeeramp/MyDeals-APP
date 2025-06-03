@@ -22,7 +22,7 @@ export class jobMonitorComponent implements PendingChangesGuard, OnDestroy {
                 private loggerSvc: logger,
                 private momentService: MomentService) {}
 
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private gridResult: Array<any[]>;
     private isDirty = false;
     private isLoading = false;

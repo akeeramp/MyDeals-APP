@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public selectedCustomerIds = [];
     public includeTenders = true;
     public savedWidgetSettings;
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     options: GridsterConfig;
 
     public filterSettings: DropDownFilterSettings = {

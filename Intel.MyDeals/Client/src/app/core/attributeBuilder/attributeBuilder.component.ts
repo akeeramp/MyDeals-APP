@@ -56,7 +56,7 @@ export class AttributeBuilder implements OnInit, OnDestroy {
     private isDeleteRule: boolean = false;
     private runRuleReqd:boolean = false;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     @ViewChild("list") list;
     
     constructor(private pteService: PricingTableEditorService, private loggerSvc: logger, protected usrPrfrncssvc: userPreferencesService,) {}

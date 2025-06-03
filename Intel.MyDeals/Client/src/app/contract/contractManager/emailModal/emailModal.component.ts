@@ -21,7 +21,7 @@ export class emailModal implements OnDestroy{
     emailSubject: any;
     headerInfo: any;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     constructor(public dialogRef: MatDialogRef<emailModal>, @Inject(MAT_DIALOG_DATA) public data, private contractManagerSvc: contractManagerservice, private loggerSvc: logger) {
     }
         public dataItem ;

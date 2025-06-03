@@ -27,6 +27,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<VistexCustomerMapping> GetVistexCustomerMappings();
 
         List<GeoDimension> GetGeoData();
+        GeoDetails GetGeoData(string filter, string sort, int take, int skip);
 
         UiTemplates GetUiTemplates();
 
@@ -37,6 +38,8 @@ namespace Intel.MyDeals.IDataLibrary
         List<ProductAlias> GetProductsFromAlias();
 
         List<BasicDropdown> GetBasicDropdowns();
+        DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip);
+        List<string> GetBasicDropdownsFilterData(string filterName);
         List<DictDropDown> GetDictDropDown(string atrbCd);
 
         Dictionary<string, string> GetDropdownDict(string lookupText);
@@ -47,6 +50,8 @@ namespace Intel.MyDeals.IDataLibrary
         //List<RetailPull> GetRetailPullSDMList();
 
         List<SoldToIds> GetSoldToIdList();
+
+        List<string> GetProductCategoriesByFilter(string fieldName);
 
         List<Funfact> GetFunfactList();
 
@@ -65,7 +70,7 @@ namespace Intel.MyDeals.IDataLibrary
         ProductSelectorWrapper GetProductSelectorWrapperDensity(DateTime startDate, DateTime endDate, string mediaCode);
 
         Dictionary<string, string> GetSearchString();
-
+        List<ProductCategory> GetProductCategoriesByPagination(string filter, string sort, int take, int skip);
         int GetSessionComparisonHash();
     }
 }

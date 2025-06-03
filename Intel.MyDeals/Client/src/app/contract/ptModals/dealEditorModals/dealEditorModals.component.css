@@ -1,4 +1,4 @@
-﻿@import '../../../admin/kendo_grid.css';
+﻿@import '/Client/src/app/admin/kendo_grid.css';
 
 #endCustomermodalBody .endCustomerRowStyle {
     padding-left: 5px;

@@ -27,7 +27,7 @@ export class dealTimelineComponent implements OnDestroy {
     private dcId = this.data.item.objSid;
     private loading = true;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     public isTextIncrease = true;
     public isTextFontTitle = "Click to Decrease Text";
     public isExpand = true;

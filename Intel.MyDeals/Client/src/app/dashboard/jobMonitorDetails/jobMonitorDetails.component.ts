@@ -22,7 +22,7 @@ export class jobMonitorDetailsComponent implements PendingChangesGuard, OnDestro
                 private loggerSvc: logger, private route: ActivatedRoute,
                 private momentService: MomentService) {}
 
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private gridResult: Array<any[]>;
     private gridHistResult: Array<any[]>;
     private isDirty = false;

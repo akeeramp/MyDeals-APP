@@ -14,4 +14,14 @@ export class GridStatusBoardService {
         return this.httpClient.post(apiUrl, data);
     }
 
+    public getContractsFltr(data): Observable<any> {
+        const apiUrl: string = this.API_URL_DASHBOARD + 'GetDashboardContractSummaryFltr';
+        return this.httpClient.post(apiUrl, data);
+    }
+
+    public getContractCount(data): Observable<any> {
+        const apiUrl: string = this.API_URL_DASHBOARD + 'GetDashboardContractSummaryCount';
+        return this.httpClient.post(apiUrl, data);
+    }
+
 }

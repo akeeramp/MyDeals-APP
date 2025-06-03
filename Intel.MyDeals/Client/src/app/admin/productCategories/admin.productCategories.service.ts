@@ -2,6 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
 import { Product_categories } from './admin.productCategories.model';
+import { filter } from "rxjs/operators";
 
 @Injectable({
     providedIn: 'root'
@@ -19,10 +20,16 @@ export class productCategoryService {
         const apiUrl: string = this.apiBaseUrl + 'GetProductCategories';
         return this.httpClient.get(apiUrl);
     }
+    public getCategories_new(data): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'GetProductCategoriesByPagination';
+        return this.httpClient.post(apiUrl,data);
+    }
     public updateCategory(category: Array<Product_categories>): Observable<any> {
         const apiUrl: string = this.apiBaseUrl + 'UpdateProductCategoryBulk';
         return this.httpClient.put(apiUrl, category);
     }
-    
-
+    public getProductVerticalFltr(filterName): Observable<any> {
+        const apiUrl = this.apiBaseUrl + 'GetProductCategoriesByFilter/' + filterName;
+        return this.httpClient.get(apiUrl);
+    }
 }

@@ -48,6 +48,19 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
+        /// Get Geo Dimensions with filter and paging
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="sort"></param>
+        /// <param name="take"></param>
+        /// <param name="skip"></param>
+        /// <returns></returns>
+        public GeoDetails GetGeoDimensions(string filter, string sort, int take, int skip)
+        {
+            return _dataCollectionsDataLib.GetGeoData(filter, sort, take, skip);
+        }
+
+        /// <summary>
         /// Get specific Geo Dimension
         /// </summary>
         /// <input>int sid of desired Geo Dimension</input>

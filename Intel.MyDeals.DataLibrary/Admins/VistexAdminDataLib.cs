@@ -8,6 +8,9 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.Data;
 using Intel.Opaque;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using System.Globalization;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -115,7 +118,115 @@ namespace Intel.MyDeals.DataLibrary
             return lstVistex;
         }
 
+        public VistexLogDetails GetVistexLogs(VistexMode vistexMode, DateTime StartDate, DateTime EndDate, string DealId, string filter, string sort, int take, int skip)
+        {
+            var lstVistex = new List<VistexLogsInfo>();
+            int RowCount = 0;
+            var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_LOG_SSP
+            {
+                in_rqst_type = vistexMode.ToString("g"),
+                in_from_dt = StartDate,
+                in_to_dt = EndDate,
+                in_deal_id = DealId,
+                MODE = "SELECT",
+                FILTER = filter,
+                SORT = sort,
+                TAKE = take,
+                SKIP = skip,
+            };
 
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int TOTAL_ROWS = DB.GetReaderOrdinal(rdr, "TOTAL_ROWS");
+                rdr.Read();
+                if (TOTAL_ROWS >= 0 && !rdr.IsDBNull(TOTAL_ROWS))
+                {
+                    RowCount = rdr.GetFieldValue<System.Int32>(TOTAL_ROWS);
+                }
+
+                rdr.NextResult();
+
+                int IDX_ARCHV_FLG = DB.GetReaderOrdinal(rdr, "ARCHV_FLG");
+                int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
+                int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+                int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+                int IDX_ERR_MSG = DB.GetReaderOrdinal(rdr, "ERR_MSG");
+                int IDX_INTRFC_RQST_DTM = DB.GetReaderOrdinal(rdr, "INTRFC_RQST_DTM");
+                int IDX_INTRFC_RSPN_DTM = DB.GetReaderOrdinal(rdr, "INTRFC_RSPN_DTM");
+                int IDX_RQST_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+                int IDX_RQST_SID = DB.GetReaderOrdinal(rdr, "RQST_SID");
+                int IDX_RQST_STS = DB.GetReaderOrdinal(rdr, "RQST_STS");
+                int IDX_RQST_TYPE = DB.GetReaderOrdinal(rdr, "RQST_TYPE");
+                int IDX_VISTEX_HYBRID_TYPE = DB.GetReaderOrdinal(rdr, "VISTEX_HYBRID_TYPE");
+
+                while (rdr.Read())
+                {
+                    lstVistex.Add(new VistexLogsInfo
+                    {
+                        ARCHV_FLG = (IDX_ARCHV_FLG < 0 || rdr.IsDBNull(IDX_ARCHV_FLG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ARCHV_FLG),
+                        BTCH_ID = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? default(System.Guid) : rdr.GetFieldValue<System.Guid>(IDX_BTCH_ID),
+                        CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+                        DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                        ERR_MSG = (IDX_ERR_MSG < 0 || rdr.IsDBNull(IDX_ERR_MSG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ERR_MSG),
+                        INTRFC_RQST_DTM = (IDX_INTRFC_RQST_DTM < 0 || rdr.IsDBNull(IDX_INTRFC_RQST_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_INTRFC_RQST_DTM),
+                        INTRFC_RSPN_DTM = (IDX_INTRFC_RSPN_DTM < 0 || rdr.IsDBNull(IDX_INTRFC_RSPN_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_INTRFC_RSPN_DTM),
+                        RQST_JSON_DATA = (IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA),
+                        RQST_SID = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
+                        RQST_STS = (IDX_RQST_STS < 0 || rdr.IsDBNull(IDX_RQST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_STS),
+                        RQST_TYPE = (IDX_RQST_TYPE < 0 || rdr.IsDBNull(IDX_RQST_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_TYPE),
+                        VISTEX_HYBRID_TYPE = (IDX_VISTEX_HYBRID_TYPE < 0 || rdr.IsDBNull(IDX_VISTEX_HYBRID_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_VISTEX_HYBRID_TYPE)
+                    });
+                } // while
+            }
+
+            return new VistexLogDetails { Items = lstVistex, TotalRows = RowCount };
+        }
+
+        public List<string> GetVistexFilterData(VistexMode vistexMode, DateTime StartDate, DateTime EndDate, string DealId,string filterName)
+        {
+            var ret = new List<string>();
+            Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_LOG_SSP cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_LOG_SSP();
+
+            cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_RSPN_LOG_SSP()
+            {
+                MODE = "FILTERDATA",
+                FILTER_NAME = filterName,
+                in_rqst_type = vistexMode.ToString("g"),
+                in_from_dt = StartDate,
+                in_to_dt = EndDate,
+                in_deal_id = DealId,
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_COL_NM_FLR = DB.GetReaderOrdinal(rdr, "FILTER_DATA");
+                    while (rdr.Read())
+                    {
+                        if (rdr.GetFieldType(IDX_COL_NM_FLR) == typeof(DateTime))
+                        {
+                            var val = (IDX_COL_NM_FLR < 0 || rdr.IsDBNull(IDX_COL_NM_FLR)) ?
+                                new DateTime(1900, 1, 1) 
+                                : rdr.GetFieldValue<System.DateTime>(IDX_COL_NM_FLR);
+
+                            ret.Add(val.ToString("MM/dd/yyyy HH:mm:ss.fff",CultureInfo.InvariantCulture));
+
+                        }
+                        else
+                        {
+                            ret.Add((IDX_COL_NM_FLR < 0 || rdr.IsDBNull(IDX_COL_NM_FLR)) ? String.Empty : rdr.GetValue(IDX_COL_NM_FLR).ToString());
+                        }
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
         //Only for internal testing
         public List<string> GetStatuses()
         {

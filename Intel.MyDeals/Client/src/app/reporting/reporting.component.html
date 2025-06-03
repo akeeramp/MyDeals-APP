@@ -14,10 +14,10 @@
                                     <div class="panel sidenav" *ngFor="let x of getReportCatagory">
                                         <div class="panel-heading">{{x.CTGR_NM}}</div>
                                         <div class="panel-body">
-                                            <div *ngFor="let s of getReportSubCatagory | filter : x.CTGR_NM">
+                                            <div *ngFor="let s of getReportSubCatagory | searchFilter : x.CTGR_NM">
                                                 <h3>{{s.SUB_CTGR_NM}} </h3>
                                                 <ul>
-                                                    <li class="reportLink" *ngFor="let d of ReportName | filter : s.SUB_CTGR_NM ">
+                                                    <li class="reportLink" *ngFor="let d of ReportName | searchFilter : s.SUB_CTGR_NM ">
                                                         <a *ngIf="d.RPT_UNIQ_NM == 'iCost report'" (click)="downloadICostReport()" style="cursor: pointer;"><i class="fa fa-circle-o text-agreen"></i> {{d.RPT_UNIQ_NM}} </a>
                                                         <a *ngIf="d.RPT_UNIQ_NM == 'New Product Missing Cost Report'" (click)="downloadGetReportNewProductMissingCostData()" style="cursor: pointer;"><i class="fa fa-circle-o text-agreen"></i> {{d.RPT_UNIQ_NM}} </a>
                                                         <a *ngIf="d.RPT_UNIQ_NM == 'Unified Customer Management Report' && s.SUB_CTGR_NM== 'Miscellaneous Report(s)'" (click)="downloadUCMReportData()" style="cursor: pointer;"><i class="fa fa-circle-o text-agreen"></i> {{d.RPT_UNIQ_NM}} </a>

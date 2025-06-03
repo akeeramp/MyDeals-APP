@@ -18,7 +18,19 @@ export interface VistexLogFilters {
 	StartDate: any;
 	EndDate: any;
 }
+export interface VistexLogFiltersRequest extends VistexLogFilters {
+	FilterName?: string
+	DealId?: string
+	InFilters?: string;
+	Sort?: any;
+	Take?: number;
+	Skip?: number;
 
+}
+export interface VistexLogFiltersResponse {
+	Items: VistexLogsInfo[];
+	TotalRows: number;
+}
 export interface VistexResponseUpdData {
 	strTransantionId: string;
 	strVistexStage: string;

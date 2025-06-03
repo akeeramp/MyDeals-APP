@@ -58,7 +58,7 @@ export class dealPopupComponent implements OnInit, OnDestroy {
     private searchgridData: GridDataResult;
     private schedulegridData: GridDataResult;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();   
+    private readonly destroy$ = new Subject<void>();   
     propertiesInclude = ["RATE", "DENSITY_RATE", "STRT_VOL", "END_VOL", "STRT_REV", "END_REV"];
     propertiesExclude = ["PASSED_VALIDATION", "DC_PARENT_ID", "TIER_NBR"];
 

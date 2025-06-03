@@ -3,6 +3,8 @@ using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
+using System;
+using PdfSharp.Pdf.Filters;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -40,7 +42,14 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _dataCollectionsDataLib.GetProductCategories();
         }
-
+        public List<ProductCategory> GetProductCategoriesByPagination(string filter, string sort, int take, int skip)
+        {
+            return _dataCollectionsDataLib.GetProductCategoriesByPagination(filter,sort,take,skip);
+        }
+        public List<string> GetProductCategoriesByFilter(string filterName)
+        {
+            return _dataCollectionsDataLib.GetProductCategoriesByFilter(filterName);
+        }
         /// <summary>
         /// Updates a list of product Verticals
         /// </summary>

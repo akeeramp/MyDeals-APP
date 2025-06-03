@@ -20,7 +20,7 @@ export class notificationDockComponent implements OnDestroy {
     public notifications: Array<any>;
     unreadMessagesCount: number;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     //to open notification settings pop up
     gotoNotificationSettings() {

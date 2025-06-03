@@ -31,7 +31,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     public cellMessages = [];
     private color: ThemePalette = 'primary';
     public isBulkUnify = true;

@@ -60,8 +60,8 @@
                                [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" (valueChange)="filterLoad(column.field)"
+                                       [filterService]="filterService" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-combobox #dealtypeDropDown [data]="distinctSetTypeCd"
@@ -71,8 +71,8 @@
             <kendo-grid-column field="ATRB_CD" title="Group" width="200" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" (valueChange)="filterLoad(column.field)"
+                                       [filterService]="filterService" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-combobox #attributeDropDown [data]="distinctAtributeCd"
@@ -82,8 +82,8 @@
             <kendo-grid-column field="CUST_NM" title="Customer" width="200" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" (valueChange)="filterLoad(column.field)"
+                                       [filterService]="filterService" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-combobox #custDropDown [data]="distinctCustomerName" [formControl]="formGroup.get('CUST_NM')"
@@ -93,8 +93,8 @@
             <kendo-grid-column field="DROP_DOWN" title="Value" width="200" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" (valueChange)="filterLoad(column.field)"
+                                       [filterService]="filterService" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-textbox [formControl]="formGroup.get('DROP_DOWN')"></kendo-textbox>
@@ -104,8 +104,8 @@
                                [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" (valueChange)="filterLoad(column.field)"
+                                       [filterService]="filterService" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-textbox [formControl]="formGroup.get('ATRB_LKUP_DESC')"></kendo-textbox>
@@ -114,8 +114,8 @@
             <kendo-grid-column field="ATRB_LKUP_TTIP" title="Tooltip" width="200" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" (valueChange)="filterLoad(column.field)"
+                                       [filterService]="filterService" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-textbox [formControl]="formGroup.get('ATRB_LKUP_TTIP')"></kendo-textbox>

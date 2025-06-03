@@ -40,7 +40,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
     @ViewChild("countDropDown") private countDdl;
     @ViewChild("partDropDown") private partDdl;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     isDirty = false;
     private isLoading = true;
     private errorMsg = "";

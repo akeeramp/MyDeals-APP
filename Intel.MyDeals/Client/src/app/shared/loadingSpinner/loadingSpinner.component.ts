@@ -38,7 +38,7 @@ export class LoadingSpinnerComponent implements OnInit, OnDestroy {
   private isLoading = true;
     private recents: Array<any> = [];
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
   constructor(private loadingSpinnerService: LoadingSpinnerService,
               private loggerService: logger,

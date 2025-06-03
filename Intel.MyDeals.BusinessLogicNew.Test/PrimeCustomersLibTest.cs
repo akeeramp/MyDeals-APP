@@ -28,6 +28,25 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         }
 
         [Test]
+        public void GetPrimeCustomerDetailsByFilter_ShouldReturnNotNull()
+        {
+            var mockData = new List<PrimeCustomers>();
+            mockIPrimeCustomersDataLib.Setup(x => x.GetPrimeCustomerDetails()).Returns(mockData);
+            var result = new PrimeCustomersLib(mockIPrimeCustomersDataLib.Object, mockIDataCollectionsDataLib.Object, mockIIntegrationLib.Object, mockIJmsDataLib.Object).GetPrimeCustomerDetails();
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void GetPrimeCustData_ShouldReturnNotNull()
+        {
+            var mockData = new List<string>();
+            string field = "PRIM_CUST_NM";
+            mockIPrimeCustomersDataLib.Setup(x => x.GetPrimeCustData(field)).Returns(mockData);
+            var result = new PrimeCustomersLib(mockIPrimeCustomersDataLib.Object, mockIDataCollectionsDataLib.Object, mockIIntegrationLib.Object, mockIJmsDataLib.Object).GetPrimeCustData(field);
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
         public void GetCountries_ShouldReturnNotNull()
         {
             var mockData = new List<Countires>();
@@ -51,6 +70,25 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             var mockData = new List<UnPrimeDeals>();
             mockIPrimeCustomersDataLib.Setup(x => x.GetUnPrimeDeals()).Returns(mockData);
             var result = new PrimeCustomersLib(mockIPrimeCustomersDataLib.Object, mockIDataCollectionsDataLib.Object, mockIIntegrationLib.Object, mockIJmsDataLib.Object).GetUnPrimeDeals();
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void GetUnPrimeDealsByFilter_ShouldReturnNotNull()
+        {
+            var mockData = new List<UnPrimeDeals>();
+            mockIPrimeCustomersDataLib.Setup(x => x.GetUnPrimeDeals()).Returns(mockData);
+            var result = new PrimeCustomersLib(mockIPrimeCustomersDataLib.Object, mockIDataCollectionsDataLib.Object, mockIIntegrationLib.Object, mockIJmsDataLib.Object).GetUnPrimeDeals();
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void GetUnPrimeDealsFilterValue_ShouldReturnNotNull()
+        {
+            var mockData = new List<UnPrimeDealsField>();
+            string field = "END_CUST_SID";
+            mockIPrimeCustomersDataLib.Setup(x => x.GetUnPrimeDealsFilterValue(field)).Returns(mockData);
+            var result = new PrimeCustomersLib(mockIPrimeCustomersDataLib.Object, mockIDataCollectionsDataLib.Object, mockIIntegrationLib.Object, mockIJmsDataLib.Object).GetUnPrimeDealsFilterValue(field);
             Assert.IsNotNull(result);
         }
 

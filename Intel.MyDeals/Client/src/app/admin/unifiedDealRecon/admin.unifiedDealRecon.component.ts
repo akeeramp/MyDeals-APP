@@ -1,6 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { unifiedDealReconService } from "./admin.unifiedDealRecon.service";
-import { Component, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { endCustomerRetailModalComponent } from "../../contract/ptModals/dealEditorModals/endCustomerRetailModal.component";
 import { MatDialog } from '@angular/material/dialog';
 import { bulkUnifyModalComponent } from "./admin.bulkUnifyModal.component";
@@ -17,8 +17,11 @@ import {
 import {
     process,
     State,
-    distinct
+    distinct, 
+    CompositeFilterDescriptor, 
+    FilterDescriptor
 } from "@progress/kendo-data-query";
+import { sortBy, uniq, pluck, forEach } from 'underscore';
 import { FormGroup, FormControl } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
@@ -27,6 +30,10 @@ import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { UnPrimeAtrbs, UnPrimeDeals } from "../PrimeCustomers/admin.primeCustomers.model";
 import { reprocessUCDModalComponent } from "./admin.UCDReprocessModal.component";
+
+import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
+import { GridUtil } from "../../contract/grid.util";
+import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
 
 @Component({
     selector: "admin-unified-dealrecon",
@@ -39,11 +46,14 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isDirty = false;
     private isLoading = true;
     private gridResult: Array<UnPrimeDeals>;
     private gridData: GridDataResult;
+    private gridAllResult: Array<UnPrimeDeals>;
+    private gridAllData: GridDataResult;
+    private unifiedDealExcel = ExcelColumnsConfig.unifiedDealExcel;
     public distinctUnPrimeCustDealNm: Array<any>;
     public formGroup: FormGroup;
     private editedRowIndex: number;
@@ -58,6 +68,13 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
     public OBJ_SID: any;
     private isWarning = false;
     private message: any;
+
+    public custData: Map<string, Array<string>> = new Map();
+    private sortData = "";
+    private filterData = "";
+    private dataForFilter: object; 
+    private totalCount = 0;
+
     private state: State = {
         skip: 0,
         take: 25,
@@ -80,19 +97,57 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         {
             text: "100",
             value: 100
-        },
-        {
-            text: "250",
-            value: 250
-        },
-        {
-            text: "All",
-            value: "all"
         }
     ];
 
     distinctPrimitive(fieldName: string): string[] {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+    }
+
+    public filterChange(filter: CompositeFilterDescriptor): void {
+        this.state.filter = filter;
+        this.loadDealReconciliation();
+    }
+
+    filterLoad(fieldName: string) {
+        let field = {value: fieldName}        
+        this.unifiedDealReconSvc.getFilterValue(field).subscribe(data => {
+            let allValues = data.map(val => {return val["value"]})
+            let duplicateValueRemoved = allValues.filter((item, index) => allValues.indexOf(item) === index);
+            this.custData.set(field.value, duplicateValueRemoved)
+        });
+    }
+
+    GetColumnFilterData(fieldName: string): any {
+        return this.custData.has(fieldName)? this.custData.get(fieldName):[];
+    }
+
+    settingFilter() {
+        this.sortData = "";
+        this.filterData = "";
+        if (this.state.sort) {
+            this.state.sort.forEach((value, ind) => {
+                if (value.dir) {
+                    this.sortData = ind == 0 ? `ORDER BY ${value.field} ${value.dir}` : `${this.sortData} , ${value.field} ${value.dir}`;
+                }
+            });
+        }
+        const filterExpression = FilterExpressBuilder.createSqlExpression(JSON.stringify(this.state.filter));
+        this.filterData = filterExpression;
+        if(filterExpression != "") {
+            this.filterData = 'AND '+this.filterData
+        }
+        this.dataForFilter = {
+            InFilters: this.filterData,
+            Sort: this.sortData,
+            Skip: this.state.skip,
+            Take: this.state.take
+        };
+    }
+
+    sortChange(state) {
+        this.state["sort"] = state;
+        this.loadDealReconciliation();
     }
 
     public onExcelExport(e: ExcelExportEvent): void {
@@ -112,23 +167,58 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
     }
 
     loadDealReconciliation(): void {
+        this.isLoading = true;
         //RA alone will have view access
         if ((<any>window).usrRole == "RA" && !(<any>window).isDeveloper) {
             this.editAccess = false;
         }
-        this.unifiedDealReconSvc.getUnmappedPrimeCustomerDeals().pipe(takeUntil(this.destroy$)).subscribe((result: Array<UnPrimeDeals>) => {
+        this.settingFilter();
+        this.unifiedDealReconSvc.getUnmappedPrimeCustomerDealsByFilter(this.dataForFilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<UnPrimeDeals>) => {
             this.isLoading = false;
             this.gridResult = result;
             this.gridData = process(result, this.state);
+            this.gridData.data=result;
+            if(result.length>0){
+             this.gridData.total = result[0].TOTALCOUNT;
+             this.totalCount = result[0].TOTALCOUNT;
+            }
+            
         }, (error) => {
+            this.isLoading = false;
             this.loggerSvc.error('UnMappedPrimeCustomerDeal service', error);
         });
+        
+        
     }
+
     dataStateChange(state: DataStateChangeEvent): void {
+        let isFilter = true
+        if (state.filter && state.filter.filters && state.filter.filters.length > 0) { isFilter = false }
+        this.state.take = state.take;
+        this.state.skip = state.skip;
+        this.state.filter = state.filter != undefined ? state.filter : this.state.filter;
+        this.state.sort = state.sort != undefined ? state.sort : this.state.sort;
+        this.state.group = state.group != undefined ? state.group : this.state.group;
+        if ((this.state.sort && this.state.sort.length > 0) || (this.state.group && this.state.group.length > 0)) {
+            let sort = {
+                take: 25,
+                skip: 0,
+                sort: this.state.sort,
+                group: this.state.group
+            }
+            let data = process(this.gridData.data, sort);
+            this.gridData.data = data.data;
+            //this.gridData.total = this.totalCount;
+        }
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
     }
-
+    pageChange(state: DataStateChangeEvent) {
+        this.isLoading = true;
+        this.state.take = state.take;
+        this.state.skip = state.skip;
+        this.loadDealReconciliation();
+    }
     closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex): void {
         grid.closeRow(rowIndex);
         this.editedRowIndex = undefined;
@@ -225,11 +315,14 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
     }
 
     clearFilter(): void {
+        this.state.skip = 0;
+        this.state.take = 25;
         this.state.filter = {
             logic: "and",
             filters: [],
         };
         this.gridData = process(this.gridResult, this.state);
+        this.loadDealReconciliation();
     }
 
     cancelHandler({ sender, rowIndex }: CancelEvent): void {
@@ -239,6 +332,27 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
     cancelWarning(): void {
         this.isWarning = false;
         this.message = "";
+    }
+
+    exportToExcel() {
+        this.isLoading = true;
+        let excelDataForFilter = {
+            InFilters: "",
+            Sort: "",
+            Skip: 0,
+            Take: this.totalCount
+        };
+        this.unifiedDealReconSvc.getUnmappedPrimeCustomerDealsByFilter(excelDataForFilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<UnPrimeDeals>) => {
+            this.isLoading = false;
+            this.gridAllResult = result;
+            GridUtil.dsToExcelUnifiedDealtData(this.unifiedDealExcel, this.gridAllResult, "MyDealsUnifiedRecon");
+        }, (error) => {
+            this.loggerSvc.error('UnMappedPrimeCustomerDeal service', error);
+        });
+    }
+
+    exportToExcelCustomColumns() {
+        GridUtil.dsToExcelUnifiedDealtData(this.unifiedDealExcel, this.gridResult, "MyDealsUnifiedRecon");
     }
 
     saveHandler({ sender, rowIndex, formGroup, dataItem }: SaveEvent): void {

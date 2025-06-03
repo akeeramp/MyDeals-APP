@@ -24,7 +24,7 @@ export class RenameTitleComponent implements OnDestroy{
     private hideErrMsg: boolean = true;
     private errMsg: string = "";
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     onCancel(): void {
         this.dialogRef.close();

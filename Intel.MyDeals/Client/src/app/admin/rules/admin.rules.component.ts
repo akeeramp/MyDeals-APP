@@ -41,7 +41,7 @@ export class adminRulesComponent implements PendingChangesGuard, OnDestroy{
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     isDirty = false;
     public rule = {};
     public Rules: Array<any> = [];

@@ -26,7 +26,7 @@ export class sdmBulkUploadComponent implements OnDestroy {
     private hotEnable = false;
     private isDownloadData = false;
     private showWarningDialog = false;
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private hotId = "spreadsheet";
     private hotTable: Handsontable;
     private uploadSaveUrl: any = "/FileAttachments/ExtractBulkSDMFile";

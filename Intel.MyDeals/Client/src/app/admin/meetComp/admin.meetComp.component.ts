@@ -31,7 +31,7 @@ export class MeetCompComponent implements PendingChangesGuard, OnDestroy {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private HasBulkUploadAccess = (<any>window).usrRole == "DA";
     isDirty = false;
     private isAccess = true;

@@ -18,7 +18,7 @@ export class AdminCacheComponent implements OnInit, OnDestroy {
                 private loggerService:logger) { }
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private readonly TITLE: string = 'Cache Manager';
     private cacheData = [];
     private currentCacheDetails = '';

@@ -7,6 +7,7 @@ namespace Intel.MyDeals.IDataLibrary
     public interface IPrimeCustomersDataLib
     {
         List<PrimeCustomers> GetPrimeCustomerDetails();
+        List<PrimeCustomers> GetPrimeCustomerDetails(string filter, string sort, int take, int skip);
 
         UpdatedPrimeCustomerDetail ManagePrimeCustomers(CrudModes mode, PrimeCustomers data);
 
@@ -15,6 +16,8 @@ namespace Intel.MyDeals.IDataLibrary
         List<PrimeCustomers> GetPrimeCustomers();
 
         List<UnPrimeDeals> GetUnPrimeDeals();
+        List<UnPrimeDeals> GetUnPrimeDeals(int skip, int take, string sort, string inFilters);
+        List<UnPrimeDealsField> GetUnPrimeDealsFilterValue(string field);
 
         List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry);
 
@@ -45,6 +48,7 @@ namespace Intel.MyDeals.IDataLibrary
         bool CheckForIQRDeals(string dealId);
 
         List<UCD_RQST_RSPN> GetReprocessUCDData(int Deal_Id, string End_Cust_NM, string End_Cust_Ctry);
-        
+        List<string> GetPrimeCustData(string fieldName);
+
     }
 }

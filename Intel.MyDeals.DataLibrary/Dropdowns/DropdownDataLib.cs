@@ -28,6 +28,18 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
+        public DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip)
+        {
+            DropdownDetails ret = ExecuteManageBasicDropdownSP(filter, sort, take, skip);
+            return ret;
+        }
+
+        public List<string> GetBasicDropdownsFilterData(string filterName)
+        {
+            var ret = ExecuteManageBasicDropdownFilterDataSP(filterName);
+            return ret;
+        }
+
         public List<DropDowns> GetOpDataElements()
         {
             return (from result in OpDataElementTypeRepository.OpDetCollection.Items
@@ -241,6 +253,112 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         // Update Cache after Insert/Update actions
                         DataCollections.RecycleCache("_getBasicDropdowns");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
+        private DropdownDetails ExecuteManageBasicDropdownSP(string filter, string sort, int take, int skip)
+        {
+            var ret = new List<BasicDropdown>();
+            int RowCount = 0;
+            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP();
+
+            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP()
+            {
+                MODE = "SELECT",
+                FILTER = filter,
+                SORT = sort,
+                TAKE = take,
+                SKIP = skip,
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+
+                    int TOTAL_ROWS = DB.GetReaderOrdinal(rdr, "TOTAL_ROWS");
+                    rdr.Read();
+                    if (TOTAL_ROWS >= 0 && !rdr.IsDBNull(TOTAL_ROWS))
+                    {
+                        RowCount = rdr.GetFieldValue<System.Int32>(TOTAL_ROWS);
+                    }
+
+                    rdr.NextResult();
+
+                    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+                    int IDX_ATRB_CD = DB.GetReaderOrdinal(rdr, "ATRB_CD");
+                    int IDX_ATRB_LKUP_DESC = DB.GetReaderOrdinal(rdr, "ATRB_LKUP_DESC");
+                    int IDX_ATRB_LKUP_SID = DB.GetReaderOrdinal(rdr, "ATRB_LKUP_SID");
+                    int IDX_ATRB_LKUP_TTIP = DB.GetReaderOrdinal(rdr, "ATRB_LKUP_TTIP");
+                    int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
+                    int IDX_CUST_MAP_ID = DB.GetReaderOrdinal(rdr, "CUST_MAP_ID");
+                    int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
+                    int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+                    int IDX_DFLT_FLG = DB.GetReaderOrdinal(rdr, "DFLT_FLG");
+                    int IDX_DROP_DOWN = DB.GetReaderOrdinal(rdr, "DROP_DOWN");
+                    int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
+                    int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
+                    int IDX_ORD = DB.GetReaderOrdinal(rdr, "ORD");
+                    int IDX_CHK_VALUE = DB.GetReaderOrdinal(rdr, "CHK_VALUE");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new BasicDropdown
+                        {
+                            ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+                            ATRB_CD = (IDX_ATRB_CD < 0 || rdr.IsDBNull(IDX_ATRB_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_CD),
+                            ATRB_LKUP_DESC = (IDX_ATRB_LKUP_DESC < 0 || rdr.IsDBNull(IDX_ATRB_LKUP_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_LKUP_DESC),
+                            ATRB_LKUP_SID = (IDX_ATRB_LKUP_SID < 0 || rdr.IsDBNull(IDX_ATRB_LKUP_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_LKUP_SID),
+                            ATRB_LKUP_TTIP = (IDX_ATRB_LKUP_TTIP < 0 || rdr.IsDBNull(IDX_ATRB_LKUP_TTIP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_LKUP_TTIP),
+                            ATRB_SID = (IDX_ATRB_SID < 0 || rdr.IsDBNull(IDX_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SID),
+                            CUST_MAP_ID = (IDX_CUST_MAP_ID < 0 || rdr.IsDBNull(IDX_CUST_MAP_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_MAP_ID),
+                            CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
+                            CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
+                            DFLT_FLG = (IDX_DFLT_FLG < 0 || rdr.IsDBNull(IDX_DFLT_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DFLT_FLG),
+                            DROP_DOWN = (IDX_DROP_DOWN < 0 || rdr.IsDBNull(IDX_DROP_DOWN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DROP_DOWN),
+                            OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
+                            OBJ_SET_TYPE_SID = (IDX_OBJ_SET_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SET_TYPE_SID),
+                            ORD = (IDX_ORD < 0 || rdr.IsDBNull(IDX_ORD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ORD),
+                            CHK_VALUE = (IDX_CHK_VALUE < 0 || rdr.IsDBNull(IDX_CHK_VALUE)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHK_VALUE)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return new DropdownDetails { Items = ret, TotalRows = RowCount };
+        }
+
+        private List<string> ExecuteManageBasicDropdownFilterDataSP(string filterName)
+        {
+            var ret = new List<string>();
+            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP();
+
+            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP()
+            {
+                MODE = "FILTERDATA",
+                FILTER_NAME = filterName
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_COL_NM_FLR = DB.GetReaderOrdinal(rdr, "FILTER_DATA");
+                    while (rdr.Read())
+                    {
+                        ret.Add((IDX_COL_NM_FLR < 0 || rdr.IsDBNull(IDX_COL_NM_FLR)) ? String.Empty : rdr.GetString(IDX_COL_NM_FLR));
                     }
                 }
             }

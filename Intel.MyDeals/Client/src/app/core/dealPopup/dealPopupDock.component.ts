@@ -23,7 +23,7 @@ export class dealPopupDockComponent implements OnDestroy {
     errormsg = "";
     ismaxDealsOpened = false;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     constructor(private broadcastService: broadCastService) {
         this.getScreenSize();

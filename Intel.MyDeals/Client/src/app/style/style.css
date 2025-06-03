@@ -1,4 +1,4 @@
-﻿@import '../../../../css/_report.css';
+﻿﻿@import '../../../../css/_report.css';
 @import '../../../../css/_dealUtil.css';
 @import '../../../../css/_secEngine.css';
 @import '../../../../Content/styles.css';
@@ -8,7 +8,7 @@
 @import '~@progress/kendo-theme-bootstrap/dist/all.css';
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import '~bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css';
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import '../../../node_modules/ngx-toastr/toastr.css';
 @import '../../../node_modules/handsontable/dist/handsontable.full.min.css';
 @import '~monaco-editor/min/vs/editor/editor.main.css';

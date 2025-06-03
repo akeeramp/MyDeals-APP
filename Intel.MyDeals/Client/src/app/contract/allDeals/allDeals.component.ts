@@ -38,7 +38,7 @@ export class allDealsComponent implements OnDestroy {
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
 
    //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isLoading = true;
     private loadMessage: string = "Loading Deals";
     public groups: any =[];

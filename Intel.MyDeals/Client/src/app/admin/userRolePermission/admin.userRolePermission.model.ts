@@ -1,4 +1,4 @@
-﻿export class userRolePermissionModel {
+﻿export class UserRolePermissionModel {
     public databaseName = "";
     public userName = "";
     public userType = "";
@@ -10,4 +10,5 @@
     public objectName = "";
     public columnName = "";
     public ROW_REFRESH_DTM = "";
+    public TOTAL_ROWS = "";
 }

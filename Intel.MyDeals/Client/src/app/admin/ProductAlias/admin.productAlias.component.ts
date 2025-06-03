@@ -19,7 +19,7 @@ export class adminProductAliasComponent implements PendingChangesGuard, OnDestro
 
     constructor(private productAliasSvc: productAliasService, private loggerSvc: logger) { }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     @ViewChild("catDropDown") private catDdl;
     @ViewChild("custDropDown") private custDdl;
     @ViewChild("countDropDown") private countDdl;

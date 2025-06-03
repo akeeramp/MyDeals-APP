@@ -24,7 +24,7 @@ import { HandsonLicenseKey } from "../../../shared/config/handsontable.licenseKe
 })
 export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
 
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     constructor(private DIALOG_REF: MatDialogRef<DropdownBulkUploadDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: BulkUploadDialogData,

@@ -30,24 +30,44 @@ namespace Intel.MyDeals.Controllers.API
 				, $"Unable to get Product Verticals"
 			);
 		}
-
-        //[Authorize]
-        //[HttpPost]
-        //[Route("CreateProductCategory")]
-        //public ProductCategory CreateProductCategory(ProductCategory category)
-        //{			
-        //	try
-        //	{
-        //		return _productCategoriesLib.CreateProductCategory(category);
-        //	}
-        //	catch (Exception ex)
-        //	{
-        //		OpLogPerf.Log(ex);
-        //		throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
-        //	}
-        //}
-
         [Authorize]
+        [HttpPost]
+        [Route("GetProductCategoriesByPagination")]
+        public IEnumerable<ProductCategory> GetProductCategoriesByPagination([FromBody] SearchParams data)
+        {
+            return SafeExecutor(() => _productCategoriesLib
+                .GetProductCategoriesByPagination(data.StrFilters, data.StrSorts, data.Take, data.Skip )
+                , $"Unable to get Product Verticals"
+            );
+        }
+        [Authorize]
+		[HttpGet]
+		[Route("GetProductCategoriesByFilter/{filterName}")]
+        public List<string> GetProductCategoriesByFilter(string filterName)
+		{
+			return SafeExecutor(() => _productCategoriesLib
+				.GetProductCategoriesByFilter(filterName)
+				, $"Unable to get Product Verticals"
+			);
+		}
+
+		//[Authorize]
+		//[HttpPost]
+		//[Route("CreateProductCategory")]
+		//public ProductCategory CreateProductCategory(ProductCategory category)
+		//{			
+		//	try
+		//	{
+		//		return _productCategoriesLib.CreateProductCategory(category);
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		OpLogPerf.Log(ex);
+		//		throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
+		//	}
+		//}
+
+		[Authorize]
 		[HttpPut]
         [AntiForgeryValidate]
         [Route("UpdateProductCategory")]

@@ -17,7 +17,7 @@ import { Countires } from "../PrimeCustomers/admin.primeCustomers.model";
 export class reprocessUCDModalComponent implements OnDestroy {
     constructor(public dialogRef: MatDialogRef<reprocessUCDModalComponent>, private loggerSvc: logger, private unifiedDealReconSvc: unifiedDealReconService) { }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private endCustCountries: string[] = [];
     private countries: string[];
     private dealId = '';

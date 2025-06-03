@@ -30,7 +30,7 @@ export class AsyncProcedureJobsComponent implements OnInit, OnDestroy {
                 private loggerService: logger) { }
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private gridData: GridDataResult;
     private isLoading = false;
     private state: State = this.DEFAULT_STATE_CONFIG;

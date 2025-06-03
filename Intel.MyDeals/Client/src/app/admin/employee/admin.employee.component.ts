@@ -17,7 +17,7 @@ export class EmployeeComponent implements PendingChangesGuard,OnDestroy {
 
     constructor(private employeeSvc: employeeService,private loggerSvc:logger) { }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     protected roleTypeId = (<any>window).usrRoleId;
     private isDeveloper = (<any>window).isDeveloper;
     private isTester = (<any>window).isTester;

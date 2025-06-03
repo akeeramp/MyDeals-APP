@@ -24,6 +24,15 @@ export class DropdownService {
         param.set('cache', isGetViaAngularCache.toString());
         return this.httpClient.get(apiUrl, { params: param });
     }
+    public getBasicDropdownsNew(data): Observable<any> {
+        const apiUrl = this.API_URL_DROPDOWN + 'GetBasicDropdowns';
+        return this.httpClient.post(apiUrl, data);
+    }
+
+    public getBasicDropdownsFilterData(filterName): Observable<any> {
+        const apiUrl = this.API_URL_DROPDOWN + 'GetBasicDropdownsFilterData/' + filterName;
+        return this.httpClient.get(apiUrl);
+    }
 
     public getDealTypesDropdowns(isForceReGet): Observable<any> {
         let isGetViaAngularCache = true;

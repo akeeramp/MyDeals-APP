@@ -44,7 +44,7 @@ export class AutoFillComponent implements OnDestroy {
     private ptTemplate;
     //UItemplate is to get lnav data
     public UItemplate: any;
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private rebateTypedata: Array<any> = [];
     private filteredrebateTypedata: Array<any> = [];
     private defaultRebateType: any = {};

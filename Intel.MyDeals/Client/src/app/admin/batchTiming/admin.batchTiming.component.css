@@ -1,4 +1,4 @@
-﻿@import '../kendo_grid.css';
+﻿@import '/Client/src/app/admin/kendo_grid.css';
 
 .batchTimingComp .head-r-shift {
     padding-top: 15px !important;

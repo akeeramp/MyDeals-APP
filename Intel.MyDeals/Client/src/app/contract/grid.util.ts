@@ -534,6 +534,7 @@ export class GridUtil {
             saveAs(dataUrl, title);
         });
     }
+
     static stop(value) {
         if (value) {
             value.end = StaticMomentService.moment();
@@ -710,6 +711,51 @@ export class GridUtil {
         });
     }
 
+    static dsToExcelUnifiedCustomerDealData(data, response, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        for (var t = 0; t < data.length; t++) {
+            rows[0].cells.push({
+                value: data[t].data,
+                type: data[t].type,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true,
+                width: data[t].width
+            });
+            colWidths.push({ width: data[t].data == 'END_CUSTOMER_RETAIL' ? 500 : 180 });
+        }
+        for (let i = 0; i < response.length; i++) {
+            rows.push({
+                cells: [
+                    { value: response[i]["IS_ACTV"], wrap: true },
+                    { value: response[i]["PRIM_CUST_ID"], wrap: true },
+                    { value: response[i]["PRIM_CUST_NM"], wrap: true },
+                    { value: response[i]["PRIM_LVL_ID"], wrap: true },
+                    { value: response[i]["PRIM_LVL_NM"], wrap: true },
+                    { value: response[i]["PRIM_CUST_CTRY"], wrap: true },
+                    { value: response[i]["RPL_STS_CD"], wrap: true }
+                ]
+            })
+        }
+        const sheets = [
+            {
+                columns: colWidths,
+                title: fileName,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
+
+
     static applySoftWarnings(passedData, field) {
         var msg = "";
         var finalMsg = "";
@@ -796,6 +842,144 @@ export class GridUtil {
                     { value: response[i]["UnifiedCountryRegionCustomerName"], wrap: true },
                     { value: response[i]["RplStatus"], wrap: true },	
                     { value: response[i]["RplStatusCode"], wrap: true }
+                ]
+            })
+        }
+        const sheets = [
+            {
+                columns: colWidths,
+                title: fileName,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
+    static dsToExcelProductVerticalRule(data, response, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        for (var t = 0; t < data.length; t++) {
+            rows[0].cells.push({
+                value: data[t].data,
+                type: data[t].type,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true,
+                width: data[t].width
+            });
+            colWidths.push({ width: data[t].data == 'END_CUSTOMER_RETAIL' ? 500 : 180 });
+        }
+        for (let i = 0; i < response.length; i++) {
+            rows.push({
+                cells: [
+                    { value: response[i]["GDM_PRD_TYPE_NM"], wrap: true },
+                    { value: response[i]["GDM_VRT_NM"], wrap: true },
+                    { value: response[i]["DIV_NM"], wrap: true },
+                    { value: response[i]["OP_CD"], wrap: true },
+                    {value: response[i]["DEAL_PRD_TYPE"], wrap: true },
+                    { value: response[i]["PRD_CAT_NM"], wrap: true },
+                    { value: response[i]["CHG_EMP_NM"], wrap: true },
+                    { value: response[i]["CHG_DTM"], wrap: true }
+                ]
+            })
+        }
+        const sheets = [
+            {
+                columns: colWidths,
+                title: fileName,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
+
+    static dsToExcelProductsData(data, response, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        for (var t = 0; t < data.length; t++) {
+            rows[0].cells.push({
+                value: data[t].data,
+                type: data[t].type,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true,
+                width: data[t].width
+            });
+            colWidths.push({ width: data[t].data == 'DEAL_PRD_NM' ? 300 : 180 });
+        }
+        for (let i = 0; i < response.length; i++) {
+            rows.push({
+                cells: [
+                    { value: response[i]["PRD_MBR_SID"], wrap: true },
+                    { value: response[i]["DEAL_PRD_TYPE"], wrap: true },
+                    { value: response[i]["PRD_CATGRY_NM"], wrap: true },
+                    { value: response[i]["BRND_NM"], wrap: true },
+                    { value: response[i]["FMLY_NM"], wrap: true },
+                    { value: response[i]["PRCSSR_NBR"], wrap: true },
+                    { value: response[i]["DEAL_PRD_NM"], wrap: true },
+                    { value: response[i]["MTRL_ID"], wrap: true },
+                    { value: response[i]["PRD_STRT_DTM"], wrap: true },
+                    { value: response[i]["PRD_END_DTM"], wrap: true },
+                    { value: response[i]["ACTV_IND"], wrap: true } 
+                ]
+            })
+        }
+        const sheets = [
+            {
+                columns: colWidths,
+                title: fileName,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
+
+    static dsToExcelUnifiedDealtData(data, response, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        for (var t = 0; t < data.length; t++) {
+            var colTitle = data[t].headerTemplate;
+            rows[0].cells.push({
+                value: colTitle,
+                type: data[t].type,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true,
+                width: data[t].width
+            });
+            colWidths.push({ width: data[t].data == 'END_CUSTOMER_RETAIL' ? 500 : 180 });
+        }
+        for (let i = 0; i < response.length; i++) {
+            rows.push({
+                cells: [ 
+                    { value: response[i]["CNTRCT_OBJ_SID"], wrap: true },
+                    { value: response[i]["TITLE"], wrap: true },	
+                    { value: response[i]["OBJ_SID"], wrap: true },
+                    { value: response[i]["END_CUSTOMER_RETAIL"], wrap: true },
+                    { value: response[i]["END_CUSTOMER_COUNTRY"], wrap: true },
+                    { value: response[i]["EMP_WWID"], wrap: true },
+                    { value: response[i]["UNIFIED_STATUS"], wrap: true },	
+                    { value: response[i]["UNIFIED_REASON"], wrap: true }
                 ]
             })
         }

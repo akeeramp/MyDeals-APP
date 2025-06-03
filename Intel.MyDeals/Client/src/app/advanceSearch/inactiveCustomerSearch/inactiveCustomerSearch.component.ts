@@ -34,7 +34,7 @@ export class InActiveCustomerSearchComponent implements OnDestroy {
     public data$
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     public searchText = "";
     public opType = 'ALL';
     public columns = [];

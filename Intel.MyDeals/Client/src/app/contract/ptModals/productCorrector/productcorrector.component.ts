@@ -73,7 +73,7 @@ export class ProductCorrectorComponent implements OnDestroy{
     private curRowExcludeProd: any[];
     private deletedProductDetails: any[] = [];
     public selection: SelectableSettings = { mode: "multiple" };
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     public showNumIssueRows: boolean = true;
 
     public rowCallback = (args) => ({

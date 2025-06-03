@@ -34,7 +34,7 @@ export class fileAttachmentComponent implements OnDestroy {
     public uploadSuccessCount = 0;
     private gridResult = [];
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private gridData: GridDataResult;
     private state: State = {
         skip: 0,

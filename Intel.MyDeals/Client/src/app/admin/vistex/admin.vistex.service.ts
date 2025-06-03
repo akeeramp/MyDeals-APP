@@ -1,7 +1,7 @@
 ﻿import { Injectable } from "@angular/core";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RequestDetails, VistexLogFilters, VistexLogsInfo, VistexResponseUpdData } from "./admin.vistex.model";
+import { RequestDetails, VistexLogFilters, VistexLogFiltersRequest, VistexLogFiltersResponse, VistexLogsInfo, VistexResponseUpdData } from "./admin.vistex.model";
 
 @Injectable({
     providedIn: 'root'
@@ -49,6 +49,22 @@ export class dsaService {
         return this.httpClient.post<VistexLogsInfo[]>(apiUrl, postData);
     }
 
+    public getVistexLogsInfo(postData: VistexLogFiltersRequest): Observable<VistexLogFiltersResponse> {
+        const apiUrl = this.apiBaseUrl + 'GetVistexLogsInfo';
+        return this.httpClient.post<VistexLogFiltersResponse>(apiUrl, postData);
+    }
+    public getVistexFilterData(request: VistexLogFiltersRequest): Observable<string[]> {
+        const apiUrl = this.apiBaseUrl + 'GetVistexFilterData';
+
+        //let params = new HttpParams();
+        //params = params.set('Dealmode', request.Dealmode);
+        //params = params.set('StartDate', request.StartDate);
+        //params = params.set('EndDate', request.EndDate);
+        //params = params.set('DealId', request.DealId);
+        //params = params.set('FilterName', request.FilterName);
+
+        return this.httpClient.post<string[]>(apiUrl, request);
+    }
     public getVistexStatuses(): Observable<string[]> {
         const apiUrl = this.apiBaseUrl + 'GetVistexStatuses'
         return this.httpClient.get<string[]>(apiUrl);

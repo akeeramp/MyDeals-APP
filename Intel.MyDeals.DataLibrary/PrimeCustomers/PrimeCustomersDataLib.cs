@@ -60,6 +60,96 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
+        public List<PrimeCustomers> GetPrimeCustomerDetails(string filter, string sort, int take, int skip)
+        {
+            var ret = new List<PrimeCustomers>();
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL_FILTER
+            {
+                FILTER = filter,
+                SORT = sort,
+                TAKE = take,
+                SKIP = skip,
+                MODE = "SELECT",
+                FLTRCOL = "",
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "IS_ACTV");
+                    int IDX_PRIM_CUST_CTRY = DB.GetReaderOrdinal(rdr, "PRIM_CUST_CTRY");
+                    int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
+                    int IDX_PRIM_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIM_CUST_NM");
+                    int IDX_PRIM_LVL_ID = DB.GetReaderOrdinal(rdr, "PRIM_LVL_ID");
+                    int IDX_PRIM_LVL_NM = DB.GetReaderOrdinal(rdr, "PRIM_LVL_NM");
+                    int IDX_PRIM_SID = DB.GetReaderOrdinal(rdr, "PRIM_SID");
+                    int IDX_RPL_STS = DB.GetReaderOrdinal(rdr, "RPL_STS");
+                    int IDX_RPL_STS_CD = DB.GetReaderOrdinal(rdr, "RPL_STS_CD");
+                    int IDX_TotalRows = DB.GetReaderOrdinal(rdr, "TotalRows");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new PrimeCustomers
+                        {
+                            IS_ACTV = (IDX_IS_ACTV < 0 || rdr.IsDBNull(IDX_IS_ACTV)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTV),
+                            PRIM_CUST_CTRY = (IDX_PRIM_CUST_CTRY < 0 || rdr.IsDBNull(IDX_PRIM_CUST_CTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_CTRY),
+                            PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID),
+                            PRIM_CUST_NM = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM),
+                            PRIM_LVL_ID = (IDX_PRIM_LVL_ID < 0 || rdr.IsDBNull(IDX_PRIM_LVL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_LVL_ID),
+                            PRIM_LVL_NM = (IDX_PRIM_LVL_NM < 0 || rdr.IsDBNull(IDX_PRIM_LVL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_LVL_NM),
+                            PRIM_SID = (IDX_PRIM_SID < 0 || rdr.IsDBNull(IDX_PRIM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_SID),
+                            RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_RPL_STS),
+                            RPL_STS_CD = (IDX_RPL_STS_CD < 0 || rdr.IsDBNull(IDX_RPL_STS_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RPL_STS_CD),
+                            TotalRows = (IDX_TotalRows < 0 || rdr.IsDBNull(IDX_TotalRows)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TotalRows)
+                        });
+                    }
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return ret;
+        }
+
+        public List<string> GetPrimeCustData(string fieldName)
+        {
+            var ret = new List<string>();
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL_FILTER
+            {
+                FILTER = "",
+                SORT = "",
+                TAKE = 0,
+                SKIP = 0,
+                MODE = "FILTER",
+                FLTRCOL = fieldName,
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_COL_NM_FLR = DB.GetReaderOrdinal(rdr, "FILTER_DATA");
+                    while (rdr.Read())
+                    {
+                        ret.Add((IDX_COL_NM_FLR < 0 || rdr.IsDBNull(IDX_COL_NM_FLR)) ? String.Empty : rdr.GetString(IDX_COL_NM_FLR));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return ret;
+        }
+
 
         public UpdatedPrimeCustomerDetail ManagePrimeCustomers(CrudModes mode, PrimeCustomers data)
         {
@@ -172,6 +262,99 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
 
+        }
+
+
+        public List<UnPrimeDeals> GetUnPrimeDeals(int skip, int take, string sort, string inFilters)
+        {
+            var ret = new List<UnPrimeDeals>();
+            var cmd = new Procs.dbo.PR_MYDL_GET_UNPRIM_DEALS_BY_FILTER
+            {
+                in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                skipRows= skip,
+                takeRows= take,
+                sort = sort == null ? "" : sort,
+                fltrcol = inFilters == null ? "" : inFilters
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+                    int IDX_CNTRCT_OBJ_SID = DB.GetReaderOrdinal(rdr, "CNTRCT_OBJ_SID");
+                    int IDX_EMP_WWID = DB.GetReaderOrdinal(rdr, "Emp_WWID");
+                    int IDX_END_CUST_OBJ = DB.GetReaderOrdinal(rdr, "END_CUST_OBJ");
+                    int IDX_END_CUSTOMER_COUNTRY = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_COUNTRY");
+                    int IDX_END_CUSTOMER_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_RETAIL");
+                    int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
+                    int IDX_TITLE = DB.GetReaderOrdinal(rdr, "TITLE");
+                    int IDX_STATUS = DB.GetReaderOrdinal(rdr, "UNIFIED_STATUS");
+                    int IDX_REASON = DB.GetReaderOrdinal(rdr, "UNIFIED_REASON");
+                    int IDX_TOTALCOUNT = DB.GetReaderOrdinal(rdr, "TOTALCOUNT");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new UnPrimeDeals
+                        {
+                            CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+                            CNTRCT_OBJ_SID = (IDX_CNTRCT_OBJ_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_OBJ_SID),
+                            EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EMP_WWID),
+                            END_CUST_OBJ = (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_OBJ),
+                            END_CUSTOMER_COUNTRY = (IDX_END_CUSTOMER_COUNTRY < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_COUNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_COUNTRY),
+                            END_CUSTOMER_RETAIL = (IDX_END_CUSTOMER_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_RETAIL),
+                            OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
+                            TITLE = (IDX_TITLE < 0 || rdr.IsDBNull(IDX_TITLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TITLE),
+                            UNIFIED_STATUS = (IDX_STATUS < 0 || rdr.IsDBNull(IDX_STATUS)) ? String.Empty : rdr.GetFieldValue<String>(IDX_STATUS),
+                            UNIFIED_REASON = (IDX_REASON < 0 || rdr.IsDBNull(IDX_REASON)) ? String.Empty : rdr.GetFieldValue<String>(IDX_REASON),
+                            TOTALCOUNT = (IDX_TOTALCOUNT < 0 || rdr.IsDBNull(IDX_TOTALCOUNT)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TOTALCOUNT)
+                        });
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+
+        }
+
+        public List<UnPrimeDealsField> GetUnPrimeDealsFilterValue(string field)
+        {
+            var ret = new List<UnPrimeDealsField>();
+            var cmd = new Procs.dbo.PR_MYDL_GET_UNPRIM_DEALS_FILTER {
+                in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                fltrcol = field
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_Value = DB.GetReaderOrdinal(rdr, "value");
+
+                    while (rdr.Read())
+                    {
+
+                        ret.Add(new UnPrimeDealsField
+                        {
+                            value = (IDX_Value < 0 || rdr.IsDBNull(IDX_Value)) ? String.Empty : rdr.GetValue(IDX_Value).ToString()
+                        });
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            
+
+            return ret;
         }
 
         public List<Countires> GetCountries()

@@ -39,6 +39,113 @@
         }
     ]
 
+    static unifiedDealCustomerExcelColHeaders = ["Is Active", "Unified Customer ID", "Unified Customer Name", "Country Customer ID", "Country Customer Name", "Unified Country", "RPL Status Code",];
+    static unifiedDealCustomerExcel = [
+        {
+            data: 'Is Active',
+            type: 'text',
+            readOnly: false,
+            width: 140
+        },
+        {
+            data: 'Unified Customer ID',
+            type: 'numeric',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'Unified Customer Name',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'Country Customer ID',
+            type: 'numeric',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'Country Customer Name',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'Unified Country',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'RPL Status Code',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        }
+    ]
+
+
+    static unifiedDealExcel = [
+        {
+            data: 'CNTRCT_OBJ_SID',
+            type: 'numeric',
+            readOnly: false,
+            width: 140,
+            headerTemplate: "Contract Id"
+        },
+        {
+            data: 'TITLE',
+            type: 'text',
+            readOnly: false,
+            width: 150,
+            headerTemplate: "Contract/Tender Folio Name"
+        },
+        {
+            data: 'OBJ_SID',
+            type: 'numeric',
+            readOnly: false,
+            width: 150,
+            headerTemplate: "Deal ID"
+        },
+        {
+            data: 'END_CUSTOMER_RETAIL',
+            type: 'text',
+            readOnly: false,
+            width: 80,
+            headerTemplate: "End Customer Retail"
+        },
+        {
+            data: 'END_CUSTOMER_COUNTRY',
+            type: 'text',
+            readOnly: false,
+            width: 80,
+            headerTemplate: "End Customer Country/Region"
+        },
+        {
+            data: 'EMP_WWID',
+            type: 'numeric',
+            readOnly: false,
+            width: 75,
+            headerTemplate: "Creator WWID"
+        },
+        {
+            data: 'UNIFIED_STATUS',
+            type: 'text',
+            readOnly: false,
+            width: 80,
+            headerTemplate: "Status"
+        },
+        {
+            data: 'UNIFIED_REASON',
+            type: 'text',
+            readOnly: false,
+            width: 75,
+            headerTemplate: "Reason Info"
+        }
+    ]
+
+
     static GetReportMissingCostDataExcel = [
         {
             data: 'ProductName',
@@ -685,6 +792,127 @@ static bulkPriceUpdateColumnData =  [
             readOnly: false,
             width: 300,
         }
+    ]
+    static ProductVerticalColHeaders = ["Gdm Product Type", "GDM Vertical Name", "Division Short Name", "Op Code", "Deal Product Type", "Product Vertical", "Last Updated By", "Last Update Date"];
+    static  ProductVerticalExcel = [
+        {
+            data: 'GDM_PRD_TYPE_NM',
+            type: 'text',
+            readOnly: false,
+            width: 140
+        },
+        {
+            data: 'GDM_VRT_NM',
+            type: 'text',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'DIV_NM',
+            type: 'numeric',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'OP_CD',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'DEAL_PRD_TYPE',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'PRD_CAT_NM',
+            type: 'numeric',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'CHG_EMP_NM',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'CHG_DTM',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        }
+    ]
+
+
+    static GetproductsExcelCalDef = [
+        {
+            data: 'Id',
+            type: 'numeric',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'Type',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'Category',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'Brand',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'Family',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'Processor Number',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'Name',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'Material ID',
+            type: 'text',
+            readOnly: false,
+            width: 100 
+        },
+        {
+            data: 'Start Date',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'End Date',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'Is Active',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        }   
     ]
     
 }

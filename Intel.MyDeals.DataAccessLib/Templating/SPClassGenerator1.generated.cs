@@ -1519,6 +1519,109 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
+		/// ID: 1521752824
+		/// Modified: 5/8/2025 11:29:31 AM
+		/// Parameters: 8
+		///</summary>
+		public partial class PR_GET_MYDL_DB_USR_ROLE_PERMISSION_BY_FILTERS : SP
+        {
+            public PR_GET_MYDL_DB_USR_ROLE_PERMISSION_BY_FILTERS()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_GET_MYDL_DB_USR_ROLE_PERMISSION_BY_FILTERS]";
+            }
+
+            ///<summary>
+            /// DataType: nvarchar(256)
+            /// Mode: IN
+            /// Max Length: 256
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 256, false)]
+            public String USERNAME
+            {
+                set { SetParmeter("USERNAME", value); }
+                get { return (String)GetParameter("USERNAME"); }
+            }
+
+            ///<summary>
+            /// DataType: date
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public DateTime START_DATE
+            {
+                set { SetParmeter("START_DATE", value); }
+                get { return (DateTime)GetParameter("START_DATE"); }
+            }
+
+            ///<summary>
+            /// DataType: date
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public DateTime END_DATE
+            {
+                set { SetParmeter("END_DATE", value); }
+                get { return (DateTime)GetParameter("END_DATE"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public Int32 IS_FETCH_LATEST
+            {
+                set { SetParmeter("IS_FETCH_LATEST", value); }
+                get { return (Int32)GetParameter("IS_FETCH_LATEST"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+            public Int32 SKIP_ROWS
+            {
+                set { SetParmeter("SKIP_ROWS", value); }
+                get { return (Int32)GetParameter("SKIP_ROWS"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(6, "ParameterDirection.Input", 0, false)]
+            public Int32 TAKE_ROWS
+            {
+                set { SetParmeter("TAKE_ROWS", value); }
+                get { return (Int32)GetParameter("TAKE_ROWS"); }
+            }
+
+            ///<summary>
+            /// DataType: nvarchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(7, "ParameterDirection.Input", -1, false)]
+            public String GROUP
+            {
+                set { SetParmeter("GROUP", value); }
+                get { return (String)GetParameter("GROUP"); }
+            }
+
+            ///<summary>
+            /// DataType: nvarchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(8, "ParameterDirection.Input", -1, false)]
+            public String FILTER
+            {
+                set { SetParmeter("FILTER", value); }
+                get { return (String)GetParameter("FILTER"); }
+            }
+        }
+
+        ///<summary>
         /// ID: 701245553
         /// Modified: 7/13/2018 1:53:25 AM
         /// Parameters: 1
@@ -5417,7 +5520,8 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         ///</summary>
         public partial class PR_MYDL_GET_BTCH_RUN_HLTH_STS : SP
         {
-            public PR_MYDL_GET_BTCH_RUN_HLTH_STS()            {
+            public PR_MYDL_GET_BTCH_RUN_HLTH_STS()
+            {
                 DatabaseName = "MyDeals";
                 StoredProdedureName = "[dbo].[PR_MYDL_GET_BTCH_RUN_HLTH_STS]";
             }
@@ -5558,6 +5662,131 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 get { return (String)GetParameter("VRTCL_LST"); }
             }
         }
+
+        ///<summary>
+        /// ID: 1357247890
+        /// Modified: 2/7/2023 11:27:48 PM
+        /// Parameters: 4
+        ///</summary>
+        public partial class PR_MYDL_GET_CNSNT_SUMMARY_SSP : SP
+        {
+            public PR_MYDL_GET_CNSNT_SUMMARY_SSP()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_CNSNT_SUMMARY_SSP]";
+            }
+
+            ///<summary>
+            /// DataType: table type
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public SqlTableValueParameterBase CUST_SIDS
+            {
+                set { SetParmeter("CUST_SIDS", value); }
+                get { return (SqlTableValueParameterBase)GetParameter("CUST_SIDS"); }
+            }
+
+            ///<summary>
+            /// DataType: datetime
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public DateTime STRT_DTM
+            {
+                set { SetParmeter("STRT_DTM", value); }
+                get { return (DateTime)GetParameter("STRT_DTM"); }
+            }
+
+            ///<summary>
+            /// DataType: datetime
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public DateTime END_DTM
+            {
+                set { SetParmeter("END_DTM", value); }
+                get { return (DateTime)GetParameter("END_DTM"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(MAX)
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public String FILTER
+            {
+                set { SetParmeter("FILTER", value); }
+                get { return (String)GetParameter("FILTER"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(MAX)
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+            public String GRPFLTR
+            {
+                set { SetParmeter("GRPFLTR", value); }
+                get { return (String)GetParameter("GRPFLTR"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(MAX)
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(6, "ParameterDirection.Input", 0, false)]
+            public String SORT
+            {
+                set { SetParmeter("SORT", value); }
+                get { return (String)GetParameter("SORT"); }
+            }
+
+            ///<summary>
+            /// DataType: Int32
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(7, "ParameterDirection.Input", 0, false)]
+            public Int32 TAKE
+            {
+                set { SetParmeter("TAKE", value); }
+                get { return (Int32)GetParameter("TAKE"); }
+            }
+
+            ///<summary>
+            /// DataType: Int32
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(8, "ParameterDirection.Input", 0, false)]
+            public Int32 SKIP
+            {
+                set { SetParmeter("SKIP", value); }
+                get { return (Int32)GetParameter("SKIP"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(4000)
+            /// Mode: IN
+            /// Max Length: 4000
+            ///</summary>
+            [SQLParameterAttribute(9, "ParameterDirection.Input", 4000, false)]
+            public String VRTCL_LST
+            {
+                set { SetParmeter("VRTCL_LST", value); }
+                get { return (String)GetParameter("VRTCL_LST"); }
+            }
+            ///<summary>
+            /// DataType: varchar(100)
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(10, "ParameterDirection.Input", 0, false)]
+            public String MODE
+            {
+                set { SetParmeter("MODE", value); }
+                get { return (String)GetParameter("MODE"); }
+            }
+        }
+
 
         ///<summary>
         /// ID: 1373247947
@@ -6141,6 +6370,144 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
+		/// ID: 1041751114
+		/// Modified: 2025-04-24 9:08:11 AM
+		/// Parameters: 11
+		///</summary>
+		public partial class PR_MYDL_GET_DSA_RQST_RSPN_LOG_SSP : SP
+        {
+            public PR_MYDL_GET_DSA_RQST_RSPN_LOG_SSP()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_DSA_RQST_RSPN_LOG_SSP]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(20)
+            /// Mode: IN
+            /// Max Length: 20
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 20, false)]
+            public String MODE
+            {
+                set { SetParmeter("MODE", value); }
+                get { return (String)GetParameter("MODE"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(30)
+            /// Mode: IN
+            /// Max Length: 30
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 30, false)]
+            public String in_rqst_type
+            {
+                set { SetParmeter("in_rqst_type", value); }
+                get { return (String)GetParameter("in_rqst_type"); }
+            }
+
+            ///<summary>
+            /// DataType: date
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public DateTime in_from_dt
+            {
+                set { SetParmeter("in_from_dt", value); }
+                get { return (DateTime)GetParameter("in_from_dt"); }
+            }
+
+            ///<summary>
+            /// DataType: date
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public DateTime in_to_dt
+            {
+                set { SetParmeter("in_to_dt", value); }
+                get { return (DateTime)GetParameter("in_to_dt"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(30)
+            /// Mode: IN
+            /// Max Length: 30
+            ///</summary>
+            [SQLParameterAttribute(5, "ParameterDirection.Input", 30, false)]
+            public String in_deal_id
+            {
+                set { SetParmeter("in_deal_id", value); }
+                get { return (String)GetParameter("in_deal_id"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(6, "ParameterDirection.Input", 0, false)]
+            public Boolean archive_flg
+            {
+                set { SetParmeter("archive_flg", value); }
+                get { return (Boolean)GetParameter("archive_flg"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(7, "ParameterDirection.Input", -1, false)]
+            public String FILTER_NAME
+            {
+                set { SetParmeter("FILTER_NAME", value); }
+                get { return (String)GetParameter("FILTER_NAME"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(8, "ParameterDirection.Input", -1, false)]
+            public String FILTER
+            {
+                set { SetParmeter("FILTER", value); }
+                get { return (String)GetParameter("FILTER"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(9, "ParameterDirection.Input", -1, false)]
+            public String SORT
+            {
+                set { SetParmeter("SORT", value); }
+                get { return (String)GetParameter("SORT"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(10, "ParameterDirection.Input", 0, false)]
+            public Int32 TAKE
+            {
+                set { SetParmeter("TAKE", value); }
+                get { return (Int32)GetParameter("TAKE"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(11, "ParameterDirection.Input", 0, false)]
+            public Int32 SKIP
+            {
+                set { SetParmeter("SKIP", value); }
+                get { return (Int32)GetParameter("SKIP"); }
+            }
+        }
+
+        ///<summary>
         /// ID: 1894453973
         /// Modified: 10/2/2023 9:17:59 PM
         /// Parameters: 0
@@ -6287,6 +6654,64 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             {
                 DatabaseName = "MyDeals";
                 StoredProdedureName = "[dbo].[PR_MYDL_GET_GEO_DIM]";
+            }
+        }
+
+        ///<summary>
+        /// ID: 649417733
+        /// Modified: 2025-04-16 3:15:58 PM
+        /// Parameters: 4
+        ///</summary>
+        public partial class PR_MYDL_GET_GEO_DIM_SSP : SP
+        {
+            public PR_MYDL_GET_GEO_DIM_SSP()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_GEO_DIM_SSP]";
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+            public String FILTER
+            {
+                set { SetParmeter("FILTER", value); }
+                get { return (String)GetParameter("FILTER"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", -1, false)]
+            public String SORT
+            {
+                set { SetParmeter("SORT", value); }
+                get { return (String)GetParameter("SORT"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Int32 TAKE
+            {
+                set { SetParmeter("TAKE", value); }
+                get { return (Int32)GetParameter("TAKE"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public Int32 SKIP
+            {
+                set { SetParmeter("SKIP", value); }
+                get { return (Int32)GetParameter("SKIP"); }
             }
         }
 
@@ -7156,7 +7581,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         /// Modified: 7/13/2018 1:54:23 AM
         /// Parameters: 2
         ///</summary>
-        public partial class PR_MYDL_GET_PRD_CAT_MAP : SP
+        public partial class PR_MYDL_GET_PRD_CAT_MAP: SP
         {
             public PR_MYDL_GET_PRD_CAT_MAP()
             {
@@ -7185,6 +7610,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 set { SetParmeter("in_chg_dt", value); }
                 get { return (DateTime)GetParameter("in_chg_dt"); }
             }
+            
         }
 
         ///<summary>
@@ -9677,6 +10103,87 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             {
                 set { SetParmeter("EMP_WWID", value); }
                 get { return (Int32)GetParameter("EMP_WWID"); }
+            }
+        }
+
+        ///<summary>
+        /// ID: 1628897220
+        /// Modified: 2025-04-16 10:57:35 AM
+        /// Parameters: 6
+        ///</summary>
+        public partial class PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP : SP
+        {
+            public PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(20)
+            /// Mode: IN
+            /// Max Length: 20
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 20, false)]
+            public String MODE
+            {
+                set { SetParmeter("MODE", value); }
+                get { return (String)GetParameter("MODE"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", -1, false)]
+            public String FILTER_NAME
+            {
+                set { SetParmeter("FILTER_NAME", value); }
+                get { return (String)GetParameter("FILTER_NAME"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", -1, false)]
+            public String FILTER
+            {
+                set { SetParmeter("FILTER", value); }
+                get { return (String)GetParameter("FILTER"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", -1, false)]
+            public String SORT
+            {
+                set { SetParmeter("SORT", value); }
+                get { return (String)GetParameter("SORT"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+            public Int32 TAKE
+            {
+                set { SetParmeter("TAKE", value); }
+                get { return (Int32)GetParameter("TAKE"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(6, "ParameterDirection.Input", 0, false)]
+            public Int32 SKIP
+            {
+                set { SetParmeter("SKIP", value); }
+                get { return (Int32)GetParameter("SKIP"); }
             }
         }
 
@@ -20209,6 +20716,85 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 get { return (Int32)GetParameter("CRE_EMP_WWID"); }
             }
         }
+        ///<summary>
+        /// ID: 649417733
+        /// Modified: 2025-04-16 3:15:58 PM
+        /// Parameters: 4
+        ///</summary>
+        public partial class PR_MYDL_GET_PRIM_CUST_DTL_FILTER : SP
+        {
+            public PR_MYDL_GET_PRIM_CUST_DTL_FILTER()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_PRIM_CUST_DTL_FILTER]";
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+            public String FILTER
+            {
+                set { SetParmeter("FILTER", value); }
+                get { return (String)GetParameter("FILTER"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", -1, false)]
+            public String SORT
+            {
+                set { SetParmeter("SORT", value); }
+                get { return (String)GetParameter("SORT"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Int32 TAKE
+            {
+                set { SetParmeter("TAKE", value); }
+                get { return (Int32)GetParameter("TAKE"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public Int32 SKIP
+            {
+                set { SetParmeter("SKIP", value); }
+                get { return (Int32)GetParameter("SKIP"); }
+            }
+            ///<summary>
+            /// DataType: varchar(100)
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(10, "ParameterDirection.Input", 0, false)]
+            public String MODE
+            {
+                set { SetParmeter("MODE", value); }
+                get { return (String)GetParameter("MODE"); }
+            }
+            ///<summary>
+            /// DataType: varchar(100)
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(10, "ParameterDirection.Input", 0, false)]
+            public String FLTRCOL
+            {
+                set { SetParmeter("FLTRCOL", value); }
+                get { return (String)GetParameter("FLTRCOL"); }
+            }
+
+        }
+
 
         ///<summary>
         /// ID: 1509944803
@@ -20367,7 +20953,256 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 get { return (String)GetParameter("END_CUST_CTRY"); }
             }
         }
+        ///<summary>
+		/// ID: 681417847
+		/// Modified: 4/16/2025 12:03:29 AM
+		/// Parameters: 4
+		///</summary>
+		public partial class PR_MYDL_GET_PRD_CAT_MAP_FILTER : SP
+        {
+            public PR_MYDL_GET_PRD_CAT_MAP_FILTER()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_PRD_CAT_MAP_FILTER]";
+            }
 
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 in_wwid
+            {
+                set { SetParmeter("in_wwid", value); }
+                get { return (Int32)GetParameter("in_wwid"); }
+            }
+
+            ///<summary>
+            /// DataType: datetime
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public DateTime in_chg_dt
+            {
+                set { SetParmeter("in_chg_dt", value); }
+                get { return (DateTime)GetParameter("in_chg_dt"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Int32 skipRows
+            {
+                set { SetParmeter("skipRows", value); }
+                get { return (Int32)GetParameter("skipRows"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public Int32 takeRows
+            {
+                set { SetParmeter("takeRows", value); }
+                get { return (Int32)GetParameter("takeRows"); }
+            }
+            ///<summary>
+            /// DataType: varchar(MAX)
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(6, "ParameterDirection.Input", 0, false)]
+            public String SORT
+            {
+                set { SetParmeter("SORT", value); }
+                get { return (String)GetParameter("SORT"); }
+            }
+            ///<summary>
+            /// DataType: varchar(MAX)
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public String FILTER
+            {
+                set { SetParmeter("FILTER", value); }
+                get { return (String)GetParameter("FILTER"); }
+            }
+            ///<summary>
+            /// DataType: varchar(100)
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(10, "ParameterDirection.Input", 0, false)]
+            public String MODE
+            {
+                set { SetParmeter("MODE", value); }
+                get { return (String)GetParameter("MODE"); }
+            }
+            ///<summary>
+            /// DataType: varchar(100)
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(10, "ParameterDirection.Input", 0, false)]
+            public String FLTRCOL
+            {
+                set { SetParmeter("FLTRCOL", value); }
+                get { return (String)GetParameter("FLTRCOL"); }
+            }
+        }
+
+        public partial class PR_MYDL_GET_UNPRIM_DEALS_BY_FILTER : SP
+        {
+            public PR_MYDL_GET_UNPRIM_DEALS_BY_FILTER()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_UNPRIM_DEALS_BY_FILTER]";
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 in_emp_wwid
+            {
+                set { SetParmeter("in_emp_wwid", value); }
+                get { return (Int32)GetParameter("in_emp_wwid"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Int32 skipRows
+            {
+                set { SetParmeter("skipRows", value); }
+                get { return (Int32)GetParameter("skipRows"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Int32 takeRows
+            {
+                set { SetParmeter("takeRows", value); }
+                get { return (Int32)GetParameter("takeRows"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(250)
+            /// Mode: IN
+            /// Max Length: 250
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 250, false)]
+            public String sort
+            {
+                set { SetParmeter("sort", value); }
+                get { return (String)GetParameter("sort"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(max)
+            /// Mode: IN
+            /// Max Length: 8000
+            ///</summary>
+            [SQLParameterAttribute(5, "ParameterDirection.Input", 8000, false)]
+            public String fltrcol
+            {
+                set { SetParmeter("fltrcol", value); }
+                get { return (String)GetParameter("fltrcol"); }
+            }
+        }
+
+        public partial class PR_MYDL_GET_UNPRIM_DEALS_FILTER : SP
+        {
+            public PR_MYDL_GET_UNPRIM_DEALS_FILTER()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_UNPRIM_DEALS_FILTER]";
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 in_emp_wwid
+            {
+                set { SetParmeter("in_emp_wwid", value); }
+                get { return (Int32)GetParameter("in_emp_wwid"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(MA
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+            public String fltrcol
+            {
+                set { SetParmeter("fltrcol", value); }
+                get { return (String)GetParameter("fltrcol"); }
+            }
+
+        }
+
+        ///<summary>
+        /// ID: 1013227012
+        /// Modified: 04/14/2025 12:04:57 PM
+        /// Parameters: 0
+        ///</summary>
+        public partial class PR_MYDL_GET_PRD_DTL_BY_FILTER : SP
+        {
+            public PR_MYDL_GET_PRD_DTL_BY_FILTER()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_PRD_DTL_BY_FILTER]";
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: Select
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 skipRows
+            {
+                set { SetParmeter("skipRows", value); }
+                get { return (Int32)GetParameter("skipRows"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: Select
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Int32 takeRows
+            {
+                set { SetParmeter("takeRows", value); }
+                get { return (Int32)GetParameter("takeRows"); }
+            }
+            ///<summary>
+            /// DataType: string
+            /// Mode: Select
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public String Filter
+            {
+                set { SetParmeter("Filter", value); }
+                get { return (String)GetParameter("Filter"); }
+            }
+            ///<summary>
+            /// DataType: string
+            /// Mode: Select
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public String Sort
+            {
+                set { SetParmeter("Sort", value); }
+                get { return (String)GetParameter("Sort"); }
+            }
+        }
     }
 }
-       

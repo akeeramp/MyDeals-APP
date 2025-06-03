@@ -7,6 +7,7 @@ using Intel.MyDeals.Helpers;
 using System.Net.Http;
 using System;
 using System.Runtime.InteropServices;
+using Intel.MyDeals.BusinessLogic;
 
 
 namespace Intel.MyDeals.Controllers.API
@@ -27,6 +28,15 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _primeCustomersLib.GetPrimeCustomerDetails(), "Unable to Get Unified Customers");
         }
+
+        [Authorize]
+        [HttpPost]
+        [Route("GetPrimeCustomerDetailsByFilter")]
+        public List<PrimeCustomers> GetPrimeCustomerDetails([FromBody] SearchParams data)
+        {
+            return SafeExecutor(() => _primeCustomersLib.GetPrimeCustomerDetails(data.StrFilters, data.StrSorts, data.Take, data.Skip), "Unable to Get Unified Customers");
+        }
+
 
         [Route("SetPrimeCustomers")]
         [HttpPost]
@@ -72,6 +82,22 @@ namespace Intel.MyDeals.Controllers.API
         public IEnumerable<UnPrimeDeals> GetUnPrimeDeals()
         {
             return SafeExecutor(() => _primeCustomersLib.GetUnPrimeDeals(), "Unable to get deals");
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("GetUnPrimeDealsByFilter")]
+        public IEnumerable<UnPrimeDeals> GetUnPrimeDealsByFilter([FromBody] UnPrimeDealsFilter data)
+        {
+            return SafeExecutor(() => _primeCustomersLib.GetUnPrimeDeals(data.Skip, data.Take, data.Sort, data.InFilters), "Unable to get deals");
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("GetUnPrimeDealsFilterValue")]
+        public List<UnPrimeDealsField> GetUnPrimeDealsFilterValue([FromBody] UnPrimeDealsField data)
+        {
+            return SafeExecutor(() => _primeCustomersLib.GetUnPrimeDealsFilterValue(data.value), "Unable to get deals");
         }
 
         [Authorize]
@@ -148,6 +174,14 @@ namespace Intel.MyDeals.Controllers.API
                 $"Unable to Get Rpl Status Code");
         }
 
+        [HttpGet]
+        [Route("GetPrimeCustData/{fieldName}")]
+        public List<string> GetPrimeCustData(string fieldName)
+        {
+            return SafeExecutor(() => _primeCustomersLib.GetPrimeCustData(fieldName)
+                , $"Unable to get Product Verticals"
+            );
+        }
         [Authorize]
         [HttpPost]
         [Route("updateDealRecon")]

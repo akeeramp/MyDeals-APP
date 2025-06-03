@@ -24,7 +24,7 @@ export class BulkUploadMeetCompModalComponent implements OnDestroy {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     spinnerMessageHeader = "Bulk Upload Meet Comp";
     spinnerMessageDescription = "Please wait while we importing meet comp data..";
     meetComps = [];

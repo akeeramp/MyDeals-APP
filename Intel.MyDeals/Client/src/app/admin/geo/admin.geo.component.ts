@@ -9,6 +9,7 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { GeoDimension } from "./admin.geo.model";
+import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
 
 @Component({
     selector: "admin-geo",
@@ -21,13 +22,16 @@ export class geoComponent implements OnDestroy {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isLoading = true;
     private type = "numeric";
     private info = true;
     private gridResult = [];
     private gridData: GridDataResult;
     private color: ThemePalette = 'primary';
+    private sortData = "";
+    private filterData = "";
+    private dataforfilter: object;
     private state: State = {
         skip: 0,
         take: 25,
@@ -63,13 +67,47 @@ export class geoComponent implements OnDestroy {
 
     loadGeo(): void {
         //Developer can see the Screen..
-        this.geoSvc.getGeos().pipe(takeUntil(this.destroy$)).subscribe((result: Array<GeoDimension>) => {
+        this.settingFilter();
+        this.isLoading = true;
+        this.geoSvc.getGeosNew(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe(result => {
             this.isLoading = false;
-            this.gridResult = result;
-            this.gridData = process(result, this.state);
+            this.gridResult = result.Items;
+            const state: State = {
+                skip: 0,
+                take: this.state.take,
+                group: this.state.group,
+                filter: {
+                    logic: "and",
+                    filters: [],
+                }
+            };
+            this.gridData = process(this.gridResult, state);
+            this.gridData.total = result.TotalRows;
+            this.isLoading = false;
+            
         }, (error) => {
             this.loggerSvc.error('Geo service', error);
         });
+    }
+
+    settingFilter() {
+        this.sortData = "";
+        this.filterData = "";
+        if (this.state.sort) {
+            this.state.sort.forEach((value, ind) => {
+                if (value.dir) {
+                    this.sortData = ind == 0 ? `ORDER BY ${value.field} ${value.dir}` : `${this.sortData} , ${value.field} ${value.dir}`;
+                }
+            });
+        }
+        const filterExpression = FilterExpressBuilder.createSqlExpression(JSON.stringify(this.state.filter));
+        this.filterData = filterExpression;
+        this.dataforfilter = {
+            InFilters: this.filterData,
+            Sort: this.sortData,
+            Skip: this.state.skip,
+            Take: this.state.take
+        };
     }
 
     public onExcelExport(e: ExcelExportEvent): void {
@@ -77,12 +115,9 @@ export class geoComponent implements OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
 
         const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
+            data: this.gridResult
         };
 
         return result;
@@ -90,7 +125,7 @@ export class geoComponent implements OnDestroy {
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
-        this.gridData = process(this.gridResult, this.state);
+        this.loadGeo();
     }
 
     clearFilter(): void {
@@ -98,7 +133,7 @@ export class geoComponent implements OnDestroy {
             logic: "and",
             filters: [],
         };
-        this.gridData = process(this.gridResult, this.state);
+        this.loadGeo();
     }
 
     refreshGrid(): void {
@@ -107,13 +142,7 @@ export class geoComponent implements OnDestroy {
             logic: "and",
             filters: [],
         };
-        this.geoSvc.getGeos().pipe(takeUntil(this.destroy$)).subscribe((result: Array<GeoDimension>) => {
-            this.isLoading = false;
-            this.gridResult = result;
-            this.gridData = process(result, this.state);
-        }, (error) => {
-            this.loggerSvc.error('Geo service', error);
-        });
+        this.loadGeo();
     }
 
     ngOnInit(): void {

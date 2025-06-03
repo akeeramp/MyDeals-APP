@@ -32,7 +32,7 @@ export class dbAuditToolsComponent implements OnDestroy {
     private dbAuditCompareRequest = [];
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     // MIKES
     private envsDataFinal: EnvsDataMap[] = []; // Final Envs list used in UI
     private selectedEnvValues: EnvsDataMap[] = [];

@@ -63,6 +63,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
         {
             int singleProdSid = 0;
             string singlePrdName = "";
+            SearchParams objSearchParams = null;
 
             // First products call is expensive because it needs to load products cache (2 minutes run time)
             // After the load, all product items are cached for this instance
@@ -84,7 +85,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
                 , "Failed ProductsLib().GetProduct(" + singleProdSid + ") Test");
 
             // Check fetching an entire category by name (list)
-            resultsList = new ProductsLib().GetProductByCategoryName(singlePrdName);
+            resultsList = new ProductsLib().GetProductByCategoryName(singlePrdName, objSearchParams);
             Assert.IsTrue(resultsList.Any() && resultsList.Where(r => r.PRD_CAT_NM.Contains(singlePrdName)).Count() == resultsList.Count()
                 , "Failed ProductsLib().GetProductByCategoryName('" + singlePrdName + "') Test");
 

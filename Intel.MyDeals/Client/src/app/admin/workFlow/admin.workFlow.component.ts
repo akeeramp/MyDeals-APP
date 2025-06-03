@@ -41,7 +41,7 @@ export class adminWorkFlowComponent implements PendingChangesGuard, OnDestroy{
     @ViewChild('workflow_grid') grid: GridComponent;
     isDirty = false;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isLoading = true;
     private errorMsg = ""
     private color: ThemePalette = "primary";

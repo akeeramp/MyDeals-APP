@@ -16,7 +16,7 @@ export class AdminBannerComponent implements OnDestroy {
     private adminMessage = "ADMIN_MESSAGE";
     private userDismissed;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     GetAdminMessage() {
         this.userDismissed = localStorage.getItem('userDismissed') == undefined ? 1 : localStorage.getItem('userDismissed');

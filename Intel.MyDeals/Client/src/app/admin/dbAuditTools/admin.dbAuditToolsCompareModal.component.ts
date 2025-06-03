@@ -31,7 +31,7 @@ export class DbAuditToolsCompareModalComponent implements OnDestroy {
     private buttonEnvs: IButton[] = [];
     //private editorOptions = { theme: 'vs-dark', language: 'sql' };
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     constructor(
         private dbAuditToolsSVC: dbAuditToolsService,

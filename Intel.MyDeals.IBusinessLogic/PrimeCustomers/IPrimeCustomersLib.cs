@@ -6,6 +6,7 @@ namespace Intel.MyDeals.IBusinessLogic
     public interface IPrimeCustomersLib
     {
         List<PrimeCustomers> GetPrimeCustomerDetails();
+        List<PrimeCustomers> GetPrimeCustomerDetails(string filter, string sort, int take, int skip);
 
         PrimeCustomers ManagePrimeCustomers(CrudModes mode, PrimeCustomers data);
 
@@ -15,6 +16,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<UnPrimeDeals> GetUnPrimeDeals();
 
+        List<UnPrimeDeals> GetUnPrimeDeals(int skip, int take, string sort, string inFilters);
+        List<UnPrimeDealsField> GetUnPrimeDealsFilterValue(string field);
         List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry);
 
         bool UpdateUnPrimeDeals(int dealId, UnPrimeAtrbs endCustData, bool isUnificationMailRequired=true);
@@ -38,6 +41,8 @@ namespace Intel.MyDeals.IBusinessLogic
         string ResubmissionDeals(string dealId, string endCustomerData);
 
         string ReprocessUCD(string objReprocessUCD_OBJ);
+
+        List<string> GetPrimeCustData(string fieldName);
 
     }
 }

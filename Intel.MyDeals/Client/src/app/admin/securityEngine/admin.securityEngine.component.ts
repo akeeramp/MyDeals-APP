@@ -20,7 +20,7 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
     constructor(private SecurityEnginesvc: SecurityEngineService, private loggerSvc: logger) { }
     isDirty = false;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     public isGridLoading = false;
     public isShowMainContent = false;
     public currentDisplayAction = [];

@@ -1138,65 +1138,63 @@ namespace Intel.MyDeals.Entities
 
     } // End of class UserVitalsSuper
 
-    ///<summary>
-    /// Class created via template - Do Not Modify!
-    /// To modify this code, re-execute the template, or extend as partial.
-    /// on MHTIPPIN-MOBL1
-    /// by mhtippin
-    /// at 10/17/2023 3:47:05 PM
-    ///</summary>
-
-    [DataContract]
-    public partial class DashboardContractSummary
-    {
-
-        [DataMember]
-        public System.String CHG_EMP_NM { set; get; }
-
-
-        [DataMember]
-        public System.Int32 CNTRCT_OBJ_SID { set; get; }
-
-
-        [DataMember]
-        public System.String CRE_EMP_NM { set; get; }
-
-
-        [DataMember]
-        public System.Int32 CUST_MBR_SID { set; get; }
-
-
-        [DataMember]
-        public System.String CUST_NM { set; get; }
-
-
-        [DataMember]
-        public System.DateTime END_DTM { set; get; }
-
-
-        [DataMember]
-        public System.Boolean HAS_ALERT { set; get; }
-
-
-        [DataMember]
-        public System.Int32 IS_TENDER { set; get; }
-
-
-        [DataMember]
-        public System.String NOTES { set; get; }
-
-
-        [DataMember]
-        public System.DateTime STRT_DTM { set; get; }
-
-
-        [DataMember]
-        public System.String TITLE { set; get; }
-
-
-        [DataMember]
-        public System.String WF_STG_CD { set; get; }
-
+	///<summary>
+	/// Class created via template - Do Not Modify!
+	/// To modify this code, re-execute the template, or extend as partial.
+	/// on MHTIPPIN-MOBL1
+	/// by mhtippin
+	/// at 10/17/2023 3:47:05 PM
+	///</summary>
+	
+	[DataContract]
+	public partial class DashboardContractSummary {
+	
+	[DataMember]
+	public System.String CHG_EMP_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.Int32 CNTRCT_OBJ_SID {set;get;}
+	
+	
+	[DataMember]
+	public System.String CRE_EMP_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.Int32 CUST_MBR_SID {set;get;}
+	
+	
+	[DataMember]
+	public System.String CUST_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.DateTime END_DTM {set;get;}
+	
+	
+	[DataMember]
+	public System.Boolean HAS_ALERT {set;get;}
+	
+	
+	[DataMember]
+	public System.Int32 IS_TENDER {set;get;}
+	
+	
+	[DataMember]
+	public System.String NOTES {set;get;}
+	
+	
+	[DataMember]
+	public System.DateTime STRT_DTM {set;get;}
+	
+	
+	[DataMember]
+	public System.String TITLE {set;get;}
+	
+	
+	[DataMember]
+	public System.String WF_STG_CD {set;get;}
 
         /*
         private static List<DashboardContractSummary> DashboardContractSummaryFromReader(SqlDataReader rdr){
@@ -1238,6 +1236,47 @@ namespace Intel.MyDeals.Entities
         */
 
     } // End of class DashboardContractSummary
+
+
+    [DataContract]
+    public partial class DashboardSummaryCount
+    {
+        [DataMember]
+        public System.Int32 COUNT { set; get; }
+
+        [DataMember]
+        public System.String WF_STG_CD { set; get; }
+
+        [DataMember]
+        public System.Int32 IS_TENDER { set; get; }
+
+        [DataMember]
+
+        public System.Boolean HAS_ALERT { set; get; }
+    }
+
+    [DataContract]
+    public partial class DashboardContractSummaryCount {
+        [DataMember]
+        public System.Int32 TOT_TABLE_COUNT { set; get; }
+
+        [DataMember]
+        public System.Int32 TOT_TENDER_COUNT { set; get; }
+
+        [DataMember]
+        public System.Int32 TOT_CONTRACT_COUNT { set; get; }
+        [DataMember]
+        public System.Int32 TOT_COMPLETE_TENDER_COUNT { set; get; }
+
+        [DataMember]
+        public System.Int32 TOT_COMPLETE_CONTRACT_COUNT { set; get; }
+
+        [DataMember]
+        public System.Int32 TOT_CANCELLED_TENDER_COUNT { set; get; }
+
+        [DataMember]
+        public System.Int32 TOT_ALERT_COUNT { set; get; }
+    }
 
     ///<summary>
     /// Class created via template - Do Not Modify!
@@ -1720,6 +1759,8 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.String USR_INPUT { set; get; }
 
+        [DataMember]
+        public System.String TOTAL_ROWS { set; get; }
 
         /*
         private static List<Product> ProductFromReader(SqlDataReader rdr){
@@ -1867,6 +1908,8 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.String PRD_CAT_NM { set; get; }
 
+        [DataMember]
+        public System.Int32 TotalRows { set; get; }
 
         /*
         private static List<ProductCategory> ProductCategoryFromReader(SqlDataReader rdr){
@@ -6594,9 +6637,9 @@ namespace Intel.MyDeals.Entities
     ///<summary>
     /// Class created via template - Do Not Modify!
     /// To modify this code, re-execute the template, or extend as partial.
-    /// on MHTIPPIN-MOBL1
-    /// by mhtippin
-    /// at 10/17/2023 3:47:56 PM
+    /// on SOC-G3NTQW3
+    /// by jlopezre
+    /// at 5/1/2025 3:57:26 PM
     ///</summary>
 
     [DataContract]
@@ -6640,6 +6683,8 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.String ColumnName { set; get; }
 
+        [DataMember]
+        public Nullable<System.Int32> TOTAL_ROWS { set; get; }
 
         [DataMember]
         public System.String ROW_REFRESH_DTM { set; get; }
@@ -8556,6 +8601,35 @@ namespace Intel.MyDeals.Entities
 
     } // End of class ReportName
 
+    [DataContract]
+    public partial class UnPrimeDealsFilter
+    {
+
+        [DataMember]
+        public System.Int32 Skip { set; get; }
+
+
+        [DataMember]
+        public System.Int32 Take { set; get; }
+
+
+        [DataMember]
+        public System.String Sort { set; get; }
+
+
+        [DataMember]
+        public System.String InFilters { set; get; }
+
+    }
+
+    [DataContract]
+    public partial class UnPrimeDealsField
+    {
+
+        [DataMember]
+        public System.String value { get; set; }
+    }
+
     ///<summary>
     /// Class created via template - Do Not Modify!
     /// To modify this code, re-execute the template, or extend as partial.
@@ -9639,6 +9713,8 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.String RPL_STS_CD { set; get; }
 
+        [DataMember]
+        public System.Int32 TotalRows { set; get; }
 
         /*
         private static List<PrimeCustomers> PrimeCustomersFromReader(SqlDataReader rdr){
@@ -9722,6 +9798,9 @@ namespace Intel.MyDeals.Entities
         public String UNIFIED_STATUS { get; set; }
         [DataMember]
         public String UNIFIED_REASON { get; set; }
+
+        [DataMember]
+        public System.Int32 TOTALCOUNT { set; get; }
         /*
 		private static List<UnPrimeDeals> UnPrimeDealsFromReader(SqlDataReader rdr){
 		// This helper method is template generated.

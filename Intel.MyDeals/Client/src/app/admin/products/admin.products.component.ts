@@ -8,6 +8,10 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { Products } from "./admin.products.model";
+import { GridUtil } from "../../contract/grid.util";
+import { ExcelColumnsConfig } from "../ExcelColumnsconfig.util";
+import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
 
 @Component({
     selector: 'admin-products',
@@ -19,13 +23,18 @@ export class adminProductsComponent implements OnDestroy {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isLoading = true;
     private type = "numeric";
     private info = true;
-    private gridResult: Array<any> = [];
+    private gridResult: Array<Products> = [];
+    private excelExport: Array<Products> = [];
     private gridData: GridDataResult;
     private color: ThemePalette = 'primary';
+    private productsExcel = ExcelColumnsConfig.GetproductsExcelCalDef;
+    private sortData = "";
+    private filterData = "";
+    private dataforfilter: object;
     private state: State = {
         skip: 0,
         take: 25,
@@ -40,8 +49,8 @@ export class adminProductsComponent implements OnDestroy {
         { text: "25", value: 25 },
         { text: "50", value: 50 },
         { text: "100", value: 100 },
-        { text: "250", value: 250 },
-        { text: "1000", value: 1000 }
+        //{ text: "250", value: 250 },
+        //{ text: "1000", value: 1000 }
     ];
 
     public onExcelExport(e: ExcelExportEvent): void {
@@ -61,11 +70,16 @@ export class adminProductsComponent implements OnDestroy {
     }
 
     loadProducts() {
+        this.settingFilter();
         //Developer can see the Screen..
-        this.productsSvc.getProducts().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
-            this.isLoading = false;
+        this.productsSvc.getProducts(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<Products>) => { 
+            this.isLoading = false; 
             this.gridResult = result;
-            this.gridData = process(result, this.state);
+            this.gridData = process(this.gridResult, this.state); 
+            this.gridData.data = this.gridResult;
+            if (result.length > 0) {
+                this.gridData.total = parseInt(result[0].TOTAL_ROWS);
+            } 
         }, (error) => {
             this.loggerSvc.error('Unable to get Products', error);
         });
@@ -73,7 +87,7 @@ export class adminProductsComponent implements OnDestroy {
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
-        this.gridData = process(this.gridResult, this.state);
+        this.loadProducts();
     }
 
     clearFilter() {
@@ -82,6 +96,7 @@ export class adminProductsComponent implements OnDestroy {
             filters: [],
         };
         this.gridData = process(this.gridResult, this.state);
+        this.loadProducts();
     }
 
     refreshGrid() {
@@ -93,6 +108,26 @@ export class adminProductsComponent implements OnDestroy {
         this.loadProducts();
     }
 
+    exportToExcel() {
+        this.isLoading = true;
+        this.productsSvc.getProducts(null).pipe(takeUntil(this.destroy$)).subscribe((result: Array<Products>) => {
+            this.isLoading = false;
+            this.excelExport = result;
+            GridUtil.dsToExcelProductsData(this.productsExcel, this.excelExport, "MyDealsProducts");
+        }, (error) => {
+            this.loggerSvc.error('GetPrimeCustomerDetails service', error);
+        });
+    }
+
+    exportToExcelCustomColumns() {
+        GridUtil.dsToExcelProductsData(this.productsExcel, this.gridResult, "MyDealsProducts");
+    }
+
+    pageChange(state) {
+        this.state.take = state.take;
+        this.state.skip = state.skip;
+    }
+
     ngOnInit() {
         this.loadProducts();
     }
@@ -100,5 +135,25 @@ export class adminProductsComponent implements OnDestroy {
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
+    }
+
+    settingFilter() {
+        this.sortData = "";
+        this.filterData = "";
+        if (this.state.sort) {
+            this.state.sort.forEach((value, ind) => {
+                if (value.dir) {
+                    this.sortData = ind == 0 ? `${value.field} ${value.dir}` : `${this.sortData} AND ${value.field} ${value.dir}`;
+                }
+            });
+        }
+        const filterExpression = FilterExpressBuilder.createSqlExpression(JSON.stringify(this.state.filter));
+        this.filterData = filterExpression;
+        this.dataforfilter = {
+            StrFilters: this.filterData,
+            StrSorts: this.sortData,
+            Skip: this.state.skip,
+            Take: this.state.take
+        };
     }
 }

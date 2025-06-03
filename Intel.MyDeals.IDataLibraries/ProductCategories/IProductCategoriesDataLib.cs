@@ -9,5 +9,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<ProductCategory> UpdateProductCategories(List<ProductCategory> categories);
 
-	}
+        List<string> GetProductCategoriesByFilter(string fieldName);
+
+    }
 }

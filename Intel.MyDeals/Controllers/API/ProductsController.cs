@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Intel.MyDeals.DataLibrary;
+using System.Reflection.Emit;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -132,12 +133,13 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [HttpPost]
         [Route("GetProductByCategoryName/{name}/{getCachedResult:bool?}")]
-        public IEnumerable<Product> GetProductByCategoryName(string name, bool getCachedResult = true)   //searches for products with category that contains string 'name'
+        public IEnumerable<Product> GetProductByCategoryName(string name, SearchParams objSearchParams,bool getCachedResult = true)   //searches for products with category that contains string 'name'
         {
             try
             {
-                return _productsLib.GetProductByCategoryName(name, getCachedResult);
+                return _productsLib.GetProductByCategoryName(name, objSearchParams,getCachedResult);
             }
             catch (Exception ex)
             {

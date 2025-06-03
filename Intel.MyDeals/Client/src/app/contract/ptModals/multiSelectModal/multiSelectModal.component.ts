@@ -52,7 +52,7 @@ export class multiSelectModalComponent implements OnDestroy {
     private multiSelectMkgArrChange: Array<string> = [];
     private marketSeglist: any = [];
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     fetchChildren(node: any): Observable<any[]> {
         // returns the items collection of the parent node as children

@@ -43,7 +43,7 @@ export class ReportingComponent implements OnDestroy{
  public chartPieeSeriesObj:any=null;
  public chartPieSeriesObj:any=null;
  public chartSeriesObj:any=null;
- private readonly destroy$ = new Subject();
+ private readonly destroy$ = new Subject<void>();
   private chartPieeObj:any ={
     title: {
         position: "bottom",

@@ -92,7 +92,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
     @Output() isDirty = new EventEmitter<any>();
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     public isLoading = false;
     private dirty = false;
     userRole = ""; canEmailIcon = true;

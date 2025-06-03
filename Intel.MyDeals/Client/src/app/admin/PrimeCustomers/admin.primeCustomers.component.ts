@@ -13,6 +13,10 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { DynamicObj } from "../employee/admin.employee.model";
+import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
+import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
+import { GridUtil } from "../../contract/grid.util";
+
 
 @Component({
     selector: 'admin-prime-customers',
@@ -20,11 +24,12 @@ import { DynamicObj } from "../employee/admin.employee.model";
     styleUrls: ['Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.css']
 })
 export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDestroy {
+
     constructor(private primeCustSvc: primeCustomerService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     @ViewChild("primeCustDropDown") private primeCustDdl;
     @ViewChild("primeCustNmDropDown") private primeCustNmDdl;
     @ViewChild("ctryCustDropDown") private ctryCustDdl;
@@ -38,6 +43,9 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     private info = true;
     private gridResult: Array<PrimeCust_Map>;
     private gridData: GridDataResult;
+    private gridAllResult: Array<PrimeCust_Map>;
+    private gridAllData: GridDataResult;
+    private unifiedDealCustomerExcel = ExcelColumnsConfig.unifiedDealCustomerExcel;
     private color: ThemePalette = 'primary';
     public distinctPrimeCustNm: Array<string>;
     public distinctCtryCustNm: Array<string>;
@@ -58,6 +66,11 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     public isUnifiedIdEditable = false; isPrimCustNmEditable = false;
     isPrimLvlIdEditable = false; isPrimCustCtryEditable = false; isRplStsDdEditable = false;
     public virtual: any = { itemHeight: 28 };
+    private sortData = "";
+    private filterData = "";
+    private dataforfilter: object;
+    private columnFieldDataList: Map<string, Array<string>> = new Map();
+    private totalCount = 0;
     private state: State = {
         skip: 0,
         take: 25,
@@ -71,9 +84,8 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     private pageSizes: PageSizeItem[] = [
         { text: "25", value: 25 },
         { text: "50", value: 50 },
-        { text: "100", value: 100 },
-        { text: "250", value: 250 },
-        { text: "1000", value: 1000 }
+        { text: "75", value: 75 },
+        { text: "100", value: 100 }
     ];
 
     distinctPrimitive(fieldName: string): string[] {
@@ -87,7 +99,6 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     public onExcelExport(e: ExcelExportEvent): void {
         e.workbook.sheets[0].title = "Users Export";
     }
-
     public allData(): ExcelExportData {
         const excelState: State = {};
         Object.assign(excelState, this.state)
@@ -105,19 +116,73 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         if ((<any>window).usrRole == "RA" && !(<any>window).isDeveloper) {
             this.editAccess = false;
         }
-        //Developer can see the Screen..
-        this.primeCustSvc.GetPrimeCustomerDetails().pipe(takeUntil(this.destroy$)).subscribe((result: Array<PrimeCust_Map>) => {
+        //Developer can see the Screen.
+        this.settingFilter();
+        this.isLoading = true;
+        this.primeCustSvc.GetPrimeCustomerDetailsByFilter(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<PrimeCust_Map>) => {
             this.isLoading = false;
             this.gridResult = result;
             this.gridData = process(result, this.state);
-            this.getPrimeCustomersDataSource();
+            this.gridData.data = result;
+            if (result.length > 0) {
+                this.gridData.total = result[0].TotalRows;
+                this.totalCount = result[0].TotalRows;
+            }
         }, (error) => {
             this.loggerSvc.error('Prime Customer service', error);
-        });
+        });   
+        this.fieldLoad('PRIM_CUST_CTRY');
     }
+    settingFilter() {
+        this.sortData = "";
+        this.filterData = "";
+        if (this.state.sort) {
+            this.state.sort.forEach((value, ind) => {
+                if (value.dir) {
+                    this.sortData = ind == 0 ? `${value.field} ${value.dir}` : `${this.sortData} AND ${value.field} ${value.dir}`;
+                }
+            });
+        }
+        const filterExpression = FilterExpressBuilder.createSqlExpression(JSON.stringify(this.state.filter));
+        this.filterData = filterExpression;
+        this.dataforfilter = {
+            StrFilters: this.filterData,
+            StrSorts: this.sortData,
+            Skip: this.state.skip,
+            Take: this.state.take
+        };
+    }
+    fieldLoad(fieldName: string) {
+        this.settingFilter();
+        if (fieldName == 'PRIM_CUST_CTRY' || fieldName == 'PRIM_CUST_NM' || fieldName == 'RPL_STS_CD') {
+            this.primeCustSvc.getPrimeCustData(fieldName).subscribe(data => {
+                this.columnFieldDataList.set(fieldName, data);
+            });
+
+        }
+    }
+    GetColumnFieldData(fieldName: string): any {
+        return this.columnFieldDataList.has(fieldName) ? this.columnFieldDataList.get(fieldName) : [];
+    }
+
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
-        this.gridData = process(this.gridResult, this.state);
+        /*  this.gridData = process(this.gridResult, this.state);*/
+        this.loadPrimeCustomer();
+    }
+    exportToExcel() {
+        this.isLoading = true;
+        this.primeCustSvc.GetPrimeCustomerDetails().pipe(takeUntil(this.destroy$)).subscribe((result: Array<PrimeCust_Map>) => {
+            this.isLoading = false;
+            this.gridAllResult = result;
+            GridUtil.dsToExcelUnifiedCustomerDealData(this.unifiedDealCustomerExcel, this.gridAllResult, "MyDealsUnifiedCustomerAdmin");
+        }, (error) => {
+            this.loggerSvc.error('GetPrimeCustomerDetails service', error);
+        });
+    }
+
+    exportToExcelCustomColumns() {
+        GridUtil.dsToExcelUnifiedCustomerDealData(this.unifiedDealCustomerExcel, this.gridResult, "MyDealsUnifiedCustomerAdmin");
     }
 
     closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex): void {
@@ -190,41 +255,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
             filters: [],
         };
         this.gridData = process(this.gridResult, this.state);
-    }
-
-    //API connections
-    getPrimeCustomersDataSource(): void {
-        this.primeCustSvc.getPrimeCustomers()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<DynamicObj>) => {
-                this.distinctPrimeCustNm = distinct(response, "Value").map(
-                    item => item.Value
-                );
-                this.distinctCtryCustNm = distinct(response, "Text").map(
-                    item => item.Text
-                );
-            }, function (response) {
-                this.loggerSvc.error("Unable to get Unified Customers.", response, response.statusText);
-            });
-
-        this.primeCustSvc.getRplStatusCodes()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<RplStatusCode>) => {
-                this.distinctRplCd = distinct(response, "RPL_STS_CD").map(
-                    item => item.RPL_STS_CD
-                );
-            }, function (response) {
-                this.loggerSvc.error("Unable to get RPL status code.", response, response.statusText);
-            });
-        this.primeCustSvc.getCountries()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<Countires>) => {
-                this.distinctprimeCtry = distinct(response, "CTRY_NM").map(
-                    item => item.CTRY_NM
-                );
-            }, function (response) {
-                this.loggerSvc.error("Unable to get Countries.", response, response.statusText);
-            });
+        this.loadPrimeCustomer();
     }
 
     cancelHandler({ sender, rowIndex }: CancelEvent): void {
@@ -327,7 +358,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
             retCond = true;
         }
 
-        if (model.PRIM_CUST_CTRY == null || model.PRIM_CUST_CTRY == '' || this.distinctprimeCtry.filter(x => x === model.PRIM_CUST_CTRY).length == 0) {
+        if (model.PRIM_CUST_CTRY == null || model.PRIM_CUST_CTRY == '' || this.columnFieldDataList.get("PRIM_CUST_CTRY").filter(x=>x === model.PRIM_CUST_CTRY).length==0) {
             this.errorMsg.push("Please Select Valid Country.");
             retCond = true;
         }

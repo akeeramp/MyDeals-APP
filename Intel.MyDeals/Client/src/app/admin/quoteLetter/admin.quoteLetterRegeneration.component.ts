@@ -22,7 +22,7 @@ import { DownloadQuoteLetterData } from "./admin.quoteLetter.model";
 export class QuoteLetterRegenerationComponent implements OnDestroy {
     constructor(private quoteLetterSvc: quoteLetterService, private loggerSvc: logger) { }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private gridResult: Array<DownloadQuoteLetterData>;
     private gridData: GridDataResult;
     private responseData = [];

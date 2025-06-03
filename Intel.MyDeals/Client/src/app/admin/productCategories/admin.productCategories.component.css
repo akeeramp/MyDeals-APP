@@ -7,3 +7,20 @@
     height: calc(100vh - 240px) !important;
     margin-right: 10px;
 }
+.excel-sections {
+    position: absolute;
+    z-index: 1;
+    top: 22px;
+    right: 180px;
+}
+
+.excel-btn-update {
+    font-family: 'Intel Clear';
+    text-align: left;
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}

@@ -21,7 +21,7 @@ export class batchTimingComponent implements OnDestroy {
 
     // Variables
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isLoading = true;
     private loadMessage = "Batch Job Details Loading..";
     private type = "numeric";

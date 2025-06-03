@@ -33,7 +33,7 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
     public formGroup: FormGroup;
     public isFormChange = false;
     public isFormValid = false;
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     public batchJobConstForm: FormGroup;
     isDirty = false;
     public secondRowCheckBox = false;

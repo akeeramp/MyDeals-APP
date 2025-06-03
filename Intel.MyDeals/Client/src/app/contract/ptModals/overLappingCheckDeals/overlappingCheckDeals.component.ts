@@ -47,7 +47,7 @@ export class OverlappingCheckComponent implements OnInit, OnDestroy  {
     private is_selected: boolean = false;
     private isNoDealsFound: boolean = false;
     private title: string = "Overlapping Deals";
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private state: State = {
         skip: 0,
         take: 50,

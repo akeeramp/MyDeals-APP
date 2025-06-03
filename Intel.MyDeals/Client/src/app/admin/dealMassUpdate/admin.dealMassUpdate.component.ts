@@ -24,7 +24,7 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
     constructor(private dealMassUpdateService: DealMassUpdateService,
         private loggerService: logger) { }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     isDirty = false;
     private color: ThemePalette = "primary";
     private attr: Array<AttributeFeildvalues> = [];

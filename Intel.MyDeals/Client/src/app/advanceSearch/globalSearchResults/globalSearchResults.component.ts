@@ -16,7 +16,7 @@ export class GlobalSearchResultsComponent implements OnDestroy {
                 private loggerService: logger,
                 private ref: ChangeDetectorRef) {}
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     //these are input coming from gloablsearch component
     @Input() searchText = "";
     response: any

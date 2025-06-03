@@ -32,7 +32,7 @@ export class iCostProductsComponent implements PendingChangesGuard, OnDestroy{
     constructor(private iCostProductSvc: iCostProductService, private loggerSvc: logger) { }
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     isDirty = false;
     public validationMessage = "";
     public isRuleInvalid = false;

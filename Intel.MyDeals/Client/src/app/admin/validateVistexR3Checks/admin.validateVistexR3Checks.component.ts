@@ -27,7 +27,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
        this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     isDirty = false;
     
     private isLoading = true;

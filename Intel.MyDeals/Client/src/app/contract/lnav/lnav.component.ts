@@ -98,7 +98,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
     private lnavSelectedPS: any = {};
     private isDeletePT: boolean = false;
     private isDeletePs: boolean = false;
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {

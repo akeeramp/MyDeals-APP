@@ -37,6 +37,27 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetBasicDropdowns")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public DropdownDetails GetBasicDropdowns([FromBody] DropdownFilters data)
+        {
+            return SafeExecutor(() => _dropdownLib.GetBasicDropdowns(data.InFilters, data.Sort, data.Take, data.Skip)
+                , $"Unable to get Basic Dropdowns"
+            );
+        }
+
+        [Authorize]
+        [Route("GetBasicDropdownsFilterData/{filterName}")]
+        [AntiForgeryValidate]
+        public List<string> GetBasicDropdownsFilterData(string filterName)
+        {
+            return SafeExecutor(() => _dropdownLib.GetBasicDropdownsFilterData(filterName)
+                , $"Unable to get Basic Dropdowns"
+            );
+        }
+
+        [Authorize]
         [Route("GetOpDataElements")]
         public IEnumerable<DropDowns> GetOpDataElements()
         {

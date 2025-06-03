@@ -73,7 +73,7 @@ export class pricingTableComponent implements OnDestroy  {
     public NumberOfDaysToExpireDeal: number;
 
     private isDirty=false;
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     public searchedContractData = {
         Model: "",

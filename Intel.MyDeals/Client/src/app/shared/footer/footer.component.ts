@@ -15,7 +15,7 @@ export class FooterComponent implements OnDestroy {
     private appVersion: string;
     private environment: string;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     loadFooter() {
         this.footerSvc.getFooterDetails().pipe(takeUntil(this.destroy$)).subscribe(res => {
             this.appVersion=res.AppVer;

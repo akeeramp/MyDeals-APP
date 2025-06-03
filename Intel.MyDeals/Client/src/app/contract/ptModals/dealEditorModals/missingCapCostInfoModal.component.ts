@@ -30,7 +30,7 @@ export class missingCapCostInfoModalComponent implements OnDestroy{
         },
     };    
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;

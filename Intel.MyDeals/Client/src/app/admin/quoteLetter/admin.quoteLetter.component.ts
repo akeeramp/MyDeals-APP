@@ -24,7 +24,7 @@ export class QuoteLetterComponent implements PendingChangesGuard, OnDestroy {
     public moduleName = "Quote Letter Dashboard";
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private menuItems: Array<AdminQuoteLetter> = [];
     private menuItemsTemplate: Array<string> = [];
     private isDropdownsLoaded = false;

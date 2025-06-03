@@ -21,7 +21,7 @@ export class ManageEmployeeModalComponent implements OnDestroy {
 
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private lastName = this.data.dataItem.LST_NM;
     private firstName = this.data.dataItem.FRST_NM;
     private title = this.data.title;

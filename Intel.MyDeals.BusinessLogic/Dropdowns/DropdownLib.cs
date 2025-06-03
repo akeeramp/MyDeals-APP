@@ -52,7 +52,23 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _dataCollectionsDataLib.GetDropdowns();
         }
-
+        /// <summary>
+        /// Get Dropdowns data according to the paging details  
+        /// </summary>
+        /// <returns>list of Basic Dropdowns</returns>
+        public DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip)
+        {
+            return _dataCollectionsDataLib.GetBasicDropdowns(filter, sort, take, skip);
+        }
+        /// <summary>
+        /// Get Basic Dropdowns Filter Data
+        /// </summary>
+        /// <param name="filterName"></param>
+        /// <returns></returns>
+        public List<string> GetBasicDropdownsFilterData(string filterName)
+        {
+            return _dataCollectionsDataLib.GetBasicDropdownsFilterData(filterName);
+        }
         public List<DictDropDown> GetDictDropDown(string atrbCd)
         {
             return _dataCollectionsDataLib.GetDictDropDown(atrbCd);

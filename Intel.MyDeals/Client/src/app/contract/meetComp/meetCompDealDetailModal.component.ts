@@ -18,7 +18,7 @@ import { Subject } from "rxjs";
 export class meetCompDealDetailModalComponent implements OnInit, OnDestroy {
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private gridData: GridDataResult;
     private gridResult;
     private state: State = {

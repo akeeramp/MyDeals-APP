@@ -10,8 +10,9 @@ import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactiva
 import { each } from 'underscore';
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { RequestDetails, VistexLogFilters, VistexLogsInfo, VistexResponseUpdData } from "./admin.vistex.model";
+import { RequestDetails, VistexLogFilters, VistexLogFiltersRequest, VistexLogFiltersResponse, VistexLogsInfo, VistexResponseUpdData } from "./admin.vistex.model";
 import { DynamicObj } from "../employee/admin.employee.model";
+import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
 
 @Component({
     selector: "vistex-integration-log",
@@ -26,7 +27,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
     constructor(private loggerSvc: logger, private dsaService: dsaService, private momentService: MomentService) { }
     isDirty = false;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private requestTypeList: RequestDetails[] = [];
     private selectedRequestType = {
         RQST_TYPE: "VISTEX_DEALS",
@@ -49,6 +50,10 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
     public formGroup: FormGroup;
     public isFormChange = false;
     private editedRowIndex: number;
+    private sortData = "";
+    private filterData = "";
+    private dataforfilter: VistexLogFiltersRequest;
+    private columnFilterDataList: Map<string, Array<string>> = new Map();
 
     public state: State = {
         skip: 0,
@@ -92,21 +97,47 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         this.getData();
     }
 
-    distinctPrimitive(fieldName: string): string[] {
-        return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+    GetColumnFilterData(fieldName: string): any {
+        return this.columnFilterDataList.has(fieldName) ? this.columnFilterDataList.get(fieldName) : [];
+    }
+
+    filterLoad(fieldName: string) {
+        const request: VistexLogFiltersRequest = {
+            Dealmode: this.selectedRequestType.RQST_TYPE,
+            EndDate: this.momentService.moment(this.endDate).format("MM/DD/YYYY"),
+            StartDate: this.momentService.moment(this.startDate).format("MM/DD/YYYY"),
+            DealId: this.LogDealId.trim(),
+            FilterName: fieldName,
+        }
+        this.dsaService.getVistexFilterData(request).subscribe(data => {
+            this.columnFilterDataList.set(fieldName, data);
+        });
     }
 
     clearFilter(): void {
+        this.state.skip = 0;
+        this.state.take = 25;
         this.state.filter = {
             logic: "and",
             filters: [],
         };
-        this.gridData = process(this.gridResult, this.state);
+        this.getData();
     }
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
-        this.gridData = process(this.gridResult, this.state);
+        this.getData();
+    }
+
+    getVistexData() {
+
+        this.state.skip = 0;
+        this.state.take = 25;
+        this.state.filter = {
+            logic: "and",
+            filters: [],
+        };
+        this.getData();
     }
 
     getData(): void {
@@ -121,24 +152,24 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
                     this.kendoBoldMsg = "";
                     return;
                 }
+                this.CreateVistexLogFiltersRequest();
                 this.isLoading = true;
-                const postData = <VistexLogFilters>{
-                    "Dealmode": this.selectedRequestType.RQST_TYPE,
-                    "StartDate": this.momentService.moment(this.startDate).format("MM/DD/YYYY"),
-                    "EndDate": this.momentService.moment(this.endDate).format("MM/DD/YYYY"),
-                    "DealId": this.LogDealId.trim()
-                }
-                this.dsaService.getVistexLogs(postData).pipe(takeUntil(this.destroy$)).subscribe((response: VistexLogsInfo[]) => {
-                    this.gridResult = response;
-                    this.gridData = process(this.gridResult, this.state);
-                    if (this.LogDealId == "") {
-                        this.toggleAtchFilter(false);
-                    }
-                    else {
-                        this.toggleAtchFilter(true);
-                    }
+
+                this.dsaService.getVistexLogsInfo(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe((response: VistexLogFiltersResponse) => {
+                    this.gridResult = response.Items;
+                    const state: State = {
+                        skip: 0,
+                        take: this.state.take,
+                        group: this.state.group,
+                        filter: {
+                            logic: "and",
+                            filters: [],
+                        }
+                    };
+                    this.gridData = process(this.gridResult, state);
+                    this.gridData.total = response.TotalRows;
+                    this.isLoading = false;
                     this.LogDealId = "";
-                    this.showArchivedData = false;
                     this.isLoading = false;
                 }, function (err) {
                     this.loggerSvc.error("Operation failed", err, err.statusText)
@@ -174,7 +205,31 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
                 filters: []
             };
         }
-        this.gridData = process(this.gridResult, this.state);
+        this.getData();
+    }
+
+    CreateVistexLogFiltersRequest() {
+        this.sortData = "";
+        this.filterData = "";
+        if (this.state.sort) {
+            this.state.sort.forEach((value, ind) => {
+                if (value.dir) {
+                    this.sortData = ind == 0 ? `ORDER BY ${value.field} ${value.dir}` : `${this.sortData} , ${value.field} ${value.dir}`;
+                }
+            });
+        }
+        const filterExpression = FilterExpressBuilder.createSqlExpression(JSON.stringify(this.state.filter));
+        this.filterData = filterExpression;
+        this.dataforfilter = {
+            Dealmode: this.selectedRequestType.RQST_TYPE,
+            StartDate: this.momentService.moment(this.startDate).format("MM/DD/YYYY"),
+            EndDate: this.momentService.moment(this.endDate).format("MM/DD/YYYY"),
+            DealId: this.LogDealId.trim(),
+            InFilters: this.filterData,
+            Sort: this.sortData,
+            Skip: this.state.skip,
+            Take: this.state.take
+        };
     }
 
     editHandler({ sender, rowIndex, dataItem }: EditEvent): void {
@@ -301,11 +356,20 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         if (value == undefined || value == null || value == "") { return; }
         this.selectedRequestType = value;
         this.closeEditor(this.senderGrid, this.rowIndexValue);
+        this.state.skip = 0;
+        this.state.take = 25;
+        this.state.filter = {
+            logic: "and",
+            filters: [],
+        };
         this.getData();
     }
 
     refreshGrid(): void {
         this.isLoading = true;
+        this.showArchivedData = false;
+        this.state.skip = 0;
+        this.state.take = 25;
         this.state.filter = {
             logic: "and",
             filters: [],

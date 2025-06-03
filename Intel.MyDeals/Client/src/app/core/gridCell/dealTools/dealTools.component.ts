@@ -73,7 +73,7 @@ export class dealToolsComponent implements OnDestroy {
     private windowTop = 320; windowLeft = 670; windowWidth = 620; windowHeight = 500; windowMinWidth = 100;
     messages: any;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private fileItems = {
         "NoPerm": {
             "icon": "intelicon-attach",

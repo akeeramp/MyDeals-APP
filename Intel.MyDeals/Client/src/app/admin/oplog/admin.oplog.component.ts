@@ -24,7 +24,7 @@ export class OpLogComponent implements OnDestroy {
     private dateRangeInvalid = false;
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     //created for Angular loader
     public isLoading = 'true';
     public loadMessage = "Log Viewer is Loading ...";

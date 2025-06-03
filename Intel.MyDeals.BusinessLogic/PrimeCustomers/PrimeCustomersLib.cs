@@ -45,6 +45,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _primeCustomersDataLib.GetPrimeCustomerDetails();
         }
+        public List<PrimeCustomers> GetPrimeCustomerDetails(string filter, string sort, int take, int skip)
+        {
+            return _primeCustomersDataLib.GetPrimeCustomerDetails(filter, sort, take, skip);
+        }
+
 
         public PrimeCustomers ManagePrimeCustomers(CrudModes mode, PrimeCustomers data)
         {
@@ -119,6 +124,15 @@ namespace Intel.MyDeals.BusinessLogic
         public List<UnPrimeDeals> GetUnPrimeDeals()
         {
             return _primeCustomersDataLib.GetUnPrimeDeals();
+        }
+        public List<UnPrimeDeals> GetUnPrimeDeals(int skip, int take, string sort, string inFilters)
+        {
+            return _primeCustomersDataLib.GetUnPrimeDeals(skip, take, sort, inFilters);
+        }
+
+        public List<UnPrimeDealsField> GetUnPrimeDealsFilterValue(string field)
+        {
+            return _primeCustomersDataLib.GetUnPrimeDealsFilterValue(field);
         }
 
         public List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry)
@@ -631,7 +645,10 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _primeCustomersDataLib.GetRplStatusCodes();
         }
-
+        public List<string> GetPrimeCustData(string fieldName)
+        {
+            return _primeCustomersDataLib.GetPrimeCustData(fieldName);
+        }
         public List<DealReconInvalidRecords> updateDealRecon(List<DealRecon> lstDealRecons)
         {
             return _primeCustomersDataLib.updateDealRecon(lstDealRecons);

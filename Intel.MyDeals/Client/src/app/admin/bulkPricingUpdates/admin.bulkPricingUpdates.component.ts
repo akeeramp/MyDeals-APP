@@ -27,7 +27,7 @@ export class BulkPricingUpdatesComponent implements PendingChangesGuard, OnDestr
               private bulkPrcSvc: bulkPricingUpdatesService,
               private momentService: MomentService) {}
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private hotRegisterer = new HotTableRegisterer();
     private hotTable: Handsontable;
     private hotId = "prcSpreadsheet";

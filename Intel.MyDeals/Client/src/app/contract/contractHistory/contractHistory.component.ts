@@ -18,7 +18,7 @@ export class contractHistoryComponent implements OnDestroy{
     @Input() contractData: any;
     @Input() UItemplate: any;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isLoading = true;
     private loadMessage = "Loading Contract History";
     private type = "numeric";

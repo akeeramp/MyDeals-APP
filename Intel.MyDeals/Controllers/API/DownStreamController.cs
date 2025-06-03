@@ -28,6 +28,27 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetVistexLogsInfo")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public VistexLogDetails GetVistexLogsInfo([FromBody] VistexLogFiltersRequest data)
+        {
+            VistexMode vistexMode = (VistexMode)Enum.Parse(typeof(VistexMode), data.Dealmode);
+            return SafeExecutor(() => _dsaLib.GetVistexLogs(vistexMode, data.StartDate, data.EndDate, data.DealId, data.InFilters, data.Sort, data.Take, data.Skip), $"Unable to get vistex data with filter and paging");
+        }
+
+        [Authorize]
+        [Route("GetVistexFilterData")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public List<string> GetVistexFilterData([FromBody] VistexLogFiltersRequest request)
+        {
+            VistexMode vistexMode = (VistexMode)Enum.Parse(typeof(VistexMode), request.Dealmode);
+
+            return SafeExecutor(() => _dsaLib.GetVistexFilterData(vistexMode, request.StartDate,request.EndDate,request.DealId, request.FilterName), $"Unable to get vistex data");
+        }
+
+        [Authorize]
         [Route("GetVistexDealOutBoundData")]
         public List<VistexDealOutBound> GetVistexDealOutBoundData()
         {

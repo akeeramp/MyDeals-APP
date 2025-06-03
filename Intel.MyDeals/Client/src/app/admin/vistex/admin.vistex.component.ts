@@ -19,7 +19,7 @@ export class adminVistexComponent implements PendingChangesGuard, OnDestroy {
     //Declaration Part
     isDirty = false;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private spinnerMessageHeader = "Test your API";
     private spinnerMessageDescription = "Please wait while we are running your API..";
     private isBusyShowFunFact = true;

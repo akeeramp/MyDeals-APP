@@ -22,7 +22,23 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             var result = new ProductCategoriesLib(mockProductCategoriesDataLib.Object, mockDataCollectionsDataLib.Object).GetProductCategories();
             Assert.NotNull(result);
         }
-
+        [Test]
+        public void GetProductCategoriesByPagination_ShouldReturnNotNull()
+        {
+            var mockData = GetProductCategoriesMockData();
+            mockDataCollectionsDataLib.Setup(x => x.GetProductCategories()).Returns(mockData);
+            var result = new ProductCategoriesLib(mockProductCategoriesDataLib.Object, mockDataCollectionsDataLib.Object).GetProductCategories();
+            Assert.NotNull(result);
+        }
+        [Test]
+        public void GetProductCategoriesByFilter_ShouldReturnNotNull()
+        {
+            var mockData = new List<string>();
+            string field = "GDM_VRT_NM";
+            mockDataCollectionsDataLib.Setup(x => x.GetProductCategoriesByFilter(field)).Returns(mockData);
+            var result = new ProductCategoriesLib(mockProductCategoriesDataLib.Object, mockDataCollectionsDataLib.Object).GetProductCategoriesByFilter(field);
+            Assert.NotNull(result);
+        }
         private static readonly object[] UpdateProductCategoriesParams =
         {
             new object[] { new List<ProductCategory> {

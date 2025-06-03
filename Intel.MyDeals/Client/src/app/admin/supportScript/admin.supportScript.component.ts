@@ -21,7 +21,7 @@ export class adminsupportScriptComponent implements PendingChangesGuard, OnDestr
         this.intializesupportScriptDataForm();
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     isDirty = false;
     public titleErrorMsg: string;
     public errorNotes: string; 

@@ -1,2 +1,2 @@
-@import '../kendo_grid.css';
-@import '../CustomerVendors/admin.customerVendors.component.css';
+@import '/Client/src/app/admin/kendo_grid.css';
+@import '/Client/src/app/admin/CustomerVendors/admin.customerVendors.component.css';

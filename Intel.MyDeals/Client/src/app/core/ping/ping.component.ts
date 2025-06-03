@@ -19,7 +19,7 @@ export class PingComponent implements OnDestroy {
     public pingCycle = 60000;
     public pingValues: Array<number> = [];
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     ngOnInit() {
         this.ping();

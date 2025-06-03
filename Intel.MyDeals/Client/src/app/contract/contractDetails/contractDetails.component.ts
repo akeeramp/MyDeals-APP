@@ -41,7 +41,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
     @Input() C_ID: number;
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private Customer;
     CUST_NM_DIV: any = []; CUST_NM; TITLE = ""; files = []; START_DT; START_QTR; START_YR; END_DT; END_QTR; END_YR; NO_END_DT = false; NO_END_DT_RSN; isSubmitted = false; NOTES = "";
     BACK_DATE_RSN; CONTRACT_TYPE;

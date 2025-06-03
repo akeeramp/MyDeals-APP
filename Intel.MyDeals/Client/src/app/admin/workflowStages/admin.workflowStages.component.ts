@@ -38,7 +38,7 @@ export class adminWorkflowStagesComponent implements PendingChangesGuard, OnDest
     @ViewChild('WFSTG_ORDTooltip', { static: false }) WFSTG_ORDTooltip: NgbTooltip;
     isDirty = false;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isLoading = true;
     private errorMsg = "";    
     private allowCustom = true;

@@ -4,7 +4,7 @@ import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { ThemePalette } from "@angular/material/core";
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
-import { process, State, distinct } from "@progress/kendo-data-query";
+import { process, State, distinct, CompositeFilterDescriptor, FilterDescriptor } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Product_categories } from "./admin.productCategories.model";
 import { each } from 'underscore';
@@ -15,6 +15,10 @@ import { Observable } from "rxjs";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { ExcelColumnsConfig } from "../ExcelColumnsconfig.util";
+import { GridUtil } from "../../contract/grid.util";
+import { filter } from "@progress/kendo-angular-editor/util";
+import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
 
 @Component({
     selector: 'admin-product-categories',
@@ -25,7 +29,7 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
     constructor(private productCategorySvc: productCategoryService, public datepipe: DatePipe, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isLoading = true;
     private type = "numeric";
     private info = true;
@@ -39,7 +43,20 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
     private isDataValid = false;
     private focusFiledld = false;
     private focusFiledProductVertical = false;
-    isDirty=false;
+    isDirty = false;
+    public totalCount=0;
+    private filterComp: Array<any> = [];
+    private sortData = "";
+    private filterData = "";
+    private loadCount = true;
+    public custData: any;
+    private groupFltr = '';
+    private dataSummary: object; // holds filters for data fetch -during API call
+    private gridAllResult: Array<any>;
+    private gridAllData: GridDataResult;
+    private ProductVerticalExcel = ExcelColumnsConfig.ProductVerticalExcel;
+    private columnFilterDataList: Map<string, Array<string>> = new Map();
+
 
     @ViewChild('dealPdctTooltip', { static: false }) dealPdctTooltip: NgbTooltip;
     @ViewChild('pdctVerticalTooltip', { static: false }) pdctVerticalTooltip: NgbTooltip;
@@ -64,17 +81,13 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
             value: 50,
         },
         {
+            text: "75",
+            value: 75,
+        },
+        {
             text: "100",
             value: 100,
         },
-        {
-            text: "250",
-            value: 250,
-        },
-        {
-            text: "All",
-            value: "all"
-        }
     ];
 
     public onExcelExport(e: ExcelExportEvent): void {
@@ -82,8 +95,14 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
-        Object.assign(excelState, this.state)
+        const excelState: State = {};
+        let newstate = {
+            take: 25,
+            skip: 0,
+            sort: this.state.sort,
+            group: this.state.group
+        }
+        Object.assign(excelState, newstate)
         excelState.take = this.gridResult.length;
 
         const result: ExcelExportData = {
@@ -92,38 +111,82 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
 
         return result;
     }
-
     clearFilter() {
+        this.state.skip = 0;
+        this.state.take = 25;
         this.state.filter = {
             logic: "and",
             filters: [],
         };
         this.gridData = process(this.gridResult, this.state);
+        this.loadproductCategoriesData();
+    }
+
+
+    loadproductCategoriesData() {
+        this.settingFilter();
+        this.productCategorySvc.getCategories_new(this.dataSummary).pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
+            //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
+            each(response, item => {
+                item['CHG_DTM'] = this.datepipe.transform(new Date(item['CHG_DTM']), 'M/d/yyyy');
+                item['CHG_DTM'] = new Date(item['CHG_DTM']);
+            })
+
+            this.gridResult = response;
+            this.gridData = process(this.gridResult, this.state);
+            this.gridData.data = response;
+            if (response.length > 0) {
+                this.gridData.total = response[0].TotalRows;
+            }
+            this.isLoading = false;
+        }, function (response) {
+            this.loggerSvc.error("Unable to get Products.", response, response.statusText);
+        });
+
     }
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
-        this.gridData = process(this.gridResult, this.state);
+        this.loadproductCategoriesData();
     }
-    loadproductCategoriesData() {
-        this.productCategorySvc.getCategories()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<any>) => {
-                //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
-                each(response, item => {
-                    item['CHG_DTM'] = this.datepipe.transform(new Date(item['CHG_DTM']), 'M/d/yyyy');
-                    item['CHG_DTM'] = new Date(item['CHG_DTM']);
-                })
-
-                this.gridResult = response;
-                this.gridData = process(this.gridResult, this.state);
-                this.isLoading = false;
-            }, function (response) {
-                this.loggerSvc.error("Unable to get Products.", response, response.statusText);
+    public filterChange(filter: CompositeFilterDescriptor): void {
+        this.state.filter = filter;
+        this.loadCount = true;
+        this.loadproductCategoriesData();
+    }
+    settingFilter() {
+        this.sortData = "";
+        this.filterData = "";
+        if (this.state.sort) {
+            this.state.sort.forEach((value, ind) => {
+                if (value.dir) {
+                    this.sortData = ind == 0 ? `ORDER BY ${value.field} ${value.dir}` : `${this.sortData} , ${value.field} ${value.dir}`;
+                }
             });
+        }
+
+        const filterExpression = FilterExpressBuilder.createSqlExpression(JSON.stringify(this.state.filter));
+        this.filterData = filterExpression;
+        this.dataSummary = {
+            StrFilters: this.filterData,
+            StrSorts: this.sortData,
+            Skip: this.state.skip,
+            Take: this.state.take
+        }
     }
-    distinctPrimitive(fieldName: string): any {
-        return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+
+    filterLoad(fieldName:string) {
+        this.custData = [];
+        this.settingFilter();
+        if (fieldName == 'GDM_PRD_TYPE_NM' || fieldName == 'GDM_VRT_NM' || fieldName == 'DIV_NM' || fieldName == 'OP_CD' || fieldName == 'DEAL_PRD_TYPE' || fieldName == 'PRD_CAT_NM' || fieldName == 'CHG_EMP_NM') {
+            this.productCategorySvc.getProductVerticalFltr(fieldName).subscribe(data => {
+                this.columnFilterDataList.set(fieldName, data);
+            });
+
+        }
     }
+        GetColumnFilterData(fieldName: string): any {
+            return this.columnFilterDataList.has(fieldName) ? this.columnFilterDataList.get(fieldName) : [];
+        }
     closeEditor(grid, rowIndex = this.editedRowIndex) {
         grid.closeRow(rowIndex);
         this.editedRowIndex = undefined;
@@ -204,9 +267,24 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
         }
         sender.closeRow(rowIndex);
     }
+    exportToExcel() {
+        this.isLoading = true;
+        this.productCategorySvc.getCategories().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+            this.isLoading = false;
+            this.gridAllResult = result;
+            GridUtil.dsToExcelProductVerticalRule(this.ProductVerticalExcel, this.gridAllResult, "MyDealsProductVerticalRules");
+        }, (error) => {
+            this.loggerSvc.error('MyDealsProductVerticalRules service', error);
+        });
+    }
 
+    exportToExcelCustomColumns() {
+        GridUtil.dsToExcelProductVerticalRule(this.ProductVerticalExcel, this.gridResult, "MyDealsProductVerticalRules");
+    }
     refreshGrid() {
         this.isLoading = true;
+        this.state.skip = 0;
+        this.state.take = 25;
         this.state.filter = {
             logic: "and",
             filters: [],

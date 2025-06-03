@@ -43,7 +43,7 @@ export class managerExcludeGroupsComponent implements OnDestroy {
     }
     
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     public isLoading: boolean;
     private color: ThemePalette = 'primary';
     PCTResultView = false;

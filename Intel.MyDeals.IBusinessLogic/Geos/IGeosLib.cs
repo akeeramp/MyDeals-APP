@@ -20,6 +20,7 @@ namespace Intel.MyDeals.IBusinessLogic
         List<GeoDimension> GetGeoDimensionByRegionSid(int sid);
 
         List<GeoDimension> GetGeoDimensions(bool getCachedResult = true);
+        GeoDetails GetGeoDimensions(string filter, string sort, int take, int skip);
 
         List<GeoDimension> GetGeoDimensionsActive();
     }

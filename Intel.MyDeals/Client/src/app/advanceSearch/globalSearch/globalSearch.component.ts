@@ -10,7 +10,7 @@ import { takeUntil } from "rxjs/operators";
 })
 export class GlobalSearchComponent implements OnDestroy {
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     //for calling Child function from Parent
     @ViewChild(GlobalSearchResultsComponent) GlobalSearchResults: GlobalSearchResultsComponent; 
     private searchText = "";

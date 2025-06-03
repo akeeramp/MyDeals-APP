@@ -20,7 +20,7 @@ export class SdsDealOverridesComponent implements OnInit, OnDestroy {
                 private constantsService: constantsService) { }
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     private attr = ['Pricing Table Row', 'Deal'];
     private gridReturnsOrig = [];

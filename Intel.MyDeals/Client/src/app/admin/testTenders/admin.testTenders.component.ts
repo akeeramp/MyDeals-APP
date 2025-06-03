@@ -20,7 +20,7 @@ export class adminTestTendersComponent implements PendingChangesGuard, OnDestroy
 
     private admintestTendersForm: FormGroup;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     isDirty = false;
     //get method for easy access to the form fields.
     get formData() { return this.admintestTendersForm.controls; }

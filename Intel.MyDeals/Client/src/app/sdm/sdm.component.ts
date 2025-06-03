@@ -25,7 +25,7 @@ export class SDMComponent {
         private momentService: MomentService) {        
     }
 
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private files: any = [];
     public formGroup: FormGroup;
     private editedRowIndex: number;

@@ -30,7 +30,7 @@ export class performanceBarsComponent {
     public marks = [];
     public tempMarkArray = [];
     public tempMarks: any = {};
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     private barChartObj:any={
         legend: {

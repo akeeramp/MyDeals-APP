@@ -32,7 +32,7 @@ export class ComplexStackingComponent implements OnInit, OnDestroy {
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
     @Output() isDirty = new EventEmitter<any>();
 
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private spinnerMessageHeader = "Loading Complex Stacking";
     private spinnerMessageDescription = "Please wait while we load Complex Stacking details.";
 

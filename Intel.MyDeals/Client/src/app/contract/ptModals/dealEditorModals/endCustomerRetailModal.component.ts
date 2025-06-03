@@ -43,7 +43,7 @@ export class endCustomerRetailModalComponent implements OnDestroy {
     private message: any;
     public virtual: any = { itemHeight: 28 };
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     addRow(e) {
         this.validateFlag = true;

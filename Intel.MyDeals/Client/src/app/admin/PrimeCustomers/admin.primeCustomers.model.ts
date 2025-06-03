@@ -7,6 +7,7 @@
     public PRIM_LVL_NM: string;
     public PRIM_CUST_CTRY: string;
     public RPL_STS_CD: any;
+    public TotalRows: any;
 }
 
 export interface RplStatusCode {
@@ -32,6 +33,7 @@ export interface UnPrimeDeals {
     TITLE: string;
     UNIFIED_STATUS: string;
     UNIFIED_REASON: string;
+    TOTALCOUNT: number;
 }
 
 export interface PrimeCustomerDetails {

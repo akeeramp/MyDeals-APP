@@ -380,9 +380,11 @@
     <TypeScriptCompile Include="Client\src\appModules\sdm\main-sdm-prod.ts" />
     <TypeScriptCompile Include="Client\src\appModules\sdm\main-sdm.ts" />
     <TypeScriptCompile Include="Client\src\appModules\sdm\sdm-util.module.ts" />
+    <TypeScriptCompile Include="Client\src\appModules\shared\searchFilter.module.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\products\admin.products.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.UCDReprocessModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.model.ts" />
@@ -866,6 +868,7 @@
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingDialog.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingModal.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\dropDownModal\dropDownModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\dashboardConfig.util.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\jobMonitorDetails\jobMonitorDetails.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\jobMonitorDetails\jobMonitorDetails.service.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\jobMonitor\jobMonitor.component.ts" />
@@ -876,6 +879,8 @@
     <TypeScriptCompile Include="Client\src\app\sdm\sdmBulkUpload\sdmBulkUpload.component.ts" />
     <TypeScriptCompile Include="Client\src\app\sdm\sdmMasterDataModal\sdmMasterDataModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\monacoCustomEditor\monacoCustomEditor.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\pipe\search-filter.pipe.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\util\filterExpressBuilder.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\util\guardConfig.util.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\util\guardProtection.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\util\gaurdprotectionDeactivate.ts" />

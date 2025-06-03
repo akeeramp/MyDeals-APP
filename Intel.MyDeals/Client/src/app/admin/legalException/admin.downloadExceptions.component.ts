@@ -21,7 +21,7 @@ export class adminDownloadExceptionscomponent implements OnDestroy {
         @Inject(MAT_DIALOG_DATA) public data) {        
     }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     private legalExceptionData: any;
     private legalExceptionColumns = ExcelColumnsConfig.legalExceptionExcelColumns;

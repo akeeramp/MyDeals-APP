@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="col-md-12 custom-filter-sections">
-            <form [formGroup]="userRolePermissionForm" (ngSubmit)="customizeFilterSubmit()">
+            <form [formGroup]="userRolePermissionForm" (ngSubmit)="filterUserSearch()">
                 <div class="row">
                     <div class="col-md-3">
                         <label>Database Username:</label>
@@ -43,10 +43,19 @@
         </div>
         <div class="col-md-12">
             <div class="table-design">
-                <kendo-grid [data]="gridData"  (dataStateChange)="dataStateChange($event)" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-                [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="true"
-                [group]="state.group" filterable="menu" (excelExport)="onExcelExport($event)">
+                <kendo-grid [data]="gridData" 
+                            (dataStateChange)="dataStateChange($event)"
+                            [loading]="isLoading"
+                            [pageSize]="state.take"
+                            [skip]="state.skip"
+                            [sort]="state.sort"
+                            [filter]="state.filter"
+                            [sortable]="true"
+                            [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
+                            [groupable]="true"
+                            [group]="state.group"
+                            filterable="menu"
+                            (excelExport)="onExcelExport($event)">
                     <ng-template kendoGridToolbarTemplate>
                         <button (click)="clearFilter()" class="k-button clearButton">
                             <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
@@ -77,8 +86,8 @@
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="ColumnName" title="Column Name"> </kendo-grid-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="ROW_REFRESH_DTM" title="Date"> </kendo-grid-column>
                     <kendo-grid-excel fileName="User-Role-Permission-Export.xlsx" [fetchData]="allData">
-                        <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
-                                                  title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                        <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{ item.key }}"
+                                                  title="{{ item.value}}" [width]="150" [cellOptions]="cellOptions"
                                                   [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
                     </kendo-grid-excel>
                 </kendo-grid>

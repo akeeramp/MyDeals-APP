@@ -24,7 +24,7 @@ export class SdmMasterDataModalComponent implements OnInit, OnDestroy {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
 
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isLoading = true;
     public filter = {
         "PRD_CAT_NM": [],

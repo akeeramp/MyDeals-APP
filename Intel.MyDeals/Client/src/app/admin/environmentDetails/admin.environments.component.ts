@@ -31,7 +31,7 @@ export class EnvironmentsComponent implements PendingChangesGuard, OnDestroy {
     private gridCaption: string;
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isLoading = true;
     private allowCustom = true;
     private color: ThemePalette = "primary";

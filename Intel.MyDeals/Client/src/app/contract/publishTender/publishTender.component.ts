@@ -49,7 +49,7 @@ export class publishTenderComponent implements OnDestroy{
     private templates: Array<any> = [];
     private OBJ_SET_TYPE_CD: string = "Tender";
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     private state: State = {
         skip: 0,

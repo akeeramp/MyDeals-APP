@@ -18,7 +18,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
 //Helper and utility modules
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
+
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { OrderModule } from 'ngx-order-pipe';
@@ -77,6 +77,7 @@ import { dealPopupDockComponent } from './core/dealPopup/dealPopupDock.component
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { GlobalSearchComponent } from './advanceSearch/globalSearch/globalSearch.component';
 import { HeaderComponent } from './shared/header/header.component';
+import { SearchFilterModule } from '../appModules/shared/searchFilter.module';
 
 @NgModule({
     imports: [
@@ -85,7 +86,7 @@ import { HeaderComponent } from './shared/header/header.component';
         ReactiveFormsModule,
         BrowserModule,
         HttpClientModule,
-        Ng2SearchPipeModule,
+        SearchFilterModule,
         BrowserAnimationsModule,
         ToastrModule.forRoot(),
         ChartsModule,

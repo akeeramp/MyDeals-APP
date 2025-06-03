@@ -1,8 +1,9 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import { Observable } from "rxjs";
+import { Observable,forkJoin } from "rxjs";
 import { Countires, EndCustomer, PrimeCust_Map, RplStatusCode, UnPrimeAtrbs, UnPrimeDeals, UnifiedDealsSummary, UnifyDeal } from "./admin.primeCustomers.model";
 import { DynamicObj } from "../employee/admin.employee.model";
+import { map } from "rxjs/operators";
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +21,11 @@ export class primeCustomerService {
         const apiUrl: string = this.apiBaseUrl + 'GetPrimeCustomerDetails';
         return this.httpClient.get<PrimeCust_Map[]>(apiUrl);
     }
+    public GetPrimeCustomerDetailsByFilter(data): Observable<PrimeCust_Map[]> {
+        const apiUrl: string = this.apiBaseUrl + 'GetPrimeCustomerDetailsByFilter';
+        return this.httpClient.post<PrimeCust_Map[]>(apiUrl, data);
+    }
+
 
     public UpdatePrimeCustomer(data: PrimeCust_Map): Observable<PrimeCust_Map> {
         const apiUrl: string = this.apiBaseUrl + 'UpdatePrimeCustomer';
@@ -85,5 +91,8 @@ export class primeCustomerService {
         const apiUrl: string = this.apiBaseUrl + 'GetRplStatusCodes';
         return this.httpClient.get<RplStatusCode[]>(apiUrl);
     }
-
+    public getPrimeCustData(fieldName): Observable<any> {
+        const apiUrl = this.apiBaseUrl + 'GetPrimeCustData/' + fieldName;
+        return this.httpClient.get(apiUrl);
+    }
 }

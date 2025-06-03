@@ -5,23 +5,33 @@ import { Observable } from "rxjs";
 @Injectable({
     providedIn: 'root'
 })
-
 export class userRolePermissionService {
-    public apiBaseUrl = '/api/Employees/';
+
+    public readonly API_URL = '/api/Employees/';
     constructor(private httpClient: HttpClient) { }
 
-    public getAllUserRolePermission (): Observable<any>{
-        const apiURL: string = this.apiBaseUrl + 'GetUserRolePermission/';
-        return this.httpClient.get(apiURL);
-    }
-    
-    public postUserInfomation (userFormValues: any): Observable<any>{
-        const apiURL: string = this.apiBaseUrl + 'PostUserRolePermission/';
-        return this.httpClient.post(apiURL, userFormValues);
+    public GetUserRolePermissionByFilter(skipRows: number, takeRows: number, group: string = '', filter: string = '', databaseUserName?: string, startDate?: string, endDate?: string): Observable<unknown> {
+        if (group == null) {
+            group = '';
+        }
+
+        if (filter == null) {
+            filter = '';
+        }
+
+        let apiUrl: string = `${ this.API_URL }GetUserRolePermissionByFilter?skipRows=${ skipRows }&takeRows=${ takeRows }&group=${ group }&filter=${ filter }`;
+
+        // For username search
+        if ((databaseUserName && databaseUserName.length > 0) && (startDate && startDate.length > 0) && (endDate && endDate.length > 0)) {
+            apiUrl += `&databaseUserName=${ databaseUserName }&startDate=${ startDate }&endDate=${ endDate }`;
+        }
+
+        return this.httpClient.get(apiUrl);
     }
 
-    public fetchUserRolePermission (isFetchLatest : number): Observable<any>{
-        const apiURL: string = this.apiBaseUrl + 'FetchUserRolePermission/?isFetchLatest='+isFetchLatest;
-        return this.httpClient.get(apiURL);
+    public fetchUserRolePermission(isFetchLatest: number): Observable<unknown> {
+        const apiUrl: string = `${ this.API_URL }GetUserRolePermissionByFilter?isFetchLatest=${ isFetchLatest }`;
+        return this.httpClient.get(apiUrl);
     }
+
 }

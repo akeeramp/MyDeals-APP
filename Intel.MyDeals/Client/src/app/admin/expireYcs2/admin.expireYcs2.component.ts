@@ -25,7 +25,7 @@ import { DownloadExpireYcs2Data } from "./admin.expireYcs2.model";
 export class ExpireYcs2Component implements OnInit, OnDestroy {
     constructor(private expireYcs2Svc: expireYcs2Service, private loggerSvc: logger, private formBuilder: FormBuilder) { }
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private gridResult: Array<DownloadExpireYcs2Data>;
     private gridData: GridDataResult;
     private responseData = [];

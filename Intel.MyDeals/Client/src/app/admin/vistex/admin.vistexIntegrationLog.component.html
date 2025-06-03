@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="col-md-2">
-            <button (click)="getData()" class="btn btn-primary" style="float: left;width:97px;">
+            <button (click)="getVistexData()" class="btn btn-primary" style="float: left;width:97px;">
                 Get Data
             </button>
         </div>
@@ -83,13 +83,15 @@
         </kendo-grid-command-column>
         <kendo-grid-column field="RQST_SID" title="Request ID" width="130" [headerClass]="{'headerClass':true}" [editable]="false">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" (valueChange)="filterLoad(column.field)"
+                                   [data]="GetColumnFilterData(column.field)">
                 </multicheck-filter>
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column field="BTCH_ID" title="Batch ID" width="310px" [headerClass]="{'headerClass':true}" [editable]="false">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" (valueChange)="filterLoad(column.field)"
+                                   [data]="GetColumnFilterData(column.field)">
                 </multicheck-filter>
             </ng-template>
             <ng-template kendoGridCellTemplate let-dataItem>
@@ -99,19 +101,22 @@
         </kendo-grid-column>
         <kendo-grid-column field="VISTEX_HYBRID_TYPE" title="Vistex Hybrid Type" width="190px" [headerClass]="{'headerClass':true}" [editable]="false">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" (valueChange)="filterLoad(column.field)"
+                                   [data]="GetColumnFilterData(column.field)">
                 </multicheck-filter>
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column field="DEAL_ID" title="Strategy/Deal ID" width="170px" [headerClass]="{'headerClass':true}" [editable]="false">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" (valueChange)="filterLoad(column.field)"
+                                   [data]="GetColumnFilterData(column.field)">
                 </multicheck-filter>
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column field="RQST_STS" title="Status" width="230px" [headerClass]="{'headerClass':true}">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" 
+                                   [data]="VistexStatuses">
                 </multicheck-filter>
             </ng-template>
             <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
@@ -120,7 +125,8 @@
         </kendo-grid-column>
         <kendo-grid-column field="ERR_MSG" title="Message" width="300px" [headerClass]="{'headerClass':true}">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" (valueChange)="filterLoad(column.field)"
+                                   [data]="GetColumnFilterData(column.field)">
                 </multicheck-filter>
             </ng-template>
             <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
@@ -129,7 +135,8 @@
         </kendo-grid-column>
         <kendo-grid-column field="INTRFC_RQST_DTM" title="Send To PO On" width="150px" [headerClass]="{'headerClass':true}" [editable]="false">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" (valueChange)="filterLoad(column.field)"
+                                   [data]="GetColumnFilterData(column.field)">
                 </multicheck-filter>
             </ng-template>
             <ng-template kendoGridCellTemplate let-dataItem>
@@ -139,7 +146,8 @@
         </kendo-grid-column>
         <kendo-grid-column field="INTRFC_RSPN_DTM" title="Processed On" width="150px" [headerClass]="{'headerClass':true}" [editable]="false">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" (valueChange)="filterLoad(column.field)"
+                                   [data]="GetColumnFilterData(column.field)">
                 </multicheck-filter>
             </ng-template>
             <ng-template kendoGridCellTemplate let-dataItem>
@@ -149,7 +157,8 @@
         </kendo-grid-column>
         <kendo-grid-column field="CRE_DTM" title="Created On" width="140px" [headerClass]="{'headerClass':true}" [editable]="false">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" (valueChange)="filterLoad(column.field)"
+                                   [data]="GetColumnFilterData(column.field)">
                 </multicheck-filter>
             </ng-template>
         </kendo-grid-column>

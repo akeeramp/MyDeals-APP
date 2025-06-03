@@ -1,4 +1,4 @@
-﻿@import '../kendo_grid.css';
+﻿@import '/Client/src/app/admin/kendo_grid.css';
 
 .k-grid.KendoProductsInfo {
     height: calc(100vh - 250px) !important;
@@ -28,4 +28,22 @@ kendo-grid#adminproduct .k-column-title {
     white-space: nowrap !important;
     text-overflow: ellipsis;
     overflow: hidden !important;
+}
+
+.excel-sections {
+    position: absolute;
+    z-index: 1;
+    top: 22px;
+    right: 180px;
+}
+
+.excel-btn-update {
+    font-family: 'Intel Clear';
+    text-align: left;
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }

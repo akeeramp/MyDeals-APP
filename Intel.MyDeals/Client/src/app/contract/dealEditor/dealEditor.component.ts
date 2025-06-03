@@ -86,7 +86,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
     @Output() loadPTEditor = new EventEmitter();
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isWarning: boolean = false;
     private message: string = "";
     public dirty = false;
@@ -1167,7 +1167,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         this.isrenameDialog = false;
     }
 
-    cellCloseHandler(args: CellCloseEvent): void {
+    cellCloseHandler(args: any): void {
         if (args.dataItem != undefined) {
             if (this.invalidField) {
                 args.sender.cellClick.closed = true;

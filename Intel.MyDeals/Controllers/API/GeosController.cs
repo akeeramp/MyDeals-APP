@@ -38,6 +38,27 @@ namespace Intel.MyDeals.Controllers.API
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
+        /// <summary>
+        /// Get Geo Dimensions with filter and paging
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="HttpResponseException"></exception>
+        [Authorize]
+        [HttpPost]
+        [Route("GetGeos")]
+        public GeoDetails GetGeoDimensions([FromBody] GeoFilters data)
+        {
+            try
+            {
+                return _geosLib.GetGeoDimensions(data.InFilters, data.Sort, data.Take, data.Skip);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
 
         [Authorize]
         [Route("GetGeo/{sid}")]

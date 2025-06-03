@@ -29,7 +29,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
     @ViewChild("settleDropDown") private settleDdl;
     @ViewChild("custRptGeoDropDown") private custGeoDdl;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     isDirty = false;
     private isLoading = true;
     private errorMsg: string[] = [];

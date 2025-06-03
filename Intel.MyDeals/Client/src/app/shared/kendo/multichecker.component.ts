@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { distinct, filterBy, FilterDescriptor } from '@progress/kendo-data-query';
 import { FilterService } from '@progress/kendo-angular-grid';
 import { each, compact, sortBy, filter } from 'underscore';
@@ -10,8 +10,8 @@ import { each, compact, sortBy, filter } from 'underscore';
         <input id="multiCheckFilter" class="k-textbox" (input)="onInput($event)" placeholder="Search" />
         <span id="searchIcon" class="k-icon k-i-zoom"></span>
     </div>
-    <cdk-virtual-scroll-viewport [itemSize]="7" style="min-height: 200px;">
-        <ul style="overflow:hidden !important; max-width: 300px;">
+    <cdk-virtual-scroll-viewport [itemSize]="7" style="min-height: 200px;display: flex; align-item: center; justify-content: center;">
+        <ul *ngIf="currentData && currentData.length > 0; else loader" style="overflow:hidden !important; max-width: 300px;">
             <li #itemElement *cdkVirtualFor="let item of currentData; let i = index;"
             (click)="onSelectionChange(valueAccessor(item), itemElement)"
             [ngClass]="{'k-state-selected': isItemSelected(item)}">
@@ -21,6 +21,11 @@ import { each, compact, sortBy, filter } from 'underscore';
             </div>
             </li>
         </ul>
+        <ng-template #loader>
+        <div class="loader-wrapper">
+          <span class="loader"></span>
+          </div>
+        </ng-template>
     </cdk-virtual-scroll-viewport>
     <div id="selectedCount">{{ selectedCount }} items selected</div>`,
     styles: [`
@@ -75,12 +80,46 @@ import { each, compact, sortBy, filter } from 'underscore';
         #selectedCount {
             font-weight: bold;
         }
+        .loader-wrapper {
+        height: 200px;
+        display:flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        }
+        .cdk-virtual-scroll-content-wrapper {
+            min-width: 100%;
+            min-height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
         cdk-virtual-scroll-viewport.cdk-virtual-scroll-viewport ul li {
             word-wrap: break-word;
             width: 100%;
             max-width: 1000px;
         }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #FFF;
+            border-bottom-color: #000;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+        } 
 
         input.k-textbox {
             padding: .375rem .75rem;
@@ -94,18 +133,19 @@ import { each, compact, sortBy, filter } from 'underscore';
         }
     `]
 })
-export class MultiCheckFilterComponent implements AfterViewInit {
+export class MultiCheckFilterComponent implements OnChanges {
     @Input() public isPrimitive: boolean;
     @Input() public currentFilter: any;
-    @Input() public data: any[];
+    @Input() public data: any[] = [];
     @Input() public textField;
     @Input() public valueField;
     @Input() public filterService: FilterService;
     @Input() public field: string;
     @Input() public operator: string;
-    @Output() public valueChange = new EventEmitter<number[]>();
+    @Output() public valueChange = new EventEmitter();
 
     public currentData: any[] = [];
+    public compactData: any[] = [];
     public showFilter = true;
     private value: any[] = [];
     private selectedCount: number = 0;
@@ -113,7 +153,7 @@ export class MultiCheckFilterComponent implements AfterViewInit {
     protected textAccessor = (dataItem: any) => this.isPrimitive ? dataItem : dataItem[this.textField];
     protected valueAccessor = (dataItem: any) => this.isPrimitive ? dataItem : dataItem[this.valueField];
 
-    public ngAfterViewInit() {
+    loadFilter() {
         //this code is to remove all falsy values
         this.currentData = compact(this.data);
         if (this.data.includes(0)) this.currentData.push(0);
@@ -144,11 +184,12 @@ export class MultiCheckFilterComponent implements AfterViewInit {
             if (!this.data.includes('Select All'))
                 this.currentData.unshift('Select All')
         }
+        this.compactData = [...this.currentData];
         this.value = this.currentFilter.filters.map((f: FilterDescriptor) => f.value);
         if (this.currentData && this.currentData.length > 0) {
             this.showFilter = typeof this.textAccessor(this.currentData[0]) === 'string';
         }
-        if (this.currentData.length == 1) {
+        if (this.compactData.length == 1) {
             this.value.push('Select All');
         }
         this.selectedCount = this.value && this.value.length > 0 ? this.value.length : 0;
@@ -156,12 +197,32 @@ export class MultiCheckFilterComponent implements AfterViewInit {
             this.selectedCount--;
     }
 
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes["data"] && (changes["data"].firstChange || ((changes["data"].previousValue && changes["data"].previousValue.length == 0)) && changes["data"].currentValue.length > 0)) {
+            if (this.data && this.data.length > 0) {
+                this.loadFilter();
+            }
+            else {
+                this.valueChange.emit();
+            }
+        }
+    }
+
+    //public ngAfterViewInit() {
+    //    if (this.data.length > 0) {
+    //        this.loadFilter();
+    //    }
+    //    else {
+    //        this.valueChange.emit(25);
+    //    }
+    //}
+
     public isItemSelected(item) {
         return this.value.some(x => x === this.valueAccessor(item));
     }
 
     public onSelectionChange(item, li) {
-        if (!(this.currentData.length == 1 && this.currentData[0].Text == 'Select All')) {
+        if (!(this.compactData.length == 1 && this.compactData[0].Text == 'Select All')) {
             let filter = [];
             if (this.value.some(x => x === item)) {
                 if (item == 'Select All') {
@@ -174,21 +235,21 @@ export class MultiCheckFilterComponent implements AfterViewInit {
             }
             if (this.value.includes('Select All') && item == 'Select All') {
                 if (this.valueField != undefined && this.valueField != null && this.valueField != '')
-                    this.value = this.currentData.map(x => x[this.valueField]);
+                    this.value = this.compactData.map(x => x[this.valueField]);
                 else
-                    this.value = this.currentData;
+                    this.value = this.compactData;
             }
             if (this.value.includes('Select All') && item !== 'Select All') {
                 this.value = this.value.filter(x => x !== 'Select All');
             }
             else if (!this.value.includes('Select All') && item !== 'Select All') {
                 if (this.valueField != undefined && this.valueField != null && this.valueField != '') {
-                    if (this.value.length == this.currentData.filter(x => x[this.valueField] != 'Select All').length) {
+                    if (this.value.length == this.compactData.filter(x => x[this.valueField] != 'Select All').length) {
                         this.value.push('Select All');
                     }
                 }
                 else if (this.valueField == undefined || this.valueField == null || this.valueField == '') {
-                    if (this.value.length == this.currentData.filter(x => x != 'Select All').length) {
+                    if (this.value.length == this.compactData.filter(x => x != 'Select All').length) {
                         this.value.push('Select All');
                     }
                 }
@@ -200,11 +261,13 @@ export class MultiCheckFilterComponent implements AfterViewInit {
                 } else if (itm != undefined && itm.length == 0) {
                     operator = "isempty";
                 }
-                filter.push({
-                    field: this.field,
-                    operator: operator,
-                    value: itm
-                })
+                if (itm != 'Select All') {
+                    filter.push({
+                        field: this.field,
+                        operator: operator,
+                        value: itm
+                    });
+                }
             });
             this.filterService.filter({
                 filters: filter,

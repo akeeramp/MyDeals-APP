@@ -60,7 +60,72 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
         }
-        
+
+        /// <summary>
+        /// Get Geo Dimensions with filter and paging
+        /// </summary>
+        /// <returns>list of geo dimension data</returns>
+        public GeoDetails GetGeoDimensions(string filter, string sort, int take, int skip)
+        {
+            OpLog.Log("GetGeoDimensions");
+
+            var ret = new List<GeoDimension>();
+            int RowCount = 0;
+            var cmd = new Procs.dbo.PR_MYDL_GET_GEO_DIM_SSP
+            {
+                FILTER = filter,
+                SORT = sort,
+                TAKE = take,
+                SKIP = skip,
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int TOTAL_ROWS = DB.GetReaderOrdinal(rdr, "TOTAL_ROWS");
+                    rdr.Read();
+                    if (TOTAL_ROWS >= 0 && !rdr.IsDBNull(TOTAL_ROWS))
+                    {
+                        RowCount = rdr.GetFieldValue<System.Int32>(TOTAL_ROWS);
+                    }
+
+                    rdr.NextResult();
+
+                    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+                    int IDX_CTRY_NM = DB.GetReaderOrdinal(rdr, "CTRY_NM");
+                    int IDX_CTRY_NM_SID = DB.GetReaderOrdinal(rdr, "CTRY_NM_SID");
+                    int IDX_GEO_ATRB_SID = DB.GetReaderOrdinal(rdr, "GEO_ATRB_SID");
+                    int IDX_GEO_MBR_SID = DB.GetReaderOrdinal(rdr, "GEO_MBR_SID");
+                    int IDX_GEO_NM = DB.GetReaderOrdinal(rdr, "GEO_NM");
+                    int IDX_GEO_NM_SID = DB.GetReaderOrdinal(rdr, "GEO_NM_SID");
+                    int IDX_RGN_NM = DB.GetReaderOrdinal(rdr, "RGN_NM");
+                    int IDX_RGN_NM_SID = DB.GetReaderOrdinal(rdr, "RGN_NM_SID");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new GeoDimension
+                        {
+                            ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+                            CTRY_NM = (IDX_CTRY_NM < 0 || rdr.IsDBNull(IDX_CTRY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CTRY_NM),
+                            CTRY_NM_SID = (IDX_CTRY_NM_SID < 0 || rdr.IsDBNull(IDX_CTRY_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CTRY_NM_SID),
+                            GEO_ATRB_SID = (IDX_GEO_ATRB_SID < 0 || rdr.IsDBNull(IDX_GEO_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_GEO_ATRB_SID),
+                            GEO_MBR_SID = (IDX_GEO_MBR_SID < 0 || rdr.IsDBNull(IDX_GEO_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_GEO_MBR_SID),
+                            GEO_NM = (IDX_GEO_NM < 0 || rdr.IsDBNull(IDX_GEO_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_NM),
+                            GEO_NM_SID = (IDX_GEO_NM_SID < 0 || rdr.IsDBNull(IDX_GEO_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_GEO_NM_SID),
+                            RGN_NM = (IDX_RGN_NM < 0 || rdr.IsDBNull(IDX_RGN_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RGN_NM),
+                            RGN_NM_SID = (IDX_RGN_NM_SID < 0 || rdr.IsDBNull(IDX_RGN_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RGN_NM_SID)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return new GeoDetails { Items = ret, TotalRows = RowCount };
+        }
 
         public IEnumerable<DcsSoldTo> GetSoldTos()
         {

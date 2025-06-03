@@ -32,7 +32,7 @@ import { GLOBAL_EMAIL_ADDRESSES } from "../../core/angular.constants";
 
 export class TenderDashboardComponent implements OnInit, OnDestroy {
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     @ViewChild(AttributeBuilder) attrBuilder: AttributeBuilder;
     private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));

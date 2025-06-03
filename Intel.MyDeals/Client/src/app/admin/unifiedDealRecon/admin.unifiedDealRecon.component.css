@@ -1,4 +1,4 @@
-﻿@import '../kendo_grid.css';
+﻿@import '/Client/src/app/admin/kendo_grid.css';
 
 .admin-deal-grid td.error-product {
     color: red !important;
@@ -451,4 +451,22 @@ kendo-dialog-actions.bulk-action-style.k-dialog-buttongroup {
     top: -379px !important;
     position: relative !important;
     width: 1374px !important;
+}
+
+.excel-sections {
+    position: absolute;
+    z-index: 1;
+    top: 22px;
+    right: 145px;
+}
+
+.excel-btn-update {
+    font-family: 'Intel Clear';
+    text-align: left;
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }

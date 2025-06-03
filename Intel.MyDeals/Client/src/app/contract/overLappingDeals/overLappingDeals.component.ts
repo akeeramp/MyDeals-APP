@@ -24,7 +24,7 @@ export class overLappingDealsComponent implements OnDestroy{
     @Input() UItemplate: any;
     @Output() isDirty = new EventEmitter();
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private isLoading = true;
     private loadMessage = "Looking for Overlapping Deals";
     private type = "numeric";

@@ -36,7 +36,7 @@ export class LoadingPanelComponent implements OnInit, OnDestroy {
   private isFunFactEnabled = true;
     private currFunFact: FunFactDefined = null;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
   getRandomFact() {
     if (this.funfactsList == null || this.funfactsList.length == 0) {

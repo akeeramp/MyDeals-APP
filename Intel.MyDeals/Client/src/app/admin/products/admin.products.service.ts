@@ -12,12 +12,12 @@ export class productsService {
     constructor(private httpClient: HttpClient) {
     }
 
-    public getProducts(): Observable<any> {
+    public getProducts(data): Observable<any> {
         // TODO: Hard coded 'EIA CPU' as default category, once we decide which drop down controls to use we can hook this
         // up with drop down change event containing product Vertical
         // Getting all the products is a costly operations as it brings ~75K records
         const apiUrl: string = this.apiBaseUrl + 'GetProductByCategoryName/EIA CPU/false';
-        return this.httpClient.get(apiUrl);
+        return this.httpClient.post(apiUrl, data);
     }
 
     public getProductCategories(): Observable<any> {

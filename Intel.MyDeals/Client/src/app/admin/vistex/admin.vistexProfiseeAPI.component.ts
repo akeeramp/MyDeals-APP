@@ -17,7 +17,7 @@ export class adminVistexProfiseeApiComponent implements OnDestroy {
     constructor(private loggerSvc: logger, private dsaService: dsaService, private constantsService: constantsService) { }
 
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private customerToSend = '';
     private selectedApiID = '';
     private vistexApiNames = [

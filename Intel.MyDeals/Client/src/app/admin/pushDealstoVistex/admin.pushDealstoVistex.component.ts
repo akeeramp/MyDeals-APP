@@ -23,7 +23,7 @@ export class adminPushDealsToVistexComponent implements PendingChangesGuard, OnD
     constructor(private loggerSvc: logger, private pushDealstoVistexSvc: pushDealsToVistexService, private formBuilder: FormBuilder, private route: ActivatedRoute) { }
     isDirty = false;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
     private color: ThemePalette = 'primary';
     private pushDealsToVistexForm: FormGroup;
     private Results: PushDealstoVistexResults[] = [];

@@ -51,6 +51,16 @@ export class unifiedDealReconService {
         return this.httpClient.get<UnPrimeDeals[]>(apiUrl);
     }
 
+    public getUnmappedPrimeCustomerDealsByFilter(data): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'GetUnPrimeDealsByFilter';
+        return this.httpClient.post(apiUrl, data);
+    }
+
+    public getFilterValue(data: any): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'GetUnPrimeDealsFilterValue';
+        return this.httpClient.post(apiUrl, data);
+    }
+
     public UpdateUnPrimeDeals(dealId: number, endCustData: UnPrimeAtrbs): Observable<boolean> {
         const apiUrl: string = this.apiBaseUrl + 'UpdateUnPrimeDeals/' + dealId;
         return this.httpClient.post<boolean>(apiUrl, Object.assign({}, endCustData));

@@ -50,7 +50,7 @@ export class TenderFolioComponent implements OnDestroy {
     private isCopyTender: boolean = false;
     private showCopyAlert: boolean = false;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     dismissPopup(): void {
         this.dialogRef.close();

@@ -46,7 +46,7 @@ export class adminlegalExceptionComponent implements PendingChangesGuard, OnDest
     colexpand = 6;
     isDirty = false;
     //RXJS subject for takeuntil
-    private readonly destroy$ = new Subject();
+    private readonly destroy$ = new Subject<void>();
 
     public state: State = {
         skip: 0,

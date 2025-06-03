@@ -21,7 +21,6 @@ import { MatListModule } from '@angular/material/list';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { NgPipesModule } from 'ngx-pipes';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
 //Authentication purpose for token
 import { AuthInterceptor } from '../../app/shared/authorization/auth.interceptor';
 //kendo components
@@ -78,7 +77,6 @@ import { POPUP_CONTAINER } from '@progress/kendo-angular-popup';
         NgPipesModule,
         DragDropModule,
         ScrollingModule,
-        Ng2SearchPipeModule,
         NavigationModule,
         TreeViewModule,
         ExcelModule,
