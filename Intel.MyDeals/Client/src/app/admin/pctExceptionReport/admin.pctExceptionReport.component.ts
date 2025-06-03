@@ -95,9 +95,9 @@ export class PctExceptionReportComponent implements OnInit, OnDestroy {
 
     @ViewChild(GridComponent) public grid: GridComponent;
     private fitColumns(): void {
-        this.ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => {
-            this.grid.autoFitColumns();
-          });
+        // this.ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => {
+        //     this.grid.autoFitColumns();
+        //   });
         this.grid.autoFitColumns();
     }
 
@@ -114,7 +114,7 @@ export class PctExceptionReportComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.destroy$.next();
+        this.destroy$.next(null);
         this.destroy$.complete();
     }
 

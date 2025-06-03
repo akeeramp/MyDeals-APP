@@ -2352,7 +2352,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
     ngOnDestroy() {
-        this.destroy$.next();
+        this.destroy$.next(null);
         this.destroy$.complete();
         this._isLoading.complete();
     }
