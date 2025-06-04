@@ -349,6 +349,13 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
         });
         this.setBusy("", "");
         if (result && result.searchData) {
+
+              for(let j=0;j<result.searchData.Items.length;j++){
+                var iqrautoapprover=result.searchData.Items[j].IQR_AUTO_APPROVE_RULE_INFO==null?'':result.searchData.Items[j].IQR_AUTO_APPROVE_RULE_INFO
+                 if(iqrautoapprover!='')
+                result.searchData.Items[j].GEO_APPROVED_BY+=' (IQR Price Rule#: '+iqrautoapprover +')';
+              }
+             
             this.tenderResultProcessing(result.searchData);
         }
         this.ruleData.runrule = false;

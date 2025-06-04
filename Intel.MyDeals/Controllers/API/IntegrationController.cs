@@ -51,6 +51,12 @@ namespace Intel.MyDeals.Controllers.API
                 jsonData.header.target_system = "Tenders";
                 jsonData.header.action = jsonData.header.action + "Response";
             }
+
+            foreach (var item in jsonData.recordDetails.quote.quoteLine)
+            {
+                item.ApprovedByInfo = null;
+            }
+                
             //return saveSuccessful != Guid.Empty ? JsonConvert.SerializeObject(jsonData) : "Tender Data Stage Failed";
             return saveSuccessful != Guid.Empty ? jsonData : null;
         }

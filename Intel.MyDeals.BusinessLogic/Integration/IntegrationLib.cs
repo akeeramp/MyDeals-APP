@@ -171,7 +171,7 @@ namespace Intel.MyDeals.BusinessLogic
             DateTime contractEndDt = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.ShipmentEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             string quoteLineId = workRecordDataFields.recordDetails.quote.Name;
             string contractTitle = "SF: " + workRecordDataFields.recordDetails.quote.FolioName;
-
+            
             // Update attributes that need to be updated
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.dc_type), OpDataElementType.CNTRCT.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.DC_ID), contractId.ToString());
@@ -186,7 +186,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.IS_TENDER), "1");
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.TITLE), contractTitle);
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
-
+             
             // Object Validation Checks - this is a contract level, and can skip OnFinalize
             SavePacket savePacket = new SavePacket()
             {
@@ -561,7 +561,7 @@ namespace Intel.MyDeals.BusinessLogic
             string processorNumber = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProcessorNumber == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProcessorNumber;
             string dealPdctName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.DealProductName == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.DealProductName;
             string dealMtrlIdName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.MaterialID == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.MaterialID;
-
+ 
             //variable to hold the Selected product name
             string productData = "";
             #region Product Check and translation
@@ -1149,6 +1149,9 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.RESET_VOLS_ON_PERIOD), "No");
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.DEAL_DESC), dealDescription);
+
+             IQR_AutoApprovedPriceRule(workRecordDataFields, myDealsData, initWipId, currentRec);
+
             if (dealStartDate < DateTime.Now) UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.BACK_DATE_RSN), backdateReason);
 
             // Object Validation Checks - This is a new item creation, so just save validation needed
@@ -1275,6 +1278,14 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return opUserToken;
+        }
+
+        private void IQR_AutoApprovedPriceRule(TenderTransferRootObject workRecordDataFields, MyDealsData myDealsData ,int dealId, int currentRec)
+        {
+            string iqrapprovedByInfo = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedByInfo == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedByInfo;
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IQR_AUTO_APPROVE_RULE_INFO), iqrapprovedByInfo);
+            workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedByInfo = null;
+            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].AddTimelineComment("Deal is approved by IQR Price rule # : " + iqrapprovedByInfo);
         }
 
         private bool containsError(IEnumerable<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> errList, List<int> checkForValues)
@@ -1440,8 +1451,8 @@ namespace Intel.MyDeals.BusinessLogic
                 workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(712, "Deal Error: Couldn't find deal for this request, contact L2 suport", "Couldn't find deal " + dealId + " to delete"));
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..  We had error on lookup, skip to next to process
-            }            
-
+            }
+            IQR_AutoApprovedPriceRule(workRecordDataFields, myDealsData, dealId, recordId);
             int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
             //var currentWipWfStg = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
             var currentWippsWfStg = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PS_WF_STG_CD);            
@@ -1566,7 +1577,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             int psId = myDealsData[OpDataElementType.PRC_ST].Data.Keys.FirstOrDefault();
             int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
-
+            IQR_AutoApprovedPriceRule(workRecordDataFields, myDealsData, dealId, recordId);
             MyCustomersInformation requestedCustomerInfo = LookupCustomerInformation(custId);
 
             // Does user have access to the customer?
@@ -2044,7 +2055,10 @@ namespace Intel.MyDeals.BusinessLogic
 
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[recordId].ApprovedQuantity;  // CEILING_VOLUME
             string payableQuantity = workRecordDataFields.recordDetails.quote.quoteLine[recordId].PayableQuantity;
+            //added by mirza
 
+            IQR_AutoApprovedPriceRule(workRecordDataFields, myDealsData, dealId, recordId);
+            
             // Payable Quantity - Overwrite w/ Ceiling Volume if (PQ > CV) or (PQ == NULL)
             MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
             MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
@@ -2237,6 +2251,7 @@ namespace Intel.MyDeals.BusinessLogic
                 string unifiedEndCustomer = workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName == null? workRecordDataFields.recordDetails.quote.UnifiedEndCustomer : workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName;
                 string IQRprimedCustomerL1Id = workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId;
                 string IQRRPLStatusCode = workRecordDataFields.recordDetails.quote.ComplianceWatchList;
+                IQR_AutoApprovedPriceRule(workRecordDataFields, myDealsData, dealId, i);
                 string endCustomerObject = null;
                 switch (destinationStage)
                 {

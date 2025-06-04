@@ -2900,7 +2900,17 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.DateTime
 		///</summary>
 		public const string YCS2_START_DT = "YCS2_START_DT";
-	}
+
+        ///<summary>
+        /// DIM_SID: 3
+        /// DIM_CD: DEAL
+        /// ATRB_SID: 73
+        /// TGT_COL_TYPE: VARCHAR
+        /// DOT_NET_DATA_TYPE: SSystem.String
+        ///</summary>
+        public const string IQR_AUTO_APPROVE_RULE_INFO = "IQR_AUTO_APPROVE_RULE_INFO";
+
+    }
 
 
 	//-- DealSaveActionCodes ------------------------------------------------------------------------------

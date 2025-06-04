@@ -1379,6 +1379,22 @@ namespace Intel.MyDeals.DataLibrary
 
             #region WIP DEAL
 
+            items.Add(new UiTemplateContainerItem  // WIP All types + Dimensioned by Prod Bucket
+            {
+                Id = 73,
+                AtrbCd = AttributeCodes.IQR_AUTO_APPROVE_RULE_INFO,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                // No FLEX deal type
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT},
+                Label = "IQR Auto-approved By",
+                Width = 320,
+                Template = "#=gridUtils.uiReadonlyControlWrapper(data, 'IQR_AUTO_APPROVE_RULE_INFO')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+                IsReadOnly = true
+            });
+
             items.Add(new UiTemplateContainerItem
             {
                 Id = 12,
