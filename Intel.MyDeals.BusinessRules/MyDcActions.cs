@@ -1921,8 +1921,15 @@ namespace Intel.MyDeals.BusinessRules
 
             IOpDataElement deVolume = r.Dc.GetDataElement(AttributeCodes.VOLUME);
             IOpDataElement dePayableQuantity = r.Dc.GetDataElement(AttributeCodes.PAYABLE_QUANTITY);
+            IOpDataElement deRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
             if (deVolume == null || deVolume.AtrbValue.ToString() == "") return;
             if (dePayableQuantity == null) return;
+
+            if (deRebateType == null || deRebateType.AtrbValue.ToString().ToUpper() != "TENDER")
+            {
+                dePayableQuantity.AtrbValue = 0; // Reset Payable Quantity to 0 if not a TENDER deal
+                return; // Only validate Payable Quantity for TENDER deals
+            }
 
             if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custId)) custId = 0;
             List<VistexCustomerMapping> custs = DataCollections.GetVistexCustomerMappings();
