@@ -124,6 +124,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     public perfModel = 'Contract_Manager'
     public isBusyShowFunFact: any;
     public offLabelName = 'Accepted';
+    private isDACustAcptReadonly = false;
     // Allowed extensions for the attachments field
     myRestrictions: FileRestrictions = {
         allowedExtensions: ["doc", "xls", "txt", "bmp", "jpg", "pdf", "ppt", "zip", "xlsx", "docx", "pptx", "odt", "ods", "ott", "sxw", "sxc", "png", "7z", "xps"],
@@ -906,7 +907,13 @@ export class contractManagerComponent implements OnInit, OnDestroy {
             }
             if(!this.csLoading) this.isLoading = false;
             this.filteredData = this.contractData?.PRC_ST;
-            this.isCustAcptReadOnly = (this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true) ? true : false;
+            if ((<any>window).usrRole.includes('DA')) {
+                this.isCustAcptReadOnly = true;
+                this.isDACustAcptReadonly = true;
+            }
+            else {
+                this.isCustAcptReadOnly = (this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true) ? true : false;
+            }
             if (!this.isRunning) this.showData = true;
             this.checkpricegrpcode();
         }

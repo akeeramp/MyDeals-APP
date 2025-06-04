@@ -4,7 +4,7 @@
             <span class="cust_title_style">Customer Acceptance</span>
             <span id="toggle-container" [ngClass]=" { 'acceptanceNotRequired' : custAccptButton == 'Acceptance Not Required in C2A' }" [ngStyle]=" { 'cursor' : custAccptButton == 'Acceptance Not Required in C2A' ? 'not-allowed' : 'auto'}"
              [title]="((isCustAcptReadOnly == true && custAccptButton !== 'Pending')|| custAccptButton == 'Acceptance Not Required in C2A') ? '' :'Click to Change Contract Acceptance Criteria'">
-               <kendo-switch class="contract-toggle" offLabel="{{ offLabelName }}" onLabel="Pending" [disabled]="(isCustAcptReadOnly == true && custAccptButton !== 'Pending') || custAccptButton == 'Acceptance Not Required in C2A'" (valueChange)="pendingChange()" [(ngModel)]="isToggle" trackRounded="medium" thumbRounded="large"></kendo-switch>
+               <kendo-switch class="contract-toggle" offLabel="{{ offLabelName }}" onLabel="Pending" [disabled]="((isCustAcptReadOnly == true && custAccptButton !== 'Pending') || isDACustAcptReadonly == true) || custAccptButton == 'Acceptance Not Required in C2A'" (valueChange)="pendingChange()" [(ngModel)]="isToggle" trackRounded="medium" thumbRounded="large"></kendo-switch>
             </span>
         </div>
         <div id="manageHeaderbakground" class="sum-filter-bar add-sub-sum" style="padding: 1px 10px;">
