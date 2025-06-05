@@ -2,7 +2,7 @@
 import { logger } from "../../shared/logger/logger";
 import { productsService } from "./admin.products.service";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
-import { process, State } from "@progress/kendo-data-query";
+import { CompositeFilterDescriptor, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
@@ -48,9 +48,7 @@ export class adminProductsComponent implements OnDestroy {
     private pageSizes: PageSizeItem[] = [
         { text: "25", value: 25 },
         { text: "50", value: 50 },
-        { text: "100", value: 100 },
-        //{ text: "250", value: 250 },
-        //{ text: "1000", value: 1000 }
+        { text: "100", value: 100 }
     ];
 
     public onExcelExport(e: ExcelExportEvent): void {
@@ -87,6 +85,7 @@ export class adminProductsComponent implements OnDestroy {
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
+        this.isLoading = true;
         this.loadProducts();
     }
 
@@ -147,7 +146,16 @@ export class adminProductsComponent implements OnDestroy {
                 }
             });
         }
-        const filterExpression = FilterExpressBuilder.createSqlExpression(JSON.stringify(this.state.filter));
+        var filter = JSON.parse(JSON.stringify(this.state.filter));
+        filter.filters.forEach((item: CompositeFilterDescriptor) => {
+            if (item && item.filters && item.filters.length > 0)
+                item.filters.forEach((filter: FilterDescriptor) => {
+                    if (filter.field == 'PRD_MBR_SID') {
+                        filter.field = 'P.PRD_MBR_SID'
+                    }
+                });
+        });
+        const filterExpression = FilterExpressBuilder.createSqlExpression(JSON.stringify(filter));
         this.filterData = filterExpression;
         this.dataforfilter = {
             StrFilters: this.filterData,

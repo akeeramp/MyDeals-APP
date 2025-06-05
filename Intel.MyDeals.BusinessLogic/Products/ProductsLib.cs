@@ -92,20 +92,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <input>string name which is what will be filtered against (example: 'NAND')</input>
         /// <returns>list of Product data containing specified Product Vertical</returns>
-        public List<Product> GetProductByCategoryName(string name, SearchParams objSearchParams, bool getCachedResult = true)
+        public List<Product> GetProductByCategoryName(SearchParams objSearchParams)
         {
-            if (objSearchParams==null)
-            {
-                if (!getCachedResult)
-                {
-                    return GetProducts(getCachedResult).Where(c => c.PRD_CAT_NM.Contains(name)).ToList();
-                }
-                return GetProducts().Where(c => c.PRD_CAT_NM.Contains(name)).ToList();
-            }
-            else
-            {
-                return _productDataLib.GetProductsByFilter(objSearchParams);
-            } 
+            return _productDataLib.GetProductsByFilter(objSearchParams);
         }
 
         /// <summary>

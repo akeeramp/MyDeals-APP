@@ -134,12 +134,12 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpPost]
-        [Route("GetProductByCategoryName/{name}/{getCachedResult:bool?}")]
-        public IEnumerable<Product> GetProductByCategoryName(string name, SearchParams objSearchParams,bool getCachedResult = true)   //searches for products with category that contains string 'name'
+        [Route("GetProductByCategoryName")]
+        public IEnumerable<Product> GetProductByCategoryName(SearchParams objSearchParams)   //searches for products with category that contains string 'name'
         {
             try
             {
-                return _productsLib.GetProductByCategoryName(name, objSearchParams,getCachedResult);
+                return _productsLib.GetProductByCategoryName(objSearchParams);
             }
             catch (Exception ex)
             {

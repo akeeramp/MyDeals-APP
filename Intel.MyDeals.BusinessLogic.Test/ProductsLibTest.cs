@@ -85,7 +85,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
                 , "Failed ProductsLib().GetProduct(" + singleProdSid + ") Test");
 
             // Check fetching an entire category by name (list)
-            resultsList = new ProductsLib().GetProductByCategoryName(singlePrdName, objSearchParams);
+            resultsList = new ProductsLib().GetProductByCategoryName(objSearchParams);
             Assert.IsTrue(resultsList.Any() && resultsList.Where(r => r.PRD_CAT_NM.Contains(singlePrdName)).Count() == resultsList.Count()
                 , "Failed ProductsLib().GetProductByCategoryName('" + singlePrdName + "') Test");
 

@@ -36,22 +36,70 @@
                     <span class="k-icon k-i-reload k-icon-md"></span>Refresh
                 </button>
             </ng-template>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_MBR_SID" title="Id"></kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="DEAL_PRD_TYPE" title="Type"></kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_CATGRY_NM" title="Category"></kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="BRND_NM" title="Brand"></kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="FMLY_NM" title="Family"></kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRCSSR_NBR" title="Processor Number"></kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="DEAL_PRD_NM" title="Name"></kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="MTRL_ID" title="Material ID"></kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_STRT_DTM" title="Start Date">
-                <ng-template kendoGridCellTemplate let-dataItem>
-                    {{ dataItem.PRD_STRT_DTM }}
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [filterable]="true" field="PRD_MBR_SID" title="Id">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                        <kendo-filter-contains-operator></kendo-filter-contains-operator>
+                    </kendo-grid-string-filter-menu>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_END_DTM" title="End Date">
-                <ng-template kendoGridCellTemplate let-dataItem>
-                    {{ dataItem.PRD_END_DTM }}
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [filterable]="true" field="DEAL_PRD_TYPE" title="Type">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                        <kendo-filter-contains-operator></kendo-filter-contains-operator>
+                    </kendo-grid-string-filter-menu>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [filterable]="true" field="PRD_CAT_NM" title="Category">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                        <kendo-filter-contains-operator></kendo-filter-contains-operator>
+                    </kendo-grid-string-filter-menu>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [filterable]="true" field="BRND_NM" title="Brand">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                        <kendo-filter-contains-operator></kendo-filter-contains-operator>
+                    </kendo-grid-string-filter-menu>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [filterable]="true" field="FMLY_NM" title="Family">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                        <kendo-filter-contains-operator></kendo-filter-contains-operator>
+                    </kendo-grid-string-filter-menu>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [filterable]="true" field="PCSR_NBR" title="Processor Number">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                        <kendo-filter-contains-operator></kendo-filter-contains-operator>
+                    </kendo-grid-string-filter-menu>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [filterable]="true" field="DEAL_PRD_NM" title="Name">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                        <kendo-filter-contains-operator></kendo-filter-contains-operator>
+                    </kendo-grid-string-filter-menu>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [filterable]="true" field="MTRL_ID" title="Material ID">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                        <kendo-filter-contains-operator></kendo-filter-contains-operator>
+                    </kendo-grid-string-filter-menu>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column  format="{0: MM/dd/yyyy}" [headerClass]="{'headerClass':true}" [filterable]="true" field="PRD_STRT_DTM" title="Start Date">
+                <ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column" let-filterService="filterService">
+                    <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService"></date-range-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column  format="{0: MM/dd/yyyy}" [headerClass]="{'headerClass':true}" [filterable]="true" field="PRD_END_DTM" title="End Date">
+                <ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column" let-filterService="filterService">
+                    <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService"></date-range-filter>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Is Active" filter="boolean">

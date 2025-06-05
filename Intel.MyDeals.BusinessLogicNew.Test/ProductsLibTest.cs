@@ -103,56 +103,18 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         private static readonly object[] objSearchParams =
         {
             new object[] {
-                "Test",
-                null,
-                true
-            }
-        };
-        private static readonly object[] objSearchParams1 =
-        {
-            new object[] {
-                "EIA CPU",
-                null,
-                false
+                null
             }
         };
 
-        [Test, TestCaseSource("objSearchParams1")]
-        public void GetProductByCategoryName_ShouldReturnNotNull_WhenValidName(dynamic data)
-        {
-            List<Product> mockedProdData = GetProductsMockedData();
-            if (!data[2])
-            {
-                mockProductDataLib.Setup(x => x.GetProducts()).Returns(mockedProdData);
-                mockDataCollectionsDataLib.Setup(x => x.GetProductData()).Returns(mockedProdData);
-                var res = new ProductsLib(mockProductDataLib.Object, mockDataCollectionsDataLib.Object, mockConstantsLookupsLib.Object).GetProductByCategoryName(data[0], data[1], data[2]);
-                Assert.IsNotNull(res);
-            }
-            else
-            {
-                mockDataCollectionsDataLib.Setup(x => x.GetProductData()).Returns(mockedProdData);
-                var res = new ProductsLib(mockProductDataLib.Object, mockDataCollectionsDataLib.Object, mockConstantsLookupsLib.Object).GetProductByCategoryName(data[0], data[1], data[2]);
-                Assert.IsNotNull(res);
-            }
-        }
 
         [Test, TestCaseSource("objSearchParams")]
         public void GetProductByCategoryName_ShouldBeEmpty_WhenInvalidName(dynamic data)
         {
             List<Product> mockedProdData = GetProductsMockedData();
-            if (!data[2])
-            {
-                mockProductDataLib.Setup(x => x.GetProducts()).Returns(mockedProdData);
-                mockDataCollectionsDataLib.Setup(x => x.GetProductData()).Returns(mockedProdData);
-                var res = new ProductsLib(mockProductDataLib.Object, mockDataCollectionsDataLib.Object, mockConstantsLookupsLib.Object).GetProductByCategoryName(data[0], data[1], data[2]);
-                Assert.IsEmpty(res);
-            }
-            else
-            {
-                mockDataCollectionsDataLib.Setup(x => x.GetProductData()).Returns(mockedProdData);
-                var res = new ProductsLib(mockProductDataLib.Object, mockDataCollectionsDataLib.Object, mockConstantsLookupsLib.Object).GetProductByCategoryName(data[0], data[1], data[2]);
-                Assert.IsEmpty(res);
-            }
+            mockDataCollectionsDataLib.Setup(x => x.GetProductData()).Returns(mockedProdData);
+            var res = new ProductsLib(mockProductDataLib.Object, mockDataCollectionsDataLib.Object, mockConstantsLookupsLib.Object).GetProductByCategoryName(data);
+            Assert.IsNull(res);
 
         }
 
