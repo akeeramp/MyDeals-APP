@@ -310,9 +310,18 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         }
 
     }
+
+    verifyCustAccptReadOnly() {
+        if ((<any>window).usrRole.includes('GA') || (<any>window).usrRole.includes('FSE'))
+            this.isCustAcptReadOnly = ((this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true && this.custAccptButton != 'pending') || this.custAccptButton == 'Acceptance Not Required in C2A') ? true : false;
+        else
+            this.isCustAcptReadOnly = true;
+    }
+
     pendingChange() {
         let fromToggle = true;
         this.togglePending(true);
+        this.verifyCustAccptReadOnly();
     }
     togglePending(runActions) {
         if (!this.isPending) {
@@ -906,14 +915,8 @@ export class contractManagerComponent implements OnInit, OnDestroy {
                 this.isToggle = false;
             }
             if(!this.csLoading) this.isLoading = false;
-            this.filteredData = this.contractData?.PRC_ST;
-            if ((<any>window).usrRole.includes('DA')) {
-                this.isCustAcptReadOnly = true;
-                this.isDACustAcptReadonly = true;
-            }
-            else {
-                this.isCustAcptReadOnly = (this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true) ? true : false;
-            }
+            this.filteredData = this.contractData?.PRC_ST;          
+            this.verifyCustAccptReadOnly();
             if (!this.isRunning) this.showData = true;
             this.checkpricegrpcode();
         }
