@@ -58,7 +58,7 @@
                                         <div class="col-md-12" *ngFor="let curDealGroup of detailData[ps.dealId]; let i = index">
                                             <kendo-grid id="dealGroupingGrid" [data]="curDealGroup.gridData" [sortable]="true" [resizable]="false" [selectable]="false" #groupingGrid>
                                                 <kendo-grid-column *ngFor="let column of COLUMNS_CONFIG" field="{{ column.field }}" title="{{ column.title }}" [hidden]="column.hidden">
-                                                    
+
                                                     <ng-template kendoGridCellTemplate *ngIf="!['PRODUCT_NM','ECAP_PRICE','MAX_RPU'].includes(column.field)" let-dataItem="dataItem">
                                                         <div title="{{dataItem[column.field]}}">
                                                             {{dataItem[column.field]}}
@@ -82,6 +82,9 @@
                                                     <ng-template kendoGridFooterTemplate  *ngIf="column.field == 'MAX_RPU'">
                                                         <div title="Total RPU: {{ curDealGroup.rpuTotal['MAX_RPU'].sum | kendoNumber: 'c' }}">
                                                             Total RPU: {{ curDealGroup.rpuTotal["MAX_RPU"].sum | kendoNumber: 'c' }}
+                                                        </div>
+                                                        <div *ngIf="showWorstProduct(curDealGroup)" style="color: #0071c5;">
+                                                            Highest RPU Product: {{curDealGroup.worstProductNames}} <span title='Click to view Highest RPU Product details.'><i (click)="onOpenWorstProductInfoPanel($event, curDealGroup)" class='intelicon-help' style='cursor: pointer !important; font-size: 15px !important; color: #0071c5 !important'></i></span>
                                                         </div>
                                                     </ng-template>
 
@@ -124,3 +127,33 @@
     </kendo-window-titlebar>
     <ng-container *ngTemplateOutlet="complexStackingGridTemplate"></ng-container>
 </kendo-window>
+
+<!-- Worst Product Popup -->
+<div class="wrst-prd-panel-wrapper" [style.left.px]="popupX" [style.top.px]="popupY">
+    <div class="cn-panel cn-panel1" [ngClass]="{ 'cn-panel-open1': showWorstProductInfoPanel }">
+        <div class="header">
+            <i class="fa fa-frown-o"></i> Highest RPU Product Details
+            <div class="fr">
+                <i class="fa fa-times-circle cn-close-panel" (click)="onCloseWorstProductInfoPanel()" title="Close"></i>
+            </div>
+        </div>
+        <div class="body">
+            <div *ngFor="let worstProduct of worstProductInfo; let i = index">
+                <div class="wrst-prd-nm-lbl">
+                    {{worstProduct.WRST_PRODUCT_NM}} : {{worstProduct.HIGH_MAX_RPU | currency }} (Highest Max RPU)
+                </div>
+                <kendo-grid [data]="worstProduct.DEAL_INFO"
+                            [resizable]="false"
+                            class="micro-grid"
+                            style="height: 100px"
+                >
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="40" field="WIP_DEAL_OBJ_SID" title="DEAL ID">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="40" field="MAX_RPU" title="Max RPU ($)">
+                    </kendo-grid-column>
+                </kendo-grid>
+                <hr class="cn-hr" />
+            </div>
+        </div>
+    </div>
+</div>

@@ -30,10 +30,14 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
     private isLoadingDealInfo = false;
     private isExportingData = false;
     private expandedDealId;
+    private showWorstProductInfoPanel = false;
+    private worstProductInfo = [];
+    private popupX = 0;
+    private popupY = 0;
     private readonly COLUMNS_CONFIG = [        
         {
             field: 'GROUPED_BY',
-            title: 'Main Deal ID',
+            title: 'Primary Deal ID',
             hidden: true
         }, {
             field: 'WIP_DEAL_OBJ_SID',
@@ -68,7 +72,7 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
             title: 'End Date',
         }, {
             field: 'ECAP_PRICE',
-            title: 'ECAP Price',
+            title: 'ECAP Price ($)',
         }, {
             field: 'ECAP_TYPE',
             title: 'Rebate Type',
@@ -250,9 +254,57 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
             groupedDeals.unshift(groupedDeals.splice(groupedDeals.findIndex(item => item.WIP_DEAL_OBJ_SID == dealId), 1)[0])
             nestedGridGrpArr[i]["gridData"] = groupedDeals;
             nestedGridGrpArr[i]["total"] = groupedDeals.length
-            nestedGridGrpArr[i]["rpuTotal"] = aggregateBy(groupedDeals, this.GROUPING_AGGREGATES)
+            nestedGridGrpArr[i]["rpuTotal"] = aggregateBy(groupedDeals, this.GROUPING_AGGREGATES);
+            this.findWorstProduct(nestedGridGrpArr[i]);
         }
         return nestedGridGrpArr;
+    }
+
+    private findWorstProduct(group): void {
+        const gridData = group.gridData;
+        let sourceProducts = [];
+        //Reason for taking first element is, the gridData is already grouped by dealId and the first element is the source dealId
+        if (gridData[0].PRODUCT_NM && gridData[0].PRODUCT_NM.includes(",")) {
+            //Converted all the user selected products into processor number (PCSR_NBR) in backend, so considering PCSR_NBR for worst product calculation.
+            sourceProducts = gridData[0].PCSR_NBR.split(",");
+        }
+        group["sourceProducts"] = sourceProducts;
+        group["worstProducts"] = [];
+        if (sourceProducts.length > 0) {
+            const highValueProducts = [];
+            sourceProducts.forEach((productName) => {
+                productName = productName.trim();
+                let High_MAX_RPU = 0;
+                const dealInfos = [];
+
+                gridData.forEach((item) => {
+                    if (item.PCSR_NBR.split(",").includes(productName)) {
+                        High_MAX_RPU += item.MAX_RPU;
+                        dealInfos.push({
+                            MAX_RPU: item.MAX_RPU,
+                            WIP_DEAL_OBJ_SID: item.WIP_DEAL_OBJ_SID,
+                            PRODUCT_NM: item.PRODUCT_NM
+                        });
+                    }
+                });
+                const highValueProduct = {};
+                highValueProduct["WRST_PRODUCT_NM"] = productName;
+                highValueProduct["HIGH_MAX_RPU"] = High_MAX_RPU;
+                highValueProduct["DEAL_INFO"] = dealInfos;
+                highValueProducts.push(highValueProduct);
+            });
+            const worstProducts = this.filterByMax(highValueProducts, "HIGH_MAX_RPU");
+            group["worstProducts"] = worstProducts;
+            group["worstProductNames"] = worstProducts.map(item => item.WRST_PRODUCT_NM).join(",");
+        }
+    }
+
+    private filterByMax(array, property) {
+        if (!array || array.length === 0) {
+            return [];
+        }
+        const max = _.maxBy(array, property)[property];
+        return _.filter(array, item => item[property] === max);
     }
 
     async getExportData() {
@@ -266,7 +318,7 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
         const dealIds = Object.keys(this.groupedData);
         forEach(dealIds, (dealId) => {
             const parentGridInfo = {};
-            const nestedGridInfo = this.formatNestedGridData(dealId);            
+            const nestedGridInfo = this.formatNestedGridData(dealId);
             parentGridInfo["groupedDeals"] = nestedGridInfo;
             this.exportData[dealId] = parentGridInfo;            
         });        
@@ -279,7 +331,7 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
                 await this.getExportData();
             }            
             const HEADER = this.COLUMNS_CONFIG.map((item) => item.field);
-            const COLUMN_WIDTHS = [{ wch: 16 }, { wch: 8 }, { wch: 18 }, { wch: 10 }, { wch: 12 }, { wch: 24 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 20 }, { wch: 10 }, { wch: 12 }, { wch: 10 }, { wch: 38 }, { wch: 100 }, { wch: 28 }, { wch: 26 }, { wch: 100 }, { wch: 28 }, { wch: 16 }];
+            const COLUMN_WIDTHS = [{ wch: 16 }, { wch: 16 }, { wch: 24 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 16 }, { wch: 24 }, { wch: 16 }, { wch: 16 }, { wch: 20 }, { wch: 16 }, { wch: 12 }];
 
             const SHEET = utils.json_to_sheet([]);            
             const dealIds = Object.keys(this.exportData);
@@ -288,7 +340,17 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
                 const dealData = this.exportData[dealId].groupedDeals;
                 for (let j = 0; j < dealData.length; j++) {
                     const gridData = new Array(...dealData[j].gridData);
+                    //Remove PCSR_NBR from gridData as it is not required in export
+                    gridData.forEach(item => {
+                        delete item.PCSR_NBR;
+                    });
                     gridData.push({ WF_STG_CD: "Total RPU:", MAX_RPU: "$ " + dealData[j].rpuTotal.MAX_RPU.sum.toFixed(2) })
+                    if (this.showWorstProduct(dealData[j])) {
+                        gridData.push({
+                            WF_STG_CD: "Highest RPU Product:",
+                            MAX_RPU: dealData[j].worstProductNames + " ($ " + dealData[j].worstProducts[0].HIGH_MAX_RPU.toFixed(2) + ")"
+                        })
+                    }
                     gridData.push({});
                     utils.sheet_add_aoa(SHEET, [this.COLUMNS_CONFIG.map((item) => item.title)], { origin: -1 });
                     utils.sheet_add_json(SHEET, gridData, { header: HEADER, origin: -1, skipHeader: true });                    
@@ -311,4 +373,28 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
 
     }
+
+    private onOpenWorstProductInfoPanel(event: MouseEvent, data): void {
+        this.popupX = event.clientX;
+        this.popupY = event.clientY;
+        this.showWorstProductInfoPanel = true;
+        this.worstProductInfo = data.worstProducts;
+    }
+
+    private onCloseWorstProductInfoPanel(): void {
+        this.showWorstProductInfoPanel = false;
+    }
+
+    private showWorstProduct(currentDealGrp): boolean {
+        const worstProduct = currentDealGrp.worstProducts;
+        if (worstProduct.length > 0) {
+            //If the current deal group has the same max rpu as the worst product, then there is no need to show the worst product
+            if (worstProduct[0].HIGH_MAX_RPU === currentDealGrp.rpuTotal.MAX_RPU.sum) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
 }

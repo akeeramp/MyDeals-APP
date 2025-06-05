@@ -36,6 +36,7 @@ namespace Intel.MyDeals.Entities
         public string CUST_ACCNT_DIV { get; set; }
         public string CONTRACT_NM { get; set; }
         public string DealType { get; set; }
+        public string PCSR_NBR { get; set; }
     }
 
     public class OvlpComplexObj
