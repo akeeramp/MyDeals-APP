@@ -107,7 +107,8 @@ namespace Intel.MyDeals.BusinessLogic
                 PRIM_SID = primCustdata.PRIM_SID,
                 RPL_STS = primCustdata.RPL_STS,
                 RPL_STS_CD = primCustdata.RPL_STS_CD,
-                IS_ACTV = primCustdata.IS_ACTV
+                IS_ACTV = primCustdata.IS_ACTV,
+                ERROR_MSG = primCustdata.ERROR_MSG
             };
         }
 

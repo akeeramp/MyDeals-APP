@@ -295,51 +295,60 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
 
     IsValidCombination(model: PrimeCust_Map): boolean {
         let retCond = false;
-        const isPrimeIdexist = this.gridResult.filter(x => x.PRIM_CUST_ID === parseInt(model.PRIM_CUST_ID));
+        const model_Cust_Nm = (model.PRIM_CUST_NM ? model.PRIM_CUST_NM.toLowerCase().trim() : '');
+        const patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
+        const res = patt.test(model_Cust_Nm);
 
-        this.gridResult.map(
-            (x) => {
-                const x_Prim_Cust_Nm = (x.PRIM_CUST_NM ? x.PRIM_CUST_NM.toLowerCase().trim() : '');
-                const model_Cust_Nm = (model.PRIM_CUST_NM ? model.PRIM_CUST_NM.toLowerCase().trim() : '');
-                const patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
-                const res = patt.test(model_Cust_Nm);
+        if (!res) {
+            if (!this.errorMsg.includes("Invalid Character identified in Unified Customer Name. Please remove it and Save."))
+                this.errorMsg.push("Invalid Character identified in Unified Customer Name. Please remove it and Save.");
+            retCond = true;
+        }
+        //const isPrimeIdexist = this.gridResult.filter(x => x.PRIM_CUST_ID === parseInt(model.PRIM_CUST_ID));
 
-                if (!res) {
-                    if (!this.errorMsg.includes("Invalid Character identified in Unified Customer Name. Please remove it and Save."))
-                        this.errorMsg.push("Invalid Character identified in Unified Customer Name. Please remove it and Save.");
-                    retCond = true;
-                } else if (isPrimeIdexist.length >= 1 && model.PRIM_SID !== x.PRIM_SID) {
-                    if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm !== model_Cust_Nm && model_Cust_Nm != "" && model_Cust_Nm != null && x.IS_ACTV == true) {
-                        if (!this.errorMsg.includes("Unified ID \"" + model.PRIM_CUST_ID + "\" is associated with \"" + x.PRIM_CUST_NM + "\" Unified Customer is active"))
-                            this.errorMsg.push("Unified ID \"" + model.PRIM_CUST_ID + "\" is associated with \"" + x.PRIM_CUST_NM + "\" Unified Customer is active");
-                        retCond = true;
-                    }
-                    if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && x.PRIM_LVL_ID == model.PRIM_LVL_ID && x.PRIM_CUST_CTRY != model.PRIM_CUST_CTRY && x.IS_ACTV) {
-                        if (!this.errorMsg.includes("For this combination of Unified Id \"" + model.PRIM_CUST_ID + "\" and Unified Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists in active status"))
-                            this.errorMsg.push("For this combination of Unified Id \"" + model.PRIM_CUST_ID + "\" and Unified Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists in active status");
-                        retCond = true;
-                    }
-                    if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && x.PRIM_LVL_ID == model.PRIM_LVL_ID && x.PRIM_CUST_CTRY == model.PRIM_CUST_CTRY) {
-                        if (!this.errorMsg.includes("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists"))
-                            this.errorMsg.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists");
-                        retCond = true;
-                    } else if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && x.PRIM_LVL_ID != model.PRIM_LVL_ID && x.PRIM_CUST_CTRY == model.PRIM_CUST_CTRY && x.IS_ACTV) {
-                        if (!this.errorMsg.includes("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists in active status"))
-                            this.errorMsg.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists in active status");
-                        retCond = true;
-                    }
-                    if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && isPrimeIdexist.length == 1 && model.PRIM_SID !== "" && x.IS_ACTV) {
-                        if (!this.errorMsg.includes("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active"))
-                            this.errorMsg.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active");
-                        retCond = true;
-                    }
-                } else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && isPrimeIdexist.length < 1 && x.PRIM_SID !== model.PRIM_SID && model.PRIM_CUST_ID != null && model.PRIM_CUST_ID != "" && x.IS_ACTV) {
-                    if (!this.errorMsg.includes("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active"))
-                        this.errorMsg.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active");
-                    retCond = true;
-                }
-            }
-        );
+        //this.gridResult.map(
+        //    (x) => {
+        //        const x_Prim_Cust_Nm = (x.PRIM_CUST_NM ? x.PRIM_CUST_NM.toLowerCase().trim() : '');
+        //        const model_Cust_Nm = (model.PRIM_CUST_NM ? model.PRIM_CUST_NM.toLowerCase().trim() : '');
+        //        const patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
+        //        const res = patt.test(model_Cust_Nm);
+
+        //        if (!res) {
+        //            if (!this.errorMsg.includes("Invalid Character identified in Unified Customer Name. Please remove it and Save."))
+        //                this.errorMsg.push("Invalid Character identified in Unified Customer Name. Please remove it and Save.");
+        //            retCond = true;
+        //        } else if (isPrimeIdexist.length >= 1 && model.PRIM_SID !== x.PRIM_SID) {
+        //            if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm !== model_Cust_Nm && model_Cust_Nm != "" && model_Cust_Nm != null && x.IS_ACTV == true) {
+        //                if (!this.errorMsg.includes("Unified ID \"" + model.PRIM_CUST_ID + "\" is associated with \"" + x.PRIM_CUST_NM + "\" Unified Customer is active"))
+        //                    this.errorMsg.push("Unified ID \"" + model.PRIM_CUST_ID + "\" is associated with \"" + x.PRIM_CUST_NM + "\" Unified Customer is active");
+        //                retCond = true;
+        //            }
+        //            if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && x.PRIM_LVL_ID == model.PRIM_LVL_ID && x.PRIM_CUST_CTRY != model.PRIM_CUST_CTRY && x.IS_ACTV) {
+        //                if (!this.errorMsg.includes("For this combination of Unified Id \"" + model.PRIM_CUST_ID + "\" and Unified Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists in active status"))
+        //                    this.errorMsg.push("For this combination of Unified Id \"" + model.PRIM_CUST_ID + "\" and Unified Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists in active status");
+        //                retCond = true;
+        //            }
+        //            if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && x.PRIM_LVL_ID == model.PRIM_LVL_ID && x.PRIM_CUST_CTRY == model.PRIM_CUST_CTRY) {
+        //                if (!this.errorMsg.includes("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists"))
+        //                    this.errorMsg.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists");
+        //                retCond = true;
+        //            } else if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && x.PRIM_LVL_ID != model.PRIM_LVL_ID && x.PRIM_CUST_CTRY == model.PRIM_CUST_CTRY && x.IS_ACTV) {
+        //                if (!this.errorMsg.includes("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists in active status"))
+        //                    this.errorMsg.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists in active status");
+        //                retCond = true;
+        //            }
+        //            if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && isPrimeIdexist.length == 1 && model.PRIM_SID !== "" && x.IS_ACTV) {
+        //                if (!this.errorMsg.includes("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active"))
+        //                    this.errorMsg.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active");
+        //                retCond = true;
+        //            }
+        //        } else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && isPrimeIdexist.length < 1 && x.PRIM_SID !== model.PRIM_SID && model.PRIM_CUST_ID != null && model.PRIM_CUST_ID != "" && x.IS_ACTV) {
+        //            if (!this.errorMsg.includes("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active"))
+        //                this.errorMsg.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active");
+        //            retCond = true;
+        //        }
+        //    }
+        //);
 
         if (model.PRIM_CUST_ID == null || model.PRIM_CUST_ID == '') {
             this.errorMsg.push("Please provide Valid Unified ID");
@@ -368,14 +377,27 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
 
     insertUpdateOperation(rowIndex: number, isNew: boolean, primeCust_map: PrimeCust_Map): void {
         this.isDirty = false;
+        rowIndex = rowIndex % this.state.take;
         if (!this.isCombExists) {
             if (isNew) {
                 this.isLoading = true;
                 this.primeCustSvc.SetPrimeCustomers(primeCust_map).pipe(takeUntil(this.destroy$)).subscribe(
-                    () => {
-                        this.gridResult.push(primeCust_map);
-                        this.loadPrimeCustomer();
-                        this.loggerSvc.success("New Unified Customer Added.");
+                    (result) => {
+                        if (result != null && result['ERROR_MSG'] != null && result['ERROR_MSG'] != "") {
+                            var error = result['ERROR_MSG'].split(',');
+                            this.errorMsg = error;
+                            this.errorMessage = this.errorMsg.join('\n');
+                            this.isDialogVisible = true;
+                            this.cancelConfirm = false;
+                            this.isLoading = false;
+                            //For DB validation
+                            this.isCombExists = true;
+                        
+                        } else {
+                            this.gridResult.push(primeCust_map);
+                            this.loadPrimeCustomer();
+                            this.loggerSvc.success("New Unified Customer Added.");
+                        }
                     },
                     error => {
                         this.loggerSvc.error("Unable to insert Unified Customer.", error);
@@ -385,11 +407,24 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
             } else {
                 this.isLoading = true;
                 this.primeCustSvc.UpdatePrimeCustomer(primeCust_map).pipe(takeUntil(this.destroy$)).subscribe(
-                    () => {
-                        this.gridResult[rowIndex] = primeCust_map;
-                        this.gridResult.push(primeCust_map);
-                        this.loadPrimeCustomer();
-                        this.loggerSvc.success("Unified Customer updated.");
+                    (result) => {
+                        if (result != null && result['ERROR_MSG'] != null && result['ERROR_MSG'] != "") {
+                            var error = result['ERROR_MSG'].split(',');
+                            this.errorMsg = error;
+                            this.errorMessage = this.errorMsg.join('\n');
+                            this.isDialogVisible = true;
+                            this.cancelConfirm = false;
+                            this.isLoading = false;
+                            //For DB validation
+                            this.isCombExists = true;
+
+                        } else {
+                            this.gridResult[rowIndex] = primeCust_map;
+                            this.gridResult.push(primeCust_map);
+                            this.loadPrimeCustomer();
+                            this.loggerSvc.success("Unified Customer updated.");
+                        }
+                        
                     },
                     error => {
                         this.loggerSvc.error("Unable to update unified customer data.", error);

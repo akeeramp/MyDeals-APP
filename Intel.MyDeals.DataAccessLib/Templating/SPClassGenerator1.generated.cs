@@ -18767,6 +18767,17 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 set { SetParmeter("in_emp_wwid", value); }
                 get { return (Int32)GetParameter("in_emp_wwid"); }
             }
+            ///<summary>
+			/// DataType: varchar(10)
+			/// Mode: IN
+			/// Max Length: 10
+			///</summary>
+			[SQLParameterAttribute(10, "ParameterDirection.Input", 10, false)]
+            public String in_mode
+            {
+                set { SetParmeter("in_mode", value); }
+                get { return (String)GetParameter("in_mode"); }
+            }
         }
 
         ///<summary>
