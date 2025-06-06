@@ -811,6 +811,94 @@ namespace Intel.MyDeals.BusinessLogic
                     primedCustomerL1Id = "";
                     primedCustomerL2Id = "";
                     primedCustName = "";
+                    //TWC3167-10375
+                    List<EndCustomer> endCustData = new List<EndCustomer>();
+                    endCustData.Add(new EndCustomer
+                    {
+                        END_CUSTOMER_RETAIL = customer,
+                        PRIMED_CUST_CNTRY = endCustomerCountry,
+                        IS_EXCLUDE = "0",
+                        IS_PRIMED_CUST = isPrimedCustomer,
+                        PRIMED_CUST_ID = primedCustomerL1Id,
+                        RPL_STS_CD = RPLStatusCode,
+                        IS_RPL = isRPLedCustomer,
+                        PRIMED_CUST_NM = primedCustName
+                    });
+                    endCustomerObject = JsonConvert.SerializeObject(endCustData);
+                    try
+                    {                        
+                        //Checking if endCustomerObject is already insterted in log table.
+                        List<UnPrimedDealLogs> result = new List<UnPrimedDealLogs>();
+                        result = _primeCustomerLib.UnPrimeDealsLogs(0, endCustomerObject);
+                        if (result != null && result.Count > 0)
+                        {
+                            var PRIMED_CUST_ID = result.First(o => o.END_CUSTOMER_RETAIL == customer && o.PRIMED_CUST_CNTRY == endCustomerCountry)?.PRIMED_CUST_ID;
+                            if (PRIMED_CUST_ID != null && PRIMED_CUST_ID == 0)
+                            {
+                                //circular dependency issue is occuring because of dependency injection in constructor, that is why object created manually..
+                                IPrimeCustomersLib _primeCustomersLib = new PrimeCustomersLib(_primeCustomerLib, null, null, _jmsDataLib);
+                                //registering endCustomerObject in MYDL_UCD_RQST_RSPN_LOG table and calling JMS - Request to UCD.
+                                var ucdResponseString = _primeCustomersLib.UnPrimeDealsLogs("0", endCustomerObject);
+                                //from the above method if we receive return value as YES/NA then we might have a data in MYDL_PRIM_CUST_DTL table..                    
+                                if (ucdResponseString != "" && ucdResponseString != null && (ucdResponseString.ToLower() == "yes" || ucdResponseString.ToLower() == "na"))
+                                {
+                                    List<EndCustomer> endCustomers = new List<EndCustomer>();
+                                    endCustomers = _primeCustomerLib.ValidateEndCustomer(endCustomerObject);
+                                    if (endCustomers != null && endCustomers.Count > 0)
+                                    {
+                                        EndCustomer endCustomerObj = new EndCustomer();
+                                        endCustomerObj = endCustomers.First(o => o.END_CUSTOMER_RETAIL == customer && o.PRIMED_CUST_CNTRY == endCustomerCountry);
+                                        if (endCustomerObj != null && endCustomerObj.IS_PRIMED_CUST == "1")
+                                        {                                            
+                                            //The below part is to append values for deal attributes.
+                                            isPrimedCustomer = endCustomerObj.IS_PRIMED_CUST;
+                                            isRPLedCustomer = endCustomerObj.IS_RPL;
+                                            RPLStatusCode = endCustomerObj.RPL_STS_CD;
+                                            primedCustomerL1Id = endCustomerObj.PRIMED_CUST_ID;
+                                            primedCustName = endCustomerObj.PRIMED_CUST_NM;
+                                            //TWC3167-10518
+                                            //The below part is to get the PRIM_LVL_ID and including that value in IQR response JSON packet..
+                                            EndCustomerObject endCustObjs = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry, primedCustomerL1Id);
+                                            if (endCustObjs != null && endCustObjs.UnifiedEndCustomerId.ToString() == endCustomerObj.PRIMED_CUST_ID)
+                                                primedCustomerL2Id = endCustObjs.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObjs.UnifiedCountryEndCustomerId.ToString();
+                                            workRecordDataFields.recordDetails.quote.ComplianceWatchList = RPLStatusCode;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        //when result is null, we might have data in log table or else might have data in master table, if data present in master table, needs to read it
+                        if (result == null || result.Count == 0)
+                        {
+                            List<EndCustomer> endCustomers = new List<EndCustomer>();
+                            endCustomers = _primeCustomerLib.ValidateEndCustomer(endCustomerObject);
+                            if (endCustomers != null && endCustomers.Count > 0)
+                            {
+                                EndCustomer endCustomerObj = new EndCustomer();
+                                endCustomerObj = endCustomers.First(o => o.END_CUSTOMER_RETAIL == customer && o.PRIMED_CUST_CNTRY == endCustomerCountry);
+                                if (endCustomerObj != null && endCustomerObj.IS_PRIMED_CUST == "1")
+                                {                                    
+                                    //The below part is to append values for deal attributes.
+                                    isPrimedCustomer = endCustomerObj.IS_PRIMED_CUST;
+                                    isRPLedCustomer = endCustomerObj.IS_RPL;
+                                    RPLStatusCode = endCustomerObj.RPL_STS_CD;
+                                    primedCustomerL1Id = endCustomerObj.PRIMED_CUST_ID;
+                                    primedCustName = endCustomerObj.PRIMED_CUST_NM;
+                                    //TWC3167-10518
+                                    //The below part is to get the PRIM_LVL_ID and including that value in IQR response JSON packet..
+                                    EndCustomerObject endCustObjs = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry, primedCustomerL1Id);
+                                    if (endCustObjs != null && endCustObjs.UnifiedEndCustomerId.ToString() == endCustomerObj.PRIMED_CUST_ID)
+                                        primedCustomerL2Id = endCustObjs.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObjs.UnifiedCountryEndCustomerId.ToString();
+                                    workRecordDataFields.recordDetails.quote.ComplianceWatchList = RPLStatusCode;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Exception while logging the unprim data: {ex.Message}");
+                    }
+                    //
                 }
                 //As END_CUST_OBJ is the one which is used to load data in the End customer pop up(both in deal editor and deal reconcilaition screen), Creating End customer obj to update deal level END_CUST_OBJ attribute
                 if ((customer != "" || customer != null) && (endCustomerCountry != "" || endCustomerCountry != null))
@@ -827,101 +915,7 @@ namespace Intel.MyDeals.BusinessLogic
                         IS_RPL = isRPLedCustomer,
                         PRIMED_CUST_NM = primedCustName
                     });
-                    endCustomerObject = JsonConvert.SerializeObject(endCustData);
-                    try
-                    {
-                        //TWC3167-10375
-                        //Checking if endCustomerObject is already insterted in log table.
-                        List<UnPrimedDealLogs> result = new List<UnPrimedDealLogs>();
-                        result = _primeCustomerLib.UnPrimeDealsLogs(0, endCustomerObject);
-                        if (result != null && result.Count > 0)
-                        {
-                            var PRIMED_CUST_ID = result.First(o => o.END_CUSTOMER_RETAIL == customer && o.PRIMED_CUST_CNTRY == endCustomerCountry)?.PRIMED_CUST_ID;
-                            if (PRIMED_CUST_ID != null && PRIMED_CUST_ID == 0)
-                            {                                
-                                //circular dependency issue is occuring because of dependency injection in constructor, that is why object created manually..
-                                IPrimeCustomersLib _primeCustomersLib = new PrimeCustomersLib(_primeCustomerLib,null,null,_jmsDataLib);
-                                //registering endCustomerObject in MYDL_UCD_RQST_RSPN_LOG table and calling JMS - Request to UCD.
-                                var ucdResponseString = _primeCustomersLib.UnPrimeDealsLogs("0", endCustomerObject);
-                                //from the above method if we receive return value as YES/NA then we might have a data in MYDL_PRIM_CUST_DTL table..                    
-                                if (ucdResponseString != "" && ucdResponseString != null && (ucdResponseString.ToLower() == "yes" || ucdResponseString.ToLower() == "na"))
-                                {
-                                    List<EndCustomer> endCustomers = new List<EndCustomer>();
-                                    endCustomers = _primeCustomerLib.ValidateEndCustomer(endCustomerObject);
-                                    if (endCustomers != null && endCustomers.Count > 0)
-                                    {
-                                        EndCustomer endCustomerObj = new EndCustomer();
-                                        endCustomerObj = endCustomers.First(o => o.END_CUSTOMER_RETAIL == customer && o.PRIMED_CUST_CNTRY == endCustomerCountry);
-                                        if (endCustomerObj != null && endCustomerObj.IS_PRIMED_CUST == "1")
-                                        {
-                                            var unifiedRetailData = new List<EndCustomer>() { new EndCustomer {
-                                                    END_CUSTOMER_RETAIL = endCustomerObj.END_CUSTOMER_RETAIL,
-                                                    PRIMED_CUST_CNTRY = endCustomerObj.PRIMED_CUST_CNTRY,
-                                                    IS_EXCLUDE = endCustomerObj.IS_EXCLUDE,
-                                                    IS_PRIMED_CUST = endCustomerObj.IS_PRIMED_CUST,
-                                                    PRIMED_CUST_ID = endCustomerObj.PRIMED_CUST_ID,
-                                                    RPL_STS_CD = endCustomerObj.RPL_STS_CD,
-                                                    IS_RPL = endCustomerObj.IS_RPL,
-                                                    PRIMED_CUST_NM = endCustomerObj.PRIMED_CUST_NM
-                                            }};
-                                            endCustomerObject = JsonConvert.SerializeObject(unifiedRetailData);
-                                            //The below part is to append values for deal attributes.
-                                            isPrimedCustomer = endCustomerObj.IS_PRIMED_CUST;
-                                            isRPLedCustomer = endCustomerObj.IS_RPL;
-                                            RPLStatusCode = endCustomerObj.RPL_STS_CD;
-                                            primedCustomerL1Id = endCustomerObj.PRIMED_CUST_ID;
-                                            primedCustName = endCustomerObj.PRIMED_CUST_NM;
-                                            //TWC3167-10518
-                                            //The below part is to get the PRIM_LVL_ID and including that value in IQR response JSON packet..
-                                            EndCustomerObject endCustObjs = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry, primedCustomerL1Id);
-                                            if (endCustObjs != null && endCustObjs.UnifiedEndCustomerId.ToString() == endCustomerObj.PRIMED_CUST_ID)
-                                                primedCustomerL2Id = endCustObjs.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObjs.UnifiedCountryEndCustomerId.ToString();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        //when result is null, we might have data in log table or else might have data in master table, if data present in master table, needs to read it
-                        if (result == null || result.Count == 0)
-                        {
-                            List<EndCustomer> endCustomers = new List<EndCustomer>();
-                            endCustomers = _primeCustomerLib.ValidateEndCustomer(endCustomerObject);
-                            if (endCustomers != null && endCustomers.Count > 0)
-                            {
-                                EndCustomer endCustomerObj = new EndCustomer();
-                                endCustomerObj = endCustomers.First(o => o.END_CUSTOMER_RETAIL == customer && o.PRIMED_CUST_CNTRY == endCustomerCountry);
-                                if (endCustomerObj != null && endCustomerObj.IS_PRIMED_CUST == "1")
-                                {
-                                    var unifiedRetailData = new List<EndCustomer>() { new EndCustomer {
-                                                    END_CUSTOMER_RETAIL = endCustomerObj.END_CUSTOMER_RETAIL,
-                                                    PRIMED_CUST_CNTRY = endCustomerObj.PRIMED_CUST_CNTRY,
-                                                    IS_EXCLUDE = endCustomerObj.IS_EXCLUDE,
-                                                    IS_PRIMED_CUST = endCustomerObj.IS_PRIMED_CUST,
-                                                    PRIMED_CUST_ID = endCustomerObj.PRIMED_CUST_ID,
-                                                    RPL_STS_CD = endCustomerObj.RPL_STS_CD,
-                                                    IS_RPL = endCustomerObj.IS_RPL,
-                                                    PRIMED_CUST_NM = endCustomerObj.PRIMED_CUST_NM
-                                    }};
-                                    endCustomerObject = JsonConvert.SerializeObject(unifiedRetailData);
-                                    //The below part is to append values for deal attributes.
-                                    isPrimedCustomer = endCustomerObj.IS_PRIMED_CUST;
-                                    isRPLedCustomer = endCustomerObj.IS_RPL;
-                                    RPLStatusCode = endCustomerObj.RPL_STS_CD;
-                                    primedCustomerL1Id = endCustomerObj.PRIMED_CUST_ID;
-                                    primedCustName = endCustomerObj.PRIMED_CUST_NM;
-                                    //TWC3167-10518
-                                    //The below part is to get the PRIM_LVL_ID and including that value in IQR response JSON packet..
-                                    EndCustomerObject endCustObjs = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry, primedCustomerL1Id);
-                                    if (endCustObjs != null && endCustObjs.UnifiedEndCustomerId.ToString() == endCustomerObj.PRIMED_CUST_ID)
-                                        primedCustomerL2Id = endCustObjs.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObjs.UnifiedCountryEndCustomerId.ToString();
-                                }
-                            }
-                        }                        
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Exception while logging the unprim data: {ex.Message}");
-                    }
+                    endCustomerObject = JsonConvert.SerializeObject(endCustData);                    
                 }
             }
             else
