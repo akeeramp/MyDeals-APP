@@ -1436,7 +1436,7 @@ export class PTE_CellChange_Util {
             const isValidDate = (itemDate_MMDD_format.isValid() && !itemDate_MMDD_format.isBefore(minDate)) || (itemDate_MD_format.isValid() && !itemDate_MD_format.isBefore(minDate));
 
             //Check if the date is invalid or before minDate, then set it to empty/Contract_date (This ensures no invalid date gets reflected in PTE during selection)
-            if ( (item.new == undefined) || (item.new == null) || (item.new == '') || !isValidDate || itemDate_MMDD_format.toString() === "Invalid date" || itemDate_MMDD_format.format("MM/DD/YYYY") === "12/30/1899") {
+            if ((item.new == undefined) || (item.new == null) || (item.new == '') || !isValidDate || (itemDate_MMDD_format.toString() === "Invalid date" && itemDate_MD_format.toString() === "Invalid date") || itemDate_MMDD_format.format("MM/DD/YYYY") === "12/30/1899") {
                 if (colName == 'OEM_PLTFRM_LNCH_DT' || colName == 'OEM_PLTFRM_EOL_DT') {
                     this.hotTable.setDataAtRowProp(item.row, colName, '', 'no-edit');
                 } else {
