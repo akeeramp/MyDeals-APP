@@ -3,7 +3,7 @@ param([string] $Operation,$USN,$PWD,$SERVER)
 try {
 
  $ENV_DATA = @(
-        [pscustomobject]@{env='CIN';DEPLOY_PATH='\\HF2CINMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2CINMYDLW01.amr.corp.intel.com';pool="cinmydeals.intel.com";config="CINR"}
+        [pscustomobject]@{env='CIN';DEPLOY_PATH='\\CALMYDCIN01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='CALMYDCIN01.amr.corp.intel.com';pool="cinmydeals.intel.com";config="CINR"}
         [pscustomobject]@{env='DEV';DEPLOY_PATH='\\HF2DEVMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2DEVMYDLW01.amr.corp.intel.com';pool="devmydeals.inte.com";config="DEV"}
         [pscustomobject]@{env='IAO-DEV';DEPLOY_PATH='\\HF2ITTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2ITTMYDLW01.amr.corp.intel.com';pool="ittmydeals.intel.com";config="ITT"}
         [pscustomobject]@{env='EUT';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsEUT';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com';pool="eutmydeals.intel.com";config="EUT"}
