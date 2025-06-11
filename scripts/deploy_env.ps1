@@ -10,8 +10,8 @@ try {
         [pscustomobject]@{env='DAY1';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsDay1';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com';pool="mydeals-day1.intel.com";config="DAY1"}
         [pscustomobject]@{env='IAO-CONS01';DEPLOY_PATH='\\HF2UTTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2UTTMYDLW01.amr.corp.intel.com';pool="uttmydeals.intel.com";config="UTT"}
         [pscustomobject]@{env='IAO-CONS02';DEPLOY_PATH='\\HF2UTTMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2UTTMYDLW02.amr.corp.intel.com';pool="uttmydeals.intel.com";config="UTT"}
-        [pscustomobject]@{env='CONS1';DEPLOY_PATH='\\FM7CONMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CONMYDLW01.amr.corp.intel.com';pool="conmydeals.intel.com";config="CONS"}
-        [pscustomobject]@{env='CONS2';DEPLOY_PATH='\\FM7CONMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CONMYDLW02.amr.corp.intel.com';pool="conmydeals.intel.com";config="CONS"}
+        [pscustomobject]@{env='CONS1';DEPLOY_PATH='\\calmydcons01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='calmydcons01.amr.corp.intel.com';pool="conmydeals.intel.com";config="CONS"}
+        [pscustomobject]@{env='CONS2';DEPLOY_PATH='\\calmydcons02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='calmydcons02.amr.corp.intel.com';pool="conmydeals.intel.com";config="CONS"}
         [pscustomobject]@{env='CIAR';DEPLOY_PATH='\\FM7CIAMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CIAMYDLW01.amr.corp.intel.com';pool="ciamydeals.intel.com";config="CIAR"}
         [pscustomobject]@{env='PERF';DEPLOY_PATH='\\HF2PRFMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2PRFMYDLW01.amr.corp.intel.com';pool="perfmydeals.intel.com";config="PERF"}
         [pscustomobject]@{env='DR';DEPLOY_PATH='\\CH2DRMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='CH2DRMYDLW01.amr.corp.intel.com';pool="drmydeals.intel.com";config="PROD"}
