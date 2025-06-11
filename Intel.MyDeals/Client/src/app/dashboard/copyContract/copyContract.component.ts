@@ -145,12 +145,16 @@ export class CopyContractComponent implements OnDestroy {
                 function (error) {
                     this.logger.error("CopContract::loadCopyContract::Unable to GetMyCustomerNames.", error);
                 });
-
         const postData = {
-            "CustomerIds": this.selectedCustomerIds,
-            "StartDate": this.copyCntrctStartDate,
-            "EndDate": this.copyCntrctEndDate,
-            "DontIncludeTenders": this.includeTenders
+            CustomerIds: this.selectedCustomerIds,
+            StartDate: this.copyCntrctStartDate,
+            EndDate: this.copyCntrctEndDate,
+            DontIncludeTenders: this.includeTenders,
+            InFilters: "",
+            grpFltr: "  AND (IS_TENDER = 0 OR IS_TENDER IS NULL)",
+            Sort: "",
+            Skip: 0,
+            Take: -1
         }
         this.dataService.getContracts(postData).pipe(takeUntil(this.destroy$)).subscribe((response) => {
             this.copyCntrctList = response;
