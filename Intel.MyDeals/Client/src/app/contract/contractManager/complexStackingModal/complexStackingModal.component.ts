@@ -54,7 +54,7 @@ export class ComplexStackingModalComponent implements OnInit, AfterViewInit {
             title: 'Stage',
         }, {
             field: 'MAX_RPU',
-            title: 'Max RPU'
+            title: 'Max RPU ($)'
         }, {
             field: 'CUST_ACCNT_DIV',
             title: 'Customer Division',
