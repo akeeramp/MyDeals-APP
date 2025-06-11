@@ -793,6 +793,138 @@ static bulkPriceUpdateColumnData =  [
             width: 300,
         }
     ]
+
+    static reportCustomerExcel = [
+        {
+            data: 'CUST_NM',
+            type: 'text',
+            readOnly: false,
+            width: 150,
+            headerTemplate: "Customer Name"
+        },
+        {
+            data: 'OBJ_SID',
+            type: 'numeric',
+            readOnly: false,
+            width: 140,
+            headerTemplate: "Deal ID"
+        },
+        {
+            data: 'OBJ_SET_TYPE_CD',
+            type: 'text',
+            readOnly: false,
+            width: 150,
+            headerTemplate: "Deal Type"
+        },
+        {
+            data: 'WF_STG_CD',
+            type: 'numeric',
+            readOnly: false,
+            width: 150,
+            headerTemplate: "Stage"
+        },
+        {
+            data: 'START_DT',
+            type: 'text',
+            readOnly: false,
+            width: 80,
+            headerTemplate: "Deal Start Date"
+        },
+        {
+            data: 'END_DT',
+            type: 'text',
+            readOnly: false,
+            width: 80,
+            headerTemplate: "Deal End Date"
+        },
+        {
+            data: 'PAYOUT_BASED_ON',
+            type: 'numeric',
+            readOnly: false,
+            width: 75,
+            headerTemplate: "Payout Source"
+        },
+        {
+            data: 'REBATE_BILLING_START',
+            type: 'text',
+            readOnly: false,
+            width: 80,
+            headerTemplate: "Billings Start Date"
+        },
+        {
+            data: 'REBATE_BILLING_END',
+            type: 'text',
+            readOnly: false,
+            width: 75,
+            headerTemplate: "Billings End Date"
+        }
+    ]
+    
+        static reportProductExcel = [
+        {
+            data: 'PRODUCT',
+            type: 'text',
+            readOnly: false,
+            width: 150,
+            headerTemplate: "Product Name"
+        },
+        {
+            data: 'OBJ_SID',
+            type: 'numeric',
+            readOnly: false,
+            width: 140,
+            headerTemplate: "Deal ID"
+        },
+        {
+            data: 'OBJ_SET_TYPE_CD',
+            type: 'text',
+            readOnly: false,
+            width: 150,
+            headerTemplate: "Deal Type"
+        },
+        {
+            data: 'WF_STG_CD',
+            type: 'numeric',
+            readOnly: false,
+            width: 150,
+            headerTemplate: "Stage"
+        },
+        {
+            data: 'START_DT',
+            type: 'text',
+            readOnly: false,
+            width: 80,
+            headerTemplate: "Deal Start Date"
+        },
+        {
+            data: 'END_DT',
+            type: 'text',
+            readOnly: false,
+            width: 80,
+            headerTemplate: "Deal End Date"
+        },
+        {
+            data: 'PAYOUT_BASED_ON',
+            type: 'numeric',
+            readOnly: false,
+            width: 75,
+            headerTemplate: "Payout Source"
+        },
+        {
+            data: 'REBATE_BILLING_START',
+            type: 'text',
+            readOnly: false,
+            width: 80,
+            headerTemplate: "Billings Start Date"
+        },
+        {
+            data: 'REBATE_BILLING_END',
+            type: 'text',
+            readOnly: false,
+            width: 75,
+            headerTemplate: "Billings End Date"
+        }
+    ]
     static ProductVerticalColHeaders = ["Gdm Product Type", "GDM Vertical Name", "Division Short Name", "Op Code", "Deal Product Type", "Product Vertical", "Last Updated By", "Last Update Date"];
     static  ProductVerticalExcel = [
         {

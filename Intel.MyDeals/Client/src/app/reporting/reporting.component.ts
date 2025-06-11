@@ -7,7 +7,6 @@ import { takeUntil } from "rxjs/operators";
 import { SeriesLabelsContentArgs } from "@progress/kendo-angular-charts";
 import { ExcelColumnsConfig } from '../admin/ExcelColumnsconfig.util';
 import { GridUtil } from "../contract/grid.util";
-
 @Component({
   selector: "reporting-dashboard",
     templateUrl: "Client/src/app/reporting/reporting.component.html",
@@ -22,6 +21,8 @@ export class ReportingComponent implements OnDestroy{
     private GetReportMissingCostDataColumn = ExcelColumnsConfig.GetReportMissingCostDataExcel;
     private GetReportNewProductMissingCostDataColumn = ExcelColumnsConfig.GetReportNewProductMissingCostDataExcel;
     private GetGetUCMReportDataColumn = ExcelColumnsConfig.GetUCMReportDataDataExcel;
+    private reportCustomerExcel = ExcelColumnsConfig.reportCustomerExcel;
+    private reportProductExcel = ExcelColumnsConfig.reportProductExcel;
     private colorStages = {
         Complete: "#C4D600",
         InComplete: "#FC4C02",
@@ -547,6 +548,28 @@ export class ReportingComponent implements OnDestroy{
 
     outChart() {
         this.visibleChart = false;
+    }
+
+    downloadReportCustomer(custName: any){
+      let data = {value: custName} 
+      this.reportingSvc.downloadDealCountData(data)
+        .pipe(takeUntil(this.destroy$)).subscribe(response => { 
+          this.isLoading = 'false';
+          let titleExcel = custName+"-Report"
+          GridUtil.dsToExcelReportCustomer(this.reportCustomerExcel, response, titleExcel);
+          this.loggerSvc.success("Successfully downloaded the Customer report data");
+      })
+    }
+
+    downloadReportProduct(product: any){
+      let data = {value: product} 
+      this.reportingSvc.downloadProductDealCountData(data)
+        .pipe(takeUntil(this.destroy$)).subscribe(response => { 
+          this.isLoading = 'false';
+          let titleExcel = "Product-Report"
+          GridUtil.dsToExcelReportProduct(this.reportProductExcel, response, titleExcel);
+          this.loggerSvc.success("Successfully downloaded the Product report data");
+      })
     }
 
     ngOnInit() {

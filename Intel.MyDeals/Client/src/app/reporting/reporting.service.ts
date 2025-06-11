@@ -34,6 +34,15 @@ export class reportingService {
         return this.httpClient.post(apiUrl, { 'headers': headers });
     }
 
+    public downloadDealCountData(data): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'GetProdCustomerReport';
+        return this.httpClient.post(apiUrl, data);
+    }
+
+    public downloadProductDealCountData(data): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'GetProductDataReport';
+        return this.httpClient.post(apiUrl, data);
+    }
     
 }
 

@@ -16,7 +16,8 @@ namespace Intel.MyDeals.IBusinessLogic
         List<ReportNewProductMissingCostData> GetNewProductReportMissingCostData();
 
         List<UCMReportData> GetUCMReportData();
+        List<ReportProdCustomer> GetProdCustomerReport(string custName);
+        List<ReportProductData> GetProductDataReport(string product);
 
-       
     }
 }

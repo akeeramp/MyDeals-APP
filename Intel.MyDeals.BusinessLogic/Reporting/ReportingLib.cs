@@ -39,6 +39,18 @@ namespace Intel.MyDeals.BusinessLogic
         {
             // TODO :Later need to decide caching will be apply or not
             return _reportingCollectorLib.GetUCMReportData();
-        } 
+        }
+
+        public List<ReportProdCustomer> GetProdCustomerReport(string custName)
+        {
+            // TODO :Later need to decide caching will be apply or not
+            return _reportingCollectorLib.GetProdCustomerReport(custName);
+        }
+
+        public List<ReportProductData> GetProductDataReport(string product)
+        {
+            // TODO :Later need to decide caching will be apply or not
+            return _reportingCollectorLib.GetProductDataReport(product);
+        }
     }
 }

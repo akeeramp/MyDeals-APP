@@ -24,7 +24,9 @@ namespace Intel.MyDeals.DataLibrary
 
             var cmd = new Procs.dbo.PR_MYDL_GET_RPT_DSBD
             {
-                CRE_EMP_IDSID = OpUserStack.MyOpUserToken.Usr.Idsid
+                CRE_EMP_IDSID = OpUserStack.MyOpUserToken.Usr.Idsid,
+                CUST_NM = null,
+                PRD_NM = null
             };
             List<ReportDashboardData> reportDashboardData  = new List<ReportDashboardData>();
 
@@ -409,5 +411,107 @@ namespace Intel.MyDeals.DataLibrary
 
             return objUCMReportData;
         }
+
+        public List<ReportProdCustomer> GetProdCustomerReport(string custName)
+        {
+            var cmd = new Procs.dbo.PR_MYDL_GET_RPT_DSBD
+            {
+                CRE_EMP_IDSID = OpUserStack.MyOpUserToken.Usr.Idsid,
+                CUST_NM = custName,
+                PRD_NM = null
+            };
+            List<ReportProdCustomer> reportProdCustomerData = new List<ReportProdCustomer>();
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+                int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
+                int IDX_START_DT = DB.GetReaderOrdinal(rdr, "START_DT");
+                int IDX_END_DT = DB.GetReaderOrdinal(rdr, "END_DT");
+                int IDX_PAYOUT_BASED_ON = DB.GetReaderOrdinal(rdr, "PAYOUT_BASED_ON");
+                int IDX_REBATE_BILLING_START = DB.GetReaderOrdinal(rdr, "REBATE_BILLING_START");
+                int IDX_REBATE_BILLING_END = DB.GetReaderOrdinal(rdr, "REBATE_BILLING_END");
+                int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
+                int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
+
+                while (rdr.Read())
+                {
+                    reportProdCustomerData.Add(new ReportProdCustomer
+                    {
+                        CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
+                        
+                        OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
+
+                        START_DT = (IDX_START_DT < 0 || rdr.IsDBNull(IDX_START_DT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_START_DT),
+
+                        END_DT = (IDX_END_DT < 0 || rdr.IsDBNull(IDX_END_DT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_DT),
+
+                        PAYOUT_BASED_ON = (IDX_PAYOUT_BASED_ON < 0 || rdr.IsDBNull(IDX_PAYOUT_BASED_ON)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PAYOUT_BASED_ON),
+
+                        REBATE_BILLING_START = (IDX_REBATE_BILLING_START < 0 || rdr.IsDBNull(IDX_REBATE_BILLING_START)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REBATE_BILLING_START),
+
+                        REBATE_BILLING_END = (IDX_REBATE_BILLING_END < 0 || rdr.IsDBNull(IDX_REBATE_BILLING_END)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REBATE_BILLING_END),
+
+                        OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
+
+                        WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD)
+                    });
+                } // while
+
+            }
+            return reportProdCustomerData;
+        }
+
+        public List<ReportProductData> GetProductDataReport(string product)
+        {
+            var cmd = new Procs.dbo.PR_MYDL_GET_RPT_DSBD
+            {
+                CRE_EMP_IDSID = OpUserStack.MyOpUserToken.Usr.Idsid,
+                CUST_NM = null,
+                PRD_NM = product
+            };
+            List<ReportProductData> reportProductData = new List<ReportProductData>();
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_PRODUCT = DB.GetReaderOrdinal(rdr, "PRODUCT");
+                int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
+                int IDX_START_DT = DB.GetReaderOrdinal(rdr, "START_DT");
+                int IDX_END_DT = DB.GetReaderOrdinal(rdr, "END_DT");
+                int IDX_PAYOUT_BASED_ON = DB.GetReaderOrdinal(rdr, "PAYOUT_BASED_ON");
+                int IDX_REBATE_BILLING_START = DB.GetReaderOrdinal(rdr, "REBATE_BILLING_START");
+                int IDX_REBATE_BILLING_END = DB.GetReaderOrdinal(rdr, "REBATE_BILLING_END");
+                int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
+                int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
+
+                while (rdr.Read())
+                {
+                    reportProductData.Add(new ReportProductData
+                    {
+                        PRODUCT = (IDX_PRODUCT < 0 || rdr.IsDBNull(IDX_PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT),
+
+                        OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
+
+                        START_DT = (IDX_START_DT < 0 || rdr.IsDBNull(IDX_START_DT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_START_DT),
+
+                        END_DT = (IDX_END_DT < 0 || rdr.IsDBNull(IDX_END_DT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_DT),
+
+                        PAYOUT_BASED_ON = (IDX_PAYOUT_BASED_ON < 0 || rdr.IsDBNull(IDX_PAYOUT_BASED_ON)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PAYOUT_BASED_ON),
+
+                        REBATE_BILLING_START = (IDX_REBATE_BILLING_START < 0 || rdr.IsDBNull(IDX_REBATE_BILLING_START)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REBATE_BILLING_START),
+
+                        REBATE_BILLING_END = (IDX_REBATE_BILLING_END < 0 || rdr.IsDBNull(IDX_REBATE_BILLING_END)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REBATE_BILLING_END),
+
+                        OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
+
+                        WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD)
+                    });
+                } // while
+
+            }
+            return reportProductData;
+        }
+
+
     }
 }

@@ -8125,6 +8125,76 @@ namespace Intel.MyDeals.Entities
     ///</summary>
 
     [DataContract]
+    public partial class ReportCustomerDashboardValue
+    {
+
+        [DataMember]
+        public System.String value { get; set; }
+    }
+
+    [DataContract]
+    public partial class ReportProdCustomer
+    {
+        [DataMember]
+        public System.String CUST_NM { set; get; }
+
+        [DataMember]
+        public System.Int32 OBJ_SID { set; get; }
+
+        [DataMember]
+        public System.String START_DT { set; get; }
+
+        [DataMember]
+        public System.String END_DT { set; get; }
+
+        [DataMember]
+        public System.String PAYOUT_BASED_ON { set; get; }
+
+        [DataMember]
+        public System.String REBATE_BILLING_START { set; get; }
+
+        [DataMember]
+        public System.String REBATE_BILLING_END { set; get; }
+
+        [DataMember]
+        public System.String OBJ_SET_TYPE_CD { set; get; }
+
+        [DataMember]
+        public System.String WF_STG_CD { set; get; }
+    }
+
+    [DataContract]
+    public partial class ReportProductData
+    {
+        [DataMember]
+        public System.String PRODUCT { set; get; }
+
+        [DataMember]
+        public System.Int32 OBJ_SID { set; get; }
+
+        [DataMember]
+        public System.String START_DT { set; get; }
+
+        [DataMember]
+        public System.String END_DT { set; get; }
+
+        [DataMember]
+        public System.String PAYOUT_BASED_ON { set; get; }
+
+        [DataMember]
+        public System.String REBATE_BILLING_START { set; get; }
+
+        [DataMember]
+        public System.String REBATE_BILLING_END { set; get; }
+
+        [DataMember]
+        public System.String OBJ_SET_TYPE_CD { set; get; }
+
+        [DataMember]
+        public System.String WF_STG_CD { set; get; }
+    }
+
+    [DataContract]
     public partial class ReportDashboardData
     {
 

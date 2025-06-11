@@ -231,7 +231,9 @@
                                                     <tbody>
                                                         <tr *ngFor="let x of ReportCustomerReport">
                                                             <td>{{x.CUSTOMER_NAME}}</td>
-                                                            <td>{{x.DEAL_COUNT}}</td>
+                                                            <td>
+                                                                <a href="javascript:void(0);" (click)="downloadReportCustomer(x.CUSTOMER_NAME)" class="download-customer-deal">{{x.DEAL_COUNT}}</a>
+                                                            </td>
                                                         </tr>
                                                         <tr class="border-top-customer">
                                                             <td>
@@ -264,7 +266,11 @@
                                                     <tbody>
                                                         <tr *ngFor="let x of ReportProducts">
                                                             <td>{{x.PRODUCT}}</td>
-                                                            <td>{{x.DEAL_COUNT}}</td>
+                                                            <td>
+                                                                <a href="javascript:void(0);" (click)="downloadReportProduct(x.PRODUCT)" class="download-customer-deal">
+                                                                    {{x.DEAL_COUNT}}
+                                                                </a>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

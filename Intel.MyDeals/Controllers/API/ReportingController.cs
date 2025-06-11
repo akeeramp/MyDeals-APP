@@ -32,6 +32,26 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetProdCustomerReport")]
+        [HttpPost]
+        public List<ReportProdCustomer> GetProdCustomerReport([FromBody] ReportCustomerDashboardValue data)
+        {
+            return SafeExecutor(() => _reportingLib.GetProdCustomerReport(data.value)
+                , $"Unable to get data"
+            );
+        }
+
+        [Authorize]
+        [Route("GetProductDataReport")]
+        [HttpPost]
+        public List<ReportProductData> GetProductDataReport([FromBody] ReportCustomerDashboardValue data)
+        {
+            return SafeExecutor(() => _reportingLib.GetProductDataReport(data.value)
+                , $"Unable to get data"
+            );
+        }
+
+        [Authorize]
         [Route("GetReportMissingCostData")]
         [HttpPost]
         public List<ReportMissingCostData> GetReportMissingCostData()

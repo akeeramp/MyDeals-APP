@@ -7912,6 +7912,31 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 set { SetParmeter("CRE_EMP_IDSID", value); }
                 get { return (String)GetParameter("CRE_EMP_IDSID"); }
             }
+
+            ///<summary>
+            /// DataType: nvarchar(20)
+            /// Mode: IN
+            /// Max Length: 20
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 20, false)]
+            public String CUST_NM
+            {
+                set { SetParmeter("CUST_NM", value); }
+                get { return (String)GetParameter("CUST_NM"); }
+            }
+
+            ///<summary>
+            /// DataType: nvarchar(20)
+            /// Mode: IN
+            /// Max Length: 20
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 20, false)]
+            public String PRD_NM
+            {
+                set { SetParmeter("PRD_NM", value); }
+                get { return (String)GetParameter("PRD_NM"); }
+            }
+
         }
 
         ///<summary>

@@ -860,6 +860,101 @@ export class GridUtil {
             saveAs(dataUrl, fileName);
         });
     }
+
+    static dsToExcelReportCustomer(data, response, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        for (var t = 0; t < data.length; t++) {
+            var colTitle = data[t].headerTemplate;
+            rows[0].cells.push({
+                value: colTitle,
+                type: data[t].type,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true,
+                width: 250
+            });
+            colWidths.push({ width: data[t].data == 'PAYOUT_BASED_ON' ? 120 : 150 });
+        }
+        for (let i = 0; i < response.length; i++) {
+            rows.push({
+                cells: [ 
+                    { value: response[i]["CUST_NM"], wrap: true },
+                    { value: response[i]["OBJ_SID"], wrap: true },	
+                    { value: response[i]["OBJ_SET_TYPE_CD"], wrap: true },
+                    { value: response[i]["WF_STG_CD"], wrap: true },
+                    { value: response[i]["START_DT"], wrap: true },
+                    { value: response[i]["END_DT"], wrap: true },
+                    { value: response[i]["PAYOUT_BASED_ON"], wrap: true },	
+                    { value: response[i]["REBATE_BILLING_START"], wrap: true },
+                    { value: response[i]["REBATE_BILLING_END"], wrap: true }
+                ]
+            })
+        }
+        const sheets = [
+            {
+                columns: colWidths,
+                title: fileName,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
+
+    static dsToExcelReportProduct(data, response, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        for (var t = 0; t < data.length; t++) {
+            var colTitle = data[t].headerTemplate;
+            rows[0].cells.push({
+                value: colTitle,
+                type: data[t].type,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true,
+                width: 250
+            });
+            colWidths.push({ width: data[t].data == 'PAYOUT_BASED_ON' ? 120 : 150 });
+        }
+        for (let i = 0; i < response.length; i++) {
+            rows.push({
+                cells: [ 
+                    { value: response[i]["PRODUCT"], wrap: true },
+                    { value: response[i]["OBJ_SID"], wrap: true },	
+                    { value: response[i]["OBJ_SET_TYPE_CD"], wrap: true },
+                    { value: response[i]["WF_STG_CD"], wrap: true },
+                    { value: response[i]["START_DT"], wrap: true },
+                    { value: response[i]["END_DT"], wrap: true },
+                    { value: response[i]["PAYOUT_BASED_ON"], wrap: true },	
+                    { value: response[i]["REBATE_BILLING_START"], wrap: true },
+                    { value: response[i]["REBATE_BILLING_END"], wrap: true }
+                ]
+            })
+        }
+        const sheets = [
+            {
+                columns: colWidths,
+                title: fileName,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
+
     static dsToExcelProductVerticalRule(data, response, fileName) {
         const rows = [{ cells: [] }];
         const colWidths = [];
