@@ -397,6 +397,17 @@ export class DE_Validation_Util {
                 if(iserror)
                     isShowStopperError = true;
             }
+            if (data[i].PAYABLE_QUANTITY !== undefined && data[i].PAYABLE_QUANTITY != null && data[i].PAYABLE_QUANTITY != ""
+                && data[i].VOLUME !== undefined && data[i].VOLUME != null && data[i].VOLUME != ""
+            ) {
+                const hasPayableQtyError = data[i].PAYABLE_QUANTITY > data[i].VOLUME;
+                if (hasPayableQtyError) {
+                    data[i]._behaviors.validMsg['PAYABLE_QUANTITY'] = "Payable Quantity cannot be greater than Ceiling Volume.\n";
+                    data[i]._behaviors.isError['PAYABLE_QUANTITY'] = true;
+                    isShowStopperError = true;
+                }
+            }
+            
         }
         
         return isShowStopperError;
