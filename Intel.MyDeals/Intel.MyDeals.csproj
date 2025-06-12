@@ -565,6 +565,7 @@
     <Content Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.component.html" />
     <Content Include="Client\src\app\admin\pctExceptionReport\admin.pctExceptionReport.component.css" />
     <Content Include="Client\src\app\admin\pctExceptionReport\admin.pctExceptionReport.component.html" />
+    <Content Include="Client\src\app\style\reporting.css" />
     <Content Include="Images\docs\PS1.png" />
     <Content Include="Images\docs\createContract.png" />
     <Content Include="Client\Images\docs\projController.png" />
