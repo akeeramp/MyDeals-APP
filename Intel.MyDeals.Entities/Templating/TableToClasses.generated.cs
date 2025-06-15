@@ -4080,6 +4080,9 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.DateTime YCS2_START { set; get; }
 
+        [DataMember]
+        public System.String actv_ind { set; get; }
+
 
         /*
         private static List<ProductSelectionResults> ProductSelectionResultsFromReader(SqlDataReader rdr){

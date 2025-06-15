@@ -86,5 +86,7 @@ namespace Intel.MyDeals.IBusinessLogic
         List<DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag);
 
         List<FlexProdOvlp> GetProductOVLPValidation(ProductOVLPValidation objProductOVLPValidation);
+
+        List<ProductSelectionResults> GetProductSelectorDtl(FilterProductSelector objFilterProductSelector);
     }
 }

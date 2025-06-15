@@ -793,6 +793,105 @@ static bulkPriceUpdateColumnData =  [
             width: 300,
         }
     ]
+    static ProductSelColHeaders = ["Processor Number", "Deal Product Name", "GDM Family Name", "Material Id", "Product Start Date", "Product End Date", "CAP Info", "YCS2", "CPU Processor number", "Media Code", "MM Customer Name", "EDW Family Name", "EPM Name", "SKU Name", "CPU CACHE","Is Active"];
+    static ProductSelReport = [
+        {
+            data: 'PCSR_NBR',
+            type: 'text',
+            readOnly: false,
+            width: 140
+        },
+        {
+            data: 'DEAL_PRD_NM',
+            type: 'text',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'FMLY_NM',
+            type: 'numeric',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'MTRL_ID',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'PRD_STRT_DTM',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'PRD_END_DTM',
+            type: 'numeric',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'CAP',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'YCS2',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'CPU_PROCESSOR_NUMBER',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'MM_MEDIA_CD',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'MM_CUST_CUSTOMER',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'GDM_FMLY_NM',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'EPM_NM',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'SKU_NM',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'CPU_CACHE',
+            type: 'text',
+            readOnly: false,
+            width: 75
+        },
+        {
+            data: 'actv_ind',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        },
+    ]
 
     static reportCustomerExcel = [
         {

@@ -697,5 +697,32 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _productsLib.GetProductOVLPValidation(objProductOVLPValidation)
             , $"Unable to check product overlap validation");
         }
+
+        /// <summary>
+        /// Get Product selection family details
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetProductSelectorFamilyDtl")]
+        public ProductSelectorWrapper GetProductSelectorFamilyDtl([FromBody] dynamic input)
+        {
+            return SafeExecutor(() => _productsLib.GetProductSelectorWrapper()
+                , $"Unable to get Product selection levels"
+            );
+        }
+
+        /// <summary>
+        /// Get Product selection levels
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetProductSelectorDtl")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public List<ProductSelectionResults> GetProductSelectorDtl(FilterProductSelector objFilterProductSelector)
+        {
+            return SafeExecutor(() => _productsLib.GetProductSelectorDtl(objFilterProductSelector)
+                , $"Unable to get product selection levels"
+            );
+        }
     }
 }

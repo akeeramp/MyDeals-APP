@@ -1387,6 +1387,15 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _productDataLib.GetProductOVLPValidation(objProductOVLPValidation);
         }
+
+        /// <summary>
+        /// Get ProductSelectionResults
+        /// </summary> 
+        /// <returns></returns>
+        public List<ProductSelectionResults> GetProductSelectorDtl(FilterProductSelector objFilterProductSelector)
+        {
+            return _productDataLib.GetProductSelectorDtl(objFilterProductSelector);
+        }
     }
 
     public class NodeMatch

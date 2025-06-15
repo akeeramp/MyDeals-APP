@@ -104,6 +104,21 @@ namespace Intel.MyDeals.Entities
         public System.String PROD_NAMES { set; get; }
     }
 
+    [DataContract]
+    public partial class FilterProductSelector
+    {
+        [DataMember]
+        public System.String CUST_ID { set; get; }
+        [DataMember]
+        public System.String FMLY_NM { set; get; }
+        [DataMember]
+        public System.Int32 PRD_ATRB_SID { set; get; }
+
+        [DataMember]
+        public System.String USER_SEARCH { set; get; }
+
+    }
+
     public class SearchString
     {
         /// <summary>

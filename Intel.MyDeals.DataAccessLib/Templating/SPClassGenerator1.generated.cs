@@ -7581,7 +7581,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         /// Modified: 7/13/2018 1:54:23 AM
         /// Parameters: 2
         ///</summary>
-        public partial class PR_MYDL_GET_PRD_CAT_MAP: SP
+        public partial class PR_MYDL_GET_PRD_CAT_MAP : SP
         {
             public PR_MYDL_GET_PRD_CAT_MAP()
             {
@@ -7610,7 +7610,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 set { SetParmeter("in_chg_dt", value); }
                 get { return (DateTime)GetParameter("in_chg_dt"); }
             }
-            
+
         }
 
         ///<summary>
@@ -21240,5 +21240,64 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 get { return (String)GetParameter("Sort"); }
             }
         }
+        ///<summary>
+        /// ID: 937770398
+        /// Modified: 1/31/2022 8:20:02 PM
+        /// Parameters: 10
+        ///</summary>
+        public partial class PR_MYDL_GET_PRD_SELECTOR_DTL : SP
+        {
+            public PR_MYDL_GET_PRD_SELECTOR_DTL()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_PRD_SELECTOR_DTL]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(100)
+            /// Mode: IN
+            /// Max Length: 100
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 100, false)]
+            public String CUST_ID
+            {
+                set { SetParmeter("CUST_ID", value); }
+                get { return (String)GetParameter("CUST_ID"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(100)
+            /// Mode: IN
+            /// Max Length: 100
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 100, false)]
+            public String FMLY_NM
+            {
+                set { SetParmeter("FMLY_NM", value); }
+                get { return (String)GetParameter("FMLY_NM"); }
+            }
+
+            ///<summary>
+            /// DataType: Int32
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Int32 PRD_ATRB_SID
+            {
+                set { SetParmeter("PRD_ATRB_SID", value); }
+                get { return (Int32)GetParameter("PRD_ATRB_SID"); }
+            }
+            ///<summary>
+            /// DataType: String
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public string USER_SEARCH
+            {
+                set { SetParmeter("USER_SEARCH", value); }
+                get { return (string)GetParameter("USER_SEARCH"); }
+            }
+        }
+
     }
 }

@@ -23,9 +23,9 @@ import { NgPipesModule } from 'ngx-pipes';
 import { AuthInterceptor } from '../../app/shared/authorization/auth.interceptor';
 //kendo components
 import { ChartsModule } from '@progress/kendo-angular-charts';
-import { GridModule } from '@progress/kendo-angular-grid';
+import { ExcelModule, GridModule } from '@progress/kendo-angular-grid';
 import { DialogModule, WindowModule } from '@progress/kendo-angular-dialog';
-import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
+import { DropDownListModule, DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import { InputsModule } from "@progress/kendo-angular-inputs";
 import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
 // Moment Injection
@@ -46,6 +46,7 @@ import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.c
 import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/globalSearch.component';
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingSpinner.component';
 import { POPUP_CONTAINER } from '@progress/kendo-angular-popup';
+import { ProductDetailsReportComponent } from '../../app/contract/productDetailsReport/productDetailsReport.component';
 import { SearchFilterModule } from '../shared/searchFilter.module';
 
 
@@ -65,6 +66,7 @@ import { SearchFilterModule } from '../shared/searchFilter.module';
         MatListModule,
         DialogModule,
         WindowModule,
+        DropDownListModule,
         DropDownsModule,
         InputsModule,
         GridModule,
@@ -73,6 +75,8 @@ import { SearchFilterModule } from '../shared/searchFilter.module';
         NgPipesModule,
         DragDropModule,
         ScrollingModule,
+        RouterModule.forRoot(routesReport, { useHash: true }),
+        ExcelModule,
         SearchFilterModule,
         RouterModule.forRoot(routesReport, { useHash: true })
     ],
@@ -96,13 +100,15 @@ import { SearchFilterModule } from '../shared/searchFilter.module';
     declarations: [
         AppRootComponent,
         ReportingComponent,
-        ReportUtilComponents
+        ReportUtilComponents,
+        ProductDetailsReportComponent
     ],
   
     entryComponents:[
         AppRootComponent,
         ReportingComponent,
-        ReportUtilComponents
+        ReportUtilComponents,
+        ProductDetailsReportComponent
     ],
 })
 

@@ -582,7 +582,28 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
                 Assert.IsNotNull(result);
             }
         }
-
+        private static readonly object[] getProductReportParams =
+        {
+            new object[] {
+                new FilterProductSelector()
+            }
+        };
+        [Test, TestCaseSource("getProductReportParams")]
+        public void GetProductSelectorDtl_ReturnsNotNull(dynamic objFilterProductSelector)
+        {
+            var mockData = new List<ProductSelectionResults>();
+            mockProductDataLib.Setup(x => x.GetProductSelectorDtl(It.IsAny<FilterProductSelector>())).Returns(mockData);
+            var res = new ProductsLib(mockProductDataLib.Object, mockDataCollectionsDataLib.Object, mockConstantsLookupsLib.Object).GetProductSelectorDtl(objFilterProductSelector);
+            Assert.IsNotNull(res);
+        }
+        [Test]
+        public void GetProductSelectorFamilyDtl_ShouldReturnNotNull()
+        {
+            var mockData = new ProductSelectorWrapper();
+            mockDataCollectionsDataLib.Setup(x => x.GetProductSelectorWrapper()).Returns(mockData);
+            var res = new ProductsLib(mockProductDataLib.Object, mockDataCollectionsDataLib.Object, mockConstantsLookupsLib.Object).GetProductSelectorWrapper();
+            Assert.IsNotNull(res);
+        }
         [Test]
         public void GetProductSelectorWrapper_ShouldReturnNotNull()
         {

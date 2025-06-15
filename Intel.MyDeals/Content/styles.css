@@ -331,3 +331,37 @@
     from { opacity: 0; }
     to   { opacity: 1; }
 }
+button.report-danger.btn.btn-danger, button.report-search.btn.btn-primary {
+    left: 30px !important;
+    position: relative !important;
+    top: 20px !important
+}
+div#rdobtn2 {
+    left: 15px !important;
+    position: relative !important;
+}
+div#rdobtn3 {
+    left: 30px !important;
+    position: relative !important;
+}
+.product-btn-report {
+    gap: 20px !important;
+    display: flex !important;
+}
+kendo-textbox#product_reportSearch {
+    float: right !important;
+    margin: -43px 125px 0px 0px !important;
+    padding-bottom: 0 !important;
+}
+
+.excel-btn-update-report {
+    font-family: 'Intel Clear' !important;
+    text-align: left !important;
+    color: #fff !important;
+    font-size: 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+   
+}
