@@ -16,8 +16,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<UnPrimeDeals> GetUnPrimeDeals();
 
-        List<UnPrimeDeals> GetUnPrimeDeals(int skip, int take, string sort, string inFilters);
-        List<UnPrimeDealsField> GetUnPrimeDealsFilterValue(string field);
+        List<UnPrimeDeals> GetUnPrimeDeals(UnPrimeDealsFilter data);
+
         List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry);
 
         bool UpdateUnPrimeDeals(int dealId, UnPrimeAtrbs endCustData, bool isUnificationMailRequired=true);

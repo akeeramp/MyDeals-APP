@@ -74,6 +74,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
     private filterData = "";
     private dataForFilter: object; 
     private totalCount = 0;
+    private Mode="Details"
 
     private state: State = {
         skip: 0,
@@ -110,11 +111,19 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
     }
 
     filterLoad(fieldName: string) {
-        let field = {value: fieldName}        
-        this.unifiedDealReconSvc.getFilterValue(field).subscribe(data => {
+        
+        this.dataForFilter = {
+            InFilters: fieldName,
+            Sort: this.sortData,
+            Skip: this.state.skip,
+            Take: this.state.take,
+            Mode: "List"
+        };
+                
+        this.unifiedDealReconSvc.getUnmappedPrimeCustomerDealsByFilter(this.dataForFilter).subscribe(data => {
             let allValues = data.map(val => {return val["value"]})
             let duplicateValueRemoved = allValues.filter((item, index) => allValues.indexOf(item) === index);
-            this.custData.set(field.value, duplicateValueRemoved)
+            this.custData.set(fieldName, duplicateValueRemoved)
         });
     }
 
@@ -141,7 +150,8 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
             InFilters: this.filterData,
             Sort: this.sortData,
             Skip: this.state.skip,
-            Take: this.state.take
+            Take: this.state.take,
+            Mode: this.Mode
         };
     }
 
@@ -340,7 +350,8 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
             InFilters: "",
             Sort: "",
             Skip: 0,
-            Take: this.totalCount
+            Take: this.totalCount,
+            mode:this.Mode
         };
         this.unifiedDealReconSvc.getUnmappedPrimeCustomerDealsByFilter(excelDataForFilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<UnPrimeDeals>) => {
             this.isLoading = false;

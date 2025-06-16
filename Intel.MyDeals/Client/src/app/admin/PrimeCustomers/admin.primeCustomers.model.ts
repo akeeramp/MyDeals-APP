@@ -35,6 +35,7 @@ export interface UnPrimeDeals {
     UNIFIED_STATUS: string;
     UNIFIED_REASON: string;
     TOTALCOUNT: number;
+    VALUE:String;
 }
 
 export interface PrimeCustomerDetails {

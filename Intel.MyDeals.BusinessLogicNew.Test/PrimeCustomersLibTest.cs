@@ -82,16 +82,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             Assert.IsNotNull(result);
         }
 
-        [Test]
-        public void GetUnPrimeDealsFilterValue_ShouldReturnNotNull()
-        {
-            var mockData = new List<UnPrimeDealsField>();
-            string field = "END_CUST_SID";
-            mockIPrimeCustomersDataLib.Setup(x => x.GetUnPrimeDealsFilterValue(field)).Returns(mockData);
-            var result = new PrimeCustomersLib(mockIPrimeCustomersDataLib.Object, mockIDataCollectionsDataLib.Object, mockIIntegrationLib.Object, mockIJmsDataLib.Object).GetUnPrimeDealsFilterValue(field);
-            Assert.IsNotNull(result);
-        }
-
+        
         [Test,
             TestCase("Lenovo", "India")]
         public void GetEndCustomerData_ShouldReturnNotNull(string endCustomerName, string endCustomerCountry)

@@ -73,7 +73,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<ProductCategory> GetProductCategoriesByPagination(string filter, string sort, int take, int skip)
         {
             var ret = new List<ProductCategory>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP_FILTER
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP_SSP
             {
 
                 skipRows = skip,
@@ -135,10 +135,10 @@ namespace Intel.MyDeals.DataLibrary
 
             {
                 var ret = new List<string>();
-                Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP_FILTER cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP_FILTER();
+                Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP_SSP cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP_SSP();
 
 
-                cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP_FILTER()
+                cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP_SSP()
                 {
                     skipRows = 0,
                     takeRows = 0,

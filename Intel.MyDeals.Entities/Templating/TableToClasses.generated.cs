@@ -8693,15 +8693,11 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.String InFilters { set; get; }
 
-    }
-
-    [DataContract]
-    public partial class UnPrimeDealsField
-    {
-
         [DataMember]
-        public System.String value { get; set; }
+        public System.String mode { set; get; }
+
     }
+ 
 
     ///<summary>
     /// Class created via template - Do Not Modify!
@@ -9878,6 +9874,8 @@ namespace Intel.MyDeals.Entities
 
         [DataMember]
         public System.Int32 TOTALCOUNT { set; get; }
+        [DataMember]
+        public System.String value { get; set; }
         /*
 		private static List<UnPrimeDeals> UnPrimeDealsFromReader(SqlDataReader rdr){
 		// This helper method is template generated.

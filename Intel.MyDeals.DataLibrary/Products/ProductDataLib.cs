@@ -134,7 +134,8 @@ namespace Intel.MyDeals.DataLibrary
         {
             OpLog.Log("GetProductsByFilter");
             var ret = new List<Product>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL_BY_FILTER {
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL_SSP
+            {
                 skipRows = objSearchParams.Skip,
                 takeRows = objSearchParams.Take,
                 Filter= objSearchParams.StrFilters,

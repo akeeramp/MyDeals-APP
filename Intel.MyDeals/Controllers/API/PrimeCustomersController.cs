@@ -89,16 +89,10 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetUnPrimeDealsByFilter")]
         public IEnumerable<UnPrimeDeals> GetUnPrimeDealsByFilter([FromBody] UnPrimeDealsFilter data)
         {
-            return SafeExecutor(() => _primeCustomersLib.GetUnPrimeDeals(data.Skip, data.Take, data.Sort, data.InFilters), "Unable to get deals");
+            return SafeExecutor(() => _primeCustomersLib.GetUnPrimeDeals(data), "Unable to get deals");
         }
 
-        [Authorize]
-        [HttpPost]
-        [Route("GetUnPrimeDealsFilterValue")]
-        public List<UnPrimeDealsField> GetUnPrimeDealsFilterValue([FromBody] UnPrimeDealsField data)
-        {
-            return SafeExecutor(() => _primeCustomersLib.GetUnPrimeDealsFilterValue(data.value), "Unable to get deals");
-        }
+      
 
         [Authorize]
         [HttpPost]

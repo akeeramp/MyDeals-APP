@@ -126,15 +126,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _primeCustomersDataLib.GetUnPrimeDeals();
         }
-        public List<UnPrimeDeals> GetUnPrimeDeals(int skip, int take, string sort, string inFilters)
+        public List<UnPrimeDeals> GetUnPrimeDeals(UnPrimeDealsFilter data)
         {
-            return _primeCustomersDataLib.GetUnPrimeDeals(skip, take, sort, inFilters);
+            return _primeCustomersDataLib.GetUnPrimeDeals(data);
         }
 
-        public List<UnPrimeDealsField> GetUnPrimeDealsFilterValue(string field)
-        {
-            return _primeCustomersDataLib.GetUnPrimeDealsFilterValue(field);
-        }
 
         public List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry)
         {
