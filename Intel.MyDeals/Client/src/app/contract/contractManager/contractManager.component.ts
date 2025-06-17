@@ -600,7 +600,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         if (this.contractData.PRC_ST !== undefined) {
             this.contractData.PRC_ST.map((x) => {
                 if (this.hasVertical(x)) {
-                    if (checkBoxType == "Approve" && this.canAction('Approve', x, false) && this.canAction('Approve', x, true) && this.canActionIcon) {
+                    if (checkBoxType == "Approve" && x.WF_STG_CD !== 'Pending' && this.canAction('Approve', x, false) && this.canAction('Approve', x, true) && this.canActionIcon) {
                         this.apprvCheck[x.DC_ID] = isItemChecked ? true : false;
                         this.approveCheckBox = true;
                         this.reviseCheckBox = false;
