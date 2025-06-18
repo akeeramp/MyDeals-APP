@@ -25,11 +25,13 @@ namespace Intel.MyDeals.BusinessLogic
         private readonly IPrimeCustomersDataLib _primeCustomerLib;
         private readonly IConstantsLookupsLib _constantsLookupsLib;
         private readonly IDataFixDataLib _dataFixDataLib;
+        private readonly IEmployeesLib _employeesLib;
         //private readonly IPrimeCustomersLib _primeCustomersLib;
         private List<int> UserTokenErrorCodes = new List<int> { 704, 705 }; // Known abort messages for User Token Security
+        private ManageUsersInfo usrProfile;
 
         public IntegrationLib(IJmsDataLib jmsDataLib, IOpDataCollectorLib dataCollectorLib, IPrimeCustomersDataLib primeCustomerLib,
-            IConstantsLookupsLib constantsLookupsLib, IDataFixDataLib dataFixDataLib
+            IConstantsLookupsLib constantsLookupsLib, IDataFixDataLib dataFixDataLib , IEmployeesLib employeesLib
             //, IPrimeCustomersLib primeCustomersLib
             )
         {
@@ -38,6 +40,7 @@ namespace Intel.MyDeals.BusinessLogic
             _primeCustomerLib = primeCustomerLib;
             _constantsLookupsLib = constantsLookupsLib;
             _dataFixDataLib = dataFixDataLib;
+            _employeesLib = employeesLib;
             //_primeCustomersLib = primeCustomersLib;
         }
 
@@ -121,12 +124,12 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
             //Krishna - This code is commented as part of optimizing the process of IQR deals on the go..
-            //this change is  only for testing in CONS for now... based on the testing result we will take a call to procced/Revert the change 
+            //this change is  only for testing in CONS for now... based on the testing result we will take a call to procced / Revert the change
             //var result = _jmsDataLib.CheckProcessedIQRDeals(firstInListGuid, true);
             //if (result)
-            //{
-            //    TestAsyncProcess(firstInListGuid);
-            //}
+            //        {
+            //            TestAsyncProcess(firstInListGuid);
+            //        }
 
             return firstInListGuid;
         }
@@ -1227,7 +1230,6 @@ namespace Intel.MyDeals.BusinessLogic
                 workRecordDataFields, currentRec);
 
             // TODO: POTENTIALLY PLACE APRV_AUDIT CALL HERE
-
             return wipDealId;
         }
 
@@ -1277,9 +1279,22 @@ namespace Intel.MyDeals.BusinessLogic
         private void IQR_AutoApprovedPriceRule(TenderTransferRootObject workRecordDataFields, MyDealsData myDealsData ,int dealId, int currentRec)
         {
             string iqrapprovedByInfo = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedByInfo == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedByInfo;
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IQR_AUTO_APPROVE_RULE_INFO), iqrapprovedByInfo);
-            workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedByInfo = null;
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].AddTimelineComment("Deal is approved by IQR Price rule # : " + iqrapprovedByInfo);
+            if (iqrapprovedByInfo != "")
+            {
+                string geoapproved = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Wwid;
+                UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IQR_AUTO_APPROVE_RULE_INFO), iqrapprovedByInfo);
+                if (usrProfile != null)
+                {
+                    if(usrProfile.EMP_WWID.ToString() == workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Wwid)
+                    {
+                        geoapproved = usrProfile.FRST_NM +" "+ usrProfile.LST_NM;
+                    }
+
+                }
+                string priceRuleDetails= "Deal is approved using IQR Price Rule# : " + iqrapprovedByInfo + " ; Price Rule Owner: " + geoapproved;
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].AddTimelineComment(priceRuleDetails);
+               
+            }
         }
 
         private bool containsError(IEnumerable<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> errList, List<int> checkForValues)
@@ -1396,6 +1411,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // Should have no bail outs, so post final messages here
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedByInfo = null;
                 fullPackageResponse += executionResponse + "<br><br>";
             } // End of quote lines loop
 
@@ -1446,7 +1462,6 @@ namespace Intel.MyDeals.BusinessLogic
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..  We had error on lookup, skip to next to process
             }
-            IQR_AutoApprovedPriceRule(workRecordDataFields, myDealsData, dealId, recordId);
             int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
             //var currentWipWfStg = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
             var currentWippsWfStg = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PS_WF_STG_CD);            
@@ -1540,6 +1555,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // Start Delete Request Action for the current quoteline item
                 executionResponse += ProcessDeleteRequest(workRecordDataFields, batchId, i, ref dealId);
+                workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedByInfo = null;
                 fullPackageResponse += executionResponse + "<br><br>";
             }
 
@@ -1623,7 +1639,6 @@ namespace Intel.MyDeals.BusinessLogic
                 workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(751, "Delete Error: Deal not deleted", "Deal not deleted"));
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
             }
-
             return executionResponse;
         }
 
@@ -2050,8 +2065,7 @@ namespace Intel.MyDeals.BusinessLogic
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[recordId].ApprovedQuantity;  // CEILING_VOLUME
             string payableQuantity = workRecordDataFields.recordDetails.quote.quoteLine[recordId].PayableQuantity;
             //added by mirza
-
-            IQR_AutoApprovedPriceRule(workRecordDataFields, myDealsData, dealId, recordId);
+            
             
             // Payable Quantity - Overwrite w/ Ceiling Volume if (PQ > CV) or (PQ == NULL)
             MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
@@ -2110,7 +2124,8 @@ namespace Intel.MyDeals.BusinessLogic
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
-            
+            IQR_AutoApprovedPriceRule(workRecordDataFields, myDealsData, dealId, recordId);
+
             // Start the save process - No errors, use MyDealsData Packets saving methods here as opposed to the flattened dictionary method used during create.
             ContractToken saveContractToken = new ContractToken("ContractToken Created - Save IRQ Deal Updates")
             {
@@ -2160,7 +2175,6 @@ namespace Intel.MyDeals.BusinessLogic
                 string stage = wipWfStage == WorkFlowStages.Draft ? psWfStage : wipWfStage;
 
                 workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQStatus = stage;
-
                 executionResponse += "Deal " + dealId + " - Save completed<br>";
 
                 return executionResponse;
@@ -2186,7 +2200,8 @@ namespace Intel.MyDeals.BusinessLogic
                 }
 
                 // Start Update Request Action for the current quoteline item
-                fullPackageResponse += ProcessUpdateRequest(workRecordDataFields, batchId, i, false, ref dealId) + "<br><br>"; ;
+                fullPackageResponse += ProcessUpdateRequest(workRecordDataFields, batchId, i, false, ref dealId) + "<br><br>";
+                workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedByInfo = null;
             }
 
             return fullPackageResponse;
@@ -2438,7 +2453,7 @@ namespace Intel.MyDeals.BusinessLogic
                 // In this case, I am just blindly setting the response stage since the save completed
 
                 workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQStatus = destinationStage;
-
+                workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedByInfo = null;
                 executionResponse += "Deal " + dealId + " - Stage Update completed<br>";
                 fullPackageResponse += executionResponse + "<br><br>";
             }
@@ -2478,7 +2493,8 @@ namespace Intel.MyDeals.BusinessLogic
 
                 Guid batchId = workRecord.BtchId;
                 int dealId = -1;
-
+                var wwid =int.Parse( workRecordDataFields.recordDetails.quote.quoteLine.FirstOrDefault().Wwid);
+                usrProfile =_employeesLib.GetManageUserData(wwid).FirstOrDefault();
                 if (goodOperationFlag)
                 {
                     switch (requestType)

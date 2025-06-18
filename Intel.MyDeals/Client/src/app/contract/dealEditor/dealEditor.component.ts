@@ -268,7 +268,10 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             this.wipTemplate = this.UItemplate["ModelTemplates"]["WIP_DEAL"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
             if (this.in_Is_Tender_Dashboard) {
                 //For removing filters in IS_RPL and MISSING_CAP_COST_INFO in tender dashboard
-                this.wipTemplate.columns.forEach(item => {
+                this.wipTemplate.columns.forEach((item,i )=> {
+                    if(item.field == "IQR_AUTO_APPROVE_RULE_INFO"){
+                        this.wipTemplate.columns.splice(i,1);
+                    }
                     if (item.field == "IS_RPL" || item.field == "MISSING_CAP_COST_INFO") {
                         item.filterable = false;
                         item.sortable = false;

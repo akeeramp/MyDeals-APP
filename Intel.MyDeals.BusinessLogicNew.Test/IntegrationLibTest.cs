@@ -20,7 +20,8 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         public Mock<IPrimeCustomersDataLib> mockPrimeCustomerLib = new Mock<IPrimeCustomersDataLib>();
         public Mock<IProductDataLib> mockProductDataLib = new Mock<IProductDataLib>();
         public Mock<IConstantsLookupsLib> mockConstantsLookupsLib = new Mock<IConstantsLookupsLib>();
-        public Mock<IDataFixDataLib> mockDataFixDataLib = new Mock<IDataFixDataLib>();        
+        public Mock<IDataFixDataLib> mockDataFixDataLib = new Mock<IDataFixDataLib>();
+        public Mock<IEmployeesLib> mockEmployee = new Mock<IEmployeesLib>();
 
 
         private static readonly object[] _IqrFetchCapData_TenderCapRequestObject_Params =
@@ -69,7 +70,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             TestCase("Demo_Xid")]
         public void ReTriggerMuleSoftByXid_ReturnsString_ContainingFailedKeyword_AndXidInputString(string xid)
         {
-            var res = new IntegrationLib(mockJmsDataLib.Object,mockDataCollectorLib.Object,mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object,mockDataFixDataLib.Object).ReTriggerMuleSoftByXid(xid);
+            var res = new IntegrationLib(mockJmsDataLib.Object,mockDataCollectorLib.Object,mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object,mockDataFixDataLib.Object, mockEmployee.Object).ReTriggerMuleSoftByXid(xid);
             Assert.That(res.Contains(xid));
             Assert.That(res.Contains("FAILED"));
         }
@@ -83,12 +84,12 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             if (TenderCapRequestObject_input.CustomerMappingId == "")
             {
                 mockJmsDataLib.Setup(x=>x.FetchCustFromCustomerMappingId(It.IsAny<string>())).Returns(2);
-                res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).IqrFetchCapData(TenderCapRequestObject_input);
+                res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object, mockEmployee.Object).IqrFetchCapData(TenderCapRequestObject_input);
             }
             else
             {
                 mockJmsDataLib.Setup(x => x.FetchCustFromCustomerMappingId(It.IsAny<string>())).Returns(0);
-                res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).IqrFetchCapData(TenderCapRequestObject_input);
+                res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object, mockEmployee.Object).IqrFetchCapData(TenderCapRequestObject_input);
             }
             Assert.AreEqual(res, "ERROR: Failed on Customer Mapping Id Lookup");
         }
@@ -109,7 +110,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             var mockData = FetchProdFromProcessorEpmMap_getMockData(type);
             mockJmsDataLib.Setup(x => x.FetchCustFromCustomerMappingId(It.IsAny<string>())).Returns(2);
             mockJmsDataLib.Setup(x=>x.FetchProdFromProcessorEpmMap(It.IsAny<int>(),It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(mockData);
-            var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).IqrFetchCapData(TenderCapRequestObject_input);
+            var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object, mockEmployee.Object).IqrFetchCapData(TenderCapRequestObject_input);
             Assert.AreEqual(res, "ERROR: Failed on EPM ID Lookup");
         }
 
@@ -123,10 +124,10 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             mockJmsDataLib.Setup(x => x.FetchProdFromProcessorEpmMap(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(mockData);
             if(TenderCapRequestObject_input.RangeStartDate == null || TenderCapRequestObject_input.RangeEndDate == null)
             {
-                Assert.Throws<ArgumentNullException>(() => new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).IqrFetchCapData(TenderCapRequestObject_input));
+                Assert.Throws<ArgumentNullException>(() => new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object, mockEmployee.Object).IqrFetchCapData(TenderCapRequestObject_input));
             }else if(TenderCapRequestObject_input.RangeStartDate == "" || TenderCapRequestObject_input.RangeEndDate == "")
             {
-                Assert.Throws<FormatException>(() => new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).IqrFetchCapData(TenderCapRequestObject_input));
+                Assert.Throws<FormatException>(() => new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object, mockEmployee.Object).IqrFetchCapData(TenderCapRequestObject_input));
             }
         }
 
@@ -178,7 +179,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             mockJmsDataLib.Setup(x => x.FetchTendersStagedData(It.IsAny<string>(), It.IsAny<Guid>())).Returns(mockData);
             mockJmsDataLib.Setup(x => x.PublishBackToSfTenders(It.IsAny<string>())).Returns(true);
             mockJmsDataLib.Setup(x => x.UpdateTendersStage(It.IsAny<Guid>(),It.IsAny<string>(),It.IsAny<List<int>>())).Verifiable();
-            var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).ReturnSalesForceTenderResults();
+            var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object, mockEmployee.Object).ReturnSalesForceTenderResults();
             mockJmsDataLib.Verify();
             Assert.That(res.Contains("successfully returned"));
         }
@@ -190,7 +191,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         {
             if(retStatus == "SUCCESS")
             {
-                var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).MuleSoftReturnTenderStatus(xid, retStatus);
+                var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object, mockEmployee.Object).MuleSoftReturnTenderStatus(xid, retStatus);
                 Assert.That(res.Contains($"{xid}"));
             }
             else
@@ -198,7 +199,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
                 var mockData = new TenderXidObject { btchGuid = Guid.Empty,dealId = 1234};
                 mockJmsDataLib.Setup(x=>x.FetchTendersReturnByXid(It.IsAny<string>())).Returns(mockData);
                 mockJmsDataLib.Setup(x => x.UpdateTendersStage(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<List<int>>())).Verifiable();
-                var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).MuleSoftReturnTenderStatus(xid, retStatus);
+                var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object, mockEmployee.Object).MuleSoftReturnTenderStatus(xid, retStatus);
                 mockJmsDataLib.Verify();
                 string batchString = mockData.btchGuid.ToString();
                 Assert.That(res.Contains(batchString));
@@ -218,7 +219,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             {
                 mockJmsDataLib.Setup(x => x.UpdateTendersStage(It.IsAny<Guid>(), It.Is<string>(r => r == "PO_Error_Resend"), It.IsAny<List<int>>())).Verifiable();
             }
-            var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).MuleSoftReturnTenderStatusByGuid(btchId,retStatus,dealId );
+            var res = new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object, mockEmployee.Object).MuleSoftReturnTenderStatusByGuid(btchId,retStatus,dealId );
             mockJmsDataLib.Verify();
             string batchString = btchId.ToString();
             Assert.That(res.Contains(batchString));
@@ -232,7 +233,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             mockJmsDataLib.Setup(x=>x.SaveTendersDataToStage(It.Is<string>(r=> r == "TENDER_DEALS_RESPONSE"),It.IsAny<List<int>>(),It.IsAny<string>())).Returns(Guid.NewGuid());
             mockJmsDataLib.Setup(x => x.PublishBackToSfTenders(It.IsAny<string>())).Returns(true);
             mockJmsDataLib.Setup(x => x.UpdateTendersStage(It.IsAny<Guid>(), It.Is<string>(r=> r == "PO_Processing_Complete"), It.IsAny<List<int>>())).Verifiable();
-            new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object).UpdateUnifiedEndCustomer(CntrctId,saleForceId,primeCustomerName,primeCustomerCountry);
+            new IntegrationLib(mockJmsDataLib.Object, mockDataCollectorLib.Object, mockPrimeCustomerLib.Object, mockConstantsLookupsLib.Object, mockDataFixDataLib.Object, mockEmployee.Object).UpdateUnifiedEndCustomer(CntrctId,saleForceId,primeCustomerName,primeCustomerCountry);
             mockJmsDataLib.Verify();
         }
 
