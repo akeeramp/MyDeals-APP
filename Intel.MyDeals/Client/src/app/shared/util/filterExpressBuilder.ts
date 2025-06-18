@@ -39,7 +39,18 @@ export class FilterExpressBuilder {
                     const subComposite = Object.assign(new CompositeFilterDescriptor("", []), item);
                     if (subComposite) {
                         if (subComposite.logic == 'or' && Array.isArray(subComposite.filters) && subComposite.filters.length > 0) {
-                            const values = subComposite.filters.map(val => `'${val.value}'`).join(", ");
+                            const values = subComposite.filters.map(val => {
+                                if(val.value) {
+                                    let originalVal = val.value;
+                                    const hasSingleQuote = originalVal.includes("'");
+                                    if(!hasSingleQuote) {
+                                        return `'${val.value}'`
+                                    } else {
+                                        let originalValQuotes = originalVal.replace(/'/g, "''");
+                                        return `'${originalValQuotes}'`
+                                    }
+                                }
+                            }).join(", ");
                             const field = subComposite.filters[0].field;
                             conditions.push(`${field} IN (${values})`);
                         }
