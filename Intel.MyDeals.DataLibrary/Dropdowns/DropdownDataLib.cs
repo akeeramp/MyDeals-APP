@@ -28,9 +28,9 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip)
+        public DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip, bool FthCnt)
         {
-            DropdownDetails ret = ExecuteManageBasicDropdownSP(filter, sort, take, skip);
+            DropdownDetails ret = ExecuteManageBasicDropdownSP(filter, sort, take, skip, FthCnt);
             return ret;
         }
 
@@ -174,11 +174,12 @@ namespace Intel.MyDeals.DataLibrary
         public List<BasicDropdown> ExecuteManageBasicDropdownSP(BasicDropdown dropdown, CrudModes type)
         {
             var ret = new List<BasicDropdown>();
-            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS();
+            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP();
 
             if (type.Equals(CrudModes.Select))
             {
-                cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
+                //used when loading all the data for caching
+                cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
                 {
                     MODE = type.ToString(),
                     ATRB_SID = 0,
@@ -187,12 +188,15 @@ namespace Intel.MyDeals.DataLibrary
                     ATRB_VAL_TXT = "",
                     ATRB_LKUP_DESC = "",
                     ATRB_LKUP_TTIP = "",
-                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID
+                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    TAKE = -1,
+                    FTHCNT = false
                 };
             }
             else
             {
-                cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
+                //used in update/insert
+                cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
                 {
                     LK_UP_SID = dropdown.ATRB_LKUP_SID,
                     MODE = type.ToString(),
@@ -264,19 +268,28 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        private DropdownDetails ExecuteManageBasicDropdownSP(string filter, string sort, int take, int skip)
+        //for select in ui dropdown page
+        private DropdownDetails ExecuteManageBasicDropdownSP(string filter, string sort, int take, int skip, bool FthCnt)
         {
             var ret = new List<BasicDropdown>();
             int RowCount = 0;
-            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP();
+            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP();
 
-            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP()
+            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
             {
+                ATRB_SID = 0,
+                OBJ_SET_TYPE_SID = 0,
+                CUST_MBR_SID = 0,
+                ATRB_VAL_TXT = "",
+                ATRB_LKUP_DESC = "",
+                ATRB_LKUP_TTIP = "",
+                EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                 MODE = "SELECT",
                 FILTER = filter,
                 SORT = sort,
                 TAKE = take,
                 SKIP = skip,
+                FTHCNT = FthCnt
             };
 
             try
@@ -284,14 +297,9 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
 
-                    int TOTAL_ROWS = DB.GetReaderOrdinal(rdr, "TOTAL_ROWS");
-                    rdr.Read();
-                    if (TOTAL_ROWS >= 0 && !rdr.IsDBNull(TOTAL_ROWS))
-                    {
-                        RowCount = rdr.GetFieldValue<System.Int32>(TOTAL_ROWS);
-                    }
+                    
 
-                    rdr.NextResult();
+                    rdr.Read();
 
                     int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
                     int IDX_ATRB_CD = DB.GetReaderOrdinal(rdr, "ATRB_CD");
@@ -330,6 +338,11 @@ namespace Intel.MyDeals.DataLibrary
                             CHK_VALUE = (IDX_CHK_VALUE < 0 || rdr.IsDBNull(IDX_CHK_VALUE)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHK_VALUE)
                         });
                     }
+                    if (rdr.NextResult() && rdr.Read())
+                    {
+                        //only count is send back in the next call
+                        RowCount = rdr.GetFieldValue<System.Int32>(0);
+                    }
                 }
             }
             catch (Exception ex)
@@ -343,11 +356,18 @@ namespace Intel.MyDeals.DataLibrary
         private List<string> ExecuteManageBasicDropdownFilterDataSP(string filterName)
         {
             var ret = new List<string>();
-            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP();
+            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP();
 
-            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP()
+            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
             {
                 MODE = "FILTERDATA",
+                ATRB_SID = 0,
+                OBJ_SET_TYPE_SID = 0,
+                CUST_MBR_SID = 0,
+                ATRB_VAL_TXT = "",
+                ATRB_LKUP_DESC = "",
+                ATRB_LKUP_TTIP = "",
+                EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                 FILTER_NAME = filterName
             };
 

@@ -1053,6 +1053,50 @@ export class GridUtil {
         });
     }
 
+    static dsToExcelDropDownData(data, response, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        for (var t = 0; t < data.length; t++) {
+            rows[0].cells.push({
+                value: data[t].data,
+                type: data[t].type,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true,
+                width: data[t].width
+            });
+            colWidths.push({ width: data[t].width });
+        }
+        for (let i = 0; i < response.length; i++) {
+            rows.push({
+                cells: [
+                    { value: response[i]["ACTV_IND"], wrap: true },
+                    { value: response[i]["OBJ_SET_TYPE_CD"], wrap: true },
+                    { value: response[i]["ATRB_CD"], wrap: true },
+                    { value: response[i]["CUST_NM"], wrap: true },
+                    { value: response[i]["DROP_DOWN"], wrap: true },
+                    { value: response[i]["ATRB_LKUP_DESC"], wrap: true },
+                    { value: response[i]["ATRB_LKUP_TTIP"], wrap: true }
+                ]
+            })
+        }
+        const sheets = [
+            {
+                columns: colWidths,
+                title: fileName,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
+
     static dsToExcelProductsData(data, response, fileName) {
         const rows = [{ cells: [] }];
         const colWidths = [];

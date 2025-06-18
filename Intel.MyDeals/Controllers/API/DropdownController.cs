@@ -42,7 +42,7 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public DropdownDetails GetBasicDropdowns([FromBody] DropdownFilters data)
         {
-            return SafeExecutor(() => _dropdownLib.GetBasicDropdowns(data.InFilters, data.Sort, data.Take, data.Skip)
+            return SafeExecutor(() => _dropdownLib.GetBasicDropdowns(data.InFilters, data.Sort, data.Take, data.Skip, data.FthCnt)
                 , $"Unable to get Basic Dropdowns"
             );
         }

@@ -105,10 +105,10 @@ namespace Intel.MyDeals.DataLibrary
         public List<BasicDropdown> ExecuteManageCustomerVendorsSP(BasicDropdown data, CrudModes type)
         {
             var ret = new List<BasicDropdown>();
-            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS();
+            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP();
 
-
-            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
+            //TAKE -1 added to fetch all data, since the proc is optimized for Server side pagination
+            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
             {
                 LK_UP_SID = data.ATRB_LKUP_SID,
                 MODE = type.ToString(),
@@ -119,7 +119,8 @@ namespace Intel.MyDeals.DataLibrary
                 ATRB_LKUP_DESC = data.ATRB_LKUP_DESC,
                 ATRB_LKUP_TTIP = data.ATRB_LKUP_TTIP,
                 ACTV_IND = data.ACTV_IND,
-                EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID
+                EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                TAKE = -1
             };
 
             try

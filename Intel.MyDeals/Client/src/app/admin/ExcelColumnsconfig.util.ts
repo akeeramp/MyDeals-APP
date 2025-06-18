@@ -1145,5 +1145,50 @@ static bulkPriceUpdateColumnData =  [
             width: 100
         }   
     ]
+
+    static GetDropDownExcelCalDef = [
+        {
+            data: 'Is Active',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'Deal Type',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'Group',
+            type: 'text',
+            readOnly: false,
+            width: 200
+        },
+        {
+            data: 'Customer',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'Value',
+            type: 'text',
+            readOnly: false,
+            width: 200
+        },
+        {
+            data: 'Description',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+        {
+            data: 'Tooltip',
+            type: 'text',
+            readOnly: false,
+            width: 100
+        },
+    ]
     
 }

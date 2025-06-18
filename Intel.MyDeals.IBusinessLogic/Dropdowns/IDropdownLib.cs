@@ -7,7 +7,7 @@ namespace Intel.MyDeals.IBusinessLogic
 	public interface IDropdownLib
 	{
         List<BasicDropdown> GetBasicDropdowns();
-        DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip);
+        DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip, bool FthCnt);
         List<string> GetBasicDropdownsFilterData(string filterName);
         List<DropDowns> GetOpDataElements();
 

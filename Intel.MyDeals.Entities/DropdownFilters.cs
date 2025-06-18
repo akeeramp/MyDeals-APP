@@ -8,5 +8,7 @@ namespace Intel.MyDeals.Entities
         public string Sort { get; set; }
         public int Take { get; set; }
         public int Skip { get; set; }
+
+        public bool FthCnt { get; set; }
     }
 }

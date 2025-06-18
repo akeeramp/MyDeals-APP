@@ -38,7 +38,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<ProductAlias> GetProductsFromAlias();
 
         List<BasicDropdown> GetBasicDropdowns();
-        DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip);
+        DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip, bool FthCnt);
         List<string> GetBasicDropdownsFilterData(string filterName);
         List<DictDropDown> GetDictDropDown(string atrbCd);
 

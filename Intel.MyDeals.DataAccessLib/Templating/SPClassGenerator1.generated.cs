@@ -10136,12 +10136,23 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         /// Modified: 2025-04-16 10:57:35 AM
         /// Parameters: 6
         ///</summary>
-        public partial class PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP : SP
+        public partial class PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP : SP
         {
-            public PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP()
+            public PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
             {
                 DatabaseName = "MyDeals";
-                StoredProdedureName = "[dbo].[PR_MYDL_MANAGE_BASIC_DROPDOWNS_SELECT_SSP]";
+                StoredProdedureName = "[dbo].[PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP]";
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 LK_UP_SID
+            {
+                set { SetParmeter("LK_UP_SID", value); }
+                get { return (Int32)GetParameter("LK_UP_SID"); }
             }
 
             ///<summary>
@@ -10149,7 +10160,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// Mode: IN
             /// Max Length: 20
             ///</summary>
-            [SQLParameterAttribute(1, "ParameterDirection.Input", 20, false)]
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 20, false)]
             public String MODE
             {
                 set { SetParmeter("MODE", value); }
@@ -10157,10 +10168,101 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
 
             ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Int32 ATRB_SID
+            {
+                set { SetParmeter("ATRB_SID", value); }
+                get { return (Int32)GetParameter("ATRB_SID"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public Int32 OBJ_SET_TYPE_SID
+            {
+                set { SetParmeter("OBJ_SET_TYPE_SID", value); }
+                get { return (Int32)GetParameter("OBJ_SET_TYPE_SID"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+            public Int32 CUST_MBR_SID
+            {
+                set { SetParmeter("CUST_MBR_SID", value); }
+                get { return (Int32)GetParameter("CUST_MBR_SID"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(8000)
+            /// Mode: IN
+            /// Max Length: 8000
+            ///</summary>
+            [SQLParameterAttribute(6, "ParameterDirection.Input", 8000, false)]
+            public String ATRB_VAL_TXT
+            {
+                set { SetParmeter("ATRB_VAL_TXT", value); }
+                get { return (String)GetParameter("ATRB_VAL_TXT"); }
+            }
+
+            ///<summary>
+            /// DataType: nvarchar(510)
+            /// Mode: IN
+            /// Max Length: 510
+            ///</summary>
+            [SQLParameterAttribute(7, "ParameterDirection.Input", 510, false)]
+            public String ATRB_LKUP_DESC
+            {
+                set { SetParmeter("ATRB_LKUP_DESC", value); }
+                get { return (String)GetParameter("ATRB_LKUP_DESC"); }
+            }
+
+            ///<summary>
+            /// DataType: nvarchar(510)
+            /// Mode: IN
+            /// Max Length: 510
+            ///</summary>
+            [SQLParameterAttribute(8, "ParameterDirection.Input", 510, false)]
+            public String ATRB_LKUP_TTIP
+            {
+                set { SetParmeter("ATRB_LKUP_TTIP", value); }
+                get { return (String)GetParameter("ATRB_LKUP_TTIP"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(9, "ParameterDirection.Input", 0, false)]
+            public Boolean ACTV_IND
+            {
+                set { SetParmeter("ACTV_IND", value); }
+                get { return (Boolean)GetParameter("ACTV_IND"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(10, "ParameterDirection.Input", 0, false)]
+            public Int32 EMP_WWID
+            {
+                set { SetParmeter("EMP_WWID", value); }
+                get { return (Int32)GetParameter("EMP_WWID"); }
+            }
+
+            ///<summary>
             /// DataType: varchar
             /// Mode: IN
             ///</summary>
-            [SQLParameterAttribute(2, "ParameterDirection.Input", -1, false)]
+            [SQLParameterAttribute(11, "ParameterDirection.Input", -1, false)]
             public String FILTER_NAME
             {
                 set { SetParmeter("FILTER_NAME", value); }
@@ -10171,7 +10273,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// DataType: varchar
             /// Mode: IN
             ///</summary>
-            [SQLParameterAttribute(3, "ParameterDirection.Input", -1, false)]
+            [SQLParameterAttribute(12, "ParameterDirection.Input", -1, false)]
             public String FILTER
             {
                 set { SetParmeter("FILTER", value); }
@@ -10182,7 +10284,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// DataType: varchar
             /// Mode: IN
             ///</summary>
-            [SQLParameterAttribute(4, "ParameterDirection.Input", -1, false)]
+            [SQLParameterAttribute(13, "ParameterDirection.Input", -1, false)]
             public String SORT
             {
                 set { SetParmeter("SORT", value); }
@@ -10193,7 +10295,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// DataType: int
             /// Mode: IN
             ///</summary>
-            [SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+            [SQLParameterAttribute(14, "ParameterDirection.Input", 0, false)]
             public Int32 TAKE
             {
                 set { SetParmeter("TAKE", value); }
@@ -10204,11 +10306,22 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// DataType: int
             /// Mode: IN
             ///</summary>
-            [SQLParameterAttribute(6, "ParameterDirection.Input", 0, false)]
+            [SQLParameterAttribute(15, "ParameterDirection.Input", 0, false)]
             public Int32 SKIP
             {
                 set { SetParmeter("SKIP", value); }
                 get { return (Int32)GetParameter("SKIP"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(15, "ParameterDirection.Input", 0, false)]
+            public bool FTHCNT
+            {
+                set { SetParmeter("FTHCNT", value); }
+                get { return (bool)GetParameter("FTHCNT"); }
             }
         }
 
