@@ -1190,5 +1190,68 @@ static bulkPriceUpdateColumnData =  [
             width: 100
         },
     ]
+
+    static GetUsrRolePermissionExcel = [
+        {
+            data: 'Database Name',
+            type: 'text',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'User Name',
+            type: 'text',
+            readOnly: false,
+            width: 300
+        },
+        {
+            data: 'User Type',
+            type: 'text',
+            readOnly: false,
+            width: 300
+        },
+        {
+            data: 'Database User Name',
+            type: 'text',
+            readOnly: false,
+            width: 500
+        },
+        {
+            data: 'Role',
+            type: 'text',
+            readOnly: false,
+            width: 200
+        },
+        {
+            data: 'Permission Type',
+            type: 'text',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'Permission State',
+            type: 'text',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'Object Type',
+            type: 'text',
+            readOnly: false,
+            width: 300
+        },
+        {
+            data: 'Object Name',
+            type: 'text',
+            readOnly: false,
+            width: 300
+        },
+        {
+            data: 'Row Refresh Date',
+            type: 'text',
+            readOnly: false,
+            width: 150
+        }
+    ]
     
 }

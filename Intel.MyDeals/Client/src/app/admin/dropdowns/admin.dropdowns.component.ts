@@ -115,6 +115,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
 
     public filterChange(filter: CompositeFilterDescriptor): void {
         this.state.filter = filter;
+        this.state.skip = 0;
         this.loadCount = true;
         this.loadUiDropdown();
     }
@@ -253,7 +254,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         if (this.state.sort) {
             this.state.sort.forEach((value, ind) => {
                 if (value.dir) {
-                    this.sortData = ind == 0 ? `ORDER BY ${value.field} ${value.dir}` : `${this.sortData} , ${value.field} ${value.dir}`;
+                    this.sortData = ind == 0 ? `ORDER BY lkup.${value.field} ${value.dir}` : `${this.sortData} , lkup.${value.field} ${value.dir}`;
                 }
             });
         }
@@ -554,24 +555,26 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
 
     //UI button click : Starts
     clearFilter() {
-        this.state.skip = 0;
-        this.state.take = 25;
         this.loadCount = true;
-        this.state.filter = {
-            logic: "and",
-            filters: [],
+        this.state = {
+            skip: 0,
+            take: 25,
+            filter: this.state.filter,
+            sort: this.state.sort
         };
         this.loadUiDropdown();
     }
 
     refreshGrid() {
         this.isLoading = true;
-        this.state.skip = 0;
-        this.state.take = 25;
         this.loadCount = true;
-        this.state.filter = {
-            logic: "and",
-            filters: [],
+        this.state = {
+            skip: 0,
+            take: 25,
+            filter: {
+                logic: "and",
+                filters: [],
+            }
         };
         this.loadUiDropdown();
     }

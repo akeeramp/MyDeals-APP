@@ -25,9 +25,9 @@ namespace Intel.MyDeals.BusinessLogic
             return new EmployeeDataLib().GetUserRolePermission(databaseUserName, startDate, endDate, isFetchLatest);
         }
 
-        public List<UserRolePermission> GetUserRolePermissionsByFilter(string databaseUserName, string startDate, string endDate, int isFetchLatest, int skipRows, int takeRows, string group, string filter)
+        public EmployeeUsrRolePermissionDetails GetUserRolePermissionsByFilter(UserRolePermissionFilter data)
         {
-            return new EmployeeDataLib().GetUserRolePermissionsByFilter(databaseUserName, startDate, endDate, isFetchLatest, skipRows, takeRows, group, filter);
+            return new EmployeeDataLib().GetUserRolePermissionsByFilter(data);
         }
 
         public List<UsrProfileRole> GetUsrProfileRoleByRoleCode(string[] strRoleCode)

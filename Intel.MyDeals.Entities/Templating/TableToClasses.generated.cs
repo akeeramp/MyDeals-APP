@@ -6687,9 +6687,6 @@ namespace Intel.MyDeals.Entities
         public System.String ColumnName { set; get; }
 
         [DataMember]
-        public Nullable<System.Int32> TOTAL_ROWS { set; get; }
-
-        [DataMember]
         public System.String ROW_REFRESH_DTM { set; get; }
 
     } // End of class User Role Permission

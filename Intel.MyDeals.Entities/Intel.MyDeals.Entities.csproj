@@ -82,6 +82,7 @@
     <Compile Include="AttributeCollection.cs" />
     <Compile Include="DropdownDetails.cs" />
     <Compile Include="DropdownFilters.cs" />
+    <Compile Include="EmployeeUsrRolePermissionDetails.cs" />
     <Compile Include="GeoDetails.cs" />
     <Compile Include="GeoFilters.cs" />
     <Compile Include="LogArchivalDetails.cs" />
@@ -337,6 +338,7 @@
     <Compile Include="UiTemplateContainerItem.cs" />
     <Compile Include="UnifyDeal.cs" />
     <Compile Include="UnPrimeAtrbs.cs" />
+    <Compile Include="UserRolePermissionFilter.cs" />
     <Compile Include="UserSetting.cs" />
     <Compile Include="VerticalSecurityItem.cs" />
     <Compile Include="VistexLogDetails.cs" />

@@ -1523,12 +1523,12 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
 		/// Modified: 5/8/2025 11:29:31 AM
 		/// Parameters: 8
 		///</summary>
-		public partial class PR_GET_MYDL_DB_USR_ROLE_PERMISSION_BY_FILTERS : SP
+		public partial class PR_GET_MYDL_DB_USR_ROLE_PERMISSION_SSP : SP
         {
-            public PR_GET_MYDL_DB_USR_ROLE_PERMISSION_BY_FILTERS()
+            public PR_GET_MYDL_DB_USR_ROLE_PERMISSION_SSP()
             {
                 DatabaseName = "MyDeals";
-                StoredProdedureName = "[dbo].[PR_GET_MYDL_DB_USR_ROLE_PERMISSION_BY_FILTERS]";
+                StoredProdedureName = "[dbo].[PR_GET_MYDL_DB_USR_ROLE_PERMISSION_SSP]";
             }
 
             ///<summary>
@@ -1548,10 +1548,10 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// Mode: IN
             ///</summary>
             [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
-            public DateTime START_DATE
+            public String START_DATE
             {
                 set { SetParmeter("START_DATE", value); }
-                get { return (DateTime)GetParameter("START_DATE"); }
+                get { return (String)GetParameter("START_DATE"); }
             }
 
             ///<summary>
@@ -1559,10 +1559,10 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// Mode: IN
             ///</summary>
             [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
-            public DateTime END_DATE
+            public String END_DATE
             {
                 set { SetParmeter("END_DATE", value); }
-                get { return (DateTime)GetParameter("END_DATE"); }
+                get { return (String)GetParameter("END_DATE"); }
             }
 
             ///<summary>
@@ -1570,10 +1570,10 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// Mode: IN
             ///</summary>
             [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
-            public Int32 IS_FETCH_LATEST
+            public bool IS_FETCH_LATEST
             {
                 set { SetParmeter("IS_FETCH_LATEST", value); }
-                get { return (Int32)GetParameter("IS_FETCH_LATEST"); }
+                get { return (bool)GetParameter("IS_FETCH_LATEST"); }
             }
 
             ///<summary>
@@ -1581,10 +1581,10 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// Mode: IN
             ///</summary>
             [SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
-            public Int32 SKIP_ROWS
+            public Int32 SKIP
             {
-                set { SetParmeter("SKIP_ROWS", value); }
-                get { return (Int32)GetParameter("SKIP_ROWS"); }
+                set { SetParmeter("SKIP", value); }
+                get { return (Int32)GetParameter("SKIP"); }
             }
 
             ///<summary>
@@ -1592,10 +1592,10 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// Mode: IN
             ///</summary>
             [SQLParameterAttribute(6, "ParameterDirection.Input", 0, false)]
-            public Int32 TAKE_ROWS
+            public Int32 TAKE
             {
-                set { SetParmeter("TAKE_ROWS", value); }
-                get { return (Int32)GetParameter("TAKE_ROWS"); }
+                set { SetParmeter("TAKE", value); }
+                get { return (Int32)GetParameter("TAKE"); }
             }
 
             ///<summary>
@@ -1603,10 +1603,10 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// Mode: IN
             ///</summary>
             [SQLParameterAttribute(7, "ParameterDirection.Input", -1, false)]
-            public String GROUP
+            public String SORT
             {
-                set { SetParmeter("GROUP", value); }
-                get { return (String)GetParameter("GROUP"); }
+                set { SetParmeter("SORT", value); }
+                get { return (String)GetParameter("SORT"); }
             }
 
             ///<summary>
@@ -1618,6 +1618,17 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             {
                 set { SetParmeter("FILTER", value); }
                 get { return (String)GetParameter("FILTER"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(9, "ParameterDirection.Input", 0, false)]
+            public bool PAGE_CHANGE
+            {
+                set { SetParmeter("PAGE_CHANGE", value); }
+                get { return (bool)GetParameter("PAGE_CHANGE"); }
             }
         }
 

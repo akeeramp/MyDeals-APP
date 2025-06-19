@@ -32,19 +32,14 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _employeeLib.GetUserRolePermission(), "Unable to get User Role Permission");
         }
 
-        // Have to modify to allow for querying / searching
+        // usr Role Permission Server side pagination Changes
         [Authorize]
-        [Route("GetUserRolePermissionByFilter")]
-        public IEnumerable<UserRolePermission> GetUserRolePermissionByFilter(int skipRows = 0, int takeRows = 25, string databaseUserName = null, string startDate = null, string endDate = null, int isFetchLatest = 0, string group = null, string filter = null)
+        [Route("GetUserRolePermissionSSP")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public EmployeeUsrRolePermissionDetails GetUserRolePermissionByFilter([FromBody] UserRolePermissionFilter data)
         {
-            return SafeExecutor(() => _employeeLib.GetUserRolePermissionsByFilter(databaseUserName: databaseUserName,
-                                                                                  startDate: startDate, 
-                                                                                  endDate: endDate, 
-                                                                                  skipRows: skipRows, 
-                                                                                  takeRows: takeRows, 
-                                                                                  isFetchLatest: isFetchLatest,
-                                                                                  group: group,
-                                                                                  filter: filter), "Unable to get User Role Permission");
+            return SafeExecutor(() => _employeeLib.GetUserRolePermissionsByFilter(data), "Unable to get User Role Permission");
         }
 
         [Authorize]

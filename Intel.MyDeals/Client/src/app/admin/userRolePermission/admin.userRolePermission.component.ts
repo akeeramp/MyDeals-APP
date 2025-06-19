@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit } from "@angular/core";
-import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
-import { GroupDescriptor, process, State } from "@progress/kendo-data-query";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { CompositeFilterDescriptor, FilterDescriptor, GroupDescriptor, process, State } from "@progress/kendo-data-query";
 import { Observable, Subject } from "rxjs";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
@@ -9,9 +9,10 @@ import { FormGroup, Validators, FormBuilder, AbstractControl } from "@angular/fo
 
 import { logger } from "../../shared/logger/logger";
 import { userRolePermissionService } from "./admin.userRolePermission.service";
-import { UserRolePermissionModel } from "./admin.userRolePermission.model";
 import { MomentService } from "../../shared/moment/moment.service";
 import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
+import { ExcelColumnsConfig } from "../ExcelColumnsconfig.util";
+import { GridUtil } from "../../contract/grid.util";
 
 @Component({
     selector: 'user-role-permission',
@@ -22,15 +23,16 @@ export class userRolePermissionComponent implements OnInit {
 
     public minDate: Date;
     public maxDate: Date;
+    public filterParams: any;
     public submitted = false;
     public range = { start: null, end: null };
     private readonly destroy$ = new Subject<void>();
     public gridData: GridDataResult;
     private isLoading = true;
-    public gridResult: Array<UserRolePermissionModel>;
+    public gridResult:any;
     userRolePermissionForm: FormGroup;
-    public isFetchLatest = 0;
-
+    public isFetchLatest = false;
+    public isPageChange = false; // Flag to indicate if the page is changed
     private state: State = {
         skip: 0,
         take: 25,
@@ -40,31 +42,55 @@ export class userRolePermissionComponent implements OnInit {
             filters: [],
         },
     };
+    private pageSizes: PageSizeItem[] = [
+            {
+                text: "25",
+                value: 25
+            },
+            {
+                text: "50",
+                value: 50
+            },
+            {
+                text: "100",
+                value: 100
+            }
+        ];
 
     constructor(private userRolePermissionSvc : userRolePermissionService, 
                 private loggerSvc: logger,
                 private formBuilder: FormBuilder,
-                private momentService: MomentService){
-        this.allData = this.allData.bind(this);
+        private momentService: MomentService) { }
+
+    public groupChange(groups: GroupDescriptor[]): void {
+        this.state.group = groups;
+        const stateTest =  {
+            skip: 0,
+            take: 25,
+            group: groups
+
+        };
+        const totalCount = this.gridData.total;
+        this.gridData = process(this.gridResult, stateTest);
+        this.gridData.total = totalCount; // Maintain the total count
     }
 
-    dataStateChange(state: DataStateChangeEvent): void {
-        this.state = state;
 
-        // Iterate through groupings, if missing direction, append ASC (default behaviour) to prevent issues w/ DB SP
-        if (this.state.group && this.state.group.length > 0) {
-            this.state.group.forEach((gd: GroupDescriptor) => {
-                if (gd.dir == undefined || gd.dir == null) {
-                    gd.dir = "asc";
-                }
-            });
-        }
+    public filterChange(filter: CompositeFilterDescriptor): void {
+        this.state.filter = filter;
+        this.state.skip = 0;
+        this.isPageChange = false;
+        this.loadUrp('load');
+    }
+    sortChange(state) {
+        this.state["sort"] = state;
+        this.loadUrp('load');
+    }
 
-        if (this.currentUserSearch.username && this.currentUserSearch.username.length > 0) {    // Active User Search, continue pagination
-            this.getUserRoleFromUserSearch(this.currentUserSearch.username, this.currentUserSearch.startDate, this.currentUserSearch.endDate);
-        } else {
-            this.loadUrp();
-        }
+    pageChange(state: DataStateChangeEvent) {
+        this.state.take = state.take;
+        this.state.skip = state.skip;
+        this.loadUrp('load');
     }
 
     public onExcelExport(e: ExcelExportEvent): void {
@@ -73,47 +99,41 @@ export class userRolePermissionComponent implements OnInit {
 
     clearFilter(): void {
         this.isLoading = true;
-        this.state.filter = {
-            logic: "and",
-            filters: [],
+        this.isPageChange = false;
+        this.state = {
+            skip: 0,
+            take: 25,
+            group: [],
+            filter: {   
+                logic: "and",
+                filters: [],
+            },
         };
-        this.state.group = [];
-        this.gridData = process(this.gridResult, this.state);
 
         if(Object.keys(this.userRolePermissionForm.value).length){
-            this.isLoading = false;
             this.submitted = false;
             this.userRolePermissionForm.reset();
-            this.loadUrp();
+            this.currentUserSearch = {
+                username: '',
+                startDate: '',
+                endDate: ''
+            };
         }
+        this.loadUrp('load');
     }
 
-    public allData(): Observable<ExcelExportData> {
+    exportToExcel() {
         this.isLoading = true;
-
-        const EXCEL_DATA_SUBJECT = new Subject<ExcelExportData>();
-        this.userRolePermissionSvc.GetUserRolePermissionByFilter(0, this.gridData.total, null)
+        const filterParams = this.buildFilterParamsForAPI(true);
+        this.userRolePermissionSvc.getUserRolePermissionByFilter(filterParams)
             .pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<UserRolePermissionModel>) => {
+            .subscribe((result: any) => {
+                GridUtil.dsToExcelUsrRolePermissionData(ExcelColumnsConfig.GetUsrRolePermissionExcel, result.Items, "User-Role-Permission-Export");
                 this.isLoading = false;
-
-                const EXCEL_STATE = { ...this.state };  // Shallow copy
-                EXCEL_STATE.take = this.gridData.total;
-                EXCEL_STATE.skip = 0;
-
-                EXCEL_DATA_SUBJECT.next({
-                    data: process(result, EXCEL_STATE).data
-                });
             }, (error) => {
                 this.isLoading = false;
-
-                this.loggerSvc.error('User Role Permission Service', error);
-                EXCEL_DATA_SUBJECT.next({
-                    data: undefined
-                });
+                this.loggerSvc.error('Unable to export data.', error);
             });
-        
-        return EXCEL_DATA_SUBJECT.asObservable();
     }
 
     dateToString(date: Date): string {
@@ -125,46 +145,29 @@ export class userRolePermissionComponent implements OnInit {
                 + ":" + ("00" + date.getSeconds()).slice(-2);
     }
 
-    private getUserRoleFromUserSearch(databaseUsername: string, startDate: string, endDate: string): void {
-        this.userRolePermissionSvc.GetUserRolePermissionByFilter(this.state.skip, this.state.take, null, null, databaseUsername, startDate, endDate)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<UserRolePermissionModel>) => {
-                this.isLoading = false;
-                this.gridResult = result;
+    private getDataFromSearchInputs(databaseUsername: string, startDate: string, endDate: string): void {
 
-                if (this.state.skip != 0) {
-                    this.gridData.data = this.gridResult;
-                } else {
-                    this.gridData = process(this.gridResult, this.state);
-                }
-
-                if (result.length > 0) {
-                    this.gridData.total = parseInt(result[0].TOTAL_ROWS);
-                }
-
-                this.currentUserSearch = {
-                    username: databaseUsername,
-                    startDate: startDate,
-                    endDate: endDate
-                };
-            }, (error) => {
-                this.isLoading = false;
-                this.loggerSvc.error('User Role Permission Service', error);
-
-                this.currentUserSearch = {
-                    username: '',
-                    startDate: '',
-                    endDate: ''
-                };
-            });
+        this.filterParams = {
+            DatabaseUserName: databaseUsername,
+            StartDate: startDate,
+            EndDate: endDate,
+            Skip: this.state.skip,
+            Take: this.state.take,
+            IsFetchLatest: this.isFetchLatest,
+            Sort: '',
+            Filter: '',
+            PageChange: this.isPageChange
+        }
+        this.loadUrp('search');
     }
 
-    private currentUserSearch = {
+    public currentUserSearch = {
         username: '',
         startDate: '',
         endDate: ''
     };
-    filterUserSearch(): void {
+
+    filterUserSearchOnSubmit(): void {
         this.submitted = true;
         if (this.userRolePermissionForm.invalid) {
             return;
@@ -175,6 +178,7 @@ export class userRolePermissionComponent implements OnInit {
         const END_DT: string = this.dateToString(this.userRolePermissionForm.value.EndDate);
         this.userRolePermissionForm.value.StartDate = START_DT;
         this.userRolePermissionForm.value.EndDate = END_DT;
+        this.isPageChange = false;
         this.isLoading = true;
         this.state = {
             skip: 0,
@@ -186,60 +190,103 @@ export class userRolePermissionComponent implements OnInit {
             },
         };
 
-        this.getUserRoleFromUserSearch(DB_USERNAME, START_DT, END_DT);
+        this.getDataFromSearchInputs(DB_USERNAME, START_DT, END_DT);
     }
 
     get f(): { [key: string]: AbstractControl } {
         return this.userRolePermissionForm.controls;
     }
 
-    fetchTrigger(): void {
+    fetchLatestTrigger(): void {
         this.isLoading = true;
-        this.isFetchLatest = 1;
-        this.userRolePermissionSvc.fetchUserRolePermission(this.isFetchLatest)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<UserRolePermissionModel>) => {
-                this.isLoading = false;
-                this.gridResult = result;
-                this.gridData = process(result, this.state);
-            }, (error) => {
-                this.isLoading = false;
-                this.loggerSvc.error('User Role Permission Service', error);
-            });
+        this.isFetchLatest = true;
+        if(Object.keys(this.userRolePermissionForm.value).length){
+            this.submitted = false;
+            this.userRolePermissionForm.reset();
+            this.currentUserSearch = {
+                username: '',
+                startDate: '',
+                endDate: ''
+            };
+        }
+
+        this.loadUrp('load');
     }
 
     refreshGrid(): void {
         this.isLoading = true;
-
-        this.currentUserSearch = {
-            username: '',
-            startDate: '',
-            endDate: ''
+        this.isPageChange = false;
+        this.state = {
+            skip: 0,
+            take: 25,
+            filter: this.state.filter,
+            group: this.state.group,
+            sort: this.state.sort
         };
-
-        this.loadUrp();
+        this.loadUrp('load');
     }
 
-    loadUrp(): void {
+    buildFilterParamsForAPI(isExcelExport = false) {
+
+        let filter = JSON.parse(JSON.stringify(this.state.filter));
+        filter.filters.forEach((item: CompositeFilterDescriptor) => {
+            if (item && item.filters && item.filters.length > 0)
+                item.filters.forEach((filter: FilterDescriptor) => {
+                    if (filter.field = 'Database_Name') filter.field = '[Database Name]'
+                });
+        });
+        let sortString = '';
+        if (this.state.sort) {
+            this.state.sort.forEach((value, ind) => {
+                if (value.field == 'Database_Name') value.field = '[Database Name]';
+                if (value.dir) {
+                    sortString = ind == 0 ? `ORDER BY ${value.field} ${value.dir}` : `${sortString} , ${value.field} ${value.dir}`;
+                }
+            });
+        }
+        const filterString = (filter && filter.filters.length > 0) ? FilterExpressBuilder.createSqlExpression(JSON.stringify(filter)) : '';
+        
+        return {
+            DatabaseUserName: this.currentUserSearch.username != '' ? this.currentUserSearch.username : '',
+            StartDate: this.currentUserSearch.startDate != '' ? this.currentUserSearch.startDate : '',
+            EndDate: this.currentUserSearch.endDate != '' ? this.currentUserSearch.endDate : '',
+            Skip: isExcelExport ? 0 : this.state.skip,
+            Take: isExcelExport ? -1 : this.state.take,
+            IsFetchLatest: this.isFetchLatest,
+            Sort: sortString,
+            Filter: filterString,
+            PageChange: this.isPageChange
+        };
+    }
+
+    loadUrp(mode:string): void {
         this.isLoading = true;
-
-        const FILTER_STRING = (this.state.filter.filters && this.state.filter.filters.length > 0) ? FilterExpressBuilder.createSqlExpression(JSON.stringify(this.state.filter)) : null;
-        const GROUP_STRING = (this.state.group && this.state.group.length > 0) ? JSON.stringify(this.state.group) : null;
-        this.userRolePermissionSvc.GetUserRolePermissionByFilter(this.state.skip, this.state.take, GROUP_STRING, FILTER_STRING)
+        
+        this.filterParams = mode == 'search' ? this.filterParams : this.buildFilterParamsForAPI(false);
+        
+        this.userRolePermissionSvc.getUserRolePermissionByFilter(this.filterParams)
             .pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<UserRolePermissionModel>) => {
+            .subscribe((result: any) => {
                 this.isLoading = false;
-                this.gridResult = result;
-
-                if (this.gridData == undefined) {
-                    this.gridData = process(this.gridResult, this.state);
-                } else {
-                    this.gridData.data = this.gridResult;
+                this.isFetchLatest = false;
+                this.isPageChange = true;
+                this.gridResult = result.Items;
+                const totalCount = result.TotalRows > 0 ? result.TotalRows : this.gridData.total;
+                const stateTest =  {
+                    skip: 0,
+                    take: this.state.take,
+                    group: this.state.group 
+                };
+                this.gridData = process(this.gridResult, stateTest);
+                this.gridData.total = totalCount;
+                if (mode == 'search') {
+                    this.currentUserSearch = {
+                        username: this.filterParams.DatabaseUserName,
+                        startDate: this.filterParams.StartDate,
+                        endDate: this.filterParams.EndDate
+                    };
                 }
 
-                if (result.length > 0) {
-                    this.gridData.total = parseInt(result[0].TOTAL_ROWS);
-                }
             }, (error) => {
                 this.isLoading = false;
                 this.loggerSvc.error('User Role Permission Service', error);
@@ -260,7 +307,7 @@ export class userRolePermissionComponent implements OnInit {
         )
         const max = new Date();
         this.maxDate = new Date(max.getFullYear(), max.getMonth(), max.getDate())
-        this.loadUrp();
+        this.loadUrp('load');
     }
     
 }

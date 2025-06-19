@@ -1108,6 +1108,54 @@ export class GridUtil {
         });
     }
 
+    static dsToExcelUsrRolePermissionData(data, response, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        for (var t = 0; t < data.length; t++) {
+            rows[0].cells.push({
+                value: data[t].data,
+                type: data[t].type,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true,
+                width: data[t].width
+            });
+            colWidths.push({ width: data[t].width });
+        }
+        for (let i = 0; i < response.length; i++) {
+            rows.push({
+                cells: [
+                    { value: response[i]["Database_Name"], wrap: true },
+                    { value: response[i]["UserName"], wrap: true },
+                    { value: response[i]["UserType"], wrap: true },
+                    { value: response[i]["DatabaseUserName"], wrap: true },
+                    { value: response[i]["Role"], wrap: true },
+                    { value: response[i]["PermissionType"], wrap: true },
+                    { value: response[i]["PermissionState"], wrap: true },
+                    { value: response[i]["ObjectType"], wrap: true },
+                    { value: response[i]["ObjectName"], wrap: true },
+                    { value: response[i]["ColumnName"], wrap: true },
+                    { value: response[i]["ROW_REFRESH_DTM"], wrap: true }
+                ]
+            })
+        }
+        const sheets = [
+            {
+                columns: colWidths,
+                title: fileName,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
+
     static dsToExcelProductsData(data, response, fileName) {
         const rows = [{ cells: [] }];
         const colWidths = [];

@@ -7,6 +7,9 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
+using Intel.Opaque.Utilities;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using Telerik.Reporting;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using SecurityAttribute = Intel.MyDeals.Entities.SecurityAttribute;
 
@@ -137,53 +140,31 @@ namespace Intel.MyDeals.DataLibrary
             return rtn;
         }
 
-        public List<UserRolePermission> GetUserRolePermissionsByFilter(string databaseUserName = null, string startDate = null, string endDate = null, int isFetchLatest = 0, int skipRows = 0, int takeRows = 25, string group = null, string filter = null)
+        public EmployeeUsrRolePermissionDetails GetUserRolePermissionsByFilter(UserRolePermissionFilter data)
         {
-            List<UserRolePermission> rtn = new List<UserRolePermission>();
+            var ret = new List<UserRolePermission>();
+            int RowCount = 0;
+            var cmd = new Procs.dbo.PR_GET_MYDL_DB_USR_ROLE_PERMISSION_SSP();
+
+            cmd = new Procs.dbo.PR_GET_MYDL_DB_USR_ROLE_PERMISSION_SSP()
+            {
+                USERNAME = data.DatabaseUserName,
+                START_DATE = data.StartDate,
+                END_DATE = data.EndDate,
+                IS_FETCH_LATEST = data.IsFetchLatest,
+                SKIP = data.Skip,
+                TAKE = data.Take,
+                SORT = data.Sort,
+                FILTER = data.Filter,
+                PAGE_CHANGE = data.PageChange
+            };
 
             try
             {
-                SqlDataReader rdr = null;
-                if (isFetchLatest == 1)
+                using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
-                    rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_GET_MYDL_DB_USR_ROLE_PERMISSION_BY_FILTERS()
-                    {
-                        @IS_FETCH_LATEST = isFetchLatest,
-                        @SKIP_ROWS = skipRows,
-                        @TAKE_ROWS = takeRows,
-                        @GROUP = group,
-                        @FILTER = filter
-                    });
-                }
-                else
-                {
-                    if (databaseUserName != null && startDate != null && endDate != null)
-                    {
-                        rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_GET_MYDL_DB_USR_ROLE_PERMISSION_BY_FILTERS()
-                        {
-                            @USERNAME = databaseUserName,
-                            @START_DATE = Convert.ToDateTime(startDate),
-                            @END_DATE = Convert.ToDateTime(endDate),
-                            @SKIP_ROWS = skipRows,
-                            @TAKE_ROWS = takeRows,
-                            @GROUP = group,
-                            @FILTER = filter
-                        });
-                    }
-                    else
-                    {
-                        rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_GET_MYDL_DB_USR_ROLE_PERMISSION_BY_FILTERS()
-                        {
-                            @SKIP_ROWS = skipRows,
-                            @TAKE_ROWS = takeRows,
-                            @GROUP = group,
-                            @FILTER = filter
-                        });
-                    }
-                }
-                using (rdr)
-                {
-                    //TABLE 1
+                    rdr.Read();
+
                     int IDX_Database_Name = DB.GetReaderOrdinal(rdr, "Database Name");
                     int IDX_UserName = DB.GetReaderOrdinal(rdr, "UserName");
                     int IDX_UserType = DB.GetReaderOrdinal(rdr, "UserType");
@@ -195,11 +176,10 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_ObjectName = DB.GetReaderOrdinal(rdr, "ObjectName");
                     int IDX_ColumnName = DB.GetReaderOrdinal(rdr, "ColumnName");
                     int IDX_ROW_REFRESH_DTM = DB.GetReaderOrdinal(rdr, "ROW_REFRESH_DTM");
-                    int IDX_TOTAL_ROWS = DB.GetReaderOrdinal(rdr, "TOTAL_ROWS");
 
                     while (rdr.Read())
                     {
-                        rtn.Add(new UserRolePermission
+                        ret.Add(new UserRolePermission
                         {
                             Database_Name = (IDX_Database_Name < 0 || rdr.IsDBNull(IDX_Database_Name)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Database_Name),
                             UserName = (IDX_UserName < 0 || rdr.IsDBNull(IDX_UserName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_UserName),
@@ -211,19 +191,120 @@ namespace Intel.MyDeals.DataLibrary
                             ObjectType = (IDX_ObjectType < 0 || rdr.IsDBNull(IDX_ObjectType)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ObjectType),
                             ObjectName = (IDX_ObjectName < 0 || rdr.IsDBNull(IDX_ObjectName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ObjectName),
                             ColumnName = (IDX_ColumnName < 0 || rdr.IsDBNull(IDX_ColumnName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ColumnName),
-                            ROW_REFRESH_DTM = (IDX_ROW_REFRESH_DTM < 0 || rdr.IsDBNull(IDX_ROW_REFRESH_DTM)) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ROW_REFRESH_DTM),
-                            TOTAL_ROWS = (IDX_TOTAL_ROWS < 0 || rdr.IsDBNull(IDX_TOTAL_ROWS)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_TOTAL_ROWS)
+                            ROW_REFRESH_DTM = (IDX_ROW_REFRESH_DTM < 0 || rdr.IsDBNull(IDX_ROW_REFRESH_DTM)) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ROW_REFRESH_DTM)
                         });
+                    }
+                    if (rdr.NextResult() && rdr.Read())
+                    {
+                        //only count is send back in the next call
+                        RowCount = rdr.GetFieldValue<System.Int32>(0);
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw OpMsgQueue.CreateFault(ex);
+                OpLogPerf.Log(ex);
+                throw;
             }
-
-            return rtn;
+            return new EmployeeUsrRolePermissionDetails { Items = ret, TotalRows = RowCount };
         }
+
+        //public List<UserRolePermission> GetUserRolePermissionsByFilter(UserRolePermissionFilter data)
+        //{
+
+        //    List<UserRolePermission> rtn = new List<UserRolePermission>();
+
+        //    try
+        //    {
+        //        SqlDataReader rdr = null;
+        //        if (data.IsFetchLatest == 1)
+        //        {
+        //            rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_GET_MYDL_DB_USR_ROLE_PERMISSION_SSP_TEST()
+        //            {
+        //                @IS_FETCH_LATEST = data.IsFetchLatest,
+        //                @SKIP_ROWS = data.SkipRows,
+        //                @TAKE_ROWS = data.TakeRows,
+        //                @GROUP = data.Group,
+        //                @FILTER = data.Filter,
+        //                @PAGE_CHANGE = data.PageChange
+        //            });
+        //        }
+        //        else
+        //        {
+        //            if (data.DatabaseUserName != null && data.StartDate != null && data.EndDate != null)
+        //            {
+        //                rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_GET_MYDL_DB_USR_ROLE_PERMISSION_SSP()
+        //                {
+        //                    @USERNAME = data.DatabaseUserName,
+        //                    @START_DATE = Convert.ToDateTime(data.StartDate),
+        //                    @END_DATE = Convert.ToDateTime(data.EndDate),
+        //                    @SKIP_ROWS = data.SkipRows,
+        //                    @TAKE_ROWS = data.TakeRows,
+        //                    @GROUP = data.Group,
+        //                    @FILTER = data.Filter,
+        //                    @PAGE_CHANGE = data.PageChange
+        //                });
+        //            }
+        //            else
+        //            {
+        //                rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_GET_MYDL_DB_USR_ROLE_PERMISSION_SSP()
+        //                {
+        //                    SKIP = data.SkipRows,
+        //                    TAKE = data.TakeRows,
+        //                    SORT = data.Sort,
+        //                    FILTER = data.Filter,
+        //                    @PAGE_CHANGE = data.PageChange
+        //                });
+        //            }
+        //        }
+        //        using (rdr)
+        //        {
+        //            //TABLE 1
+        //            int IDX_Database_Name = DB.GetReaderOrdinal(rdr, "Database Name");
+        //            int IDX_UserName = DB.GetReaderOrdinal(rdr, "UserName");
+        //            int IDX_UserType = DB.GetReaderOrdinal(rdr, "UserType");
+        //            int IDX_DatabaseUserName = DB.GetReaderOrdinal(rdr, "DatabaseUserName");
+        //            int IDX_Role = DB.GetReaderOrdinal(rdr, "Role");
+        //            int IDX_PermissionType = DB.GetReaderOrdinal(rdr, "PermissionType");
+        //            int IDX_PermissionState = DB.GetReaderOrdinal(rdr, "PermissionState");
+        //            int IDX_ObjectType = DB.GetReaderOrdinal(rdr, "ObjectType");
+        //            int IDX_ObjectName = DB.GetReaderOrdinal(rdr, "ObjectName");
+        //            int IDX_ColumnName = DB.GetReaderOrdinal(rdr, "ColumnName");
+        //            int IDX_ROW_REFRESH_DTM = DB.GetReaderOrdinal(rdr, "ROW_REFRESH_DTM");
+
+        //            while (rdr.Read())
+        //            {
+        //                rtn.Add(new UserRolePermission
+        //                {
+        //                    Database_Name = (IDX_Database_Name < 0 || rdr.IsDBNull(IDX_Database_Name)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Database_Name),
+        //                    UserName = (IDX_UserName < 0 || rdr.IsDBNull(IDX_UserName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_UserName),
+        //                    UserType = (IDX_UserType < 0 || rdr.IsDBNull(IDX_UserType)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_UserType),
+        //                    DatabaseUserName = (IDX_DatabaseUserName < 0 || rdr.IsDBNull(IDX_DatabaseUserName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DatabaseUserName),
+        //                    Role = (IDX_Role < 0 || rdr.IsDBNull(IDX_Role)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Role),
+        //                    PermissionType = (IDX_PermissionType < 0 || rdr.IsDBNull(IDX_PermissionType)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PermissionType),
+        //                    PermissionState = (IDX_PermissionState < 0 || rdr.IsDBNull(IDX_PermissionState)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PermissionState),
+        //                    ObjectType = (IDX_ObjectType < 0 || rdr.IsDBNull(IDX_ObjectType)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ObjectType),
+        //                    ObjectName = (IDX_ObjectName < 0 || rdr.IsDBNull(IDX_ObjectName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ObjectName),
+        //                    ColumnName = (IDX_ColumnName < 0 || rdr.IsDBNull(IDX_ColumnName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ColumnName),
+        //                    ROW_REFRESH_DTM = (IDX_ROW_REFRESH_DTM < 0 || rdr.IsDBNull(IDX_ROW_REFRESH_DTM)) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ROW_REFRESH_DTM),
+        //                    //TOTAL_ROWS = hasTotalRows ? (IDX_TOTAL_ROWS < 0 || rdr.IsDBNull(IDX_TOTAL_ROWS)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_TOTAL_ROWS) : null
+        //                });
+        //            }
+
+        //            if (rdr.NextResult() && rdr.Read())
+        //            {
+        //                //only count is send back in the next call
+        //                TOTAL_ROWS = rdr.GetFieldValue<System.Int32>(0);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw OpMsgQueue.CreateFault(ex);
+        //    }
+
+        //    return rtn;
+        //}
 
         public UserSetting GetUserSettings(OpUserToken opUserToken)
         {

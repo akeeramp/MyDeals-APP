@@ -18,7 +18,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
@@ -387,7 +387,6 @@
     <TypeScriptCompile Include="Client\src\app\admin\products\admin.products.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.UCDReprocessModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.component.ts" />
-    <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.service.ts" />
     <Content Include="Client\src\app\admin\pctExceptionReport\admin.pctExceptionReport.component.ts" />
     <Content Include="Client\src\app\admin\pctExceptionReport\admin.pctExceptionReport.service.ts" />
