@@ -297,6 +297,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges, OnDestroy {
                     this.contractDs = this.activekey == 'fav' && this.favContractsMap.length == 0 ? process([], state) : process(this.gridResult, state);
                     this.contractDs.total = this.pageCount[this.activekey];
                     this.loadCount = false;
+                    this.isInitialLoad = false;
                     this.isGridLoading.emit(false);
                 }, (error) => {
                     if (error.status == 400) {
@@ -433,7 +434,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnChanges() {
         if (!this.isInitialLoad) {
-            this.isInitialLoad = true;
+            this.loadCount = true;
             this.loadContractData();
         }
         //update input values and call loadContractData();
