@@ -23,6 +23,7 @@ namespace Intel.MyDeals.Entities
         public string Mode { get; set; }
         public string Filter { get; set; }
         public string Field { get; set; }
+        public bool FtchCnt { get; set; }
 
 
     }

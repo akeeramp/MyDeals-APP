@@ -21220,10 +21220,10 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// Mode: Select
             ///</summary>
             [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
-            public Int32 skipRows
+            public Int32 SKIP
             {
-                set { SetParmeter("skipRows", value); }
-                get { return (Int32)GetParameter("skipRows"); }
+                set { SetParmeter("SKIP", value); }
+                get { return (Int32)GetParameter("SKIP"); }
             }
 
             ///<summary>
@@ -21231,30 +21231,40 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             /// Mode: Select
             ///</summary>
             [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
-            public Int32 takeRows
+            public Int32 TAKE
             {
-                set { SetParmeter("takeRows", value); }
-                get { return (Int32)GetParameter("takeRows"); }
+                set { SetParmeter("TAKE", value); }
+                get { return (Int32)GetParameter("TAKE"); }
             }
             ///<summary>
             /// DataType: string
             /// Mode: Select
             ///</summary>
             [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
-            public String Filter
+            public String FILTER
             {
-                set { SetParmeter("Filter", value); }
-                get { return (String)GetParameter("Filter"); }
+                set { SetParmeter("FILTER", value); }
+                get { return (String)GetParameter("FILTER"); }
             }
             ///<summary>
             /// DataType: string
             /// Mode: Select
             ///</summary>
             [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
-            public String Sort
+            public String SORT
             {
-                set { SetParmeter("Sort", value); }
-                get { return (String)GetParameter("Sort"); }
+                set { SetParmeter("SORT", value); }
+                get { return (String)GetParameter("SORT"); }
+            }
+            ///<summary>
+            /// DataType: bool
+            /// Mode: Select
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public bool FTCHCNT
+            {
+                set { SetParmeter("FTCHCNT", value); }
+                get { return (bool)GetParameter("FTCHCNT"); }
             }
         }
 

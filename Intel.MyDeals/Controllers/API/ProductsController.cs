@@ -135,7 +135,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [HttpPost]
         [Route("GetProductByCategoryName")]
-        public IEnumerable<Product> GetProductByCategoryName(SearchParams objSearchParams)   //searches for products with category that contains string 'name'
+        public ProductDetails GetProductByCategoryName(SearchParams objSearchParams)   //searches for products with category that contains string 'name'
         {
             try
             {

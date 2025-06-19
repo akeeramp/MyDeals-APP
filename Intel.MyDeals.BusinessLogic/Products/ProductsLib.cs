@@ -92,7 +92,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <input>string name which is what will be filtered against (example: 'NAND')</input>
         /// <returns>list of Product data containing specified Product Vertical</returns>
-        public List<Product> GetProductByCategoryName(SearchParams objSearchParams)
+        public ProductDetails GetProductByCategoryName(SearchParams objSearchParams)
         {
             return _productDataLib.GetProductsByFilter(objSearchParams);
         }

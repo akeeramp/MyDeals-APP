@@ -12,7 +12,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<Product> GetProductByBrandSid(int sid);
 
-        List<Product> GetProductByCategoryName(SearchParams objSearchParams);
+        ProductDetails GetProductByCategoryName(SearchParams objSearchParams);
 
         List<Product> GetProductByCategorySid(int sid);
 

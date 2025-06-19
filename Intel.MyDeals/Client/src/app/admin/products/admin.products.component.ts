@@ -35,6 +35,7 @@ export class adminProductsComponent implements OnDestroy {
     private sortData = "";
     private filterData = "";
     private dataforfilter: object;
+    private ftchCnt = true;
     private state: State = {
         skip: 0,
         take: 25,
@@ -70,26 +71,32 @@ export class adminProductsComponent implements OnDestroy {
     loadProducts() {
         this.settingFilter();
         //Developer can see the Screen..
-        this.productsSvc.getProducts(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<Products>) => { 
+        this.productsSvc.getProducts(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe((result: any) => { 
             this.isLoading = false; 
-            this.gridResult = result;
+            this.gridResult = result.Items;
+            let count = result.TotalRows == 0 ? this.gridData.total : result.TotalRows
             this.gridData = process(this.gridResult, this.state); 
             this.gridData.data = this.gridResult;
-            if (result.length > 0) {
-                this.gridData.total = parseInt(result[0].TOTAL_ROWS);
-            } 
+            this.gridData.total = count;
         }, (error) => {
             this.loggerSvc.error('Unable to get Products', error);
         });
     }
 
-    dataStateChange(state: DataStateChangeEvent): void {
-        this.state = state;
-        this.isLoading = true;
+    public filterChange(filter: CompositeFilterDescriptor): void {
+        this.state.filter = filter;
+        this.state.skip = 0;
+        this.ftchCnt = true;
+        this.loadProducts();
+    }
+
+    sortChange(state) {
+        this.state["sort"] = state;
         this.loadProducts();
     }
 
     clearFilter() {
+        this.ftchCnt = true;
         this.state.filter = {
             logic: "and",
             filters: [],
@@ -100,6 +107,7 @@ export class adminProductsComponent implements OnDestroy {
 
     refreshGrid() {
         this.isLoading = true;
+        this.ftchCnt = true;
         this.state.filter = {
             logic: "and",
             filters: [],
@@ -109,9 +117,13 @@ export class adminProductsComponent implements OnDestroy {
 
     exportToExcel() {
         this.isLoading = true;
-        this.productsSvc.getProducts(null).pipe(takeUntil(this.destroy$)).subscribe((result: Array<Products>) => {
+        let exportFilter = JSON.parse(JSON.stringify(this.dataforfilter));
+        exportFilter.Take = -1;
+        exportFilter.FtchCnt = false;
+        exportFilter.StrFilters = exportFilter.StrFilters = '' ? '(ACTV_IND = 1)' : exportFilter.StrFilters.includes('ACTV_IND') ? exportFilter.StrFilters.replace(`ACTV_IND = '0'`, `ACTV_IND = '1'`) : `${exportFilter.StrFilters} AND (ACTV_IND = 1)`
+        this.productsSvc.getProducts(exportFilter).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
             this.isLoading = false;
-            this.excelExport = result;
+            this.excelExport = result.Items;
             GridUtil.dsToExcelProductsData(this.productsExcel, this.excelExport, "MyDealsProducts");
         }, (error) => {
             this.loggerSvc.error('GetPrimeCustomerDetails service', error);
@@ -125,6 +137,7 @@ export class adminProductsComponent implements OnDestroy {
     pageChange(state) {
         this.state.take = state.take;
         this.state.skip = state.skip;
+        this.loadProducts();
     }
 
     ngOnInit() {
@@ -153,6 +166,9 @@ export class adminProductsComponent implements OnDestroy {
                     if (filter.field == 'PRD_MBR_SID') {
                         filter.field = 'P.PRD_MBR_SID'
                     }
+                    else if (filter.field == 'ACTV_IND') {
+                        filter.value = filter.value ? 1 : 0
+                    }
                 });
         });
         const filterExpression = FilterExpressBuilder.createSqlExpression(JSON.stringify(filter));
@@ -161,7 +177,8 @@ export class adminProductsComponent implements OnDestroy {
             StrFilters: this.filterData,
             StrSorts: this.sortData,
             Skip: this.state.skip,
-            Take: this.state.take
+            Take: this.state.take,
+            FtchCnt: this.ftchCnt
         };
     }
 }

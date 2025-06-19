@@ -130,16 +130,18 @@ namespace Intel.MyDeals.DataLibrary
         /// Get All Products
         /// </summary>
         /// <returns>list of product data</returns>
-        public List<Product> GetProductsByFilter(SearchParams objSearchParams)
+        public ProductDetails GetProductsByFilter(SearchParams objSearchParams)
         {
             OpLog.Log("GetProductsByFilter");
             var ret = new List<Product>();
+            int RowCount = 0;
             var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL_SSP
             {
-                skipRows = objSearchParams.Skip,
-                takeRows = objSearchParams.Take,
-                Filter= objSearchParams.StrFilters,
-                Sort = objSearchParams.StrSorts
+                SKIP = objSearchParams.Skip,
+                TAKE = objSearchParams.Take,
+                FILTER= objSearchParams.StrFilters,
+                SORT = objSearchParams.StrSorts,
+                FTCHCNT = objSearchParams.FtchCnt
             };
             //var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL_MABIRA { };
 
@@ -234,6 +236,11 @@ namespace Intel.MyDeals.DataLibrary
                             TOTAL_ROWS = (IDX_TOTAL_ROWS < 0 || rdr.IsDBNull(IDX_TOTAL_ROWS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TOTAL_ROWS)
                         });
                     }
+                    if (rdr.NextResult() && rdr.Read())
+                    {
+                        //only count is send back in the next call
+                        RowCount = rdr.GetFieldValue<System.Int32>(0);
+                    }
                 }
             }
             catch (Exception ex)
@@ -241,7 +248,7 @@ namespace Intel.MyDeals.DataLibrary
                 OpLogPerf.Log(ex);
                 throw;
             }
-            return ret;
+            return new ProductDetails { Items = ret, TotalRows = RowCount };
         }
 
 

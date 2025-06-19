@@ -92,6 +92,10 @@ export class FilterExpressBuilder {
                 return `${subFilter.field} >= '${subFilter.value}'`;
             case "lte":
                 return `${subFilter.field} <= '${subFilter.value}'`;
+            case "lt":
+                return `${subFilter.field} < '${subFilter.value}'`;
+            case "gt":
+                return `${subFilter.field} > '${subFilter.value}'`;
             default:
                 throw new Error(`Unsupported operator: ${subFilter.operator}`);
         }

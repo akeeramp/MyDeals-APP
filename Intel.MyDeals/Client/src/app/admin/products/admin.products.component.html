@@ -22,10 +22,10 @@
                 <li (click)="exportToExcelCustomColumns()" style="cursor: pointer;"><a>Export Current View</a></li>
             </ul>
         </div>
-        <kendo-grid class="KendoProductsInfo changedragcolor kAlignHeaders" (pageChange)="pageChange($event)" [data]="gridData" [loading]="isLoading"
+        <kendo-grid class="KendoProductsInfo changedragcolor kAlignHeaders"  [data]="gridData" [loading]="isLoading"
                     [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{ type:type, pageSizes: pageSizes, info:info, refresh:true }" [groupable]="true"
-                    [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)"
+                    [group]="state.group" filterable="menu" (sortChange)="sortChange($event)" (pageChange)="pageChange($event)" (filterChange)="filterChange($event)"
                     (excelExport)="onExcelExport($event)" id="adminproduct">
             <ng-template kendoGridToolbarTemplate>
                 <button (click)="clearFilter()" class="k-button clearButton">
@@ -38,9 +38,7 @@
             </ng-template>
             <kendo-grid-column [headerClass]="{'headerClass':true}" [filterable]="true" field="PRD_MBR_SID" title="Id">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
-                        <kendo-filter-contains-operator></kendo-filter-contains-operator>
-                    </kendo-grid-string-filter-menu>
+                    <kendo-grid-numeric-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false" [format]="'#########'"></kendo-grid-numeric-filter-menu>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" [filterable]="true" field="DEAL_PRD_TYPE" title="Type">
@@ -87,9 +85,7 @@
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" [filterable]="true" field="MTRL_ID" title="Material ID">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
-                        <kendo-filter-contains-operator></kendo-filter-contains-operator>
-                    </kendo-grid-string-filter-menu>
+                    <kendo-grid-numeric-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false" [format]="'#########'"></kendo-grid-numeric-filter-menu>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column  format="{0: MM/dd/yyyy}" [headerClass]="{'headerClass':true}" [filterable]="true" field="PRD_STRT_DTM" title="Start Date">
