@@ -75,13 +75,13 @@
                 filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" [columnMenu]="true" (excelExport)="onExcelExport($event)">
         <ng-template kendoGridToolbarTemplate>
             <button (click)="clearFilter()" class="k-button clearButton">
-                <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
+                <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family" style="font-size: 30px !important"></span>Clear Filters
             </button>
             <kendo-grid-spacer></kendo-grid-spacer>
             <div class="excel-sections">
                 <a href="javascript:void(0);" id="excelDropDownMenu" class="btn btn-sm dropdown-toggle tool-hover" (click)="exportToExcel()">
                     <div class="excel-btn-update-report">
-                        <i class="intelicon-ms-excel-outlined" style="font-size: 30px;color: #fff"></i>
+                        <i class="intelicon-ms-excel-outlined" style="font-size: 30px !important;color: #fff"></i>
                         <span>Excel Export</span>
                     </div>
                 </a>

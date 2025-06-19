@@ -222,6 +222,7 @@ export class ProductDetailsReportComponent implements OnDestroy {
                 isValid = true;
             }
             if ((CUST_ID && FMLY_NM && this.selectedCUST_ACCPT !== 0 && !this.userEnteredData) || !this.userEnteredData) {
+                this.selectedFamilyReport = [];
                 this.loggerService.error("Please search by Processor number or L4 or Material ID", "");
                 isValid = false;
             }
@@ -248,6 +249,7 @@ export class ProductDetailsReportComponent implements OnDestroy {
                         this.gridResult = result;
                         this.gridAllResult = result;
                         this.gridData = process(this.gridResult, this.state);
+                        this.gridData.data = result;
                     },
                     (error) => {
                         this.loggerService.error('ProductSelectorComponent::getProductSelection::', error);
@@ -270,6 +272,7 @@ export class ProductDetailsReportComponent implements OnDestroy {
             this.showL4Column = true;
             this.showMaterialIDColumn = true;
         }
+        this.clearFilter();
     }
 
     bntReset() {
@@ -283,6 +286,7 @@ export class ProductDetailsReportComponent implements OnDestroy {
         this.userEnteredData = null;
         this.showL4Column = false;
         this.showMaterialIDColumn = false;
+        this.clearFilter();
     }
 
     dataStateChange(state: DataStateChangeEvent): void {
@@ -293,6 +297,8 @@ export class ProductDetailsReportComponent implements OnDestroy {
     }
 
     clearFilter(): void {
+        this.state.skip = 0;
+        this.state.take = 25;
         this.state.filter = {
             logic: "and",
             filters: [],
@@ -327,7 +333,27 @@ export class ProductDetailsReportComponent implements OnDestroy {
     exportToExcel() {
         if (this.gridResult) {
             this.isLoading = true;
-            GridUtil.dsToExcelProductSelectorReport(this.ProductSelReport, this.gridAllResult, "MyDealsProductSelectorReport");
+            // Determine if "DEAL_PRD_NM" and "MTRL_ID" have non-empty values
+            const hasDealPrdNm = this.gridAllResult.some(row => row["DEAL_PRD_NM"] && row["DEAL_PRD_NM"].trim() !== '');
+            const hasMtrlId = this.gridAllResult.some(row => row["MTRL_ID"] && row["MTRL_ID"].trim() !== '');
+            const filteredColumns = this.ProductSelReport.filter(header => {
+                if (header.data === 'DEAL_PRD_NM') {
+                    return hasDealPrdNm;
+                }
+                if (header.data === 'MTRL_ID') {
+                    return hasMtrlId;
+                }
+                return true;
+            });
+            const dataToExport = this.gridAllResult.map(row => {
+                const filteredRow = {};
+                filteredColumns.forEach(header => {
+                    filteredRow[header.data] = row[header.data];
+                });
+                return filteredRow;
+            });
+            GridUtil.dsToExcelProductDetailsReport(filteredColumns, dataToExport, "MyDealsProductDetailsReport");
+
             this.isLoading = false;
         }
     }

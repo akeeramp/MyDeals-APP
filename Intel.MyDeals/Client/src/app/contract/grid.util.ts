@@ -860,7 +860,7 @@ export class GridUtil {
             saveAs(dataUrl, fileName);
         });
     }
-    static dsToExcelProductSelectorReport(data, response, fileName) {
+    static dsToExcelProductDetailsReport(data, response, fileName) {
         const rows = [{ cells: [] }];
         const colWidths = [];
         for (var t = 0; t < data.length; t++) {
@@ -873,30 +873,41 @@ export class GridUtil {
                 wrap: true,
                 width: data[t].width
             });
-            //colWidths.push({ width: data[t].data == 'END_CUSTOMER_RETAIL' ? 500 : 180 });
         }
         for (let i = 0; i < response.length; i++) {
-            rows.push({
-                cells: [
-                    { value: response[i]["PCSR_NBR"], wrap: true },
-                    { value: response[i]["DEAL_PRD_NM"], wrap: true },
-                    { value: response[i]["FMLY_NM"], wrap: true },
-                    { value: response[i]["MTRL_ID"], wrap: true },
-                    { value: response[i]["PRD_STRT_DTM"], wrap: true },
-                    { value: response[i]["PRD_END_DTM"], wrap: true },
-                    { value: response[i]["CAP"], wrap: true },
-                    { value: response[i]["YCS2"], wrap: true },
-                    { value: response[i]["CPU_PROCESSOR_NUMBER"], wrap: true },
-                    { value: response[i]["MM_MEDIA_CD"], wrap: true },
-                    { value: response[i]["MM_CUST_CUSTOMER"], wrap: true },
-                    { value: response[i]["GDM_FMLY_NM"], wrap: true },
-                    { value: response[i]["EPM_NM"], wrap: true },
-                    { value: response[i]["SKU_NM"], wrap: true },
-                    { value: response[i]["CPU_CACHE"], wrap: true },
-                    { value: response[i]["actv_ind"], wrap: true }
+            const item = response[i];
+            const hasDealPrdNm = item["DEAL_PRD_NM"];
+            const hasMtrlId = item["MTRL_ID"];
 
-                ]
-            })
+            // Base cells
+            const baseCells = [
+                { value: item["PCSR_NBR"], wrap: true },
+                { value: item["FMLY_NM"], wrap: true },
+                { value: item["PRD_STRT_DTM"], wrap: true },
+                { value: item["PRD_END_DTM"], wrap: true },
+                { value: item["CAP"], wrap: true },
+                { value: item["YCS2"], wrap: true },
+                { value: item["CPU_PROCESSOR_NUMBER"], wrap: true },
+                { value: item["MM_MEDIA_CD"], wrap: true },
+                { value: item["MM_CUST_CUSTOMER"], wrap: true },
+                { value: item["GDM_FMLY_NM"], wrap: true },
+                { value: item["EPM_NM"], wrap: true },
+                { value: item["SKU_NM"], wrap: true },
+                { value: item["CPU_CACHE"], wrap: true },
+                { value: item["actv_ind"], wrap: true }
+            ];
+
+            // Add DEAL_PRD_NM if present
+            if (hasDealPrdNm) {
+                baseCells.splice(1, 0, { value: item["DEAL_PRD_NM"], wrap: true });
+            }
+
+            // Add MTRL_ID if present
+            if (hasMtrlId) {
+                baseCells.splice(3, 0, { value: item["MTRL_ID"], wrap: true });
+            }
+
+            rows.push({ cells: baseCells });
         }
         const sheets = [
             {
