@@ -120,7 +120,7 @@ export class adminProductsComponent implements OnDestroy {
         let exportFilter = JSON.parse(JSON.stringify(this.dataforfilter));
         exportFilter.Take = -1;
         exportFilter.FtchCnt = false;
-        exportFilter.StrFilters = exportFilter.StrFilters = '' ? '(ACTV_IND = 1)' : exportFilter.StrFilters.includes('ACTV_IND') ? exportFilter.StrFilters.replace(`ACTV_IND = '0'`, `ACTV_IND = '1'`) : `${exportFilter.StrFilters} AND (ACTV_IND = 1)`
+        exportFilter.StrFilters = exportFilter.StrFilters == '' ? '(ACTV_IND = 1)' : exportFilter.StrFilters.includes('ACTV_IND') ? exportFilter.StrFilters.replace(`ACTV_IND = '0'`, `ACTV_IND = '1'`) : `${exportFilter.StrFilters} AND (ACTV_IND = 1)`
         this.productsSvc.getProducts(exportFilter).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
             this.isLoading = false;
             this.excelExport = result.Items;
