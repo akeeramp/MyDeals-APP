@@ -185,7 +185,7 @@
         <div class="ng-binding vert-center">{{uiControlBackEndRebateWrapper(in_DataItem)}}</div>
     </div>
 </div>
-<div *ngIf="in_Field_Name == 'TOTAL_CR_DB_PERC'" class="dealCell">
+<!--<div *ngIf="in_Field_Name == 'TOTAL_CR_DB_PERC'" class="dealCell">
     <div class="uiControlDiv isReadOnlyCell">
         <div class="ng-binding vert-center">
             <div *ngIf="getPercData(in_DataItem).vol != 999999999" class="progress creditDebitAlignmentStyle" style="margin-bottom: 2px; background-color:#edeff0 !important; ">
@@ -195,7 +195,7 @@
             <div *ngIf="getPercData(in_DataItem).vol == 999999999">{{numberWithCommas(getPercData(in_DataItem).numerator)}}</div>
         </div>
     </div>
-</div>    
+</div>    -->
 <div *ngIf="in_Field_Name == 'MEETCOMP_TEST_RESULT' || in_Field_Name == 'COST_TEST_RESULT'" id="{{in_Field_Name + '_' + in_DataItem['DC_ID']}}" class="dealCell">
     <div class="dealCell">
         <div *ngIf="in_Field_Name == 'MEETCOMP_TEST_RESULT' || in_Field_Name == 'COST_TEST_RESULT'" id="{{in_Field_Name + '_' + in_DataItem['DC_ID']}}" class="dealCell">
@@ -500,7 +500,7 @@
         && in_Field_Name !== 'DEAL_SOLD_TO_ID' && in_Field_Name !== 'PRIMARY_OR_SECONDARY' && in_Field_Name !== 'KIT_REBATE_BUNDLE_DISCOUNT'
         && in_Field_Name !== 'SUBKIT_REBATE_BUNDLE_DISCOUNT' && in_Field_Name !== 'BACKEND_REBATE' && in_Field_Name !== 'TOTAL_DSCNT_PR_LN'
         && in_Field_Name !== 'CAP_KIT' && in_Field_Name !== 'YCS2_KIT' && in_Field_Name !== 'KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE' && in_Field_Name !== 'SUBKIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'
-        && in_Field_Name !== 'TOTAL_CR_DB_PERC' && in_Field_Name !== 'MEETCOMP_TEST_RESULT' && in_Field_Name !== 'COST_TEST_RESULT' && in_Field_Name !== 'CAP_INFO'
+        && in_Field_Name !== 'MEETCOMP_TEST_RESULT' && in_Field_Name !== 'COST_TEST_RESULT' && in_Field_Name !== 'CAP_INFO'
         && in_Field_Name !== 'YCS2_INFO' && in_Field_Name !== 'MISSING_CAP_COST_INFO' && in_Field_Name !== 'tender_actions'" [innerHTML]="in_Template|sanitizeHtml"
      class="uiControlDiv wrap readOnlyCell dealCell">
 </div>

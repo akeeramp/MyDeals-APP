@@ -34,7 +34,7 @@ export class DE_Common_Util {
                         }
                     }
                 }
-                gridResult[w]._behaviors.isReadOnly["TOTAL_CR_DB_PERC"] = true;
+                /*gridResult[w]._behaviors.isReadOnly["TOTAL_CR_DB_PERC"] = true;*/
             }
         }
         return numSoftWarn;

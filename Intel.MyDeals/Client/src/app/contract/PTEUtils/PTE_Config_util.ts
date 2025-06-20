@@ -334,9 +334,9 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "TOTAL_CR_DB_PERC": {
+                /*"TOTAL_CR_DB_PERC": {
                     "Groups": ["Payment"]
-                },
+                },*/
                 "GEO_APPROVED_BY": {
                     "Groups": ["Deal Info"]
                 },
@@ -522,9 +522,9 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "TOTAL_CR_DB_PERC": {
+                /*"TOTAL_CR_DB_PERC": {
                     "Groups": ["Payment"]
-                },
+                },*/
             },
             "REV_TIER": {
                 "tools": {
@@ -683,9 +683,9 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "TOTAL_CR_DB_PERC": {
+                /*"TOTAL_CR_DB_PERC": {
                     "Groups": ["Payment"]
-                },
+                },*/
             },
             "PROGRAM": {
                 "tools": {
@@ -877,9 +877,9 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "TOTAL_CR_DB_PERC": {
+                /*"TOTAL_CR_DB_PERC": {
                     "Groups": ["Payment"]
-                },
+                },*/
             },
             "KIT": {
                 "EXCLUDE_AUTOMATION": {
@@ -1149,9 +1149,9 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "TOTAL_CR_DB_PERC": {
+                /*"TOTAL_CR_DB_PERC": {
                     "Groups": ["Payment"]
-                },
+                },*/
                 "GEO_APPROVED_BY": {
                     "Groups": ["Deal Info"]
                 },
@@ -1352,9 +1352,9 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "TOTAL_CR_DB_PERC": {
+                /*"TOTAL_CR_DB_PERC": {
                     "Groups": ["Payment"]
-                },
+                },*/
             },
             "FLEX": {
                 "tools": {
@@ -1531,9 +1531,9 @@ export class PTE_Config_Util {
                 "REBATE_OA_MAX_AMT": {
                     "Groups": ["All"]
                 },
-                "TOTAL_CR_DB_PERC": {
+                /*"TOTAL_CR_DB_PERC": {
                     "Groups": ["Payment"]
-                },
+                },*/
             }
         },
         "requiredForTender": ["VOLUME", "PAYABLE_QUANTITY", "END_CUSTOMER_RETAIL"],

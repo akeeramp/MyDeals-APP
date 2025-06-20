@@ -3201,7 +3201,7 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_DEAL_ID')#"
             });
             
-            items.Add(new UiTemplateContainerItem  // WIP All Types
+            /*items.Add(new UiTemplateContainerItem  // WIP All Types
             {
                 Id = 9999,
                 AtrbCd = "TOTAL_CR_DB_PERC",
@@ -3212,7 +3212,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = false,
                 Template = "#=gridUtils.uiCrDbPercWrapper(data)#",
                 ExcelTemplate = "#=gridUtils.uiCrDbPercExcelWrapper(data)#"
-            });
+            });*/
            
             items.Add(new UiTemplateContainerItem  // WIP All Types
             {
