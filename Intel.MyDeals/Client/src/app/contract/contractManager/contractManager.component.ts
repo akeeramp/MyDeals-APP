@@ -312,15 +312,13 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     }
 
     verifyCustAccptReadOnly() {
-        if ((<any>window).usrRole.includes('GA') || (<any>window).usrRole.includes('FSE'))
-            this.isCustAcptReadOnly = ((this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true && this.custAccptButton != 'pending') || this.custAccptButton == 'Acceptance Not Required in C2A') ? true : false;
-        else
-            this.isCustAcptReadOnly = true;
+        this.isCustAcptReadOnly = ((this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true && this.custAccptButton != 'pending') || this.custAccptButton == 'Acceptance Not Required in C2A') ? true : false;
     }
 
     pendingChange() {
         let fromToggle = true;
         this.togglePending(true);
+        this.custAccptButton = this.contractData.CUST_ACCPT;
         this.verifyCustAccptReadOnly();
     }
     togglePending(runActions) {
@@ -915,7 +913,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
                 this.isToggle = false;
             }
             if(!this.csLoading) this.isLoading = false;
-            this.filteredData = this.contractData?.PRC_ST;          
+            this.filteredData = this.contractData?.PRC_ST;
             this.verifyCustAccptReadOnly();
             if (!this.isRunning) this.showData = true;
             this.checkpricegrpcode();

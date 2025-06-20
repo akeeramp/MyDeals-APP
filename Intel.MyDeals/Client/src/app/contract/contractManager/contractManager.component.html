@@ -3,7 +3,7 @@
         <div class="divine-pro" style="font-size: 14px; line-height: 1.1em; text-align: center; position: absolute; top: 11px; right: 25px;">            
             <span class="cust_title_style">Customer Acceptance</span>
             <span id="toggle-container" [ngClass]=" { 'acceptanceNotRequired' : custAccptButton == 'Acceptance Not Required in C2A' }" [ngStyle]=" { 'cursor' : custAccptButton == 'Acceptance Not Required in C2A' ? 'not-allowed' : 'auto'}"
-             [title]="isCustAcptReadOnly || custAccptButton == 'Acceptance Not Required in C2A' ? '' :'Click to Change Contract Acceptance Criteria'">
+                  [title]="isCustAcptReadOnly ? '' :'Click to Change Contract Acceptance Criteria'">
                <kendo-switch class="contract-toggle" offLabel="{{ offLabelName }}" onLabel="Pending" [disabled]="isCustAcptReadOnly" (valueChange)="pendingChange()" [(ngModel)]="isToggle" trackRounded="medium" thumbRounded="large"></kendo-switch>
             </span>
         </div>
