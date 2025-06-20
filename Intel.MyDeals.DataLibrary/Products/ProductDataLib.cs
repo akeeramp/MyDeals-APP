@@ -19,6 +19,7 @@ namespace Intel.MyDeals.DataLibrary
         /// Get All Products
         /// </summary>
         /// <returns>list of product data</returns>
+        /// cleanup after WW28.4 release move into PR_MYDL_GET_PRD_DTL_SSP
         public List<Product> GetProducts()
         {
             OpLog.Log("GetProducts");
@@ -188,7 +189,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_SKU_NM = DB.GetReaderOrdinal(rdr, "SKU_NM");
                     int IDX_SUB_VERTICAL = DB.GetReaderOrdinal(rdr, "SUB_VERTICAL");
                     int IDX_USR_INPUT = DB.GetReaderOrdinal(rdr, "USR_INPUT");
-                    int IDX_TOTAL_ROWS= DB.GetReaderOrdinal(rdr, "TOTAL_ROWS");
+                    //int IDX_TOTAL_ROWS= DB.GetReaderOrdinal(rdr, "TOTAL_ROWS");
 
                     while (rdr.Read())
                     {
@@ -233,7 +234,7 @@ namespace Intel.MyDeals.DataLibrary
                             SKU_NM = (IDX_SKU_NM < 0 || rdr.IsDBNull(IDX_SKU_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SKU_NM),
                             SUB_VERTICAL = (IDX_SUB_VERTICAL < 0 || rdr.IsDBNull(IDX_SUB_VERTICAL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SUB_VERTICAL),
                             USR_INPUT = (IDX_USR_INPUT < 0 || rdr.IsDBNull(IDX_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_INPUT),
-                            TOTAL_ROWS = (IDX_TOTAL_ROWS < 0 || rdr.IsDBNull(IDX_TOTAL_ROWS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TOTAL_ROWS)
+                            //TOTAL_ROWS = (IDX_TOTAL_ROWS < 0 || rdr.IsDBNull(IDX_TOTAL_ROWS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TOTAL_ROWS)
                         });
                     }
                     if (rdr.NextResult() && rdr.Read())

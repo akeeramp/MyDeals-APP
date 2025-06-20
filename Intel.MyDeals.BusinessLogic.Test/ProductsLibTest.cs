@@ -8,6 +8,8 @@ using System.Linq;
 namespace Intel.MyDeals.BusinessLogic.Test
 {
     //[Ignore("Takes time to build")]
+
+    //remove after ww28.4 as we are already having mock test
     [TestClass]
     public class ProductLibTests
     {
@@ -63,7 +65,14 @@ namespace Intel.MyDeals.BusinessLogic.Test
         {
             int singleProdSid = 0;
             string singlePrdName = "";
-            SearchParams objSearchParams = null;
+            SearchParams objSearchParams = new SearchParams
+            {
+                Skip = 0,
+                Take = 25,
+                FtchCnt = true,
+                StrSorts = "",
+                StrFilters = ""
+            };
 
             // First products call is expensive because it needs to load products cache (2 minutes run time)
             // After the load, all product items are cached for this instance
@@ -85,7 +94,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
                 , "Failed ProductsLib().GetProduct(" + singleProdSid + ") Test");
 
             // Check fetching an entire category by name (list)
-            resultsList = new ProductsLib().GetProductByCategoryName(objSearchParams);
+            resultsList = new ProductsLib().GetProductByCategoryName(objSearchParams).Items;
             Assert.IsTrue(resultsList.Any() && resultsList.Where(r => r.PRD_CAT_NM.Contains(singlePrdName)).Count() == resultsList.Count()
                 , "Failed ProductsLib().GetProductByCategoryName('" + singlePrdName + "') Test");
 
