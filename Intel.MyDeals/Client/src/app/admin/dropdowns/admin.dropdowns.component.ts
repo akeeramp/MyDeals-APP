@@ -68,12 +68,12 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     public isFormChange = false;
     public DealTypeData: Array<any>;
     public allDealTypeData: Array<any>;
-    public distinctSetTypeCd: Array<any>;
+    public distinctSetTypeCd = [];
     public fullDistinctSetTypeCd: Array<any>;
-    public distinctAtributeCd: Array<any>;
+    public distinctAtributeCd = [];
     public GroupData: Array<any>;
     public CustomerData: Array<any>;
-    public distinctCustomerName: Array<any>;
+    public distinctCustomerName = [];
     public nonCorpInheritableValues: Array<any> = [];
     public COMP_ATRB_SIDS: Array<any> = [];
     public checkRestrictionFlag: boolean = false;
@@ -161,6 +161,20 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
             });
     }
 
+    openedSetTypeCd() {
+        if (this.distinctSetTypeCd.length == 0)
+            this.getDealTypeDataSource();
+    }
+
+    openedAtributeCd() {
+        if (this.distinctAtributeCd.length == 0)
+            this.getGroupsDataSource();
+    }
+
+    openedCustomerName() {
+        if (this.distinctCustomerName.length == 0)
+            this.getCustomersDataSource();
+    }
     
 
     async getDealTypeDataSource() {
@@ -399,11 +413,6 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     async addHandler({ sender }) {
         this.isDirty=true;
         this.closeEditor(sender);
-        this.isLoading = true
-        await this.getDealTypeDataSource();
-        await this.getGroupsDataSource();
-        await this.getCustomersDataSource();
-        this.isLoading = false
 
         this.formGroup = new FormGroup({
             ACTV_IND: new FormControl(false, Validators.required),
@@ -419,7 +428,6 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
             ATRB_LKUP_TTIP: new FormControl(""),
             ORD: new FormControl()
         });
-        this.distinctSetTypeCd = this.fullDistinctSetTypeCd;
         this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
         });
@@ -479,12 +487,6 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
 
     saveHandler({ sender, rowIndex, formGroup, isNew, dataItem }) {
         let newUiDropdown: UiDropdownItem = formGroup.getRawValue();
-        //for disabled formgroup, using the dropdown datasource to get the ID value as in dataItem the value coming as null
-        const FILTERED_DROPDOWN = this.gridResult.filter(x => x.OBJ_SET_TYPE_CD === newUiDropdown.OBJ_SET_TYPE_CD);
-        if (FILTERED_DROPDOWN.length > 0) {
-            newUiDropdown.OBJ_SET_TYPE_SID = FILTERED_DROPDOWN[0].OBJ_SET_TYPE_SID;
-        }
-
         if (isNew) {
             const GroupSID = this.GroupData.filter(x => x.dropdownName == newUiDropdown.ATRB_CD)
             if (GroupSID.length > 0) {
@@ -494,6 +496,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
             if (customerSID.length > 0) {
                 newUiDropdown.CUST_MBR_SID = customerSID[0]["dropdownID"];
             }
+            newUiDropdown.OBJ_SET_TYPE_SID = this.DealTypeData.filter(x => x.dropdownName == newUiDropdown.OBJ_SET_TYPE_CD)[0].dropdownID;
         }
 
         if (!isNew) {

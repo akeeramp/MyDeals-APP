@@ -296,11 +296,6 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
-
-                    
-
-                    rdr.Read();
-
                     int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
                     int IDX_ATRB_CD = DB.GetReaderOrdinal(rdr, "ATRB_CD");
                     int IDX_ATRB_LKUP_DESC = DB.GetReaderOrdinal(rdr, "ATRB_LKUP_DESC");

@@ -1,4 +1,35 @@
 ﻿﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<style>
+    .loader-wrapper {
+        height: 200px;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .loader {
+        width: 30px;
+        height: 30px;
+        border: 5px solid #FFF;
+        border-bottom-color: #000;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    } 
+
+</style>
 <div class="row">
     <div class="col-md-12" style="padding-left: 30px; padding-top: 24px">
         <h3 class="header-bottomsizereduce">UI Dropdown Values</h3>
@@ -65,8 +96,17 @@
                                        [filterService]="filterService" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #dealtypeDropDown [data]="distinctSetTypeCd"
-                                    [formControl]="formGroup.get('OBJ_SET_TYPE_CD')" [allowCustom]="allowCustom"></kendo-combobox>
+                    <kendo-combobox #dealtypeDropDown (opened)="openedSetTypeCd()" [data]="distinctSetTypeCd" style="float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md"
+                                    [formControl]="formGroup.get('OBJ_SET_TYPE_CD')" [allowCustom]="allowCustom">
+                        <ng-template kendoComboBoxItemTemplate let-dataItem>
+                            <span *ngIf="distinctCustomerName.length > 0; else loader">{{ dataItem }}</span>
+                            <ng-template #loader>
+                                <div class="loader-wrapper">
+                                    <span class="loader"></span>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="ATRB_CD" title="Group" width="200" [headerClass]="{'headerClass':true}">
@@ -76,8 +116,17 @@
                                        [filterService]="filterService" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #attributeDropDown [data]="distinctAtributeCd"
-                                    [formControl]="formGroup.get('ATRB_CD')" [allowCustom]="allowCustom"></kendo-combobox>
+                    <kendo-combobox #attributeDropDown (opened)="openedAtributeCd()" [data]="distinctAtributeCd" style="float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md"
+                                    [formControl]="formGroup.get('ATRB_CD')" [allowCustom]="allowCustom">
+                        <ng-template kendoComboBoxItemTemplate let-dataItem>
+                            <span *ngIf="distinctCustomerName.length > 0; else loader">{{ dataItem }}</span>
+                            <ng-template #loader>
+                                <div class="loader-wrapper">
+                                    <span class="loader"></span>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="CUST_NM" title="Customer" width="200" [headerClass]="{'headerClass':true}">
@@ -87,8 +136,17 @@
                                        [filterService]="filterService" [data]="GetColumnFilterData(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #custDropDown [data]="distinctCustomerName" [formControl]="formGroup.get('CUST_NM')"
-                                    [allowCustom]="allowCustom"></kendo-combobox>
+                    <kendo-combobox #custDropDown (opened)="openedCustomerName()" [data]="distinctCustomerName" [formControl]="formGroup.get('CUST_NM')" style="float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md"
+                                    [allowCustom]="allowCustom">
+                        <ng-template kendoComboBoxItemTemplate let-dataItem>
+                            <span *ngIf="distinctCustomerName.length > 0; else loader">{{ dataItem }}</span>
+                            <ng-template #loader>
+                                <div class="loader-wrapper">
+                                    <span class="loader"></span>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="DROP_DOWN" title="Value" width="200" [headerClass]="{'headerClass':true}">
