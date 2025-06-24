@@ -552,8 +552,9 @@
     <Content Include="Client\src\app\contract\complexStacking\complexStacking.component.html" />
     <Content Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingModal.component.css" />
     <Content Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingModal.component.html" />
-    <Content Include="Client\src\app\contract\productDetailsReport\productDetailsReport.component.css" />
-    <Content Include="Client\src\app\contract\productDetailsReport\productDetailsReport.component.html" />
+    <Content Include="Client\src\app\reporting\productDetailsReport\productDetailsReport.component.css" />
+    <Content Include="Client\src\app\reporting\productDetailsReport\productDetailsReport.component.html" />
+    <Content Include="Client\src\app\reporting\shared\powerBISearch\powerBISearch.component.html" />
     <Content Include="Client\src\app\sdm\sdm.component.css" />
     <Content Include="Client\src\app\sdm\sdm.component.html" />
     <Content Include="Client\src\app\sdm\sdmBulkUpload\sdmBulkUpload.component.css" />
@@ -869,9 +870,10 @@
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingDialog.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingModal.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\contract\productDetailsReport\prodSel_Util.ts" />
-    <TypeScriptCompile Include="Client\src\app\contract\productDetailsReport\productDetailsReport.component.ts" />
-    <TypeScriptCompile Include="Client\src\app\contract\productDetailsReport\productDetailsReport.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\modules\reporting.module.ts" />
+    <TypeScriptCompile Include="Client\src\app\reporting\productDetailsReport\prodSel_Util.ts" />
+    <TypeScriptCompile Include="Client\src\app\reporting\productDetailsReport\productDetailsReport.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\reporting\productDetailsReport\productDetailsReport.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\dropDownModal\dropDownModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\dashboardConfig.util.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\jobMonitorDetails\jobMonitorDetails.component.ts" />
@@ -879,6 +881,8 @@
     <TypeScriptCompile Include="Client\src\app\dashboard\jobMonitor\jobMonitor.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\jobMonitor\jobMonitor.service.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\codingPractices.module.ts" />
+    <TypeScriptCompile Include="Client\src\app\reporting\shared\powerBISearch\powerBISearch.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\reporting\shared\powerBISearch\powerBISearch.service.ts" />
     <TypeScriptCompile Include="Client\src\app\sdm\sdm.component.ts" />
     <TypeScriptCompile Include="Client\src\app\sdm\sdm.service.ts" />
     <TypeScriptCompile Include="Client\src\app\sdm\sdmBulkUpload\sdmBulkUpload.component.ts" />

@@ -2982,3 +2982,14 @@ kendo-chart#deal-stages-chart svg text {
 .added-pricing-table-editor .htComments.commentHover {
     left: 364px !important;
 }
+.alignment-fixes-report-dashboard kendo-breadcrumb.breadCrumbs-design {
+    background-color: transparent !important;
+}
+
+.alignment-fixes-report-dashboard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-right: 15px;
+}

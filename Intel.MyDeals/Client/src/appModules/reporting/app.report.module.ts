@@ -46,8 +46,9 @@ import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.c
 import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/globalSearch.component';
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingSpinner.component';
 import { POPUP_CONTAINER } from '@progress/kendo-angular-popup';
-import { ProductDetailsReportComponent } from '../../app/contract/productDetailsReport/productDetailsReport.component';
 import { SearchFilterModule } from '../shared/searchFilter.module';
+import { ReportingDasboardComponent } from '../../app/modules/reporting.module';
+import { BreadCrumbModule } from '@progress/kendo-angular-navigation';
 
 
 @NgModule({
@@ -78,6 +79,7 @@ import { SearchFilterModule } from '../shared/searchFilter.module';
         RouterModule.forRoot(routesReport, { useHash: true }),
         ExcelModule,
         SearchFilterModule,
+        BreadCrumbModule,
         RouterModule.forRoot(routesReport, { useHash: true })
     ],
     providers: [
@@ -99,16 +101,15 @@ import { SearchFilterModule } from '../shared/searchFilter.module';
     ],
     declarations: [
         AppRootComponent,
-        ReportingComponent,
+        ReportingDasboardComponent,
         ReportUtilComponents,
-        ProductDetailsReportComponent
+        
     ],
   
     entryComponents:[
         AppRootComponent,
-        ReportingComponent,
         ReportUtilComponents,
-        ProductDetailsReportComponent
+        ReportingDasboardComponent
     ],
 })
 

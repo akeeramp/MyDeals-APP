@@ -18,9 +18,6 @@ export class ReportingComponent implements OnDestroy{
     public isLoading: string = 'true';
     public loadMessage: string = "Report is Loading ...";
     public moduleName: string = "Report Dashboard";
-    private GetReportMissingCostDataColumn = ExcelColumnsConfig.GetReportMissingCostDataExcel;
-    private GetReportNewProductMissingCostDataColumn = ExcelColumnsConfig.GetReportNewProductMissingCostDataExcel;
-    private GetGetUCMReportDataColumn = ExcelColumnsConfig.GetUCMReportDataDataExcel;
     private reportCustomerExcel = ExcelColumnsConfig.reportCustomerExcel;
     private reportProductExcel = ExcelColumnsConfig.reportProductExcel;
     private colorStages = {
@@ -185,7 +182,9 @@ export class ReportingComponent implements OnDestroy{
   private btnText: string = "Show more ";
   private isRecordAvailable: boolean = false;
   private getReportCatagory: any;
-  getReportSubCatagory: any;
+    getReportSubCatagory: any;
+    private flagBool: string;
+    public list_breadcrumbs: any;
   visibleIndex = -1;
     private dataDealTypeStages: Array<any> = [];
   //Creating Color Code Dictionary
@@ -205,7 +204,6 @@ export class ReportingComponent implements OnDestroy{
     "Query Studio": "#DD4B39",
     others: "#00C0EF",
   };
-
   getColor(RPT_NM, mode) {
     if (this.colorNameDict.hasOwnProperty(RPT_NM)) {
       // Remove item
@@ -253,52 +251,6 @@ export class ReportingComponent implements OnDestroy{
         }
         return dealStages
     }
-
-    downloadICostReport() {
-        this.loggerSvc.warn("Please wait downloading inprogress","");
-        this.reportingSvc.GetReportMissingCostData().pipe(takeUntil(this.destroy$))
-            .subscribe((response: any) => {
-                if (response && response.length > 0) {
-                    GridUtil.dsToExcelReport(this.GetReportMissingCostDataColumn, response, "missingCostData");
-                    this.loggerSvc.success("Successfully downloaded the report data");
-                } else {
-                    this.loggerSvc.error("Unable to Download Report Data","");
-                }
-            }, (error) => {
-                this.loggerSvc.error("Unable to Download Report Data", error);
-            })
-    }
-
-    downloadGetReportNewProductMissingCostData() {
-        this.reportingSvc.GetReportNewProductMissingCostData().pipe(takeUntil(this.destroy$))
-            .subscribe((response: any) => {
-                if (response) {
-                    GridUtil.dsToExcelReportNewProductMissingCostData(this.GetReportNewProductMissingCostDataColumn, response, "New Product Missing Cost Report");
-                    this.loggerSvc.success("Successfully downloaded the report data");
-                } else {
-                    this.loggerSvc.error("Unable to Download Report Data", "");
-                }
-            }, (error) => {
-                this.loggerSvc.error("Unable to Download Report Data", error);
-            })
-    }
-
-    downloadUCMReportData() {
-        this.loggerSvc.warn("Please wait downloading inprogress", "");
-        this.reportingSvc.GetUCMReportData().pipe(takeUntil(this.destroy$))
-            .subscribe((response: any) => {
-                if (response) {
-                    GridUtil.dsToExcelGetUCMReportData(this.GetGetUCMReportDataColumn, response, "UCMReport");
-                    this.loggerSvc.success("Successfully downloaded the report data");
-                } else {
-                    this.loggerSvc.error("Unable to Download Report Data", "");
-                }
-            }, (error) => {
-                this.loggerSvc.error("Unable to Download Report Data", error);
-            })
-    }
-
- 
     reportDealTypesBarChart() {
         let Val = this.ReportDealTypeQuarter.filter(val => {
             if (val.DEAL_TYPE == "ECAP") {
@@ -331,8 +283,8 @@ export class ReportingComponent implements OnDestroy{
     let vm = this;
     this.reportingSvc.getReportData()
         .pipe(takeUntil(this.destroy$)).subscribe(response => {
-        //loader stops
-        vm.isLoading = 'false';
+            //loader stops
+            vm.isLoading = 'false';
         //variable assignment
         vm.masterData = response; // changing to see all values
         vm.ReportDealType=vm.masterData["ReportDealType"];
@@ -571,10 +523,23 @@ export class ReportingComponent implements OnDestroy{
           this.loggerSvc.success("Successfully downloaded the Product report data");
       })
     }
-
+    responseLnav(e: any, sKey?) {
+        this.flagBool = e.bool;
+        if (this.flagBool == "reportingdashboard") {
+            this.list_breadcrumbs = [
+                { text: "Report", url: "reportingdashboard" },
+                { text: "Dashboard", url: "javascript:void(0)" },
+            ];
+        }
+    }
     ngOnInit() {
         this.loadReportDashboard();
+        this.list_breadcrumbs = [
+            { text: "Report", url: "reportingdashboard" },
+            { text: "Dashboard", url: "javascript:void(0)" },
+        ];
     }
+
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
     ngOnDestroy() {
