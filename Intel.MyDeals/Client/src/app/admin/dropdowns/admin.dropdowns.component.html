@@ -99,7 +99,7 @@
                     <kendo-combobox #dealtypeDropDown (opened)="openedSetTypeCd()" [data]="distinctSetTypeCd" style="float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md"
                                     [formControl]="formGroup.get('OBJ_SET_TYPE_CD')" [allowCustom]="allowCustom">
                         <ng-template kendoComboBoxItemTemplate let-dataItem>
-                            <span *ngIf="distinctCustomerName.length > 0; else loader">{{ dataItem }}</span>
+                            <span *ngIf="distinctSetTypeCd.length > 0; else loader">{{ dataItem }}</span>
                             <ng-template #loader>
                                 <div class="loader-wrapper">
                                     <span class="loader"></span>
@@ -119,7 +119,7 @@
                     <kendo-combobox #attributeDropDown (opened)="openedAtributeCd()" [data]="distinctAtributeCd" style="float: left; height: 35px; font-size: 11px;" class="optsdm opUiContainer md"
                                     [formControl]="formGroup.get('ATRB_CD')" [allowCustom]="allowCustom">
                         <ng-template kendoComboBoxItemTemplate let-dataItem>
-                            <span *ngIf="distinctCustomerName.length > 0; else loader">{{ dataItem }}</span>
+                            <span *ngIf="distinctAtributeCd.length > 0; else loader">{{ dataItem }}</span>
                             <ng-template #loader>
                                 <div class="loader-wrapper">
                                     <span class="loader"></span>

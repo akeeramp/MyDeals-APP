@@ -231,10 +231,9 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         this.dropdownService.getBasicDropdownsNew(this.dataforfilter).pipe(takeUntil(this.destroy$))
             .subscribe(result => {
                 this.setNonCorpInheritableValues(result.Items);
-                const items = result.Items.filter(ob => ob.ATRB_CD !== "SETTLEMENT_PARTNER");
                 //checkRestrictionFlag = this.checkRestrictions(result);
                 //this to restrict SA users to have only restricted values
-                this.gridResult = items;
+                this.gridResult = result.Items;
                 let count = !this.loadCount ? this.gridData.total : 0;
                 const state: State = {
                     skip: 0,
@@ -281,7 +280,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
                 });
         });
         const filterExpression = FilterExpressBuilder.createSqlExpression(JSON.stringify(filter));
-        this.filterData = filterExpression;
+        this.filterData = `lkup.ATRB_SID != 3353 ${filterExpression == '' ? '' : `AND ${filterExpression}` }`;
         this.dataforfilter = {
             InFilters: this.filterData,
             Sort: this.sortData,
@@ -562,8 +561,10 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         this.state = {
             skip: 0,
             take: 25,
-            filter: this.state.filter,
-            sort: this.state.sort
+            filter: {
+                logic: "and",
+                filters: [],
+            }
         };
         this.loadUiDropdown();
     }
@@ -574,10 +575,8 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         this.state = {
             skip: 0,
             take: 25,
-            filter: {
-                logic: "and",
-                filters: [],
-            }
+            filter: this.state.filter,
+            sort: this.state.sort
         };
         this.loadUiDropdown();
     }
