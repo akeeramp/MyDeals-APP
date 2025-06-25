@@ -10,7 +10,8 @@ export interface DialogData {
 
 @Component({
     selector: "add-widget",
-    templateUrl: "Client/src/app/dashboard/addWidget/addWidget.component.html"
+    templateUrl: "Client/src/app/dashboard/addWidget/addWidget.component.html",
+    styleUrls: ['Client/src/app/dashboard/addWidget/addWidget.component.css']
 })
 export class addWidgetComponent {
     constructor(
