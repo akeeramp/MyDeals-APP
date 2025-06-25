@@ -394,7 +394,7 @@ namespace Intel.MyDeals.DataLibrary
             DataSet dsCheckConstraintErrors = null;
             try
             {
-                DataAccess.ExecuteDataSet(new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
+                DataAccess.ExecuteDataSet(new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
                 {
                     LK_UP_SID = id,
                     MODE = CrudModes.Delete.ToString(),
