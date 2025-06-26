@@ -200,6 +200,7 @@ export class userRolePermissionComponent implements OnInit {
     fetchLatestTrigger(): void {
         this.isLoading = true;
         this.isFetchLatest = true;
+        this.isPageChange = false;
         if(Object.keys(this.userRolePermissionForm.value).length){
             this.submitted = false;
             this.userRolePermissionForm.reset();
@@ -232,7 +233,7 @@ export class userRolePermissionComponent implements OnInit {
         filter.filters.forEach((item: CompositeFilterDescriptor) => {
             if (item && item.filters && item.filters.length > 0)
                 item.filters.forEach((filter: FilterDescriptor) => {
-                    if (filter.field = 'Database_Name') filter.field = '[Database Name]'
+                    if (filter.field == 'Database_Name') filter.field = '[Database Name]'
                 });
         });
         let sortString = '';
