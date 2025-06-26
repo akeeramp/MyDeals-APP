@@ -2419,8 +2419,6 @@
     <TypeScriptCompile Include="Client\src\app\reporting\reporting.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\authorization\auth.interceptor.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\authorization\auth.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\shared\config\config.model.ts" />
-    <TypeScriptCompile Include="Client\src\app\shared\config\config.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\footer\footer.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\footer\footer.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\header\header.service.ts" />

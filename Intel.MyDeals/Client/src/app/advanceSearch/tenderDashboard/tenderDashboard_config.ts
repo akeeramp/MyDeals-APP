@@ -310,11 +310,6 @@
             title: "Geo",
             type: "string",
             width: 100
-        },{
-            field: "NET_VOL_PAID",
-            title: "Net Credited Volume",
-            type: "number",
-            width: 120
         }, {
             field: "TOT_QTY_PAID",
             title: "Total Qty Paid",
@@ -645,13 +640,6 @@
             width: 170,
             format: "{0:c}",
             filterable: "moneyObjFilter"
-        }, {
-            field: "NET_VOL_PAID",
-            title: "Net Credited Volume",
-            type: "number",
-            filterable: false,
-            sortable: false,
-            width: 120
         },{
             field: "TOT_QTY_PAID",
             title: "Total Qty Paid",
@@ -972,13 +960,6 @@
             width: 170,
             format: "{0:c}",
             filterable: "moneyObjFilter"
-        }, {
-            field: "NET_VOL_PAID",
-            title: "Net Credited Volume",
-            type: "number",
-            filterable: false,
-            sortable: false,
-            width: 120
         }, {
             field: "TOT_QTY_PAID",
             title: "Total Qty Paid",
