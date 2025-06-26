@@ -43,7 +43,7 @@
     <div class="" style="margin-left: 20px;display:inline-block">
         <div class="fr mrgn-txt-color" style="width: 150px;">
             Show Archived data : 
-            <mat-slide-toggle (change)="toggleAtchFilter($event)" class="toggle-button-custom mat-slide-toggle mat-primary mat-checked" [checked]="showArchivedData" id="ARCHV_FLG" name="ARCHV_FLG" [color]="color"></mat-slide-toggle>
+            <mat-slide-toggle (change)="toggleAtchFilter($event)" class="toggle-button-custom test-slider" [checked]="showArchivedData" id="ARCHV_FLG" name="ARCHV_FLG" [color]="color"></mat-slide-toggle>
         </div>
     </div>
 </div>
@@ -165,7 +165,7 @@
         <kendo-grid-column [headerClass]="{'headerClass':true}" width="140px" field="ARCHV_FLG" title="Is Archived" filter="boolean">
             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                 <div class="text-center">
-                    <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.ARCHV_FLG" disabled></mat-slide-toggle>
+                    <mat-slide-toggle class="toggle-button-custom test-slider" [color]="color" [checked]="dataItem.ARCHV_FLG" disabled></mat-slide-toggle>
                 </div>
             </ng-template>
         </kendo-grid-column>

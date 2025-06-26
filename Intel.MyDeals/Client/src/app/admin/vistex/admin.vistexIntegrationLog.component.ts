@@ -13,6 +13,7 @@ import { takeUntil } from "rxjs/operators";
 import { RequestDetails, VistexLogFilters, VistexLogFiltersRequest, VistexLogFiltersResponse, VistexLogsInfo, VistexResponseUpdData } from "./admin.vistex.model";
 import { DynamicObj } from "../employee/admin.employee.model";
 import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
+import { ThemePalette } from "@angular/material/core";
 
 @Component({
     selector: "vistex-integration-log",
@@ -54,6 +55,8 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
     private filterData = "";
     private dataforfilter: VistexLogFiltersRequest;
     private columnFilterDataList: Map<string, Array<string>> = new Map();
+    private color: ThemePalette = "primary";
+
 
     public state: State = {
         skip: 0,
