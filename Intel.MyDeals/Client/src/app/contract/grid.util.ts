@@ -896,6 +896,7 @@ export class GridUtil {
                 { value: item["EPM_NM"], wrap: true },
                 { value: item["SKU_NM"], wrap: true },
                 { value: item["CPU_CACHE"], wrap: true },
+                { value: item["GEO"], wrap: true },
                 { value: item["actv_ind"], wrap: true }
             ];
 

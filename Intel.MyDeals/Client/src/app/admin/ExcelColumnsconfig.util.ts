@@ -901,6 +901,13 @@ static bulkPriceUpdateColumnData =  [
             headerTemplate: "CPU CACHE"
         },
         {
+            data: 'GEO',
+            type: 'text',
+            readOnly: false,
+            width: 100,
+            headerTemplate: "Geo"
+        },
+        {
             data: 'actv_ind',
             type: 'text',
             readOnly: false,

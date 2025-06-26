@@ -4083,6 +4083,9 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.String actv_ind { set; get; }
 
+        [DataMember]
+        public System.String GEO { set; get; }
+
 
         /*
         private static List<ProductSelectionResults> ProductSelectionResultsFromReader(SqlDataReader rdr){

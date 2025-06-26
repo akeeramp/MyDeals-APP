@@ -1546,6 +1546,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_YCS2_END = DB.GetReaderOrdinal(rdr, "YCS2_END");
                     int IDX_YCS2_START = DB.GetReaderOrdinal(rdr, "YCS2_START");
                     int IDX_actv_ind = DB.GetReaderOrdinal(rdr, "actv_ind");
+                    int IDX_GEO = DB.GetReaderOrdinal(rdr, "GEO");
 
                     while (rdr.Read())
                     {
@@ -1583,7 +1584,8 @@ namespace Intel.MyDeals.DataLibrary
                             YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_YCS2),
                             YCS2_END = (IDX_YCS2_END < 0 || rdr.IsDBNull(IDX_YCS2_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_END),
                             YCS2_START = (IDX_YCS2_START < 0 || rdr.IsDBNull(IDX_YCS2_START)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_START),
-                            actv_ind = (IDX_actv_ind < 0 || rdr.IsDBNull(IDX_actv_ind)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_actv_ind)
+                            actv_ind = (IDX_actv_ind < 0 || rdr.IsDBNull(IDX_actv_ind)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_actv_ind),
+                            GEO = (IDX_GEO < 0 || rdr.IsDBNull(IDX_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO)
                         });
                     } // while
                 }

@@ -206,6 +206,13 @@
                                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                                 </ng-template>
                             </kendo-grid-column>
+                            <kendo-grid-column field="GEO" title="Geo" width="180" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                                             let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                                </ng-template>
+                            </kendo-grid-column>
                             <kendo-grid-column field="actv_ind" title="Is active" width="300"
                                                [headerClass]="{'headerClass':true}" [editable]="false">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
