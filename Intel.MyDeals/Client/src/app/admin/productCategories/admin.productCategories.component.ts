@@ -257,6 +257,7 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
                     }
                     this.gridData = process(this.gridResult, this.state);
                     this.isLoading = false;
+                    this.loadproductCategoriesData();
                     this.loggerSvc.success("Product Verticals were successfully updated.");
                 },
                 error => {

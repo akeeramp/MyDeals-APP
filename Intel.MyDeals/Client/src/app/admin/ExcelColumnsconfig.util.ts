@@ -1040,55 +1040,64 @@ static bulkPriceUpdateColumnData =  [
             headerTemplate: "Billings End Date"
         }
     ]
-    static ProductVerticalColHeaders = ["Gdm Product Type", "GDM Vertical Name", "Division Short Name", "Op Code", "Deal Product Type", "Product Vertical", "Last Updated By", "Last Update Date"];
     static  ProductVerticalExcel = [
         {
             data: 'GDM_PRD_TYPE_NM',
             type: 'text',
             readOnly: false,
-            width: 140
+            width: 140,
+            headerTemplate: "Gdm Product Type"
         },
         {
             data: 'GDM_VRT_NM',
             type: 'text',
             readOnly: false,
-            width: 150
+            width: 150,
+            headerTemplate: "GDM Vertical Name"
         },
         {
             data: 'DIV_NM',
             type: 'numeric',
             readOnly: false,
-            width: 150
+            width: 150,
+            headerTemplate: "Division Short Name"
+
         },
         {
             data: 'OP_CD',
             type: 'text',
             readOnly: false,
-            width: 80
+            width: 80,
+            headerTemplate: "Op Code"
+
         },
         {
             data: 'DEAL_PRD_TYPE',
             type: 'text',
             readOnly: false,
-            width: 80
+            width: 80,
+            headerTemplate: "Deal Product Type"
         },
         {
             data: 'PRD_CAT_NM',
             type: 'numeric',
             readOnly: false,
-            width: 75
+            width: 75,
+            headerTemplate: "Product Vertical"
         },
         {
             data: 'CHG_EMP_NM',
             type: 'text',
             readOnly: false,
-            width: 80
+            width: 80,
+            headerTemplate: "Last Updated By"
         },
         {
             data: 'CHG_DTM',
             type: 'text',
             readOnly: false,
-            width: 75
+            width: 75,
+            headerTemplate: "Last Update Date"
         }
     ]
 

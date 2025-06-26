@@ -1025,8 +1025,9 @@ export class GridUtil {
         const rows = [{ cells: [] }];
         const colWidths = [];
         for (var t = 0; t < data.length; t++) {
+            var colTitle = data[t].headerTemplate;
             rows[0].cells.push({
-                value: data[t].data,
+                value: colTitle,
                 type: data[t].type,
                 textAlign: "center",
                 background: "#0071C5",
