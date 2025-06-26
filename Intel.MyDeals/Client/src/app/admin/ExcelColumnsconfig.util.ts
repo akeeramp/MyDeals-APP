@@ -793,103 +793,119 @@ static bulkPriceUpdateColumnData =  [
             width: 300,
         }
     ]
-    static ProductSelColHeaders = ["Processor Number", "Deal Product Name", "GDM Family Name", "Material Id", "Product Start Date", "Product End Date", "CAP Info", "YCS2", "CPU Processor number", "Media Code", "MM Customer Name", "EDW Family Name", "EPM Name", "SKU Name", "CPU CACHE","Is Active"];
     static ProductSelReport = [
         {
             data: 'PCSR_NBR',
             type: 'text',
             readOnly: false,
-            width: 140
+            width: 150,
+            headerTemplate: "Processor Number"
+
         },
         {
             data: 'DEAL_PRD_NM',
             type: 'text',
             readOnly: false,
-            width: 150
+            width: 100,
+            headerTemplate: "Deal Product Name"
         },
         {
             data: 'FMLY_NM',
             type: 'numeric',
             readOnly: false,
-            width: 150
+            width: 150,
+            headerTemplate: "GDM Family Name"
         },
         {
             data: 'MTRL_ID',
             type: 'text',
             readOnly: false,
-            width: 80
+            width: 100,
+            headerTemplate: "Material Id"
         },
         {
             data: 'PRD_STRT_DTM',
             type: 'text',
             readOnly: false,
-            width: 80
+            width: 100,
+            headerTemplate: "Product Start Date"
         },
         {
             data: 'PRD_END_DTM',
             type: 'numeric',
             readOnly: false,
-            width: 75
+            width: 100,
+            headerTemplate: "Product End Date"
         },
         {
             data: 'CAP',
             type: 'text',
             readOnly: false,
-            width: 80
+            width: 80,
+            headerTemplate: "CAP Info"
         },
         {
             data: 'YCS2',
             type: 'text',
             readOnly: false,
-            width: 75
+            width: 80,
+            headerTemplate: "YCS2"
         },
         {
             data: 'CPU_PROCESSOR_NUMBER',
             type: 'text',
             readOnly: false,
-            width: 75
+            width: 100,
+            headerTemplate: "CPU Processor number"
         },
         {
             data: 'MM_MEDIA_CD',
             type: 'text',
             readOnly: false,
-            width: 75
+            width: 100,
+            headerTemplate: "Media Code"
         },
         {
             data: 'MM_CUST_CUSTOMER',
             type: 'text',
             readOnly: false,
-            width: 75
+            width: 100,
+            headerTemplate: "MM Customer Name"
         },
         {
             data: 'GDM_FMLY_NM',
             type: 'text',
             readOnly: false,
-            width: 75
+            width: 150,
+            headerTemplate: "EDW Family Name"
         },
         {
             data: 'EPM_NM',
             type: 'text',
             readOnly: false,
-            width: 75
+            width: 100,
+            headerTemplate: "EPM Name"
         },
         {
             data: 'SKU_NM',
             type: 'text',
             readOnly: false,
-            width: 75
+            width: 100,
+            headerTemplate: "SKU Name"
         },
         {
             data: 'CPU_CACHE',
             type: 'text',
             readOnly: false,
-            width: 75
+            width: 100,
+            headerTemplate: "CPU CACHE"
         },
         {
             data: 'actv_ind',
             type: 'text',
             readOnly: false,
-            width: 80
+            width: 80,
+            headerTemplate: "Is Active"
         },
     ]
 
