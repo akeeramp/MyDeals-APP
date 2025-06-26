@@ -291,6 +291,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     }
 
     GetColumnFilterData(fieldName: string): any {
+
         return this.columnFilterDataList.has(fieldName) ? this.columnFilterDataList.get(fieldName) : [];
     }
 
@@ -506,6 +507,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         if (this.isFormChange) {
             this.isModelValid = this.checkModelValid(newUiDropdown, isNew);
             if (this.isModelValid) {
+                this.columnFilterDataList = new Map();
                 if (isNew) {
                     this.isLoading = true;
                     this.dropdownService.insertBasicDropdowns(newUiDropdown).pipe(takeUntil(this.destroy$)).subscribe((result) => {
@@ -597,6 +599,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
 
     deleteRecord() {
         this.isDialogVisible = false;
+        this.columnFilterDataList = new Map();
         this.dropdownService.deleteBasicDropdowns(this.deleteDropdownData).pipe(takeUntil(this.destroy$)).subscribe(() => {
             if (this.deleteATRB_CDItem == "MRKT_SEG_COMBINED") {
                 const indx = this.nonCorpInheritableValues.indexOf(this.deleteDROP_DOWNItem);
