@@ -33,7 +33,7 @@
                     Please select option(s) below to move into the valid products box or use the <span class="skyblue">Product Selector</span>
                 </div>
             </div>
-            <div class="row subHeaderNavContainer" style=" margin: 0 !important;height:90px">
+            <div class="row subHeaderNavContainer" style=" margin: 0 !important;min-height: 90px">
                 <div class="mini-left miniNav" *ngIf="numIssueRows > 1">
                     <div class="text-center">({{ curRowIndx }} of {{ numIssueRows }} rows)</div>
                     <div>
@@ -59,16 +59,16 @@
                             </li>
                         </ul>
                     </div>
-                    <div style="float: left; font-size: 14px; margin-left: 10px; margin-top: 5px; color: #000000;" *ngIf="curRowExcludeProd.length >0">Excluded Product(s):</div>
-                    <div>
-                        <ul class="productpath breadcrumb">
+                    <div style="float: left; font-size: 14px; margin-left: 10px; color: #000000;" *ngIf="curRowExcludeProd.length >0">Excluded Product(s):</div>
+                    <div *ngIf="curRowExcludeProd.length >0">
+                        <ul class="productpath breadcrumb" style="max-height:50px">
                             <li *ngFor="let p of curRowExcludeProd  | unique:'name'">
-                                <span [ngClass]="{'strike': p.matchName.length != 0,'btnInclude':showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs">
+                                <span [ngClass]="{'strike': p.matchName.length != 0,'btnInclude':showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs padding-tb-0">
                                     <span class="prdAnchor {{p.status}}" (click)="clkPrdUsrNm(p)" title="{{p.reason}}">{{ p.anchorName }}</span>
                                     <span title="Remove Product" class="skyblue pl10 removeProduct span-closer" (click)="removeProd(p.name, p.exclude)">x</span>
                                 </span>
-                                <div class="newProd">
-                                    <span id="selectedProducts" *ngIf="p.matchName.length > 0">{{p.matchName.length > 1 ? p.matchName.length + " products" : p.matchName[0]}}</span>
+                                <div class="newProd height-auto-fix">
+                                    <span id="selectedProducts" class="assign-inline-block" *ngIf="p.matchName.length > 0">{{p.matchName.length > 1 ? p.matchName.length + " products" : p.matchName[0]}}</span>
                                     &nbsp;
                                 </div>
                             </li>
@@ -78,7 +78,7 @@
 
             </div>
 
-            <div *ngIf="!allDone && (curRowIssues.length > 0 || curRowLvl.length > 1 || curRowCategories.length > 1)" class="row subHeaderNavContainer">
+            <div *ngIf="!allDone && (curRowIssues.length > 0 || curRowLvl.length > 1 || curRowCategories.length > 1)" class="row subHeaderNavContainer" style="max-height:175px !important; overflow: auto">
                 <div class="row subHeaderNavContainer" *ngIf="curRowIssues.length > 0" style="margin-bottom:0px !important;padding-bottom:0px;">
                     <div class="col" style="padding: 0;">
                         <p class='filterTitleUnderline'>Filter by product</p>
@@ -111,7 +111,7 @@
             <div class="row subHeaderNavContainer" *ngIf="!allDone && !isLoading" style="display:block;margin-top: 10px !important; border-radius:0px;">
                 <div >
                     <kendo-grid #pdtCrtGrid id="productcorrectorgrid" [data]="selGridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                                [sort]="state.sort" [filter]="state.filter" [ngStyle]="{'height':dynamicGridHeight()}" 
+                                [sort]="state.sort" [filter]="state.filter" [ngStyle]="{'height':'320px'}" 
                                 [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}"
                                 [rowClass]="rowCallback" (filterChange)="onGridFilterChange($event)"
                                 filterable="menu" (dataStateChange)="dataStateChange($event)" [resizable]="true"
