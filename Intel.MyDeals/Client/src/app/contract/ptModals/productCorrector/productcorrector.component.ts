@@ -709,7 +709,10 @@ export class ProductCorrectorComponent implements OnDestroy{
             });
 
             this.ProductCorrectorData.ValidProducts[this.curRowId][item.name] = filterDuplicateProducts;
-            this.data.ProductCorrectorData.ValidProducts[this.curRowId][item.name] = filterDuplicateProducts;
+            if (this.data.ProductCorrectorData.ValidProducts.hasOwnProperty(this.curRowId)
+                && this.data.ProductCorrectorData.ValidProducts[this.curRowId].hasOwnProperty(item.name)) {
+                this.data.ProductCorrectorData.ValidProducts[this.curRowId][item.name] = filterDuplicateProducts;
+            }
 
             if (this.ProductCorrectorData.ValidProducts[this.curRowId][item.name].length === 0) delete this.ProductCorrectorData.ValidProducts[this.curRowId][item.name];
             this.curRowData.forEach((item)=> {
