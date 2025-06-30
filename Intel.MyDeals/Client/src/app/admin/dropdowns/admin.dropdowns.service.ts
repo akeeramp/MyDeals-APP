@@ -29,9 +29,9 @@ export class DropdownService {
         return this.httpClient.post(apiUrl, data);
     }
 
-    public getBasicDropdownsFilterData(filterName): Observable<any> {
+    public getBasicDropdownsFilterData(filterName, data): Observable<any> {
         const apiUrl = this.API_URL_DROPDOWN + 'GetBasicDropdownsFilterData/' + filterName;
-        return this.httpClient.get(apiUrl);
+        return this.httpClient.post(apiUrl, data);
     }
 
     public getDealTypesDropdowns(isForceReGet): Observable<any> {

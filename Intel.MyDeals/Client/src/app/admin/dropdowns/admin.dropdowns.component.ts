@@ -77,7 +77,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     public nonCorpInheritableValues: Array<any> = [];
     public COMP_ATRB_SIDS: Array<any> = [];
     public checkRestrictionFlag: boolean = false;
-    private isDeveloperFlag = false;
+    private isDeveloperFlag = (<any>window).isDeveloper;
     public restrictedGroupList = [3456, 3457, 3458, 3454];
     private sortData = "";
     private filterData = "";
@@ -145,16 +145,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
                 //this to restrict SA users to have only restricted values
                 let exportData = items;
                 this.isLoading = false;
-                if (this.checkRestrictionFlag) {
-                    //return exportData;
-                    GridUtil.dsToExcelDropDownData(ExcelColumnsConfig.GetDropDownExcelCalDef, exportData, "MyDealsDropdowns");
-                } else {
-                    exportData = filter(exportData, (item) => {
-                        let id = (item.dropdownID === undefined) ? item.ATRB_SID : item.dropdownID;
-                        if (this.restrictedGroupList.includes(id)) return item
-                    });
-                    GridUtil.dsToExcelDropDownData(ExcelColumnsConfig.GetDropDownExcelCalDef, exportData, "MyDealsDropdowns");
-                }
+                GridUtil.dsToExcelDropDownData(ExcelColumnsConfig.GetDropDownExcelCalDef, exportData, "MyDealsDropdowns");                
 
             }, (err) => {
                 this.loggerService.error("Unable to get Group Dropdowns.", err, err.statusText);
@@ -245,19 +236,10 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
                     }
                 };
                 this.loadCount = false;
-                if (this.checkRestrictionFlag) {
-                    this.gridData = process(this.gridResult, state);
-                    this.gridData.total = result.TotalRows == 0 ? count : result.TotalRows;
-                    this.isLoading = false;
-                } else {
-                    this.gridResult = filter(this.gridResult, (item) => {
-                        let id = (item.dropdownID === undefined) ? item.ATRB_SID : item.dropdownID;
-                        if (this.restrictedGroupList.includes(id)) return item
-                    })
-                    this.gridData = process(this.gridResult, state);
-                    this.gridData.total = result.TotalRows;
-                    this.isLoading = false;
-                }
+                this.columnFilterDataList = new Map();
+                this.gridData = process(this.gridResult, state);
+                this.gridData.total = result.TotalRows == 0 ? count : result.TotalRows;
+                this.isLoading = false;               
             });
     }
 
@@ -286,7 +268,8 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
             Sort: this.sortData,
             Skip: this.state.skip,
             Take: this.state.take,
-            FthCnt: this.loadCount
+            FthCnt: this.loadCount,
+            ChkRestFlg: this.checkRestrictionFlag
         };
     }
 
@@ -296,40 +279,12 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     }
 
     filterLoad(fieldName: string) {
-        if (fieldName == 'ATRB_LKUP_DESC' || fieldName == 'ATRB_LKUP_TTIP' || fieldName == 'DROP_DOWN') {
-            this.dropdownService.getBasicDropdownsFilterData(fieldName).subscribe(data => {
+            this.dropdownService.getBasicDropdownsFilterData(fieldName, this.dataforfilter).subscribe(data => {
                 this.columnFilterDataList.set(fieldName, data);
             });
-        }
-        else if (fieldName == 'OBJ_SET_TYPE_CD') {
-            this.dropdownService.getDealTypesDropdowns(true).subscribe(data => {
-                const dataValues: Array<any> = distinct(data, "dropdownName").map(
-                    (item: any) => item.dropdownName
-                );
-                this.columnFilterDataList.set(fieldName, dataValues);
-            });
-        }
-        else if (fieldName == 'CUST_NM') {
-            this.dropdownService.getCustsDropdowns(true).subscribe(data => {
-                const dataValues: Array<any> = distinct(data, "dropdownName").map(
-                    (item: any) => item.dropdownName
-                );
-                this.columnFilterDataList.set(fieldName, dataValues);
-
-            });
-        }
-        else if (fieldName == 'ATRB_CD') {
-            this.dropdownService.getDropdownGroups(true).subscribe(data => {
-                const dataValues: Array<any> = distinct(data, "dropdownName").map(
-                    (item: any) => item.dropdownName
-                );
-                this.columnFilterDataList.set(fieldName, dataValues);
-
-            });
-        }
     }
     setNonCorpInheritableValues(data: Array<any>) {
-        for (let i = 0; i <= data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
             if (data[i] != null && data[i].ATRB_CD == "MRKT_SEG_COMBINED") {
                 this.nonCorpInheritableValues.push(data[i].DROP_DOWN);
             }
@@ -485,18 +440,40 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         this.closeEditor(sender, rowIndex);
     }
 
-    saveHandler({ sender, rowIndex, formGroup, isNew, dataItem }) {
+    async saveHandler({ sender, rowIndex, formGroup, isNew, dataItem }) {
         let newUiDropdown: UiDropdownItem = formGroup.getRawValue();
         if (isNew) {
-            const GroupSID = this.GroupData.filter(x => x.dropdownName == newUiDropdown.ATRB_CD)
-            if (GroupSID.length > 0) {
-                newUiDropdown.ATRB_SID = GroupSID[0]["dropdownID"];
+            if (this.GroupData) {
+                const GroupSID = this.GroupData.filter(x => x.dropdownName == newUiDropdown.ATRB_CD)
+                if (GroupSID.length > 0) {
+                    newUiDropdown.ATRB_SID = GroupSID[0]["dropdownID"];
+                }
             }
-            const customerSID = this.CustomerData.filter(x => x.dropdownName == newUiDropdown.CUST_NM)
-            if (customerSID.length > 0) {
-                newUiDropdown.CUST_MBR_SID = customerSID[0]["dropdownID"];
+            else {
+                await this.getGroupsDataSource();
+                const GroupSID = this.GroupData.filter(x => x.dropdownName == newUiDropdown.ATRB_CD)
+                if (GroupSID.length > 0) {
+                    newUiDropdown.ATRB_SID = GroupSID[0]["dropdownID"];
+                }
             }
-            newUiDropdown.OBJ_SET_TYPE_SID = this.DealTypeData.filter(x => x.dropdownName == newUiDropdown.OBJ_SET_TYPE_CD)[0].dropdownID;
+            if (this.CustomerData) {
+                const customerSID = this.CustomerData.filter(x => x.dropdownName == newUiDropdown.CUST_NM)
+                if (customerSID.length > 0) {
+                    newUiDropdown.CUST_MBR_SID = customerSID[0]["dropdownID"];
+                }
+            } else {
+                await this.getCustomersDataSource();
+                const customerSID = this.CustomerData.filter(x => x.dropdownName == newUiDropdown.CUST_NM)
+                if (customerSID.length > 0) {
+                    newUiDropdown.CUST_MBR_SID = customerSID[0]["dropdownID"];
+                }
+            }
+            if (this.DealTypeData)
+                newUiDropdown.OBJ_SET_TYPE_SID = this.DealTypeData.filter(x => x.dropdownName == newUiDropdown.OBJ_SET_TYPE_CD)[0].dropdownID;
+            else {
+                await this.getDealTypeDataSource();
+                newUiDropdown.OBJ_SET_TYPE_SID = this.DealTypeData.filter(x => x.dropdownName == newUiDropdown.OBJ_SET_TYPE_CD)[0].dropdownID;
+            }
         }
 
         if (!isNew) {
@@ -507,7 +484,6 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         if (this.isFormChange) {
             this.isModelValid = this.checkModelValid(newUiDropdown, isNew);
             if (this.isModelValid) {
-                this.columnFilterDataList = new Map();
                 if (isNew) {
                     this.isLoading = true;
                     this.dropdownService.insertBasicDropdowns(newUiDropdown).pipe(takeUntil(this.destroy$)).subscribe((result) => {
@@ -599,7 +575,6 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
 
     deleteRecord() {
         this.isDialogVisible = false;
-        this.columnFilterDataList = new Map();
         this.dropdownService.deleteBasicDropdowns(this.deleteDropdownData).pipe(takeUntil(this.destroy$)).subscribe(() => {
             if (this.deleteATRB_CDItem == "MRKT_SEG_COMBINED") {
                 const indx = this.nonCorpInheritableValues.indexOf(this.deleteDROP_DOWNItem);
@@ -645,8 +620,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     }
 
     ngOnInit() {
-        this.checkRestrictionFlag = ((<any>window).usrRole === 'SA' && !(<any>window).isDeveloper) === false ? true : false;
-        this.isDeveloperFlag = (<any>window).isDeveloper;
+        this.checkRestrictionFlag = !((<any>window).usrRole === 'SA' && !(<any>window).isDeveloper);
         this.initialization();
     }
 

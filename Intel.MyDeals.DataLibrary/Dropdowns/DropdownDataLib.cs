@@ -28,15 +28,15 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip, bool FthCnt)
+        public DropdownDetails GetBasicDropdowns(DropdownFilters data)
         {
-            DropdownDetails ret = ExecuteManageBasicDropdownSP(filter, sort, take, skip, FthCnt);
+            DropdownDetails ret = ExecuteManageBasicDropdownSP(data);
             return ret;
         }
 
-        public List<string> GetBasicDropdownsFilterData(string filterName)
+        public List<string> GetBasicDropdownsFilterData(string filterName, DropdownFilters data)
         {
-            var ret = ExecuteManageBasicDropdownFilterDataSP(filterName);
+            var ret = ExecuteManageBasicDropdownFilterDataSP(filterName, data);
             return ret;
         }
 
@@ -190,7 +190,8 @@ namespace Intel.MyDeals.DataLibrary
                     ATRB_LKUP_TTIP = "",
                     EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                     TAKE = -1,
-                    FTHCNT = false
+                    FTHCNT = false,
+                    CHKRESTFLG = true
                 };
             }
             else
@@ -269,7 +270,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         //for select in ui dropdown page
-        private DropdownDetails ExecuteManageBasicDropdownSP(string filter, string sort, int take, int skip, bool FthCnt)
+        private DropdownDetails ExecuteManageBasicDropdownSP(DropdownFilters data)
         {
             var ret = new List<BasicDropdown>();
             int RowCount = 0;
@@ -285,11 +286,12 @@ namespace Intel.MyDeals.DataLibrary
                 ATRB_LKUP_TTIP = "",
                 EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                 MODE = "SELECT",
-                FILTER = filter,
-                SORT = sort,
-                TAKE = take,
-                SKIP = skip,
-                FTHCNT = FthCnt
+                FILTER = data.InFilters,
+                SORT = data.Sort,
+                TAKE = data.Take,
+                SKIP = data.Skip,
+                FTHCNT = data.FthCnt,
+                CHKRESTFLG =data.ChkRestFlg
             };
 
             try
@@ -348,7 +350,7 @@ namespace Intel.MyDeals.DataLibrary
             return new DropdownDetails { Items = ret, TotalRows = RowCount };
         }
 
-        private List<string> ExecuteManageBasicDropdownFilterDataSP(string filterName)
+        private List<string> ExecuteManageBasicDropdownFilterDataSP(string filterName, DropdownFilters data)
         {
             var ret = new List<string>();
             Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP();
@@ -363,7 +365,13 @@ namespace Intel.MyDeals.DataLibrary
                 ATRB_LKUP_DESC = "",
                 ATRB_LKUP_TTIP = "",
                 EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                FILTER_NAME = filterName
+                FILTER_NAME = filterName,
+                FILTER = data.InFilters,
+                SORT = data.Sort,
+                TAKE = data.Take,
+                SKIP = data.Skip,
+                FTHCNT = data.FthCnt,
+                CHKRESTFLG = data.ChkRestFlg
             };
 
             try

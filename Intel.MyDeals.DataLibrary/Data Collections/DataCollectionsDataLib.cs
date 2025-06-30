@@ -185,14 +185,14 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetBasicDropdowns();
         }
 
-        public DropdownDetails GetBasicDropdowns(string filter, string sort, int take, int skip, bool FthCnt)
+        public DropdownDetails GetBasicDropdowns(DropdownFilters data)
         {
-            return new DropdownDataLib().GetBasicDropdowns(filter, sort, take, skip, FthCnt);
+            return new DropdownDataLib().GetBasicDropdowns(data);
         }
 
-        public List<string> GetBasicDropdownsFilterData(string filterName)
+        public List<string> GetBasicDropdownsFilterData(string filterName, DropdownFilters data)
         {
-            return new DropdownDataLib().GetBasicDropdownsFilterData(filterName);
+            return new DropdownDataLib().GetBasicDropdownsFilterData(filterName, data);
         }
 
         public Dictionary<string, string> GetDropdownDict(string lookupText)

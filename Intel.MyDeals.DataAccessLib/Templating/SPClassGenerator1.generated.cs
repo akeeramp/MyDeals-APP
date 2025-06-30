@@ -10325,14 +10325,25 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
 
             ///<summary>
-            /// DataType: int
+            /// DataType: bool
             /// Mode: IN
             ///</summary>
-            [SQLParameterAttribute(15, "ParameterDirection.Input", 0, false)]
+            [SQLParameterAttribute(16, "ParameterDirection.Input", 0, false)]
             public bool FTHCNT
             {
                 set { SetParmeter("FTHCNT", value); }
                 get { return (bool)GetParameter("FTHCNT"); }
+            }
+
+            ///<summary>
+            /// DataType: bool
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(17, "ParameterDirection.Input", 0, false)]
+            public bool CHKRESTFLG
+            {
+                set { SetParmeter("CHKRESTFLG", value); }
+                get { return (bool)GetParameter("CHKRESTFLG"); }
             }
         }
 

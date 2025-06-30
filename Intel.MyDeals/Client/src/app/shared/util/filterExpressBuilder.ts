@@ -52,7 +52,7 @@ export class FilterExpressBuilder {
                                 }
                             }).join(", ");
                             const field = subComposite.filters[0].field;
-                            conditions.push(`${field} IN (${values})`);
+                            conditions.push(`${field} IN (${values == '' ? `''` : `${values}`})`);
                         }
                         else {
                             const nestedCondition = this.buildSqlExpression(subComposite);

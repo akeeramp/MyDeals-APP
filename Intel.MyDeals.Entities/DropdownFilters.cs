@@ -10,5 +10,7 @@ namespace Intel.MyDeals.Entities
         public int Skip { get; set; }
 
         public bool FthCnt { get; set; }
+
+        public bool ChkRestFlg { get; set; }
     }
 }
