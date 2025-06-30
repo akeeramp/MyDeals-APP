@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { MomentService } from "../../shared/moment/moment.service";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, EditEvent, GridComponent, CancelEvent, SaveEvent } from "@progress/kendo-angular-grid";
-import { process, State, distinct } from "@progress/kendo-data-query";
+import { process, State, distinct, CompositeFilterDescriptor, FilterDescriptor } from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { each } from 'underscore';
@@ -65,7 +65,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         // Initial filter descriptor
         filter: {
             logic: "and",
-            filters: [],
+            filters: [{ field: "ARCHV_FLG", operator: "eq", value: false }],
         },
     };
     public pageSizes: PageSizeItem[] = [
@@ -122,13 +122,33 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         this.state.take = 25;
         this.state.filter = {
             logic: "and",
-            filters: [],
+            filters: this.showArchivedData ? [{ field: "ARCHV_FLG", operator: "eq", value: true }] : [{ field: "ARCHV_FLG", operator: "eq", value: false }],
         };
         this.getData();
     }
 
-    dataStateChange(state: DataStateChangeEvent): void {
-        this.state = state;
+    pageChange(state): void {
+        this.state.take = state.take;
+        this.state.skip = state.skip;
+        this.getData();
+    }
+
+    filterChange(filter): void {
+        this.state.filter = filter;
+        this.state.skip = 0;
+        filter.filters.forEach((item: CompositeFilterDescriptor) => {
+            if (item && item.filters && item.filters.length > 0)
+                item.filters.forEach((filter: FilterDescriptor) => {
+                    if (filter.field = 'ARCHV_FLG') {
+                        this.showArchivedData = filter.value;
+                    }
+                });
+        });
+        this.getData();
+    }
+
+    sortChange(sort): void {
+        this.state["sort"] = sort;
         this.getData();
     }
 
@@ -138,7 +158,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         this.state.take = 25;
         this.state.filter = {
             logic: "and",
-            filters: [],
+            filters: this.showArchivedData ? [{ field: "ARCHV_FLG", operator: "eq", value: true }] : [{ field: "ARCHV_FLG", operator: "eq", value: false }],
         };
         this.getData();
     }
@@ -148,49 +168,49 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         this.startDate = new Date(this.momentService.moment(this.startDate).format("MM/DD/YYYY"));
         this.endDate = new Date(this.momentService.moment(this.endDate).format("MM/DD/YYYY"));
         
-            if (this.momentService.moment(this.startDate, "MM/DD/YYYY", true).isValid() && this.momentService.moment(this.endDate, "MM/DD/YYYY", true).isValid() && this.momentService.moment(this.startDate).isBefore(this.endDate)) {
-                if (this.selectedRequestType == undefined || this.selectedRequestType.RQST_TYPE == undefined || this.selectedRequestType.RQST_TYPE == "" || this.selectedRequestType.RQST_TYPE == null) {
-                    this.showKendoAlert = true;
-                    this.kendoAlertMsg = "Please Select Request Type";
-                    this.kendoBoldMsg = "";
-                    return;
-                }
-                this.CreateVistexLogFiltersRequest();
-                this.isLoading = true;
-
-                this.dsaService.getVistexLogsInfo(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe((response: VistexLogFiltersResponse) => {
-                    this.gridResult = response.Items;
-                    const state: State = {
-                        skip: 0,
-                        take: this.state.take,
-                        group: this.state.group,
-                        filter: {
-                            logic: "and",
-                            filters: [],
-                        }
-                    };
-                    this.gridData = process(this.gridResult, state);
-                    this.gridData.total = response.TotalRows;
-                    this.isLoading = false;
-                    this.LogDealId = "";
-                    this.isLoading = false;
-                }, function (err) {
-                    this.loggerSvc.error("Operation failed", err, err.statusText)
-                });
-
-                this.dsaService.getVistexStatuses().pipe(takeUntil(this.destroy$)).subscribe((response: string[]) => {
-                    this.VistexStatuses = response;
-                }, function (err) {
-                    this.loggerSvc.error("Unable to get statuses of vistex", err, err.statusText);
-                });
-            }
-            else {
+        if (this.momentService.moment(this.startDate, "MM/DD/YYYY", true).isValid() && this.momentService.moment(this.endDate, "MM/DD/YYYY", true).isValid() && this.momentService.moment(this.startDate).isBefore(this.endDate)) {
+            if (this.selectedRequestType == undefined || this.selectedRequestType.RQST_TYPE == undefined || this.selectedRequestType.RQST_TYPE == "" || this.selectedRequestType.RQST_TYPE == null) {
                 this.showKendoAlert = true;
-                this.kendoAlertMsg = "Please provide valid";
-                this.kendoBoldMsg = " Start and End Date";
-                this.startDate = new Date(this.momentService.moment().subtract(5, 'days').format("MM/DD/YYYY"));
-                this.endDate = new Date(this.momentService.moment().format("MM/DD/YYYY"));
+                this.kendoAlertMsg = "Please Select Request Type";
+                this.kendoBoldMsg = "";
+                return;
             }
+            this.CreateVistexLogFiltersRequest();
+            this.isLoading = true;
+
+            this.dsaService.getVistexLogsInfo(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe((response: VistexLogFiltersResponse) => {
+                this.gridResult = response.Items;
+                const state: State = {
+                    skip: 0,
+                    take: this.state.take,
+                    group: this.state.group,
+                    filter: {
+                        logic: "and",
+                        filters: [],
+                    }
+                };
+                this.gridData = process(this.gridResult, state);
+                this.gridData.total = response.TotalRows;
+                this.isLoading = false;
+                this.LogDealId = "";
+                this.isLoading = false;
+            }, function (err) {
+                this.loggerSvc.error("Operation failed", err, err.statusText)
+            });
+
+            this.dsaService.getVistexStatuses().pipe(takeUntil(this.destroy$)).subscribe((response: string[]) => {
+                this.VistexStatuses = response;
+            }, function (err) {
+                this.loggerSvc.error("Unable to get statuses of vistex", err, err.statusText);
+            });
+        }
+        else {
+            this.showKendoAlert = true;
+            this.kendoAlertMsg = "Please provide valid";
+            this.kendoBoldMsg = " Start and End Date";
+            this.startDate = new Date(this.momentService.moment().subtract(5, 'days').format("MM/DD/YYYY"));
+            this.endDate = new Date(this.momentService.moment().format("MM/DD/YYYY"));
+        }
     }
 
     toggleAtchFilter(event) {
@@ -205,7 +225,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
             this.showArchivedData = true;
             this.state.filter = {
                 logic: "and",
-                filters: []
+                filters: [{ field: "ARCHV_FLG", operator: "eq", value: true }]
             };
         }
         this.getData();
@@ -363,7 +383,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         this.state.take = 25;
         this.state.filter = {
             logic: "and",
-            filters: [],
+            filters: this.showArchivedData ? [{ field: "ARCHV_FLG", operator: "eq", value: true }] : [{ field: "ARCHV_FLG", operator: "eq", value: false }],
         };
         this.getData();
     }
@@ -375,7 +395,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         this.state.take = 25;
         this.state.filter = {
             logic: "and",
-            filters: [],
+            filters: [{ field: "ARCHV_FLG", operator: "eq", value: false }],
         };
         this.getData();
     }
