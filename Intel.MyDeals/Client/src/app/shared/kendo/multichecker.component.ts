@@ -11,20 +11,23 @@ import { each, compact, sortBy, filter } from 'underscore';
         <span id="searchIcon" class="k-icon k-i-zoom"></span>
     </div>
     <cdk-virtual-scroll-viewport [itemSize]="7" style="min-height: 200px;display: flex; align-item: center; justify-content: center;">
-        <ul *ngIf="currentData && currentData.length > 0; else loader" style="overflow:hidden !important; max-width: 300px;">
+        <ul *ngIf="data && data.length > 0; else loader" style="overflow:hidden !important; max-width: 300px;">
             <li #itemElement *cdkVirtualFor="let item of currentData; let i = index;"
             (click)="onSelectionChange(valueAccessor(item), itemElement)"
             [ngClass]="{'k-state-selected': isItemSelected(item)}">
-            <div class="k-form-field-checkbox-wrap">
-                <input kendoCheckBox type="checkbox" id="chk-{{ valueAccessor(item) }}" (focus)="onFocus(itemElement)" [checked]="isItemSelected(item)" />
-                <label class="k-multiselect-checkbox k-checkbox-label" for="chk-{{ valueAccessor(item) }}">{{ textAccessor(item) }}</label>
-            </div>
+                <div class="k-form-field-checkbox-wrap">
+                    <input kendoCheckBox type="checkbox" id="chk-{{ valueAccessor(item) }}" (focus)="onFocus(itemElement)" [checked]="isItemSelected(item)" />
+                    <label class="k-multiselect-checkbox k-checkbox-label" for="chk-{{ valueAccessor(item) }}">{{ textAccessor(item) }}</label>
+                </div>
             </li>
+            <div [ngClass]="[ currentData.length == 0 ? 'noData' : 'noDataHidden' ]">
+                <span>No Data Found</span>
+            </div>
         </ul>
         <ng-template #loader>
-        <div class="loader-wrapper">
-          <span class="loader"></span>
-          </div>
+            <div class="loader-wrapper">
+              <span class="loader"></span>
+             </div>
         </ng-template>
     </cdk-virtual-scroll-viewport>
     <div id="selectedCount">{{ selectedCount }} items selected</div>`,
@@ -36,6 +39,18 @@ import { each, compact, sortBy, filter } from 'underscore';
             text-align: center;
             vertical-align: middle;
             overflow: hidden;
+        }
+        .noData{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .noDataHidden{
+            display: none;
         }
 
         #filterBar {
