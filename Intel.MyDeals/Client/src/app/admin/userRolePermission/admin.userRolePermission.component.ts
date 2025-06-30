@@ -238,7 +238,8 @@ export class userRolePermissionComponent implements OnInit {
         });
         let sortString = '';
         if (this.state.sort) {
-            this.state.sort.forEach((value, ind) => {
+            let sort = JSON.parse(JSON.stringify(this.state.sort));
+            sort.forEach((value, ind) => {
                 if (value.field == 'Database_Name') value.field = '[Database Name]';
                 if (value.dir) {
                     sortString = ind == 0 ? `ORDER BY ${value.field} ${value.dir}` : `${sortString} , ${value.field} ${value.dir}`;
@@ -281,6 +282,7 @@ export class userRolePermissionComponent implements OnInit {
                 this.gridData = process(this.gridResult, stateTest);
                 this.gridData.total = totalCount;
                 if (mode == 'search') {
+                    this.loggerSvc.success("User Role Permission Data Updated successfully");
                     this.currentUserSearch = {
                         username: this.filterParams.DatabaseUserName,
                         startDate: this.filterParams.StartDate,

@@ -44,6 +44,7 @@
         <div class="col-md-12">
             <div class="table-design">
                 <kendo-grid [data]="gridData" 
+                            id="usrPermGrid"
                             (sortChange)="sortChange($event)" 
                             (pageChange)="pageChange($event)" 
                             (filterChange)="filterChange($event)"
