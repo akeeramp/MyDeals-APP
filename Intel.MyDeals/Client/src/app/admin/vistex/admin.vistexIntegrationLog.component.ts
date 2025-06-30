@@ -139,7 +139,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         filter.filters.forEach((item: CompositeFilterDescriptor) => {
             if (item && item.filters && item.filters.length > 0)
                 item.filters.forEach((filter: FilterDescriptor) => {
-                    if (filter.field = 'ARCHV_FLG') {
+                    if (filter.field == 'ARCHV_FLG') {
                         this.showArchivedData = filter.value;
                     }
                 });
