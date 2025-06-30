@@ -55,18 +55,18 @@
     min-width: 500px;
 }
 
-#dealTimeLine .k-i-file-excel {
+/*#dealTimeLine .k-i-file-excel {
     margin-top: -6px
-}
+}*/
 
 .metho-comp {
-    height: 25px !important;
+    height: 30px !important;
     color: #444 !important;
     line-height: 0 !important;
     padding: 9px 14px !important;
     border-color: #fafafa !important;
     background-color: #fafafa !important;
-    display: inline-block !important
+    display: flex !important
 }
 
     .metho-comp:hover {
@@ -115,9 +115,9 @@ button.excelBtn.metho-comp {
     font-size: 15px
 }
 
-    button.excelBtn.metho-comp span {
+/*    button.excelBtn.metho-comp span {
         margin-top: -3px
-    }
+    }*/
 
 .common-messages .opUiContainer.md.k-grid kendo-grid-list tbody tr td {
     border: none !important;
