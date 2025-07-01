@@ -1929,6 +1929,10 @@ kendo-grid#manageFilterStyle tr.k-grid-norecords td {
     top: -4px;
 }
 
+kendo-popup {
+    max-width: 215px;
+}
+
 kendo-popup.k-animation-container .k-list-filter input.k-textbox {
     width: 100%;
     height: 27px;
@@ -2992,4 +2996,20 @@ kendo-chart#deal-stages-chart svg text {
     justify-content: space-between;
     width: 100%;
     padding-right: 15px;
+}
+
+kendo-grid-filter-menu-input-wrapper kendo-numerictextbox .k-spinner-increase,
+kendo-grid-filter-menu-input-wrapper kendo-numerictextbox .k-spinner-decrease {
+    padding: 0 5px !important;
+}
+
+.margin-bottom-five {
+    margin-bottom: 5px;
+}
+
+kendo-popup date-range-filter kendo-dropdownlist .k-button,
+kendo-popup date-range-filter kendo-datepicker .k-button,
+kendo-popup kendo-grid-filter-menu-container kendo-grid-filter-menu-input-wrapper kendo-dropdownlist .k-button,
+kendo-popup kendo-grid-filter-menu-container dropdown-filter kendo-combobox .k-button {
+    width: auto !important;
 }

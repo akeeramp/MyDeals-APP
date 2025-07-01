@@ -21,6 +21,7 @@ const closest = (node: any, predicate: any): any => {
         [(ngModel)]="selectedValue"
         [valuePrimitive]="true"
         (valueChange)="onFilterChange($event)"
+        class="margin-bottom-five"
       >
       </kendo-dropdownlist>
         <kendo-datepicker (valueChange)="onStartChange($event)" [navigation]="false"
