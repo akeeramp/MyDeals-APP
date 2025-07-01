@@ -19,7 +19,7 @@
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
                 </button>
                 <kendo-grid-spacer></kendo-grid-spacer>
-                <button type="button" kendoGridExcelCommand>
+                <button type="button" (click)="exportToExcel()" class="k-button k-grid-excel k-button-md k-rounded-md k-button-solid-base k-button-solid">
                     <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
                 </button>
                 <button (click)="refreshGrid()" class="k-button clearButton">

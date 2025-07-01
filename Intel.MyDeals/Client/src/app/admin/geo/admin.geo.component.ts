@@ -10,6 +10,8 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { GeoDimension } from "./admin.geo.model";
 import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
+import { GridUtil } from "../../contract/grid.util";
+import { ExcelColumnsConfig } from "../ExcelColumnsconfig.util";
 
 @Component({
     selector: "admin-geo",
@@ -64,6 +66,7 @@ export class geoComponent implements OnDestroy {
             value: "all"
         }
     ];
+    private geosExcel = ExcelColumnsConfig.geosExcel;
 
     loadGeo(): void {
         //Developer can see the Screen..
@@ -84,7 +87,7 @@ export class geoComponent implements OnDestroy {
             this.gridData = process(this.gridResult, state);
             this.gridData.total = result.TotalRows;
             this.isLoading = false;
-            
+
         }, (error) => {
             this.loggerSvc.error('Geo service', error);
         });
@@ -108,6 +111,20 @@ export class geoComponent implements OnDestroy {
             Skip: this.state.skip,
             Take: this.state.take
         };
+    }
+
+    exportToExcel() {
+        //Developer can see the Screen..
+        this.settingFilter();
+        this.dataforfilter["Skip"] = 0;
+        this.dataforfilter["Take"] = this.gridData.total;
+        this.isLoading = true;
+        this.geoSvc.getGeosNew(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe(result => {
+            this.isLoading = false;
+            GridUtil.dsToGeoData(this.geosExcel, result.Items, "MyDealsGeos");
+        }, (error) => {
+            this.loggerSvc.error('Geo service', error);
+        });
     }
 
     public onExcelExport(e: ExcelExportEvent): void {

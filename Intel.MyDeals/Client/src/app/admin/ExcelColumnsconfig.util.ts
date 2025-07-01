@@ -1285,5 +1285,37 @@ static bulkPriceUpdateColumnData =  [
             width: 150
         }
     ]
-    
+
+    static geosExcel = [
+        {
+            data: 'Id',
+            type: 'numeric',
+            readOnly: false,
+            width: 80
+        },
+        {
+            data: 'Name',
+            type: 'text',
+            readOnly: false,
+            width: 120
+        },
+        {
+            data: 'Geography',
+            type: 'text',
+            readOnly: false,
+            width: 200
+        },
+        {
+            data: 'Country/Region',
+            type: 'numeric',
+            readOnly: false,
+            width: 200
+        },
+        {
+            data: 'Is Active',
+            type: 'text',
+            readOnly: false,
+            width: 80
+        }
+    ]
 }

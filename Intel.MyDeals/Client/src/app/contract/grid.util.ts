@@ -755,6 +755,47 @@ export class GridUtil {
         });
     }
 
+    static dsToGeoData(data, response, fileName) {
+        const rows = [{ cells: [] }];
+        const colWidths = [];
+        for (var t = 0; t < data.length; t++) {
+            rows[0].cells.push({
+                value: data[t].data,
+                type: data[t].type,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true,
+                width: data[t].width
+            });
+            colWidths.push({ width: data[t].width });
+        }
+        for (let i = 0; i < response.length; i++) {
+            rows.push({
+                cells: [
+                    { value: response[i]["GEO_MBR_SID"], wrap: true },
+                    { value: response[i]["GEO_NM"], wrap: true },
+                    { value: response[i]["RGN_NM"], wrap: true },
+                    { value: response[i]["CTRY_NM"], wrap: true },
+                    { value: response[i]["ACTV_IND"], wrap: true }
+                ]
+            })
+        }
+        const sheets = [
+            {
+                columns: colWidths,
+                title: fileName,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        const workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, fileName);
+        });
+    }
 
     static applySoftWarnings(passedData, field) {
         var msg = "";
