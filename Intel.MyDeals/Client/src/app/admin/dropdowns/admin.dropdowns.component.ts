@@ -575,6 +575,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
 
     deleteRecord() {
         this.isDialogVisible = false;
+        this.isLoading = true;
         this.dropdownService.deleteBasicDropdowns(this.deleteDropdownData).pipe(takeUntil(this.destroy$)).subscribe(() => {
             if (this.deleteATRB_CDItem == "MRKT_SEG_COMBINED") {
                 const indx = this.nonCorpInheritableValues.indexOf(this.deleteDROP_DOWNItem);
@@ -582,9 +583,11 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
                     this.nonCorpInheritableValues.splice(indx, 1);
                 }
             }
+            this.isLoading = false;
             this.refreshGrid();
             this.loggerService.success("UI Dropdown successfully deleted or deactivated.")
         }, (errorResponse) => {
+            this.isLoading = false;
             this.loggerService.error(
                 "Unable to delete row Data.",
                 errorResponse,

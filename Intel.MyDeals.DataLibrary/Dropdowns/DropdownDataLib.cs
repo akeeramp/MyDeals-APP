@@ -174,12 +174,12 @@ namespace Intel.MyDeals.DataLibrary
         public List<BasicDropdown> ExecuteManageBasicDropdownSP(BasicDropdown dropdown, CrudModes type)
         {
             var ret = new List<BasicDropdown>();
-            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP();
+            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS();
 
             if (type.Equals(CrudModes.Select))
             {
                 //used when loading all the data for caching
-                cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
+                cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
                 {
                     MODE = type.ToString(),
                     ATRB_SID = 0,
@@ -188,16 +188,13 @@ namespace Intel.MyDeals.DataLibrary
                     ATRB_VAL_TXT = "",
                     ATRB_LKUP_DESC = "",
                     ATRB_LKUP_TTIP = "",
-                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                    TAKE = -1,
-                    FTHCNT = false,
-                    CHKRESTFLG = true
+                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID
                 };
             }
             else
             {
                 //used in update/insert
-                cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
+                cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
                 {
                     LK_UP_SID = dropdown.ATRB_LKUP_SID,
                     MODE = type.ToString(),
