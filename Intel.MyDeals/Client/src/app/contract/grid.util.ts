@@ -1180,10 +1180,10 @@ export class GridUtil {
                 cells: [
                     { value: response[i]["PRD_MBR_SID"], wrap: true },
                     { value: response[i]["DEAL_PRD_TYPE"], wrap: true },
-                    { value: response[i]["PRD_CATGRY_NM"], wrap: true },
+                    { value: response[i]["PRD_CAT_NM"], wrap: true },
                     { value: response[i]["BRND_NM"], wrap: true },
                     { value: response[i]["FMLY_NM"], wrap: true },
-                    { value: response[i]["PRCSSR_NBR"], wrap: true },
+                    { value: response[i]["PCSR_NBR"], wrap: true },
                     { value: response[i]["DEAL_PRD_NM"], wrap: true },
                     { value: response[i]["MTRL_ID"], wrap: true },
                     { value: response[i]["PRD_STRT_DTM"], wrap: true },
