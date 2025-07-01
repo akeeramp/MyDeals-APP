@@ -172,13 +172,20 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     }
     exportToExcel() {
         this.isLoading = true;
-        this.primeCustSvc.GetPrimeCustomerDetails().pipe(takeUntil(this.destroy$)).subscribe((result: Array<PrimeCust_Map>) => {
+         let filter=this.dataforfilter["StrFilters"];
+        let excelDataForFilter = {
+            StrFilters: filter,
+            Sort: "",
+            Skip: 0,
+            Take: this.totalCount
+        };
+         this.primeCustSvc.GetPrimeCustomerDetailsByFilter(excelDataForFilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<PrimeCust_Map>) => {
             this.isLoading = false;
             this.gridAllResult = result;
             GridUtil.dsToExcelUnifiedCustomerDealData(this.unifiedDealCustomerExcel, this.gridAllResult, "MyDealsUnifiedCustomerAdmin");
         }, (error) => {
-            this.loggerSvc.error('GetPrimeCustomerDetails service', error);
-        });
+            this.loggerSvc.error('Prime Customer service', error);
+        }); 
     }
 
     exportToExcelCustomColumns() {

@@ -56,7 +56,7 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
     private gridAllData: GridDataResult;
     private ProductVerticalExcel = ExcelColumnsConfig.ProductVerticalExcel;
     private columnFilterDataList: Map<string, Array<string>> = new Map();
-
+    
 
     @ViewChild('dealPdctTooltip', { static: false }) dealPdctTooltip: NgbTooltip;
     @ViewChild('pdctVerticalTooltip', { static: false }) pdctVerticalTooltip: NgbTooltip;
@@ -137,6 +137,7 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
             this.gridData.data = response;
             if (response.length > 0) {
                 this.gridData.total = response[0].TotalRows;
+                this.totalCount=response[0].TotalRows;
             }
             this.isLoading = false;
         }, function (response) {
@@ -270,12 +271,21 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
     }
     exportToExcel() {
         this.isLoading = true;
-        this.productCategorySvc.getCategories().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
-            this.isLoading = false;
-            this.gridAllResult = result;
+     let filter=this.dataSummary["StrFilters"];
+        let excelDataForFilter = {
+            StrFilters: filter,
+            Sort: "",
+            Skip: 0,
+            Take: this.totalCount
+        };
+          this.productCategorySvc.getCategories_new(excelDataForFilter).pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
+            //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
+            this.isLoading = false; 
+            this.gridAllResult = response;
             GridUtil.dsToExcelProductVerticalRule(this.ProductVerticalExcel, this.gridAllResult, "MyDealsProductVerticalRules");
-        }, (error) => {
-            this.loggerSvc.error('MyDealsProductVerticalRules service', error);
+        
+        }, function (response) {
+            this.loggerSvc.error("Unable to get Products.", response, response.statusText);
         });
     }
 

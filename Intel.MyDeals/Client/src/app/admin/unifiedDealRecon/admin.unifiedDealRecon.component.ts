@@ -346,8 +346,9 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
 
     exportToExcel() {
         this.isLoading = true;
+        let filter=this.dataForFilter["InFilters"];
         let excelDataForFilter = {
-            InFilters: "",
+            InFilters: filter,
             Sort: "",
             Skip: 0,
             Take: this.totalCount,
