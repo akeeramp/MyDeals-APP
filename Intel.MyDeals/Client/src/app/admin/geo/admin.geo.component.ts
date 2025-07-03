@@ -117,7 +117,7 @@ export class geoComponent implements OnDestroy {
         //Developer can see the Screen..
         this.settingFilter();
         this.dataforfilter["Skip"] = 0;
-        this.dataforfilter["Take"] = this.gridData.total;
+        this.dataforfilter["Take"] = this.gridData.total == 0 ? this.state.take : this.gridData.total;
         this.isLoading = true;
         this.geoSvc.getGeosNew(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe(result => {
             this.isLoading = false;
