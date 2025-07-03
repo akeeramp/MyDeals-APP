@@ -1930,7 +1930,7 @@ kendo-grid#manageFilterStyle tr.k-grid-norecords td {
 }
 
 kendo-popup {
-    max-width: 215px;
+    max-width: 350px;
 }
 
 kendo-popup.k-animation-container .k-list-filter input.k-textbox {
@@ -3012,4 +3012,9 @@ kendo-popup date-range-filter kendo-datepicker .k-button,
 kendo-popup kendo-grid-filter-menu-container kendo-grid-filter-menu-input-wrapper kendo-dropdownlist .k-button,
 kendo-popup kendo-grid-filter-menu-container dropdown-filter kendo-combobox .k-button {
     width: auto !important;
+}
+
+.k-grid-filter-popup.k-popup .k-filter-menu-container date-range-filter {
+    display: block;
+    width: 215px !important;
 }
