@@ -1240,19 +1240,19 @@ static bulkPriceUpdateColumnData =  [
             data: 'User Type',
             type: 'text',
             readOnly: false,
-            width: 300
+            width: 150
         },
         {
             data: 'Database User Name',
             type: 'text',
             readOnly: false,
-            width: 500
+            width: 350
         },
         {
             data: 'Role',
             type: 'text',
             readOnly: false,
-            width: 200
+            width: 150
         },
         {
             data: 'Permission Type',
@@ -1270,16 +1270,22 @@ static bulkPriceUpdateColumnData =  [
             data: 'Object Type',
             type: 'text',
             readOnly: false,
-            width: 300
+            width: 200
         },
         {
             data: 'Object Name',
             type: 'text',
             readOnly: false,
-            width: 300
+            width: 200
         },
         {
-            data: 'Row Refresh Date',
+            data: 'Column Name',
+            type: 'text',
+            readOnly: false,
+            width: 150
+        },
+        {
+            data: 'Date',
             type: 'text',
             readOnly: false,
             width: 150

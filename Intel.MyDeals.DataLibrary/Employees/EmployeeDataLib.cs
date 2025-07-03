@@ -163,8 +163,6 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
-                    rdr.Read();
-
                     int IDX_Database_Name = DB.GetReaderOrdinal(rdr, "Database Name");
                     int IDX_UserName = DB.GetReaderOrdinal(rdr, "UserName");
                     int IDX_UserType = DB.GetReaderOrdinal(rdr, "UserType");
