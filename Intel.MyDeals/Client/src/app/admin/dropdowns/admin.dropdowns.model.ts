@@ -35,3 +35,53 @@ export type BulkDeleteResponse = {
     ATRB_LKUP_SID: number,
     ACTV_IND: boolean
 }
+
+export class generateFilter {
+    public static generateFilter(model:any) {
+       return {
+            "filters": [
+                {
+                    "filters": [
+                        {
+                            "field": "lkup.OBJ_SET_TYPE_CD",
+                            "operator": "eq",
+                            "value": model.OBJ_SET_TYPE_CD.toString().toUpperCase().trim()
+                        }
+                    ],
+                    "logic": "or"
+                },
+                {
+                    "filters": [
+                        {
+                            "field": "lkup.ATRB_CD",
+                            "operator": "eq",
+                            "value": model.ATRB_CD.toString().toUpperCase().trim()
+                        }
+                    ],
+                    "logic": "or"
+                },
+                {
+                    "filters": [
+                        {
+                            "field": "lkup.CUST_NM",
+                            "operator": "eq",
+                            "value": model.CUST_NM.toString().toUpperCase().trim()
+                        }
+                    ],
+                    "logic": "or"
+                },
+                {
+                    "filters": [
+                        {
+                            "field": "lkup.DROP_DOWN",
+                            "operator": "eq",
+                            "value": model.DROP_DOWN.toString().toUpperCase().trim()
+                        }
+                    ],
+                    "logic": "or"
+                }
+            ],
+                "logic": "and"
+        }
+    }
+}

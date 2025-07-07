@@ -49,9 +49,12 @@ export class FilterExpressBuilder {
                                         return `'${originalValQuotes}'`
                                     }
                                 
-                            }).join(", ");
+                            }).join(",");
                             const field = subComposite.filters[0].field;
                             conditions.push(`${field} IN (${values == '' ? `''` : `${values}`})`);
+                            if (values.split(',').indexOf(`''`) > -1) {
+                                conditions[conditions.length - 1] = `(${conditions[conditions.length - 1]} OR ${field} IS NULL)`
+                            }
                         }
                         else {
                             const nestedCondition = this.buildSqlExpression(subComposite);

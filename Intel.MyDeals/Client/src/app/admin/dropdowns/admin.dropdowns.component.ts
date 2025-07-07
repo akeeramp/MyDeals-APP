@@ -11,7 +11,7 @@ import { takeUntil } from "rxjs/operators";
 
 import { logger } from "../../shared/logger/logger";
 import { DropdownService } from './admin.dropdowns.service';
-import { UiDropdownItem } from "./admin.dropdowns.model";
+import { UiDropdownItem, generateFilter } from "./admin.dropdowns.model";
 import { PendingChangesGuard } from "../../shared/util/gaurdprotectionDeactivate";
 import { DropdownBulkUploadDialogComponent } from "./dropdownBulkUploadDialog/admin.dropdowns.bulkUploadDialog.component";
 import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
@@ -274,7 +274,6 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     }
 
     GetColumnFilterData(fieldName: string): any {
-
         return this.columnFilterDataList.has(fieldName) ? this.columnFilterDataList.get(fieldName) : [];
     }
 
@@ -291,12 +290,26 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         }
     }
 
-    checkModelValid(model: any, isNew: boolean) {
-        const MATCHING_DROPDOWNS: Array<UiDropdownItem> = this.gridResult.filter((x: UiDropdownItem) =>
-            x.OBJ_SET_TYPE_CD.toString().toUpperCase().trim() === model.OBJ_SET_TYPE_CD.toString().toUpperCase().trim() &&
-                x.ATRB_CD.toString().toUpperCase().trim() === model.ATRB_CD.toString().toUpperCase().trim() &&
-                x.DROP_DOWN.toString().toUpperCase().trim() === model.DROP_DOWN.toString().toUpperCase().trim() &&
-                x.CUST_NM.toString().toUpperCase().trim() === model.CUST_NM.toString().toUpperCase().trim());
+    async checkModelValid(model: any, isNew: boolean) {
+        const inputfilter = generateFilter.generateFilter(model);
+        const filter = FilterExpressBuilder.createSqlExpression(JSON.stringify(inputfilter));
+
+        const filterData = {
+            InFilters: filter,
+            Sort: '',
+            Skip: this.state.skip,
+            Take: this.state.take,
+            FthCnt: false,
+            ChkRestFlg: this.checkRestrictionFlag
+        }
+
+        const data = await this.dropdownService.getBasicDropdownsNew(filterData).toPromise().catch(
+            err => {
+                this.loggerService.error("Unable to fetch data",err)
+            }
+        )
+
+        const MATCHING_DROPDOWNS = data.Items;
 
         if (model.DROP_DOWN.indexOf(',') > -1) {
             this.loggerService.warn(model.ATRB_CD + " values cannot have embedded commas (,).", "Validation Error");
@@ -390,27 +403,29 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         sender.addRow(this.formGroup);
     }
 
-    editHandler({ sender, rowIndex, dataItem }) {
-            this.isDirty = true;
-            this.closeEditor(sender);
-            this.isFormChange = false;
-            this.distinctSetTypeCd = [dataItem.OBJ_SET_TYPE_CD];
-            this.distinctAtributeCd = [dataItem.ATRB_CD];
-            this.distinctCustomerName = [dataItem.CUST_NM];
-            this.formGroup = new FormGroup({
-                ACTV_IND: new FormControl(dataItem.ACTV_IND),
-                OBJ_SET_TYPE_CD: new FormControl({ value: dataItem.OBJ_SET_TYPE_CD, disabled: true }),
-                OBJ_SET_TYPE_SID: new FormControl(dataItem.OBJ_SET_TYPE_SID),
-                ATRB_CD: new FormControl({ value: dataItem.ATRB_CD, disabled: true }),
-                ATRB_SID: new FormControl(dataItem.ATRB_SID),
-                CUST_NM: new FormControl({ value: dataItem.CUST_NM, disabled: true }),
-                CUST_MBR_SID: new FormControl(dataItem.CUST_MBR_SID),
-                CUST_MAP_ID: new FormControl(dataItem.CUST_MAP_ID),
-                DROP_DOWN: new FormControl({ value: dataItem.DROP_DOWN, disabled: true }),
-                ATRB_LKUP_DESC: new FormControl(dataItem.ATRB_LKUP_DESC),
-                ATRB_LKUP_TTIP: new FormControl(dataItem.ATRB_LKUP_TTIP),
-                ORD: new FormControl(dataItem.ORD)
-            });
+    async editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty = true;
+        this.closeEditor(sender);
+        this.isFormChange = false;
+        this.isLoading = true
+        await this.getDealTypeDataSource();
+        await this.getGroupsDataSource();
+        await this.getCustomersDataSource();
+        this.isLoading = false;
+        this.formGroup = new FormGroup({
+            ACTV_IND: new FormControl(dataItem.ACTV_IND),
+            OBJ_SET_TYPE_CD: new FormControl({ value: dataItem.OBJ_SET_TYPE_CD, disabled: true }),
+            OBJ_SET_TYPE_SID: new FormControl(dataItem.OBJ_SET_TYPE_SID),
+            ATRB_CD: new FormControl({ value: dataItem.ATRB_CD, disabled: true }),
+            ATRB_SID: new FormControl(dataItem.ATRB_SID),
+            CUST_NM: new FormControl({ value: dataItem.CUST_NM, disabled: true }),
+            CUST_MBR_SID: new FormControl(dataItem.CUST_MBR_SID),
+            CUST_MAP_ID: new FormControl(dataItem.CUST_MAP_ID),
+            DROP_DOWN: new FormControl({ value: dataItem.DROP_DOWN, disabled: true }),
+            ATRB_LKUP_DESC: new FormControl(dataItem.ATRB_LKUP_DESC),
+            ATRB_LKUP_TTIP: new FormControl(dataItem.ATRB_LKUP_TTIP),
+            ORD: new FormControl(dataItem.ORD)
+        });
         //Unused cnsmptn edit for Account SA,Account SA-D & SA-D only
         if ((<any>window).usrRole == "SA" && ((<any>window).isCustomerAdmin || (<any>window).isDeveloper)) {
             //for Account SA-D & SA-D, only restrictedGroupList can edit value field
@@ -428,12 +443,12 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
                 }
             }
         }
-            this.formGroup.valueChanges.subscribe(() => {
-                this.isFormChange = true;
-            });
-            this.editedRowIndex = rowIndex;
-            sender.editRow(rowIndex, this.formGroup);
-        }
+        this.formGroup.valueChanges.subscribe(() => {
+            this.isFormChange = true;
+        });
+        this.editedRowIndex = rowIndex;
+        sender.editRow(rowIndex, this.formGroup);
+    }
     
 
     cancelHandler({ sender, rowIndex }) {
@@ -443,37 +458,18 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     async saveHandler({ sender, rowIndex, formGroup, isNew, dataItem }) {
         let newUiDropdown: UiDropdownItem = formGroup.getRawValue();
         if (isNew) {
-            if (this.GroupData) {
+            //call api with the added values as filter and check whether value exist
+            //if exist throw validation try handling inside checkModelValid.
                 const GroupSID = this.GroupData.filter(x => x.dropdownName == newUiDropdown.ATRB_CD)
-                if (GroupSID.length > 0) {
-                    newUiDropdown.ATRB_SID = GroupSID[0]["dropdownID"];
-                }
+            if (GroupSID.length > 0) {
+                newUiDropdown.ATRB_SID = GroupSID[0]["dropdownID"];
             }
-            else {
-                await this.getGroupsDataSource();
-                const GroupSID = this.GroupData.filter(x => x.dropdownName == newUiDropdown.ATRB_CD)
-                if (GroupSID.length > 0) {
-                    newUiDropdown.ATRB_SID = GroupSID[0]["dropdownID"];
-                }
-            }
-            if (this.CustomerData) {
                 const customerSID = this.CustomerData.filter(x => x.dropdownName == newUiDropdown.CUST_NM)
                 if (customerSID.length > 0) {
                     newUiDropdown.CUST_MBR_SID = customerSID[0]["dropdownID"];
                 }
-            } else {
-                await this.getCustomersDataSource();
-                const customerSID = this.CustomerData.filter(x => x.dropdownName == newUiDropdown.CUST_NM)
-                if (customerSID.length > 0) {
-                    newUiDropdown.CUST_MBR_SID = customerSID[0]["dropdownID"];
-                }
-            }
-            if (this.DealTypeData)
                 newUiDropdown.OBJ_SET_TYPE_SID = this.DealTypeData.filter(x => x.dropdownName == newUiDropdown.OBJ_SET_TYPE_CD)[0].dropdownID;
-            else {
-                await this.getDealTypeDataSource();
-                newUiDropdown.OBJ_SET_TYPE_SID = this.DealTypeData.filter(x => x.dropdownName == newUiDropdown.OBJ_SET_TYPE_CD)[0].dropdownID;
-            }
+           
         }
 
         if (!isNew) {
@@ -482,7 +478,8 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
 
         //check the combination exists
         if (this.isFormChange) {
-            this.isModelValid = this.checkModelValid(newUiDropdown, isNew);
+            this.isLoading = true;
+            this.isModelValid = await this.checkModelValid(newUiDropdown, isNew);
             if (this.isModelValid) {
                 if (isNew) {
                     this.isLoading = true;
@@ -519,6 +516,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
                     });
                 }
             }
+            else this.isLoading = false;
             this.isDirty = false;
         }
 
