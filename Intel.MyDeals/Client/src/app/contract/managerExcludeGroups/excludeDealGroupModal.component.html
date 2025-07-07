@@ -4,8 +4,7 @@
         <div class="modal-body exclude" style="padding:0;">
             <div class="fr">
                 <span style="padding-right:15px; color: #ffffff">
-                    <i role="button" title="Save and Close"
-                       class="intelicon-close-max" (click)="cancel()"></i>
+                    <i role="button" title="Save and Close" class="intelicon-close-max" (click)="cancel()"></i>
                 </span>
             </div>
             <div *ngIf="isLoading" class="excludeGroupLoadingSpinners">
@@ -19,21 +18,22 @@
                 <p style="text-align:center; color: #ffffff">Please wait as we fetch a list of deal groups.</p>
             </div>
             <div *ngIf="!isLoading">
-                <div style="color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: left"
-                     *ngIf="hasCheckbox">Select which deals you would like to exclude: </div>
-                <div style="color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: left"
-                     *ngIf="!hasCheckbox">Deals marked with "✓" are excluded: </div>
+                <div style="color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: left" *ngIf="hasCheckbox">
+                    Select which deals you would like to exclude:
+                </div>
+                <div style="color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: left" *ngIf="!hasCheckbox">
+                    Deals marked with "✓" are excluded:
+                </div>
                 <div style='color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: left; padding-left: 20px'>
-                    <mat-slide-toggle [color]="color" [(ngModel)]="isSelected" (change)="onToggleChange()"
-                                      title='Click to see Excluded/Included by USER'></mat-slide-toggle>
+                    <mat-slide-toggle [color]="color" [(ngModel)]="isSelected" (change)="onToggleChange()" title='Click to see Excluded/Included by USER'></mat-slide-toggle>
                 </div>
                 <div [ngClass]="{ 'showToggle': isSelected, 'hideToggle': !isSelected }" style="color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: right; right: 50px; position: relative;">
                     Filter deals based on consumption parameters:
                     <mat-slide-toggle [(ngModel)]="isConsumptionToggleOn" (change)="viewConsumptionOnly()" [color]="color" title="{{isConsumptionToggleOn ? 'Click to see all deals' : 'Click to see filtered deals based on consumption parameters'}}" style="position: relative; left: 20px;"></mat-slide-toggle>
                 </div>
                 <div class="row oppo-grids new-now-wrap" style="margin: 0px;width:100%">
-                    <kendo-grid class="exclude-filter-style view_popup_height icon-changes" [data]="gridData" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-                                [groupable]="false" [group]="state.group" filterable="menu" [navigable]="true"  [resizable]="true"
+                    <kendo-grid class="exclude-filter-style view_popup_height icon-changes" [loading]="isLoading" [data]="gridData" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+                                [groupable]="false" [group]="state.group" filterable="menu" [navigable]="true" [resizable]="true"
                                 (dataStateChange)="dataStateChange($event)" style="height: calc(100vh - 400px); width:100%; line-height:10px;"
                                 [isDetailExpanded]="expandInStockProducts" (excelExport)="onExcelExport($event)">
                         <ng-template kendoGridToolbarTemplate>
@@ -43,141 +43,87 @@
                         </ng-template>
                         <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="35">
                             <ng-template kendoGridHeaderTemplate>
-                                <input type="checkbox"
-                                       (click)='clkAllItems($event)' [(ngModel)]="isDealToolsChecked"
-                                       [disabled]="!hasCheckbox" /><span style="overflow:visible;white-space:normal"></span>
+                                <input type="checkbox" (click)='clkAllItems($event)' [(ngModel)]="isDealToolsChecked" [disabled]="!hasCheckbox" />
+                                <span style="overflow:visible;white-space:normal"></span>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column title="Deal Id" field="OVLP_DEAL_ID" [headerClass]="{'headerClass':true}"
-                                           [width]="100" [hidden]="pctGroupDealsView">
-                        </kendo-grid-column>
-                        <kendo-grid-column *ngIf="pctGroupDealsView" title="Deal Id" field="OVLP_DEAL_ID" [headerClass]="{'headerClass':true}"
-                                           [width]="100"></kendo-grid-column>
-                        <kendo-grid-column title="Deal Type" field="OVLP_DEAL_TYPE"
-                                           [headerClass]="{'headerClass':true}" [width]="110"></kendo-grid-column>
-                        <kendo-grid-column title="Rebate Type" field="OVLP_REBT_TYPE" [headerClass]="{'headerClass':true}"
-                                           [width]="120" [hidden]="pctGroupDealsView"></kendo-grid-column>
-                        <kendo-grid-column *ngIf="pctGroupDealsView" title="Rebate Type" field="OVLP_REBT_TYPE" [headerClass]="{'headerClass':true}"
-                                           [width]="120"></kendo-grid-column>
-                        <kendo-grid-column title="Contract" field="OVLP_CNTRCT_NM" [headerClass]="{'headerClass':true}"
-                                           [width]="140"></kendo-grid-column>
-                        <kendo-grid-column title="Contract Product" field="OVLP_PTR_USER_PRD" [headerClass]="{'headerClass':true}"
-                                           [width]="140"></kendo-grid-column>
-                        <kendo-grid-column title="Stage" field="OVLP_WF_STG_CD" [headerClass]="{'headerClass':true}"
-                                           [width]="100" [hidden]="pctGroupDealsView"></kendo-grid-column>
-                        <kendo-grid-column title="Stage" field="OVLP_WF_STG_CD" [headerClass]="{'headerClass':true}"
-                                           [width]="100" [hidden]="!pctGroupDealsView"></kendo-grid-column>
-
-                        <kendo-grid-column title="Deal Start" field="OVLP_DEAL_STRT_DT" [headerClass]="{'headerClass':true}" filter="date" format="{0:d}"
-                                           [width]="120" [hidden]="pctGroupDealsView"></kendo-grid-column>
-                        <kendo-grid-column title="Deal End" field="OVLP_DEAL_END_DT" [headerClass]="{'headerClass':true}" filter="date"
-                                           [width]="120" [hidden]="pctGroupDealsView"></kendo-grid-column>
-                        <kendo-grid-column title="Deal Start" field="OVLP_DEAL_STRT_DT" [headerClass]="{'headerClass':true}" filter="date" format="{0:d}"
-                                           [width]="120" [hidden]="!pctGroupDealsView"></kendo-grid-column>
-                        <kendo-grid-column title="Deal End" field="OVLP_DEAL_END_DT" [headerClass]="{'headerClass':true}" filter="date"
-                                           [width]="120" [hidden]="!pctGroupDealsView"></kendo-grid-column>
-                        <kendo-grid-column title="Additive" field="OVLP_ADDITIVE" [headerClass]="{'headerClass':true}"
-                                           [width]="120" [hidden]="pctGroupDealsView"></kendo-grid-column>
-                        <kendo-grid-column title="Additive" field="OVLP_ADDITIVE" [headerClass]="{'headerClass':true}"
-                                           [width]="120" [hidden]="!pctGroupDealsView"></kendo-grid-column>
-                        <kendo-grid-column title="Deal Description" field="OVLP_DEAL_DESC"
-                                           [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
-                        <kendo-grid-column title="ECAP" field="OVLP_ECAP_PRC" [headerClass]="{'headerClass':true}" filter="numeric"
-                                           [width]="100">
+                        <kendo-grid-column title="Deal Id" field="OVLP_DEAL_ID" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="pctGroupDealsView"></kendo-grid-column>
+                        <kendo-grid-column *ngIf="pctGroupDealsView" title="Deal Id" field="OVLP_DEAL_ID" [headerClass]="{'headerClass':true}" [width]="100"></kendo-grid-column>
+                        <kendo-grid-column title="Deal Type" field="OVLP_DEAL_TYPE" [headerClass]="{'headerClass':true}" [width]="110"></kendo-grid-column>
+                        <kendo-grid-column title="Rebate Type" field="OVLP_REBT_TYPE" [headerClass]="{'headerClass':true}" [width]="120" [hidden]="pctGroupDealsView"></kendo-grid-column>
+                        <kendo-grid-column *ngIf="pctGroupDealsView" title="Rebate Type" field="OVLP_REBT_TYPE" [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
+                        <kendo-grid-column title="Contract" field="OVLP_CNTRCT_NM" [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
+                        <kendo-grid-column title="Contract Product" field="OVLP_PTR_USER_PRD" [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
+                        <kendo-grid-column title="Stage" field="OVLP_WF_STG_CD" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="pctGroupDealsView"></kendo-grid-column>
+                        <kendo-grid-column title="Stage" field="OVLP_WF_STG_CD" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!pctGroupDealsView"></kendo-grid-column>
+                        <kendo-grid-column title="Deal Start" field="OVLP_DEAL_STRT_DT" [headerClass]="{'headerClass':true}" filter="date" format="{0:d}" [width]="120" [hidden]="pctGroupDealsView"></kendo-grid-column>
+                        <kendo-grid-column title="Deal End" field="OVLP_DEAL_END_DT" [headerClass]="{'headerClass':true}" filter="date" [width]="120" [hidden]="pctGroupDealsView"></kendo-grid-column>
+                        <kendo-grid-column title="Deal Start" field="OVLP_DEAL_STRT_DT" [headerClass]="{'headerClass':true}" filter="date" format="{0:d}" [width]="120" [hidden]="!pctGroupDealsView"></kendo-grid-column>
+                        <kendo-grid-column title="Deal End" field="OVLP_DEAL_END_DT" [headerClass]="{'headerClass':true}" filter="date" [width]="120" [hidden]="!pctGroupDealsView"></kendo-grid-column>
+                        <kendo-grid-column title="Additive" field="OVLP_ADDITIVE" [headerClass]="{'headerClass':true}" [width]="120" [hidden]="pctGroupDealsView"></kendo-grid-column>
+                        <kendo-grid-column title="Additive" field="OVLP_ADDITIVE" [headerClass]="{'headerClass':true}" [width]="120" [hidden]="!pctGroupDealsView"></kendo-grid-column>
+                        <kendo-grid-column title="Deal Description" field="OVLP_DEAL_DESC" [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
+                        <kendo-grid-column title="ECAP" field="OVLP_ECAP_PRC" [headerClass]="{'headerClass':true}" filter="numeric" [width]="100">
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                <span>{{dataItem.OVLP_ECAP_PRC |currency}}</span>
+                                <span>{{dataItem.OVLP_ECAP_PRC | currency}}</span>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column title="Max RPU" field="OVLP_MAX_RPU" [headerClass]="{'headerClass':true}" filter="numeric"
-                                           [width]="120">
+                        <kendo-grid-column title="Max RPU" field="OVLP_MAX_RPU" [headerClass]="{'headerClass':true}" filter="numeric" [width]="120">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <span>{{dataItem.OVLP_MAX_RPU | currency}}</span>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column title="Market Segment" field="OVLP_MKT_SEG" [headerClass]="{'headerClass':true}"
-                                           [width]="140"></kendo-grid-column>
-
-                        <kendo-grid-column title="Consumption Customer Platform" field="OVLP_CONSUMPTION_CUST_PLATFORM"
-                                           [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
-                        <kendo-grid-column title="Consumption System configuration" field="OVLP_CONSUMPTION_SYS_CONFIG"
-                                           [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
-                        <kendo-grid-column title="Consumption Country/Region" field="OVLP_CONSUMPTION_COUNTRY_REGION"
-                                           [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
-
-                        <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN"
-                                           [headerClass]="{'headerClass':true}" [width]="180" [hidden]="pctGroupDealsView"></kendo-grid-column>
-                        <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN"
-                                           [headerClass]="{'headerClass':true}" [width]="140" [hidden]="!pctGroupDealsView"></kendo-grid-column>
-                        <!--adding consumption columns for pct grouping-->
-                        <div>
-                            <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of Consumptioncolumns" field="{{column.field}}" title="{{column.title}}" [width]="140"></kendo-grid-column>
-                         </div>
+                        <kendo-grid-column title="Market Segment" field="OVLP_MKT_SEG" [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
+                        <kendo-grid-column title="Consumption Customer Platform" field="OVLP_CONSUMPTION_CUST_PLATFORM" [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
+                        <kendo-grid-column title="Consumption System configuration" field="OVLP_CONSUMPTION_SYS_CONFIG" [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
+                        <kendo-grid-column title="Consumption Country/Region" field="OVLP_CONSUMPTION_COUNTRY_REGION" [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
+                        <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN" [headerClass]="{'headerClass':true}" [width]="180" [hidden]="pctGroupDealsView"></kendo-grid-column>
+                        <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN" [headerClass]="{'headerClass':true}" [width]="140" [hidden]="!pctGroupDealsView"></kendo-grid-column>
+                        <!-- Adding consumption columns for pct grouping -->
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of Consumptioncolumns" field="{{column.field}}" title="{{column.title}}" [width]="140"></kendo-grid-column>
                         <ng-template *ngIf="isData" kendoGridDetailTemplate let-dataItem>
                             <div id="childGrid" class="opUiContainer md dashboard group-exclude-child">
                                 <kendo-grid *ngFor="let childColumn of childGrid" [data]="childColumn" (dataStateChange)="dataStateChange($event)" [kendoGridExpandDetailsBy]="expandDetailsBy"
-                                            [(expandedDetailKeys)]="expandedDetailKeys" class="height-auto-child child-head icon-changes" [hideHeader]="true"[resizable]="true">
-                                    <kendo-grid-column field="data" title=""
-                                                       [headerClass]="{'headerClass':false}" [width]="1500"></kendo-grid-column>
+                                            [(expandedDetailKeys)]="expandedDetailKeys" class="height-auto-child child-head icon-changes" [hideHeader]="true" [resizable]="true">
+                                    <kendo-grid-column field="data" title="" [headerClass]="{'headerClass':false}" [width]="1500"></kendo-grid-column>
                                     <ng-template kendoGridDetailTemplate let-dataItem>
                                         <kendo-grid [data]="convertToChildData(dataItem)" (dataStateChange)="dataStateChange($event)"
                                                     [rowClass]="rowCallback" [ngClass]="{'childColor': hasCheckbox && dataItem.data == 'Deals below are included as part of the Cost Test'}" class="height-auto-child child-EDGM " [hideHeader]="true" style="padding:0">
                                             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="30">
                                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                                    <input type='checkbox'
-                                                           [(ngModel)]="dataItem.selected" [disabled]="!hasCheckbox|| checkCheckboxIsDisabled(dataItem)" title="getTitle(dataItem)">
+                                                    <input type='checkbox' [(ngModel)]="dataItem.selected" [disabled]="!hasCheckbox || checkCheckboxIsDisabled(dataItem)" title="getTitle(dataItem)">
                                                     <span style="overflow:visible;white-space:normal"></span>
                                                 </ng-template>
                                             </kendo-grid-column>
-                                            <kendo-grid-column title="Deal Id" field="OVLP_DEAL_ID"
-                                                               [headerClass]="{'headerClass':true}" [width]="80"></kendo-grid-column>
-                                            <kendo-grid-column title="Deal Type" field="OVLP_DEAL_TYPE"
-                                                               [headerClass]="{'headerClass':true}" [width]="90"></kendo-grid-column>
-                                            <kendo-grid-column title="Rebate Type" field="OVLP_REBT_TYPE"
-                                                               [headerClass]="{'headerClass':true}" [width]="100"></kendo-grid-column>
-                                            <kendo-grid-column title="Contract" field="OVLP_CNTRCT_NM"
-                                                               [headerClass]="{'headerClass':true}" [width]="110"></kendo-grid-column>
-                                            <kendo-grid-column title="Contract Product" field="OVLP_PTR_USER_PRD"
-                                                               [headerClass]="{'headerClass':true}" [width]="110"></kendo-grid-column>
-                                            <kendo-grid-column title="Stage" field="OVLP_WF_STG_CD"
-                                                               [headerClass]="{'headerClass':true}" [width]="80"></kendo-grid-column>
-                                            <kendo-grid-column title="Deal Start" field="OVLP_DEAL_STRT_DT"
-                                                               [headerClass]="{'headerClass':true}" [width]="100"></kendo-grid-column>
-                                            <kendo-grid-column title="Deal End" field="OVLP_DEAL_END_DT"
-                                                               [headerClass]="{'headerClass':true}" [width]="100"></kendo-grid-column>
-                                            <kendo-grid-column title="Additive" field="OVLP_ADDITIVE"
-                                                               [headerClass]="{'headerClass':true}" [width]="100"></kendo-grid-column>
-                                            <kendo-grid-column title="Deal Description" field="OVLP_DEAL_DESC"
-                                                               [headerClass]="{'headerClass':true}" [width]="110"></kendo-grid-column>
-                                            <kendo-grid-column title="ECAP" field="OVLP_ECAP_PRC"
-                                                               [headerClass]="{'headerClass':true}" [width]="80">
+                                            <kendo-grid-column title="Deal Id" field="OVLP_DEAL_ID" [headerClass]="{'headerClass':true}" [width]="80"></kendo-grid-column>
+                                            <kendo-grid-column title="Deal Type" field="OVLP_DEAL_TYPE" [headerClass]="{'headerClass':true}" [width]="90"></kendo-grid-column>
+                                            <kendo-grid-column title="Rebate Type" field="OVLP_REBT_TYPE" [headerClass]="{'headerClass':true}" [width]="100"></kendo-grid-column>
+                                            <kendo-grid-column title="Contract" field="OVLP_CNTRCT_NM" [headerClass]="{'headerClass':true}" [width]="110"></kendo-grid-column>
+                                            <kendo-grid-column title="Contract Product" field="OVLP_PTR_USER_PRD" [headerClass]="{'headerClass':true}" [width]="110"></kendo-grid-column>
+                                            <kendo-grid-column title="Stage" field="OVLP_WF_STG_CD" [headerClass]="{'headerClass':true}" [width]="80"></kendo-grid-column>
+                                            <kendo-grid-column title="Deal Start" field="OVLP_DEAL_STRT_DT" [headerClass]="{'headerClass':true}" [width]="100"></kendo-grid-column>
+                                            <kendo-grid-column title="Deal End" field="OVLP_DEAL_END_DT" [headerClass]="{'headerClass':true}" [width]="100"></kendo-grid-column>
+                                            <kendo-grid-column title="Additive" field="OVLP_ADDITIVE" [headerClass]="{'headerClass':true}" [width]="100"></kendo-grid-column>
+                                            <kendo-grid-column title="Deal Description" field="OVLP_DEAL_DESC" [headerClass]="{'headerClass':true}" [width]="110"></kendo-grid-column>
+                                            <kendo-grid-column title="ECAP" field="OVLP_ECAP_PRC" [headerClass]="{'headerClass':true}" [width]="80">
                                                 <ng-template kendoGridCellTemplate let-dataItem>
                                                     <span *ngIf="!pctGroupDealsView">{{dataItem.OVLP_ECAP_PRC | currency}}</span>
                                                     <span *ngIf="pctGroupDealsView">{{dataItem.OVLP_ECAP_PRC | currency}}</span>
                                                 </ng-template>
                                             </kendo-grid-column>
-                                            <kendo-grid-column title="Max RPU" field="OVLP_MAX_RPU"
-                                                               [headerClass]="{'headerClass':true}" [width]="100">
+                                            <kendo-grid-column title="Max RPU" field="OVLP_MAX_RPU" [headerClass]="{'headerClass':true}" [width]="100">
                                                 <ng-template kendoGridCellTemplate let-dataItem>
                                                     <span *ngIf="!pctGroupDealsView">{{dataItem.OVLP_MAX_RPU | currency}}</span>
                                                     <span *ngIf="pctGroupDealsView">{{dataItem.OVLP_MAX_RPU | currency}}</span>
                                                 </ng-template>
                                             </kendo-grid-column>
-                                            <kendo-grid-column title="Market Segment" field="OVLP_MKT_SEG"
-                                                               [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
-
-                                            <kendo-grid-column title="Consumption Customer Platform" field="OVLP_CONSUMPTION_CUST_PLATFORM"
-                                                               [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
-                                            <kendo-grid-column title="Consumption System configuration" field="OVLP_CONSUMPTION_SYS_CONFIG"
-                                                               [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
-                                            <kendo-grid-column title="Consumption Country/Region" field="OVLP_CONSUMPTION_COUNTRY_REGION"
-                                                               [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
-
-                                            <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN"
-                                                               [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
-                                            <!--adding consumption columns for pct grouping-->
-                                            <div>
-                                                <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of Consumptioncolumns" field="{{column.field}}" title="{{column.title}}" [width]="140"></kendo-grid-column>
-                                            </div>
+                                            <kendo-grid-column title="Market Segment" field="OVLP_MKT_SEG" [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
+                                            <kendo-grid-column title="Consumption Customer Platform" field="OVLP_CONSUMPTION_CUST_PLATFORM" [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
+                                            <kendo-grid-column title="Consumption System configuration" field="OVLP_CONSUMPTION_SYS_CONFIG" [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
+                                            <kendo-grid-column title="Consumption Country/Region" field="OVLP_CONSUMPTION_COUNTRY_REGION" [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
+                                            <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN" [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
+                                            <!-- Adding consumption columns for pct grouping -->
+                                            <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of Consumptioncolumns" field="{{column.field}}" title="{{column.title}}" [width]="140"></kendo-grid-column>
                                         </kendo-grid>
                                     </ng-template>
                                 </kendo-grid>
@@ -186,16 +132,18 @@
                         <kendo-grid-excel fileName="ExcludeDealGroup.xlsx" [fetchData]="allData"></kendo-grid-excel>
                     </kendo-grid>
                 </div>
-
                 <div>
-                    <div class="fl" style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;"
-                         *ngIf="hasCheckbox"><b style="color: #f3D54E;">*</b>Provide reason for the exclusion(s): </div>
-                    <div class="fl" style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;"
-                         *ngIf="!hasCheckbox">Reason for the exclusion(s): </div>
-                    <div class="fr" style="color: #f3D54E; font-weight: bold; margin-bottom: 5px; margin-top: 20px;"
-                         *ngIf="hasCheckbox">* Reason is Required </div>
-                    <div class="clearboth"></div><textarea [(ngModel)]="DEAL_GRP_CMNT" rows="3"
-                                                           style="height: 100%; width: 100%" [disabled]="!hasCheckbox"></textarea>
+                    <div class="fl" style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;" *ngIf="hasCheckbox">
+                        <b style="color: #f3D54E;">*</b>Provide reason for the exclusion(s):
+                    </div>
+                    <div class="fl" style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;" *ngIf="!hasCheckbox">
+                        Reason for the exclusion(s):
+                    </div>
+                    <div class="fr" style="color: #f3D54E; font-weight: bold; margin-bottom: 5px; margin-top: 20px;" *ngIf="hasCheckbox">
+                        * Reason is Required
+                    </div>
+                    <div class="clearboth"></div>
+                    <textarea [(ngModel)]="DEAL_GRP_CMNT" rows="3" style="height: 100%; width: 100%" [disabled]="!hasCheckbox"></textarea>
                 </div>
             </div>
         </div>
