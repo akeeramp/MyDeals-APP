@@ -312,7 +312,10 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     }
 
     verifyCustAccptReadOnly() {
-        this.isCustAcptReadOnly = ((this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true && this.custAccptButton != 'pending') || this.custAccptButton == 'Acceptance Not Required in C2A') ? true : false;
+        if ((<any>window).usrRole.includes('GA') || (<any>window).usrRole.includes('FSE'))
+        this.isCustAcptReadOnly = ((this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true && this.custAccptButton != 'pending') || this.custAccptButton == 'Acceptance Not Required in C2A') ? true : false;
+        else
+            this.isCustAcptReadOnly = true;
     }
 
     pendingChange() {
@@ -351,6 +354,8 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         this.showPendingFile = false;
         this.showPendingC2A = false;
         if (page === "showPendingInfo") {
+            this.contractData.C2A_DATA_C2A_ID = "";
+            this.contractData.HAS_ATTACHED_FILES = "0"
             this.showPendingInfo = true;
         } else if (page === "showPendingFile") {
             this.showPendingFile = true;
@@ -980,8 +985,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
                     }
                 }
             }
-        }
-
+        }        
         this.needToRunOverlaps = [];
         this.getActionItems(data, dataItems, "Approve", "Send for Approval");
         this.getActionItems(data, dataItems, "Revise", "Send for Revision");
