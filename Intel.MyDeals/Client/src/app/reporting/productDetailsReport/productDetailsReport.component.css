@@ -2,8 +2,8 @@
     margin: 15px 17px !important;
 }
 kendo-grid.k-grid.product-kendo-report {
-    height: calc(100Vh - 27rem);
-    margin: 50px 10px 12px 10px !important;
+    height: 600px;
+    margin: 30px 10px 12px 10px !important;
 }
 .header-bottomsizereduce_report {
     font-size: 1.5em !important;
@@ -26,6 +26,15 @@ kendo-grid.k-grid.product-kendo-report {
 .radio-group_report {
     display: flex !important;
     flex-direction: row !important;
+}
+.adjust-height {
+    width: 100%;
+    height: 770px;
+    overflow-y: auto;
+}
+
+section.content-header.new-head_report {
+    padding-bottom: 15px;
 }
 .search-container {
     display: flex !important;
