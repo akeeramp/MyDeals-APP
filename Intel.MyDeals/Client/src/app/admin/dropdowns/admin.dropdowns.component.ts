@@ -297,7 +297,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         const filterData = {
             InFilters: filter,
             Sort: '',
-            Skip: this.state.skip,
+            Skip: 0,
             Take: this.state.take,
             FthCnt: false,
             ChkRestFlg: this.checkRestrictionFlag
