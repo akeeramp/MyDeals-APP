@@ -1,9 +1,9 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { primeCustomerService } from "./admin.primeCustomers.service";
-import { Component, ViewChild, OnDestroy } from "@angular/core";
+import { Component, ViewChild, OnDestroy, QueryList } from "@angular/core";
 import { Countires, PrimeCust_Map, RplStatusCode } from "./admin.primeCustomers.model";
 import { ThemePalette } from "@angular/material/core";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem, GridComponent, AddEvent, EditEvent, CancelEvent, SaveEvent } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, GridComponent, AddEvent, EditEvent, CancelEvent, SaveEvent, ColumnBase } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
@@ -16,7 +16,6 @@ import { DynamicObj } from "../employee/admin.employee.model";
 import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { GridUtil } from "../../contract/grid.util";
-
 
 @Component({
     selector: 'admin-prime-customers',
@@ -36,6 +35,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     @ViewChild("ctryCustNmDropDown") private ctryCustNmDdl;
     @ViewChild("primeCtryDropDown") private primeCtryDdl;
     @ViewChild("rplStsCdDropDown") private rplStsCdDdl;
+    public columns: QueryList<ColumnBase>;
     isDirty = false;
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
@@ -46,6 +46,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     private gridAllResult: Array<PrimeCust_Map>;
     private gridAllData: GridDataResult;
     private unifiedDealCustomerExcel = ExcelColumnsConfig.unifiedDealCustomerExcel;
+    private optUnifiedDealCustomerExcel: Array<any> = [];
     private color: ThemePalette = 'primary';
     public distinctPrimeCustNm: Array<string>;
     public distinctCtryCustNm: Array<string>;
@@ -170,7 +171,28 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         /*  this.gridData = process(this.gridResult, this.state);*/
         this.loadPrimeCustomer();
     }
-    exportToExcel() {
+
+    columnCheck(grid){
+        let arrVal = []
+        grid.columns.toArray().forEach((c) => {
+            if(c.title != "Commands" && !c.hidden){ 
+                arrVal.push(c.title)
+            }
+        })
+        
+        this.optUnifiedDealCustomerExcel = []
+        for(let i = 0; i < arrVal.length; i++) {
+            let firstVal = arrVal[i]
+            for(let j = 0; j < this.unifiedDealCustomerExcel.length; j++){
+                let secVal = this.unifiedDealCustomerExcel[j].data
+                if(firstVal == secVal){
+                    this.optUnifiedDealCustomerExcel.push(this.unifiedDealCustomerExcel[j])
+                }
+            }
+        }
+    }
+
+    exportToExcel(grid: GridComponent) {
         this.isLoading = true;
          let filter=this.dataforfilter["StrFilters"];
         let excelDataForFilter = {
@@ -179,17 +201,19 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
             Skip: 0,
             Take: this.totalCount
         };
-         this.primeCustSvc.GetPrimeCustomerDetailsByFilter(excelDataForFilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<PrimeCust_Map>) => {
+        this.primeCustSvc.GetPrimeCustomerDetailsByFilter(excelDataForFilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<PrimeCust_Map>) => {
             this.isLoading = false;
             this.gridAllResult = result;
-            GridUtil.dsToExcelUnifiedCustomerDealData(this.unifiedDealCustomerExcel, this.gridAllResult, "MyDealsUnifiedCustomerAdmin");
+            this.columnCheck(grid);
+            GridUtil.dsToExcelUnifiedCustomerDealData(this.optUnifiedDealCustomerExcel, this.gridAllResult, "MyDealsUnifiedCustomerAdmin");
         }, (error) => {
             this.loggerSvc.error('Prime Customer service', error);
         }); 
     }
 
-    exportToExcelCustomColumns() {
-        GridUtil.dsToExcelUnifiedCustomerDealData(this.unifiedDealCustomerExcel, this.gridResult, "MyDealsUnifiedCustomerAdmin");
+    exportToExcelCustomColumns(grid: GridComponent) {
+        this.columnCheck(grid);
+        GridUtil.dsToExcelUnifiedCustomerDealData(this.optUnifiedDealCustomerExcel, this.gridResult, "MyDealsUnifiedCustomerAdmin");
     }
 
     closeEditor(grid: GridComponent, rowIndex = this.editedRowIndex): void {

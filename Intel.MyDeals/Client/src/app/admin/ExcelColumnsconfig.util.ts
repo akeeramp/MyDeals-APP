@@ -45,43 +45,57 @@
             data: 'Is Active',
             type: 'text',
             readOnly: false,
-            width: 140
+            width: 140,
+            returnName: 'IS_ACTV'
+        },
+        {
+            data: 'Customer ID',
+            type: 'numeric',
+            readOnly: false,
+            width: 140,
+            returnName: 'PRIM_SID'
         },
         {
             data: 'Unified Customer ID',
             type: 'numeric',
             readOnly: false,
-            width: 150
+            width: 150,
+            returnName: 'PRIM_CUST_ID'
         },
         {
             data: 'Unified Customer Name',
             type: 'text',
             readOnly: false,
-            width: 80
+            width: 80,
+            returnName: 'PRIM_CUST_NM'
         },
         {
             data: 'Country Customer ID',
             type: 'numeric',
             readOnly: false,
-            width: 80
+            width: 80,
+            returnName: 'PRIM_LVL_ID'
         },
         {
             data: 'Country Customer Name',
             type: 'text',
             readOnly: false,
-            width: 75
+            width: 75,
+            returnName: 'PRIM_LVL_NM'
         },
         {
             data: 'Unified Country',
             type: 'text',
             readOnly: false,
-            width: 80
+            width: 80,
+            returnName: 'PRIM_CUST_CTRY'
         },
         {
             data: 'RPL Status Code',
             type: 'text',
             readOnly: false,
-            width: 75
+            width: 75,
+            returnName: 'RPL_STS_CD'
         }
     ]
 

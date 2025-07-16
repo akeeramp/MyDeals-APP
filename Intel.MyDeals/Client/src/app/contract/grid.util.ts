@@ -9,6 +9,8 @@ import { ExcelExport } from "../contract/excelExport.util";
 import { InActiveCustomerService } from "../advanceSearch/inactiveCustomerSearch/inactiveCustomerSearch.service";
 export class GridUtil {
 
+    static excelValueLoop: any;
+
     constructor(public inactSvc: InActiveCustomerService) { }
 
     static uiValidationErrorDetail(passedData) {
@@ -711,6 +713,20 @@ export class GridUtil {
         });
     }
 
+    static excelLoop(responseVal){
+        this.excelValueLoop = Object.keys(responseVal).map(key => { return { value: responseVal[key], wrap: true }; });
+    }
+
+    static filterObjectByArrayKeys(array, object) {
+        let result = {};
+        array.forEach(key => {
+            if (object.hasOwnProperty(key)) {
+                result[key] = object[key];
+            }
+        });
+        return result;
+    }
+
     static dsToExcelUnifiedCustomerDealData(data, response, fileName) {
         const rows = [{ cells: [] }];
         const colWidths = [];
@@ -724,19 +740,25 @@ export class GridUtil {
                 wrap: true,
                 width: data[t].width
             });
-            colWidths.push({ width: data[t].data == 'END_CUSTOMER_RETAIL' ? 500 : 180 });
+            colWidths.push({ width: data[t].returnName == 'RPL_STS_CD' ? 300 : 180 });
         }
+
+        let excelReturnName =  data.map(item => item.returnName)
+
         for (let i = 0; i < response.length; i++) {
+            let filteredObject = this.filterObjectByArrayKeys(excelReturnName, response[i]);
+            this.excelLoop(filteredObject)
             rows.push({
-                cells: [
-                    { value: response[i]["IS_ACTV"], wrap: true },
-                    { value: response[i]["PRIM_CUST_ID"], wrap: true },
-                    { value: response[i]["PRIM_CUST_NM"], wrap: true },
-                    { value: response[i]["PRIM_LVL_ID"], wrap: true },
-                    { value: response[i]["PRIM_LVL_NM"], wrap: true },
-                    { value: response[i]["PRIM_CUST_CTRY"], wrap: true },
-                    { value: response[i]["RPL_STS_CD"], wrap: true }
-                ]
+                cells: this.excelValueLoop
+                // cells: [
+                //     { value: response[i]["IS_ACTV"], wrap: true },
+                //     { value: response[i]["PRIM_CUST_ID"], wrap: true },
+                //     { value: response[i]["PRIM_CUST_NM"], wrap: true },
+                //     { value: response[i]["PRIM_LVL_ID"], wrap: true },
+                //     { value: response[i]["PRIM_LVL_NM"], wrap: true },
+                //     { value: response[i]["PRIM_CUST_CTRY"], wrap: true },
+                //     { value: response[i]["RPL_STS_CD"], wrap: true }
+                // ]
             })
         }
         const sheets = [
