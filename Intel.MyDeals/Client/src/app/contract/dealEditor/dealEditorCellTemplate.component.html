@@ -25,12 +25,19 @@
     <div *ngIf="in_Field_Name == 'NUM_OF_TIERS' && in_DataItem['OBJ_SET_TYPE_CD'] == 'DENSITY'">
         <div class="err-bit" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
         <div class="ng-binding vert-center">{{(uiControlWrapper(in_DataItem, in_Field_Name)['NUM_OF_TIERS'] / uiControlWrapper(in_DataItem, in_Field_Name)['NUM_OF_DENSITY'])}}</div>
-    </div>    
+    </div>
     <div *ngIf="(in_Field_Name == 'REBATE_BILLING_START' || in_Field_Name == 'REBATE_BILLING_END') && in_DataItem[in_Field_Name] != 'Invalid date'" [ngClass]="applySoftWarnings(in_DataItem, in_Field_Name) != '' ? 'isSoftWarnCell' : ''" title="{{applySoftWarnings(in_DataItem, in_Field_Name)}}" class="ng-binding vert-center wordWrapTransform">{{uiControlWrapper(in_DataItem, in_Field_Name)[in_Field_Name] | date:'MM/dd/yyy'}}</div>
     <div class="err-bit" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip position="bottom" title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
-    <div *ngIf="in_DataItem[in_Field_Name] != undefined && in_DataItem[in_Field_Name] != null && in_Field_Name !== 'REBATE_BILLING_START' && in_Field_Name !== 'REBATE_BILLING_END'"
+    <div *ngIf="in_DataItem[in_Field_Name] != undefined && in_DataItem[in_Field_Name] != null && in_Field_Name !== 'REBATE_BILLING_START' && in_Field_Name !== 'REBATE_BILLING_END' && in_Field_Name != 'SYS_PRICE_POINT'"
          [ngClass]="applySoftWarnings(in_DataItem, in_Field_Name) != '' ? 'isSoftWarnCell' : ''" title="{{applySoftWarnings(in_DataItem, in_Field_Name)}}" class="ng-binding vert-center wordWrapTransform">
         {{uiControlWrapper(in_DataItem, in_Field_Name)[in_Field_Name]}}
+    </div>
+    <div *ngIf="in_Field_Name == 'SYS_PRICE_POINT'" [ngClass]="applySoftWarnings(in_DataItem, in_Field_Name) != '' ? 'isSoftWarnCell' : ''" title="{{applySoftWarnings(in_DataItem, in_Field_Name)}}" class="ng-binding vert-center wordWrapTransform">
+        <span *ngIf="in_DataItem.SYS_PRICE_POINT == undefined ; else elseBlock"></span>
+        <ng-template #elseBlock>
+            <span>{{in_DataItem.SYS_PRICE_POINT.split('$')[0]}}</span>
+            <span>{{in_DataItem.SYS_PRICE_POINT.split('$')[1] | currency}}</span>
+        </ng-template>
     </div>
 </div>
 <div *ngIf="in_Field_Name == 'DC_ID'" id="DC_ID" class="dealCell" style="align-items: center; display: flex; "
@@ -231,7 +238,10 @@
                     <div *ngIf="in_DataItem[field.field] && in_DataItem[field.field][tier] != undefined && in_DataItem[field.field][tier] != null">
                         <span *ngIf="field.field == 'RATE' || field.field == 'STRT_REV' || field.field == 'END_REV'; else elseEnableTier" class="ng-binding dataPadding">{{in_DataItem[field.field][tier] | currency}}</span>
                         <ng-template #elseEnableTier>
-                            <span class="ng-binding dataPadding">{{in_DataItem[field.field][tier]}}</span>
+                            <span *ngIf="in_DataItem[field.field][tier] != 'Unlimited'; else indataItem" class="ng-binding dataPadding">{{in_DataItem[field.field][tier] | number}}</span>
+                            <ng-template #indataItem>
+                                <span class="ng-binding dataPadding">{{in_DataItem[field.field][tier]}}</span>
+                            </ng-template>
                         </ng-template>
                     </div>
                 </div>

@@ -37,7 +37,7 @@ export class PTEUtil {
         if (templateColumnFields[item.field].type != null) {
             const ITEM_FIELD = templateColumnFields[item.field].type;
 
-            if (item.field == "END_VOL" || item.field === 'STRT_VOL') {
+            if (item.field == "END_VOL" || item.field === 'STRT_VOL' || item.field == "VOLUME") {
                 currentColumnConfig.type = 'numeric';
                 currentColumnConfig.numericFormat = {
                     pattern: '0,0',
@@ -47,8 +47,6 @@ export class PTEUtil {
                 if (item.field == "END_VOL") {
                     currentColumnConfig.validator = this.EndValueValidator;
                 }
-            } else if (item.field == "VOLUME") {
-                currentColumnConfig.type = 'text';
             } else if (ITEM_FIELD === 'number') {
                 currentColumnConfig.type = 'numeric';
 

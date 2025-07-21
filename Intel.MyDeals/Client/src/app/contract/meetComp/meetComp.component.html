@@ -123,7 +123,7 @@
                             </multicheck-filter>
                         </ng-template>
                         <ng-template kendoGridCellTemplate let-dataItem>
-                            <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}"><span *ngIf="(dataItem.MC_AVG_RPU != null && dataItem.MC_AVG_RPU != '' && dataItem.MC_AVG_RPU > 0)">$</span>{{dataItem.MC_AVG_RPU}}</div>
+                            <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}"><span *ngIf="(dataItem.MC_AVG_RPU != null && dataItem.MC_AVG_RPU != '' && dataItem.MC_AVG_RPU > 0)"></span>{{dataItem.MC_AVG_RPU | currency}}</div>
                         </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column field="COMP_SKU" title="Meet Comp SKU" width="170" [headerClass]="{'headerClass':true}">
@@ -140,7 +140,7 @@
                             </kendo-combobox>
                         </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column field="COMP_PRC" title="Meet Comp Price" width="170" [headerClass]="{'headerClass':true}">
+                    <kendo-grid-column field="COMP_PRC" title="Meet Comp Price" width="170" [headerClass]="{'headerClass':true}"> 
                         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                             <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                             </multicheck-filter>
@@ -149,7 +149,7 @@
                             <div [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_PRC)}">
                                 <div *ngIf="(dataItem.COMP_PRC==0 || dataItem.COMP_PRC==null);else comp_prc"></div>
                                 <ng-template #comp_prc>
-                                    <div style="padding-left: 5px;" *ngIf="showPrice">${{dataItem.COMP_PRC}} </div>
+                                    <div style="padding-left: 5px;" *ngIf="showPrice">{{dataItem.COMP_PRC | currency}} </div>
                                 </ng-template>
                             </div>
                         </ng-template>
@@ -167,7 +167,7 @@
                             <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.IA_BNCH) }">
                                 <div *ngIf="(dataItem.IA_BNCH==0 || dataItem.IA_BNCH==null );else Ia_Bnch"></div>
                                 <ng-template #Ia_Bnch>
-                                    <div>${{dataItem.IA_BNCH}}</div>
+                                    <div>{{dataItem.IA_BNCH | currency}}</div>
                                 </ng-template>
                             </div>
                         </ng-template>
@@ -184,7 +184,7 @@
                             <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_BNCH) }">
                                 <div *ngIf="(dataItem.COMP_BNCH==0 || dataItem.COMP_BNCH==null );else Comp_Bnch"></div>
                                 <ng-template #Comp_Bnch>
-                                    <div>${{dataItem.COMP_BNCH}}</div>
+                                    <div>{{dataItem.COMP_BNCH | currency}}</div>
                                 </ng-template>
                             </div>
                         </ng-template>
@@ -199,7 +199,7 @@
                         <ng-template kendoGridCellTemplate let-dataItem>
                             <div *ngIf="dataItem.CAP==0;else cap" class='readOnlyCell' title="0"></div>
                             <ng-template #cap>
-                                <div title="{{dataItem.CAP}}" class='readOnlyCell'>${{dataItem.CAP}}</div>
+                                <div title="{{dataItem.CAP}}" class='readOnlyCell'>{{dataItem.CAP | currency}}</div>
                             </ng-template>
                         </ng-template>
                     </kendo-grid-column>
@@ -374,7 +374,7 @@
                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field, dataItem)"></multicheck-filter>
                                     </ng-template>
                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                        <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}"><span *ngIf="(dataItem.MC_AVG_RPU != null && dataItem.MC_AVG_RPU != '' && dataItem.MC_AVG_RPU > 0)">$</span>{{dataItem.MC_AVG_RPU}}</div>
+                                        <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}"><span *ngIf="(dataItem.MC_AVG_RPU != null && dataItem.MC_AVG_RPU != '' && dataItem.MC_AVG_RPU > 0)"></span>{{dataItem.MC_AVG_RPU | currency}}</div>
                                     </ng-template>
                                 </kendo-grid-column>
                                 <kendo-grid-column field="COMP_SKU" title="Meet Comp SKU" width="155" [headerClass]="{'headerClass':true}">
@@ -397,7 +397,7 @@
                                         <div [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_PRC)}">
                                             <div *ngIf="(dataItem.COMP_PRC==0 || dataItem.COMP_PRC==null);else comp_prc_c"></div>
                                             <ng-template #comp_prc_c>
-                                                <div style="padding-left:5px;">${{dataItem.COMP_PRC}} </div>
+                                                <div style="padding-left:5px;">{{dataItem.COMP_PRC | currency}} </div>
                                             </ng-template>
                                         </div>
                                     </ng-template>
@@ -415,7 +415,7 @@
                                             <div *ngIf="(dataItem.IA_BNCH==0 || dataItem.IA_BNCH==null );else Ia_Bnch">
                                             </div>
                                             <ng-template #Ia_Bnch>
-                                                <div>${{dataItem.IA_BNCH}}</div>
+                                                <div>{{dataItem.IA_BNCH | currency}}</div>
                                             </ng-template>
                                         </div>
                                     </ng-template>
@@ -432,7 +432,7 @@
                                             <div *ngIf="(dataItem.COMP_BNCH==0 || dataItem.COMP_BNCH==null );else Comp_Bnch">
                                             </div>
                                             <ng-template #Comp_Bnch>
-                                                <div>${{dataItem.COMP_BNCH}}</div>
+                                                <div>{{dataItem.COMP_BNCH | currency}}</div>
                                             </ng-template>
                                         </div>
                                     </ng-template>
@@ -448,7 +448,7 @@
                                         <div *ngIf="dataItem.CAP==0;else cap_c" class="readOnlyCell" title="0"></div>
                                         <ng-template #cap_c>
                                             <div class="readOnlyCell" title="{{dataItem.CAP}}">
-                                                ${{dataItem.CAP}}
+                                                {{dataItem.CAP | currency}}
                                             </div>
                                         </ng-template>
                                     </ng-template>
@@ -545,7 +545,7 @@
                                         </div>
                                         <ng-template #ecap_prc>
                                             <div class='readOnlyCell' title="{{dataItem.ECAP_PRC}}">
-                                                ${{dataItem.ECAP_PRC}}
+                                                {{dataItem.ECAP_PRC | currency}}
                                             </div>
                                         </ng-template>
                                     </ng-template>
@@ -559,7 +559,7 @@
                                         </div>
                                         <ng-template #ycs2_prc>
                                             <div class='readOnlyCell' title="{{dataItem.YCS2}}">
-                                                ${{dataItem.YCS2}}
+                                                {{dataItem.YCS2 | currency}}
                                             </div>
                                         </ng-template>
                                     </ng-template>

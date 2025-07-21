@@ -416,29 +416,52 @@
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="KIT CAP" field="CAP_KIT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isKIT[pt.DC_ID]" filterable="false">
                                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                                        <span>
-                                                            {{getFormatedDim(dataItem, 'CAP', '20_____1', 'currency')}}
-                                                        </span>
+                                                        <span *ngIf="dataItem.CAP !== undefined && dataItem.CAP['20_____1'] !== undefined && dataItem.CAP['20_____1'] !== 'No CAP'; else elseBlock">{{dataItem.CAP['20_____1'] | currency}}</span>
+                                                        <ng-template #elseBlock>
+                                                            <span>
+                                                                {{dataItem.CAP['20_____1']}}
+                                                            </span>
+                                                        </ng-template>
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="KIT ECAP" field="ECAP_PRICE" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isKIT[pt.DC_ID]" filterable="false">
-                                                    <ng-template kendoGridCellTemplate let-dataItem><span>{{ getFormatedDim(dataItem, 'ECAP_PRICE', '20_____1', 'currency')}}</span></ng-template>
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                    <span>{{ getFormatedDim(dataItem, 'ECAP_PRICE', '20_____1', 'currency')}}</span></ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="CAP" field="CAP" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isECAP[pt.DC_ID]" filterable="false">
                                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                                        <span>
-                                                            {{getFormatedDim(dataItem, 'CAP', '20___0', 'currency')}}
-                                                        </span>
+                                                        <span *ngIf="dataItem.CAP !== undefined && dataItem.CAP['20___0'] !== undefined && dataItem.CAP['20___0'] !== 'No CAP'; else elseBlock">{{dataItem.CAP['20___0'] | currency}}</span>
+                                                        <ng-template #elseBlock>
+                                                            <span>
+                                                                {{dataItem.CAP['20___0']}}
+                                                            </span>
+                                                        </ng-template>
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="ECAP" field="ECAP_PRICE" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isECAP[pt.DC_ID]" filterable="false">
-                                                    <ng-template kendoGridCellTemplate let-dataItem><span>{{ getFormatedDim(dataItem, 'ECAP_PRICE', '20___0','currency')}}</span></ng-template>
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        <span *ngIf="dataItem.ECAP_PRICE !== undefined && dataItem.ECAP_PRICE['20___0'] !== undefined">{{dataItem.ECAP_PRICE['20___0'] | currency}}</span>
+                                                    </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="YCS2" field="YCS2_PRC_IRBT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isECAP[pt.DC_ID]" filterable="false">
-                                                    <ng-template kendoGridCellTemplate let-dataItem><span>{{getFormatedDim(dataItem, 'YCS2_PRC_IRBT', '20___0','currency')}}</span></ng-template>
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        <span *ngIf="dataItem.YCS2_PRC_IRBT !== undefined && dataItem.YCS2_PRC_IRBT['20___0'] !== undefined && dataItem.YCS2_PRC_IRBT['20___0'] !== 'No YCS2'; else elseBlock">{{dataItem.YCS2_PRC_IRBT['20___0'] | currency}}</span>
+                                                        <ng-template #elseBlock>
+                                                            <span>
+                                                                {{dataItem.YCS2_PRC_IRBT['20___0']}}
+                                                            </span>
+                                                        </ng-template>
+                                                    </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="KIT YCS2" field="YCS2_PRC_IRBT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isKIT[pt.DC_ID]" filterable="false">
-                                                    <ng-template kendoGridCellTemplate let-dataItem><span>{{getFormatedDim(dataItem, 'YCS2_PRC_IRBT','20_____1', 'currency')}}</span></ng-template>
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        <span *ngIf="dataItem.YCS2_PRC_IRBT !== undefined && dataItem.YCS2_PRC_IRBT['20_____1'] !== undefined && dataItem.YCS2_PRC_IRBT['20_____1'] !== 'No YCS2'; else elseBlock">{{dataItem.YCS2_PRC_IRBT['20_____1'] | currency}}</span>
+                                                        <ng-template #elseBlock>
+                                                            <span>
+                                                                {{dataItem.YCS2_PRC_IRBT['20_____1']}}
+                                                            </span>
+                                                        </ng-template>
+                                                    </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Rebate Type" field="REBATE_TYPE" [headerClass]="{'headerClass':true}" [width]="120">
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
@@ -458,7 +481,9 @@
                                                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex"><span>{{getFormatedDim(dataItem, 'COMP_SKU', '20___0','string')}}</span></ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Comp Price" field="COMPETITIVE_PRICE" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!CAN_VIEW_COST_TEST">
-                                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex"><span>{{getFormatedDim(dataItem, 'COMPETITIVE_PRICE','20___0', 'currency')}}</span></ng-template>
+                                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                                        <span *ngIf="dataItem.COMPETITIVE_PRICE !== undefined && dataItem.COMPETITIVE_PRICE['20___0'] !== undefined">{{dataItem.COMPETITIVE_PRICE['20___0'] | currency}}</span>
+                                                    </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Meet Comp Test Result" field="MEETCOMP_TEST_RESULT" [headerClass]="{'headerClass':true}" [width]="140" [hidden]="!CAN_VIEW_MEET_COMP">
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
@@ -512,6 +537,9 @@
                                                                  let-filterService="filterService">
                                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
                                                                            [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
+                                                    </ng-template>
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        <span>{{ dataItem.VOLUME | number }}</span>
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="End Customer" field="END_CUSTOMER_RETAIL" [headerClass]="{'headerClass':true}" [width]="150" [hidden]="OtherType[pt.DC_ID]">

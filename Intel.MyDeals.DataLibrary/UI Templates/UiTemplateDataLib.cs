@@ -763,7 +763,8 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
                 Width = 110,
-                IsRequired = false
+                IsRequired = false,
+                DataType = "number"
             });
 
             items.Add(new UiTemplateContainerItem

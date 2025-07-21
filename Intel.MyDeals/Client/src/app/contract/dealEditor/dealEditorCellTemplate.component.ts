@@ -92,7 +92,7 @@ export class dealEditorCellTemplateComponent {
     uiControlWrapper(passedData, field) {
         let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
         if (field == "VOLUME" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "FRCST_VOL" ||
-            field == "REBATE_OA_MAX_VOL") {
+            field == "REBATE_OA_MAX_VOL" || field == "PAYABLE_QUANTITY") {
             if (data[field] != undefined && data[field] != null && data[field] != "")
                 data[field] = this.decimalPipe.transform(data[field], "1.0-0");            
         } else if (field == "REBATE_OA_MAX_AMT" || field == "MAX_RPU" || field == "USER_MAX_RPU" ||

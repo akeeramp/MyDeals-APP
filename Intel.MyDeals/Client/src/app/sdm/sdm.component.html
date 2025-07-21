@@ -146,36 +146,54 @@
                     </ng-template>
                 </kendo-grid-column>
                 <kendo-grid-column field="CPU_FLR" title="CPU_FLR" width="200px" [headerClass]="{'headerClass':true}" [sortable]="false">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <span>{{dataItem.CPU_FLR | currency}}</span>
+                    </ng-template>
                     <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                         <input type="number" class="k-textbox" [formControl]="formGroup.get('CPU_FLR')" />
                     </ng-template>
                 </kendo-grid-column>
 
                 <kendo-grid-column field="APAC_PD" title="APAC_PD" width="200px" [headerClass]="{'headerClass':true}" [sortable]="false">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <span>{{dataItem.APAC_PD | currency}}</span>
+                    </ng-template>
                     <ng-template kendoGridEditTemplate let-formGroup="formGroup">
                         <input type="number" class="k-textbox" [formControl]="formGroup.get('APAC_PD')" />
                     </ng-template>
                 </kendo-grid-column>
 
                 <kendo-grid-column field="IJKK_PD" title="IJKK_PD" width="200px" [headerClass]="{'headerClass':true}" [sortable]="false">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <span>{{dataItem.IJKK_PD | currency}}</span>
+                    </ng-template>
                     <ng-template kendoGridEditTemplate let-formGroup="formGroup">
                         <input type="number" class="k-textbox" [formControl]="formGroup.get('IJKK_PD')" />
                     </ng-template>
                 </kendo-grid-column>
 
                 <kendo-grid-column field="PRC_PD" title="PRC_PD" width="200px" [headerClass]="{'headerClass':true}" [sortable]="false">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <span>{{dataItem.PRC_PD | currency}}</span>
+                    </ng-template>
                     <ng-template kendoGridEditTemplate let-formGroup="formGroup">
                         <input type="number" class="k-textbox" [formControl]="formGroup.get('PRC_PD')" />
                     </ng-template>
                 </kendo-grid-column>
 
                 <kendo-grid-column field="EMEA_PD" title="EMEA_PD" width="200px" [headerClass]="{'headerClass':true}" [sortable]="false">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <span>{{dataItem.EMEA_PD | currency}}</span>
+                    </ng-template>
                     <ng-template kendoGridEditTemplate let-formGroup="formGroup">
                         <input type="number" class="k-textbox" [formControl]="formGroup.get('EMEA_PD')" />
                     </ng-template>
                 </kendo-grid-column>
 
                 <kendo-grid-column field="ASMO_PD" title="ASMO_PD" width="200px" [headerClass]="{'headerClass':true}" [sortable]="false">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                        <span>{{dataItem.ASMO_PD | currency}}</span>
+                    </ng-template>
                     <ng-template kendoGridEditTemplate let-formGroup="formGroup">
                         <input type="number" class="k-textbox" [formControl]="formGroup.get('ASMO_PD')" />
                     </ng-template>

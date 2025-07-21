@@ -221,9 +221,7 @@
                                        [width]="160"></kendo-grid-column>
                     <kendo-grid-column title="ECAP Price" field="ECAP_PRICE" [headerClass]="{'headerClass':true}" [width]="120">
                         <ng-template kendoGridCellTemplate let-dataItem>
-                            <span>
-                                {{getFormatedDim(dataItem, 'ECAP_PRICE','20___0','currency')}}
-                            </span>
+                            <span *ngIf="dataItem.ECAP_PRICE !== undefined && dataItem.ECAP_PRICE['20___0'] !== undefined">{{dataItem.ECAP_PRICE['20___0'] | currency}}</span>
                         </ng-template>
                         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService" let-dataItem>
                             <dropDown-filter class="de-dropdwn-styl" [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value" operator="isnotnull"
@@ -232,10 +230,9 @@
                     </kendo-grid-column>
                     <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="120">
                         <ng-template kendoGridCellTemplate let-dataItem>
-                            <span>{{getFormatedDim(dataItem,'MAX_RPU','20___0','currency')}}</span>
+                            <span *ngIf="dataItem.MAX_RPU !== undefined && dataItem.MAX_RPU['20___0'] !== undefined">{{dataItem.MAX_RPU['20___0'] | currency}}</span>
                         </ng-template>
                     </kendo-grid-column>
-
                     <kendo-grid-column title="Consumption Customer Platform" field="CONSUMPTION_CUST_PLATFORM"
                         [headerClass]="{'headerClass':true}" [width]="160">
                     </kendo-grid-column>

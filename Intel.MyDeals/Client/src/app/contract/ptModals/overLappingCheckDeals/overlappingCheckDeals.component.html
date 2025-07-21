@@ -191,6 +191,12 @@
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="START_DT" width="150" title="Deal Start Date"></kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="END_DT" width="150" title="Deal End Date"></kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="ECAP_PRICE" width="150" title="ECAP Price">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <span *ngIf="dataItem.ECAP_PRICE != '' || dataItem.ECAP_PRICE != undefined; else indataItem" class="text-center">{{dataItem.ECAP_PRICE | currency}}</span>
+                    <ng-template #indataItem>
+                        <span class="text-center">{{dataItem.ECAP_PRICE}}</span>
+                    </ng-template>
+                </ng-template>
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
