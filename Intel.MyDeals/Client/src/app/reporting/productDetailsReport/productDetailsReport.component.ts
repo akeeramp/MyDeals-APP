@@ -256,7 +256,6 @@ export class ProductDetailsReportComponent implements OnDestroy {
                         this.gridResult = result;
                         this.gridAllResult = result;
                         this.gridData = process(this.gridResult, this.state);
-                        this.gridData.data = result;
                     },
                     (error) => {
                         this.loggerService.error('ProductSelectorComponent::getProductSelection::', error);
