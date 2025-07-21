@@ -3018,3 +3018,9 @@ kendo-popup kendo-grid-filter-menu-container dropdown-filter kendo-combobox .k-b
     display: block;
     width: 215px !important;
 }
+
+#allDeals .k-cell-inner .k-grid-header-menu {
+    margin-inline-end: 10px;
+    position: relative;
+    top: 1px;
+}

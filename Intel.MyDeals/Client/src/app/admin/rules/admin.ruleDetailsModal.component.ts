@@ -641,7 +641,7 @@ export class RuleDetailsModalComponent {
             }
             if (this.invalidPrice.length > 0) {
                 this.strmsg += '<br/><br/><b>Below products has invalid price! Please enter valid Price for highlighted products in orange</b><br/>';
-                this.invalidValuesCellComments('Price', '<b>Below products has invalid price! Please enter valid Price for highlighted products in orange</b><br/>', cellComments, 1, null);
+                this.invalidValuesCellComments('Price', 'Below products has invalid price! Please enter valid Price for highlighted products in orange', cellComments, 1, null);
                 this.cellMessages = cellComments;
                 this.hotTable.updateSettings({
                     cell: this.cellMessages
