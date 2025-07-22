@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, OnDestroy, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, SelectAllCheckboxState, ExcelExportEvent } from '@progress/kendo-angular-grid';
 import { distinct, process, State } from '@progress/kendo-data-query';
@@ -38,7 +38,7 @@ export class ProductDetailsReportComponent implements OnDestroy {
         this.allData = this.allData.bind(this);
 
     }
-
+    @ViewChild('nonInteractiveElement') nonInteractiveElement: ElementRef;
     private custDataReport: any;
     private selectedCustNamesReport:any;
     private selectedFamilyReport: Item[];
@@ -292,6 +292,9 @@ export class ProductDetailsReportComponent implements OnDestroy {
         this.userEnteredData = null;
         this.showL4Column = false;
         this.showMaterialIDColumn = false;
+        setTimeout(() => {
+            this.nonInteractiveElement.nativeElement.focus();
+        });
         this.clearFilter();
     }
     responseLnav(e: any, sKey?) {

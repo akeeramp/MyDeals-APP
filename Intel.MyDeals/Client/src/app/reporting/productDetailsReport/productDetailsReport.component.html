@@ -101,6 +101,9 @@
                                 </ng-template>
                                 <kendo-grid-column *ngIf="showProcessorColumn" field="PCSR_NBR" title="Processor Number" width="300"
                                                 [headerClass]="{'headerClass':true}" [editable]="false">
+                                    <ng-template kendoGridHeaderTemplate let-dataItem>
+                                        <span class="k-column-title" #nonInteractiveElement tabindex="-1">Processor Number</span>
+                                    </ng-template>
                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                                                 let-filterService="filterService">
                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
