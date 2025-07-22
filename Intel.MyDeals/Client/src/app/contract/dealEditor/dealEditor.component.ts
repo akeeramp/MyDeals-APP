@@ -1787,6 +1787,21 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         }
         return columns;
     }
+
+    //The formatCompetitivePrice function formats COMPETITIVE_PRICE values by adding a dollar sign to non-empty entries in a given dataset.
+    formatCompetitivePrice(data) {
+        return data.map(item => {
+            let competitivePriceValue = item.COMPETITIVE_PRICE && item.COMPETITIVE_PRICE["20___0"];
+            let formattedCompetitivePrice = competitivePriceValue ? `$${competitivePriceValue}` : "";
+
+            // Return a new object with the competitive price value converted to a string
+            return {
+                ...item,
+                COMPETITIVE_PRICE: formattedCompetitivePrice
+            };
+        });
+    }
+
     exportToExcel() {
         //to invoke a search to get 1000 records
         if (this.in_Is_Tender_Dashboard) {
@@ -1797,11 +1812,13 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         }
         else {
             let columns = this.columnOrdering();
-            GridUtil.dsToExcel(columns, this.gridResult, "Deal Editor Export");
+            let processedGridResult = this.formatCompetitivePrice(this.gridResult);
+            GridUtil.dsToExcel(columns, processedGridResult, "Deal Editor Export");
         }
     }
     exportToExcelCustomColumns() {
-        GridUtil.dsToExcel(this.columns, this.gridData.data, "Deal Editor Export");
+        let processedGridData = this.formatCompetitivePrice(this.gridData.data);
+        GridUtil.dsToExcel(this.columns, processedGridData, "Deal Editor Export");
     }
 
     removeDeletedRowData(deletedPsId) {
