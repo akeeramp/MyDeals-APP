@@ -143,18 +143,18 @@
                     <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
                     </date-range-filter>
                 </div>
-                <div *ngIf="this.advancedSearchDropdownFilter[column.field] == undefined && column.field != 'Customer_NM' && !(column.field == 'START_DT' || column.field == 'END_DT' || column.field == 'OEM_PLTFRM_LNCH_DT' || column.field == 'OEM_PLTFRM_EOL_DT' || column.field == 'DC_ID' || column.field == 'CAP_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'VOLUME' || column.field == 'STRT_VOL_VAL' || column.field == 'END_VOL_VAL' || column.field == 'RATE_VAL' || column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'TOT_QTY_PAID' || column.field == 'CONSUMPTION_LOOKBACK_PERIOD' )">
+                <div *ngIf="this.advancedSearchDropdownFilter[column.field] == undefined && column.field != 'Customer_NM' && !(column.field == 'START_DT' || column.field == 'END_DT' || column.field == 'OEM_PLTFRM_LNCH_DT' || column.field == 'OEM_PLTFRM_EOL_DT' || column.field == 'DC_ID' || column.field == 'CAP_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'VOLUME' || column.field == 'STRT_VOL_VAL' || column.field == 'END_VOL_VAL' || column.field == 'RATE_VAL' || column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'CONSUMPTION_LOOKBACK_PERIOD' )">
                     <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
                     </kendo-grid-string-filter-menu>
                 </div>
-                <div *ngIf="column.field == 'DC_ID' || column.field == 'CAP_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'TOT_QTY_PAID' || column.field == 'VOLUME' || column.field == 'STRT_VOL_VAL' || column.field == 'END_VOL_VAL' || column.field == 'RATE_VAL' || column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'CONSUMPTION_LOOKBACK_PERIOD' ">
+                <div *ngIf="column.field == 'DC_ID' || column.field == 'CAP_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'VOLUME' || column.field == 'STRT_VOL_VAL' || column.field == 'END_VOL_VAL' || column.field == 'RATE_VAL' || column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'CONSUMPTION_LOOKBACK_PERIOD' ">
                     <kendo-grid-numeric-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [format]="'#########'" [extra]="false"></kendo-grid-numeric-filter-menu>
                 </div>
 
             </ng-template>
             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                 <div *ngIf="column.field == 'CNTRCT_OBJ_SID' || column.field == 'Customer' || column.field == 'DC_ID' || column.field == 'CNTRCT_TITLE' || column.field == 'PRC_ST_TITLE' || column.field == 'RATE_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'CAP_VAL'
-                || column.field == 'TOTAL_DOLLAR_AMOUNT' ||  column.field == 'TOT_QTY_PAID' || column.field == 'TOT_QTY_PAID' || column.field == 'END_VOL_VAL' || column.field == 'STRT_VOL_VAL' || column.field == 'VOLUME' || column.field == 'PAYABLE_QUANTITY'; else elseCond">
+                || column.field == 'TOTAL_DOLLAR_AMOUNT' ||  column.field == 'END_VOL_VAL' || column.field == 'STRT_VOL_VAL' || column.field == 'VOLUME' || column.field == 'PAYABLE_QUANTITY'; else elseCond">
                     <div *ngIf="column.field == 'DC_ID'" class="dealer-tender-comp">
                         <deal-popup-icon [dealId]="dataItem.DC_ID"></deal-popup-icon>
                         <a (click)="goto(dataItem.DC_ID, 'gotoDeal')" title='Click to Edit' class="comp-anchor-dealer advSearch click-adv"><span>{{dataItem.DC_ID}}</span></a>
@@ -174,7 +174,7 @@
                     <div *ngIf="(column.field == 'CAP_VAL' && dataItem.CAP_VAL == 'No CAP' )">
                         <span>{{dataItem.CAP_VAL}}</span>
                     </div>
-                    <div *ngIf="column.field == 'RATE_VAL' || column.field == 'TOT_QTY_PAID' || column.field == 'ECAP_PRICE_VAL' || (column.field == 'CAP_VAL' && dataItem.CAP_VAL != 'No CAP' ) ||column.field == 'TOTAL_DOLLAR_AMOUNT'">
+                    <div *ngIf="column.field == 'RATE_VAL' || column.field == 'ECAP_PRICE_VAL' || (column.field == 'CAP_VAL' && dataItem.CAP_VAL != 'No CAP' ) ||column.field == 'TOTAL_DOLLAR_AMOUNT'">
                         <span>{{dataItem[column.field] | currency:'USD' : 'symbol':'1.2-2' }}</span>
                     </div>
                     <div *ngIf="(column.field == 'END_VOL_VAL' || column.field == 'STRT_VOL_VAL' || column.field == 'VOLUME' || column.field == 'PAYABLE_QUANTITY')">

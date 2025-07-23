@@ -311,12 +311,6 @@
             type: "string",
             width: 100
         }, {
-            field: "TOT_QTY_PAID",
-            title: "Total Qty Paid",
-            type: "number",
-            format: "{0:c}",
-            width: 120
-        },{
             field: "END_CUSTOMER_RETAIL",
             title: "End Customer",
             type: "string",
@@ -641,14 +635,6 @@
             format: "{0:c}",
             filterable: "moneyObjFilter"
         },{
-            field: "TOT_QTY_PAID",
-            title: "Total Qty Paid",
-            type: "number",
-            format: "{0:c}",
-            filterable: false,
-            sortable: false,
-            width: 120
-        },{
             field: "END_CUSTOMER_RETAIL",
             title: "End Customer",
             type: "string",
@@ -961,14 +947,6 @@
             format: "{0:c}",
             filterable: "moneyObjFilter"
         }, {
-            field: "TOT_QTY_PAID",
-            title: "Total Qty Paid",
-            type: "number",
-            format: "{0:c}",
-            filterable: false,
-            sortable: false,
-            width: 120
-        },{
             field: "END_CUSTOMER_RETAIL",
             title: "End Customer",
             type: "string",
