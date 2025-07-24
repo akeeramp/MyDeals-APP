@@ -5,18 +5,17 @@ try {
  $ENV_DATA = @(
         [pscustomobject]@{env='CIN';DEPLOY_PATH='\\CALMYDCIN01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='CALMYDCIN01.amr.corp.intel.com';pool="cinmydeals.intel.com";config="CINR"}
         [pscustomobject]@{env='DEV';DEPLOY_PATH='\\HF2DEVMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2DEVMYDLW01.amr.corp.intel.com';pool="devmydeals.inte.com";config="DEV"}
-        [pscustomobject]@{env='IAO-DEV';DEPLOY_PATH='\\HF2ITTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2ITTMYDLW01.amr.corp.intel.com';pool="ittmydeals.intel.com";config="ITT"}
-        [pscustomobject]@{env='EUT';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsEUT';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com';pool="eutmydeals.intel.com";config="EUT"}
-        [pscustomobject]@{env='DAY1';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsDay1';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com';pool="mydeals-day1.intel.com";config="DAY1"}
-        [pscustomobject]@{env='IAO-CONS01';DEPLOY_PATH='\\HF2UTTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2UTTMYDLW01.amr.corp.intel.com';pool="uttmydeals.intel.com";config="UTT"}
-        [pscustomobject]@{env='IAO-CONS02';DEPLOY_PATH='\\HF2UTTMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2UTTMYDLW02.amr.corp.intel.com';pool="uttmydeals.intel.com";config="UTT"}
+        [pscustomobject]@{env='IAO-DEV';DEPLOY_PATH='\\calmydiaopp01.amr.corp.intel.com\MyDeals_IAO_DEV';DEPLOY_SERVER='calmydiaopp01.amr.corp.intel.com';pool="iaodevmydeals.intel.com";config="ITT"}
+        [pscustomobject]@{env='EUT';DEPLOY_PATH='\\CALMYDCIN01.amr.corp.intel.com\MyDealsEUT';DEPLOY_SERVER='CALMYDCIN01.amr.corp.intel.com';pool="eutmydeals.intel.com";config="EUT"}
+        [pscustomobject]@{env='DAY1';DEPLOY_PATH='\\CALMYDCIN01.amr.corp.intel.com\MyDealsDay1';DEPLOY_SERVER='CALMYDCIN01.amr.corp.intel.com';pool="mydeals-day1.intel.com";config="DAY1"}
+        [pscustomobject]@{env='IAO-CONS01';DEPLOY_PATH='\\calmydiaopp01.amr.corp.intel.com\MyDeals_IAO_CONS';DEPLOY_SERVER='calmydiaopp01.amr.corp.intel.com';pool="iaoconsmydeals.intel.com";config="UTT"}        
         [pscustomobject]@{env='CONS1';DEPLOY_PATH='\\calmydcons01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='calmydcons01.amr.corp.intel.com';pool="conmydeals.intel.com";config="CONS"}
         [pscustomobject]@{env='CONS2';DEPLOY_PATH='\\calmydcons02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='calmydcons02.amr.corp.intel.com';pool="conmydeals.intel.com";config="CONS"}
-        [pscustomobject]@{env='CIAR';DEPLOY_PATH='\\FM7CIAMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CIAMYDLW01.amr.corp.intel.com';pool="ciamydeals.intel.com";config="CIAR"}
+        [pscustomobject]@{env='CIAR';DEPLOY_PATH='\\calmydcia01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='calmydcia01.amr.corp.intel.com';pool="ciamydeals.intel.com";config="CIAR"}
         [pscustomobject]@{env='PERF';DEPLOY_PATH='\\HF2PRFMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2PRFMYDLW01.amr.corp.intel.com';pool="perfmydeals.intel.com";config="PERF"}
-        [pscustomobject]@{env='DR';DEPLOY_PATH='\\CH2DRMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='CH2DRMYDLW01.amr.corp.intel.com';pool="drmydeals.intel.com";config="PROD"}
-        [pscustomobject]@{env='PROD1';DEPLOY_PATH='\\FM1PRDMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYDLW01.amr.corp.intel.com';pool="prdmydeals.intel.com";config="PROD"}
-        [pscustomobject]@{env='PROD2';DEPLOY_PATH='\\FM1PRDMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYDLW02.amr.corp.intel.com';pool="prdmydeals.intel.com";config="PROD"}
+        [pscustomobject]@{env='DR';DEPLOY_PATH='\\calmyddr01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='calmyddr01.amr.corp.intel.com';pool="drmydeals.intel.com";config="PROD"}
+        [pscustomobject]@{env='PROD1';DEPLOY_PATH='\\calmydprd01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='calmydprd01.amr.corp.intel.com';pool="prdmydeals.intel.com";config="PROD"}
+        [pscustomobject]@{env='PROD2';DEPLOY_PATH='\\calmydprd02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='calmydprd02.amr.corp.intel.com';pool="prdmydeals.intel.com";config="PROD"}
    )
     if ($Operation -eq 'verifyENV'){
         $result = $ENV_DATA | Where env -eq $SERVER;

@@ -14,7 +14,6 @@ on:
           - 'DAY1'
           - 'EUT'
           - 'IAO-CONS01'
-          - 'IAO-CONS02'
           - 'CONS1'
           - 'CONS2'
       Move_Latest:
