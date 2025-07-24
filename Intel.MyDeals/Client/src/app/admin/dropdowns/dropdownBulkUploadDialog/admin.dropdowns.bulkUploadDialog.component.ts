@@ -363,23 +363,29 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
         }
     }
 
-    private sanitizeValue(value: string): string {
-        if (value != null && value != undefined && value.length > 0) {
-            const REGEX_REPLACE_TO_SPACE = /(\r\n|\r|\n|\s)/g;
-            let wipValue: string = value.replace(REGEX_REPLACE_TO_SPACE, ' ');
-    
-            // Character Replacements (in order)
-            wipValue = wipValue.replace(/((?<!\\)`)|(\\`)|(\`)/g, '\'')     // Backtick -> Single-quote
-                               .replace(/((?<!\\)')|(\\')|(\')/g, '\'\'')   // Convert single-quote to two single-quotes w/ escape characters (SQL limitation)
-                               .replace(/(?<!\\)"/g, '\"')                  // Add escape character to double-quote
-                               .replace(/\'{3,}/g, '\'\'')                  // Limit multiple (>= 3) single-quotes to just two single-quotes
-                               .replace(/-{2,}/g, '-')                      // Multiple hyphens to single (SQL limitation)
-                               .replace(/\s{2,}/g, ' ').trim();             // Multiple spaces to single space
-            
-            return wipValue;
-        } else {
-            return '';
+    private sanitizeValue(value: any): string {
+        let wipValue = ''; // Initialize wipValue to an empty string
+
+        if (value != null && value != undefined) {
+            if (typeof value === 'string') {
+                if (value.length > 0) {
+                    const REGEX_REPLACE_TO_SPACE = /(\r\n|\r|\n|\s)/g;
+                    wipValue = value.replace(REGEX_REPLACE_TO_SPACE, ' ');
+
+                    // Character Replacements (in order)
+                    wipValue = wipValue.replace(/((?<!\\)`)|(\\`)|(\`)/g, '\'')     // Backtick -> Single-quote
+                        .replace(/((?<!\\)')|(\\')|(\')/g, '\'\'')   // Convert single-quote to two single-quotes w/ escape characters (SQL limitation)
+                        .replace(/(?<!\\)"/g, '\"')                  // Add escape character to double-quote
+                        .replace(/\'{3,}/g, '\'\'')                  // Limit multiple (>= 3) single-quotes to just two single-quotes
+                        .replace(/-{2,}/g, '-')                      // Multiple hyphens to single (SQL limitation)
+                        .replace(/\s{2,}/g, ' ').trim();             // Multiple spaces to single space
+                }
+            } else if (typeof value === 'number') {
+                wipValue = value.toString(); // Convert number to string
+            }
         }
+
+        return wipValue;
     }
 
     /**
@@ -850,7 +856,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
 
         if (values != null && values != undefined && values.length > 0) {
             values.forEach((value: BulkDropdownAction) => {
-                if (value.value != undefined && value.value != null && value.value.length > 0) {  // Remove Empty Values
+                if (value.value != undefined && value.value != null) {  // Remove Empty Values
                     let currentValue = value;
                     currentValue.value = this.sanitizeValue(value.value);   // Default to sanitized values
 
