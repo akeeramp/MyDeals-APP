@@ -288,6 +288,7 @@ export class ProductDetailsReportComponent implements OnDestroy {
         window.localStorage.prdReportselectedFamilyNames = null;
         this.selectedCUST_ACCPT = 0;
         this.gridResult = [];
+        this.gridAllResult = [];
         this.gridData = process(this.gridResult, this.state);
         this.userEnteredData = null;
         this.showL4Column = false;
