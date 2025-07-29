@@ -670,6 +670,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 100,
                 Label = "ECAP Price *",
                 IsDimKey = true,
+                Format = "{0:c}",
                 IsRequired = true
             });
 
@@ -741,6 +742,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.LUMP_SUM },
                 Width = 100,
                 Label = "Adjustment Ecap Unit",
+                Format = "{0:n}",
                 DataType = "number"
             });
 
@@ -752,6 +754,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.LUMP_SUM },
                 Width = 100,
                 Label = "Forecast Volume",
+                Format = "{0:n}",
                 DataType = "number"
             });
 
@@ -763,6 +766,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
                 Width = 110,
+                Format = "{0:n}",
                 IsRequired = false,
                 DataType = "number"
             });
@@ -971,7 +975,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.LUMP_SUM },
                 Width = 140,
                 Label = "Overarching Maximum Volume",
-                Format = "{0:d}",
+                Format = "{0:n}",
                 UiType = "IntegerTextBox",
                 DataType = "number",
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_OA_MAX_VOL', 'number')#"
@@ -3028,6 +3032,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'FRCST_VOL', 'number')#",
                 IsFilterable = true,
+                Format = "{0:n}",
                 IsSortable = true
             });
 
@@ -3167,7 +3172,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.LUMP_SUM, OpDataElementSetType.VOL_TIER },
                 Label = "Overarching Max Volume",
                 Width = 140,
-                Format = "{0:d}",
+                Format = "{0:n}",
                 IsFilterable = true,
                 IsSortable = true,
                 UiType = "IntegerTextBox",
@@ -3182,7 +3187,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Label = "Overarching Max Dollar",
                 Width = 140,
-                Format = "{0:d}",
+                Format = "{0:c}",
                 IsFilterable = true,
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_OA_MAX_AMT', 'currency')#"

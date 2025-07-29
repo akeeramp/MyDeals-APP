@@ -4,6 +4,7 @@ import { contractExportService } from "./contractExport.service";
 import { lnavService } from "../lnav/lnav.service";
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
+import { CurrencyPipe, DecimalPipe } from "@angular/common";
 
 
 @Component({
@@ -13,7 +14,7 @@ import { Subject } from "rxjs";
 })
 
 export class contractExportComponent implements OnDestroy{
-    constructor(private contractExportSvc: contractExportService, private loggerSvc: logger, private lnavSvc: lnavService) {
+    constructor(private contractExportSvc: contractExportService, private loggerSvc: logger, private lnavSvc: lnavService, private currencyPipe: CurrencyPipe, private decimalPipe: DecimalPipe ) {
     }
     @Input() contractData: any;
     @Input() UItemplate: any;
@@ -43,30 +44,37 @@ export class contractExportComponent implements OnDestroy{
         });
     }
     showObjType(objType) {
-        if (objType === "KIT") return "Kit";
-        if (objType === "ECAP") return "ECAP";
-        if (objType === "PROGRAM") return "Program";
-        if (objType === "VOL_TIER") return "Volume Tier";
-        if (objType === "REV_TIER") return "Rev Tier";
-        if (objType === "LUMP_SUM") return "Lump Sum";
-        if (objType === "FLEX") return "Flex Accruals";
+        const type = {
+            "KIT": "Kit",
+            "ECAP": "Ecap",
+            "PROGRAM": "Program",
+            "VOL_TIER": "Volume Tier",
+            "REV_TIER": "Rev Tier",
+            "LUMP_SUM": "Lump Sum",
+            "FLEX": "Flex Accruals"
+        }
+        if (objType === "KIT" || objType === "ECAP" || objType === "PROGRAM" || objType === "VOL_TIER" || objType === "REV_TIER" || objType === "LUMP_SUM" || objType === "FLEX")
+            return type[objType];
         return "";
     }
-    showField(data, field, tmplt, objType) {
-        let val = data[field];
-        if (val === undefined || val === null) val = "";
-        if (typeof val === 'string') val = val.replace(/,/g, ', ');
 
-        if (this.UItemplate["ModelTemplates"].PRC_TBL_ROW[objType].model.fields[field].type === 'number') {
+    showField(data, field, tmplt, objType) {
+        const val = data[field];
+        if (val === undefined || val === null || val == "") return "";
+        else if (this.UItemplate["ModelTemplates"].PRC_TBL_ROW[objType].model.fields[field].type === 'number') {
             let format = this.UItemplate.ModelTemplates.PRC_TBL_ROW[objType].model.fields[field].format;
             if (format === "{0:c}") format = "c";
-            if (format === "{0:n}") format = "n";
-            if (format === "{0:d}") format = "d";
-            if (val !== "" && !isNaN(val)) {
-                // val = kendo.toString(parseFloat(val), format);
-            }
-        }
+            else if (format === "{0:n}") format = "n";
+            else if (format === "{0:d}") format = "d";
 
+            const obj = {
+                "c": this.currencyPipe.transform(val),
+                "n": this.decimalPipe.transform(val, '1.0-0'),
+                "d": this.decimalPipe.transform(val, '1.2-2')
+            }
+            return obj[format];
+        }
+        else if (typeof val === 'string') return val.replace(/,/g, ', ');
         return val;
     }
 
