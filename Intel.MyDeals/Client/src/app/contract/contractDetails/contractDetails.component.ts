@@ -93,6 +93,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
     private isShowBtn = false;
     private maxCount = 5;
     private deleteAttachmentParams: any = {};
+    public isDeleteAttachmentC2AAccpet: boolean = false;
     private isLoading: boolean = false;
     private msgType: string = "";
     private spinnerMessageHeader: string = "Contract Details";
@@ -904,42 +905,59 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         }
     }
 
-    getFileAttachmentDetails(value) {
+    async getFileAttachmentDetails(value) {
         if (value <= 0) {
             this.isNewContract = true;
         } else {
             this.isNewContract = false;
-            this.contractDetailsService.getFileAttachments(this.contractData.CUST_MBR_SID, this.contractData.DC_ID)
-            .pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-                if (response != undefined && response != null) {
-                    this.attachmentsDataSource = response;
-                    this.gridData = process(this.attachmentsDataSource, this.state);
-                    this.contractData = this.contractData;
-                    this.attachmentCount = response.length;
+            const response : any = await this.contractDetailsService.getFileAttachments(this.contractData.CUST_MBR_SID, this.contractData.DC_ID).toPromise().catch(
+                error => {
+                    this.loggerService.error("Unable to get Files.", error);
                     this.initComplete = true;
-                    this.setCustAcceptanceRules(this.contractData.CUST_ACCPT)
                 }
-            }, error => {
-                this.loggerService.error("Unable to get Files.", error);
-                this.initComplete = true;
-            });
+            );
+            this.attachmentsDataSource = response;
+            this.gridData = process(this.attachmentsDataSource, this.state);
+            this.contractData = this.contractData;
+            this.attachmentCount = response.length;
+            this.initComplete = true;            
+            this.setCustAcceptanceRules(this.contractData.CUST_ACCPT)            
         }
     }
-    deleteFileAttachment(data) {
+    deleteFileAttachment(data) { 
         this.deleteAttachmentParams = { custMbrSid: data.CUST_MBR_SID, objTypeSid: data.OBJ_TYPE_SID, objSid: data.OBJ_SID, fileDataSid: data.FILE_DATA_SID };
         this.isDeleteAttachment = true;
+        if (this.files.length == 0) {
+            this.contractData["HAS_ATTACHED_FILES"] = "0";
+        }        
+    }    
+
+    deleteAttachmentActionsCheckCustAccpt(act: boolean) {
+        if ((this.attachmentCount - 1) == 0 && this.contractData.C2A_DATA_C2A_ID == "" && this.contractData.CUST_ACCPT == "Accepted") {
+            this.isDeleteAttachment = false;
+            this.isDeleteAttachmentC2AAccpet = true;
+        }
+        else {
+            this.deleteAttachmentActions(act);
+        }
     }
 
-    deleteAttachmentActions(act: boolean) {
+    closeDeleteAttachment() {
+        this.isDeleteAttachmentC2AAccpet = false;
+    }
+
+    async deleteAttachmentActions(act: boolean) {
         if (act == true) {
-            this.contractDetailsService.deleteAttachment(this.deleteAttachmentParams.custMbrSid, this.deleteAttachmentParams.objTypeSid, this.deleteAttachmentParams.objSid,
-                this.deleteAttachmentParams.fileDataSid).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-                    this.isDeleteAttachment = false;
-                    this.loggerService.success("Successfully deleted attachment.", "Delete successful");
-                    this.getFileAttachmentDetails(this.deleteAttachmentParams.objSid);
-                }, error => {
-                    this.loggerService.error("Unable to delete attachment.", "Delete failed",error);
-                })
+            await this.contractDetailsService.deleteAttachment(this.deleteAttachmentParams.custMbrSid, this.deleteAttachmentParams.objTypeSid, this.deleteAttachmentParams.objSid,
+                this.deleteAttachmentParams.fileDataSid).toPromise().catch(
+                    error => {
+                        this.loggerService.error("Unable to delete attachment.", "Delete failed", error);
+                    }
+            )
+            this.isDeleteAttachment = false;
+            this.loggerService.success("Successfully deleted attachment.", "Delete successful");
+            await this.getFileAttachmentDetails(this.deleteAttachmentParams.objSid);
+            this.saveContract();               
         }
         else {
             this.isDeleteAttachment = false;

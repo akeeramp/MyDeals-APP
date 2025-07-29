@@ -350,7 +350,7 @@
         You have Selected a date in the past which means the dates you will enter will be considered
         backdated
     </p>
-    <div style="display:flex"> 
+    <div style="display:flex">
         <kendo-dialog-actions style="flex-grow:1;">
             <button kendoButton (click)="pastDateFieldsenable()" class="ok-btn-pop-up">OK</button>
         </kendo-dialog-actions>
@@ -377,10 +377,20 @@
         Are you sure that you want to Delete this file attachment?
     </p>
     <kendo-dialog-actions>
-        <button kendoButton (click)="deleteAttachmentActions(true)" themeColor="primary" class="ok-btn-pop-up">Yes</button>
+        <button kendoButton (click)="deleteAttachmentActionsCheckCustAccpt(true)" themeColor="primary" class="ok-btn-pop-up">Yes</button>
         <button kendoButton (click)="deleteAttachmentActions(false)" class="cancel-btn-pop-up">No</button>
     </kendo-dialog-actions>
 </kendo-dialog>
+
+<kendo-dialog *ngIf="isDeleteAttachmentC2AAccpet" (close)="deleteAttachmentActions(false)" class="k-dialog-popup-design" [minWidth]="250" [width]="620">
+    <p class="dialogmsg">
+        The customer accptance of the contract is in Accpted state, Please ensure to attach the document prior proceeding with the deletion of existing document.
+    </p>
+    <kendo-dialog-actions>
+        <button kendoButton (click)="closeDeleteAttachment()" themeColor="primary" class="ok-btn-pop-up">OK</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+
 <kendo-dialog *ngIf="isDeleteContract" (close)="deleteContractActions(false)" class="k-dialog-popup-design" [minWidth]="250" [width]="620">
     <p class="dialogmsg">
         Are you sure that you want to delete this contract?

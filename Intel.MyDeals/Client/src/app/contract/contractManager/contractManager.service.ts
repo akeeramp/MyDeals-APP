@@ -14,6 +14,7 @@ export class contractManagerservice {
     public apiBaseContractUrl = "/api/Contracts/v1/";
     public apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
     public apiBasePricingTableUrl = "/api/PricingTables/v1/";
+    private readonly API_URL_FILE_ATTACHMENTS = "/api/FileAttachments/";
 
     public getWipSummary(id): Observable<any>{
         // NOTE: Don't get angular-cached data b/c it needs latest data for the $state.go to work correctly in the contact.controller.js' createPricingTable()
@@ -57,5 +58,15 @@ export class contractManagerservice {
     public getOverlappingDealsFromPricingStrategy(ids): Observable<any> {
         const apiUrl: string = this.apiBasePricingTableUrl + 'GetOverlappingDealsFromPricingStrategy/' + ids;
         return this.httpClient.get(apiUrl);
+    }
+
+    getFileAttachments(custId, ctrctId) {
+        const url = this.API_URL_FILE_ATTACHMENTS + "Get/" + custId + "/1/" + ctrctId + "/CNTRCT";
+        return this.httpClient.get(url);
+    }
+
+    deleteAttachment(custId, objTypeSid, objSid, fileSid) {
+        const url = this.API_URL_FILE_ATTACHMENTS + "Delete/" + custId + "/" + objTypeSid + "/" + objSid + "/" + fileSid + "/CNTRCT";
+        return this.httpClient.post(url, objTypeSid);
     }
 }

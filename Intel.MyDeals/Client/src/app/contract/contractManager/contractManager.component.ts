@@ -61,6 +61,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     requestBody: any = {};
     showMeetCompDetails: boolean = false;
     public uploadSaveUrl = "/FileAttachments/Save";
+    public isCntrctMngrUpld = false;
     grid_Result: any;
     showMultipleDialog: boolean = false;
     pteTableData: any;
@@ -95,6 +96,8 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     private readonly destroy$ = new Subject<void>();
     public isLoading = false;
     private dirty = false;
+    public hasUnSavedFiles = false;
+    public selectedCUST_ACCPT = "Pending"
     userRole = ""; canEmailIcon = true;
     isPTEToolsOpen = [];
     isPSExpanded = []; isPTExpanded = {}; TrackerNbr = {}; emailCheck = {}; reviseCheck = {}; apprvCheck = {};
@@ -124,7 +127,6 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     public perfModel = 'Contract_Manager'
     public isBusyShowFunFact: any;
     public offLabelName = 'Accepted';
-    private isDACustAcptReadonly = false;
     // Allowed extensions for the attachments field
     myRestrictions: FileRestrictions = {
         allowedExtensions: ["doc", "xls", "txt", "bmp", "jpg", "pdf", "ppt", "zip", "xlsx", "docx", "pptx", "odt", "ods", "ott", "sxw", "sxc", "png", "7z", "xps"],
@@ -142,8 +144,45 @@ export class contractManagerComponent implements OnInit, OnDestroy {
             objTypeSid: 1
         };
         this.contractData._behaviors.isRequired.C2A_DATA_C2A_ID = false;
-        this.contractData["HAS_ATTACHED_FILES"] = "1";
+        this.contractData["HAS_ATTACHED_FILES"] = "1";    
+        this.isCntrctMngrUpld = true;
     }
+
+    uploadFile() {
+        $(".k-upload-selected").click();
+    }
+
+    onFileSelect() {
+        // Hide default kendo upload and clear buttons, as contract is not generated at this point. Upload files after contract id is generated.
+        setTimeout(() => {
+            $(".k-clear-selected").parent().hide();
+            $(".k-upload-selected").parent().hide();
+        });
+        this.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = this.contractData._behaviors.isError["C2A_DATA_C2A_ID"] = false;
+        if (this.contractData.DC_ID < 0) this.contractData._behaviors.validMsg["C2A_DATA_C2A_ID"] = "";
+        this.hasUnSavedFiles = true;
+        this.contractData.AttachmentError = false;
+    }
+
+    onFileUploadComplete() {
+        if (this.uploadSuccess) {
+            this.loggerSvc.success("Successfully uploaded " + this.files.length + " attachment(s).", "Upload successful");
+
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
+            window.location.href = "Contract#/manager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
+        }
+    }
+
+    onFileRemove() {
+        this.files.pop();
+        if (this.files.length <= 0/*&& !this.isTenderContract*/) {
+            if (this.contractData.CUST_ACCPT.toLowerCase() != "pending") { this.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = true; }
+            this.hasUnSavedFiles = false;            
+        }
+                
+    }
+
     selectAllIDs(event, id) {
         let isChecked = (document.getElementById("chkDealTools_" + id) as HTMLInputElement).checked;
         for (let i = 0; i < this.gridDataSet[id].length; i++) {
@@ -354,8 +393,12 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         this.showPendingFile = false;
         this.showPendingC2A = false;
         if (page === "showPendingInfo") {
-            this.contractData.C2A_DATA_C2A_ID = "";
-            this.contractData.HAS_ATTACHED_FILES = "0"
+            if (this.contractData.C2A_DATA_C2A_ID)
+                this.contractData.C2A_DATA_C2A_ID = "";
+            if (this.contractData.HAS_ATTACHED_FILE == "1" || this.contractData.HAS_ATTACHED_FILE == undefined) {
+                this.onFileRemove();
+                this.contractData.HAS_ATTACHED_FILES = "0";
+            }
             this.showPendingInfo = true;
         } else if (page === "showPendingFile") {
             this.showPendingFile = true;
@@ -364,7 +407,6 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         }
 
     }
-
 
     actionItems(fromToggle, checkForRequirements) {
         if (fromToggle == undefined && checkForRequirements == undefined) {
@@ -1089,12 +1131,14 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     async quickSaveContract(action, data?){
         const ct = this.contractData;
         this.custAccptButton = this.contractData.CUST_ACCPT;
-        if (action != 'SaveContract')
+        if (action != 'SaveContract') {
             this.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!", "Info", true);
+        }
         let response = await this.contractManagerSvc.createContract(this.contractData["CUST_MBR_SID"], this.contractData["DC_ID"], ct).toPromise().catch((err) => {
-            this.loggerSvc.error('Save Contract service', err);
+            this.loggerSvc.error('Save Contract service', err);            
+            this.deleteAttachment();
         });
-        if(response) {
+        if (response) {
             this.isLoading = false;
             if (action === 'SaveAndLoad') {
                 this.windowOpened = true;
@@ -1106,10 +1150,36 @@ export class contractManagerComponent implements OnInit, OnDestroy {
                     await this.checkPriorToActioning(data)
                 }
             }
+        }       
+    }
+
+    deleteAttachment() {
+        if (this.isCntrctMngrUpld) {
+            this.contractManagerSvc.getFileAttachments(this.contractData.CUST_MBR_SID, this.contractData.DC_ID)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe((data: any) => {
+                    if (data.length > 0) {
+                        this.contractManagerSvc.deleteAttachment(data[0].CUST_MBR_SID, data[0].OBJ_TYPE_SID, data[0].OBJ_SID, data[0].FILE_DATA_SID)
+                            .pipe(takeUntil(this.destroy$))
+                            .subscribe((responses: any) => {
+                            }, error => {
+                                this.loggerSvc.error("Unable to delete attachment.", "Delete failed", error);
+                            });
+                        if (data.length == 1) 
+                            this.contractData.HAS_ATTACHED_FILES = "0"
+                        this.isCntrctMngrUpld = false;
+                        
+                    }
+                }, error => {
+                    this.loggerSvc.error("Unable to get Files.", error);
+                });
         }
     }
 
     continueAction(fromToggle, checkForRequirements) {
+        if (this.hasUnSavedFiles && this.files.length >= 0) {
+            this.uploadFile();
+        }
         if (this.isPending === true && this.contractData.CUST_ACCPT === "Accepted" && this.contractData.HAS_ATTACHED_FILES === "0" && this.contractData.C2A_DATA_C2A_ID.trim() === "") return;
         this.pendingWarningActions = false;
         this.showPendingWarning = false;

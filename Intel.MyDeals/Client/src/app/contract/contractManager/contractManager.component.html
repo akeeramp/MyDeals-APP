@@ -130,7 +130,8 @@
                                                   position="top" [tooltipWidth]="300">
                                             </span>
                                         </div>
-                                        <kendo-upload class="contract-correction-upload"
+                                        <kendo-upload name="files"
+                                                      class="contract-correction-upload kuploadaction"
                                                       [saveUrl]="uploadSaveUrl"
                                                       [removeUrl]="uploadRemoveUrl"
                                                       [concurrent]="false"
@@ -139,6 +140,10 @@
                                                       (upload)="uploadEventHandler($event)"
                                                       (success)="successEventHandler()"
                                                       [(ngModel)]="files"
+                                                      [autoUpload]="false"
+                                                      (select)="onFileSelect()" 
+                                                      (remove)="onFileRemove()"
+                                                      (complete)="onFileUploadComplete()"
                                                       (error)="onFileUploadError()"></kendo-upload>
                                     </div>
                                     <div style="text-align: center;">
