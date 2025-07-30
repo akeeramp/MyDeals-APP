@@ -459,5 +459,19 @@ kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hov
     right: 7px;
     top: 9px;
     width: 15px;
-    position:absolute
+    position:absolute;
+    z-index: 9;
+}
+
+kendo-multiselect.kendoInput.divisionblock.cross-btn-position.cd-input-bottom.cd-division-level:hover span.k-clear-value {
+    position: relative!important;
+    top: 0!important;
+    width: 20px;
+    height: 20px;
+}
+
+kendo-multiselect.kendoInput.divisionblock.cross-btn-position.cd-input-bottom.cd-division-level:hover span.k-clear-value span.k-icon.k-i-x {
+    width: 100%;
+    height: 100%;
+    position: relative;
 }

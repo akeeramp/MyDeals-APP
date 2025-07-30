@@ -33,7 +33,7 @@
                                     <div class="col-md-11 display displayblock">
                                         <div *ngIf="!isCustomerDivHidden" class="inputWidth">
                                             <div class="division-text">Division:</div>
-                                            <kendo-multiselect #CUST_MBR_DIV_Multi class="kendoInput divisionblock cd-input-bottom cd-division-level" [data]="CustomerFilter_Divs" [filterable]="true" (filterChange)="customerDivFilter($event)"
+                                            <kendo-multiselect #CUST_MBR_DIV_Multi class="kendoInput divisionblock cross-btn-position cd-input-bottom cd-division-level" [data]="CustomerFilter_Divs" [filterable]="true" (filterChange)="customerDivFilter($event)"
                                                                [(ngModel)]="CUST_NM_DIV"
                                                                name="CUST_NM_DIV" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [autoClose]="false"></kendo-multiselect>
                                             <div class="description">Blank means that ALL divisions are included</div>
