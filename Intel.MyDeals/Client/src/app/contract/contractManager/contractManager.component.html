@@ -154,7 +154,7 @@
                                         </button>
                                         <button class="btn btn-sm btn-skyblue contract_done_btn" type="button" 
                                                 [ngClass]="{'disabled': !contractData.HAS_ATTACHED_FILES}"
-                                                (click)="continueAction(true,null)" style="margin: 0 10px -30px 10px; width: 110px;">
+                                                (click)="saveAttachment()" [disabled]="!hasUnSavedFiles" style="margin: 0 10px -30px 10px; width: 110px;">
                                             Done
                                         </button>
                                     </div>

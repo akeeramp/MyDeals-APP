@@ -149,7 +149,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     }
 
     uploadFile() {
-        $(".k-upload-selected").click();
+        $(".k-upload-selected").click();        
     }
 
     onFileSelect() {
@@ -167,10 +167,9 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     onFileUploadComplete() {
         if (this.uploadSuccess) {
             this.loggerSvc.success("Successfully uploaded " + this.files.length + " attachment(s).", "Upload successful");
-
             this.isLoading = false;
             this.setBusy("", "", "", false);
-            window.location.href = "Contract#/manager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
+            this.continueAction(true, null);
         }
     }
 
@@ -1176,10 +1175,13 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         }
     }
 
-    continueAction(fromToggle, checkForRequirements) {
+    saveAttachment() {
         if (this.hasUnSavedFiles && this.files.length >= 0) {
             this.uploadFile();
-        }
+        }        
+    }
+
+    continueAction(fromToggle, checkForRequirements) {        
         if (this.isPending === true && this.contractData.CUST_ACCPT === "Accepted" && this.contractData.HAS_ATTACHED_FILES === "0" && this.contractData.C2A_DATA_C2A_ID.trim() === "") return;
         this.pendingWarningActions = false;
         this.showPendingWarning = false;
