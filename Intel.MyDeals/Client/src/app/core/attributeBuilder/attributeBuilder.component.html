@@ -177,7 +177,7 @@
                                     (valueChange)="dataChange(i, dataItem, 'combobox', $event)">
                 </kendo-dropdownlist>
             </span>
-            <span class="inner-third-span" *ngIf="(dataItem.type == 'singleselect' || dataItem.type == 'singleselect_ext' || dataItem.type == 'singleselect_read_only') && dataItem.field !== 'OBJ_SET_TYPE_CD' && !enableTextbox[i]">
+            <span [ngClass]="dataItem.field == 'AR_SETTLEMENT_LVL' || 'PERIOD_PROFILE' ? 'inner-third-span min-width-dropDown' : 'inner-third-span'" *ngIf="(dataItem.type == 'singleselect' || dataItem.type == 'singleselect_ext' || dataItem.type == 'singleselect_read_only') && dataItem.field !== 'OBJ_SET_TYPE_CD' && !enableTextbox[i]">
                 <kendo-dropdownlist class="opUiContainer sm tender_ecap_multi_style k-dropdown-design"
                                     [data]="dataItem.dropDown"
                                     textField="DROP_DOWN"

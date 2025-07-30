@@ -563,3 +563,7 @@ kendo-datepicker.k-custom-dater span.k-picker-wrap.k-state-focused .k-select {
     border-radius: 3px !important;
     color: #212529 !important;
 }
+
+span.inner-third-span.min-width-dropDown kendo-dropdownlist.k-dropdown-design {
+    min-width: 250px;
+}
