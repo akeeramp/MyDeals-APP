@@ -253,7 +253,7 @@ export class dealEditorEditTemplateComponent {
         let keys = ["STRT_VOL", "STRT_REV"];
         dimKey = "10___" + (row + 1);
         each(keys, (key) => {
-            if (dataItem[key] && !!dataItem[key][dimKey]) {
+            if (dataItem[key] && (dataItem[key][dimKey]==0 || !!dataItem[key][dimKey])) {
                 if (field === "END_VOL" || field === "END_REV") {
                     if (dataItem[field]["10___" + row].toString().toLowerCase() === "unlimited" || dataItem[field]["10___" + row] === "9999999999.99") {
                         dataItem[key][dimKey] = 0;
