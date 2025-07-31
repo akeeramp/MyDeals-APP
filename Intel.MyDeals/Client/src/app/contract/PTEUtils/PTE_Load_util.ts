@@ -721,6 +721,11 @@ export class PTE_Load_Util {
                         cellProperties['readOnly'] = true;
                     }
                 }
+                if (curPricingTable.PS_WF_STG_CD == 'Approved') {
+                    if (prop == "QLTR_PROJECT") {
+                        cellProperties['readOnly'] = true;
+                    }
+                }
                 if (curPricingTable.PS_WF_STG_CD == 'Approved' && curPricingTable.PASSED_VALIDATION == 'Dirty' && prop == 'SETTLEMENT_PARTNER' && hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == 'Cash') {
                     cellProperties['readOnly'] = false;
                 }
