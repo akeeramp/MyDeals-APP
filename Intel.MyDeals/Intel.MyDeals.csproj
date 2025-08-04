@@ -383,7 +383,6 @@
     <TypeScriptCompile Include="Client\src\appModules\shared\searchFilter.module.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\products\admin.products.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.UCDReprocessModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.component.ts" />
@@ -641,10 +640,6 @@
     <Content Include="Client\src\app\admin\primeCustomers\admin.primeCustomers.component.css" />
     <Content Include="Client\src\app\app-root.component.css" />
     <Content Include="Client\src\app\app-root.component.html" />
-    <Content Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.css" />
-    <Content Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.html" />
-    <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.model.ts" />
-    <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.service.ts" />
     <Content Include="Client\src\app\admin\bulkPricingUpdates\admin.bulkPricingUpdateModal.component.html" />
     <Content Include="Client\src\app\admin\bulkPricingUpdates\admin.bulkPricingUpdates.component.css" />
     <Content Include="Client\src\app\admin\bulkPricingUpdates\admin.bulkPricingUpdates.component.html" />

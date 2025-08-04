@@ -3,7 +3,6 @@ import { AdminCacheComponent } from '../admin/cache/admin.cache.component';
 import { adminCustomerComponent } from '../admin/customer/admin.customer.component';
 import { adminCustomerVendorsComponent } from '../admin/CustomerVendors/admin.customerVendors.component';
 import { OpLogComponent } from '../admin/oplog/admin.oplog.component';
-import { batchTimingComponent } from '../admin/batchTiming/admin.batchTiming.component';
 import { batchJobConstantsComponent } from "../admin/batchJobConstants/admin.batchJobConstants.component";
 import { adminVistexCustomerMappingComponent } from '../admin/vistexCustomerMapping/admin.vistexCustomerMapping.component';
 import { adminPrimeCustomersComponent } from '../admin/PrimeCustomers/admin.primeCustomers.component';
@@ -80,7 +79,6 @@ export const AdminComponents =[
     adminCustomerComponent,
     adminCustomerVendorsComponent,
     OpLogComponent,
-    batchTimingComponent,
     batchJobConstantsComponent,
     adminVistexCustomerMappingComponent,
     adminPrimeCustomersComponent,

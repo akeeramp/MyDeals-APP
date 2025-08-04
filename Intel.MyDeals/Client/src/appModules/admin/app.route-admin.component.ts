@@ -2,7 +2,6 @@ import { Routes } from "@angular/router";
 import { authGuard } from "./../../app/shared/util/guardProtection";
 import { PendingChangesGuard } from "./../../app/shared/util/gaurdprotectionDeactivate";
  //admins routes
-import { batchTimingComponent } from "../../app/admin/batchTiming/admin.batchTiming.component";
 import { batchJobConstantsComponent } from "../../app/admin/batchJobConstants/admin.batchJobConstants.component";
 import { BulkPricingUpdatesComponent } from "../../app/admin/bulkPricingUpdates/admin.bulkPricingUpdates.component";
 import { AdminCacheComponent } from "../../app/admin/cache/admin.cache.component";
@@ -66,7 +65,6 @@ export const routesAdmin: Routes = [
     { path: 'customers', component: adminCustomerComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'CustomerVendors', component: adminCustomerVendorsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard], canDeactivate: [PendingChangesGuard] },
     { path: 'opLog', component: OpLogComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
-    { path: 'batchTiming', component: batchTimingComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'batchJobConstants', component: batchJobConstantsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'VistexCustomerMapping', component: adminVistexCustomerMappingComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] ,canDeactivate:[PendingChangesGuard]},
     { path: 'UnifiedCustomerAdmin', component: adminPrimeCustomersComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard],canDeactivate:[PendingChangesGuard] },

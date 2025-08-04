@@ -73,16 +73,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             Assert.IsNotNull(result);
         }
 
-        [Test,
-            TestCase("logString")]
-        public void getBatchJobTiming_Returns_NotNull(string logType)
-        {
-            var mockData = getbatchJobTimingMockData();
-            mockLoggingDataLib.Setup(x=>x.getBatchJobTiming(It.IsAny<string>())).Returns(mockData);
-            var result = new LoggingLib(mockLoggingDataLib.Object).getBatchJobTiming(logType);
-            Assert.IsNotNull(result);
-            Assert.Greater(result.Count, 0);
-        }
+
 
         [Test,
             TestCaseSource("_paramList_LogPerformanceTime")]

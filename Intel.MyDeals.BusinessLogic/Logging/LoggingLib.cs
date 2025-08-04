@@ -37,12 +37,6 @@ namespace Intel.MyDeals.BusinessLogic
             return true;
         }
 
-        public List<batchJobTiming> getBatchJobTiming(string logType)
-        {
-            return _loggingDataLib.getBatchJobTiming(logType).ToList();
-           
-        }
-
         public bool UploadUiPerfLogs(IEnumerable<LogPerformanceTime> logPerformanceTimes)
         {
             return _loggingDataLib.UploadUiPerfLogs(logPerformanceTimes).Result;
