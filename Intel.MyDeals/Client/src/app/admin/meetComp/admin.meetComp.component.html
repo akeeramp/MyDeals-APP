@@ -118,8 +118,9 @@
                 <span title={{column.title}}>{{column.title}}</span>
             </ng-template>
             <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.CRE_DTM | date: 'M/d/yyyy'}} </ng-template>
-            <ng-template kendoGridFilterMenuTemplate let-filter let-column="column" let-filterService="filterService">
-                <kendo-grid-date-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false" operator="eq"></kendo-grid-date-filter-menu>
+            <ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column" let-filterService="filterService">
+                <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
+                </date-range-filter>
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_EMP_NM" title="Last Modified By" [groupable]="false">
@@ -135,8 +136,9 @@
                 <span title={{column.title}}>{{column.title}}</span>
             </ng-template>
             <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.CHG_DTM | date: 'M/d/yyyy'}} </ng-template>
-            <ng-template kendoGridFilterMenuTemplate let-filter let-column="column" let-filterService="filterService">
-                <kendo-grid-date-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false" operator="eq"></kendo-grid-date-filter-menu>
+            <ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column" let-filterService="filterService">
+                <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
+                </date-range-filter>
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-excel fileName="MyDealsMeetComp.xlsx" [fetchData]="allData">
