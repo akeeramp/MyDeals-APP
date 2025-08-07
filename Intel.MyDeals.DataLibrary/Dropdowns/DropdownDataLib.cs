@@ -246,6 +246,11 @@ namespace Intel.MyDeals.DataLibrary
                         });
                     }
                 }
+                if (!type.Equals(CrudModes.Select))
+                {
+                    // Update Cache after Insert/Update actions
+                    DataCollections.RecycleCache("_getBasicDropdowns");
+                }
             }
             catch (Exception ex)
             {
@@ -328,7 +333,6 @@ namespace Intel.MyDeals.DataLibrary
                     }
                 }
 
-                DataCollections.RecycleCache("_getBasicDropdowns");
             }
             catch (Exception ex)
             {
