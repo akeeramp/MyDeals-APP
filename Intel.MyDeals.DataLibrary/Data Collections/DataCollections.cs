@@ -598,7 +598,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             lock (LOCK_OBJECT ?? new object())
             {
-                return _getProductData ?? (_getProductData = new ProductDataLib().GetProducts());
+                return _getProductData ?? (_getProductData = new ProductDataLib().GetProducts().Items);
             }
         }
 

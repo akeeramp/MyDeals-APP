@@ -6,9 +6,7 @@ namespace Intel.MyDeals.IDataLibrary
 {
     public interface IProductDataLib
     {
-        List<Product> GetProducts();
-
-        ProductDetails GetProductsByFilter(SearchParams objSearchParams);
+        ProductDetails GetProducts(SearchParams objSearchParams = null);
 
         List<ProductAlias> SetProductAlias(CrudModes mode, ProductAlias data);
 

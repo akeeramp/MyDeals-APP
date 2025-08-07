@@ -105,10 +105,10 @@ namespace Intel.MyDeals.DataLibrary
         public List<BasicDropdown> ExecuteManageCustomerVendorsSP(BasicDropdown data, CrudModes type)
         {
             var ret = new List<BasicDropdown>();
-            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP();
+            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS();
 
             //TAKE -1 added to fetch all data, since the proc is optimized for Server side pagination
-            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
+            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
             {
                 LK_UP_SID = data.ATRB_LKUP_SID,
                 MODE = type.ToString(),

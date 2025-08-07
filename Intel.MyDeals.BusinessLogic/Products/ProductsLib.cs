@@ -49,7 +49,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             if (!getCachedResult)
             {
-                _productDataLib.GetProducts();
+                return _productDataLib.GetProducts().Items;
             }
             return _dataCollectionsDataLib.GetProductData();
         }
@@ -63,7 +63,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             if (!getCachedResult)
             {
-                _productDataLib.GetProducts();
+                return _productDataLib.GetProducts().Items;
             }
             return _dataCollectionsDataLib.GetProductData();
         }
@@ -94,7 +94,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Product data containing specified Product Vertical</returns>
         public ProductDetails GetProductByCategoryName(SearchParams objSearchParams)
         {
-            return _productDataLib.GetProductsByFilter(objSearchParams);
+            return _productDataLib.GetProducts(objSearchParams);
         }
 
         /// <summary>

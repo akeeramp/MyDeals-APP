@@ -21,9 +21,10 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         public void GetProducts_ShouldReturnNotNull(bool cachedData)
         {
             List<Product> mockedProdData = GetProductsMockedData();
+            ProductDetails mockedProdData1 = GetProductsMockedData1();
             if (!cachedData)
             {
-                mockProductDataLib.Setup(x => x.GetProducts()).Returns(mockedProdData);
+                mockProductDataLib.Setup(x => x.GetProducts(null)).Returns(mockedProdData1);
                 mockDataCollectionsDataLib.Setup(x => x.GetProductData()).Returns(mockedProdData);
                 var res = new ProductsLib(mockProductDataLib.Object, mockDataCollectionsDataLib.Object, mockConstantsLookupsLib.Object).GetProducts(cachedData);
                 Assert.IsNotNull(res);
@@ -40,9 +41,10 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         public void GetProductsDetails_ShouldReturnNotNull(bool cachedData)
         {
             List<Product> mockedProdData = GetProductsMockedData();
+            ProductDetails mockedProdData1 = GetProductsMockedData1();
             if (!cachedData)
             {
-                mockProductDataLib.Setup(x => x.GetProducts()).Returns(mockedProdData);
+                mockProductDataLib.Setup(x => x.GetProducts(null)).Returns(mockedProdData1);
                 mockDataCollectionsDataLib.Setup(x => x.GetProductData()).Returns(mockedProdData);
                 var res = new ProductsLib(mockProductDataLib.Object, mockDataCollectionsDataLib.Object, mockConstantsLookupsLib.Object).GetProductsDetails(cachedData);
                 Assert.IsNotNull(res);
@@ -953,6 +955,76 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             }
             );
             return productMockedData;
+        }
+
+        private ProductDetails GetProductsMockedData1()
+        {
+            var productMockedData = new List<Product>();
+            productMockedData.Add(new Product
+            {
+                ACTV_IND = true,
+                PRD_MBR_SID = 1,
+                PRD_CAT_NM = "one",
+                PRD_CAT_NM_SID = 1,
+                FMLY_NM = "family_name_1",
+                FMLY_NM_SID = 1,
+                BRND_NM = "brand_name_1",
+                BRND_NM_SID = 1,
+                PCSR_NBR = "name_1",
+                PCSR_NBR_SID = 1,
+                DEAL_PRD_TYPE = "type_1",
+                DEAL_PRD_TYPE_SID = 1,
+                DEAL_PRD_NM = "deal_prd_name_1",
+                DEAL_PRD_NM_SID = 1,
+                MTRL_ID = "1",
+                MTRL_ID_SID = 1
+            }
+            );
+            productMockedData.Add(new Product
+            {
+                ACTV_IND = true,
+                PRD_MBR_SID = 2,
+                PRD_CAT_NM = "two",
+                PRD_CAT_NM_SID = 2,
+                FMLY_NM = "family_name_2",
+                FMLY_NM_SID = 2,
+                BRND_NM = "brand_name_2",
+                BRND_NM_SID = 2,
+                PCSR_NBR = "name_2",
+                PCSR_NBR_SID = 2,
+                DEAL_PRD_TYPE = "type_2",
+                DEAL_PRD_TYPE_SID = 2,
+                DEAL_PRD_NM = "deal_prd_name_2",
+                DEAL_PRD_NM_SID = 2,
+                MTRL_ID = "2",
+                MTRL_ID_SID = 2
+            }
+            );
+            productMockedData.Add(new Product
+            {
+                ACTV_IND = false,
+                PRD_MBR_SID = 1,
+                PRD_CAT_NM = "three",
+                PRD_CAT_NM_SID = 3,
+                FMLY_NM = "family_name_3",
+                FMLY_NM_SID = 3,
+                BRND_NM = "brand_name_3",
+                BRND_NM_SID = 3,
+                PCSR_NBR = "name_3",
+                PCSR_NBR_SID = 3,
+                DEAL_PRD_TYPE = "type_3",
+                DEAL_PRD_TYPE_SID = 3,
+                DEAL_PRD_NM = "deal_prd_name_3",
+                DEAL_PRD_NM_SID = 3,
+                MTRL_ID = "3",
+                MTRL_ID_SID = 3
+            }
+            );
+            return new ProductDetails
+            {
+                Items = productMockedData,
+                TotalRows = 3
+            };
         }
 
         private List<PRD_TRANSLATION_RESULTS> GetProductTranslationMockedData()

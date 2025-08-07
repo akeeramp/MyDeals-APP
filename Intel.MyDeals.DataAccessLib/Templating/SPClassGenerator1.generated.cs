@@ -5617,7 +5617,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
 
         ///<summary>
         /// ID: 1357247890
-        /// Modified: 11/14/2019 8:27:53 PM
+        /// Modified: 2/7/2023 11:27:48 PM
         /// Parameters: 4
         ///</summary>
         public partial class PR_MYDL_GET_CNSNT_SUMMARY : SP
@@ -5626,65 +5626,6 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             {
                 DatabaseName = "MyDeals";
                 StoredProdedureName = "[dbo].[PR_MYDL_GET_CNSNT_SUMMARY]";
-            }
-
-            ///<summary>
-            /// DataType: table type
-            /// Mode: IN
-            ///</summary>
-            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
-            public SqlTableValueParameterBase CUST_SIDS
-            {
-                set { SetParmeter("CUST_SIDS", value); }
-                get { return (SqlTableValueParameterBase)GetParameter("CUST_SIDS"); }
-            }
-
-            ///<summary>
-            /// DataType: datetime
-            /// Mode: IN
-            ///</summary>
-            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
-            public DateTime STRT_DTM
-            {
-                set { SetParmeter("STRT_DTM", value); }
-                get { return (DateTime)GetParameter("STRT_DTM"); }
-            }
-
-            ///<summary>
-            /// DataType: datetime
-            /// Mode: IN
-            ///</summary>
-            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
-            public DateTime END_DTM
-            {
-                set { SetParmeter("END_DTM", value); }
-                get { return (DateTime)GetParameter("END_DTM"); }
-            }
-
-            ///<summary>
-            /// DataType: varchar(4000)
-            /// Mode: IN
-            /// Max Length: 4000
-            ///</summary>
-            [SQLParameterAttribute(4, "ParameterDirection.Input", 4000, false)]
-            public String VRTCL_LST
-            {
-                set { SetParmeter("VRTCL_LST", value); }
-                get { return (String)GetParameter("VRTCL_LST"); }
-            }
-        }
-
-        ///<summary>
-        /// ID: 1357247890
-        /// Modified: 2/7/2023 11:27:48 PM
-        /// Parameters: 4
-        ///</summary>
-        public partial class PR_MYDL_GET_CNSNT_SUMMARY_SSP : SP
-        {
-            public PR_MYDL_GET_CNSNT_SUMMARY_SSP()
-            {
-                DatabaseName = "MyDeals";
-                StoredProdedureName = "[dbo].[PR_MYDL_GET_CNSNT_SUMMARY_SSP]";
             }
 
             ///<summary>
@@ -7705,20 +7646,6 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             {
                 set { SetParmeter("in_dq_flg", value); }
                 get { return (Boolean)GetParameter("in_dq_flg"); }
-            }
-        }
-
-        ///<summary>
-        /// ID: 1821249543
-        /// Modified: 1/31/2022 8:19:57 PM
-        /// Parameters: 0
-        ///</summary>
-        public partial class PR_MYDL_GET_PRD_DTL : SP
-        {
-            public PR_MYDL_GET_PRD_DTL()
-            {
-                DatabaseName = "MyDeals";
-                StoredProdedureName = "[dbo].[PR_MYDL_GET_PRD_DTL]";
             }
         }
 
@@ -10014,10 +9941,11 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
         }
 
+        
         ///<summary>
-        /// ID: 345768289
-        /// Modified: 7/17/2024 9:18:30 PM
-        /// Parameters: 10
+        /// ID: 1628897220
+        /// Modified: 2025-04-16 10:57:35 AM
+        /// Parameters: 6
         ///</summary>
         public partial class PR_MYDL_MANAGE_BASIC_DROPDOWNS : SP
         {
@@ -10025,134 +9953,6 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             {
                 DatabaseName = "MyDeals";
                 StoredProdedureName = "[dbo].[PR_MYDL_MANAGE_BASIC_DROPDOWNS]";
-            }
-
-            ///<summary>
-            /// DataType: int
-            /// Mode: IN
-            ///</summary>
-            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
-            public Int32 LK_UP_SID
-            {
-                set { SetParmeter("LK_UP_SID", value); }
-                get { return (Int32)GetParameter("LK_UP_SID"); }
-            }
-
-            ///<summary>
-            /// DataType: varchar(20)
-            /// Mode: IN
-            /// Max Length: 20
-            ///</summary>
-            [SQLParameterAttribute(2, "ParameterDirection.Input", 20, false)]
-            public String MODE
-            {
-                set { SetParmeter("MODE", value); }
-                get { return (String)GetParameter("MODE"); }
-            }
-
-            ///<summary>
-            /// DataType: int
-            /// Mode: IN
-            ///</summary>
-            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
-            public Int32 ATRB_SID
-            {
-                set { SetParmeter("ATRB_SID", value); }
-                get { return (Int32)GetParameter("ATRB_SID"); }
-            }
-
-            ///<summary>
-            /// DataType: int
-            /// Mode: IN
-            ///</summary>
-            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
-            public Int32 OBJ_SET_TYPE_SID
-            {
-                set { SetParmeter("OBJ_SET_TYPE_SID", value); }
-                get { return (Int32)GetParameter("OBJ_SET_TYPE_SID"); }
-            }
-
-            ///<summary>
-            /// DataType: int
-            /// Mode: IN
-            ///</summary>
-            [SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
-            public Int32 CUST_MBR_SID
-            {
-                set { SetParmeter("CUST_MBR_SID", value); }
-                get { return (Int32)GetParameter("CUST_MBR_SID"); }
-            }
-
-            ///<summary>
-            /// DataType: varchar(8000)
-            /// Mode: IN
-            /// Max Length: 8000
-            ///</summary>
-            [SQLParameterAttribute(6, "ParameterDirection.Input", 8000, false)]
-            public String ATRB_VAL_TXT
-            {
-                set { SetParmeter("ATRB_VAL_TXT", value); }
-                get { return (String)GetParameter("ATRB_VAL_TXT"); }
-            }
-
-            ///<summary>
-            /// DataType: nvarchar(510)
-            /// Mode: IN
-            /// Max Length: 510
-            ///</summary>
-            [SQLParameterAttribute(7, "ParameterDirection.Input", 510, false)]
-            public String ATRB_LKUP_DESC
-            {
-                set { SetParmeter("ATRB_LKUP_DESC", value); }
-                get { return (String)GetParameter("ATRB_LKUP_DESC"); }
-            }
-
-            ///<summary>
-            /// DataType: nvarchar(510)
-            /// Mode: IN
-            /// Max Length: 510
-            ///</summary>
-            [SQLParameterAttribute(8, "ParameterDirection.Input", 510, false)]
-            public String ATRB_LKUP_TTIP
-            {
-                set { SetParmeter("ATRB_LKUP_TTIP", value); }
-                get { return (String)GetParameter("ATRB_LKUP_TTIP"); }
-            }
-
-            ///<summary>
-            /// DataType: bit
-            /// Mode: IN
-            ///</summary>
-            [SQLParameterAttribute(9, "ParameterDirection.Input", 0, false)]
-            public Boolean ACTV_IND
-            {
-                set { SetParmeter("ACTV_IND", value); }
-                get { return (Boolean)GetParameter("ACTV_IND"); }
-            }
-
-            ///<summary>
-            /// DataType: int
-            /// Mode: IN
-            ///</summary>
-            [SQLParameterAttribute(10, "ParameterDirection.Input", 0, false)]
-            public Int32 EMP_WWID
-            {
-                set { SetParmeter("EMP_WWID", value); }
-                get { return (Int32)GetParameter("EMP_WWID"); }
-            }
-        }
-
-        ///<summary>
-        /// ID: 1628897220
-        /// Modified: 2025-04-16 10:57:35 AM
-        /// Parameters: 6
-        ///</summary>
-        public partial class PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP : SP
-        {
-            public PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
-            {
-                DatabaseName = "MyDeals";
-                StoredProdedureName = "[dbo].[PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP]";
             }
 
             ///<summary>
@@ -21229,12 +21029,12 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         /// Modified: 04/14/2025 12:04:57 PM
         /// Parameters: 0
         ///</summary>
-        public partial class PR_MYDL_GET_PRD_DTL_SSP : SP
+        public partial class PR_MYDL_GET_PRD_DTL : SP
         {
-            public PR_MYDL_GET_PRD_DTL_SSP()
+            public PR_MYDL_GET_PRD_DTL()
             {
                 DatabaseName = "MyDeals";
-                StoredProdedureName = "[dbo].[PR_MYDL_GET_PRD_DTL_SSP]";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_PRD_DTL]";
             }
 
             ///<summary>

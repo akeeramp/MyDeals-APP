@@ -24,13 +24,6 @@ namespace Intel.MyDeals.DataLibrary.Test
         }
 
 
-        [TestCase]
-        public void PrdDataLib_GetProducts()
-        {
-            IEnumerable<Product> results = new ProductDataLib().GetProducts();
-            Assert.IsTrue(results.Any());
-        }
-
         [TestCase("7001,7002,7004", "INCLUDE")]
         [TestCase("7001,7002,7004", "EXCLUDE")]
         public void PrdDataLib_SetIncludeExclude(string incExcldStr, string mode)

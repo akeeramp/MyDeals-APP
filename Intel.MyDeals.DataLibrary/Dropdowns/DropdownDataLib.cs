@@ -24,7 +24,20 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns>list of basic dropdown data</returns>
         public List<BasicDropdown> GetBasicDropdowns()
         {
-            List<BasicDropdown> ret = ExecuteManageBasicDropdownSP(null, CrudModes.Select);
+            //to check the user role and specify the check restriction flag
+            string roleTypeCd = OpUserStack.MySettings.UserToken.Role.RoleTypeCd;
+            OpUserStack.MySettings.UserToken.Properties.TryGetValue("IsDeveloper", out object isDeveloper);
+            bool isDev = isDeveloper != null && isDeveloper is bool ? (bool)isDeveloper : false;
+            var data = new DropdownFilters
+            {
+                InFilters = string.Empty,
+                Sort = string.Empty,
+                Take = -1,
+                Skip = 0,
+                FthCnt = false,
+                ChkRestFlg = !(roleTypeCd == "SA" && !isDev)
+            };
+            List<BasicDropdown> ret = ExecuteManageBasicDropdownSP(data).Items;
             return ret;
         }
 
@@ -55,7 +68,8 @@ namespace Intel.MyDeals.DataLibrary
             var ret = new List<ConsumptionCountry>();
             var cmd = new Procs.dbo.PR_MYDL_CNSMPTN_CTRY { };
 
-            try {
+            try 
+            {
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
             { 
@@ -175,39 +189,20 @@ namespace Intel.MyDeals.DataLibrary
         {
             var ret = new List<BasicDropdown>();
             Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS();
-
-            if (type.Equals(CrudModes.Select))
+            //used in update/insert
+            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
             {
-                //used when loading all the data for caching
-                cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
-                {
-                    MODE = type.ToString(),
-                    ATRB_SID = 0,
-                    OBJ_SET_TYPE_SID = 0,
-                    CUST_MBR_SID = 0,
-                    ATRB_VAL_TXT = "",
-                    ATRB_LKUP_DESC = "",
-                    ATRB_LKUP_TTIP = "",
-                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID
-                };
-            }
-            else
-            {
-                //used in update/insert
-                cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
-                {
-                    LK_UP_SID = dropdown.ATRB_LKUP_SID,
-                    MODE = type.ToString(),
-                    ATRB_SID = dropdown.ATRB_SID,
-                    OBJ_SET_TYPE_SID = dropdown.OBJ_SET_TYPE_SID,
-                    CUST_MBR_SID = dropdown.CUST_MBR_SID,
-                    ATRB_VAL_TXT = dropdown.DROP_DOWN,
-                    ATRB_LKUP_DESC = dropdown.ATRB_LKUP_DESC,
-                    ATRB_LKUP_TTIP = dropdown.ATRB_LKUP_TTIP,
-                    ACTV_IND = dropdown.ACTV_IND,
-                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID
-                };
-            }
+                LK_UP_SID = dropdown.ATRB_LKUP_SID,
+                MODE = type.ToString(),
+                ATRB_SID = dropdown.ATRB_SID,
+                OBJ_SET_TYPE_SID = dropdown.OBJ_SET_TYPE_SID,
+                CUST_MBR_SID = dropdown.CUST_MBR_SID,
+                ATRB_VAL_TXT = dropdown.DROP_DOWN,
+                ATRB_LKUP_DESC = dropdown.ATRB_LKUP_DESC,
+                ATRB_LKUP_TTIP = dropdown.ATRB_LKUP_TTIP,
+                ACTV_IND = dropdown.ACTV_IND,
+                EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID
+            };
 
             try
             {
@@ -250,12 +245,6 @@ namespace Intel.MyDeals.DataLibrary
                             CHK_VALUE = (IDX_CHK_VALUE < 0 || rdr.IsDBNull(IDX_CHK_VALUE)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHK_VALUE)
                         });
                     }
-
-                    if (!type.Equals(CrudModes.Select))
-                    {
-                        // Update Cache after Insert/Update actions
-                        DataCollections.RecycleCache("_getBasicDropdowns");
-                    }
                 }
             }
             catch (Exception ex)
@@ -271,9 +260,9 @@ namespace Intel.MyDeals.DataLibrary
         {
             var ret = new List<BasicDropdown>();
             int RowCount = 0;
-            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP();
+            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS();
 
-            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
+            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
             {
                 ATRB_SID = 0,
                 OBJ_SET_TYPE_SID = 0,
@@ -338,6 +327,8 @@ namespace Intel.MyDeals.DataLibrary
                         RowCount = rdr.GetFieldValue<System.Int32>(0);
                     }
                 }
+
+                DataCollections.RecycleCache("_getBasicDropdowns");
             }
             catch (Exception ex)
             {
@@ -350,9 +341,9 @@ namespace Intel.MyDeals.DataLibrary
         private List<string> ExecuteManageBasicDropdownFilterDataSP(string filterName, DropdownFilters data)
         {
             var ret = new List<string>();
-            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP();
+            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS();
 
-            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
+            cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
             {
                 MODE = "FILTERDATA",
                 ATRB_SID = 0,
@@ -399,7 +390,7 @@ namespace Intel.MyDeals.DataLibrary
             DataSet dsCheckConstraintErrors = null;
             try
             {
-                DataAccess.ExecuteDataSet(new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS_SSP()
+                DataAccess.ExecuteDataSet(new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
                 {
                     LK_UP_SID = id,
                     MODE = CrudModes.Delete.ToString(),
