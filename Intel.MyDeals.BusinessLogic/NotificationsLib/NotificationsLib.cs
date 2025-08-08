@@ -3,8 +3,6 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Logging;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
-using RazorEngine;
-using RazorEngine.Templating;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -209,7 +207,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return emailTable;
-        }        
+        }
 
         /// <summary>
         /// Get email body for single notification
@@ -222,7 +220,7 @@ namespace Intel.MyDeals.BusinessLogic
             ids.Add(nltId);
             var notifications = GetNotificationEmails(ids);
             return GetEmailBodyTable(notifications.FirstOrDefault(), notifications);
-        }        
+        }
 
         /// <summary>
         /// GetContractAndPSTable
@@ -232,46 +230,34 @@ namespace Intel.MyDeals.BusinessLogic
         public string GetContractAndPSTable(List<NotificationEmailTable> email)
         {
             var url = MyDealsWebApiUrl.ROOT_URL;
-            var template = "@{ var rootUrl =\"" + url + "\";}";
-
-            // TODO: Move this to constant, tip: dont edit directly here, copy paste into .cshtml file.
-            template += @"<table style='FONT-SIZE: 11pt; BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Contract</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Strategy #</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Strategy Name</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
-                                                            </tr>
-                                                        </tbody>
-                                                        <tbody>
-                                                            @foreach(var item in Model)
-                                                            {
-                                                                <tr>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/Contract#/manager/"" + item.CNTRCT_SID)'>@(item.CNTRCT_SID + "" : "" +item.CNTRCT_NM)</a>*
-                                                                    </td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoPs/"" + item.OBJ_SID)'>@item.OBJ_SID</a>*
-                                                                    </td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.PRICING_STRTAEGY_NAME</td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoPs/"" + item.OBJ_SID)'>View Pricing Strategy</a>*
-                                                                    </td>
-                                                                </tr>
-                                                            }
-                                                        </tbody>
-                                                    </table>";
-            var tempKey = "ContractAndPSTable"; // Constant Name
-            if (!Engine.Razor.IsTemplateCached(tempKey, typeof(List<NotificationEmailTable>)))
-            {
-                return Engine.Razor.RunCompile(template, tempKey, typeof(List<NotificationEmailTable>), email);
-            }
-            else
-            {
-                return Engine.Razor.Run(tempKey, typeof(List<NotificationEmailTable>), email);
-            }
-        }        
+            var template = $@"
+                <table style='FONT-SIZE: 11pt; BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
+                    <tbody>
+                        <tr>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Contract</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Strategy #</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Strategy Name</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        {string.Join("", email.Select(item => $@"
+                            <tr>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>
+                                    <a href='{url}/Contract#/manager/{item.CNTRCT_SID}'>{item.CNTRCT_SID} : {item.CNTRCT_NM}</a>*
+                                </td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>
+                                    <a href='{url}/advancedSearch#/gotoPs/{item.OBJ_SID}'>{item.OBJ_SID}</a>*
+                                </td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>{item.PRICING_STRTAEGY_NAME}</td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>
+                                    <a href='{url}/advancedSearch#/gotoPs/{item.OBJ_SID}'>View Pricing Strategy</a>*
+                                </td>
+                            </tr>"))}
+                    </tbody>
+                </table>";
+            return template;
+        }
 
         /// <summary>
         /// Get Contract And PSTable Tender
@@ -281,44 +267,30 @@ namespace Intel.MyDeals.BusinessLogic
         public string GetContractAndDealTableTender(List<NotificationEmailTable> email)
         {
             var url = MyDealsWebApiUrl.ROOT_URL;
-            var template = "@{ var rootUrl =\"" + url + "\";}";
-
-            // TODO: Move this to constant, tip: dont edit directly here, copy paste into .cshtml file.
-            template += @"<table style='FONT-SIZE: 11pt; BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Folio</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Deal #</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
-                                                            </tr>
-                                                        </tbody>
-                                                        <tbody>
-                                                            @foreach(var item in Model)
-                                                            {
-                                                                <tr>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/Contract#/manager/"" + item.CNTRCT_SID)'>@(item.CNTRCT_SID + "" : "" +item.CNTRCT_NM)</a>*
-                                                                    </td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        @item.OBJ_SID
-                                                                    </td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>View Deals*</a>*
-                                                                    </td>
-                                                                </tr>
-                                                            }
-                                                        </tbody>
-                                                    </table>";
-            var tempKey = "ContractAndDealTenderTable"; // Constant Name
-            if (!Engine.Razor.IsTemplateCached(tempKey, typeof(List<NotificationEmailTable>)))
-            {
-                return Engine.Razor.RunCompile(template, tempKey, typeof(List<NotificationEmailTable>), email);
-            }
-            else
-            {
-                return Engine.Razor.Run(tempKey, typeof(List<NotificationEmailTable>), email);
-            }
-        }        
+            var template = $@"
+                <table style='FONT-SIZE: 11pt; BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
+                    <tbody>
+                        <tr>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Folio</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Deal #</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        {string.Join("", email.Select(item => $@"
+                            <tr>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>
+                                    <a href='{url}/Contract#/manager/{item.CNTRCT_SID}'>{item.CNTRCT_SID} : {item.CNTRCT_NM}</a>*
+                                </td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>{item.OBJ_SID}</td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>
+                                    <a href='{url}/advancedSearch#/gotoDeal/{item.OBJ_SID}'>View Deals*</a>*
+                                </td>
+                            </tr>"))}
+                    </tbody>
+                </table>";
+            return template;
+        }
 
         public T Deserialize<T>(string input) where T : class
         {
@@ -367,42 +339,30 @@ namespace Intel.MyDeals.BusinessLogic
         public string GetDealAndPSTable(List<NotificationEmailTable> email)
         {
             var url = MyDealsWebApiUrl.ROOT_URL;
-            var template = "@{ var rootUrl =\"" + url + "\";}";
-
-            // TODO: Move this to constant, tip: dont edit directly here, copy paste into .cshtml file.
-            template += @"<table style='FONT-SIZE: 11pt;BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Strategy Name</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Deal #</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
-                                                            </tr>
-                                                        </tbody>
-                                                        <tbody>
-                                                            @foreach(var item in Model)
-                                                            {
-                                                                <tr>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.PRICING_STRTAEGY_NAME</td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>@item.OBJ_SID</a>*
-                                                                    </td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>View Deals</a>*
-                                                                    </td>
-                                                                </tr>
-                                                            }
-                                                        </tbody>
-                                                    </table>";
-            var tempKey = "DealAndPSTable"; // Constant Name
-            if (!Engine.Razor.IsTemplateCached(tempKey, typeof(List<NotificationEmailTable>)))
-            {
-                return Engine.Razor.RunCompile(template, tempKey, typeof(List<NotificationEmailTable>), email);
-            }
-            else
-            {
-                return Engine.Razor.Run(tempKey, typeof(List<NotificationEmailTable>), email);
-            }
-        }        
+            var template = $@"
+                <table style='FONT-SIZE: 11pt;BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
+                    <tbody>
+                        <tr>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Strategy Name</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Deal #</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        {string.Join("", email.Select(item => $@"
+                            <tr>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>{item.PRICING_STRTAEGY_NAME}</td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>
+                                    <a href='{url}/advancedSearch#/gotoDeal/{item.OBJ_SID}'>{item.OBJ_SID}</a>*
+                                </td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>
+                                    <a href='{url}/advancedSearch#/gotoDeal/{item.OBJ_SID}'>View Deals</a>*
+                                </td>
+                            </tr>"))}
+                    </tbody>
+                </table>";
+            return template;
+        }
 
         /// <summary>
         /// Get Contract And PSTable Tender
@@ -412,51 +372,39 @@ namespace Intel.MyDeals.BusinessLogic
         public string GetDealAndPSTableForCAPandCost(List<NotificationMaster> email)
         {
             var url = MyDealsWebApiUrl.ROOT_URL;
-            var template = "@{ var rootUrl =\"" + url + "\";}";
-
-            // TODO: Move this to constant, tip: dont edit directly here, copy paste into .cshtml file.
-            template += @"<table style='FONT-SIZE: 11pt;BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Customer</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>C2A ID#</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Strategy Name</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Deal #</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Deal Type</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>SKU</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
-                                                            </tr>
-                                                        </tbody>
-                                                        <tbody>
-                                                            @foreach(var item in Model)
-                                                            {
-                                                                <tr>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.ExtendedProperty.CUST_NM</td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.ExtendedProperty.C2A_ID</td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.PRICING_STRTAEGY_NAME</td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>@item.OBJ_SID</a>*
-                                                                    </td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.ExtendedProperty.OBJ_SET_TYPE_CD</td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@item.ExtendedProperty.SKU_NM</td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/advancedSearch#/gotoDeal/"" + item.OBJ_SID)'>View Deals</a>*
-                                                                    </td>
-                                                                </tr>
-                                                            }
-                                                        </tbody>
-                                                    </table>";
-            var tempKey = "DealAndPSTableCAPCost"; // Constant Name
-            if (!Engine.Razor.IsTemplateCached(tempKey, typeof(List<NotificationMaster>)))
-            {
-                return Engine.Razor.RunCompile(template, tempKey, typeof(List<NotificationMaster>), email);
-            }
-            else
-            {
-                return Engine.Razor.Run(tempKey, typeof(List<NotificationMaster>), email);
-            }
+            var template = $@"
+                <table style='FONT-SIZE: 11pt;BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
+                    <tbody>
+                        <tr>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Customer</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>C2A ID#</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Strategy Name</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Deal #</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Deal Type</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>SKU</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        {string.Join("", email.Select(item => $@"
+                            <tr>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>{item.ExtendedProperty.CUST_NM}</td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>{item.ExtendedProperty.C2A_ID}</td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>{item.PRICING_STRTAEGY_NAME}</td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>
+                                    <a href='{url}/advancedSearch#/gotoDeal/{item.OBJ_SID}'>{item.OBJ_SID}</a>*
+                                </td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>{item.ExtendedProperty.OBJ_SET_TYPE_CD}</td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>{item.ExtendedProperty.SKU_NM}</td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>
+                                    <a href='{url}/advancedSearch#/gotoDeal/{item.OBJ_SID}'>View Deals</a>*
+                                </td>
+                            </tr>"))}
+                    </tbody>
+                </table>";
+            return template;
         }
-        
+
         /// <summary>
         /// Get contract table
         /// </summary>
@@ -465,38 +413,26 @@ namespace Intel.MyDeals.BusinessLogic
         public string GetContractTable(List<NotificationEmailTable> email)
         {
             var url = MyDealsWebApiUrl.ROOT_URL;
-            var template = "@{ var rootUrl =\"" + url + "\";}";
-
-            // TODO: Move this to constant, tip: dont edit directly here, copy paste into .cshtml file.
-            template += @"<table style='FONT-SIZE: 11pt; BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Contract #</th>
-                                                                <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
-                                                            </tr>
-                                                        </tbody>
-                                                        <tbody>
-                                                            @foreach(var item in Model)
-                                                            {
-                                                                <tr>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>@(item.CNTRCT_SID + "" : "" +item.CNTRCT_NM)</td>
-                                                                    <td style='TEXT-ALIGN: left;padding:8px;'>
-                                                                        <a href='@(rootUrl +""/Contract#/manager/"" + item.CNTRCT_SID)'>View Contract</a>*
-                                                                    </td>
-                                                                </tr>
-                                                            }
-                                                        </tbody>
-                                                    </table>";
-            var tempKey = "ContractTable"; // Constant Name
-            if (!Engine.Razor.IsTemplateCached(tempKey, typeof(List<NotificationEmailTable>)))
-            {
-                return Engine.Razor.RunCompile(template, tempKey, typeof(List<NotificationEmailTable>), email);
-            }
-            else
-            {
-                return Engine.Razor.Run(tempKey, typeof(List<NotificationEmailTable>), email);
-            }
-        }        
+            var template = $@"
+                <table style='FONT-SIZE: 11pt; BORDER-COLLAPSE: collapse;font-family:Intel Clear' bordercolor='#bbbbbb' cellspacing='0' cellpadding='3' align='left' border='1'>
+                    <tbody>
+                        <tr>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Contract #</th>
+                            <th style='TEXT-ALIGN: left;padding:8px;'>Action</th>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        {string.Join("", email.Select(item => $@"
+                            <tr>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>{item.CNTRCT_SID} : {item.CNTRCT_NM}</td>
+                                <td style='TEXT-ALIGN: left;padding:8px;'>
+                                    <a href='{url}/Contract#/manager/{item.CNTRCT_SID}'>View Contract</a>*
+                                </td>
+                            </tr>"))}
+                    </tbody>
+                </table>";
+            return template;
+        }
 
         /// <summary>
         /// Update notification emails as processed after they have been sent it MC
@@ -511,6 +447,6 @@ namespace Intel.MyDeals.BusinessLogic
         public class NotificationMaster : NotificationEmailTable
         {
             public NotifExtendedProperty ExtendedProperty { get; set; }
-        }        
+        }
     }
 }
