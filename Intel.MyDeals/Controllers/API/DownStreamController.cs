@@ -18,16 +18,6 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetVistexLogs")]
-        [HttpPost]
-        [AntiForgeryValidate]
-        public List<VistexLogsInfo> GetVistexLogs(VistexLogFilters data)
-        {
-            VistexMode vistexMode = (VistexMode)Enum.Parse(typeof(VistexMode), data.Dealmode);
-            return SafeExecutor(() => _dsaLib.GetVistexLogs(vistexMode,data.StartDate,data.EndDate,data.DealId), $"Unable to get vistex data");
-        }
-
-        [Authorize]
         [Route("GetVistexLogsInfo")]
         [HttpPost]
         [AntiForgeryValidate]
@@ -116,6 +106,7 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _dsaLib.UpdateArchived(batchId, vistexStage, vrud.dealId, vrud.strErrorMessage, vrud.rqstSid), $"Unable to update vistex status");
         }
 
+        /*
         [Authorize]
         [Route("SendVistexData")]
         [HttpPost]
@@ -124,6 +115,7 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _dsaLib.AddVistexData(lstDealIds), $"Unable to send vistex data");
         }
+        */
 
         [Authorize]
         [Route("GetRequestTypeList")]

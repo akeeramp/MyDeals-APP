@@ -25,13 +25,6 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _employeeLib.GetUsrProfileRole(), "Unable to get User Profiles");
         }
 
-        [Authorize]
-        [Route("GetUserRolePermission")]
-        public IEnumerable<UserRolePermission> GetUserRolePermission()
-        {
-            return SafeExecutor(() => _employeeLib.GetUserRolePermission(), "Unable to get User Role Permission");
-        }
-
         // usr Role Permission Server side pagination Changes
         [Authorize]
         [Route("GetUserRolePermissionSSP")]
@@ -50,12 +43,5 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _employeeLib.GetUsrProfileRoleByRoleCode(lstRoles), "Unable to get User Profiles");
         }
 
-        //[Authorize]
-        //[HttpGet]
-        //[Route("FetchUserRolePermission")]
-        //public IEnumerable<UserRolePermission> FetchUserRolePermission(int isFetchLatest)
-        //{
-        //    return SafeExecutor(() => _employeeLib.GetUserRolePermission(isFetchLatest: isFetchLatest), "Unable to get User Role Permission - Add New Record");
-        //}
     }
 }

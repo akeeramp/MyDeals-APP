@@ -14,10 +14,6 @@ namespace Intel.MyDeals.BusinessLogic
 
         }
 
-        public List<VistexLogsInfo> GetVistexLogs(VistexMode vistexMode, DateTime StartDate, DateTime EndDate, string DealId)
-        {
-            return new VistexAdminDataLib().GetVistexLogs(vistexMode, StartDate, EndDate, DealId);
-        }
         public List<string> GetVistexFilterData(VistexMode vistexMode, DateTime StartDate, DateTime EndDate, string DealId, string filterName)
         {
             return new VistexAdminDataLib().GetVistexFilterData(vistexMode,StartDate,EndDate,DealId, filterName);
@@ -30,12 +26,13 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return new VistexAdminDataLib().GetStatuses();
         }
-
-        public List<VistexLogsInfo> AddVistexData(List<int> lstDealIds)
+        /*
+        public VistexLogDetails AddVistexData(List<int> lstDealIds, string filter)
         {
-            return new VistexAdminDataLib().AddVistexData(lstDealIds);
+            return new VistexAdminDataLib().AddVistexData(lstDealIds, filter);
         }
-
+        */
+        
         public List<RequestDetails> GetRequestTypeList()
         {
             return new VistexAdminDataLib().GetRequestTypeList();

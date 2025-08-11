@@ -16,9 +16,4 @@ export class userRolePermissionService {
         return this.httpClient.post(apiUrl, data);
     }
 
-    //public fetchUserRolePermission(data: any): Observable<any> {
-    //    const apiUrl: string = `${this.API_URL}GetUserRolePermissionSSP`;
-    //    return this.httpClient.post(apiUrl, data);
-    //}
-
 }

@@ -11,7 +11,6 @@ namespace Intel.MyDeals.IBusinessLogic
         OpMsg getSelfGrantUIAccess(string Idsid);
 
         List<ManageUsersInfo> GetManageUserData(int wwid);
-        List<UserRolePermission> GetUserRolePermission(string databaseUserName=null, string startDate = null, string endDate = null, int isFetchLatest = 0);
         EmployeeUsrRolePermissionDetails GetUserRolePermissionsByFilter(UserRolePermissionFilter data);
     }
 }

@@ -3,14 +3,14 @@ import { dsaService } from "./admin.vistex.service";
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { MomentService } from "../../shared/moment/moment.service";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem, EditEvent, GridComponent, CancelEvent, SaveEvent } from "@progress/kendo-angular-grid";
-import { process, State, distinct, CompositeFilterDescriptor, FilterDescriptor } from "@progress/kendo-data-query";
+import { GridDataResult, PageSizeItem, EditEvent, GridComponent, CancelEvent, SaveEvent } from "@progress/kendo-angular-grid";
+import { process, State, CompositeFilterDescriptor, FilterDescriptor } from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { each } from 'underscore';
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { RequestDetails, VistexLogFilters, VistexLogFiltersRequest, VistexLogFiltersResponse, VistexLogsInfo, VistexResponseUpdData } from "./admin.vistex.model";
+import { RequestDetails, VistexLogFiltersRequest, VistexLogFiltersResponse, VistexLogsInfo, VistexResponseUpdData } from "./admin.vistex.model";
 import { DynamicObj } from "../employee/admin.employee.model";
 import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
 import { ThemePalette } from "@angular/material/core";
@@ -38,10 +38,10 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
     private spinnerMessageDescription = "Please wait while we loading integration logs..";
     private editedRowData;
     private VistexStatuses: string[] = [];
-    private DealIds = "";
+    //private DealIds = "";
     private LogDealId = "";
     private showArchivedData = false;
-    private IsDealIdsValid = true;
+    //private IsDealIdsValid = true;
     private startDate: Date = new Date(this.momentService.moment().subtract(5, 'days').format("MM/DD/YYYY"));
     private endDate: Date = new Date(this.momentService.moment().format("MM/DD/YYYY"));
     private isLoading = true;
@@ -194,13 +194,14 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
                 this.isLoading = false;
                 this.LogDealId = "";
                 this.isLoading = false;
-            }, function (err) {
-                this.loggerSvc.error("Operation failed", err, err.statusText)
+            }, (err) => {
+                this.isLoading = false;
+                this.loggerSvc.error("Fetch Operation failed", err, err.statusText)
             });
 
             this.dsaService.getVistexStatuses().pipe(takeUntil(this.destroy$)).subscribe((response: string[]) => {
                 this.VistexStatuses = response;
-            }, function (err) {
+            }, (err) => {
                 this.loggerSvc.error("Unable to get statuses of vistex", err, err.statusText);
             });
         }
@@ -296,6 +297,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
         this.showKendoAlert = false;
     }
 
+    /*
     SendVistexData(): void {
         const RegxDealIds = new RegExp(/^[0-9,]+$/);
         if (this.DealIds != undefined) {
@@ -327,6 +329,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
             }
         }
     }
+    */
 
     saveHandler({ sender, rowIndex, formGroup }: SaveEvent): void {
         const selectedRow = formGroup.getRawValue();

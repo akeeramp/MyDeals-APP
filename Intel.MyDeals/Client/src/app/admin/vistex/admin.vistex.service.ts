@@ -1,7 +1,7 @@
 ﻿import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RequestDetails, VistexLogFilters, VistexLogFiltersRequest, VistexLogFiltersResponse, VistexLogsInfo, VistexResponseUpdData } from "./admin.vistex.model";
+import { RequestDetails, VistexLogFiltersRequest, VistexLogFiltersResponse, VistexResponseUpdData } from "./admin.vistex.model";
 
 @Injectable({
     providedIn: 'root'
@@ -15,11 +15,12 @@ export class dsaService {
     constructor(private httpClient: HttpClient) {
     }
 
-
-    public sendVistexData(lstDealIds: any[]): Observable<VistexLogsInfo[]> {
+    /*
+    public sendVistexData(sendVstxData: VistexSendData): Observable<VistexLogFiltersResponse> {
         const apiUrl: string = this.apiBaseUrl + 'SendVistexData';
-        return this.httpClient.post<VistexLogsInfo[]>(apiUrl, lstDealIds);
+        return this.httpClient.post<VistexLogFiltersResponse>(apiUrl, sendVstxData);
     }
+    */
 
     public callAPI(apiName: string, runMode: string): Observable<any> {
         let apiUrl: string;
@@ -42,11 +43,6 @@ export class dsaService {
 
         return this.httpClient.get(apiUrl);
 
-    }
-
-    public getVistexLogs(postData: VistexLogFilters): Observable<VistexLogsInfo[]> {
-        const apiUrl = this.apiBaseUrl + 'GetVistexLogs';
-        return this.httpClient.post<VistexLogsInfo[]>(apiUrl, postData);
     }
 
     public getVistexLogsInfo(postData: VistexLogFiltersRequest): Observable<VistexLogFiltersResponse> {
