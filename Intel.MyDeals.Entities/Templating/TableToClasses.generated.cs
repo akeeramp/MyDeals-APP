@@ -9870,10 +9870,7 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public String UNIFIED_STATUS { get; set; }
         [DataMember]
-        public String UNIFIED_REASON { get; set; }
-
-        [DataMember]
-        public System.Int32 TOTALCOUNT { set; get; }
+        public String UNIFIED_REASON { get; set; }        
         [DataMember]
         public System.String value { get; set; }
         /*

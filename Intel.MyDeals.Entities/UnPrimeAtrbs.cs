@@ -22,4 +22,9 @@ namespace Intel.MyDeals.Entities
 
         public string END_CUSTOMER_RETAIL { get; set; }
     }
+    public class UnPrimeDealDetails
+    {
+        public List<UnPrimeDeals> Items { get; set; }
+        public int TotalRows { get; set; }
+    }
 }

@@ -87,7 +87,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [HttpPost]
         [Route("GetUnPrimeDealsByFilter")]
-        public IEnumerable<UnPrimeDeals> GetUnPrimeDealsByFilter([FromBody] UnPrimeDealsFilter data)
+        public UnPrimeDealDetails GetUnPrimeDealsByFilter([FromBody] UnPrimeDealsFilter data)
         {
             return SafeExecutor(() => _primeCustomersLib.GetUnPrimeDeals(data), "Unable to get deals");
         }

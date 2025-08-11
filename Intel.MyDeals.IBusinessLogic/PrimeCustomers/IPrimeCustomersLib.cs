@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.IBusinessLogic
@@ -13,10 +14,10 @@ namespace Intel.MyDeals.IBusinessLogic
         List<Countires> GetCountries();
 
         List<PrimeCustomers> GetPrimeCustomers();
-
+        [Obsolete("GetUnPrimeDeals() method doesn't have pagination feature, please use GetUnPrimeDeals(UnPrimeDealsFilter data) method instead.", false)]
         List<UnPrimeDeals> GetUnPrimeDeals();
 
-        List<UnPrimeDeals> GetUnPrimeDeals(UnPrimeDealsFilter data);
+        UnPrimeDealDetails GetUnPrimeDeals(UnPrimeDealsFilter data);
 
         List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry);
 

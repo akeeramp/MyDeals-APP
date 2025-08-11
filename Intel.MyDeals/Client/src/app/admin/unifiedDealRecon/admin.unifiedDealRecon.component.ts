@@ -121,7 +121,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         };
                 
         this.unifiedDealReconSvc.getUnmappedPrimeCustomerDealsByFilter(this.dataForFilter).subscribe(data => {
-            let allValues = data.map(val => {return val["value"]})
+            let allValues = data.Items.map(val => {return val["value"]})
             let duplicateValueRemoved = allValues.filter((item, index) => allValues.indexOf(item) === index);
             this.custData.set(fieldName, duplicateValueRemoved)
         });
@@ -185,12 +185,12 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         this.settingFilter();
         this.unifiedDealReconSvc.getUnmappedPrimeCustomerDealsByFilter(this.dataForFilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<UnPrimeDeals>) => {
             this.isLoading = false;
-            this.gridResult = result;
-            this.gridData = process(result, this.state);
-            this.gridData.data=result;
-            if(result.length>0){
-             this.gridData.total = result[0].TOTALCOUNT;
-             this.totalCount = result[0].TOTALCOUNT;
+            this.gridResult = result['Items'];
+            this.gridData = process(result['Items'], this.state);
+            this.gridData.data=result['Items'];
+            if(result['Items'].length>0){
+             this.gridData.total = result['TotalRows'];
+             this.totalCount = result['TotalRows'];
             }
             
         }, (error) => {
@@ -356,7 +356,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
         };
         this.unifiedDealReconSvc.getUnmappedPrimeCustomerDealsByFilter(excelDataForFilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<UnPrimeDeals>) => {
             this.isLoading = false;
-            this.gridAllResult = result;
+            this.gridAllResult = result['Items'];
             GridUtil.dsToExcelUnifiedDealtData(this.unifiedDealExcel, this.gridAllResult, "MyDealsUnifiedRecon");
         }, (error) => {
             this.loggerSvc.error('UnMappedPrimeCustomerDeal service', error);
