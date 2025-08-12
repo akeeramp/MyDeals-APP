@@ -9783,9 +9783,9 @@ namespace Intel.MyDeals.Entities
         public System.String RPL_STS_CD { set; get; }
 
         [DataMember]
-        public System.Int32 TotalRows { set; get; }
-        [DataMember]
         public System.String ERROR_MSG { set; get; }
+
+
 
         /*
         private static List<PrimeCustomers> PrimeCustomersFromReader(SqlDataReader rdr){

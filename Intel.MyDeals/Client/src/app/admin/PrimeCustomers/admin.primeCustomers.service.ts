@@ -21,7 +21,7 @@ export class primeCustomerService {
         const apiUrl: string = this.apiBaseUrl + 'GetPrimeCustomerDetails';
         return this.httpClient.get<PrimeCust_Map[]>(apiUrl);
     }
-    public GetPrimeCustomerDetailsByFilter(data): Observable<PrimeCust_Map[]> {
+    public GetPrimeCustomerDetailsByFilter(data): Observable<any> {
         const apiUrl: string = this.apiBaseUrl + 'GetPrimeCustomerDetailsByFilter';
         return this.httpClient.post<PrimeCust_Map[]>(apiUrl, data);
     }

@@ -7,7 +7,7 @@ namespace Intel.MyDeals.IBusinessLogic
     public interface IPrimeCustomersLib
     {
         List<PrimeCustomers> GetPrimeCustomerDetails();
-        List<PrimeCustomers> GetPrimeCustomerDetails(string filter, string sort, int take, int skip);
+        PrimeCustomersDetails GetPrimeCustomerDetails(string filter, string sort, int take, int skip);
 
         PrimeCustomers ManagePrimeCustomers(CrudModes mode, PrimeCustomers data);
 

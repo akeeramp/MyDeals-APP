@@ -41,9 +41,9 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
     private info = true;
-    private gridResult: Array<PrimeCust_Map>;
+    private gridResult: Array<any>;
     private gridData: GridDataResult;
-    private gridAllResult: Array<PrimeCust_Map>;
+    private gridAllResult: Array<any>;
     private gridAllData: GridDataResult;
     private unifiedDealCustomerExcel = ExcelColumnsConfig.unifiedDealCustomerExcel;
     private optUnifiedDealCustomerExcel: Array<any> = [];
@@ -71,7 +71,6 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     private filterData = "";
     private dataforfilter: object;
     private columnFieldDataList: Map<string, Array<string>> = new Map();
-    private totalCount = 0;
     private state: State = {
         skip: 0,
         take: 25,
@@ -120,15 +119,21 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         //Developer can see the Screen.
         this.settingFilter();
         this.isLoading = true;
-        this.primeCustSvc.GetPrimeCustomerDetailsByFilter(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<PrimeCust_Map>) => {
+        this.primeCustSvc.GetPrimeCustomerDetailsByFilter(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe((result) => {
             this.isLoading = false;
-            this.gridResult = result;
-            this.gridData = process(result, this.state);
-            this.gridData.data = result;
-            if (result.length > 0) {
-                this.gridData.total = result[0].TotalRows;
-                this.totalCount = result[0].TotalRows;
-            }
+            this.gridResult = result.Items;
+            const state: State = {
+                skip: 0,
+                take: this.state.take,
+                group: [],
+                filter: {
+                    logic: "and",
+                    filters: [],
+                }
+            };
+            this.gridData = process(this.gridResult, state);
+            this.gridData.total = result.TotalRows;
+            this.isLoading = false;
         }, (error) => {
             this.loggerSvc.error('Prime Customer service', error);
         });   
@@ -193,17 +198,13 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
     }
 
     exportToExcel(grid: GridComponent) {
+        this.settingFilter();
+        this.dataforfilter["Skip"] = 0;
+        this.dataforfilter["Take"] = this.gridData.total == 0 ? this.state.take : this.gridData.total;
         this.isLoading = true;
-         let filter=this.dataforfilter["StrFilters"];
-        let excelDataForFilter = {
-            StrFilters: filter,
-            Sort: "",
-            Skip: 0,
-            Take: this.totalCount
-        };
-        this.primeCustSvc.GetPrimeCustomerDetailsByFilter(excelDataForFilter).pipe(takeUntil(this.destroy$)).subscribe((result: Array<PrimeCust_Map>) => {
+        this.primeCustSvc.GetPrimeCustomerDetailsByFilter(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe((result) => {
             this.isLoading = false;
-            this.gridAllResult = result;
+            this.gridAllResult = result.Items;
             this.columnCheck(grid);
             GridUtil.dsToExcelUnifiedCustomerDealData(this.optUnifiedDealCustomerExcel, this.gridAllResult, "MyDealsUnifiedCustomerAdmin");
         }, (error) => {

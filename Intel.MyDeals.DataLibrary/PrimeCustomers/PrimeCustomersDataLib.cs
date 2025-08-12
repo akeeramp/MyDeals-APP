@@ -16,8 +16,15 @@ namespace Intel.MyDeals.DataLibrary
         public List<PrimeCustomers> GetPrimeCustomerDetails()
         {
             var ret = new List<PrimeCustomers>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL { };
-
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL {
+                SKIP = 0,
+                TAKE = -1,
+                SORT = string.Empty,
+                MODE = "SELECT",
+                FLTRCOL = string.Empty,
+                FILTER = string.Empty
+            };
+          
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -60,10 +67,11 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<PrimeCustomers> GetPrimeCustomerDetails(string filter, string sort, int take, int skip)
+        public PrimeCustomersDetails GetPrimeCustomerDetails(string filter, string sort, int take, int skip) 
         {
             var ret = new List<PrimeCustomers>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL_SSP
+            int RowCount = 0;
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL
             {
                 FILTER = filter,
                 SORT = sort,
@@ -86,7 +94,6 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_PRIM_SID = DB.GetReaderOrdinal(rdr, "PRIM_SID");
                     int IDX_RPL_STS = DB.GetReaderOrdinal(rdr, "RPL_STS");
                     int IDX_RPL_STS_CD = DB.GetReaderOrdinal(rdr, "RPL_STS_CD");
-                    int IDX_TotalRows = DB.GetReaderOrdinal(rdr, "TotalRows");
 
                     while (rdr.Read())
                     {
@@ -101,8 +108,12 @@ namespace Intel.MyDeals.DataLibrary
                             PRIM_SID = (IDX_PRIM_SID < 0 || rdr.IsDBNull(IDX_PRIM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_SID),
                             RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_RPL_STS),
                             RPL_STS_CD = (IDX_RPL_STS_CD < 0 || rdr.IsDBNull(IDX_RPL_STS_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RPL_STS_CD),
-                            TotalRows = (IDX_TotalRows < 0 || rdr.IsDBNull(IDX_TotalRows)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TotalRows)
                         });
+                    }
+                    if (rdr.NextResult() && rdr.Read())
+                    {
+                        //only count is send back in the next call
+                        RowCount = rdr.GetFieldValue<System.Int32>(0);
                     }
                 }
 
@@ -114,13 +125,13 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
 
-            return ret;
+            return new PrimeCustomersDetails { Items = ret, TotalRows = RowCount };
         }
 
         public List<string> GetPrimeCustData(string fieldName)
         {
             var ret = new List<string>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL_SSP
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL
             {
                 FILTER = "",
                 SORT = "",

@@ -7,7 +7,6 @@
     public PRIM_LVL_NM: string;
     public PRIM_CUST_CTRY: string;
     public RPL_STS_CD: any;
-    public TotalRows: any;
     public ERROR_MSG: string;
 }
 

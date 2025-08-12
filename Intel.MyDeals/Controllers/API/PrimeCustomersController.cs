@@ -32,7 +32,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [HttpPost]
         [Route("GetPrimeCustomerDetailsByFilter")]
-        public List<PrimeCustomers> GetPrimeCustomerDetails([FromBody] SearchParams data)
+        public PrimeCustomersDetails GetPrimeCustomerDetails([FromBody] SearchParams data)
         {
             return SafeExecutor(() => _primeCustomersLib.GetPrimeCustomerDetails(data.StrFilters, data.StrSorts, data.Take, data.Skip), "Unable to Get Unified Customers");
         }

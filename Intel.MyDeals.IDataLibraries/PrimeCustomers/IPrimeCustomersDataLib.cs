@@ -7,7 +7,7 @@ namespace Intel.MyDeals.IDataLibrary
     public interface IPrimeCustomersDataLib
     {
         List<PrimeCustomers> GetPrimeCustomerDetails();
-        List<PrimeCustomers> GetPrimeCustomerDetails(string filter, string sort, int take, int skip);
+        PrimeCustomersDetails GetPrimeCustomerDetails(string filter, string sort, int take, int skip);
 
         UpdatedPrimeCustomerDetail ManagePrimeCustomers(CrudModes mode, PrimeCustomers data);
 

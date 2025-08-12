@@ -45,7 +45,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _primeCustomersDataLib.GetPrimeCustomerDetails();
         }
-        public List<PrimeCustomers> GetPrimeCustomerDetails(string filter, string sort, int take, int skip)
+        public PrimeCustomersDetails GetPrimeCustomerDetails(string filter, string sort, int take, int skip)
         {
             return _primeCustomersDataLib.GetPrimeCustomerDetails(filter, sort, take, skip);
         }
