@@ -4107,11 +4107,11 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
-        /// ID: 1181247263
-        /// Modified: 7/13/2018 1:53:45 AM
-        /// Parameters: 2
-        ///</summary>
-        public partial class PR_MYDL_DEAL_SYNC : SP
+		/// ID: 1181247263
+		/// Modified: 7/17/2025 12:39:09 AM
+		/// Parameters: 1
+		///</summary>
+		public partial class PR_MYDL_DEAL_SYNC : SP
         {
             public PR_MYDL_DEAL_SYNC()
             {
@@ -4128,17 +4128,6 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             {
                 set { SetParmeter("in_btch_ids", value); }
                 get { return (SqlTableValueParameterBase)GetParameter("in_btch_ids"); }
-            }
-
-            ///<summary>
-            /// DataType: bit
-            /// Mode: IN
-            ///</summary>
-            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
-            public Boolean in_debug
-            {
-                set { SetParmeter("in_debug", value); }
-                get { return (Boolean)GetParameter("in_debug"); }
             }
         }
 
