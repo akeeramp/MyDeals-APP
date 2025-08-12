@@ -17,7 +17,7 @@ jobs:
     runs-on:  [self-hosted, mydeals-runner01]
     steps:
       - name: Checkout Directory
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
 
       - name: Sonar Scan
         run: |

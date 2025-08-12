@@ -19,7 +19,7 @@ jobs:
      runs-on: [self-hosted, mydeals-runner01]
      steps:
        - name: Checkout Directory
-         uses: actions/checkout@master
+         uses: actions/checkout@v4
        - name: Restore NUGET Packages 
          run: |
             echo "RUN NUGET Packages script at ${{env.NUGET_PATH}}"

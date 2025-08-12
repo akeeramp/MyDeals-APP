@@ -39,7 +39,7 @@ jobs:
      needs:  Verify-environement
      steps:
        - name: Checkout Directory
-         uses: actions/checkout@master
+         uses: actions/checkout@v4
 
   Restore-packages:
      if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
