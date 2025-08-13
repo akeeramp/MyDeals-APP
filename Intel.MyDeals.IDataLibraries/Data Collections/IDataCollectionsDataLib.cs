@@ -27,7 +27,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<VistexCustomerMapping> GetVistexCustomerMappings();
 
         List<GeoDimension> GetGeoData();
-        GeoDetails GetGeoData(string filter, string sort, int take, int skip);
+        GeoDetails GetGeoData(GeoFilters data);
 
         UiTemplates GetUiTemplates();
 

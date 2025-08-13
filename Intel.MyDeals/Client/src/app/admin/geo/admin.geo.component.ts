@@ -2,13 +2,10 @@
 import { logger } from "../../shared/logger/logger";
 import { geoService } from "./admin.geo.service";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
-import { process, State } from "@progress/kendo-data-query";
+import { process, State, CompositeFilterDescriptor } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
-import { ExcelExportData } from "@progress/kendo-angular-excel-export";
-import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { GeoDimension } from "./admin.geo.model";
 import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
 import { GridUtil } from "../../contract/grid.util";
 import { ExcelColumnsConfig } from "../ExcelColumnsconfig.util";
@@ -21,7 +18,6 @@ import { ExcelColumnsConfig } from "../ExcelColumnsconfig.util";
 
 export class geoComponent implements OnDestroy {
     constructor(private geoSvc: geoService, private loggerSvc: logger) {
-        this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject<void>();
@@ -34,15 +30,16 @@ export class geoComponent implements OnDestroy {
     private sortData = "";
     private filterData = "";
     private dataforfilter: object;
+    public ftchCnt = true;
+    public totalCnt;
     private state: State = {
         skip: 0,
         take: 25,
-        group: [],
         // Initial filter descriptor
         filter: {
             logic: "and",
             filters: [],
-        },
+        },        
     };
     private pageSizes: PageSizeItem[] = [
         {
@@ -85,7 +82,10 @@ export class geoComponent implements OnDestroy {
                 }
             };
             this.gridData = process(this.gridResult, state);
-            this.gridData.total = result.TotalRows;
+            if (this.dataforfilter["FtchCnt"] == true)
+                this.totalCnt = result.TotalRows;
+            this.gridData.total = this.totalCnt;
+            this.dataforfilter["FtchCnt"] = false;
             this.isLoading = false;
 
         }, (error) => {
@@ -104,20 +104,21 @@ export class geoComponent implements OnDestroy {
             });
         }
         const filterExpression = FilterExpressBuilder.createSqlExpression(JSON.stringify(this.state.filter));
-        this.filterData = filterExpression;
+        this.filterData = filterExpression;        
         this.dataforfilter = {
             InFilters: this.filterData,
             Sort: this.sortData,
             Skip: this.state.skip,
-            Take: this.state.take
+            Take: this.state.take,
+            FtchCnt: this.ftchCnt
         };
     }
 
-    exportToExcel() {
-        //Developer can see the Screen..
+    exportToExcel() {        
         this.settingFilter();
         this.dataforfilter["Skip"] = 0;
-        this.dataforfilter["Take"] = this.gridData.total == 0 ? this.state.take : this.gridData.total;
+        this.dataforfilter["Take"] = this.gridData.total;
+        this.dataforfilter["FtchCnt"] = false;
         this.isLoading = true;
         this.geoSvc.getGeosNew(this.dataforfilter).pipe(takeUntil(this.destroy$)).subscribe(result => {
             this.isLoading = false;
@@ -126,43 +127,54 @@ export class geoComponent implements OnDestroy {
             this.loggerSvc.error('Geo service', error);
         });
     }
-
-    public onExcelExport(e: ExcelExportEvent): void {
-        e.workbook.sheets[0].title = "Users Export";
-    }
-
-    public allData(): ExcelExportData {
-
-        const result: ExcelExportData = {
-            data: this.gridResult
-        };
-
-        return result;
-    }
-
-    dataStateChange(state: DataStateChangeEvent): void {
-        this.state = state;
+    
+    
+    pageChange(state: DataStateChangeEvent) {
+        this.state.take = state.take;
+        this.state.skip = state.skip;
+        this.ftchCnt = false;
         this.loadGeo();
     }
 
     clearFilter(): void {
+        this.state.take = 25;
+        this.state.skip = 0;
         this.state.filter = {
             logic: "and",
             filters: [],
         };
+        this.ftchCnt = true;
+        this.loadGeo();
+    }
+
+    public filterChange(filter: CompositeFilterDescriptor): void {
+        this.state.filter = filter;
+        this.state.skip = 0;
+        this.ftchCnt = true;
+        this.loadGeo();
+    }
+    sortChange(state) {
+        this.state["sort"] = state;
+        this.ftchCnt = false;
         this.loadGeo();
     }
 
     refreshGrid(): void {
         this.isLoading = true;
-        this.state.filter = {
-            logic: "and",
-            filters: [],
+        this.state = {
+            skip: 0,
+            take: 25,
+            group: [],
+            filter: {
+                logic: "and",
+                filters: [],
+            },
         };
+        this.ftchCnt = true;
         this.loadGeo();
     }
 
-    ngOnInit(): void {
+    ngOnInit(): void {        
         this.loadGeo();
     }
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component

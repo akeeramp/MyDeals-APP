@@ -40,11 +40,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Geo Dimension data</returns>
         public List<GeoDimension> GetGeoDimensions(bool getCachedResult = true)
         {
-            if (!getCachedResult)
-            {
-                _geoDataLib.GetGeoDimensions();
-            }
-            return _dataCollectionsDataLib.GetGeoData();
+            return !getCachedResult ? _geoDataLib.GetGeoDimensions().Items : _dataCollectionsDataLib.GetGeoData();           
         }
 
         /// <summary>
@@ -55,9 +51,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="take"></param>
         /// <param name="skip"></param>
         /// <returns></returns>
-        public GeoDetails GetGeoDimensions(string filter, string sort, int take, int skip)
+        public GeoDetails GetGeoDimensions(GeoFilters data)
         {
-            return _dataCollectionsDataLib.GetGeoData(filter, sort, take, skip);
+            return _dataCollectionsDataLib.GetGeoData(data);
         }
 
         /// <summary>

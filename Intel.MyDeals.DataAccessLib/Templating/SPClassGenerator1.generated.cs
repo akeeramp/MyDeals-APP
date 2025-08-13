@@ -6400,30 +6400,16 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
-        /// ID: 1565248631
-        /// Modified: 7/13/2018 1:54:09 AM
-        /// Parameters: 0
-        ///</summary>
-        public partial class PR_MYDL_GET_GEO_DIM : SP
+		/// ID: 1565248631
+		/// Modified: 8/11/2025 8:38:38 PM
+		/// Parameters: 5
+		///</summary>
+		public partial class PR_MYDL_GET_GEO_DIM : SP
         {
             public PR_MYDL_GET_GEO_DIM()
             {
                 DatabaseName = "MyDeals";
                 StoredProdedureName = "[dbo].[PR_MYDL_GET_GEO_DIM]";
-            }
-        }
-
-        ///<summary>
-        /// ID: 649417733
-        /// Modified: 2025-04-16 3:15:58 PM
-        /// Parameters: 4
-        ///</summary>
-        public partial class PR_MYDL_GET_GEO_DIM_SSP : SP
-        {
-            public PR_MYDL_GET_GEO_DIM_SSP()
-            {
-                DatabaseName = "MyDeals";
-                StoredProdedureName = "[dbo].[PR_MYDL_GET_GEO_DIM_SSP]";
             }
 
             ///<summary>
@@ -6468,6 +6454,17 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             {
                 set { SetParmeter("SKIP", value); }
                 get { return (Int32)GetParameter("SKIP"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+            public Boolean FTHCNT
+            {
+                set { SetParmeter("FTHCNT", value); }
+                get { return (Boolean)GetParameter("FTHCNT"); }
             }
         }
 

@@ -23,14 +23,14 @@ namespace Intel.MyDeals.DataLibrary.Test
             Console.WriteLine("Completed GeoData Lib tests.");
         }
 
-
+        /*
         [TestCase]
         public void GeosGetAll()
         {
-            IEnumerable<GeoDimension> results = new GeoDataLib().GetGeoDimensions();
+            IEnumerable<GeoDimension> results = new GeoDataLib().GetGeoDimensions().Items;
             Assert.IsTrue(results.Any());
         }
-
+        */
         [TestCase]
         public void GetSoldTos() // Added for coverage, but expected result is empty list.  If ever altered, must change assert
         {

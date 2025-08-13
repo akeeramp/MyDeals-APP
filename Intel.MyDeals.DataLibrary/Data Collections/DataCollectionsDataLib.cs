@@ -116,9 +116,9 @@ namespace Intel.MyDeals.DataLibrary
         {
             return DataCollections.GetGeoData();
         }
-        public GeoDetails GetGeoData(string filter, string sort, int take, int skip)
+        public GeoDetails GetGeoData(GeoFilters data)
         {
-            return new GeoDataLib().GetGeoDimensions(filter, sort, take, skip);
+            return new GeoDataLib().GetGeoDimensions(data);
         }
 
         public UiTemplates GetUiTemplates()

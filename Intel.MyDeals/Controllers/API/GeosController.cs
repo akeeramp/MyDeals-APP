@@ -51,7 +51,7 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return _geosLib.GetGeoDimensions(data.InFilters, data.Sort, data.Take, data.Skip);
+                 return _geosLib.GetGeoDimensions(data);
             }
             catch (Exception ex)
             {

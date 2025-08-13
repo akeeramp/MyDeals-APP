@@ -23,8 +23,10 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             TestCase(false)]
         public void GetGeoDimensions_Returns_NotNull(bool getCachedResult)
         {
-            var mockData = getGeoDimensionsMockData();
-            if(getCachedResult == true)
+            List<GeoDimension> mockData = getGeoDimensionsMockData();
+            GeoDetails mockData1 = getGeoDimensionsMockData1();
+            
+            if (getCachedResult == true)
             {
                 mockDataCollectionsDataLib.Setup(x=>x.GetGeoData()).Returns(mockData);
                 var result = new GeosLib(mockGeoDataLib.Object,mockDataCollectionsDataLib.Object).GetGeoDimensions(getCachedResult);
@@ -33,7 +35,8 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             }
             else
             {
-                mockGeoDataLib.Setup(x => x.GetGeoDimensions()).Returns(mockData);
+                mockGeoDataLib.Setup(x => x.GetGeoDimensions(null)).Returns(mockData1);
+                mockDataCollectionsDataLib.Setup(x => x.GetGeoData()).Returns(mockData);
                 var result = new GeosLib(mockGeoDataLib.Object, mockDataCollectionsDataLib.Object).GetGeoDimensions(getCachedResult);
                 Assert.IsNotNull(result);
                 Assert.Greater(result.Count, 0);
@@ -215,6 +218,29 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
                 RGN_NM_SID = 9
             } };
             return mockData;
+
+        }
+
+        public GeoDetails getGeoDimensionsMockData1()
+        {
+            var mockData = new List<GeoDimension> { new GeoDimension
+            {
+                ACTV_IND  = true,
+                CTRY_NM  = "Peru",
+                CTRY_NM_SID  = 56,
+                GEO_ATRB_SID  = 56,
+                GEO_MBR_SID  = 56,
+                GEO_NM  = "APAC",
+                GEO_NM_SID  = 7,
+                RGN_NM  = "Latin Amer",
+                RGN_NM_SID = 9
+            } };
+            //return mockData;
+            return new GeoDetails
+            {
+                Items = mockData,
+                TotalRows = 1
+            };
 
         }
     }

@@ -302,7 +302,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             lock (LOCK_OBJECT ?? new object())
             {
-                return _getGeoData ?? (_getGeoData = new GeoDataLib().GetGeoDimensions());
+                return _getGeoData ?? (_getGeoData = new GeoDataLib().GetGeoDimensions().Items);
             }
         }
 
