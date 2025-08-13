@@ -125,26 +125,31 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
 
     loadproductCategoriesData() {
         this.settingFilter();
-        this.productCategorySvc.getCategories_new(this.dataSummary).pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
+        this.productCategorySvc.getCategories_new(this.dataSummary).pipe(takeUntil(this.destroy$)).subscribe((response) => {
             //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
-            each(response, item => {
+            response.Items.forEach(item => {
                 item['CHG_DTM'] = this.datepipe.transform(new Date(item['CHG_DTM']), 'M/d/yyyy');
                 item['CHG_DTM'] = new Date(item['CHG_DTM']);
-            })
-
-            this.gridResult = response;
-            this.gridData = process(this.gridResult, this.state);
-            this.gridData.data = response;
-            if (response.length > 0) {
-                this.gridData.total = response[0].TotalRows;
-                this.totalCount=response[0].TotalRows;
-            }
+            });
+            this.isLoading = false;
+            this.gridResult = response.Items;
+            const state: State = {
+                skip: 0,
+                take: this.state.take,
+                group: this.state.group,
+                filter: {
+                    logic: "and",
+                    filters: [],
+                }
+            };
+            this.gridData = process(this.gridResult, state);
+            this.gridData.total = response.TotalRows;
             this.isLoading = false;
         }, function (response) {
             this.loggerSvc.error("Unable to get Products.", response, response.statusText);
         });
 
-    }
+    } 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.loadproductCategoriesData();
@@ -270,18 +275,14 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
         sender.closeRow(rowIndex);
     }
     exportToExcel() {
+        this.settingFilter();
+        this.dataSummary["Skip"] = 0;
+        this.dataSummary["Take"] = this.gridData.total == 0 ? this.state.take : this.gridData.total;
         this.isLoading = true;
-     let filter=this.dataSummary["StrFilters"];
-        let excelDataForFilter = {
-            StrFilters: filter,
-            Sort: "",
-            Skip: 0,
-            Take: this.totalCount
-        };
-          this.productCategorySvc.getCategories_new(excelDataForFilter).pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
+        this.productCategorySvc.getCategories_new(this.dataSummary).pipe(takeUntil(this.destroy$)).subscribe((response) => {
             //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
             this.isLoading = false; 
-            this.gridAllResult = response;
+            this.gridAllResult = response.Items;
             GridUtil.dsToExcelProductVerticalRule(this.ProductVerticalExcel, this.gridAllResult, "MyDealsProductVerticalRules");
         
         }, function (response) {

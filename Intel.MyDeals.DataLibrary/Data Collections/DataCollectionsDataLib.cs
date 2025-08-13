@@ -154,7 +154,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             return DataCollections.GetProductCategories();
         }
-        public List<ProductCategory> GetProductCategoriesByPagination(string filter, string sort, int take, int skip)
+        public ProductCategoryDetails GetProductCategoriesByPagination(string filter, string sort, int take, int skip)
         {
             return DataCollections.GetProductCategoriesByPagination(filter,sort,take,skip);
 

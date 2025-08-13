@@ -70,7 +70,7 @@ namespace Intel.MyDeals.IDataLibrary
         ProductSelectorWrapper GetProductSelectorWrapperDensity(DateTime startDate, DateTime endDate, string mediaCode);
 
         Dictionary<string, string> GetSearchString();
-        List<ProductCategory> GetProductCategoriesByPagination(string filter, string sort, int take, int skip);
+        ProductCategoryDetails GetProductCategoriesByPagination(string filter, string sort, int take, int skip);
         int GetSessionComparisonHash();
     }
 }

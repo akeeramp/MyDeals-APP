@@ -1908,9 +1908,6 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.String PRD_CAT_NM { set; get; }
 
-        [DataMember]
-        public System.Int32 TotalRows { set; get; }
-
         /*
         private static List<ProductCategory> ProductCategoryFromReader(SqlDataReader rdr){
         // This helper method is template generated.

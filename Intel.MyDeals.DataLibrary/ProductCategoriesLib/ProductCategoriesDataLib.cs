@@ -28,8 +28,15 @@ namespace Intel.MyDeals.DataLibrary
         public List<ProductCategory> GetProductCategories()
         {
             var ret = new List<ProductCategory>();
-            Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP();
-
+            Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP
+            {
+                SKIPROWS = 0,
+                TAKEROWS = -1,
+                SORT = "",
+                MODE = "SELECT",
+                FLTRCOL = "",
+                FILTER = ""
+            };
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -70,14 +77,15 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
         }
-        public List<ProductCategory> GetProductCategoriesByPagination(string filter, string sort, int take, int skip)
+        public ProductCategoryDetails GetProductCategoriesByPagination(string filter, string sort, int take, int skip)
         {
             var ret = new List<ProductCategory>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP_SSP
+            int RowCount = 0;
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP
             {
 
-                skipRows = skip,
-                takeRows = take,
+                SKIPROWS = skip,
+                TAKEROWS = take,
                 SORT = sort,
                 MODE = "SELECT",
                 FLTRCOL = "",
@@ -101,7 +109,6 @@ namespace Intel.MyDeals.DataLibrary
                         int IDX_OP_CD = DB.GetReaderOrdinal(rdr, "OP_CD");
                         int IDX_PRD_CAT_MAP_SID = DB.GetReaderOrdinal(rdr, "PRD_CAT_MAP_SID");
                         int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
-                        int IDX_Total_Rows = DB.GetReaderOrdinal(rdr, "TotalRows");
 
                         while (rdr.Read())
                         {
@@ -116,18 +123,22 @@ namespace Intel.MyDeals.DataLibrary
                                 GDM_VRT_NM = (IDX_GDM_VRT_NM < 0 || rdr.IsDBNull(IDX_GDM_VRT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GDM_VRT_NM),
                                 OP_CD = (IDX_OP_CD < 0 || rdr.IsDBNull(IDX_OP_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OP_CD),
                                 PRD_CAT_MAP_SID = (IDX_PRD_CAT_MAP_SID < 0 || rdr.IsDBNull(IDX_PRD_CAT_MAP_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_CAT_MAP_SID),
-                                PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
-                                TotalRows = (IDX_Total_Rows < 0 || rdr.IsDBNull(IDX_Total_Rows)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Total_Rows),
+                                PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM)
                             });
                         }
+                    if (rdr.NextResult() && rdr.Read())
+                    {
+                        //only count is send back in the next call
+                        RowCount = rdr.GetFieldValue<System.Int32>(0);
                     }
+                }
                 }
                 catch (Exception ex)
                 {
                     OpLogPerf.Log(ex);
                     throw;
                 }
-                return ret;
+            return new ProductCategoryDetails { Items = ret, TotalRows = RowCount };
         }
 
         public List<string> GetProductCategoriesByFilter(string filterName)
@@ -135,13 +146,13 @@ namespace Intel.MyDeals.DataLibrary
 
             {
                 var ret = new List<string>();
-                Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP_SSP cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP_SSP();
+                Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP();
 
 
-                cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP_SSP()
+                cmd = new Procs.dbo.PR_MYDL_GET_PRD_CAT_MAP()
                 {
-                    skipRows = 0,
-                    takeRows = 0,
+                    SKIPROWS = 0,
+                    TAKEROWS = 0,
                     SORT = "",
                     MODE = "FILTER",
                     FLTRCOL = filterName,

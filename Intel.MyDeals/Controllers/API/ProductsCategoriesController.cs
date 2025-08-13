@@ -33,7 +33,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [HttpPost]
         [Route("GetProductCategoriesByPagination")]
-        public IEnumerable<ProductCategory> GetProductCategoriesByPagination([FromBody] SearchParams data)
+        public ProductCategoryDetails GetProductCategoriesByPagination([FromBody] SearchParams data)
         {
             return SafeExecutor(() => _productCategoriesLib
                 .GetProductCategoriesByPagination(data.StrFilters, data.StrSorts, data.Take, data.Skip )

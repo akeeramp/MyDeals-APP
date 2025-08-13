@@ -6,7 +6,7 @@ namespace Intel.MyDeals.IBusinessLogic
 	public interface IProductCategoriesLib
 	{
 		List<ProductCategory> GetProductCategories();
-		List<ProductCategory> GetProductCategoriesByPagination(string filter, string sort, int take, int skip);
+		ProductCategoryDetails GetProductCategoriesByPagination(string filter, string sort, int take, int skip);
 
         List<ProductCategory> UpdateProductCategories(List<ProductCategory> categories);
         List<string> GetProductCategoriesByFilter(string fieldName);

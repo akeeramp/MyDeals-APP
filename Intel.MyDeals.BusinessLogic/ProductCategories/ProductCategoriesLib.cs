@@ -42,7 +42,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _dataCollectionsDataLib.GetProductCategories();
         }
-        public List<ProductCategory> GetProductCategoriesByPagination(string filter, string sort, int take, int skip)
+        public ProductCategoryDetails GetProductCategoriesByPagination(string filter, string sort, int take, int skip)
         {
             return _dataCollectionsDataLib.GetProductCategoriesByPagination(filter,sort,take,skip);
         }

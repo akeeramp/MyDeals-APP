@@ -666,7 +666,7 @@ namespace Intel.MyDeals.DataLibrary
          private static List<ProductCategory> _getProductCategories;
 
         #endregion Product Vertical
-        public static List<ProductCategory> GetProductCategoriesByPagination(string filter, string sort, int take, int skip)
+        public static ProductCategoryDetails GetProductCategoriesByPagination(string filter, string sort, int take, int skip)
         {
             lock (LOCK_OBJECT ?? new object())
             {
