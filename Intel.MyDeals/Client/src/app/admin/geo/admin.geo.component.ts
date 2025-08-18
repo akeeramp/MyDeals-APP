@@ -2,7 +2,7 @@
 import { logger } from "../../shared/logger/logger";
 import { geoService } from "./admin.geo.service";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
-import { process, State, CompositeFilterDescriptor } from "@progress/kendo-data-query";
+import { process, State, CompositeFilterDescriptor, GroupDescriptor } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -35,6 +35,7 @@ export class geoComponent implements OnDestroy {
     private state: State = {
         skip: 0,
         take: 25,
+        group:[],
         // Initial filter descriptor
         filter: {
             logic: "and",
@@ -136,25 +137,45 @@ export class geoComponent implements OnDestroy {
         this.loadGeo();
     }
 
-    clearFilter(): void {
-        this.state.take = 25;
-        this.state.skip = 0;
-        this.state.filter = {
-            logic: "and",
-            filters: [],
+    public groupChange(groups: GroupDescriptor[]): void {        
+        this.state.group = groups;
+        const stateTest = {
+            skip: 0,
+            take: this.state.take,
+            group: groups
+
         };
+        const totalCount = this.gridData.total;
+        this.gridData = process(this.gridResult, stateTest);
+        this.gridData.total = totalCount;
+    }
+
+    clearFilter(): void {
+        this.state = {
+            skip: 0,
+            take: this.state.take,
+            group: this.state.group,
+            filter: {
+                logic: "and",
+                filters: [],
+            },
+        };        
         this.ftchCnt = true;
         this.loadGeo();
     }
 
-    public filterChange(filter: CompositeFilterDescriptor): void {
-        this.state.filter = filter;
-        this.state.skip = 0;
+    public filterChange(filter: CompositeFilterDescriptor): void {        
+        this.state = {
+            skip: 0,
+            take: this.state.take,
+            group: this.state.group,
+            filter: filter
+        };
         this.ftchCnt = true;
         this.loadGeo();
     }
     sortChange(state) {
-        this.state["sort"] = state;
+        this.state.sort = state;
         this.ftchCnt = false;
         this.loadGeo();
     }
@@ -163,8 +184,8 @@ export class geoComponent implements OnDestroy {
         this.isLoading = true;
         this.state = {
             skip: 0,
-            take: 25,
-            group: [],
+            take: this.state.take,
+            group: this.state.group,
             filter: {
                 logic: "and",
                 filters: [],

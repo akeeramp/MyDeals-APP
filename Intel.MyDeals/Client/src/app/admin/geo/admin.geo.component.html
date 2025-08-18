@@ -13,7 +13,7 @@
                     [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="true"
                     [group]="state.group" filterable="menu" (pageChange)="pageChange($event)" id="admin-geo-page"
-                    (filterChange)="filterChange($event)" (sortChange)="sortChange($event)">
+                    (filterChange)="filterChange($event)" (sortChange)="sortChange($event)" (groupChange)="groupChange($event)">
             <ng-template kendoGridToolbarTemplate>
                 <button (click)="clearFilter()" class="k-button clearButton">
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
