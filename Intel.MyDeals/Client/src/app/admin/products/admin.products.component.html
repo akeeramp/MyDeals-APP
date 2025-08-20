@@ -110,6 +110,13 @@
                                           title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
                                           [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
             </kendo-grid-excel>
+            <ng-template kendoPagerTemplate>
+                <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+                <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                <kendo-pager-info></kendo-pager-info>
+                <kendo-pager-page-sizes [pageSizes]="pageSizes"></kendo-pager-page-sizes>
+            </ng-template>
         </kendo-grid>
     </div>
 </div>
