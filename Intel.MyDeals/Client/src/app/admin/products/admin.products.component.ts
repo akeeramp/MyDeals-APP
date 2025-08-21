@@ -24,6 +24,7 @@ export class adminProductsComponent implements OnDestroy {
     }
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject<void>();
+    private isExportAll = false;
     private isLoading = true;
     private type = "numeric";
     private info = true;
@@ -115,7 +116,16 @@ export class adminProductsComponent implements OnDestroy {
         this.loadProducts();
     }
 
+    exportAll() {
+        this.isExportAll = true;
+    }
+
+    closeExportDialog() {
+        this.isExportAll = false;
+    }    
+
     exportToExcel() {
+        this.isExportAll = false;
         this.isLoading = true;
         let exportFilter = JSON.parse(JSON.stringify(this.dataforfilter));
         exportFilter.Take = -1;

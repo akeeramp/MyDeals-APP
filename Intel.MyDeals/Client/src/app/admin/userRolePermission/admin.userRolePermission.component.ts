@@ -66,7 +66,7 @@ export class userRolePermissionComponent implements OnInit {
         this.state.group = groups;
         const stateTest =  {
             skip: 0,
-            take: 25,
+            take: this.state.take,
             group: groups
 
         };
@@ -102,7 +102,7 @@ export class userRolePermissionComponent implements OnInit {
         this.isPageChange = false;
         this.state = {
             skip: 0,
-            take: 25,
+            take: this.state.take,
             group: [],
             filter: {   
                 logic: "and",
@@ -182,7 +182,7 @@ export class userRolePermissionComponent implements OnInit {
         this.isLoading = true;
         this.state = {
             skip: 0,
-            take: 25,
+            take: this.state.take,
             group: [],
             filter: {
                 logic: "and",
@@ -219,7 +219,7 @@ export class userRolePermissionComponent implements OnInit {
         this.isPageChange = false;
         this.state = {
             skip: 0,
-            take: 25,
+            take: this.state.take,
             filter: this.state.filter,
             group: this.state.group,
             sort: this.state.sort

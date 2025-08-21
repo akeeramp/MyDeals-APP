@@ -20,18 +20,12 @@
             <button class="btn btn-primary" (click)="validateData()">Upload Data</button>
         </div>
         <div class="col-md-6 notesBulk " style=" margin-left: auto; margin-right: auto; padding-top:-10px;">
-            <span class="redboldBulk">NOTE:</span><span>
-                &nbsp;Please use the template to upload the data.
-            </span>
-            <br />
-            <span class="redboldBulk">NOTE:</span><span>
-                &nbsp;Excel will not allow more than 2000 records at a time.
-            </span>
-            <br />
-            <span class="redboldBulk">NOTE:</span><span>
-                &nbsp;Please make sure that only one sheet in excel.
-            </span>
-            <br />
+            <span class="redboldBulk">NOTE:</span>
+            <ul>
+                <li>Please use the template to upload the data.</li>
+                <li>Excel will not allow more than 2000 records at a time.</li>
+                <li>Please make sure that only one sheet in excel.</li>
+            </ul>            
             <span style="margin-left: 0px;text-align:left;">
                 <a style="cursor: pointer;" class="text-dwnlod-style-admin" (click)="openMasterDataModal()">Click here for master data lookup</a>
             </span>

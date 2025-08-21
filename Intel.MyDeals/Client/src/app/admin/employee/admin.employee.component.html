@@ -1,4 +1,7 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<loading-panel-angular id="updateUserRoleLoading" class="updateUserRoleLoadingClass" style="z-index:500;" [show]="isLoading"
+                       [header]="'User Role'" [description]="'Please wait while we update the user role...'"[isShowFunFact]="true" [msgType]="'Info'"></loading-panel-angular>
+
 <div class="empRole" style="padding-top: 5px;">
     <h2 class="heading-employee-actions">Employee Role Manager</h2>
 

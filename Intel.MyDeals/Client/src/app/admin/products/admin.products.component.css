@@ -47,3 +47,30 @@ kendo-grid#adminproduct .k-column-title {
     justify-content: center;
     gap: 5px;
 }
+
+kendo-dialog-actions.rpd-excel-actions button.k-button.rpd-excel-ok {
+    background-color: #3c8dbc !important;
+    border-color: #367fa9 !important;
+    font-size: 16px;
+    border-radius: 3px !important;
+    padding: 8px !important;
+    width: auto !important;
+    max-width: 125px;
+    color: #fff
+}
+
+kendo-dialog-actions.rpd-excel-actions button.k-button.prd-excel-ok:hover,
+kendo-dialog-actions.rpd-excel-actions button.k-button.prd-excel-ok:active {
+    background-color: #3c8dbc !important;
+    border-color: #367fa9 !important;
+    color: #fff !important;
+    box-shadow: none !important
+}
+
+kendo-dialog-actions.rpd-excel-actions button.k-button.prd-excel-cancel:hover,
+kendo-dialog-actions.rpd-excel-actions button.k-button.prd-excel-cancel:active {
+    background-color: #f0f0f0 !important;
+    border-color: #f0f0f0 !important;
+    color: #111 !important;
+    box-shadow: none !important
+}

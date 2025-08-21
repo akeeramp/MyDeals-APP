@@ -22,9 +22,11 @@ export class EmployeeComponent implements PendingChangesGuard,OnDestroy {
     private isDeveloper = (<any>window).isDeveloper;
     private isTester = (<any>window).isTester;
     private isSuper = (<any>window).isSuper;
+    private isLoading = false;
     private roles: Array<any>;
     isDirty = false;
     save(): void {
+        this.isLoading = true;
         const data: OpUserTokenParameters = {
             "roleTypeId": this.roleTypeId,
             "isDeveloper": this.isDeveloper ? 1 : 0,
@@ -39,6 +41,7 @@ export class EmployeeComponent implements PendingChangesGuard,OnDestroy {
                 (<any>window).clearSessionData('/error/ResetMyCache');
                 document.location.href = "/error/ResetMyCache";
             }, err => {
+                this.isLoading = false;
                 this.loggerSvc.error("Unable to set User Roles.", err);
             });
     }
