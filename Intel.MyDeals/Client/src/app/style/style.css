@@ -3024,3 +3024,19 @@ kendo-popup kendo-grid-filter-menu-container dropdown-filter kendo-combobox .k-b
     position: relative;
     top: 1px;
 }
+
+kendo-grid-date-filter-menu kendo-grid-date-filter-menu-input kendo-datepicker.k-datepicker.k-input.k-input-md.k-rounded-md.k-input-solid {
+    width: 215px !important;
+}
+
+kendo-grid-date-filter-menu kendo-grid-date-filter-menu-input kendo-datepicker.k-datepicker.k-input.k-input-md.k-rounded-md.k-input-solid kendo-dateinput.k-input.k-dateinput {
+    min-width: 168px;
+}
+
+kendo-grid-date-filter-menu kendo-grid-date-filter-menu-input kendo-datepicker.k-datepicker.k-input.k-input-md.k-rounded-md.k-input-solid button.k-input-button.k-button.k-icon-button.k-button-md.k-button-solid.k-button-solid-base {
+    max-width: 45px;
+}
+
+[id^="kendo-popup"] .k-calendar-container .k-calendar-navigation {
+    display: none;
+}
