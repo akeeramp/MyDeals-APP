@@ -154,10 +154,6 @@
       <Project>{2f3217ad-e46b-4dab-82c2-11e007b65a9c}</Project>
       <Name>Intel.MyDeals.BusinessRules</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Intel.MyDeals.DataLibrary.Test\Intel.MyDeals.DataLibrary.Test.csproj">
-      <Project>{bb4f6af0-3519-4cf3-b0f1-7aee380348ff}</Project>
-      <Name>Intel.MyDeals.DataLibrary.Test</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Intel.MyDeals.DataLibrary\Intel.MyDeals.DataLibrary.csproj">
       <Project>{b45850dc-1515-40d2-bfa5-15c8dffc5af2}</Project>
       <Name>Intel.MyDeals.DataLibrary</Name>
