@@ -3,7 +3,6 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using Moq;
-using NUnit.Core;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
