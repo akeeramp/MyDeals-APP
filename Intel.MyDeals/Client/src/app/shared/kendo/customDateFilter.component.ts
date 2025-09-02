@@ -15,7 +15,7 @@ const closest = (node: any, predicate: any): any => {
     template: `<div class="k-form">
     <label class="k-form-field">
         <kendo-dropdownlist
-        [data]="listItems"
+        [data]="operators"
         textField="text"
         valueField="value"
         [(ngModel)]="selectedValue"
@@ -34,6 +34,7 @@ export class CustomDateFilterComponent implements OnInit, OnDestroy {
     @Input() public filter: any;
     @Input() public filterService: FilterService;
     @Input() public field: string;
+    @Input() excludeOperators: boolean = false;
 
     constructor(private element: ElementRef,
         private popupService: SinglePopupService) {
@@ -57,7 +58,12 @@ export class CustomDateFilterComponent implements OnInit, OnDestroy {
         { text: "Is after or equal", value: 'gte' },
         { text: "Is before or equal", value: 'lte' },
         
-      ];
+    ];
+
+    public get operators(): Array<any> { 
+        return this.excludeOperators ? this.listItems.filter(item => item.value !== 'eq' && item.value !== 'lte') : this.listItems;
+    }
+
     public selectedValue = "gte";
 
     public ngOnInit(): void {

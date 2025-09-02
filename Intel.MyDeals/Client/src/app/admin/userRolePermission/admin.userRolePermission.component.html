@@ -147,7 +147,7 @@
                     </kendo-grid-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="ROW_REFRESH_DTM" title="Date">
                         <ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column" let-filterService="filterService">
-                            <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService"></date-range-filter>
+                            <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService" [excludeOperators]="true"></date-range-filter>
                         </ng-template>
                     </kendo-grid-column>
                     <ng-template kendoPagerTemplate>
