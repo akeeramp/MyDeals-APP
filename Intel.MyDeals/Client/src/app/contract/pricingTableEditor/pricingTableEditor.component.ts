@@ -35,6 +35,7 @@ import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/ove
 import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
 import { dropDownModalComponent } from '../ptModals/dropDownModal/dropDownModal.component';
 import { HandsonLicenseKey } from '../../shared/config/handsontable.licenseKey.config';
+import { infoModalComponent } from '../ptModals/infoModal/infoModal.component';
 
 @Component({
     selector: 'pricing-table-editor',
@@ -1464,7 +1465,35 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 }
                 this.dirty = false;
                 this.undoEnable = false;
-                await this.saveEntireContractRoot(finalPTR, deleteDCIDs);
+                //Showing the flex overlap warning modal if flex and having overlap products and date range
+                let showFlexOverlapWarning = false;
+                if (this.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+                    showFlexOverlapWarning = PTE_Save_Util.isPTEWarning(finalPTR)
+                }
+                //If showFlexOverlapWarning true, then only show the modal
+                if (showFlexOverlapWarning) {
+                    const DIALOG_REF = this.dialog.open(infoModalComponent, {
+                        height: 'auto',
+                        width: '600px',
+                        data: { PTR: finalPTR, curPricingTable: this.curPricingTable, sourceKey: "PTR_USER_PRD" }
+                    });
+                    DIALOG_REF.afterClosed().subscribe(async (result) => {
+                        if (result) {
+                            finalPTR.forEach(element => {
+                                if (element._behaviors && element._behaviors.warningMsg) {
+                                    element["SYS_COMMENTS"] = element._behaviors.warningMsg["PTR_USER_PRD_SYS_COMMENT"];
+                                }
+                            });
+                            await this.saveEntireContractRoot(finalPTR, deleteDCIDs);
+                        } else {
+                            this.generateHandsonTable(finalPTR);
+                            this.loggerService.warn('Mandatory validations failure.', 'Warning');
+                            this.setBusy("", "", "", false);
+                        }
+                    });
+                } else {
+                    await this.saveEntireContractRoot(finalPTR, deleteDCIDs);
+                }
             }
         } else {
             if (this.showErrorMsg != false) {

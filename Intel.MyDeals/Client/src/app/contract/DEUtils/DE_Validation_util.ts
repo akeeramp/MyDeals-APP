@@ -303,9 +303,22 @@ export class DE_Validation_Util {
                                         ((StaticMomentService.moment(data[tmpProd].END_DT).isSameOrBefore(StaticMomentService.moment(el.END_DT))) &&
                                         (StaticMomentService.moment(data[tmpProd].END_DT).isSameOrAfter(StaticMomentService.moment(el.START_DT))))) {
                                         if ((duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID] !== undefined) {
-                                            el._behaviors.isError["PTR_USER_PRD"] = true;
-                                            el._behaviors.validMsg["PTR_USER_PRD"] = "Cannot have duplicate product(s). Product(s): " +
-                                                (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapProduct + " are duplicated within rows " + (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapDCID + ". Please check the date range overlap.";
+                                            if (el.PAYOUT_BASED_ON == data[tmpProd].PAYOUT_BASED_ON) {
+                                                el._behaviors.isWarning["PTR_USER_PRD"] = true;
+                                                const OverlapDCID = (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapDCID.map(Number).filter(n => n > 0);
+                                                if (OverlapDCID.length > 0) {
+                                                    el._behaviors.warningMsg["PTR_USER_PRD_SYS_COMMENT"] = "Product(s): " + (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapProduct +
+                                                        " are duplicated within rows " + (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapDCID + ", with overlapping date ranges, and were ignored.";
+                                                } else {
+                                                    el._behaviors.warningMsg["PTR_USER_PRD_SYS_COMMENT"] = "Product(s): " + (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapProduct + " are duplicated, with overlapping date ranges, and were ignored."
+                                                }
+                                                el._behaviors.warningMsg["PTR_USER_PRD"] = "Product(s): " + (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapProduct + " are duplicated within rows " + (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapDCID + ". Please check the date range overlap.";
+                                            }
+                                            else {
+                                                el._behaviors.isError["PTR_USER_PRD"] = true;
+                                                el._behaviors.validMsg["PTR_USER_PRD"] = "Cannot have duplicate product(s). Product(s): " +
+                                                    (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapProduct + " are duplicated within rows " + (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapDCID + ". Please check the date range overlap.";
+                                            }
                                         }
                                     }
                                 }

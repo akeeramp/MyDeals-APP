@@ -30,6 +30,7 @@ import { SecurityService } from "../../shared/services/security.service"
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service';
+import { infoModalComponent } from '../ptModals/infoModal/infoModal.component';
 
 @Component({
     selector: 'deal-editor',
@@ -1348,110 +1349,32 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             }
             this.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
             let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups, this.prcTblRowData, this.overlapFlexDEResult,this.oldDEData);
-            if (this.isDeveloper || this.isTester) {
-                this.setPerfBarDetails('mark', "Built data structure", "", false, false);
-                this.perfComp.emit(this.perfBar);
+            //Showing the flex overlap warning modal if flex and having overlap products and date range
+            let showFlexOverlapWarning = false;
+            if (this.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+                showFlexOverlapWarning = PTE_Save_Util.isPTEWarning(this.gridResult)
             }
-            if (isShowStopError) {
-                this.loggerService.warn("Please fix validation errors before proceeding", "");
-                this.gridData = process(this.gridResult, this.state);
-                this.isDataLoading = false;
-                this.setBusy("", "", "", false);
-            } else {
-                var cashObj = this.gridResult.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
-                if (cashObj && cashObj.length > 0) {
-                    if (this.VendorDropDownResult != null && this.VendorDropDownResult != undefined && this.VendorDropDownResult.length > 0) {
-                        var customerVendor = this.VendorDropDownResult;
-                        each(this.gridResult, (item) => {
-                            var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
-                            if (partnerID && partnerID.length == 1) {
-                                item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
+            //If showFlexOverlapWarning true, then only show the modal
+            if (showFlexOverlapWarning) {
+                const DIALOG_REF = this.dialog.open(infoModalComponent, {
+                    height: 'auto',
+                    width: '600px',
+                    data: { PTR: this.gridResult, curPricingTable: this.curPricingTable, sourceKey: "PTR_USER_PRD" }
+                });
+                DIALOG_REF.afterClosed().subscribe(async (result) => {
+                    if (result) {
+                        this.gridResult.forEach(element => {
+                            if (element._behaviors && element._behaviors.warningMsg) {
+                                element["SYS_COMMENTS"] = element._behaviors.warningMsg["PTR_USER_PRD_SYS_COMMENT"];
                             }
                         });
+                        await this.updateContract(isShowStopError);
+                    } else {
+                        await this.updateContract(true);
                     }
-                }
-                //added this check should done after the validation check previously it was done for before validation
-                each(this.gridResult, (item) => {
-                    if (item.HAS_TRACKER == "1" && item._behaviors.isDirty != undefined) {
-                        if (item._behaviors.isDirty['CONSUMPTION_CUST_PLATFORM'] == true || item._behaviors.isDirty['CONSUMPTION_SYS_CONFIG'] == true ||
-                            item._behaviors.isDirty['CNSMPTN_LKBACK_PERD_DT'] == true || item._behaviors.isDirty['CONSUMPTION_REASON'] == true ||
-                            item._behaviors.isDirty['CONSUMPTION_CUST_SEGMENT'] == true || item._behaviors.isDirty['CONSUMPTION_CUST_RPT_GEO'] == true ||
-                            item._behaviors.isDirty['CONSUMPTION_COUNTRY_REGION'] == true || item._behaviors.isDirty['CONSUMPTION_REASON_CMNT'] == true ||
-                            item._behaviors.isDirty['CONSUMPTION_TYPE'] == true || item._behaviors.isDirty['SYS_PRICE_POINT'] == true ||
-                            item._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || item._behaviors.isDirty['QLTR_PROJECT'] == true) {
-                            if (item.LAST_REDEAL_DT == null || item.LAST_REDEAL_DT == '' || item.LAST_REDEAL_DT == "Invalid date") {
-                                item.LAST_REDEAL_DT = this.datePipe.transform(new Date(), "MM/dd/yyyy");
-                            }
-                        }
-                    }
-                })
-                let data = {
-                    "Contract": [],
-                    "PricingStrategy": [],
-                    "PricingTable": [this.curPricingTable],
-                    "PricingTableRow": [],
-                    "WipDeals": this.gridResult != undefined ? this.gridResult.filter(x => x._dirty == true) : [],
-                    "EventSource": 'WIP_DEAL',
-                    "Errors": {}
-                }
-
-                if (this.isDeveloper || this.isTester) {
-                    this.setPerfBarDetails('setFinalDetails', "Gather data to pass", "UI", false, false);
-                    this.perfComp.emit(this.perfBar);
-                    this.setPerfBarDetails('setInitialDetails', "Update Contract And CurPricing Table", "MT", false, false);
-                    this.perfComp.emit(this.perfBar);
-                }
-                let response: any = await this.pteService.updateContractAndCurrentPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((err) => {
-                    this.loggerService.error("dealEditorComponent::saveUpdateDEAPI::", err);
-                    this.isDataLoading = false;
                 });
-                if (response != undefined && response != null && response.Data != undefined && response.Data != null) {
-                    if (this.isDeveloper || this.isTester) {
-                        this.addPerfTimes.emit(response.PerformanceTimes);
-                        this.setPerfBarDetails('setFinalDetails', "Update Contract And CurPricing Table", "MT", false, false);
-                        this.perfComp.emit(this.perfBar);
-                        this.setPerfBarDetails('setInitialDetails', "Processing returned data", "UI", false, false);
-                        this.perfComp.emit(this.perfBar);
-                        this.setPerfBarDetails('mark', "Constructing returnset", "", false, false);
-                        this.perfComp.emit(this.perfBar);
-                    }
-                    this.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
-                    if (response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
-                        this.savedResponseWarning = [];
-                        await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
-                        let isanyWarnings = false;
-                        if (this.gridResult.length != response.Data.WIP_DEAL) {
-                            each(this.gridResult, (item) => {
-                                let isResponse = false;
-                                each(response.Data.WIP_DEAL, (wipItem) => {
-                                    if (wipItem.DC_ID == item.DC_ID)
-                                        isResponse = true;
-                                });
-                                if (!isResponse) {
-                                    isanyWarnings = item.warningMessages !== undefined && item.warningMessages.length > 0 ? true : false;
-                                }
-                            });
-                        }
-                        isanyWarnings = response.Data.WIP_DEAL.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
-                        if (isanyWarnings) {
-                            //to avoid losing warning details which comes only during save action
-                            PTE_Save_Util.saveWarningDetails(response.Data.WIP_DEAL, this.savedResponseWarning);
-                            this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning", true);
-                        }
-                        else {
-                            this.setBusy("Save Successful", "Saved the contract", "Success", true);
-                        }
-                        if (this.isTenderContract) this.tmDirec.emit('');
-                    }
-                }
-                await this.getWipDealData();
-                if (this.isDeveloper || this.isTester) {
-                    this.setPerfBarDetails('setFinalDetails', "Processing returned data", "UI", false, false);
-                    this.perfComp.emit(this.perfBar);
-                    this.setPerfBarDetails('setFinalDetails', "Save Contract Root", "UX", false, false);
-                    this.perfComp.emit(this.perfBar);
-                }
-                this.dirty = false;
+            } else {
+                await this.updateContract(isShowStopError);
             }
         }
          else {
@@ -1513,6 +1436,113 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
+    async updateContract(isShowStopError) {
+        if (this.isDeveloper || this.isTester) {
+            this.setPerfBarDetails('mark', "Built data structure", "", false, false);
+            this.perfComp.emit(this.perfBar);
+        }
+        if (isShowStopError) {
+            this.loggerService.warn("Please fix validation errors before proceeding", "");
+            this.gridData = process(this.gridResult, this.state);
+            this.isDataLoading = false;
+            this.setBusy("", "", "", false);
+        } else {
+            var cashObj = this.gridResult.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+            if (cashObj && cashObj.length > 0) {
+                if (this.VendorDropDownResult != null && this.VendorDropDownResult != undefined && this.VendorDropDownResult.length > 0) {
+                    var customerVendor = this.VendorDropDownResult;
+                    each(this.gridResult, (item) => {
+                        var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
+                        if (partnerID && partnerID.length == 1) {
+                            item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
+                        }
+                    });
+                }
+            }
+            //added this check should done after the validation check previously it was done for before validation
+            each(this.gridResult, (item) => {
+                if (item.HAS_TRACKER == "1" && item._behaviors.isDirty != undefined) {
+                    if (item._behaviors.isDirty['CONSUMPTION_CUST_PLATFORM'] == true || item._behaviors.isDirty['CONSUMPTION_SYS_CONFIG'] == true ||
+                        item._behaviors.isDirty['CNSMPTN_LKBACK_PERD_DT'] == true || item._behaviors.isDirty['CONSUMPTION_REASON'] == true ||
+                        item._behaviors.isDirty['CONSUMPTION_CUST_SEGMENT'] == true || item._behaviors.isDirty['CONSUMPTION_CUST_RPT_GEO'] == true ||
+                        item._behaviors.isDirty['CONSUMPTION_COUNTRY_REGION'] == true || item._behaviors.isDirty['CONSUMPTION_REASON_CMNT'] == true ||
+                        item._behaviors.isDirty['CONSUMPTION_TYPE'] == true || item._behaviors.isDirty['SYS_PRICE_POINT'] == true ||
+                        item._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || item._behaviors.isDirty['QLTR_PROJECT'] == true) {
+                        if (item.LAST_REDEAL_DT == null || item.LAST_REDEAL_DT == '' || item.LAST_REDEAL_DT == "Invalid date") {
+                            item.LAST_REDEAL_DT = this.datePipe.transform(new Date(), "MM/dd/yyyy");
+                        }
+                    }
+                }
+            })
+            let data = {
+                "Contract": [],
+                "PricingStrategy": [],
+                "PricingTable": [this.curPricingTable],
+                "PricingTableRow": [],
+                "WipDeals": this.gridResult != undefined ? this.gridResult.filter(x => x._dirty == true) : [],
+                "EventSource": 'WIP_DEAL',
+                "Errors": {}
+            }
+
+            if (this.isDeveloper || this.isTester) {
+                this.setPerfBarDetails('setFinalDetails', "Gather data to pass", "UI", false, false);
+                this.perfComp.emit(this.perfBar);
+                this.setPerfBarDetails('setInitialDetails', "Update Contract And CurPricing Table", "MT", false, false);
+                this.perfComp.emit(this.perfBar);
+            }
+            let response: any = await this.pteService.updateContractAndCurrentPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((err) => {
+                this.loggerService.error("dealEditorComponent::saveUpdateDEAPI::", err);
+                this.isDataLoading = false;
+            });
+            if (response != undefined && response != null && response.Data != undefined && response.Data != null) {
+                if (this.isDeveloper || this.isTester) {
+                    this.addPerfTimes.emit(response.PerformanceTimes);
+                    this.setPerfBarDetails('setFinalDetails', "Update Contract And CurPricing Table", "MT", false, false);
+                    this.perfComp.emit(this.perfBar);
+                    this.setPerfBarDetails('setInitialDetails', "Processing returned data", "UI", false, false);
+                    this.perfComp.emit(this.perfBar);
+                    this.setPerfBarDetails('mark', "Constructing returnset", "", false, false);
+                    this.perfComp.emit(this.perfBar);
+                }
+                this.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
+                if (response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
+                    this.savedResponseWarning = [];
+                    await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
+                    let isanyWarnings = false;
+                    if (this.gridResult.length != response.Data.WIP_DEAL) {
+                        each(this.gridResult, (item) => {
+                            let isResponse = false;
+                            each(response.Data.WIP_DEAL, (wipItem) => {
+                                if (wipItem.DC_ID == item.DC_ID)
+                                    isResponse = true;
+                            });
+                            if (!isResponse) {
+                                isanyWarnings = item.warningMessages !== undefined && item.warningMessages.length > 0 ? true : false;
+                            }
+                        });
+                    }
+                    isanyWarnings = response.Data.WIP_DEAL.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
+                    if (isanyWarnings) {
+                        //to avoid losing warning details which comes only during save action
+                        PTE_Save_Util.saveWarningDetails(response.Data.WIP_DEAL, this.savedResponseWarning);
+                        this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning", true);
+                    }
+                    else {
+                        this.setBusy("Save Successful", "Saved the contract", "Success", true);
+                    }
+                    if (this.isTenderContract) this.tmDirec.emit('');
+                }
+            }
+            await this.getWipDealData();
+            if (this.isDeveloper || this.isTester) {
+                this.setPerfBarDetails('setFinalDetails', "Processing returned data", "UI", false, false);
+                this.perfComp.emit(this.perfBar);
+                this.setPerfBarDetails('setFinalDetails', "Save Contract Root", "UX", false, false);
+                this.perfComp.emit(this.perfBar);
+            }
+            this.dirty = false;
+        }
+    }
 
      async validatetrackerEffectiveDate(data: Array<any>){
        

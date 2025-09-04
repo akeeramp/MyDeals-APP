@@ -163,6 +163,8 @@ export class PTE_Common_Util {
         if (!item._behaviors.isError) item._behaviors.isError = {};
         if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
         if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+        if (!item._behaviors.isWarning) item._behaviors.isWarning = {};
+        if (!item._behaviors.warningMsg) item._behaviors.warningMsg = {};
     }
     static setBehaviorsValidMessage(item: any, elem: string, elemLabel: string, cond: string) {
         if (elem === 'ECAP_PRICE' && cond == 'equal-zero') {

@@ -18,7 +18,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
@@ -551,6 +551,8 @@
     <Content Include="Client\src\app\contract\complexStacking\complexStacking.component.html" />
     <Content Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingModal.component.css" />
     <Content Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingModal.component.html" />
+    <Content Include="Client\src\app\contract\ptModals\infoModal\infoModal.component.css" />
+    <Content Include="Client\src\app\contract\ptModals\infoModal\infoModal.component.html" />
     <Content Include="Client\src\app\reporting\productDetailsReport\productDetailsReport.component.css" />
     <Content Include="Client\src\app\reporting\productDetailsReport\productDetailsReport.component.html" />
     <Content Include="Client\src\app\reporting\shared\powerBISearch\powerBISearch.component.html" />
@@ -865,6 +867,7 @@
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingDialog.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingModal.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\infoModal\infoModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\reporting.module.ts" />
     <TypeScriptCompile Include="Client\src\app\reporting\productDetailsReport\prodSel_Util.ts" />
     <TypeScriptCompile Include="Client\src\app\reporting\productDetailsReport\productDetailsReport.component.ts" />
