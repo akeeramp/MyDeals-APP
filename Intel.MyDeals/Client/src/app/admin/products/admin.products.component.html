@@ -90,12 +90,12 @@
             </kendo-grid-column>
             <kendo-grid-column  format="{0: MM/dd/yyyy}" [headerClass]="{'headerClass':true}" [filterable]="true" field="PRD_STRT_DTM" title="Start Date">
                 <ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column" let-filterService="filterService">
-                    <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService" [excludeOperators]="true"></date-range-filter>
+                    <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService" ></date-range-filter>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column  format="{0: MM/dd/yyyy}" [headerClass]="{'headerClass':true}" [filterable]="true" field="PRD_END_DTM" title="End Date">
                 <ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column" let-filterService="filterService">
-                    <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService" [excludeOperators]="true"></date-range-filter>
+                    <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService" ></date-range-filter>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Is Active" filter="boolean">

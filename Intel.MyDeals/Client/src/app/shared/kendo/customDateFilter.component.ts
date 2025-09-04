@@ -15,7 +15,7 @@ const closest = (node: any, predicate: any): any => {
     template: `<div class="k-form">
     <label class="k-form-field">
         <kendo-dropdownlist
-        [data]="operators"
+        [data]="listItems"
         textField="text"
         valueField="value"
         [(ngModel)]="selectedValue"
@@ -24,8 +24,8 @@ const closest = (node: any, predicate: any): any => {
         class="margin-bottom-five"
       >
       </kendo-dropdownlist>
-        <kendo-datepicker (valueChange)="onStartChange($event)" [navigation]="false"
-            [(ngModel)]="start"  [popupSettings]="popupSettings">
+        <kendo-datepicker (valueChange)="onselectedDateChange($event)" [navigation]="false"
+            [(ngModel)]="selectedDate"  [popupSettings]="popupSettings">
         </kendo-datepicker>
     </label>
 </div>`
@@ -34,7 +34,6 @@ export class CustomDateFilterComponent implements OnInit, OnDestroy {
     @Input() public filter: any;
     @Input() public filterService: FilterService;
     @Input() public field: string;
-    @Input() excludeOperators: boolean = false;
 
     constructor(private element: ElementRef,
         private popupService: SinglePopupService) {
@@ -46,7 +45,7 @@ export class CustomDateFilterComponent implements OnInit, OnDestroy {
             }
         });
     }
-    public start: any;
+    public selectedDate: any;
     public popupSettings: any = {
         popupClass: 'date-range-filter'
     };
@@ -60,16 +59,12 @@ export class CustomDateFilterComponent implements OnInit, OnDestroy {
         
     ];
 
-    public get operators(): Array<any> { 
-        return this.excludeOperators ? this.listItems.filter(item => item.value !== 'eq' && item.value !== 'lte') : this.listItems;
-    }
-
     public selectedValue = "gte";
 
     public ngOnInit(): void {
         const filter= this.findValue();
         if(filter){
-            this.start=filter.value;
+            this.selectedDate=filter.value;
             this.selectedValue=filter.operator;
         }
     }
@@ -78,11 +73,11 @@ export class CustomDateFilterComponent implements OnInit, OnDestroy {
         this.popupSubscription.unsubscribe();
     }
 
-    public onStartChange(value: any): void {
+    public onselectedDateChange(value: any): void {
         this.filterRange(value);
     }
     public onFilterChange(obj:any,){
-        this.filterRange(this.start);
+        this.filterRange(this.selectedDate);
         }
 
     private findValue() {
@@ -90,16 +85,50 @@ export class CustomDateFilterComponent implements OnInit, OnDestroy {
       return filter ? filter : null;
     }
 
-    private filterRange(start) {
+    private filterRange(selectedDate) {
         const filters = [];
 
-        if (start){
-            filters.push({
-              field: this.field,
-              operator: this.selectedValue,
-              value: this.start
-            });
-            this.start = start;
+        if (selectedDate) {
+            const filterValue = selectedDate;
+            // handle different comparison operators
+            if (this.selectedValue === 'eq') {
+                // Equal to: check entire day
+                const selectedDateOfDay = new Date(filterValue);
+                selectedDateOfDay.setHours(0, 0, 0, 0);
+
+                const endOfDay = new Date(filterValue);
+                endOfDay.setHours(23, 59, 59, 999);
+
+                filters.push({
+                    field: this.field,
+                    operator: 'gte',
+                    value: selectedDateOfDay
+                });
+                filters.push({
+                    field: this.field,
+                    operator: 'lte',
+                    value: endOfDay
+                });
+            } else if (this.selectedValue === 'lte') {
+                // Less than or equal: end of selected day
+                const endOfDay = new Date(filterValue);
+                endOfDay.setHours(23, 59, 59, 999);
+
+                filters.push({
+                    field: this.field,
+                    operator: 'lte',
+                    value: endOfDay
+                });
+            } else {
+                // For 'gt','gte' and 'lt', use as-is
+                filters.push({
+                    field: this.field,
+                    operator: this.selectedValue,
+                    value: filterValue
+                });
+            }
+
+            this.selectedDate = selectedDate;
         }
 
         this.filterService.filter({

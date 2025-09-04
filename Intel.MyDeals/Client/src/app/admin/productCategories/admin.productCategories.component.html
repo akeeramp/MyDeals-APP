@@ -144,7 +144,7 @@
 							   filter="date" format="{0:M/d/yyyy}" [editable]="false">
 				<ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column"
 							 let-filterService="filterService">
-					<date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService" [excludeOperators]="true">
+					<date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService" >
 					</date-range-filter>
 				</ng-template>
 				<ng-template kendoGridCellTemplate let-dataItem>

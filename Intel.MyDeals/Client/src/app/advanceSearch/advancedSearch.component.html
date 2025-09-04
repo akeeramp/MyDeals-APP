@@ -140,7 +140,7 @@
                                      [filterService]="filterService" [data]="advancedSearchDropdownFilter[column.field]"></dropDown-filter>
                 </div>
                 <div *ngIf="(column.field == 'START_DT' || column.field == 'END_DT' || column.field == 'OEM_PLTFRM_LNCH_DT' || column.field == 'OEM_PLTFRM_EOL_DT')">
-                    <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService" [excludeOperators]="true">
+                    <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
                     </date-range-filter>
                 </div>
                 <div *ngIf="this.advancedSearchDropdownFilter[column.field] == undefined && column.field != 'Customer_NM' && !(column.field == 'START_DT' || column.field == 'END_DT' || column.field == 'OEM_PLTFRM_LNCH_DT' || column.field == 'OEM_PLTFRM_EOL_DT' || column.field == 'DC_ID' || column.field == 'CAP_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'VOLUME' || column.field == 'STRT_VOL_VAL' || column.field == 'END_VOL_VAL' || column.field == 'RATE_VAL' || column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'CONSUMPTION_LOOKBACK_PERIOD' )">
