@@ -152,7 +152,10 @@ export class PTE_Save_Util {
                                     ((StaticMomentService.moment(PTR[tmpProd].END_DT).isSameOrBefore(StaticMomentService.moment(el.END_DT))) &&
                                     (StaticMomentService.moment(PTR[tmpProd].END_DT).isSameOrAfter(StaticMomentService.moment(el.START_DT))))) {
                                     if (isFlexPs && (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID] !== undefined) {
+                                        const PTR_USER_PRD_ERR_MSG = "Cannot have duplicate product(s). Product(s): " +
+                                            (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapProduct + " are duplicated within rows " + (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapDCID + ". Please check the date range overlap.";
                                         if (el.PAYOUT_BASED_ON == PTR[tmpProd].PAYOUT_BASED_ON) {
+                                            el._behaviors.warningMsg["PTR_USER_PRD_HANDSON_ERR_MSG"] = PTR_USER_PRD_ERR_MSG;
                                             el._behaviors.isWarning["PTR_USER_PRD"] = true;
                                             const OverlapDCID = (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapDCID.map(Number).filter(n => n > 0);
                                             if (OverlapDCID.length > 0) {
@@ -165,8 +168,7 @@ export class PTE_Save_Util {
                                         }
                                         else {
                                             el._behaviors.isError["PTR_USER_PRD"] = true;
-                                            el._behaviors.validMsg["PTR_USER_PRD"] = "Cannot have duplicate product(s). Product(s): " +
-                                                (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapProduct + " are duplicated within rows " + (duplicateFlexRows['duplicateProductDCIds'])[el.DC_ID].OverlapDCID + ". Please check the date range overlap.";
+                                            el._behaviors.validMsg["PTR_USER_PRD"] = PTR_USER_PRD_ERR_MSG;
                                         }
                                     }
                                 }

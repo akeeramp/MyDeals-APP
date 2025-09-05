@@ -1361,7 +1361,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                     width: '600px',
                     data: { PTR: this.gridResult, curPricingTable: this.curPricingTable, sourceKey: "PTR_USER_PRD" }
                 });
-                DIALOG_REF.afterClosed().subscribe(async (result) => {
+                await DIALOG_REF.afterClosed().toPromise().then(async (result) => {
                     if (result) {
                         this.gridResult.forEach(element => {
                             if (element._behaviors && element._behaviors.warningMsg) {
@@ -1370,6 +1370,12 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                         });
                         await this.updateContract(isShowStopError);
                     } else {
+                        this.gridResult.forEach(element => {
+                            if (element._behaviors && element._behaviors.warningMsg) {
+                                element._behaviors.isError["PTR_USER_PRD"] = true;
+                                element._behaviors.validMsg["PTR_USER_PRD"] = element._behaviors.warningMsg["PTR_USER_PRD_HANDSON_ERR_MSG"];
+                            }
+                        });
                         await this.updateContract(true);
                     }
                 });
