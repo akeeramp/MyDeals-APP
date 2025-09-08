@@ -173,11 +173,13 @@ export class dealToolsComponent implements OnDestroy {
         }
         this.dataItem._settings.C_HOLD_DEALS = ((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA" || (<any>window).usrRole === "DA");
         this.dataItem._settings.C_DEL_DEALS = (((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA") && (this.dataItem?.SALESFORCE_ID === undefined || this.dataItem?.SALESFORCE_ID === ""));
-
+        
         if (this.dataItem?._settings.C_DEL_DEALS === undefined || this.dataItem?._settings.C_DEL_DEALS === false) {
             // In tenders screen for DA user, this is undefined but skipping over
             this.isDeleteEnabled = false;
         }
+        if (this.isDealExpired(this.dataItem.END_DT)) this.isDeleteEnabled = false;
+        
         //PS object is holding the Pricing Strategy ID with Pricing Strategy Status
         this.dataItem.PS = {};
         if (this.contractData.PRC_ST) {

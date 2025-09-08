@@ -166,7 +166,7 @@
         </div>
 
         <!-- Hold icon -->
-        <div class='fl md-icon' *ngIf="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold' && isTenderContract == false && getHoldVisibility(dataItem) == false">
+        <div class='fl md-icon' *ngIf="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold' && isTenderContract == false && getHoldVisibility(dataItem) == false && !isDealExpired(dataItem.END_DT)">
             <i [ngClass]='getHoldIcon(dataItem)' [ngStyle]="getHoldStyle(dataItem)" title="{{getHoldTitle(dataItem)}}" style="font-size: 20px !important;" (click)="clkHoldIcon(dataItem)" *ngIf="!openHoldDialog && !openUnHoldDialog"></i>
             <kendo-dialog class="dt-on-hold k-dialog-popup-design" *ngIf="openHoldDialog" (close)="closeDialogs()" [maxWidth]="572">
                 <div class="dealToolsKendoAlert" style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">

@@ -174,6 +174,15 @@ export class dealEditorCellTemplateComponent {
                     classNm = "";
                 }
             }
+            if (passedData.END_DATE) {
+                let hardExp = new Date(passedData.END_DATE);
+                hardExp.setDate(hardExp.getDate() + this.NumberOfDaysToExpireDeal);
+                if (hardExp > new Date())
+                    classNm += " isReadOnlyCell";
+            }
+            if (passedData.WF_STG_CD && passedData.WF_STG_CD == 'cancelled') {
+                classNm += " isReadOnlyCell";
+            }
         } 
         return classNm.replace(" isRequiredCell", "");
     }
