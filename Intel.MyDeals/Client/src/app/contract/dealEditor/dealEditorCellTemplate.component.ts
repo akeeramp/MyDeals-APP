@@ -174,13 +174,14 @@ export class dealEditorCellTemplateComponent {
                     classNm = "";
                 }
             }
-            if (passedData.END_DATE) {
+            //used to make columns readonly expired active deals & cancelled deals except IQR tender deals (salesforce_id identifier)
+            if (passedData.END_DATE && passedData.SALESFORCE_ID == '') {
                 let hardExp = new Date(passedData.END_DATE);
                 hardExp.setDate(hardExp.getDate() + this.NumberOfDaysToExpireDeal);
-                if (hardExp > new Date())
+                if (hardExp > new Date() && passedData.WF_STG_CD == 'active')
                     classNm += " isReadOnlyCell";
             }
-            if (passedData.WF_STG_CD && passedData.WF_STG_CD == 'cancelled') {
+            if (passedData.WF_STG_CD && passedData.WF_STG_CD == 'cancelled' && passedData.SALESFORCE_ID == '') {
                 classNm += " isReadOnlyCell";
             }
         } 

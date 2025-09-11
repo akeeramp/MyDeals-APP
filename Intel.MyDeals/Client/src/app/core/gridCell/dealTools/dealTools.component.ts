@@ -178,7 +178,8 @@ export class dealToolsComponent implements OnDestroy {
             // In tenders screen for DA user, this is undefined but skipping over
             this.isDeleteEnabled = false;
         }
-        if (this.isDealExpired(this.dataItem?.END_DT) || this.dataItem?.WF_STG_CD == 'cancelled') this.isDeleteEnabled = false;
+        //used to lock all expired active deals & cancelled deals and only show commen, history, ql & atttachment
+        if (((this.isDealExpired(this.dataItem?.END_DT) && this.dataItem?.WF_STG_CD == 'Active') || this.dataItem?.WF_STG_CD == 'cancelled') && this.dataItem.SALESFORCE_ID == '') this.isDeleteEnabled = false;
         
         //PS object is holding the Pricing Strategy ID with Pricing Strategy Status
         this.dataItem.PS = {};
