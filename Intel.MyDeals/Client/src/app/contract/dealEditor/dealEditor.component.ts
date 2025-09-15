@@ -1338,7 +1338,10 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         
         if (!this.in_Is_Tender_Dashboard) {
             this.isDatesOverlap = false;
-            this.datesModified = false;
+            //TWC5971-641: If not flex, then reset the datesModified flag to false to avoid the flex warning modal
+            if (!(this.curPricingTable.OBJ_SET_TYPE_CD === "FLEX")) {
+                this.datesModified = false;
+            }
             this.isDataLoading = true;
             this.savingDeal = true;
             this.isWarning = false;
@@ -1355,7 +1358,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                 showFlexOverlapWarning = PTE_Save_Util.isPTEWarning(this.gridResult)
             }
             //If showFlexOverlapWarning true, then only show the modal
-            if (showFlexOverlapWarning) {
+            if (showFlexOverlapWarning && this.datesModified) {
                 const DIALOG_REF = this.dialog.open(infoModalComponent, {
                     height: 'auto',
                     width: '600px',
@@ -1363,6 +1366,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                 });
                 await DIALOG_REF.afterClosed().toPromise().then(async (result) => {
                     if (result) {
+                        this.datesModified = false;
                         this.gridResult.forEach(element => {
                             if (element._behaviors && element._behaviors.warningMsg) {
                                 element["SYS_COMMENTS"] = element._behaviors.warningMsg["PTR_USER_PRD_SYS_COMMENT"];
