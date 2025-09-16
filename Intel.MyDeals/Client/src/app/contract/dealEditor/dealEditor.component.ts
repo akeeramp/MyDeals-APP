@@ -1181,14 +1181,25 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             else {
                 args.sender.cellClick.closed = false;
                 args.sender.cellClick.isStopped = false;                
+                // List all date fields that need formatting
+                const dateFields = [
+                    "START_DT",
+                    "END_DT",
+                    "LAST_REDEAL_DT",
+                    "REBATE_BILLING_START",
+                    "REBATE_BILLING_END",
+                    "OEM_PLTFRM_LNCH_DT",
+                    "OEM_PLTFRM_EOL_DT",
+                    "ON_ADD_DT"
+                ];
                 each(this.gridResult, (item) => {
                     if (item._dirty) {
                         PTE_Common_Util.cellCloseValues(args.column.field, item);
-                        if (args.column.field == "REBATE_BILLING_START" || args.column.field == "REBATE_BILLING_END"
-                            || args.column.field == "START_DT" || args.column.field == "LAST_REDEAL_DT" || args.column.field == "END_DT"
-                            || args.column.field == "OEM_PLTFRM_LNCH_DT" || args.column.field == "OEM_PLTFRM_EOL_DT" || args.column.field == "ON_ADD_DT")
-                            if (item[args.column.field] != undefined && item[args.column.field] != null && item[args.column.field] != "" && item[args.column.field] != "Invalid date")
-                                item[args.column.field] = this.datePipe.transform(item[args.column.field], "MM/dd/yyyy");                        
+                        // Format all date fields to MM/dd/yyyy
+                        dateFields.forEach(field => {
+                            if (item[field] != undefined && item[field] != null && item[field] != "" && item[field] != "Invalid date")
+                                item[field] = this.datePipe.transform(item[field], "MM/dd/yyyy");                        
+                        });          
                     }
                 })
                 if ((args.column.field == "START_DT" || args.column.field == "END_DT") && args.dataItem._behaviors != undefined && args.dataItem._behaviors != null
