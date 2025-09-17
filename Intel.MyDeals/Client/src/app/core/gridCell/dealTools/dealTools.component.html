@@ -1,12 +1,12 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 
 <div class="dealTools custom-deal-tools">
-    <div *ngIf="isPublishable != true" class="tools-parent">
+    <div *ngIf="!isPublishable" class="tools-parent">
         <div class="dirtyTip" *ngIf="isModified" title="This deal has been modified"></div>
-        <div class='grid-status fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' [ngStyle]="getDealStageStyle()" [innerHTML]="stgOneChar()"></div>
+        <div class='grid-status fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stageTitle}}' [ngStyle]="stageStyle" [innerHTML]="stageChar"></div>
 
         <!-- Checkbox -->
-        <div class='fl check-parent' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1) && (dataItem.WF_STG_CD !== 'Cancelled')
+        <div class='fl check-parent' *ngIf="editable && (!dataItem._parentCnt || dataItem._parentCnt <= 1) && (dataItem.WF_STG_CD !== 'Cancelled')
                 && (!(isSalesForceDeal && (dataItem.WF_STG_CD === 'Offer' || dataItem.WF_STG_CD === 'Lost' || dataItem.WF_STG_CD === 'Won')))">
             <input type="checkbox" [(ngModel)]="dataItem.isLinked" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" />
             <label for="lnkChk_{{dataItem.DC_PARENT_ID}}" title="Check to apply changes to all checked rows"></label>
@@ -23,10 +23,10 @@
 
         <!-- Split group icon -->
         <div *ngIf="isSplitEnabled" class='fl'>
-            <div class='fl md-icon rotate-270' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won'))))">
+            <div class='fl md-icon rotate-270' *ngIf="editable && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won'))))">
                 <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" (click)="openSplit()" *ngIf="!openSplitDialog" title="Split the Group"></i>
             </div>
-            <div class='fl md-icon-disabled rotate-270' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Draft' || dataItem.WF_STG_CD === 'Cancelled')))">
+            <div class='fl md-icon-disabled rotate-270' *ngIf="editable && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Draft' || dataItem.WF_STG_CD === 'Cancelled')))">
                 <i class="intelicon-org-chart" style="font-size: 20px !important; color: #e7e7e8;" title="You cannot split this group while it is being re-dealed."></i>
             </div>
             <kendo-dialog *ngIf="openSplitDialog" (close)="closeDialogs()" [maxWidth]="485" class="toolsartho-css k-dialog-popup-design">
@@ -47,7 +47,7 @@
                 <i class='intelicon-discussion-outlined' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to add a comment" *ngIf="!openNotesDialog" (click)="openNotes()"></i>
             </div>
             <div class='fl md-icon' *ngIf="!!dataItem.NOTES && dataItem.NOTES !== ''">
-                <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" *ngIf="!openNotesDialog" (click)="openNotes()"></i>
+                <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="dataItem.NOTES" *ngIf="!openNotesDialog" (click)="openNotes()"></i>
             </div>
             <kendo-dialog class="toolsartho-css" *ngIf="openNotesDialog" (close)="closeDialogs()" [width]="500" [height]="350">
                 <div class="notesContent">
@@ -67,7 +67,7 @@
 
         <!-- File Attachments icon -->
         <div class='fl md-icon' *ngIf="isFileAttachmentEnabled || dataItem._settings.C_ADD_ATTACHMENTS">
-            <i [ngClass]="getFileIcon(dataItem)" [ngStyle]="getFileStyle(dataItem)" title="{{getFileTitle(dataItem)}}" style="font-size: 20px !important;" (click)="clkFileIcon(dataItem)"></i>
+            <i [ngClass]="fileIcon" [ngStyle]="fileStyle" title="{{fileTitle}}" style="font-size: 20px !important;" (click)="clkFileIcon()"></i>
         </div>
 
         <!-- Quote Letter icon -->
@@ -84,7 +84,7 @@
         </div>
 
         <!-- Cancel/Rollback/Delete icon -->
-        <div class='fl md-icon' *ngIf="isDeleteEnabled && editable === true && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
+        <div class='fl md-icon' *ngIf="isDeleteEnabled && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
             <i *ngIf="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
                title="Unable to delete this deal at this stage"></i>
             <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && !dataItem.TRKR_NBR.hasOwnProperty('20___0')" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
@@ -161,13 +161,13 @@
                     </kendo-dialog-actions>
             </kendo-dialog>
         </div>
-        <div class='fl md-icon-disabled' *ngIf="isDeleteEnabled && editable === true && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
+        <div class='fl md-icon-disabled' *ngIf="isDeleteEnabled && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
             <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;" title="This deal shares the same pricing table row as other deals.  You will need to split the group or delete the deal from the Pricing Table."></i>
         </div>
 
         <!-- Hold icon -->
-        <div class='fl md-icon' *ngIf="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold' && isTenderContract == false && getHoldVisibility(dataItem) == false && !isDealExpired(dataItem.END_DT)">
-            <i [ngClass]='getHoldIcon(dataItem)' [ngStyle]="getHoldStyle(dataItem)" title="{{getHoldTitle(dataItem)}}" style="font-size: 20px !important;" (click)="clkHoldIcon(dataItem)" *ngIf="!openHoldDialog && !openUnHoldDialog"></i>
+        <div class='fl md-icon' *ngIf="enableHold">
+            <i [ngClass]='holdIcon' [ngStyle]="holdStyle" title="{{holdTitle}}" style="font-size: 20px !important;" (click)="clkHoldIcon(dataItem)" *ngIf="!openHoldDialog && !openUnHoldDialog"></i>
             <kendo-dialog class="dt-on-hold k-dialog-popup-design" *ngIf="openHoldDialog" (close)="closeDialogs()" [maxWidth]="572">
                 <div class="dealToolsKendoAlert" style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
                     <h4 class="h4Style" style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Would you like to place the {{dealTxt}} on hold?</h4>

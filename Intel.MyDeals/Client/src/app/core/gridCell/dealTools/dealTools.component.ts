@@ -29,7 +29,7 @@ export class dealToolsComponent implements OnDestroy {
     @Input() isFileAttachmentEnabled;
     @Input() isHistoryEnabled;
     @Input() isCommentEnabled;
-    @Input() isEditable;
+    @Input() isEditable: boolean;
     @Input() isQuoteLetterEnabled;
     @Input() isDeleteEnabled;
     @Input() isManageTab;
@@ -69,6 +69,19 @@ export class dealToolsComponent implements OnDestroy {
     public notes;
     public isModified: boolean = false;
     private objTypeSid;
+    public enableHold: boolean;
+    public holdIcon: string = '';
+    public holdTitle: string = '';
+    public holdValue: string = '';
+    public holdStyle: string = '';
+    public fileValue: string = '';
+    public fileIcon: string = '';
+    public fileStyle: string = '';
+    public fileTitle: string = '';
+    public stageTitle: string = '';
+    public isDealHardExpired: boolean;
+    public stageStyle: any;
+    public stageChar: any;
     private windowOpened = false;
     private windowTop = 320; windowLeft = 670; windowWidth = 620; windowHeight = 500; windowMinWidth = 100;
     messages: any;
@@ -124,62 +137,75 @@ export class dealToolsComponent implements OnDestroy {
         }
     }
 
+    isFileAtchEnabled() {
+        this.fileValue = this.getFileValue();
+        this.fileIcon = this.fileItems[this.fileValue].icon;
+        this.fileStyle = this.fileItems[this.fileValue].style;
+        this.fileTitle = this.fileItems[this.fileValue].title;
+    }
+
+    isHoldEnabled() {
+        this.holdValue = this.getHoldValue();
+        //checking for the lockstatus conditions -- is deal hard expired & active or cancelled & regular hold conditions
+        this.enableHold = (this.dataItem._parentCnt === undefined || this.dataItem._parentCnt <= 1)
+            && this.holdValue !== 'NoShowHold' && !this.isTenderContract
+            && !this.getHoldVisibility(this.dataItem)
+            && (!(this.isDealHardExpired && this.dataItem.WF_STG_CD == 'Active') || this.dataItem.WF_STG_CD != 'Cancelled');
+        if (this.enableHold){
+            this.holdTitle = !this.dataItem._settings.C_HOLD_DEALS ? "" : this.holdItems[this.holdValue].title;;
+            this.holdStyle = !this.dataItem._settings.C_HOLD_DEALS ? { color: "#dddddd" } : this.holdItems[this.holdValue].style;
+            this.holdIcon = this.holdItems[this.holdValue].icon;
+        }
+    }
+
     loadDealTools() {
-        let distinctData;
-        if (this.dataItem.DC_ID != undefined) {
-            distinctData = distinct(this.gridData, 'DC_ID');
-        }
-        else {
-            distinctData = distinct(this.gridData, 'DEAL_ID');//contract manage tab
-        }
+        let distinctData = this.dataItem.DC_ID ? distinct(this.gridData, 'DC_ID') : distinct(this.gridData, 'DEAL_ID');
+        
         let childParent = countBy(distinctData, 'DC_PARENT_ID');
         each(this.gridData, item => {
             item['_parentCnt'] = childParent[`${item.DC_PARENT_ID}`]
         });
 
         this.objTypeSid = 5; //WIP deals
-        if (!this.in_Is_Tender_Dashboard)// If not Tender Dashboard Screen, check deal is tende ror not from contract data 
-            this.isTenderContract = this.contractData["IS_TENDER"] == "1" ? true : false;
-        else// Tender Dashboard always have tender deals only
-            this.isTenderContract = true;
-        if(typeof this.isTenderContract !== 'undefined') {
-            this.isTenderContract = (this.isTenderContract == true);
-        }        
-        if (this.dataItem.PS_WF_STG_CD === undefined && this.dataItem.items !== undefined) {
-            this.dataItem = this.dataItem.items[0];
-        }
-        if (!this.isEditable || this.isEditable === "false" || this.isEditable === false || this.dataItem.PS_WF_STG_CD == "Cancelled") {
-            this.editable = false;
-        }
-        else {
-            this.editable = true;
-        }
-        if (this.dataItem?.SALESFORCE_ID === undefined || this.dataItem?.SALESFORCE_ID === "") {
-            this.isSalesForceDeal = false;
-        }
-        else {
-            this.isSalesForceDeal = true;
-        }
-        if (this.dataItem._dirty || this.dataItem.isDirtyFile) this.isModified = true;
-        else this.isModified = false;
-                
+        // If not Tender Dashboard Screen, check deal is tende ror not from contract data
+        this.isTenderContract = (!this.in_Is_Tender_Dashboard && this.contractData["IS_TENDER"] == "1");
+        this.dataItem = !this.dataItem.PS_WF_STG_CD && this.dataItem.items ? this.dataItem.items[0] : this.dataItem;
+        //checking whether Item is editable
+        this.editable = !(!this.isEditable || this.dataItem.PS_WF_STG_CD == "Cancelled");
+        //checking whether dataItem is IQR
+        this.isSalesForceDeal = !this.dataItem?.SALESFORCE_ID ? false : true;
+        //checking the modified status
+        this.isModified = (this.dataItem._dirty || this.dataItem.isDirtyFile);
+        //checking whether the deal is hard expired
+        this.isDealHardExpired = this.isDealExpired(this.dataItem?.END_DT);
+        //setting deal title
+        this.stageTitle = this.IsExpiredDealHighlighted && this.isDealHardExpired ? 'This deal is Expired' : GridUtil.stgFullTitleChar(this.dataItem);
+        //stage style
+        this.stageStyle = this.IsExpiredDealHighlighted && this.isDealHardExpired
+            ? { 'background-color': 'red' } : { backgroundColor: DE_Load_Util.getColorStage(this.stageTitle) };
+        //stage character
+        this.stageChar = this.IsExpiredDealHighlighted && this.isDealHardExpired
+            ? 'X' : GridUtil.stgOneChar(this.dataItem);
+
         // Swap IF statement to prevent IQR from having access to quote letters
-        if (this.dataItem?.OBJ_SET_TYPE_CD !== 'ECAP' && this.dataItem?.OBJ_SET_TYPE_CD !== 'KIT')
-            this.isQuoteLetterEnabled = false;
+        this.isQuoteLetterEnabled = (this.dataItem?.OBJ_SET_TYPE_CD !== 'ECAP' && this.dataItem?.OBJ_SET_TYPE_CD !== 'KIT') ? false : this.isQuoteLetterEnabled;
         
         this.isDaUser = ((<any>window).usrRole === "DA");//SalesForce Checkbox Disabled icon except for DA users
-        if (this.dataItem && !this.dataItem._settings) {
+        if (!this.dataItem?._settings) {
             this.dataItem._settings = {};
         }
+
         this.dataItem._settings.C_HOLD_DEALS = ((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA" || (<any>window).usrRole === "DA");
-        this.dataItem._settings.C_DEL_DEALS = (((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA") && (this.dataItem?.SALESFORCE_ID === undefined || this.dataItem?.SALESFORCE_ID === ""));
-        
-        if (this.dataItem?._settings.C_DEL_DEALS === undefined || this.dataItem?._settings.C_DEL_DEALS === false) {
-            // In tenders screen for DA user, this is undefined but skipping over
+        this.dataItem._settings.C_DEL_DEALS = (((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA") && !this.isSalesForceDeal);
+
+        this.isDeleteEnabled = this.isDeleteEnabled && this.editable;
+
+        // In tenders screen for DA user, this is undefined but skipping over or used to lock all expired active deals & cancelled deals and only show commen, history, ql & atttachment
+        if (!this.dataItem?._settings.C_DEL_DEALS || (((this.isDealHardExpired
+            && this.dataItem?.WF_STG_CD == 'Active') || this.dataItem?.WF_STG_CD == 'cancelled') && !this.isSalesForceDeal)) {
             this.isDeleteEnabled = false;
         }
-        //used to lock all expired active deals & cancelled deals and only show commen, history, ql & atttachment
-        if (((this.isDealExpired(this.dataItem?.END_DT) && this.dataItem?.WF_STG_CD == 'Active') || this.dataItem?.WF_STG_CD == 'cancelled') && this.dataItem.SALESFORCE_ID == '') this.isDeleteEnabled = false;
+        
         
         //PS object is holding the Pricing Strategy ID with Pricing Strategy Status
         this.dataItem.PS = {};
@@ -189,6 +215,11 @@ export class dealToolsComponent implements OnDestroy {
             });
         }
         this.dealTxt = this.getLinkedHoldIds(this.dataItem).length > 1 ? "deals" : "deal";
+        //checking to enable hold
+        this.isHoldEnabled();
+
+        if (this.isFileAttachmentEnabled || this.dataItem?._settings?.C_ADD_ATTACHMENTS)
+            this.isFileAtchEnabled();
     }
 
     setBusy(msg, detail, msgType, isShowFunFact) {
@@ -222,20 +253,6 @@ export class dealToolsComponent implements OnDestroy {
             }
         });
     }
-    stgFullTitleChar() {
-
-    return this.IsExpiredDealHighlighted && this.isDealExpired(this.dataItem.END_DT)
-        ? 'This deal is Expired'
-        : GridUtil.stgFullTitleChar(this.dataItem);
-    }
-    stgOneChar() {
-        return this.IsExpiredDealHighlighted && this.isDealExpired(this.dataItem.END_DT)
-            ? 'X'
-            : GridUtil.stgOneChar(this.dataItem);
-    }
-    getStageBgColorStyle = function (c) {
-        return { backgroundColor: DE_Load_Util.getColorStage(c) };
-    }
    
     private isDealExpired(endDate: string): boolean {
         const today = new Date();
@@ -243,11 +260,7 @@ export class dealToolsComponent implements OnDestroy {
         const expirationDate = new Date(dealEndDate.setDate(dealEndDate.getDate() + this.NumberOfDaysToExpireDeal));
         return today >= expirationDate;
     }
-    getDealStageStyle(): { [key: string]: string } {
-        return this.IsExpiredDealHighlighted && this.isDealExpired(this.dataItem.END_DT)
-            ? { 'background-color': 'red' }
-            : this.getStageBgColorStyle(this.stgFullTitleChar());
-    }
+
     closeDialogs() {
         this.openSplitDialog = false;
         this.openNotesDialog = false;
@@ -419,7 +432,7 @@ export class dealToolsComponent implements OnDestroy {
         }
     }
     // FILES Items
-    getFileValue(dataItem) {
+    getFileValue() {
         if (!this.dataItem?._settings.C_VIEW_ATTACHMENTS)
             return "NoPerm";
         if (this.isFileAttachmentEnabled) {
@@ -430,19 +443,10 @@ export class dealToolsComponent implements OnDestroy {
             return "HasFile";
         }
         return "NoPerm";
-    }    
-    getFileIcon(dataItem) {
-        return this.fileItems[this.getFileValue(this.dataItem)].icon;
-    }
-    getFileStyle(dataItem) {
-        return this.fileItems[this.getFileValue(this.dataItem)].style;
-    }
-    getFileTitle(dataItem) {
-        return this.fileItems[this.getFileValue(this.dataItem)].title;
-    }
-    clkFileIcon(dataItem) {
-        let fVal = this.getFileValue(dataItem);
-        if (fVal === "HasFile" || fVal === "AddFile") {
+    } 
+
+    clkFileIcon() {
+        if (this.fileValue === "HasFile" || this.fileValue === "AddFile") {
             this.openAttachments();
         }
     }
@@ -633,13 +637,13 @@ export class dealToolsComponent implements OnDestroy {
     }
     //Hold Items
     //All of hold is broken for Tender dashboard because it is undefined since it has a scoping issue, but for tender deals, we SHOULD NOT HAVE HOLD anyhow..  It is 1:1 with PS.
-    getHoldValue(dataItem) {
+    getHoldValue() {
         if (this.dataItem?.WF_STG_CD === 'Active' || this.dataItem?.WF_STG_CD === 'Won')
             return 'NoShowHold';
         if (this.dataItem?._actionsPS === undefined)
             this.dataItem._actionsPS = {};
         if (this.dataItem?.WF_STG_CD === 'Hold') {
-            if (!!this.dataItem?._actionsPS.Hold)
+            if (!!this.dataItem?._actionsPS.Hold && !this.isDealHardExpired)
                 return 'TakeOffHold'; // !! = If it exists - If deal is on hold and I can hold from hold stage...
             else
                 return 'CantRemoveHold';
@@ -667,25 +671,7 @@ export class dealToolsComponent implements OnDestroy {
         }
         return false;
     }
-    getHoldIcon() {
-        return this.holdItems[this.getHoldValue(this.dataItem)].icon;
-    }
-    getHoldStyle() {
-        if (!this.dataItem._settings.C_HOLD_DEALS) {
-            return { color: "#dddddd" };
-        }
-        else {
-            return this.holdItems[this.getHoldValue(this.dataItem)].style;
-        }
-    }
-    getHoldTitle() {
-        if (!this.dataItem._settings.C_HOLD_DEALS) {
-            return "";
-        }
-        else {
-            return this.holdItems[this.getHoldValue(this.dataItem)].title;
-        }
-    }
+    
 
     getLinkedHoldIds(model){
         let ids = [];
@@ -732,10 +718,10 @@ export class dealToolsComponent implements OnDestroy {
     clkHoldIcon() {
         if (!this.dataItem._settings.C_HOLD_DEALS)
             return;
-        let hVal = this.getHoldValue(this.dataItem);
-        if (hVal === "CanHold")
+        //let hVal = this.getHoldValue();
+        if (this.holdValue === "CanHold")
             this.openHoldDialog = true;
-        if (hVal === "TakeOffHold")
+        if (this.holdValue === "TakeOffHold")
             this.openUnHoldDialog = true;
     }
     actionHoldWipDeals(dataItem, stage: string) {
