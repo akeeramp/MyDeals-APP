@@ -284,11 +284,19 @@ export class EnvironmentsComponent implements PendingChangesGuard, OnDestroy {
             if (isNew) {
                 this.isLoading = true;
                 this.environmentsSvc.insertEnvironments(Envir_Map).pipe(takeUntil(this.destroy$))
-                    .subscribe(() => {
-                        this.gridResult.push(Envir_Map);
-                        this.updateEnvBannerMessage(Envir_Map);
+                    .subscribe((response?) => {
+                        if (!response || response?.ENVT_SID === 0) {
+                            alert("Required information is missing or incorrect.");
+                        }
+                        else
+                        {
+                            this.gridResult.push(response);
+                            this.updateEnvBannerMessage(response);
+                            this.loadEnvDetails();
+                            this.loggerSvc.success("New Environment added.");
+                        }
+                        this.isLoading = false;
                         this.loadEnvDetails();
-                        this.loggerSvc.success("New Environment added.");
                     },
                         error => {
                             this.loggerSvc.error("Unable to save environment data.", error);
