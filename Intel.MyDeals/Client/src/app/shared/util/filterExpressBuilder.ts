@@ -1,4 +1,5 @@
-﻿export class FilterDescriptor {
+﻿
+export class FilterDescriptor {
     field: string;
     operator: string;
     value: any;
@@ -25,6 +26,14 @@ export class FilterExpressBuilder {
         const filterDescriptor: CompositeFilterDescriptor = JSON.parse(filterJson);
         return this.buildSqlExpression(filterDescriptor);
     }
+    private static dateToString(date: Date): string {
+        return ("00" + (date.getMonth() + 1)).slice(-2)
+            + "/" + ("00" + date.getDate()).slice(-2)
+            + "/" + date.getFullYear() + " "
+            + ("00" + date.getHours()).slice(-2) + ":"
+            + ("00" + date.getMinutes()).slice(-2)
+            + ":" + ("00" + date.getSeconds()).slice(-2);
+    }
 
     private static buildSqlExpression(filter: CompositeFilterDescriptor): string {
         const conditions: string[] = [];
@@ -33,6 +42,47 @@ export class FilterExpressBuilder {
             if (item instanceof Object) {
                 const subFilter = Object.assign(new FilterDescriptor("", "", null), item);
                 if (subFilter && subFilter.field) {
+
+                    if (subFilter.field.includes('_DTM')) {
+                        //Setting start time and end time so that date filters will take entire day when selecting a date
+                        const dateValue = new Date(subFilter.value);
+                        const startOfDay = new Date(dateValue);
+                        startOfDay.setHours(0, 0, 0, 0);
+                        const endOfDay = new Date(dateValue);
+                        endOfDay.setHours(23, 59, 59, 999);
+                        let dateFilters: FilterDescriptor[] = [];
+
+                        switch (subFilter.operator) {
+                            // Equal to: check entire 
+                            case 'eq':
+                                dateFilters = [
+                                    new FilterDescriptor(subFilter.field, 'gte', this.dateToString(startOfDay)),
+                                    new FilterDescriptor(subFilter.field, 'lte', this.dateToString(endOfDay))
+                                ];
+                                break;
+                            case 'lte':
+                                subFilter.value = this.dateToString(endOfDay);
+                                // Less than or equal: end of selected
+                                break;
+                            case 'lt':
+                                //Less than : Exclude this day
+                                subFilter.value = this.dateToString(startOfDay);
+                                break;
+                            case 'gte':
+                                // Greater than or equal: Include this day
+                                subFilter.value = this.dateToString(startOfDay);
+                                break;
+                            case 'gt':
+                                // Greater than: Exclude this day
+                                subFilter.value = this.dateToString(endOfDay);
+                                break;
+                        }
+                        if (dateFilters.length > 1) {
+                            const nested = dateFilters.map(df => this.getSqlCondition(df)).join(" AND ");
+                            conditions.push(`(${nested})`);
+                            continue; 
+                        }
+                    }
                     const sqlCondition = this.getSqlCondition(subFilter);
                     conditions.push(sqlCondition);
                 } else {
@@ -40,15 +90,15 @@ export class FilterExpressBuilder {
                     if (subComposite) {
                         if (subComposite.logic == 'or' && Array.isArray(subComposite.filters) && subComposite.filters.length > 0) {
                             const values = subComposite.filters.map(val => {
-                                   let originalVal = val.value !== null && val.value !== undefined ? val.value : '';
-                                    const hasSingleQuote = originalVal.includes("'");
-                                    if(!hasSingleQuote) {
-                                        return `'${originalVal}'`
-                                    } else {
-                                        let originalValQuotes = originalVal.replace(/'/g, "''");
-                                        return `'${originalValQuotes}'`
-                                    }
-                                
+                                let originalVal = val.value !== null && val.value !== undefined ? val.value : '';
+                                const hasSingleQuote = originalVal.includes("'");
+                                if (!hasSingleQuote) {
+                                    return `'${originalVal}'`
+                                } else {
+                                    let originalValQuotes = originalVal.replace(/'/g, "''");
+                                    return `'${originalValQuotes}'`
+                                }
+
                             }).join(",");
                             const field = subComposite.filters[0].field;
                             conditions.push(`${field} IN (${values == '' ? `''` : `${values}`})`);
@@ -64,6 +114,7 @@ export class FilterExpressBuilder {
                 }
             }
         }
+
 
         return conditions.join(` ${filter.logic.toUpperCase()} `);
     }

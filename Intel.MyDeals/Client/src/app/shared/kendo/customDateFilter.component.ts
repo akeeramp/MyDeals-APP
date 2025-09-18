@@ -46,6 +46,7 @@ export class CustomDateFilterComponent implements OnInit, OnDestroy {
         });
     }
     public selectedDate: any;
+    public selectedValue = "gte";
     public popupSettings: any = {
         popupClass: 'date-range-filter'
     };
@@ -58,8 +59,6 @@ export class CustomDateFilterComponent implements OnInit, OnDestroy {
         { text: "Is before or equal", value: 'lte' },
         
     ];
-
-    public selectedValue = "gte";
 
     public ngOnInit(): void {
         const filter= this.findValue();
@@ -89,48 +88,13 @@ export class CustomDateFilterComponent implements OnInit, OnDestroy {
         const filters = [];
 
         if (selectedDate) {
-            const filterValue = selectedDate;
-            // handle different comparison operators
-            if (this.selectedValue === 'eq') {
-                // Equal to: check entire day
-                const selectedDateOfDay = new Date(filterValue);
-                selectedDateOfDay.setHours(0, 0, 0, 0);
-
-                const endOfDay = new Date(filterValue);
-                endOfDay.setHours(23, 59, 59, 999);
-
-                filters.push({
-                    field: this.field,
-                    operator: 'gte',
-                    value: selectedDateOfDay
-                });
-                filters.push({
-                    field: this.field,
-                    operator: 'lte',
-                    value: endOfDay
-                });
-            } else if (this.selectedValue === 'lte') {
-                // Less than or equal: end of selected day
-                const endOfDay = new Date(filterValue);
-                endOfDay.setHours(23, 59, 59, 999);
-
-                filters.push({
-                    field: this.field,
-                    operator: 'lte',
-                    value: endOfDay
-                });
-            } else {
-                // For 'gt','gte' and 'lt', use as-is
-                filters.push({
-                    field: this.field,
-                    operator: this.selectedValue,
-                    value: filterValue
-                });
-            }
-
+            filters.push({
+                field: this.field,
+                operator: this.selectedValue,
+                value: selectedDate
+            });
             this.selectedDate = selectedDate;
         }
-
         this.filterService.filter({
             logic: "and",
             filters: filters
