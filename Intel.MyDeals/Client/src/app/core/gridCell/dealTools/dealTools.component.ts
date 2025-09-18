@@ -168,7 +168,7 @@ export class dealToolsComponent implements OnDestroy {
 
         this.objTypeSid = 5; //WIP deals
         // If not Tender Dashboard Screen, check deal is tende ror not from contract data
-        this.isTenderContract = (!this.in_Is_Tender_Dashboard && this.contractData["IS_TENDER"] == "1");
+        this.isTenderContract = !this.in_Is_Tender_Dashboard ? this.contractData["IS_TENDER"] == "1" : true;
         this.dataItem = !this.dataItem.PS_WF_STG_CD && this.dataItem.items ? this.dataItem.items[0] : this.dataItem;
         //checking whether Item is editable
         this.editable = !(!this.isEditable || this.dataItem.PS_WF_STG_CD == "Cancelled");

@@ -598,8 +598,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         let idStringArray = fullId.split('_');
         let idString: string = idStringArray[2];
         var id = parseInt(idString);
-
-        var result: any = $.grep(allPs, function (e: any) { return e.DC_ID === id; });
+        const result = allPs.filter((e: any) => e.DC_ID === id);
         var stage = result.length > 0 ? result[0].WF_STG_CD : "";
         var title = result.length > 0 ? result[0].TITLE : "";
         var hasL1 = result.length > 0 ? result[0].HAS_L1 !== "0" : false;
