@@ -3173,7 +3173,8 @@ namespace Intel.MyDeals.Entities {
 		public const string VNDR_REC_CNT_THRHLD = "VNDR_REC_CNT_THRHLD";
 		public const string VOL_TIER_MIGRATION = "VOL_TIER_MIGRATION";
 		public const string WIP_ACTNS_DEBUG = "WIP_ACTNS_DEBUG";
-	}
+        public const string VISTEX_ACCRUALS_EMAIL = "VISTEX_ACCRUALS_EMAIL";
+    }
 
 
 	//-- Roles ---------------------------------------------------------------------------------

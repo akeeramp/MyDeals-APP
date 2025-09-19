@@ -1138,63 +1138,63 @@ namespace Intel.MyDeals.Entities
 
     } // End of class UserVitalsSuper
 
-	///<summary>
-	/// Class created via template - Do Not Modify!
-	/// To modify this code, re-execute the template, or extend as partial.
-	/// on MHTIPPIN-MOBL1
-	/// by mhtippin
-	/// at 10/17/2023 3:47:05 PM
-	///</summary>
-	
-	[DataContract]
-	public partial class DashboardContractSummary {
-	
-	[DataMember]
-	public System.String CHG_EMP_NM {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 CNTRCT_OBJ_SID {set;get;}
-	
-	
-	[DataMember]
-	public System.String CRE_EMP_NM {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 CUST_MBR_SID {set;get;}
-	
-	
-	[DataMember]
-	public System.String CUST_NM {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime END_DTM {set;get;}
-	
-	
-	[DataMember]
-	public System.Boolean HAS_ALERT {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 IS_TENDER {set;get;}
-	
-	
-	[DataMember]
-	public System.String NOTES {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime STRT_DTM {set;get;}
-	
-	
-	[DataMember]
-	public System.String TITLE {set;get;}
-	
-	
-	[DataMember]
-	public System.String WF_STG_CD {set;get;}
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on MHTIPPIN-MOBL1
+    /// by mhtippin
+    /// at 10/17/2023 3:47:05 PM
+    ///</summary>
+
+    [DataContract]
+    public partial class DashboardContractSummary {
+
+        [DataMember]
+        public System.String CHG_EMP_NM {set;get;}
+
+
+        [DataMember]
+        public System.Int32 CNTRCT_OBJ_SID {set;get;}
+
+
+        [DataMember]
+        public System.String CRE_EMP_NM {set;get;}
+
+
+        [DataMember]
+        public System.Int32 CUST_MBR_SID {set;get;}
+
+
+        [DataMember]
+        public System.String CUST_NM {set;get;}
+
+
+        [DataMember]
+        public System.DateTime END_DTM {set;get;}
+
+
+        [DataMember]
+        public System.Boolean HAS_ALERT {set;get;}
+
+
+        [DataMember]
+        public System.Int32 IS_TENDER {set;get;}
+
+
+        [DataMember]
+        public System.String NOTES {set;get;}
+
+
+        [DataMember]
+        public System.DateTime STRT_DTM {set;get;}
+
+
+        [DataMember]
+        public System.String TITLE {set;get;}
+
+
+        [DataMember]
+        public System.String WF_STG_CD {set;get;}
 
         /*
         private static List<DashboardContractSummary> DashboardContractSummaryFromReader(SqlDataReader rdr){
@@ -1628,7 +1628,7 @@ namespace Intel.MyDeals.Entities
         public System.String CPU_PROCESSOR_NUMBER { set; get; }
 
 
-     
+
 
 
         [DataMember]
@@ -1731,7 +1731,7 @@ namespace Intel.MyDeals.Entities
         public System.DateTime PRD_END_DTM { set; get; }
 
 
-       
+
 
         [DataMember]
         public System.Int32 PRD_MBR_SID { set; get; }
@@ -2679,13 +2679,13 @@ namespace Intel.MyDeals.Entities
         public System.String CPU_CACHE { set; get; }
 
 
-      
+
 
         [DataMember]
         public System.String CPU_PROCESSOR_NUMBER { set; get; }
 
 
-       
+
 
 
         [DataMember]
@@ -3868,7 +3868,7 @@ namespace Intel.MyDeals.Entities
         public System.String GDM_FMLY_NM { set; get; }
 
 
-      
+
 
 
         [DataMember]
@@ -3879,7 +3879,7 @@ namespace Intel.MyDeals.Entities
         public System.DateTime PRD_END_DTM { set; get; }
 
 
-    
+
 
 
         [DataMember]
@@ -3961,7 +3961,7 @@ namespace Intel.MyDeals.Entities
         public System.String CPU_CACHE { set; get; }
 
 
-       
+
 
 
         [DataMember]
@@ -6691,7 +6691,7 @@ namespace Intel.MyDeals.Entities
 
     } // End of class User Role Permission
 
-        
+
     [DataContract]
     public partial class PostUserRolePermission
     {
@@ -7535,7 +7535,7 @@ namespace Intel.MyDeals.Entities
         public System.String CPU_PROCESSOR_NUMBER { set; get; }
 
 
-      
+
 
 
         [DataMember]
@@ -7590,10 +7590,10 @@ namespace Intel.MyDeals.Entities
         public System.String MTRL_ID { set; get; }
 
 
-      
 
 
-      
+
+
 
 
         [DataMember]
@@ -8425,14 +8425,14 @@ namespace Intel.MyDeals.Entities
     ///</summary>
 
     [DataContract]
-	public partial class ReportDealStage {
-	
-	[DataMember]
-	public System.String DEAL_STAGE {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 Deal_Stage_Count {set;get;}
+    public partial class ReportDealStage {
+
+        [DataMember]
+        public System.String DEAL_STAGE {set;get;}
+
+
+        [DataMember]
+        public System.Int32 Deal_Stage_Count {set;get;}
 
         [DataMember]
         public System.String YEAR_WISE { set; get; }
@@ -8694,7 +8694,7 @@ namespace Intel.MyDeals.Entities
         public System.String mode { set; get; }
 
     }
- 
+
 
     ///<summary>
     /// Class created via template - Do Not Modify!
@@ -9867,7 +9867,7 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public String UNIFIED_STATUS { get; set; }
         [DataMember]
-        public String UNIFIED_REASON { get; set; }        
+        public String UNIFIED_REASON { get; set; }
         [DataMember]
         public System.String value { get; set; }
         /*
@@ -11716,7 +11716,7 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public int CHG_EMP_WWID { get; set; }
         [DataMember]
-        public System.DateTime CHG_DTM { get; set; } 
+        public System.DateTime CHG_DTM { get; set; }
     }// End of class AdminEnvironments
 
 
@@ -11726,7 +11726,7 @@ namespace Intel.MyDeals.Entities
     ///</summary>
     [DataContract]
     public class AdminServerDetails
-    { 
+    {
         [DataMember]
         public string LNKD_SRVR_NM { get; set; }
         [DataMember]
@@ -11741,7 +11741,7 @@ namespace Intel.MyDeals.Entities
         public string LS_ERR_TXT { get; set; }
         [DataMember]
         public bool ACTV_IND { get; set; }
-        [DataMember]   
+        [DataMember]
         public int CRE_EMP_WWID { get; set; }
         [DataMember]
         public System.DateTime CRE_DTM { get; set; }
@@ -11865,6 +11865,22 @@ namespace Intel.MyDeals.Entities
         public System.String END_CUST_OBJ { set; get; }
     }
 
+    [DataContract]
+    public partial class CheckVistexAccrualRes
+    {
+        [DataMember]
+        public System.String DealId { set; get; }
+        [DataMember]
+        public System.String AgreementId { set; get; }
+        [DataMember]
+        public System.String AcrlFlg { set; get; }
+        [DataMember]
+        public System.String CeilFlg { set; get; }
+        //[DataMember]
+        //public System.String Status { set; get; }
+        //[DataMember]
+        //public System.String Data { set; get; }
+    }
     ///<summary>
     /// Class created via template - Do Not Modify!
     /// To modify this code, re-execute the template, or extend as partial.
@@ -11872,6 +11888,24 @@ namespace Intel.MyDeals.Entities
     /// by jlopezre
     /// at 5/15/2025 2:06:31 PM
     ///</summary>
+    ///
+    [DataContract]
+    public partial class VistexCheck
+    {
+
+        [DataMember]
+        public System.String dcId { get; set; }
+        [DataMember]
+        public System.String dealStage { get; set; }
+        [DataMember]
+        public System.String dealType { get; set; }
+        [DataMember]
+        public System.String psId { get; set; }
+        [DataMember]
+        public System.String ptId { get; set; }
+
+
+    }
 
     [DataContract]
     public partial class PctException
@@ -11905,10 +11939,10 @@ namespace Intel.MyDeals.Entities
 
         [DataMember]
         public System.String Market_Segment { set; get; }
-        
+
         [DataMember]
         public System.String Geo { set; get; }
-        
+
         [DataMember]
         public System.String Payout_Based_On { set; get; }
 
@@ -11917,67 +11951,67 @@ namespace Intel.MyDeals.Entities
 
         [DataMember]
         public System.String Cost_Type { set; get; }
-       
+
         [DataMember]
         public System.String Rebate_Type { set; get; }
-        
+
         [DataMember]
         public System.String Group_type { set; get; }
-        
+
         [DataMember]
         public System.Decimal CAP { set; get; }
-        
+
         [DataMember]
         public System.Decimal MAX_RPU { set; get; }
-        
+
         [DataMember]
         public System.Decimal YCS2 { set; get; }
-        
+
         [DataMember]
         public System.Decimal ECAP_Price { set; get; }
-        
+
         [DataMember]
         public System.Decimal Retail_Pull_Dollar { set; get; }
-        
+
         [DataMember]
         public System.Decimal Product_Cost { set; get; }
-        
+
         [DataMember]
         public System.Decimal Lowest_Net_Price { set; get; }
-        
+
         [DataMember]
         public System.String Price_Cost_Test_Result { set; get; }
-        
+
         [DataMember]
         public System.String Cost_Test_Ovrride { set; get; }
-        
+
         [DataMember]
         public System.Int32 Legal_Exception_Id { set; get; }
-        
+
         [DataMember]
         public System.String Legal_Exception_Description { set; get; }
-        
+
         [DataMember]
         public System.Decimal Meet_Comp_Price { set; get; }
-        
+
         [DataMember]
         public System.Decimal Avrrage_Net_Price { set; get; }
 
         [DataMember]
         public System.String Meet_Comp_Test_Result { set; get; }
-        
+
         [DataMember]
         public System.String Division_Approver { set; get; }
-        
+
         [DataMember]
         public System.DateTime Division_Approved_Date { set; get; }
-        
+
         [DataMember]
         public System.String Geo_Approver { set; get; }
-        
+
         [DataMember]
         public System.DateTime Geo_Approved_Date { set; get; }
-        
+
         [DataMember]
         public System.String Deal_Created_By { set; get; }
 
