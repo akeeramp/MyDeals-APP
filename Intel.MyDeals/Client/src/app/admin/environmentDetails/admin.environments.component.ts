@@ -511,12 +511,20 @@ export class EnvironmentsComponent implements PendingChangesGuard, OnDestroy {
             this.serverisDirty = false;
             if (isNew) {
                 this.isLoading = true;
-                this.environmentsSvc.insertSvrDetails(Svr_Map).pipe(takeUntil(this.destroy$))
-                    .subscribe(() => {
-                        this.servergridResult.push(Svr_Map);
-                        this.updatesvrBannerMessage(Svr_Map);
+                this.environmentsSvc.insertSvrDetails(Svr_Map).pipe(takeUntil(this.destroy$))                    
+                    .subscribe((response?) => {
+                        if (!response || response?.LNKD_SRVR_NM === null) {
+                            alert("Required information is missing or incorrect.");
+                        }
+                        else
+                        {
+                            this.servergridResult.push(Svr_Map);
+                            this.updatesvrBannerMessage(Svr_Map);
+                            this.loadsvrDetails();
+                            this.loggerSvc.success("New server added.");
+                        }
+                        this.isLoading = false;
                         this.loadsvrDetails();
-                        this.loggerSvc.success("New server added.");
                     },
                         error => {
                             this.loggerSvc.error("Unable to save server data.", error);
