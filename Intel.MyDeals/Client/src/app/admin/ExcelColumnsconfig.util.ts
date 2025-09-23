@@ -805,6 +805,24 @@ static bulkPriceUpdateColumnData =  [
             type: 'text',
             readOnly: false,
             width: 300,
+        },
+        {
+            data: 'DealCreatorWWID',
+            type: 'numeric',
+            readOnly: false,
+            width: 300,
+        },
+        {
+            data: 'DealCreatorName',
+            type: 'text',
+            readOnly: false,
+            width: 400,
+        },
+        {
+            data: 'DealCreateDate',
+            type: 'text',
+            readOnly: false,
+            width: 500,
         }
     ]
     static ProductSelReport = [

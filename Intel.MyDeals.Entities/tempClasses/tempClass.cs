@@ -2448,6 +2448,12 @@ public partial class DealTemplateDataGram
         public bool RplStatus;
         [DataMember]
         public string RplStatusCode;
+        [DataMember]
+        public int DealCreatorWWID;
+        [DataMember]
+        public string DealCreatorName;
+        [DataMember]
+        public DateTime DealCreateDate;
     }
 
 }

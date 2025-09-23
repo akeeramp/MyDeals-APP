@@ -904,7 +904,10 @@ export class GridUtil {
                     { value: response[i]["UnifiedCountryRegionCustomerId"], wrap: true },
                     { value: response[i]["UnifiedCountryRegionCustomerName"], wrap: true },
                     { value: response[i]["RplStatus"], wrap: true },	
-                    { value: response[i]["RplStatusCode"], wrap: true }
+                    { value: response[i]["RplStatusCode"], wrap: true },
+                    { value: response[i]["DealCreatorWWID"], wrap: true },
+                    { value: response[i]["DealCreatorName"], wrap: true },
+                    { value: response[i]["DealCreateDate"], wrap: true }
                 ]
             })
         }

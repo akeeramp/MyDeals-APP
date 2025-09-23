@@ -385,6 +385,9 @@ namespace Intel.MyDeals.DataLibrary
                 int IDX_UNIFIED_COUNTRY_REGION_CUSTOMER_NAME = DB.GetReaderOrdinal(rdr, "UNIFIED COUNTRY/REGION CUSTOMER NAME");
                 int IDX_RPL_STATUS = DB.GetReaderOrdinal(rdr, "RPL STATUS");
                 int IDX_RPL_STATUS_CODE = DB.GetReaderOrdinal(rdr, "RPL STATUS CODE");
+                int IDX_DEAL_CREATOR_WWID = DB.GetReaderOrdinal(rdr, "DEAL CREATOR WWID");
+                int IDX_DEAL_CREATOR_NAME = DB.GetReaderOrdinal(rdr, "DEAL CREATOR NAME");
+                int IDX_DEAL_CREATE_DATE = DB.GetReaderOrdinal(rdr, "DEAL CREATE DATE");
 
                 while (rdr.Read())
                 {
@@ -404,6 +407,9 @@ namespace Intel.MyDeals.DataLibrary
                         UnifiedCountryRegionCustomerName= (IDX_UNIFIED_COUNTRY_REGION_CUSTOMER_NAME < 0 || rdr.IsDBNull(IDX_UNIFIED_COUNTRY_REGION_CUSTOMER_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_UNIFIED_COUNTRY_REGION_CUSTOMER_NAME),
                         RplStatus= (IDX_RPL_STATUS < 0 || rdr.IsDBNull(IDX_RPL_STATUS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_RPL_STATUS),
                         RplStatusCode= (IDX_RPL_STATUS_CODE < 0 || rdr.IsDBNull(IDX_RPL_STATUS_CODE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RPL_STATUS_CODE),
+                        DealCreatorWWID = (IDX_DEAL_CREATOR_WWID < 0 || rdr.IsDBNull(IDX_DEAL_CREATOR_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_CREATOR_WWID),
+                        DealCreatorName = (IDX_DEAL_CREATOR_NAME < 0 || rdr.IsDBNull(IDX_DEAL_CREATOR_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_CREATOR_NAME),
+                        DealCreateDate = (IDX_DEAL_CREATE_DATE < 0 || rdr.IsDBNull(IDX_DEAL_CREATE_DATE)) ? DateTime.MinValue : rdr.GetFieldValue<System.DateTime>(IDX_DEAL_CREATE_DATE),
                     });
                 };
             } // while
