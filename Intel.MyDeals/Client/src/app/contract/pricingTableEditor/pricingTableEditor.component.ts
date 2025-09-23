@@ -1487,7 +1487,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                             await this.saveEntireContractRoot(finalPTR, deleteDCIDs);
                         } else {
                             finalPTR.forEach(element => {
-                                if (element._behaviors && element._behaviors.warningMsg) {
+                                if (element._behaviors && element._behaviors.warningMsg && element._behaviors.warningMsg["PTR_USER_PRD"]) {
                                     element._behaviors.isError["PTR_USER_PRD"] = true;
                                     element._behaviors.validMsg["PTR_USER_PRD"] = element._behaviors.warningMsg["PTR_USER_PRD_HANDSON_ERR_MSG"];
                                 }

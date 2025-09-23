@@ -1386,7 +1386,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                         await this.updateContract(isShowStopError);
                     } else {
                         this.gridResult.forEach(element => {
-                            if (element._behaviors && element._behaviors.warningMsg) {
+                            if (element._behaviors && element._behaviors.warningMsg && element._behaviors.warningMsg["PTR_USER_PRD"]) {
                                 element._behaviors.isError["PTR_USER_PRD"] = true;
                                 element._behaviors.validMsg["PTR_USER_PRD"] = element._behaviors.warningMsg["PTR_USER_PRD_HANDSON_ERR_MSG"];
                                 element._behaviors.isWarning = {};
