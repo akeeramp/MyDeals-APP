@@ -14,13 +14,13 @@ export class GridUtil {
     constructor(public inactSvc: InActiveCustomerService) { }
 
     static uiValidationErrorDetail(passedData) {
-        var values: string[] = Object.values(passedData._behaviors.validMsg);
-        var formattedMessage = '';
+        const values: string[] = Object.values(passedData._behaviors.validMsg);
+        let formattedMessage = '';
         values.forEach((msg) => {
-            if (msg.indexOf("\n") < 0) {
+            if (msg && msg.indexOf("\n") < 0) {
                 msg += "\n";
             }
-            formattedMessage += msg.toString().replace(/'/g, "");
+            formattedMessage += msg ? msg.toString().replace(/'/g, "") : '';
         });
         //fixing for validation alert icon issue, while fixing the deal error through admin screen
         if ((values == null || values == undefined || values.length == 0) && formattedMessage == '') {
@@ -28,7 +28,8 @@ export class GridUtil {
         }
         else if (values.length > 0)
             passedData.PASSED_VALIDATION = "Dirty";
-        var titleMsg = "Validation: ";
+
+        let titleMsg = "Validation: ";
         if (passedData.PASSED_VALIDATION === "Dirty" || passedData.PASSED_VALIDATION == "0")
             titleMsg += formattedMessage;
         else

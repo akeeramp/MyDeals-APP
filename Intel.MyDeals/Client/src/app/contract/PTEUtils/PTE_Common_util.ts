@@ -295,13 +295,33 @@ export class PTE_Common_Util {
                 if (mode) {
                     return finalResult;
                 }
+                //TWC5971-641: Mapping the flex row type and payout based on from parent to child to validate the overlap based on these two fields
+                const mappingTable = {
+                    "ACR": "Accrual",
+                    "DRN": "Draining"
+                };
+                finalResult.forEach(item => {
+                    const expectedFlexType = mappingTable[item.ACR_DRN_TYPE];
+                    const parent = data.find(p =>
+                        p.DC_ID === item.ROW_ID &&
+                        p.FLEX_ROW_TYPE === expectedFlexType
+                    );
+                    if (parent) {
+                        item.FLEX_ROW_TYPE = parent.FLEX_ROW_TYPE;
+                        item.PAYOUT_BASED_ON = parent.PAYOUT_BASED_ON;
+                    }
+                });
+                const dupRows = PTE_Common_Util.findMatchingRowIdAndType(finalResult);
                 each(data, (item) => {
                     each(finalResult, (itm) => {
                         //To handle multi tier condition only assign to object which has PTR_SYS_PRD in PTE and PTR_USER_PRD in DE
                         if ((objectId == 'DC_ID' && item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) || (objectId == 'DC_PARENT_ID' && item.PTR_USER_PRD && (item.PTR_USER_PRD != null || item.PTR_USER_PRD != ''))) {
                             if (item[objectId] == itm.ROW_ID && itm.dup && itm.dup == 'duplicate'&& (!(restrictGroupFlexOverlap))) {
                                 OVLPFlexPdtPTRUSRPRDError = true;
-                                item = PTE_Load_Util.setBehaviors(item, "PTR_USER_PRD", "duplicate", curPricingTable);
+                                //TWC5971-641: This condition is to avoid Hard stop PTW/DE and showing warning popup for duplicate overlapping products
+                                if (!dupRows.some(dupItem => dupItem.source === itm.ROW_ID)) {
+                                    item = PTE_Load_Util.setBehaviors(item, "PTR_USER_PRD", "duplicate", curPricingTable);
+                                }
                             }
                             else if (item[objectId] == itm.ROW_ID && itm.dup && itm.dup == 'dateissue') {
                                 OVLPFlexPdtPTRUSRPRDError = true;
@@ -318,6 +338,32 @@ export class PTE_Common_Util {
         }
         return data;
     }
+
+    static findMatchingRowIdAndType = (data) => {
+        const matches = [];
+        data.forEach(item => {
+            const ovlpIds = item.OVLP_ROW_ID.split(',').map(Number);
+            ovlpIds.forEach(id => {
+                if (id === item.ROW_ID) return; // Skip self
+
+                const match = data.find(other =>
+                    other.ROW_ID === id &&
+                    other.ACR_DRN_TYPE === item.ACR_DRN_TYPE &&
+                    other.PAYOUT_BASED_ON === item.PAYOUT_BASED_ON
+                );
+                if (match) {
+                    matches.push({
+                        source: item.ROW_ID,
+                        match: match.ROW_ID,
+                        ACR_DRN_TYPE: item.ACR_DRN_TYPE,
+                        PAYOUT_BASED_ON: item.PAYOUT_BASED_ON,
+                        OVLP_ROW_ID: item.OVLP_ROW_ID
+                    });
+                }
+            });
+        });
+        return matches;
+    };
     static checkOVLPDate = function (data, resp, objectId) {
         //var momentRange = require('moment-range');
         const rangemoment = extendMoment(StaticMomentService.moment);
