@@ -412,6 +412,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
     @Input() in_Pt_Id: any = '';
     @Input() contractData: any = {};
     @Input() UItemplate: any = {};
+    @Input() NumberOfDaysToExpireDeal = 90;
     @Output() tmDirec = new EventEmitter();
     @Output() enableDeTab = new EventEmitter();
     @Output() refreshedContractData = new EventEmitter;
@@ -450,6 +451,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
     private spinnerMessageHeader: string = "";
     private spinnerMessageDescription: string = "";
     private isBusyShowFunFact: boolean = true;
+    private hardExp;
     private timeout: any = null;
     /*For loading variable */
     public showDiscount: string = "0%";
@@ -769,9 +771,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             console.error('PricingTableEditorComponent::readPricingTable::readTemplates:: service::', err);
         });
         if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
-            this.wipDealData=response.WIP_DEAL;
+            this.wipDealData = response.WIP_DEAL;
         }
-
         if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
             // The thing about Tender contract, they can be created from a copy which will NOT create WIP deals and
             // Cleans out the PTR_SYS_PRD value forcing a product reconciliation because the customer might have changed.
@@ -848,6 +849,14 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 },
                 mergeCells: mergCells,
                 cells: (row: number, col: number, prop: string) => {
+                    //used to make columns readonly expired active deals & cancelled deals except IQR tender deals (salesforce_id identifier)
+                    this.hardExp = this.newPTR[row]?.END_DT ? new Date(this.newPTR[row]?.END_DT) : null;
+                    if (this.hardExp) {
+                        this.hardExp.setDate(this.hardExp.getDate() + this.NumberOfDaysToExpireDeal);
+                        if (new Date() >= this.hardExp && this.contractData.SALESFORCE_ID == "") {
+                            return { 'readOnly': true };
+                        }
+                    }
                     return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable, this.isTenderContract, this.curPricingStrategy.IS_HYBRID_PRC_STRAT,this.wipDealData);
                 },
                 cell: this.cellComments,

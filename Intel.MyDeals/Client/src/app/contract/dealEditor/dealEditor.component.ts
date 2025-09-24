@@ -314,6 +314,15 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         this.gridResult = [];
         setTimeout(() => {
             if (Object.keys(this.in_Search_Results[0]).length > 0) {
+                //used to make columns readonly expired active deals & cancelled deals except IQR tender deals (salesforce_id identifier)
+                each(this.in_Search_Results, row => {
+                    const hardExp = this.isDealExpired(row.END_DT);
+                    each(this.wipTemplate.columns, (col, i) => {
+                        if (hardExp && this.contractData.SALESFORCE_ID == "" && col.field != 'tools') {
+                            row._behaviors.isReadOnly[col.field] = true
+                        }
+                    });
+                })
                 this.gridResult = this.in_Search_Results;
                 if (this.ruleData.exportAll == 1) {
                     let columns = this.columnOrdering();
@@ -379,17 +388,21 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             this.savingDeal = false;
             each(response.WIP_DEAL, row => {
                 row.PTR_USER_PRD = row.PTR_USER_PRD.split(',').join(', ');
-                 
-                     each(this.wipTemplate.columns,(col,i)=>{
-                        if(!!col && col.title=='Send to Vistex'){
-                           // this.wipTemplate.columns.splice(i,1);
+                //used to make columns readonly expired active deals & cancelled deals except IQR tender deals (salesforce_id identifier)
+                const hardExp = this.isDealExpired(row.END_DT);
+                each(this.wipTemplate.columns, (col, i) => {
+                    if (hardExp && this.contractData.SALESFORCE_ID == "" && col.field != 'tools') {
+                        row._behaviors.isReadOnly[col.field] = true
+                    }
+                    if(!!col && col.title=='Send to Vistex'){
+                        // this.wipTemplate.columns.splice(i,1);
 
-                           if(!!row._behaviors.isHidden && !!row._behaviors.isHidden.SEND_TO_VISTEX && row._behaviors.isHidden.SEND_TO_VISTEX==true)
-                            {
-                                col.hidden=true;
-                            }
+                        if(!!row._behaviors.isHidden && !!row._behaviors.isHidden.SEND_TO_VISTEX && row._behaviors.isHidden.SEND_TO_VISTEX==true)
+                        {
+                            col.hidden=true;
                         }
-                    })
+                    }
+                })
                
             })
             this.gridResult = response.WIP_DEAL;
@@ -625,36 +638,36 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                 if (args.dataItem.HAS_TRACKER == "1" ) {
 
                     if(args.column.field == "CONSUMPTION_LOOKBACK_PERIOD" || args.column.field == "CONSUMPTION_REASON"
-                    || args.column.field == "CONSUMPTION_TYPE" || args.column.field == "SYS_PRICE_POINT"
-                    || args.column.field == "QLTR_PROJECT" || args.column.field == "CONSUMPTION_REASON_CMNT") {
+                            || args.column.field == "CONSUMPTION_TYPE" || args.column.field == "SYS_PRICE_POINT"
+                            || args.column.field == "QLTR_PROJECT" || args.column.field == "CONSUMPTION_REASON_CMNT") {
 
-                    }
+                        }
                     else{
+                            args.sender.editCell(
+                                args.rowIndex,
+                                args.columnIndex
+                            );
+                        }
+                    }
+                else{
                         args.sender.editCell(
                             args.rowIndex,
                             args.columnIndex
                         );
                     }
-                }
-                else{
-                    args.sender.editCell(
-                        args.rowIndex,
-                        args.columnIndex
-                    );
-                }
                 if (args.dataItem.HAS_TRACKER!="1" && args.column.field == "SYS_PRICE_POINT") {
-                    this.openSystemPriceModal(args.dataItem);
+                        this.openSystemPriceModal(args.dataItem);
+                    }
+                    else if (args.column.field == "END_CUSTOMER_RETAIL") {
+                        this.openEndCustomerModal(args.dataItem, this.wipTemplate.columns.filter(x => x.field == args.column.field)[0]);
+                    }
+                    else if (args.column.field == "MRKT_SEG" || args.column.field == "CONSUMPTION_COUNTRY_REGION"
+                        || args.column.field == "CONSUMPTION_CUST_PLATFORM" || args.column.field == "CONSUMPTION_CUST_SEGMENT"
+                        || args.column.field == "CONSUMPTION_CUST_RPT_GEO" || args.column.field == "CONSUMPTION_SYS_CONFIG"
+                        || args.column.field == "DEAL_SOLD_TO_ID" || args.column.field == "TRGT_RGN") {
+                        this.openMultiSelectModal(args.dataItem, this.wipTemplate.columns.filter(x => x.field == args.column.field)[0]);
+                    }
                 }
-                else if (args.column.field == "END_CUSTOMER_RETAIL") {
-                    this.openEndCustomerModal(args.dataItem, this.wipTemplate.columns.filter(x => x.field == args.column.field)[0]);
-                }
-                else if (args.column.field == "MRKT_SEG" || args.column.field == "CONSUMPTION_COUNTRY_REGION"
-                    || args.column.field == "CONSUMPTION_CUST_PLATFORM" || args.column.field == "CONSUMPTION_CUST_SEGMENT"
-                    || args.column.field == "CONSUMPTION_CUST_RPT_GEO" || args.column.field == "CONSUMPTION_SYS_CONFIG"
-                    || args.column.field == "DEAL_SOLD_TO_ID" || args.column.field == "TRGT_RGN") {
-                    this.openMultiSelectModal(args.dataItem, this.wipTemplate.columns.filter(x => x.field == args.column.field)[0]);
-                }
-            }
             else if ((args.column.field == "PRD_BCKT" && this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (args.column.field == "TITLE" && this.curPricingTable.OBJ_SET_TYPE_CD !== "KIT")) {
                 this.openDealProductModal(args.dataItem);
             }

@@ -41,7 +41,7 @@
                             <kendo-tabstrip-tab title="Pricing Table Editor" [selected]="isPTETab==true">
                                 <ng-template kendoTabContent>
                                     <div *ngIf="isPTETab">
-                                        <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" (enableDeTab)="enableDETab($event)" (refreshedContractData)="refreshContractData($event)">
+                                        <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" [NumberOfDaysToExpireDeal]="NumberOfDaysToExpireDeal" (enableDeTab)="enableDETab($event)" (refreshedContractData)="refreshContractData($event)">
                                         </pricing-table-editor>
                                     </div>
                                 </ng-template>
