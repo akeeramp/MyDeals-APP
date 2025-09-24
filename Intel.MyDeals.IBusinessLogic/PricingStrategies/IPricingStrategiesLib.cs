@@ -19,5 +19,6 @@ namespace Intel.MyDeals.IBusinessLogic
         OpMsgQueue ActionTenderApprovals(ContractToken contractToken, List<TenderActionItem> data, string actn);
         OpDataCollectorFlattenedDictList GetFullPricingStrategy(int id);
         OpDataCollectorFlattenedDictList FetchTenderData(List<int> ids, OpDataElementType idsType);
+        bool UpdateSkipPCTMCTFailureFlag(List<SkipPCTMCTFailureObj> skipPCTMCTFailureObjs);
     }
 }

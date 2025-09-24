@@ -867,6 +867,7 @@
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingDialog.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\complexStackingModal\complexStackingModal.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\contractManager\confirmationModal\confirmationModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\infoModal\infoModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\reporting.module.ts" />
     <TypeScriptCompile Include="Client\src\app\reporting\productDetailsReport\prodSel_Util.ts" />
@@ -935,6 +936,8 @@
     <Content Include="Client\src\app\contract\contractManager\emailModal\emailModal.component.html" />
     <Content Include="Client\src\app\contract\contractManager\messageBoard\messageBoard.component.css" />
     <Content Include="Client\src\app\contract\contractManager\messageBoard\messageBoard.component.html" />
+	<Content Include="Client\src\app\contract\contractManager\confirmationModal\confirmationModal.component.html" />
+	<Content Include="Client\src\app\contract\contractManager\confirmationModal\confirmationModal.component.css" />
     <Content Include="Client\src\app\contract\dealEditor\dealEditor.component.css" />
     <Content Include="Client\src\app\contract\dealEditor\dealEditor.component.html" />
     <Content Include="Client\src\app\contract\contractManager\contractManager.component.css" />

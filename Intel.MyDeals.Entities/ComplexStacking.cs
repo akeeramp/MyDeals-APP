@@ -50,4 +50,10 @@ namespace Intel.MyDeals.Entities
         public int ObjID { get; set; }
         public int ObjType { get; set; }
     }
+
+    public class SkipPCTMCTFailureObj
+    {
+        public int ObjID { get; set; }
+        public int ObjType { get; set; }
+    }
 }

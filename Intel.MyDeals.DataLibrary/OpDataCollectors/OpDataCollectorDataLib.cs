@@ -1136,5 +1136,35 @@ namespace Intel.MyDeals.DataLibrary
             return result;
         }
 
+        public bool UpdateSkipPCTMCTFailureFlag(List<SkipPCTMCTFailureObj> skipPCTMCTFailureObjs)
+        {
+            OpLog.Log("UpdateSkipPCTMCTFailureFlag - Started");
+            bool result = false;
+            try
+            {
+                type_int_pair opPair = new type_int_pair();
+                opPair.AddRows(skipPCTMCTFailureObjs.Select(obj => new OpPair<int, int>
+                {
+                    First = obj.ObjType,
+                    Second = obj.ObjID
+                }));
+                DataAccess.ExecuteNonQuery(new Procs.dbo.PR_MYDL_SKIP_PCT_MCT_FAILURE_ACTN
+                {
+                    @in_cs_actn = "UPDATE",
+                    @in_atrb_nm = "IS_PCT_MCT_FAILURE_SKIPPED",
+                    @in_obj_keys = opPair,
+                    @in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                    @role = OpUserStack.MyOpUserToken.Role.RoleTypeCd
+                });
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return result;
+        }
+
     }
 }

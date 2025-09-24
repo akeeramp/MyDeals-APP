@@ -6,6 +6,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.MyDeals.Helpers;
+using Intel.MyDeals.BusinessLogic;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -214,6 +215,17 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(data, savePacket)
                 , "Unable to copy the Pricing Strategy"
             );
+        }
+
+        [Authorize]
+        [Route("UpdateSkipPCTMCTFailureFlag")]
+        [HttpPost]
+        public bool UpdateSkipPCTMCTFailureFlag(List<SkipPCTMCTFailureObj> skipPCTMCTObjs)
+        {
+            bool result = SafeExecutor(() => _pricingStrategiesLib.UpdateSkipPCTMCTFailureFlag(skipPCTMCTObjs)
+                , $"Unable to update SkipPCTMCTFailure flag."
+             );
+            return result;
         }
     }
 }

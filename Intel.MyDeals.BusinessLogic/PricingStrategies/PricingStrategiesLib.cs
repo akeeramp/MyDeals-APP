@@ -216,6 +216,32 @@ namespace Intel.MyDeals.BusinessLogic
                     continue;
                 }
 
+                //Skipping PCT/MCT for GA based on Constant Value
+                if(role == RoleTypes.DA && (submittedFailTests.Contains(meetCompInDB) || submittedFailTests.Contains(costTestInDB)))
+                {
+                    var _constantLookupDataLib = new ConstantLookupDataLib();
+                    var adminConstants = _constantLookupDataLib.GetAdminConstants();
+
+                    // Check for PCT results if we are DA and approving from Submitted
+                    var enablePctRun = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_PCT_FAILURE" && c.CNST_VAL_TXT == "1");
+                    if (enablePctRun != null) costTestInDB = "skipPCT";
+
+                    // Check for PCT/MCT results if we are DA and approving from Submitted
+                    var enableMctRun = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_MCT_FAILURE" && c.CNST_VAL_TXT == "1");
+                    if (enableMctRun != null) meetCompInDB = "skipMCT";
+
+                    // Log timeline and system comments if we skipped PCT or MCT based on Constant Value
+                    if (costTestInDB == "skipPCT" || meetCompInDB == "skipMCT")
+                    {
+                        var timelineMsg = costTestInDB == "skipPCT" && meetCompInDB == "skipMCT"
+                            ? "Cost Test and Meet Comp Test failure skipped based on Constant Value setting for DA role."
+                            : costTestInDB == "skipPCT"
+                                ? "Cost Test failure skipped based on Constant Value setting for DA role."
+                                : "Meet Comp Test failure skipped based on Constant Value setting for DA role.";
+                        dc.AddTimelineComment(timelineMsg);
+                    }
+                }
+                
                 // concurrency check for meet comp and cost test values..
                 if (stageIn == WorkFlowStages.Submitted && (submittedFailTests.Contains(meetCompInDB) || submittedFailTests.Contains(costTestInDB)) && actnPs.ContainsKey("Approve") && actnPs["Approve"].Any(i => i.DC_ID == dc.DcID))
                 {
@@ -870,6 +896,13 @@ namespace Intel.MyDeals.BusinessLogic
                 OBJ_TYPE_SID = (int)opdataElementType,
                 NOTIF_ID = (int)notfEvent
             });
+        }
+
+        public bool UpdateSkipPCTMCTFailureFlag(List<SkipPCTMCTFailureObj> skipPCTMCTFailureObjs)
+        {
+            OpDataCollectorDataLib OD = new OpDataCollectorDataLib();
+            var result = OD.UpdateSkipPCTMCTFailureFlag(skipPCTMCTFailureObjs);
+            return result;
         }
     }
 }

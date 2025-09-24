@@ -1,0 +1,21 @@
+﻿<div class="container-fluid overflow">
+    <div class="row">
+        <div class="col">
+            <h4 class="another-header-geo" mat-dialog-title>{{confirmationModalName}}</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p style="padding-top: 1em; color:blue" [innerHTML]='warningMessage'></p>
+            <p style="padding-top: 1em; color:blue">{{confirmationMessage}}</p>
+        </div>
+    </div>
+    <div class="row justify-content-end" style="place-self: flex-end;">
+        <div class="col">
+            <div class="bottom-btns" mat-dialog-actions>
+                <button mat-button (click)="onNoClick()" class="btn btn-warning bid-geo-cancel">No</button>
+                <button mat-button (click)="onConfirm()" cdkFocusInitial class="btn btn-primary bid-geo-saveclose">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>

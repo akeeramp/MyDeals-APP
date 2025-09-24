@@ -1597,6 +1597,15 @@ namespace Intel.MyDeals.Entities {
         public const string IS_CS_GRP_REVIEWED = "IS_CS_GRP_REVIEWED";
 
         ///<summary>
+        /// DIM_SID: 3
+        /// DIM_CD: DEAL
+        /// ATRB_SID: 3720
+        /// TGT_COL_TYPE: INT
+        /// DOT_NET_DATA_TYPE: System.Int32
+        ///</summary>
+        public const string IS_PCT_MCT_FAILURE_SKIPPED = "IS_PCT_MCT_FAILURE_SKIPPED";
+
+        ///<summary>
         /// DIM_SID: 50
         /// DIM_CD: SECUR
         /// ATRB_SID: 5041

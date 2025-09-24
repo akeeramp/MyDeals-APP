@@ -3340,6 +3340,78 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
+		/// ID: 1747849639
+		/// Modified: 9/19/2025 11:31:30 AM
+		/// Parameters: 5
+		///</summary>
+		public partial class PR_MYDL_SKIP_PCT_MCT_FAILURE_ACTN : SP
+        {
+            public PR_MYDL_SKIP_PCT_MCT_FAILURE_ACTN()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_SKIP_PCT_MCT_FAILURE_ACTN]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(50)
+            /// Mode: IN
+            /// Max Length: 50
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 50, false)]
+            public String in_cs_actn
+            {
+                set { SetParmeter("in_cs_actn", value); }
+                get { return (String)GetParameter("in_cs_actn"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(50)
+            /// Mode: IN
+            /// Max Length: 50
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 50, false)]
+            public String in_atrb_nm
+            {
+                set { SetParmeter("in_atrb_nm", value); }
+                get { return (String)GetParameter("in_atrb_nm"); }
+            }
+
+            ///<summary>
+            /// DataType: table type
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public SqlTableValueParameterBase in_obj_keys
+            {
+                set { SetParmeter("in_obj_keys", value); }
+                get { return (SqlTableValueParameterBase)GetParameter("in_obj_keys"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public Int32 in_emp_wwid
+            {
+                set { SetParmeter("in_emp_wwid", value); }
+                get { return (Int32)GetParameter("in_emp_wwid"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(50)
+            /// Mode: IN
+            /// Max Length: 50
+            ///</summary>
+            [SQLParameterAttribute(5, "ParameterDirection.Input", 50, false)]
+            public String role
+            {
+                set { SetParmeter("role", value); }
+                get { return (String)GetParameter("role"); }
+            }
+        }
+
+        ///<summary>
         /// ID: 2044182678
         /// Modified: 2/21/2025 12:30:05 PM
         /// Parameters: 5

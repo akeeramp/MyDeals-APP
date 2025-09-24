@@ -202,12 +202,98 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 }
 
+                //Skipping PCT/MCT for DA based on Constant Value
+                string IS_PCT_MCT_FAILURE_SKIPPED = r.Dc.GetDataElementValue(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED);
+                if (role == RoleTypes.DA && r.Dc.DcType == "PRC_ST" && action == "Approve"
+                    && !objsetActionItem.Actions["Approve"] && IS_PCT_MCT_FAILURE_SKIPPED == "1")
+                {
+                    bool skipPCT = false;
+                    bool skipMCT = false;
+                    var _constantLookupDataLib = new ConstantLookupDataLib();
+                    var adminConstants = _constantLookupDataLib.GetAdminConstants();
+                    var actionReasonStr = objsetActionItem.ActionReasons["Approve"];
+
+                    // Check if skipping PCT or MCT is enabled in constants
+                    var enablePctRun = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_PCT_FAILURE" && c.CNST_VAL_TXT == "1" && pct == "Fail");
+                    if (enablePctRun != null)
+                    {
+                        skipPCT = true;
+                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "PCT failure is skipped.", true, false);
+                    };
+
+                    var enableMctRun = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_MCT_FAILURE" && c.CNST_VAL_TXT == "1" && mct == "Fail");
+                    if (enableMctRun != null)
+                    {
+                        skipMCT = true;
+                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "MCT failure is skipped.", false, true);
+                    };
+
+                    // If both are skipped, or one is skipped and the other did not fail, allow Approve
+                    if (skipPCT && skipMCT)
+                    {
+                        objsetActionItem.Actions["Approve"] = true;
+                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "Both PCT and MCT failures are skipped.", true, true);
+                    }
+                    else if (skipPCT && !skipMCT && !mctFailed)
+                    {
+                        objsetActionItem.Actions["Approve"] = true;
+                    }
+                    else if (!skipPCT && !pctFailed && skipMCT)
+                    {
+                        objsetActionItem.Actions["Approve"] = true;
+                    }
+                }
             }
 
             objsetItem["_actions"] = objsetActionItem.Actions;
             objsetItem["_actionReasons"] = objsetActionItem.ActionReasons;
             objsetItem["_settings"] = objsetActionItem.Settings;
-         }
+        }
+
+        private static string GetPopUpMessage(string str, string newStr, bool skipPCT, bool skipMCT) 
+        {
+            // Adjust the existing action reason message to reflect skipped tests
+            if (str.Contains("Pricing Strategy did not pass Price Cost Test and Meet Comp Test."))
+            {
+                int newlineIndex = str.IndexOf('\n');
+                if (newlineIndex != -1)
+                {
+                    string remaining = str.Substring(newlineIndex + 1);                    
+                    if (skipPCT || skipMCT)
+                    {
+                        str = $"Pricing Strategy did not pass {(skipMCT ? "Price Cost Test" : "Meet Comp Test")}.\n";
+                    }
+                    else
+                    {
+                        str = newStr + "\n";
+                    }
+                    str += remaining;
+
+                }
+                else
+                {
+                    str = newStr;
+                }
+            }
+            else if (str.Contains("Pricing Strategy did not pass Price Cost Test") || str.Contains("Pricing Strategy did not pass Meet Comp Test"))
+            {
+                int newlineIndex = str.IndexOf('\n');
+                if (newlineIndex != -1)
+                {
+                    string remaining = str.Substring(newlineIndex + 1);
+                    str = newStr + "\n" + remaining;
+                }
+                else
+                {
+                    str = newStr;
+                }
+            }
+            else
+            {
+                str += "\n" + newStr;
+            }
+            return str;
+        }
 
         public static void TranslateProductFilter(params object[] args)
         {

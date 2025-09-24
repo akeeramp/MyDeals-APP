@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
+import { DynamicObj } from "../../admin/employee/admin.employee.model";
 
 @Injectable({
     providedIn: 'root'
@@ -68,5 +69,10 @@ export class contractManagerservice {
     deleteAttachment(custId, objTypeSid, objSid, fileSid) {
         const url = this.API_URL_FILE_ATTACHMENTS + "Delete/" + custId + "/" + objTypeSid + "/" + objSid + "/" + fileSid + "/CNTRCT";
         return this.httpClient.post(url, objTypeSid);
+    }
+
+    updateSkipPCTMCTFailureFlag(inputData: DynamicObj[]): Observable<any> {
+        const apiUrl: string = this.apiBasePricingStrategyUrl + 'UpdateSkipPCTMCTFailureFlag';
+        return this.httpClient.post(apiUrl, inputData);
     }
 }

@@ -14,13 +14,14 @@ import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 import { each }from 'underscore';
 import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
-import { Subject, Subscription } from "rxjs";
+import { Subject, Subscription, forkJoin } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ComplexStackingModalComponent } from "./complexStackingModal/complexStackingModal.component";
 import { DynamicObj } from "../../admin/employee/admin.employee.model";
 import { ComplexStackingModalService } from "./complexStackingModal/complexStackingModal.service";
 import { ComplexStackingDialogService } from "./complexStackingModal/complexStackingDialog.service";
-
+import { constantsService } from "../../admin/constants/admin.constants.service";
+import { confirmationModalComponent } from "./confirmationModal/confirmationModal.component";
 export interface contractIds {
     Model: string;
     C_ID: number;
@@ -77,6 +78,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         private loggerSvc: logger,
         private contractManagerSvc: contractManagerservice,
         private complexStackingDialogSvc: ComplexStackingDialogService,
+        private constantsService: constantsService,
         private lnavSvc: lnavService,
         private momentService: MomentService) { }
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
@@ -127,6 +129,9 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     public perfModel = 'Contract_Manager'
     public isBusyShowFunFact: any;
     public offLabelName = 'Accepted';
+    public constants: any[] = [];
+    public skipPCTFailure = false;
+    public skipMCTFailure = false;
     // Allowed extensions for the attachments field
     myRestrictions: FileRestrictions = {
         allowedExtensions: ["doc", "xls", "txt", "bmp", "jpg", "pdf", "ppt", "zip", "xlsx", "docx", "pptx", "odt", "ods", "ott", "sxw", "sxc", "png", "7z", "xps"],
@@ -933,7 +938,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         this.canActionIcon = true;
     }
     async loadContractDetails(){
-        this.contractData = {};
+        this.contractData = {};        
         let response: any = await this.contractManagerSvc.readContract(this.contractId).toPromise().catch((error) => {
             this.loggerSvc.error('Get Upper Contract service', error);
         });
@@ -1432,10 +1437,31 @@ export class contractManagerComponent implements OnInit, OnDestroy {
                 })
             })
             this.loadDetails();
+            this.loadConstants();
         } catch(ex) {
             this.loggerSvc.error('Something went wrong', 'Error');
             console.error('ContractManager::ngOnInit::',ex);
         }
+    }
+
+    async loadConstants() {
+        let response: any = await this.constantsService.getConstants().toPromise().catch((error) => {
+            this.loggerSvc.error('Get Constant service', error);
+        });
+        if (response && response.length > 0) {
+            this.constants = response;
+            const skipPCTFailure = response.find((item) => item.CNST_NM === 'SKIP_PCT_FAILURE');
+            const skipMCTFailure = response.find((item) => item.CNST_NM === 'SKIP_MCT_FAILURE');
+            if (skipPCTFailure && skipPCTFailure.CNST_VAL_TXT === '1') {
+                this.skipPCTFailure = true;
+            }
+            if (skipMCTFailure && skipMCTFailure.CNST_VAL_TXT === '1') {
+                this.skipMCTFailure = true;
+            }
+        }
+        else {
+            this.loggerSvc.error('No records found in Constants', 'Error');
+        }        
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
@@ -1453,5 +1479,94 @@ export class contractManagerComponent implements OnInit, OnDestroy {
             return true;
         }
         return false;
+    }
+
+    showPCTMCTSkipLabel(ps: DynamicObj) {
+        const USER_ROLE = (<any>window).usrRole;
+        if (USER_ROLE === "DA" && (this.skipPCTFailure || this.skipMCTFailure)) {
+            return true;
+        }
+        return false;
+    }
+
+    showPCTMCTSkipIcon(ps: DynamicObj) {
+        const USER_ROLE = (<any>window).usrRole;
+        if (USER_ROLE === "DA") {
+            return this.shouldShowSkipIcon(ps);
+        }
+        return false;
+    }
+
+    shouldShowSkipIcon(ps) {
+        // Normalize statuses to uppercase for safety
+        const pctSkip = this.skipPCTFailure;
+        const mctSkip = this.skipMCTFailure;
+        const pctStatus = ps?.COST_TEST_RESULT?.toUpperCase();
+        const mctStatus = ps?.MEETCOMP_TEST_RESULT?.toUpperCase();
+
+        // Case 1: Both skips are FALSE
+        if (!pctSkip && !mctSkip) {
+            return false; // Icon Skip = N
+        }
+
+        // Case 2: PCT Skip = TRUE, MCT Skip = FALSE
+        if (pctSkip && !mctSkip) {
+            return pctStatus === "FAIL" && mctStatus === "PASS";
+        }
+
+        // Case 3: PCT Skip = FALSE, MCT Skip = TRUE
+        if (!pctSkip && mctSkip) {
+            return pctStatus === "PASS" && mctStatus === "FAIL";
+        }
+
+        // Case 4: Both skips are TRUE
+        if (pctSkip && mctSkip) {
+            return !(pctStatus === "PASS" && mctStatus === "PASS");
+        }
+
+        // Fallback
+        return false;
+    }
+
+
+    IsPCTMCTSkipped(skippedPCTMCTFailure) {
+        const USER_ROLE = (<any>window).usrRole;
+        if (USER_ROLE === "DA" && skippedPCTMCTFailure === "1") {
+            return true;
+        }
+        return false;
+    }
+
+    async onSkippingPCTMCTFailure(e, ps) {
+        const USER_ROLE = (<any>window).usrRole;
+        if (USER_ROLE === "DA") {
+            const pctMctFailureSkipInputObj: DynamicObj[] = [{ ObjId: ps.DC_ID, ObjType: 2 }];
+            const DIALOG_REF = this.dialog.open(confirmationModalComponent, {
+                height: 'auto',
+                width: '600px',
+                data: { confirmationMessage: "Click 'Yes' to Skip PCT/MCT Failure?", confirmationModalName: 'Skip PCT/MCT Failure' }
+            });
+            await DIALOG_REF.afterClosed().toPromise().then(async (result) => {
+                //If user clicks on 'Yes'
+                if (result) {
+                    //Skip PCT/MCT Failure
+                    this.isLoading = true;
+                    this.contractManagerSvc.updateSkipPCTMCTFailureFlag(pctMctFailureSkipInputObj).toPromise()
+                        .then((response: boolean) => {// response is boolean
+                            this.isLoading = false;
+                            if (response) {
+                                this.loadDetails();
+                            } else {
+                                this.loggerSvc.error("Unable to update the Pricing Stratergy", "Error", 500);
+                            }                            
+                        }).catch((error) => {
+                            this.loggerSvc.error("Unable to update the Pricing Stratergy", error, error.statusText);
+                        })
+                } else {
+                    //If user clicks on 'No'
+                    e.preventDefault();
+                }
+            });
+        }
     }
 }

@@ -205,6 +205,11 @@
                     <td style="width: 100px; text-align: center;">Stage</td>
                     <td style="width: 50px; text-align: center;">Valid</td>
                     <td style="line-height: 1.1em;">Pricing Strategy / Pricing Table</td>
+                    <td style="width: 150px; text-align: center;" *ngIf="showPCTMCTSkipLabel(ps)">
+                        <div title='Is complex stacking reviewed.'>
+                            Skip PCT/MCT Failure
+                        </div>
+                    </td>
                     <td style="width: 150px; text-align: center;">
                         <div title='Is complex stacking reviewed.'>
                             Complex Stacking
@@ -283,6 +288,15 @@
                             </td>
                             <td>
                                 <div [textContent]="ps.TITLE" class="bolder linkable" title="Click to open the Pricing Strategy in the Contract Editor" (click)="openPTEeditor(ps)"></div>
+                            </td>
+                            <td style="width: 150px; text-align: center;" *ngIf="showPCTMCTSkipIcon(ps)">
+                                <div *ngIf="IsPCTMCTSkipped(ps.IS_PCT_MCT_FAILURE_SKIPPED);then pctmctskip_content else non_pctmctskip_content">here is ignored</div>
+                                <ng-template #pctmctskip_content>
+                                    <i class="intelicon-protection-checked-verified-solid bigIcon validf_Complete" title="PCT/MCT Failed Skipped"></i>
+                                </ng-template>
+                                <ng-template #non_pctmctskip_content>
+                                    <i (click)="onSkippingPCTMCTFailure($event, ps)" style="cursor: pointer" class="intelicon-information-solid bigIcon validf_Valid" title="Click to Skip PCT/MCT Failure"></i>
+                                </ng-template>
                             </td>
                             <td style="width: 150px; text-align: center;">
                                 <div *ngIf="IsCSReviewed(ps.IS_CS_GRP_REVIEWED);then rev_content else non_rev_content">here is ignored</div>
