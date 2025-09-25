@@ -34,6 +34,7 @@ export class BusinessProcessComponent implements OnInit {
                     { text: "Rebate Strategy Versions", url: '#rsVersions', bool: 'rsVersions' },
                     { text: "Rebate Strategy Approval", url: '#rsApproval', bool: 'rsApproval' },
                     { text: "Deal Validation", url: '#dealValidation', bool: 'dealValidation' },
+                    { text: "Grouping", url: '#grouping', bool: 'grouping' },
                     { text: "Overlapping Deals", url: '#overlappingDeals', bool:'overlappingDeals' },
                     { text: "Meet Comp Test", url: '#meetCompTest', bool:'meetCompTest' },
                     { text: "Pricing Cost Test", url: '#pricingCostTest', bool:'pricingCostTest' },
@@ -104,6 +105,12 @@ export class BusinessProcessComponent implements OnInit {
                 { text: "Coding practices", url: "Home" },
                 { text: "Business Process and Abstract Design", url: "BusinessDesign" },
                 { text: "Deal Validation", url: '#dealValidation' }
+            ];
+        } else if (this.flagBool == "grouping") {
+            this.list_breadcrumbs = [
+                { text: "Coding practices", url: "Home" },
+                { text: "Business Process and Abstract Design", url: "BusinessDesign" },
+                { text: "Grouping", url: '#grouping' }
             ];
         } else if(this.flagBool == "overlappingDeals"){
             this.list_breadcrumbs = [

@@ -1,4 +1,4 @@
-﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> 
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <app-breadcrumbs [list_breadcrumbs]="list_breadcrumbs" (selectedBreadCrumb)="loadSelected($event)"></app-breadcrumbs>
 
 <div class="layout-cp-inner-page">
@@ -9,135 +9,176 @@
         </div>
         <div id="tocExpand" *ngIf="!isVisible" (click)="Toggle()" class="intelicon-up rotateIcon"><span class="font-cp">TOC</span> </div>
     </div>
-        <div class="grid-two" style="width: 100%;">
-            <div id="codeQuality">
-                <div style="margin: 10px;">
-                    <h1>My Deals Code Quality Standards</h1>
-                    <p>
-                        MyDeals is a full stack UI application with complex logic and multiple teams are working on it, it is necessary to integrate code quality tools to follow good coding standards.
-                    </p>
-                    <ul>
-                        <li>
-                            In that way developers will have proper guidelines and minimum processes to follow.
-                        </li>
-                        <li>
-                            This practice can help to enforce strong coding standards; application will have low security threats and better performance.
-                        </li>
-                    </ul>
-                    <h4>Quality Checks</h4>
-                    <p> Following the below Quality checks as part of MyDeals Coding Quality Standards</p>
-                    <ul>
-                        <li><b>Unit Testing(NUnit Test Suite):</b> NUnit is unit test framework for all .Net languages.</li>
-                        <li><b>SonarQube:</b> Tool for static analysis of code for any bugs and reviews.</li>
-                        <li><b>CheckMarx:</b> Tool to scan security vulnerabilities.</li>
-                        <li><b>Spectral Scan:</b>  Tool to validate security keys in the source</li>
-                    </ul>
-                    <p>
-                        On each PR, automated quality checks (Sonar Scan and NUnit Test) will run, and code merging will be blocked unless they pass successfully.<br />
-                        <img src="\Client\Images\docs\allChecks-passed.png" alt="" style="height: 300px; margin: 15px 0px;">
-                    </p>
-                    <h4 id="developmentAndDeployment">Development & Deployment Process.​</h4>
-                    <img src="\Client\Images\docs\DevelopmentAndDeployment.jpg" style="height: 500px; margin: 15px 0px;" />
-                    <ul>
-                        <li>
-                            <a href="https://intel.sharepoint.com/:p:/r/sites/MyDealsTeam/_layouts/15/Doc.aspx?sourcedoc=%7B0D9E95FD-07A6-431F-84F7-76798427AE2A%7D&file=MyDeals_Codequality_standarization.pptx&action=edit&mobileredirect=true" target="_blank" class="anchorCodingTools">
-                                Click Here
-                            </a> for more information related to <b>Coding Quality Standards & development and deployment process</b>.
-                        </li>
-                    </ul>
-                </div>
-                    <div id="unitTest">
-                        <h2>Unit Testing</h2>
-                        <p>
-                            Unit testing can be done using many different tools and based on the application's infrastructure. My Deals will focus on writing unit test cases in the Middle Tier layers. NUnit is enabled only for files having C# changes.
-                        </p>
-                        <ul>
-                            <li>
-                                NUnit Test cases must pass in local system before raising PR. On each PR, automated unit tests will be triggered.
-                            </li>
-                            <li>
-                                If Nunit test result is 'PASS' -> No action required can Proceed to next stage.
-                            </li>
-                            <li>If test result is 'FAIL' -> Single test failure will fail the workflow and code merge will be blocked.<br/>
-                            <img src="Client\Images\docs\nUnit_check.png" alt="NUNIT" style="margin: 15px 0px;" /> </li>
-                            <li>
-                                Merging will be blocked unless the workflow passes. Each developer raising PR must ensure that it passes successfully.<br/>
-                                <img src="Client\Images\docs\nUnit_gitHub.png" alt="NUNIT" style="margin: 15px 0px;" />
-                            </li>
-                        </ul>
-                        <p>Refer to Coding Practices -> Coding Tools -> Unit Testing for more information related to Unit Testing</p>
-                    </div>
-                    <div id="sonarScan">
-                        <h2> SonarQube</h2>
-                        <p>
-                            SonarQube is a self-managed, automatic code review tool that systematically helps to deliver Clean Code by integrating in to existing workflow and detects issues in the code to perform continuous code inspections.
-                        </p>
-                        <ul>
-                            <li>
-                                In MyDeals, for now Sonar is enabled only for Angular changes. SonarLint plugin in VS Code helps to identify the issues in local system before raising the PR. 
-                            </li>
-                            <li>
-                                On each PR, a sonar scan will be triggered and merging will be done once sonar checks passed successfully.<br/>
-                                <img src="Client\Images\docs\sonar_gitHub.png" alt="sonarQube" style="height: 300px; margin: 10px 0px;" />
-                            </li>
-                            <li>
-                                If sonar workflow fails , the code will not be mergeable, and we must investigate the issue and fix it.
-                            </li>
-                            <li>
-                                Sonar has <a href="http://mydeals-soatest.amr.corp.intel.com:9000/" target="_blank">dashboard</a> from where we can identify the blocker issues.The issue will have recommended solution to fix the bug. <br/>
-                                <img src="Client\Images\docs\sonar_severity.png" alt="sonarQube" style="height: 300px; margin: 10px 0px;" />
-                            </li>
-                            <li>
-                                For now, the sonar scan workflow will fail only if there is any blocker issue. Low priority vulnerabilities are not considered for now.
-                                
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="checkmarx">
-                        <h2>Checkmarx</h2>
-                        <p>Checkmarx is a widely used application security testing (AST) solution that helps organizations identify and remediate security vulnerabilities in their software applications during the development and testing phases.</p>
-                        <ul>
-                            <li>
-                                In MyDeals GitHub workflow triggers CheckMarx scan on every Tuesday and Thursday 8AM IST. Estimated time of completion is 4-5 hours  and the result is available in appsec 
-                                <a href="https://appsec.intel.com/#/home/" target=" _blank"><b>portal</b></a>.
-                            </li>
-                            <li>
-                                In appsec, go to “My-Application” -> Static Code Scan -> Dashboard. In the dashboard there is “Assets” with “Branch ID: 19568”. Click  on “Checkmarx scan results”.<br/>
-                                <img src="\Client\Images\docs\checkmarx_result.png" alt="checkmarxImg" style="height: 320px; margin: 15px 0px;" />
-                            </li>
-                            <li>
-                                This will redirect to CheckMarx portal  for the latest scan. Here we must make sure no high bugs are reported.
-                               
-                            </li>
-                            <li>
-                                If we have any high priority bug,  refer this <a href="https://intel.sharepoint.com/:w:/s/MyDealsTeam/EYtSPmMri4RPg-mbkLC3oeABGHAWuDwixgwyCLPQBGj8mw?e=OYmtyk"  target="_blank"><b>Doc</b></a> to make necessary changes.
-                            </li>
-                            <li>
-                                Workflow status are available under GitHub Actions -> Checkmarx Scheduled Scan.<br/>
-                                <img src="Client\Images\docs\checkmarxScan.png" alt="checkmarxScan" style="height: 500px; margin: 10px 0px">
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="spectralScan">
-                        <h2> Spectral Scan</h2>
-                    </div>
-                    <ul>
-                        <li>
-                            It is an INTEL recommended scan and enfoces all the repos under innersource org.
-                        </li>
-                        <li>
-                            Spectral Scan will run on each PR. And we can find the scan result in the Actions tab of the PR.<br/>
-                            <img src="\Client\Images\docs\spectralScanResult.png" style="height: 500px; margin: 15px 0px;">
-                        </li>
-                        <li>
-                            If any issue identified in the spectral scan - we can find in the Dashboard of this <b><a href="https://app.spectralops.io/" target="_blank">Link</a></b>
-                        </li>
-                    </ul>
+    <div class="grid-two" style="width: 100%;">
+        <div id="codeQuality">
+            <div style="margin: 10px;">
+                <h1>My Deals Code Quality Standards</h1>
+                <p>
+                    MyDeals is a full stack UI application with complex logic and multiple teams are working on it, it is necessary to integrate code quality tools to follow good coding standards.
+                </p>
+                <ul>
+                    <li>
+                        In that way developers will have proper guidelines and minimum processes to follow.
+                    </li>
+                    <li>
+                        This practice can help to enforce strong coding standards; application will have low security threats and better performance.
+                    </li>
+                </ul>
+                <h4>Quality Checks</h4>
+                <p> Following the below Quality checks as part of MyDeals Coding Quality Standards</p>
+                <ul>
+                    <li><b>Unit Testing(NUnit Test Suite):</b> NUnit is unit test framework for all .Net languages.</li>
+                    <li><b>SonarQube:</b> Tool for static analysis of code for any bugs and reviews.</li>
+                    <li><b>Spectral Scan:</b>  Tool to validate security keys in the source.</li>
+                    <li><b>UIPath: </b>Platform that offers comprehensive solutions for UI automation testing, particularly through its UiPath Test Suite.</li>
+                    <li><b>JMeter: </b>Tool for performance testing.</li>
+                    <li><b>Semgrep:</b> Static analysis tool designed for searching code, finding bugs, and enforcing code standards.</li>
+                    <li><b>Dynatrace: </b>Is a Software as a Service offering that focuses on performance and availability monitoring​</li>
+                </ul>
+                <p>
+                    On each PR, automated quality checks (Sonar Scan and NUnit Test) will run, and code merging will be blocked unless they pass successfully.<br />
+                    <img src="\Client\Images\docs\allChecks-passed.png" alt="" style="height: 300px; margin: 15px 0px;">
+                </p>
+                <h4 id="developmentAndDeployment">Development & Deployment Process.​</h4>
+                <img src="\Client\Images\docs\DevelopmentAndDeployment.jpg" style="height: 500px; margin: 15px 0px;" />
+                <ul>
+                    <li>
+                        <a href="https://intel.sharepoint.com/:p:/r/sites/MyDealsTeam/_layouts/15/Doc.aspx?sourcedoc=%7B0D9E95FD-07A6-431F-84F7-76798427AE2A%7D&file=MyDeals_Codequality_standarization.pptx&action=edit&mobileredirect=true" target="_blank" class="anchorCodingTools">
+                            Click Here
+                        </a> for more information related to <b>Coding Quality Standards & development and deployment process</b>.
+                    </li>
+                </ul>
             </div>
+            <div id="unitTest">
+                <h2>Unit Testing</h2>
+                <p>
+                    Unit testing can be done using many different tools and based on the application's infrastructure. My Deals will focus on writing unit test cases in the Middle Tier layers. NUnit is enabled only for files having C# changes.
+                </p>
+                <ul>
+                    <li>
+                        NUnit Test cases must pass in local system before raising PR. On each PR, automated unit tests will be triggered.
+                    </li>
+                    <li>
+                        If Nunit test result is 'PASS' -> No action required can Proceed to next stage.
+                    </li>
+                    <li>
+                        If test result is 'FAIL' -> Single test failure will fail the workflow and code merge will be blocked.<br />
+                        <img src="Client\Images\docs\nUnit_check.png" alt="NUNIT" style="margin: 15px 0px;" />
+                    </li>
+                    <li>
+                        Merging will be blocked unless the workflow passes. Each developer raising PR must ensure that it passes successfully.<br />
+                        <img src="Client\Images\docs\nUnit_gitHub.png" alt="NUNIT" style="margin: 15px 0px;" />
+                    </li>
+                </ul>
+                <p>Refer to Coding Practices -> Coding Tools -> Unit Testing for more information related to Unit Testing</p>
+            </div>
+            <div id="sonarScan">
+                <h2> SonarQube</h2>
+                <p>
+                    SonarQube is a self-managed, automatic code review tool that systematically helps to deliver Clean Code by integrating in to existing workflow and detects issues in the code to perform continuous code inspections.
+                </p>
+                <ul>
+                    <li>
+                        In MyDeals, for now Sonar is enabled only for Angular changes. SonarLint plugin in VS Code helps to identify the issues in local system before raising the PR.
+                    </li>
+                    <li>
+                        On each PR, a sonar scan will be triggered and merging will be done once sonar checks passed successfully.<br />
+                        <img src="Client\Images\docs\sonar_gitHub.png" alt="sonarQube" style="height: 300px; margin: 10px 0px;" />
+                    </li>
+                    <li>
+                        If sonar workflow fails , the code will not be mergeable, and we must investigate the issue and fix it.
+                    </li>
+                    <li>
+                        Sonar has <a href="http://mydeals-soatest.amr.corp.intel.com:9000/" target="_blank">dashboard</a> from where we can identify the blocker issues.The issue will have recommended solution to fix the bug. <br />
+                        <img src="Client\Images\docs\sonar_severity.png" alt="sonarQube" style="height: 300px; margin: 10px 0px;" />
+                    </li>
+                    <li>
+                        For now, the sonar scan workflow will fail only if there is any blocker issue. Low priority vulnerabilities are not considered for now.
+
+                    </li>
+                </ul>
+            </div>
+            <div id="spectralScan">
+                <h2> Spectral Scan</h2>
+                <ul>
+                    <li>
+                        It is an INTEL recommended scan and enfoces all the repos under innersource org.
+                    </li>
+                    <li>
+                        Spectral Scan will run on each PR. And we can find the scan result in the Actions tab of the PR.<br />
+                        <img src="\Client\Images\docs\spectralScanResult.png" style="height: 500px; margin: 15px 0px;">
+                    </li>
+                    <li>
+                        If any issue identified in the spectral scan - we can find in the Dashboard of this <b><a href="https://app.spectralops.io/" target="_blank">Link</a></b>
+                    </li>
+                </ul>
+            </div>
+            <div id="uipath">
+                <h2>UIPath</h2>
+                <p>
+                    UIPath is used to automate repetitive business and IT processes by employing Robotic Process Automation (RPA) and AI-powered technologies,
+                    allowing businesses to improve efficiency, reduce costs, and free up human employees for higher-value work.
+                </p>
+                <img src="\Client\Images\docs\uipath-workflow.png" style="height: 500px; margin: 15px 5px;" />
+            </div>
+            <div id="jmeter">
+                <h2>JMeter</h2>
+                <p>
+                    Apache JMeter is a Java-based open-source tool designed for load testing and performance measurement of web applications. It has a very user-friendly GUI which makes things
+                    easier while scripting and supports various protocols (HTTP, HTTPS, FTP,JDBC etc.).
+                </p>
+                <ul>
+                    <li>
+                        <b>Test scenarios in JMeter are built by configuring essential elements within the test plan:</b> Define thread groups for virtual users and test duration, configure samplers  to simulate user requests, add logic controllers for interaction flow, incorporate assertions to validate server responses,
+                        introduce timers for realistic delays between actions, parameterize test data using variables from external sources, and iteratively validate and optimize the test plan to accurately simulate user behavior and measure performance metrics.
+                    </li>
+                </ul>
+            </div>
+
+            <div id="semgrep">
+                <h2>Semgrep</h2>
+                <p>Semgrep Code is a static application security testing (SAST) tool that detects security vulnerabilities in our code.</p>
+                <ul>
+                    <li>
+                        Semgrep has two methods of functionality: IDE and Scan. For the scan, scans are performed in two ways: full and differential.
+                        <ul>
+                            <li>A full scan is performed on every merge/pull request.</li>
+                            <li> A differential scan is performed on branches after every commit.</li>
+                        </ul>
+                    </li>
+                    <li>Semgrep Code uses rules, which encapsulate pattern matching logic and data flow analysis, to scan your code for security issues, style violations, bugs, and more.</li>
+                    <li>
+                        Semgrep AppSec Platform displays Semgrep Code's findings. Additionally, the platform allows you to:                        
+                        <ul>
+                            <li> Triage findings</li>
+                            <li> Send alerts and notifications or create tickets to track findings identified by Semgrep Code</li>
+                            <li> Customize how Semgrep Code scans your repositories</li>
+                            <li>Manage your users and facilitate team collaboration in remediating security issues</li>
+                        </ul>
+                    </li>
+                    <li> Semgrep scans altered files based on schedule that runs at 8am IST on Tuesday and Thursday.</li>
+                </ul>
+                <img src="\Client\Images\docs\semgrep-workflow.png" style="height: 500px; margin: 15px 5px;" />
+                <p>The Semgrep dashboard is an overview of your organization’s security posture based on data aggregated within Semgrep AppSec Platform.</p>
+                <img src="\Client\Images\docs\semgrep-dashboard.png" style="height: 500px; margin: 15px 0px;">
+            </div>
+            <div id="dynatrace">
+                <h2>Dynatrace</h2>
+                <p>
+                    Dynatrace monitoring is an observability and application performance monitoring (APM) platform that uses artificial intelligence (AI) to provide comprehensive visibility into the entire technology stack, from user experience to infrastructure and code.
+                </p>
+                <ul>
+                    <li>Provide preventive monitoring to our SQL servers performance.​</li>
+                    <li>Monitoring can involve synthetic monitors or agent-based monitors to trace avaialability.</li>
+                    <li>Dynatrace enables you to: Use readymade dashboards to monitor your system status in real-time <br />
+                        <img src="\Client\Images\docs\dynatrace-dashboard.png" style="height: 500px; margin: 15px 0px;">
+                    </li>
+                   
+                </ul>
+                
+                
+            </div>
+
         </div>
     </div>
-
-
-
-    
-                   
+</div>

@@ -28,9 +28,13 @@ export class CodeQualityComponent implements OnInit {
         this.left_nav = [
             { text: "Introduction", url:'#codeQuality', bool: "codeQuality" },
             { text: "Unit Testing", url:'#unitTest', bool: "unitTest" },
-            { text: "SonarQube", url:'#sonarScan', bool: "sonarScan" },
-            { text: "Checkmarx", url:'#checkmarx', bool: "checkmarx" },
-            { text: "Spectral Scan", url:'#spectralScan', bool: "spectralScan" },
+            { text: "SonarQube", url: '#sonarScan', bool: "sonarScan" },
+            { text: "Spectral Scan", url: '#spectralScan', bool: "spectralScan" },
+            { text: "UIPath", url: '#uipath', bool: "uipath" },
+            { text: "JMeter", url: '#jmeter', bool: "jmeter" },
+            { text: "Semgrep", url: '#semgrep', bool: "semgrep" },
+            { text: "Dynatrace", url: '#dynatrace', bool: "dynatrace" },
+            
             
         ]
     }
@@ -71,11 +75,29 @@ export class CodeQualityComponent implements OnInit {
                 { text: "MyDeals Code Quality Standards", url: "CodeQuality" },
                 { text: "Spectral Scan", url: "javascript:void(0)" }
             ];
-        } else if ( this.flagBool == 'checkmarx'){
+        } else if (this.flagBool == 'uipath') {
             this.list_breadcrumbs = [
                 { text: "Coding practices", url: "Home" },
                 { text: "MyDeals Code Quality Standards", url: "CodeQuality" },
-                { text: "Checkmarx", url: "javascript:void(0)" }
+                { text: "UIPath", url: "javascript:void(0)" }
+            ];
+        } else if (this.flagBool == 'jmeter') {
+            this.list_breadcrumbs = [
+                { text: "Coding practices", url: "Home" },
+                { text: "MyDeals Code Quality Standards", url: "CodeQuality" },
+                { text: "JMeter", url: "javascript:void(0)" }
+            ];
+        } else if (this.flagBool == 'semgrep') {
+            this.list_breadcrumbs = [
+                { text: "Coding practices", url: "Home" },
+                { text: "MyDeals Code Quality Standards", url: "CodeQuality" },
+                { text: "Semgrep", url: "javascript:void(0)" }
+            ];
+        } else if (this.flagBool == 'dynatrace') {
+            this.list_breadcrumbs = [
+                { text: "Coding practices", url: "Home" },
+                { text: "MyDeals Code Quality Standards", url: "CodeQuality" },
+                { text: "Dynatrace", url: "javascript:void(0)" }
             ];
         }
 

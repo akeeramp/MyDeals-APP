@@ -18,7 +18,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+	<IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
@@ -447,8 +447,6 @@
     <Content Include="Client\Images\docs\breakpoint-cs.png" />
     <Content Include="Client\Images\docs\breakpointInChrome.png" />
     <Content Include="Client\Images\docs\chromeDebugger.png" />
-    <Content Include="Client\Images\docs\checkmarxScan.png" />
-    <Content Include="Client\Images\docs\checkmarx_result.png" />
     <Content Include="Client\Images\docs\sonar_gitHub.png" />
     <Content Include="Client\Images\docs\sonar_severity.png" />
     <Content Include="Client\Images\docs\nUnit_check.png" />

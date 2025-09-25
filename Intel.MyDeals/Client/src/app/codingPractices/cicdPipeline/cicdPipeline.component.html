@@ -133,6 +133,7 @@
                             There are 3 workflows available. <br />
                             <ol>
                                 <li><b>WF1- MyDeals DB pre-prod manual:</b> This will push all the changes mentioned in checklist file from the <b>selected branch</b> to the <b>selected DBAAS environment.</b></li>
+                                <li>Execute the Downtime page script dduring pre-prod and prod worfkflows</li>
                                 <li><b>WF2- MyDeals DB prod manual:</b> This will push all the changes mentioned in checklist file from the <b>selected branch</b> to the <b>DBAAS PROD environment</b>.</li>
                                 <li><b>WF3- MyDeals DB CIAR manual:</b> This will push all the changes mentioned in checklist file from the <b>selected branch</b> to the <b> DBAAS CIAR environment.</b></li>
                             </ol>
@@ -154,6 +155,15 @@
             <div class="deployment-process" id="deployment-process">
                 <h4><i class="fa fa-cloud-upload icon-color-pipe" aria-hidden="true"></i>&nbsp; Deployment process</h4>
                 <div style="padding-left: 30px;">
+                    <div>
+                        <h5>Downtime page</h5>
+                        <p style="padding-left: 10px;">A downtime page will provide an appropriate, customized message during maintanence or refresh to prevent any issues and manual deletion of fallacy records</p>
+                        <ul>
+                            <li>Automated Workflow Management: Uses GitHub Actions workflows for both pre-production and production environments with mandatory input validation for maintenance schedules, messages, and timing in PST format.</li>
+                            <li> Refer to this document for further details: <a href="https://intel.sharepoint.com/:w:/r/sites/ScrumTroopersAPT/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7B0164c65d-9a03-4915-be3c-77b262b5757f%7D&wdOrigin=TEAMS-MAGLEV.undefined_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1756805445902&web=1">Downtime Page Management for UI Deployment </a></li>
+                        </ul>
+                        <img src="/Client/Images/docs/downtime.png" style="width: 850px;" /><br /><br />
+                    </div>
 
                     <h6>Pre-PROD</h6>
                     <ul>
@@ -216,6 +226,15 @@
                             </li>
                             <li>
                                 After giving mandatory fields. Click on <b>Run workflow</b>. The build triggers.
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5>NAS</h5>
+                        <p>NAS (Network Attached Storage, which we requested for 100GB size) is integrated with both the Opaque and MyDeals solutions.</p>
+                        <ul>
+                            <li>
+                                This integration will facilitate the writing of log files into specific, dedicated folders on the NAS.
                             </li>
                         </ul>
                     </div>
