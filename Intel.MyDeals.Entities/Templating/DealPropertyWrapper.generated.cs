@@ -2813,7 +2813,23 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
-		public static MyDealsAttribute IS_PRIMED_CUST = new MyDealsAttribute()
+        public static MyDealsAttribute IS_PCT_MCT_FAILURE_SKIPPED = new MyDealsAttribute()
+        {
+            ATRB_COL_NM = "IS_PCT_MCT_FAILURE_SKIPPED",
+            ATRB_DESC = "Skipping PCT/MCT failure for specific roles based on CONST attrb SKIP_PCT_FAILURE and SKIP_MCT_FAILURE values",
+            ATRB_LBL = "Is PCT/MCT Failure Skipped",
+            ATRB_MAX_LEN = 1,
+            ATRB_SID = 3720,
+            DATA_TYPE_CD = "INT",
+            DIM_CD = "DEAL",
+            DIM_SID = 3,
+            DOT_NET_DATA_TYPE = "System.Int32",
+            FRMT_MSK = "{0:d}",
+            MJR_MNR_CHG = "MINOR",
+            TGT_COL_TYPE = "INT",
+            UI_TYPE_CD = "CheckBox"
+        };
+        public static MyDealsAttribute IS_PRIMED_CUST = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "IS_PRIMED_CUST",
 			ATRB_DESC = "Is a Unified Cust",

@@ -160,7 +160,8 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.HAS_L1.ATRB_SID,
                 Attributes.MEETCOMP_TEST_RESULT.ATRB_SID, // added for approval blocking at submitted for fails or incomplete PCT/MCTs
                 Attributes.COST_TEST_RESULT.ATRB_SID, // added for approval blocking at submitted for fails or incomplete PCT/MCTs
-                Attributes.SYS_COMMENTS.ATRB_SID
+                Attributes.SYS_COMMENTS.ATRB_SID,
+                Attributes.IS_PCT_MCT_FAILURE_SKIPPED.ATRB_SID
             };
 
             List<string> submittedFailTests = new List<string>
@@ -200,6 +201,7 @@ namespace Intel.MyDeals.BusinessLogic
                 string actn = id2actnMapping[dc.DcID];
                 string costTestInDB = dc.GetDataElementValue(AttributeCodes.COST_TEST_RESULT);
                 string meetCompInDB = dc.GetDataElementValue(AttributeCodes.MEETCOMP_TEST_RESULT);
+                string PSLevelPCTMCTFailureSkipFlag = dc.GetDataElementValue(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED);
 
                 bool hasL1 = dc.GetDataElementValue(AttributeCodes.HAS_L1) != "0";
 
@@ -216,8 +218,8 @@ namespace Intel.MyDeals.BusinessLogic
                     continue;
                 }
 
-                //Skipping PCT/MCT for GA based on Constant Value
-                if(role == RoleTypes.DA && (submittedFailTests.Contains(meetCompInDB) || submittedFailTests.Contains(costTestInDB)))
+                //Skipping PCT/MCT Failure for DA based on Constant Value and PS Level IS_PCT_MCT_FAILURE_SKIPPED Flag (Acceptance to Skip PCT/MCT Failure)
+                if (role == RoleTypes.DA && PSLevelPCTMCTFailureSkipFlag != null && PSLevelPCTMCTFailureSkipFlag == "1" && (submittedFailTests.Contains(meetCompInDB) || submittedFailTests.Contains(costTestInDB)))
                 {
                     var _constantLookupDataLib = new ConstantLookupDataLib();
                     var adminConstants = _constantLookupDataLib.GetAdminConstants();
@@ -402,7 +404,8 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.LAST_TRKR_START_DT_CHK.ATRB_SID,
                     Attributes.SALESFORCE_ID.ATRB_SID,
                     Attributes.AUTO_APPROVE_RULE_INFO.ATRB_SID,
-                    Attributes.OBJ_PATH_HASH.ATRB_SID
+                    Attributes.OBJ_PATH_HASH.ATRB_SID,
+                    Attributes.IS_PCT_MCT_FAILURE_SKIPPED.ATRB_SID
                 };
 
                 if (psStageChanges.Any())
@@ -425,6 +428,25 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         SetDealDcMessages(myDealsData, de, null);
                         stageChangesDealIds.Add(de.DcID);
+                    }
+
+                    // TWC5971-673: If we are revising any PS, then we need to clear the IS_PCT_MCT_FAILURE_SKIPPED flag on all deals back to 0
+                    var allRevisePS = id2actnMapping
+                        .Where(kvp => kvp.Value == WorkFlowActions.Revise && psStageChanges.Contains(kvp.Key))
+                        .Select(kvp => kvp.Key)
+                        .ToList();
+                    if (allRevisePS.Any())
+                    {
+                        foreach (OpDataElement de in deals)
+                        {
+                            OpDataCollector dealDc = myDealsData[OpDataElementType.WIP_DEAL].Data[de.DcID];
+                            string isPCTMCTFailureSkipped = dealDc.GetDataElementValue(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED);
+                            if (isPCTMCTFailureSkipped != null && isPCTMCTFailureSkipped == "1")
+                            {
+                                dealDc.AddTimelineComment("PCT/MCT failure skip flag cleared due to Pricing Strategy revision.");
+                            }
+                            dealDc.SetDataElementValue(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED, "0");
+                        }
                     }
                 }
 

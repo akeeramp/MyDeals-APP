@@ -14,6 +14,12 @@ namespace Intel.MyDeals.BusinessRules
     /// </summary>
     public static partial class MyOpDataCollectorFlattenedItemActions
     {
+        //TWC5971-658: As part of this story,
+        //defined failure messages for PCT and MCT in Variable.
+        //If you're making any changes to these messages, please make sure SKIP_PCT_MCT_Failure messages are also working as expected.
+        public static string PCTAndMCTFailMsg = "Pricing Strategy did not pass Price Cost Test and Meet Comp Test.";
+        public static string PCTFailMsg = "Pricing Strategy did not pass Price Cost Test.";
+        public static string MCTFailMsg = "Pricing Strategy did not pass Meet Comp Test.";
         public static void ApplyActionsAndSettings(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -41,7 +47,7 @@ namespace Intel.MyDeals.BusinessRules
             bool mctFailed = mct != "Pass" && mct != "NA";
             bool mctIncomplete = mct == "InComplete";
             bool mctNotRun = mct == "Not Run Yet" || mct == "";
-
+            
             MyDealsActionItem objsetActionItem = new MyDealsActionItem
             {
                 ObjsetType = objSetType,
@@ -130,13 +136,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 if (action == "Approve" && objsetActionItem.Actions[action] && hasL1)
                 {
-                    string reasonPctMct = "Pricing Strategy did not pass " + (pctFailed && mctFailed
-                        ? "Price Cost Test and Meet Comp Test."
-                        : pctFailed 
-                            ? "Price Cost Test."
-                            : mctFailed 
-                                ? "Meet Comp Test."
-                                : "");
+                    string reasonPctMct = (pctFailed && mctFailed) ? PCTAndMCTFailMsg : pctFailed ? PCTFailMsg : mctFailed ? MCTFailMsg: "";
 
                     switch (role)
                     {
@@ -218,14 +218,12 @@ namespace Intel.MyDeals.BusinessRules
                     if (enablePctRun != null)
                     {
                         skipPCT = true;
-                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "PCT failure is skipped.", true, false);
                     };
 
                     var enableMctRun = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_MCT_FAILURE" && c.CNST_VAL_TXT == "1" && mct == "Fail");
                     if (enableMctRun != null)
                     {
                         skipMCT = true;
-                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "MCT failure is skipped.", false, true);
                     };
 
                     // If both are skipped, or one is skipped and the other did not fail, allow Approve
@@ -237,10 +235,12 @@ namespace Intel.MyDeals.BusinessRules
                     else if (skipPCT && !skipMCT && !mctFailed)
                     {
                         objsetActionItem.Actions["Approve"] = true;
+                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "PCT failure is skipped.", true, false);
                     }
                     else if (!skipPCT && !pctFailed && skipMCT)
                     {
                         objsetActionItem.Actions["Approve"] = true;
+                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "MCT failure is skipped.", false, true);
                     }
                 }
             }
@@ -253,7 +253,7 @@ namespace Intel.MyDeals.BusinessRules
         private static string GetPopUpMessage(string str, string newStr, bool skipPCT, bool skipMCT) 
         {
             // Adjust the existing action reason message to reflect skipped tests
-            if (str.Contains("Pricing Strategy did not pass Price Cost Test and Meet Comp Test."))
+            if (str.Contains(PCTAndMCTFailMsg))
             {
                 int newlineIndex = str.IndexOf('\n');
                 if (newlineIndex != -1)
@@ -261,7 +261,7 @@ namespace Intel.MyDeals.BusinessRules
                     string remaining = str.Substring(newlineIndex + 1);                    
                     if (skipPCT || skipMCT)
                     {
-                        str = $"Pricing Strategy did not pass {(skipMCT ? "Price Cost Test" : "Meet Comp Test")}.\n";
+                        str = $"{(skipMCT ? PCTFailMsg : MCTFailMsg)}\n";
                     }
                     else
                     {
@@ -275,7 +275,7 @@ namespace Intel.MyDeals.BusinessRules
                     str = newStr;
                 }
             }
-            else if (str.Contains("Pricing Strategy did not pass Price Cost Test") || str.Contains("Pricing Strategy did not pass Meet Comp Test"))
+            else if (str.Contains(PCTFailMsg) || str.Contains(MCTFailMsg))
             {
                 int newlineIndex = str.IndexOf('\n');
                 if (newlineIndex != -1)

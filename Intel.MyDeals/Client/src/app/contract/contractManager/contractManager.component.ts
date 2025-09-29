@@ -11,7 +11,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { actionSummaryModal } from "./actionSummaryModal/actionSummaryModal.component";
 import { emailModal } from "./emailModal/emailModal.component";
 import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
-import { each }from 'underscore';
+import { each, forEach }from 'underscore';
 import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 import { Subject, Subscription, forkJoin } from "rxjs";
@@ -1481,12 +1481,31 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    showPCTMCTSkipLabel(ps: DynamicObj) {
+    showPCTMCTSkipLabel() {
         const USER_ROLE = (<any>window).usrRole;
         if (USER_ROLE === "DA" && (this.skipPCTFailure || this.skipMCTFailure)) {
-            return true;
+            const skipEnabledItems = [];
+            forEach(this.filteredData, (ps) => {
+                skipEnabledItems.push(this.shouldShowSkipIcon(ps));
+            })
+            //Check any TRUE value present in the array if yes return TRUE else FALSE
+            return skipEnabledItems.includes(true);
         }
         return false;
+    }
+
+    getPCTMCTSkipLabel(fromIcon) {
+        const skip = (fromIcon == "successMessage") ? "Skipped" : (fromIcon == "greyIconTitle") ? "Click to Skip" : "Skip";
+        if (this.skipPCTFailure && this.skipMCTFailure) {
+            return `${skip} PCT/MCT Failure`;
+        }
+        if (this.skipPCTFailure) {
+            return `${skip} PCT Failure`;
+        }
+        if (this.skipMCTFailure) {
+            return `${skip} MCT Failure`;
+        }
+        return "";
     }
 
     showPCTMCTSkipIcon(ps: DynamicObj) {
@@ -1537,30 +1556,40 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    resetBusy() {
+        this.setBusy("", "", "", false);
+    }
+
     async onSkippingPCTMCTFailure(e, ps) {
         const USER_ROLE = (<any>window).usrRole;
         if (USER_ROLE === "DA") {
             const pctMctFailureSkipInputObj: DynamicObj[] = [{ ObjId: ps.DC_ID, ObjType: 2 }];
+            const confirmationMsg = `Click 'Yes' to ${this.getPCTMCTSkipLabel(undefined)}?`;
+            const confirmationModalName = this.getPCTMCTSkipLabel(undefined);
+            const successMessage = this.getPCTMCTSkipLabel("successMessage");
             const DIALOG_REF = this.dialog.open(confirmationModalComponent, {
                 height: 'auto',
                 width: '600px',
-                data: { confirmationMessage: "Click 'Yes' to Skip PCT/MCT Failure?", confirmationModalName: 'Skip PCT/MCT Failure' }
+                data: { confirmationMessage: confirmationMsg, confirmationModalName: confirmationModalName }
             });
             await DIALOG_REF.afterClosed().toPromise().then(async (result) => {
                 //If user clicks on 'Yes'
                 if (result) {
                     //Skip PCT/MCT Failure
                     this.isLoading = true;
+                    this.setBusy("Skip PCT/MCT Failure", `${confirmationModalName} is in progress.`, "Info", true);
                     this.contractManagerSvc.updateSkipPCTMCTFailureFlag(pctMctFailureSkipInputObj).toPromise()
                         .then((response: boolean) => {// response is boolean
                             this.isLoading = false;
+                            this.resetBusy();
                             if (response) {
+                                this.loggerSvc.success(successMessage);
                                 this.loadDetails();
                             } else {
-                                this.loggerSvc.error("Unable to update the Pricing Stratergy", "Error", 500);
+                                this.loggerSvc.error(`Unable to ${confirmationModalName}`, "Error", 500);
                             }                            
                         }).catch((error) => {
-                            this.loggerSvc.error("Unable to update the Pricing Stratergy", error, error.statusText);
+                            this.loggerSvc.error(`Unable to ${confirmationModalName}`, error, error.statusText);
                         })
                 } else {
                     //If user clicks on 'No'
