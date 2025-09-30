@@ -39,11 +39,10 @@ namespace Intel.MyDeals.DataLibrary
 
             dt.Rows.Add(1, "Deal End Date cannot exceed 20 years beyond the Deal Start Date");
             dt.Rows.Add(2, "or 180 days prior to the Deal Start Date");
-            dt.Rows.Add(3, "Billing Start Date cannot be backdated beyond 1 year prior to the Deal Start Date");
-            dt.Rows.Add(4, "For draining products, the end date is limited to 2 Intel Calendar Years from deal start date");
-            dt.Rows.Add(5, "ECAP Price must be a positive number.");
-            dt.Rows.Add(6, "End Date is limited to 1 Intel Calendar Year from");
-            dt.Rows.Add(7, "Below are the valid vertical combinations allowed in My Deals");
+            dt.Rows.Add(3, "For draining products, the end date is limited to 2 Intel Calendar Years from deal start date");
+            dt.Rows.Add(4, "ECAP Price must be a positive number.");
+            dt.Rows.Add(5, "End Date is limited to 1 Intel Calendar Year from");
+            dt.Rows.Add(6, "Below are the valid vertical combinations allowed in My Deals");
 
             return dt;
         }

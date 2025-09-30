@@ -3083,7 +3083,6 @@ namespace Intel.MyDeals.Entities {
 		public const string BATCH_STATUS = "BATCH_STATUS";
 		public const string BKUP_EXPIRE_DAYS = "BKUP_EXPIRE_DAYS";
 		public const string BKUP_NOTIFY_DAYS = "BKUP_NOTIFY_DAYS";
-		public const string BLLG_TENDER_CUTOVER_DEAL = "BLLG_TENDER_CUTOVER_DEAL";
 		public const string BULK_PRICE_ADMINS_LIST = "BULK_PRICE_ADMINS_LIST";
 		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
 		public const string CHNL_CUST_FLTR = "CHNL_CUST_FLTR";
