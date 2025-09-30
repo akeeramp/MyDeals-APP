@@ -30,7 +30,5 @@ namespace Intel.MyDeals.IDataLibrary
         Boolean CallProfiseeApi(string CustNM, Boolean ACTV_IND);
 
         Dictionary<string, string> PublishToSapPoDCPV(string jsonData, string mode, VistexDFDataResponseObject responseObject);
-
-        Dictionary<string, string> CheckVistexAccrualAPI(string dcId, string dealStage, string dealType);
     }
 }

@@ -63,7 +63,7 @@ namespace Intel.MyDeals.Controllers.API
         public VistexDFDataResponseObject GetVistexDFStageData(string runMode) //VTX_OBJ: CUSTOMERS, PRODUCTS, VERTICAL
         {
             VistexDFDataResponseObject responseObject = new VistexDFDataResponseObject();
-            responseObject.MessageLog = new List<string>();
+            responseObject.MessageLog = new List<string>();         
             try
             {
                 responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Controller - GetVistexDFStageData - Called") + Environment.NewLine);
@@ -74,9 +74,9 @@ namespace Intel.MyDeals.Controllers.API
             {
                 responseObject.BatchMessage = "Exception: " + ex.Message + "\n" + "Innerexception: " + ex.InnerException;
                 responseObject.BatchStatus = "Exception";
-                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, ex.Message) + Environment.NewLine);
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, ex.Message) + Environment.NewLine); 
                 OpLogPerf.Log($"Thrown from: VistexServiceController - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
-            }
+            }            
             return responseObject;
         }
 
@@ -106,30 +106,12 @@ namespace Intel.MyDeals.Controllers.API
         }
         [Route("CallProfiseeApi/{CustNm}/{ACTV_IND}")]
         [HttpGet]
-        public bool CallProfiseeApi(string CustNM, string ACTV_IND)
+        public bool CallProfiseeApi (string CustNM, string ACTV_IND)
         {
             bool ACT_IND = (ACTV_IND == "1") ? true : false;
             return _vistexServiceLib.CallProfiseeApi(CustNM, ACT_IND);
 
         }
-
-        [Authorize]
-        [Route("CheckVistexAccrualDetails")]
-        [HttpPost]
-        public Dictionary<string, string> CheckVistexAccrualAPI([FromBody] VistexCheck data)
-        {
-            // Determine the correct identifier
-            string identifier = null;
-            if (!string.IsNullOrEmpty(data.psId)) // pricing_strategy_number
-                identifier = data.psId;
-            else if (!string.IsNullOrEmpty(data.ptId)) // pricing_table_number
-                identifier = data.ptId;
-            else
-                identifier = data.dcId;
-
-            return _vistexServiceLib.CheckVistexAccrualAPI(identifier, data.dealStage, data.dealType);
-        }
-
         /* TWC3179-5036: Removal of credits and debits API
         [Route("SentVistexClaimData/{packetType}/{runMode}")] //VTX_OBJ: CLAIM DATA
         [HttpGet]

@@ -137,46 +137,5 @@ namespace Intel.MyDeals.Controllers
 
             return result;
         }
-
-
-        [ValidateInput(false)]
-        //string body
-        [HttpPost]
-        public HttpResponseMessage EmailNotificationVistex(EmailMessage emailMessage)
-        {
-            var result = new HttpResponseMessage(HttpStatusCode.OK);
-            var message = new MailMessage
-            {
-                From = new MailAddress(ConfigurationManager.AppSettings["emailMydealsNotifications"]),
-                Subject = emailMessage.Subject,
-                Body = emailMessage.Body,
-                IsBodyHtml = true,
-                Priority = MailPriority.High
-            };
-
-            foreach (string email in emailMessage.To)
-            {
-                message.To.Add(email.Trim());
-            }
-            message.To.Add(OpUserStack.MyOpUserToken.Usr.Email);
-            message.CC.Add(ConfigurationManager.AppSettings["emailMydealsAllDeveloper"]);
-
-            using (var client = new SmtpClient())
-            {
-                client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["smtpClinetUid"], StringEncrypter.StringDecrypt(
-                        ConfigurationManager.AppSettings["smtpClinetPass"] != string.Empty ? ConfigurationManager.AppSettings["smtpClinetPass"] : "", "Smtp_Password"));
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.EnableSsl = true;
-                //SMTP Change for Port Number and Host Name
-                client.Host = ConfigurationManager.AppSettings["smtpClinet"];
-                client.Port = Convert.ToInt32(ConfigurationManager.AppSettings["smtpClinetPort"]);
-                client.Send(message);
-
-            }
-
-            return result;
-        }
-
     }
 }

@@ -375,11 +375,6 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _vistexServiceDataLib.CallProfiseeApi(CustNM, ACTV_IND);
         }
-        public Dictionary<string, string> CheckVistexAccrualAPI(string identifier, string dealStage, string dealType)
-        {
-            return _vistexServiceDataLib.CheckVistexAccrualAPI(identifier, dealStage, dealType);
-        }
-
 
     }
 }

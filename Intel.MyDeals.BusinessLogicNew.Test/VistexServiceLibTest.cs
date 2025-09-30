@@ -3,7 +3,6 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Moq;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -115,11 +114,6 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         {
             new object[] {"{'key':'value'}", new VistexDFDataResponseObject { } , new List<VistexQueueObject> { new VistexQueueObject { BatchId = new Guid("9245fe4a-d402-451c-b9ed-9c1a04247482") } } ,"V"},
             new object[] {"{'key':'value'}", new VistexDFDataResponseObject { MessageLog = new List<string>() } , new List<VistexQueueObject> {  } ,"V"}
-        };
-
-        private static readonly object[] CheckVistexAccrualDetails_params =
-        {
-            new object[] { "5940480", "ECAP", "CANCEL" },
         };
 
         [Test,
@@ -510,19 +504,6 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             }
         }
 
-        [Test, 
-            TestCaseSource("CheckVistexAccrualDetails_params")]
-        public void CheckVistexAccrualDetails_validObj(dynamic input)
-        {
-            string DealId = input[0];
-            string DealType = input[1];
-            string ActionType = input[2];
-
-            mockVistexServiceDataLib.Setup(x => x.CheckVistexAccrualAPI(DealId, DealType, ActionType)).Returns(GetVistexCustomerAccrualDetailsMockData());
-            var res = new VistexServiceLib(mockVistexServiceDataLib.Object, mockJmsDataLib.Object).CheckVistexAccrualAPI(DealId, DealType, ActionType);
-            Assert.IsNotNull(res);
-        }
-
         private Dictionary<string, string> VistexDFDataLoadObject_getMockData(string status)
         {
             var mockData = new Dictionary<string, string>();
@@ -537,12 +518,5 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             }
             return mockData;
         }
-
-        private Dictionary<string, string> GetVistexCustomerAccrualDetailsMockData()
-        {
-            var result = new Dictionary<string, string>();
-            return result;
-        }
-
     }
 }

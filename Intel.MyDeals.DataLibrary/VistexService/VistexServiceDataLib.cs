@@ -31,7 +31,6 @@ namespace Intel.MyDeals.DataLibrary
         private string vistexVertApi;
         private string vistexCNSPApi;
         private Dictionary<string, string> vistexEnvs;
-        private string vistexAccrualCheck;
 
         //private IConnection connection;
         //private ISession session;
@@ -158,60 +157,6 @@ namespace Intel.MyDeals.DataLibrary
             //responseObjectDictionary.Add("Log", string.Join(",", logMsg.ToArray()));
             return responseObjectDictionary;
         }
-
-        public Dictionary<string, string> CheckVistexAccrualAPI(string identifier, string dealStage, string dealType)
-        {
-            vistexAccrualCheck = ConfigurationManager.AppSettings["vistexAccrualCheck"];
-            var URL = vistexAccrualCheck + "/DealValidation?DealId='" + identifier + "'&DealType='" + dealType + "'&ActionType='" + dealStage + "'&$expand=Users&$format=json";
-
-
-            // Create a request using a URL that can receive a post.  All current Vistex channels are post methods.
-            WebRequest request = WebRequest.Create(URL);
-            request.Method = "GET";
-
-            // Define your username and password
-            string username = ConfigurationManager.AppSettings["vistexUID"];
-            string password = StringEncrypter.StringDecrypt(ConfigurationManager.AppSettings["vistexPWD"] != string.Empty ? ConfigurationManager.AppSettings["vistexPWD"] : "", "Vistex_Password");
-
-            // Encode the username and password in Base64
-            string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
-
-            // Add the Authorization header with Basic Authentication
-            request.Headers.Add("Authorization", $"Basic {credentials}");
-
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-            request.ContentType = "application/x-www-form-urlencoded";
-
-            //new implementation
-            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
-
-            try
-            {
-                using (WebResponse response = request.GetResponse())
-                {
-                    responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
-                    using (Stream stream = response.GetResponseStream())
-                    {
-                        StreamReader reader = new StreamReader(stream);
-                        // Read the content.  
-                        var responseFromServer = reader.ReadToEnd();
-                        // Display the content.  
-                        responseObjectDictionary["Data"] = responseFromServer;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                responseObjectDictionary["Status"] = e.Message;
-            }
-
-            return responseObjectDictionary;
-
-        }
-
-
 
         public List<VistexQueueObject> GetVistexDealOutBoundData(string packetType, string runMode) //VTX_OBJ: DEALS
         {

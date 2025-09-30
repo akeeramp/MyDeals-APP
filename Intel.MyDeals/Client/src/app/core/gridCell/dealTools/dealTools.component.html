@@ -119,18 +119,6 @@
                     <div kendoButton class="k-button cancelDelete" (click)="closeDialogs()">OK</div>
                 </kendo-dialog-actions>
             </kendo-dialog>
-            <kendo-dialog *ngIf="vistexCancel" (close)="closeDialogs()" [maxWidth]="800" class="toolsartho-css k-dialog-popup-design">
-                <div class="dealToolsKendoAlert" style="padding: 2.4em;">
-                    <h4 class="h4Style" style="font-size: 24px !important;">Unable to Cancel</h4>
-                    <p>Accruals have been recorded against the deal. Please ensure that all accruals are cleared or updated in Vistex before proceeding with cancellation in the My Deals.</p>
-                    <p>To initiate this process, click the 'Raise Request' button to notify the RA and Support teams via email.</p>
-                </div>
-                <kendo-dialog-actions style=" padding: 0; display: block !important;">
-                    <!-- <div kendoButton class="k-button cancelDelete" style="color: #fff!important;" (click)="closeDialogs()">OK</div> -->
-                    <button kendoButton class="k-button ok-btn-pop-up line-height-unset" style="width: 50% !important;" (click)="closeDialogs()">OK</button>
-                    <button kendoButton class="k-button cancelDelete cancel-btn-pop-up line-height-unset" style="width: 50% !important;" (click)="triggerEmail()">Raise Request</button>
-                </kendo-dialog-actions>
-            </kendo-dialog>
             <kendo-dialog *ngIf="confirmCancel" (close)="closeDialogs()" [maxWidth]="572" class="toolsartho-css k-dialog-popup-design">
                 <div style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
                     <h4 class="h4Style" style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Are you sure that you want to cancel this deal?</h4>

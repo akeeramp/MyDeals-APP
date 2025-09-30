@@ -12,8 +12,6 @@ export class dealToolsService {
     public apiBaseAttachmentsUrl = "/api/FileAttachments/Get/";
     public apiBasePricingStartegyUrl = "/api/PricingStrategies/v1/";
     private fileApiUrl = "/api/FileAttachments/";
-    private vistexAcc = "/api/VistexService/";
-    private getConstantsUrl = "/api/AdminConstants/v1/"
     constructor(private httpClient: HttpClient, private securityService: SecurityService) { }
 
     public chkDealRules(action, role, itemType, itemSetType, stage): boolean {
@@ -50,21 +48,6 @@ export class dealToolsService {
     }
     public deletePricingStrategyById(custId, contractId, dcId): Observable<any> {
         const apiUrl: string = this.apiBasePricingStartegyUrl + 'DeletePricingStrategyById/' + custId + '/' + contractId + '/' + dcId;
-        return this.httpClient.get(apiUrl);
-    }
-    
-    public checkVistexAccrualServ(payload: any): Observable<any> {
-        const apiUrl: string = this.vistexAcc + 'CheckVistexAccrualDetails/';
-        return this.httpClient.post(apiUrl, payload);
-    }
-
-    public emailNotification(emailInfo): Observable<any> {
-        const apiUrl: string = '/Email/EmailNotificationVistex';
-        return this.httpClient.post(apiUrl,emailInfo);
-    }
-
-    public getConstantsByName(data): Observable<any> {
-        const apiUrl: string = this.getConstantsUrl + 'GetConstantsByName/' + data;
         return this.httpClient.get(apiUrl);
     }
 }

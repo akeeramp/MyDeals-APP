@@ -11,7 +11,7 @@ import { distinct } from "@progress/kendo-data-query";
 import { PricingTableEditorService } from "../../../contract/pricingTableEditor/pricingTableEditor.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { vistexCustomerMappingService } from "../../../admin/vistexCustomerMapping/admin.vistexCustomerMapping.service";
+
 @Component({
     providers: [dealToolsService],
     selector: "deal-tools-angular",
@@ -21,8 +21,7 @@ import { vistexCustomerMappingService } from "../../../admin/vistexCustomerMappi
 })
 export class dealToolsComponent implements OnDestroy {
     
-    constructor(private dataService: dealToolsService, private loggerSvc: logger, protected dialog: MatDialog, 
-                private pteService: PricingTableEditorService, private customerMapSvc: vistexCustomerMappingService ) {}
+    constructor(private dataService: dealToolsService, private loggerSvc: logger, protected dialog: MatDialog, private pteService: PricingTableEditorService) {}
     @Input() dataItem;
     @Input() gridData;
     @Input() contractData;
@@ -42,8 +41,6 @@ export class dealToolsComponent implements OnDestroy {
     @Output() refreshContract: EventEmitter<any> = new EventEmitter<any>();
     @Output() reloadFn = new EventEmitter<any>();
     @Output() removeDeletedRow = new EventEmitter<any>();
-    public accuralsValueObj: any[] = [];
-    public customerDetails = {};
     public isSalesForceDeal;
     public isPublishable;
     public isDaUser;  
@@ -65,11 +62,9 @@ export class dealToolsComponent implements OnDestroy {
     public confirmRollback: boolean = false;
     public openHoldDialog: boolean = false;
     public openUnHoldDialog: boolean = false;
-    public vistexCancel: boolean = false;
     private isValidationMessage: boolean = false;
     public validationMsg: string = '';
     public gridDataTmp: any = [];
-    private vistexAccEmail = "VISTEX_ACCRUALS_EMAIL";
     public dealTxt;
     public notes;
     public isModified: boolean = false;
@@ -225,18 +220,6 @@ export class dealToolsComponent implements OnDestroy {
 
         if (this.isFileAttachmentEnabled || this.dataItem?._settings?.C_ADD_ATTACHMENTS)
             this.isFileAtchEnabled();
-        // Get Accruals details from Vistex
-        this.loadCustomerDetails();
-    }
-
-    loadCustomerDetails() { 
-        let customerName = this.dataItem.Customer.CUST_NM;
-
-        this.customerMapSvc.getVistexCustomersMapList().pipe(takeUntil(this.destroy$)).subscribe((result) => {
-            this.customerDetails = result.find(cust => cust.CUST_NM == customerName);
-        }, (error) => {
-            this.loggerSvc.error("Unable to get Customers.", error, error.statusText);
-        });
     }
 
     setBusy(msg, detail, msgType, isShowFunFact) {
@@ -289,7 +272,6 @@ export class dealToolsComponent implements OnDestroy {
         this.confirmRollback = false;
         this.openHoldDialog = false;
         this.openUnHoldDialog = false;
-        this.vistexCancel = false;
         //TWC3179-4696: refresh DE post click on alert message 
         if (this.isValidationMessage) {
             this.refreshContract.emit(true);
@@ -508,65 +490,6 @@ export class dealToolsComponent implements OnDestroy {
         }
         this.confirmDelete = true;
     }
-
-    triggerEmail() {
-        this.isBusy = true;
-        const dealType = this.dataItem.OBJ_SET_TYPE_CD;
-        const dealStage = this.dataItem.WF_STG_CD;
-        const isHybrid = this.dataItem.IS_HYBRID_PRC_STRAT === "1";
-        let payload: any = { dealStage, dealType };
-        var emailSubject, emailBody, dealIdRes, agreementRes, CustomerRes, emailTo;
-
-        this.accuralsValueObj.forEach(item => {
-            if (isHybrid && (dealType === "ECAP" || dealType === "VOL_TIER")) {
-                payload.psId = JSON.parse(this.dataItem.OBJ_PATH_HASH).PS;
-                dealIdRes = item.DealId;
-            } else if (dealType === "FLEX") {
-                payload.ptId = JSON.parse(this.dataItem.OBJ_PATH_HASH).PT;
-                dealIdRes = item.DealId;
-            } else {
-                payload.dcId = this.dataItem.DC_ID;
-                dealIdRes = item.DealId;
-            }
-            agreementRes = item.Agreement;
-            CustomerRes = item.Customer;
-            // Getting email ids from the Vistex API response
-            emailTo = item.Users.results.map(item => item.Email)
-            emailTo = emailTo.map(item => item.trim()).filter(item => item !== '');
-            
-            this.dataService.getConstantsByName(this.vistexAccEmail).subscribe((res: any) => {
-                // Response values are getting from the constants table
-                if (res) {
-                    emailSubject = res.CNST_DESC;
-                    emailSubject = emailSubject.replace('{dealIdRes}', dealIdRes);
-                    emailBody = res.CNST_VAL_TXT;    
-                    emailBody = emailBody.replace('{dealIdRes}', dealIdRes);
-                    emailBody = emailBody.replace('{agreementRes}', agreementRes);
-                    emailBody = emailBody.replace('{customerRes}', CustomerRes);                
-                }
-                let emailItem = {
-                    to: emailTo.toString(),
-                    subject: emailSubject,
-                    body: emailBody
-                };
-                this.dataService.emailNotification(emailItem).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-                    this.vistexCancel = false;
-                    this.loggerSvc.success("Deal Cancel Request Raised Successfully");
-                }, (error) => {
-                    if (error.status == 200) {
-                        this.isBusy = false;
-                        this.vistexCancel = false;
-                        this.loggerSvc.success("Deal Cancel Request Raised Successfully");
-                    }
-                    else{
-                        this.loggerSvc.error('Failed to send Email', '');
-                    } 
-                });
-                
-            });
-        });
-    }
-
     async deletePricingTableRow() {
         if (!this.in_Is_Tender_Dashboard) {// If not Tender Dashboard Screen, delete Pricing table row
             this.closeDialogs();
@@ -631,52 +554,12 @@ export class dealToolsComponent implements OnDestroy {
             }
         }
     }
-
-    //onClick of Cancel in DealTools
-    checkVistexAccrual() {
-        this.isBusy = true;
-        const dealType = this.dataItem.OBJ_SET_TYPE_CD;
-        const dealStage = 'CANCEL';
-        const isHybrid = this.dataItem.IS_HYBRID_PRC_STRAT === "1";
-        let payload: any = { dealStage, dealType };
-
-        if (isHybrid && (dealType === "ECAP" || dealType === "VOL_TIER")) {
-            payload.psId = JSON.parse(this.dataItem.OBJ_PATH_HASH).PS;
-        } else if (dealType === "FLEX") {
-            payload.ptId = JSON.parse(this.dataItem.OBJ_PATH_HASH).PT;
-        } else {
-            payload.dcId = this.dataItem.DC_ID;
-        }
-
-        this.dataService.checkVistexAccrualServ(payload)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((response: any) => {
-                this.isBusy = false;
-                let res = JSON.parse(response.Data);
-                this.accuralsValueObj = res.d.results;
-                if( res?.d?.results && res?.d?.results?.length != 0 ){
-                    if (res.d.results[0].AccrualStatus == "Y") {
-                        this.confirmCancel = false;
-                        this.vistexCancel = true;
-                    } else {
-                        this.confirmCancel = true;
-                        this.vistexCancel = false;
-                    }
-                }
-            });
-    }
-
     openCancelDialog() {
         if (this.getLinkedIds().length > 1) {
             this.alertCancel = true;
             return;
         }
-
-        if(this.customerDetails['VISTEX_CUST_FLAG']) {
-            this.checkVistexAccrual();
-        } else {
-            this.confirmCancel = true;
-        }
+        this.confirmCancel = true;
     }
     actionWipDeal() {
         this.closeDialogs();
