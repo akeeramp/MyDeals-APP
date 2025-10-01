@@ -286,4 +286,14 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
         this.destroy$.next();
         this.destroy$.complete();
     }
+
+    getConstantEditTooltip(dataItem) {
+        if (dataItem.CNST_NM === "SKIP_PCT_FAILURE") {
+            return "Changing this constant will impact existing Deals PCT Failure Skipping.";
+        } else if (dataItem.CNST_NM === "SKIP_MCT_FAILURE") {
+            return "Changing this constant will impact existing Deals MCT Failure Skipping.";
+        } else {
+            return null;
+        }
+    }
 }

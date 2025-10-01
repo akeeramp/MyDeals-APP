@@ -1530,12 +1530,12 @@ export class contractManagerComponent implements OnInit, OnDestroy {
 
         // Case 2: PCT Skip = TRUE, MCT Skip = FALSE
         if (pctSkip && !mctSkip) {
-            return pctStatus === "FAIL" && mctStatus === "PASS";
+            return pctStatus === "FAIL";
         }
 
         // Case 3: PCT Skip = FALSE, MCT Skip = TRUE
         if (!pctSkip && mctSkip) {
-            return pctStatus === "PASS" && mctStatus === "FAIL";
+            return mctStatus === "FAIL";
         }
 
         // Case 4: Both skips are TRUE

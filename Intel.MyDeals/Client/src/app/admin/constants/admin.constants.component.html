@@ -29,7 +29,7 @@
             </ng-template>
             <kendo-grid-command-column title="" width="60" [headerClass]="{'headerClass':true}" [columnMenu]="false">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-isNew="isNew">
-                    <button id="command-icon-first" kendoGridEditCommand [hidden]="!dataItem.UI_UPD_FLG">
+                    <button kendoTooltip title="{{getConstantEditTooltip(dataItem)}}" id="command-icon-first" kendoGridEditCommand [hidden]="!dataItem.UI_UPD_FLG">
                         <span class="k-icon k-i-edit k-icon-sm delete-editorspaceremove edited-icon-color"></span>
                     </button>
                     <button kendoGridRemoveCommand id="command-icon-first" *ngIf="!opened" [hidden]="!dataItem.UI_UPD_FLG" class="k-button">

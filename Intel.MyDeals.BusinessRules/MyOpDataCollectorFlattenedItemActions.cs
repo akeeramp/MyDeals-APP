@@ -218,12 +218,14 @@ namespace Intel.MyDeals.BusinessRules
                     if (enablePctRun != null)
                     {
                         skipPCT = true;
+                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "PCT failure is skipped.", true, false);
                     };
 
                     var enableMctRun = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_MCT_FAILURE" && c.CNST_VAL_TXT == "1" && mct == "Fail");
                     if (enableMctRun != null)
                     {
                         skipMCT = true;
+                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "MCT failure is skipped.", false, true);
                     };
 
                     // If both are skipped, or one is skipped and the other did not fail, allow Approve
@@ -235,12 +237,10 @@ namespace Intel.MyDeals.BusinessRules
                     else if (skipPCT && !skipMCT && !mctFailed)
                     {
                         objsetActionItem.Actions["Approve"] = true;
-                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "PCT failure is skipped.", true, false);
                     }
                     else if (!skipPCT && !pctFailed && skipMCT)
                     {
                         objsetActionItem.Actions["Approve"] = true;
-                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "MCT failure is skipped.", false, true);
                     }
                 }
             }
@@ -258,8 +258,12 @@ namespace Intel.MyDeals.BusinessRules
                 int newlineIndex = str.IndexOf('\n');
                 if (newlineIndex != -1)
                 {
-                    string remaining = str.Substring(newlineIndex + 1);                    
-                    if (skipPCT || skipMCT)
+                    string remaining = str.Substring(newlineIndex + 1);
+                    if (skipPCT && skipMCT)
+                    {
+                        str = newStr + "\n";
+                    }
+                    else if (skipPCT || skipMCT)
                     {
                         str = $"{(skipMCT ? PCTFailMsg : MCTFailMsg)}\n";
                     }
@@ -272,7 +276,13 @@ namespace Intel.MyDeals.BusinessRules
                 }
                 else
                 {
-                    str = newStr;
+                    if (skipPCT && skipMCT)
+                        return newStr;
+
+                    if (skipMCT || skipPCT)
+                        str = (skipMCT ? PCTFailMsg : MCTFailMsg);
+
+                    str += "\n" + newStr;
                 }
             }
             else if (str.Contains(PCTFailMsg) || str.Contains(MCTFailMsg))
