@@ -1517,6 +1517,9 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     }
 
     shouldShowSkipIcon(ps) {
+        if (ps.WF_STG_CD !== "Submitted" && ps.WF_STG_CD !== "Approved") {
+            return false;
+        }
         // Normalize statuses to uppercase for safety
         const pctSkip = this.skipPCTFailure;
         const mctSkip = this.skipMCTFailure;
@@ -1540,13 +1543,16 @@ export class contractManagerComponent implements OnInit, OnDestroy {
 
         // Case 4: Both skips are TRUE
         if (pctSkip && mctSkip) {
-            return !(pctStatus === "PASS" && mctStatus === "PASS");
+            if (pctStatus === "PASS" && mctStatus === "PASS") {
+                return false;
+            } else if (pctStatus === "FAIL" || mctStatus === "FAIL") {
+                return true;
+            }
         }
 
         // Fallback
         return false;
     }
-
 
     IsPCTMCTSkipped(skippedPCTMCTFailure) {
         const USER_ROLE = (<any>window).usrRole;
