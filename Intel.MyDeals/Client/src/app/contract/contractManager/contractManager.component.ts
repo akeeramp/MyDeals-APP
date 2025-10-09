@@ -1517,7 +1517,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     }
 
     shouldShowSkipIcon(ps) {
-        if (ps.WF_STG_CD !== "Submitted" && ps.WF_STG_CD !== "Approved") {
+        if (ps.WF_STG_CD !== "Submitted" && ps.WF_STG_CD !== "Approved" && ps.WF_STG_CD !== "Pending") {
             return false;
         }
         // Normalize statuses to uppercase for safety
