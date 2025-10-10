@@ -151,7 +151,7 @@
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true"  [resizable]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                             filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)"
-                            (cellClick)="cellClickHandler($event)"  (filterChange)="filterChange($event)" class="group-Excl-grid grouping_grid_h grids-manager-table">
+                            (cellClick)="cellClickHandler($event)"  (filterChange)="filterChange($event)" class="group-Excl-grid grouping_grid_h grids-manager-table" [ngClass] =" { 'wrap-enabled' : wrapEnabled } ">
                     <kendo-grid-column title="Deal #" field="DC_ID" [headerClass]="{'headerClass':true}" [width]="120">
                     </kendo-grid-column>
                     <kendo-grid-column title="Rebate Type" field="REBT_TYPE" [headerClass]="{'headerClass':true}" hidden="hidden">

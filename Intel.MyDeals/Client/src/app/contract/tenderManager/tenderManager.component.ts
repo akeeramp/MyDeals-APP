@@ -1,4 +1,4 @@
-﻿import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+﻿import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { each } from 'underscore';
 import { ActivatedRoute, Router } from "@angular/router";
 
@@ -16,7 +16,7 @@ import { performanceBarsComponent } from "../performanceBars/performanceBar.comp
     templateUrl: "Client/src/app/contract/tenderManager/tenderManager.component.html",
     styleUrls: ["Client/src/app/contract/tenderManager/tenderManager.component.css"]
 })
-export class TenderManagerComponent implements OnInit, OnDestroy, AfterViewInit {
+export class TenderManagerComponent implements OnInit, AfterViewInit {
 
     @ViewChild(PricingTableEditorComponent) private pteComp: PricingTableEditorComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
@@ -31,7 +31,6 @@ export class TenderManagerComponent implements OnInit, OnDestroy, AfterViewInit 
                 private templatesSvc: TemplatesService,
                 private route: ActivatedRoute,
                 private router: Router) {
-        $('body').addClass('added-tender');
     }
     public c_Id: any = '';
     public ps_Id: any = '';
@@ -492,10 +491,7 @@ export class TenderManagerComponent implements OnInit, OnDestroy, AfterViewInit 
             console.error('TenderManager::ngOnInit::',ex);
         }
     }
-
-    ngOnDestroy() {
-        $('body').removeClass('added-tender')
-    }
+  
 
     ngAfterViewInit() {
         //this functionality will enable when dashboard landing to this page
@@ -503,7 +499,7 @@ export class TenderManagerComponent implements OnInit, OnDestroy, AfterViewInit 
         each(loaders, item => {
             item.setAttribute('style', 'display:none');
         })
-        // document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');
+    // document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');
         const divLoader = document.getElementsByClassName('jumbotron')
         if (divLoader && divLoader.length > 0) {
             each(divLoader, div => {

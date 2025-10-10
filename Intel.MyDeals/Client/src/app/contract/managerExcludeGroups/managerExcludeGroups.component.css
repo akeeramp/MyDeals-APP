@@ -82,6 +82,13 @@
     background-color: #ffffff
 }
 
+.grids-manager-table td{
+    white-space: nowrap;
+}
+.grids-manager-table.wrap-enabled td{
+    white-space: normal;
+}
+
 #ExcldGrid.k-grid .k-grid-content {
     height: calc(85vh - 290px) !important
 }

@@ -394,10 +394,7 @@ export class managerExcludeGroupsComponent implements OnDestroy {
     }
 
     toggleWrap() {
-        var getToggle = $(".grids-manager-table td");
         this.wrapEnabled = !this.wrapEnabled;
-        var newVal = this.wrapEnabled ? "normal" : "nowrap";
-        getToggle.css('white-space', newVal);
     }
     displayDealTypes() {
         let data = this.gridResult;

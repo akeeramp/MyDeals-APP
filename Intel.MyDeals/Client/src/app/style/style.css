@@ -2979,13 +2979,6 @@ kendo-chart#deal-stages-chart svg text {
 #genUCDBtn .k-button-text {
     padding-left: 0px !important;
 }
-.added-pricing-table-editor-tender .htComments.commentHover {
-    left: 80px !important;
-}
-
-.added-pricing-table-editor .htComments.commentHover {
-    left: 364px !important;
-}
 .alignment-fixes-report-dashboard kendo-breadcrumb.breadCrumbs-design {
     background-color: transparent !important;
 }

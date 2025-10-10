@@ -863,7 +863,6 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 readOnlyCellClassName: 'readonly-cell',
                 nestedHeaders: nestedHeaders
             });
-            this.hoverPTE();
         }
     }
 
@@ -2294,20 +2293,6 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         if (isProductOrderChanged) {
             await new Promise(resolve => {
                 setTimeout(resolve, 100);
-            });
-        }
-    }
-
-    hoverPTE() {
-        if (this.isTenderContract) {
-            $(".pricing_table_celltext .handsontable .ht_clone_inline_start .wtHolder table.htCore tr td.error-cell").hover(function () {
-                $(".htCommentsContainer .htComments").toggleClass("commentHover");
-                $('.htCommentsContainer').addClass('added-pricing-table-editor-tender');
-            });
-        } else {
-            $(".pricing_table_celltext .handsontable .ht_clone_inline_start .wtHolder table.htCore tr td.error-cell").hover(function () {
-                $(".htCommentsContainer .htComments").toggleClass("commentHover");
-                $('.htCommentsContainer').addClass('added-pricing-table-editor');
             });
         }
     }
