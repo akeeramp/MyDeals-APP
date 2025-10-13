@@ -452,6 +452,12 @@
     <Content Include="Client\Images\docs\nUnit_check.png" />
     <Content Include="Client\Images\docs\nUnit_gitHub.png" />
     <Content Include="Client\Images\docs\allChecks-passed.png" />
+	<Content Include="Client\Images\docs\downtime.png" />
+	<Content Include="Client\Images\docs\dynatrace-dashboard.png" />
+	<Content Include="Client\Images\docs\pricing-table-sample.png" />
+	<Content Include="Client\Images\docs\semgrep-dashboard.png" />
+	<Content Include="Client\Images\docs\semgrep-workflow.png" />
+	<Content Include="Client\Images\docs\uipath-workflow.png" />
     <Content Include="Client\Images\docs\spectralScanResult.png" />
     <Content Include="Client\Images\docs\DBLogs.png" />
     <Content Include="Client\Images\docs\Business-rules.png" />
