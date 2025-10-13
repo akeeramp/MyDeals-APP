@@ -24,14 +24,14 @@ on:
 
 jobs:
   Call-Workflow:
-    uses: intel-innersource/frameworks.actions.semgrep-static-code-scan/.github/workflows/semgrep.yml@1.6.0
+    uses: intel-innersource/frameworks.actions.semgrep-static-code-scan/.github/workflows/semgrep.yml@v1.7.0
     with:
       # (Required) Please insert the runner group for your project
       # Example: runner-group: 'innersource.prod.amr.dind'
       runner-group: 'innersource.prod.amr.dind'
       # (Optional) Please insert the IAPM ID of the application here
       # If the ID not entered the auto-tagging feature will not work
-      iapm-id: '14464'
+      iapm-ids: '14464'
       # (Optional) Please insert the branch that should be tagged as "prod"
       prod-branch: 'development'
       # (Optional) Please indicate if this should be calculated for ASPN scoring entering true
