@@ -320,6 +320,10 @@ export class dealEditorEditTemplateComponent {
             else
                 this.dropDowResponse[`${key}`] = this.in_DropDownResponses[key].map(a => a.dropdownName);
         });
+        if(this.in_DataItem.PAYABLE_QUANTITY) {
+            // convert PAYABLE_QUANTITY value from string to integer to avoid in numeric textbox
+            this.in_DataItem.PAYABLE_QUANTITY = parseInt(this.in_DataItem.PAYABLE_QUANTITY);
+        }
         if (this.in_Field_Name == "tender_actions") {//dropdown values added for the field tender_actions(tender Dashboard)
             let approveActions = [];
             approveActions.push({ text: "Action", value: "Action" })  //placeholder dummy for a user non-selection
