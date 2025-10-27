@@ -43,11 +43,17 @@ export class dealEditorCellTemplateComponent {
     @Input() in_DataSet: any = '';
     @Input() IsExpiredDealHighlighted: boolean = false;
     @Input() NumberOfDaysToExpireDeal: number;
+    @Input() skipPCTFailure: boolean = false;
+    @Input() skipMCTFailure: boolean = false;
+    @Input() getPCTMCTSkipFailureLabel!: (arg) => boolean;
+    @Input() getPCTMCTSkipIconDisplayFlag!: (arg) => string;
+    @Input() shouldShowSkipIcon!: (arg) => boolean;
 
     @Output() iconUpdate: EventEmitter<any> = new EventEmitter<any>();
     @Output() refresh_Contract_Data: EventEmitter<any> = new EventEmitter<any>();
     @Output() reLoad: EventEmitter<any> = new EventEmitter<any>();
     @Output() removeDeletedRow = new EventEmitter<any>();
+    @Output() _onSkippingPCTMCTFailure = new EventEmitter<any>();
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
     private subKitEcapDim = "20_____2";
@@ -94,7 +100,7 @@ export class dealEditorCellTemplateComponent {
         if (field == "VOLUME" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "FRCST_VOL" ||
             field == "REBATE_OA_MAX_VOL" || field == "PAYABLE_QUANTITY") {
             if (data[field] != undefined && data[field] != null && data[field] != "")
-                data[field] = this.decimalPipe.transform(data[field], "1.0-0");            
+                data[field] = this.decimalPipe.transform(data[field], "1.0-0");
         } else if (field == "REBATE_OA_MAX_AMT" || field == "MAX_RPU" || field == "USER_MAX_RPU" ||
             field == "AVG_RPU" || field == "USER_AVG_RPU" || field == "TOTAL_DOLLAR_AMOUNT" || field == "MAX_PAYOUT"
             || field == "ADJ_ECAP_UNIT") {
@@ -201,7 +207,7 @@ export class dealEditorCellTemplateComponent {
         return GridUtil.uiValidationErrorDetail(passedData);
     }
 
-
+    
 
     uiControlScheduleWrapper(passedData) {
         let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
@@ -424,4 +430,31 @@ export class dealEditorCellTemplateComponent {
         this.fields = this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : this.in_Deal_Type === 'DENSITY' ? PTE_Config_Util.densityFields : PTE_Config_Util.volTierFields;
     }
 
+    IsPCTMCTSkipped(skippedPCTMCTFailure) {
+        const USER_ROLE = (<any>window).usrRole;
+        if (USER_ROLE === "DA" && skippedPCTMCTFailure === "1") {
+            return true;
+        }
+        return false;
+    }
+
+    onSkippingPCTMCTFailure(e, dataItem) {
+        this._onSkippingPCTMCTFailure.emit({ e: e, ps: dataItem });
+    }
+
+    getPCTMCTSkipLabel(dataItem) {
+        if (this.getPCTMCTSkipFailureLabel) {
+            const result = this.getPCTMCTSkipFailureLabel(dataItem);
+            return result;
+        }
+        return "Skip PCT/MCT Failure";
+    }
+
+    showPCTMCTSkipIcon(dataItem) {
+        if (this.getPCTMCTSkipIconDisplayFlag) {
+            const result = this.getPCTMCTSkipIconDisplayFlag(dataItem);
+            return result;
+        }
+        return false;
+    }
 }

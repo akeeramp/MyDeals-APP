@@ -7,7 +7,7 @@ import { tenderDashboardService } from "./tenderDashboard.service";
 import { TenderDashboardConfig } from '../tenderDashboard/tenderDashboard_config'
 import { TemplatesService } from "../../shared/services/templates.service";
 import { FilterDescriptor, CompositeFilterDescriptor } from "@progress/kendo-data-query";
-import { each } from 'underscore';
+import { each, forEach, take } from 'underscore';
 import { GridUtil } from "../../contract/grid.util";
 import { TenderDashboardGridUtil } from "../../contract/tenderDashboardGrid.util";
 import { PTE_Config_Util } from "../../contract/PTEUtils/PTE_Config_util";
@@ -82,7 +82,8 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
     private runSearch: boolean = false;
     private approveDeals: boolean = false;
     private entireDataDeleted: boolean = false;
-
+    public constants: any = [];
+    
     public filterData: any;
     public dropdownResponses: any;
      constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
@@ -1043,6 +1044,7 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
         this.startDateValue = window.localStorage.startDateValue ? new Date(window.localStorage.startDateValue) : this.startDateValue;
         this.endDateValue = window.localStorage.endDateValue ? new Date(window.localStorage.endDateValue) : this.endDateValue;
         this.getCustomerData();
+        this.getConstants();
         //this.getMaxRecordCount('TENDER_SEARCH_MAX_VALUE')
         if (this.templates.length == 0) {
             this.templatesSvc.readTemplates().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
@@ -1120,4 +1122,15 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
         this.destroy$.complete();
     }
 
+    async getConstants() {
+        const response: any = await this.constantsService.getConstants().toPromise().catch((error) => {
+            this.loggerSvc.error('Get Constant service', error);
+        });
+        if (response && response.length > 0) {
+            this.constants = response;
+        }
+        else {
+            this.loggerSvc.error('No records found in Constants', 'Error');
+        }
+    }
 }

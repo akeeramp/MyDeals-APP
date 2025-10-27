@@ -1,6 +1,6 @@
 ﻿import { Component, Input, ViewEncapsulation, ViewChild, Output, EventEmitter, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
-import { each, uniq } from 'underscore';
+import { each, forEach, uniq } from 'underscore';
 import { MomentService, StaticMomentService } from "../../shared/moment/moment.service";
 import { MatDialog } from '@angular/material/dialog';
 import { opGridTemplate } from "../../core/angular.constants"
@@ -31,6 +31,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service';
 import { infoModalComponent } from '../ptModals/infoModal/infoModal.component';
+import { confirmationModalComponent } from "../../contract/contractManager/confirmationModal/confirmationModal.component";
+import { contractManagerservice } from "../../contract/contractManager/contractManager.service";
 
 @Component({
     selector: 'deal-editor',
@@ -38,19 +40,20 @@ import { infoModalComponent } from '../ptModals/infoModal/infoModal.component';
     styleUrls: ['Client/src/app/contract/dealEditor/dealEditor.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class dealEditorComponent implements OnInit, OnDestroy, OnChanges { 
+export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(private pteService: PricingTableEditorService,
-                private contractDetailsSvc: ContractDetailsService,
-                private flexOverlappingCheckDealService: flexoverLappingcheckDealService,
-                private loggerService: logger,
-                private datePipe: DatePipe,
-                protected dialog: MatDialog,
-                private DESvc: dealEditorService,
-                private securityService: SecurityService,
-                private router: Router, 
-                private route: ActivatedRoute,
-                private momentService: MomentService) {}
+        private contractDetailsSvc: ContractDetailsService,
+        private contractManagerSvc: contractManagerservice,
+        private flexOverlappingCheckDealService: flexoverLappingcheckDealService,
+        private loggerService: logger,
+        private datePipe: DatePipe,
+        protected dialog: MatDialog,
+        private DESvc: dealEditorService,
+        private securityService: SecurityService,
+        private router: Router,
+        private route: ActivatedRoute,
+        private momentService: MomentService) {}
 
     @Input() in_Cid: any = '';
     @Input() in_Ps_Id: any = '';
@@ -66,6 +69,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
     @Input() filterData: any = {};
     @Input() IsExpiredDealHighlighted: boolean = false;
     @Input() NumberOfDaysToExpireDeal: number;
+    @Input() constants: any = [];
 
     @ViewChild('dealEditor') private grid: GridComponent;
     @Output() perfComp = new EventEmitter;
@@ -173,6 +177,9 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         { text: "25", value: 25 }
     ];
     private filteringData: any[] = [];
+    public skipPCTFailure: boolean = false;
+    public skipMCTFailure: boolean = false;
+
     filterChange(filter: any): void {
         this.state.filter = filter;
         if (!this.in_Is_Tender_Dashboard) { //Since tender dashboard is having server side filteration this is not required
@@ -277,6 +284,9 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                         item.filterable = false;
                         item.sortable = false;
                     }
+                    if (item.field == "IS_PCT_MCT_FAILURE_SKIPPED") {
+                        this.removeSkipPCTMCTFailureColumnFromWipTemplate(i);
+                    }
                 });
             }
 
@@ -297,6 +307,11 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                 this.getTenderDashboardData(); //To reload the tender dashboard data on reload
             }
             this.setBusy("", "", "", false);
+        }
+
+        // To remove Skip PCT/MCT Failure column from WIP_DEAL template for non-tender dashboard
+        if (this.wipTemplate) {
+            this.removeSkipPCTMCTFailureColumnFromWipTemplate();
         }
     }
 
@@ -403,7 +418,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                         }
                     }
                 })
-               
+
             })
             this.gridResult = response.WIP_DEAL;
             this.setWarningDetails();
@@ -623,51 +638,51 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                     args.dataItem._behaviors.isDirty['CONSUMPTION_CUST_SEGMENT'] == true || args.dataItem._behaviors.isDirty['CONSUMPTION_CUST_RPT_GEO'] == true ||
                     args.dataItem._behaviors.isDirty['CONSUMPTION_COUNTRY_REGION'] == true || args.dataItem._behaviors.isDirty['CONSUMPTION_REASON_CMNT'] == true ||
                     args.dataItem._behaviors.isDirty['CONSUMPTION_TYPE'] == true || args.dataItem._behaviors.isDirty['SYS_PRICE_POINT'] == true ||
-                    args.dataItem._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || args.dataItem._behaviors.isDirty['QLTR_PROJECT'] == true) {                    
-                        args.sender.editCell(
-                            args.rowIndex,
-                            args.columnIndex
-                        );
+                    args.dataItem._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || args.dataItem._behaviors.isDirty['QLTR_PROJECT'] == true) {
+                    args.sender.editCell(
+                        args.rowIndex,
+                        args.columnIndex
+                    );
                 }
             }
             if (!args.isEdited && args.column.field !== 'MISSING_CAP_COST_INFO' && args.column.field !== "details" && args.column.field !== "tools" && args.column.field !== "PRD_BCKT" && args.column.field !== "CUST_MBR_SID" && args.column.field !== "CAP_INFO" && args.column.field !== "YCS2_INFO" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
                 args.column.field !== "BACKEND_REBATE" && args.column.field !== "AUTO_APPROVE_RULE_INFO" && args.column.field !== "CAP_KIT" && args.column.field !== "PRIMARY_OR_SECONDARY" && args.column.field !== "KIT_REBATE_BUNDLE_DISCOUNT" &&
-                args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && !(args.dataItem._behaviors != undefined &&
-                args.dataItem._behaviors.isReadOnly != undefined && args.dataItem._behaviors.isReadOnly[args.column.field] != undefined && args.dataItem._behaviors.isReadOnly[args.column.field])) {
+                args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && args.column.field !== "IS_PCT_MCT_FAILURE_SKIPPED" && !(args.dataItem._behaviors != undefined &&
+                    args.dataItem._behaviors.isReadOnly != undefined && args.dataItem._behaviors.isReadOnly[args.column.field] != undefined && args.dataItem._behaviors.isReadOnly[args.column.field])) {
                 //to handle on-click action on kendogrid cells
                 if (args.dataItem.HAS_TRACKER == "1" ) {
 
                     if(args.column.field == "CONSUMPTION_LOOKBACK_PERIOD" || args.column.field == "CONSUMPTION_REASON"
-                            || args.column.field == "CONSUMPTION_TYPE" || args.column.field == "SYS_PRICE_POINT"
-                            || args.column.field == "QLTR_PROJECT" || args.column.field == "CONSUMPTION_REASON_CMNT") {
+                        || args.column.field == "CONSUMPTION_TYPE" || args.column.field == "SYS_PRICE_POINT"
+                        || args.column.field == "QLTR_PROJECT" || args.column.field == "CONSUMPTION_REASON_CMNT") {
 
-                        }
-                    else{
-                            args.sender.editCell(
-                                args.rowIndex,
-                                args.columnIndex
-                            );
-                        }
                     }
-                else{
+                    else{
                         args.sender.editCell(
                             args.rowIndex,
                             args.columnIndex
                         );
                     }
-                if (args.dataItem.HAS_TRACKER!="1" && args.column.field == "SYS_PRICE_POINT") {
-                        this.openSystemPriceModal(args.dataItem);
-                    }
-                    else if (args.column.field == "END_CUSTOMER_RETAIL") {
-                        this.openEndCustomerModal(args.dataItem, this.wipTemplate.columns.filter(x => x.field == args.column.field)[0]);
-                    }
-                    else if (args.column.field == "MRKT_SEG" || args.column.field == "CONSUMPTION_COUNTRY_REGION"
-                        || args.column.field == "CONSUMPTION_CUST_PLATFORM" || args.column.field == "CONSUMPTION_CUST_SEGMENT"
-                        || args.column.field == "CONSUMPTION_CUST_RPT_GEO" || args.column.field == "CONSUMPTION_SYS_CONFIG"
-                        || args.column.field == "DEAL_SOLD_TO_ID" || args.column.field == "TRGT_RGN") {
-                        this.openMultiSelectModal(args.dataItem, this.wipTemplate.columns.filter(x => x.field == args.column.field)[0]);
-                    }
                 }
+                else{
+                    args.sender.editCell(
+                        args.rowIndex,
+                        args.columnIndex
+                    );
+                }
+                if (args.dataItem.HAS_TRACKER!="1" && args.column.field == "SYS_PRICE_POINT") {
+                    this.openSystemPriceModal(args.dataItem);
+                }
+                else if (args.column.field == "END_CUSTOMER_RETAIL") {
+                    this.openEndCustomerModal(args.dataItem, this.wipTemplate.columns.filter(x => x.field == args.column.field)[0]);
+                }
+                else if (args.column.field == "MRKT_SEG" || args.column.field == "CONSUMPTION_COUNTRY_REGION"
+                    || args.column.field == "CONSUMPTION_CUST_PLATFORM" || args.column.field == "CONSUMPTION_CUST_SEGMENT"
+                    || args.column.field == "CONSUMPTION_CUST_RPT_GEO" || args.column.field == "CONSUMPTION_SYS_CONFIG"
+                    || args.column.field == "DEAL_SOLD_TO_ID" || args.column.field == "TRGT_RGN") {
+                    this.openMultiSelectModal(args.dataItem, this.wipTemplate.columns.filter(x => x.field == args.column.field)[0]);
+                }
+            }
             else if ((args.column.field == "PRD_BCKT" && this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (args.column.field == "TITLE" && this.curPricingTable.OBJ_SET_TYPE_CD !== "KIT")) {
                 this.openDealProductModal(args.dataItem);
             }
@@ -679,6 +694,9 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             }
             else if (args.column.field == 'MISSING_CAP_COST_INFO') {
                 this.openMissingCapCostInfo(args.dataItem);
+            }
+            else if (args.column.field == 'IS_PCT_MCT_FAILURE_SKIPPED' && (<any>window).usrRole === "DA" && args.dataItem['IS_PCT_MCT_FAILURE_SKIPPED'] === "0") {
+                this.onSkippingPCTMCTFailure(args.dataItem);
             }
             this.isLoading = false;
         }, 0);
@@ -808,8 +826,8 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             width: "900px",
             autoFocus: false,
             data: {
-                    DC_ID: dataItem.DC_ID,
-                    CUST_MBR_SID: dataItem.CUST_MBR_SID
+                DC_ID: dataItem.DC_ID,
+                CUST_MBR_SID: dataItem.CUST_MBR_SID
             }
         });
     }
@@ -826,7 +844,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             disableClose: true
         });
 
-        DIALOG_REF.afterClosed().subscribe(result => { 
+        DIALOG_REF.afterClosed().subscribe(result => {
             //
         });
     }
@@ -922,8 +940,8 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         if (this.Derenametab === "" || this.Derenametab.toLowerCase() == "overlapping") return;
         each(this.groups, group => {
             if (group.name == this.selectedTab) {
-               group.name = this.Derenametab;
-               this.renamedefault.push({ "key": this.Derenametab, "value": this.selectedTab });
+                group.name = this.Derenametab;
+                this.renamedefault.push({ "key": this.Derenametab, "value": this.selectedTab });
             }
         });
         each(this.wipTemplate.columns, column => {
@@ -932,7 +950,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                     if (row == this.selectedTab) {
                         let ind = this.templates[column.field].Groups.findIndex(item => item == row);
                         this.templates[column.field].Groups[ind] = this.Derenametab;
-                    } 
+                    }
                 });
         });
         if (this.selectedTab.toLowerCase() == 'all') this.allTabRename = this.Derenametab;
@@ -993,7 +1011,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             if (group.name.trim().toLowerCase() === this.DeAddtab.trim().toLowerCase()) {
                 this.loggerService.error("Tab name already exists.", null, "Add Tab Failed");
                 return;
-            } 
+            }
         });
         this.addToTab(this.DeAddtab.trim());
         this.isAddDialog = false
@@ -1193,7 +1211,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             }
             else {
                 args.sender.cellClick.closed = false;
-                args.sender.cellClick.isStopped = false;                
+                args.sender.cellClick.isStopped = false;
                 // List all date fields that need formatting
                 const dateFields = [
                     "START_DT",
@@ -1211,8 +1229,8 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                         // Format all date fields to MM/dd/yyyy
                         dateFields.forEach(field => {
                             if (item[field] != undefined && item[field] != null && item[field] != "" && item[field] != "Invalid date")
-                                item[field] = this.datePipe.transform(item[field], "MM/dd/yyyy");                        
-                        });          
+                                item[field] = this.datePipe.transform(item[field], "MM/dd/yyyy");
+                        });
                     }
                 })
                 if ((args.column.field == "START_DT" || args.column.field == "END_DT") && args.dataItem._behaviors != undefined && args.dataItem._behaviors != null
@@ -1283,13 +1301,13 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                             item._behaviors.isDirty['CONSUMPTION_CUST_SEGMENT'] == true || item._behaviors.isDirty['CONSUMPTION_CUST_RPT_GEO'] == true ||
                             item._behaviors.isDirty['CONSUMPTION_COUNTRY_REGION'] == true || item._behaviors.isDirty['CONSUMPTION_REASON_CMNT'] == true ||
                             item._behaviors.isDirty['CONSUMPTION_TYPE'] == true || item._behaviors.isDirty['SYS_PRICE_POINT'] == true ||
-                            item._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || item._behaviors.isDirty['QLTR_PROJECT'] == true) 
+                            item._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || item._behaviors.isDirty['QLTR_PROJECT'] == true)
                             {
                                 this.isConsumptiondirty=true;
                             }
                     }
                 });
-                 
+
                 if (!this.isDatesOverlap && !this.isConsumptiondirty) {
                     await this.SaveDealData();
                 }
@@ -1302,9 +1320,9 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                         this.message+= "Extending Deal Dates will result in the extension of Contract Dates. Please click 'OK', if you want to proceed.\n";
                     }
                     if(this.isConsumptiondirty)
-                    this.message += "Consumption parameter values are modified, Please validate \" Effective Tracker Start Date \". Click Ok to continue. Cancel to modify the Date.";
+                        this.message += "Consumption parameter values are modified, Please validate \" Effective Tracker Start Date \". Click Ok to continue. Cancel to modify the Date.";
                 }
-                if (this.isDeveloper || this.isTester) { 
+                if (this.isDeveloper || this.isTester) {
                     this.setPerfBarDetails('setFinalDetails', "Deal Editor Save & Validate", "UX", false, true);
                     this.perfComp.emit(this.perfBar);
                     this.setPerfBarDetails('drawChart', "", "", false, false);
@@ -1324,7 +1342,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                         item._behaviors.isDirty['CONSUMPTION_CUST_SEGMENT'] == true || item._behaviors.isDirty['CONSUMPTION_CUST_RPT_GEO'] == true ||
                         item._behaviors.isDirty['CONSUMPTION_COUNTRY_REGION'] == true || item._behaviors.isDirty['CONSUMPTION_REASON_CMNT'] == true ||
                         item._behaviors.isDirty['CONSUMPTION_TYPE'] == true || item._behaviors.isDirty['SYS_PRICE_POINT'] == true ||
-                        item._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || item._behaviors.isDirty['QLTR_PROJECT'] == true) 
+                        item._behaviors.isDirty['CONSUMPTION_LOOKBACK_PERIOD'] == true || item._behaviors.isDirty['QLTR_PROJECT'] == true)
                         {
                             this.isConsumptiondirty=true;
                         }
@@ -1338,7 +1356,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             }
             else
             {
-                await this.SaveDealData(); 
+                await this.SaveDealData();
             }
         }
     }
@@ -1354,12 +1372,12 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         this.isWarning = false;
         this.isAlertDialog = false;
         this.isConsumptiondirty = false;
-       
-            let iserror = await this.validatetrackerEffectiveDate(this.gridResult);
-            if (iserror) {
-                return
-            }
-        
+
+        let iserror = await this.validatetrackerEffectiveDate(this.gridResult);
+        if (iserror) {
+            return
+        }
+
         if (!this.in_Is_Tender_Dashboard) {
             this.isDatesOverlap = false;
             //TWC5971-641: If not flex, then reset the datesModified flag to false to avoid the flex warning modal
@@ -1413,7 +1431,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                 await this.updateContract(isShowStopError);
             }
         }
-         else {
+        else {
             this.isWarning = false;
             this.isAlertDialog = false;
             this.isDataLoading = true;
@@ -1465,9 +1483,9 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                     "EventSource": 'WIP_DEAL',
                     "Errors": {}
                 }
-                    this.invokeSearchData.emit(data);// invoke Tender Dashboard save api call
-                    this.dirty = false;
-                    this.setBusy("", "", "", false);
+                this.invokeSearchData.emit(data);// invoke Tender Dashboard save api call
+                this.dirty = false;
+                this.setBusy("", "", "", false);
             }
         }
     }
@@ -1580,8 +1598,8 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-     async validatetrackerEffectiveDate(data: Array<any>){
-       
+    async validatetrackerEffectiveDate(data: Array<any>){
+
         let iserror=false;
         each(data, (item) => {
             if (item.WF_STG_CD == "Active"  || item.WF_STG_CD == "Won" ) {
@@ -1590,7 +1608,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                     let  getlasttrackerdate =this.oldDEData.find(x=>x.DC_ID==item.DC_ID).LAST_REDEAL_DT;
                     let startDate =getlasttrackerdate!=""?getlasttrackerdate: item.START_DT;
                     //let startd=item.START_DT > item.TRKR_START_DT ? item.START_DT : item.TRKR_START_DT;  
-                
+
                     if (item._behaviors.isDirty) {
                         if (item._behaviors.isDirty['LAST_REDEAL_DT'] == true && (StaticMomentService.moment(item.LAST_REDEAL_DT).isBefore(startDate) || StaticMomentService.moment(item.LAST_REDEAL_DT).isAfter(endDate))) {
                             iserror = true;
@@ -1634,7 +1652,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
     }
-    setWarningDetails() {        
+    setWarningDetails() {
         PTE_Common_Util.setWarningFields(this.gridResult, this.curPricingTable);
         PTE_Common_Util.clearBadegCnt(this.groups);
         for (let i = 0; i < this.gridResult.length; i++) {
@@ -1651,7 +1669,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                 }
             }
         }
-        this.numSoftWarn = PTE_Common_Util.checkSoftWarnings(this.gridResult, this.curPricingTable);        
+        this.numSoftWarn = PTE_Common_Util.checkSoftWarnings(this.gridResult, this.curPricingTable);
     }
 
     async getAllDrowdownValues() {
@@ -1685,7 +1703,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                     url = column[0].lookupUrl;
                 }
                 if (!(this.in_Is_Tender_Dashboard && (item == "PERIOD_PROFILE" || item == "SETTLEMENT_PARTNER")))
-                dropObjs[`${item}`] = this.pteService.readDropdownEndpoint(url);
+                    dropObjs[`${item}`] = this.pteService.readDropdownEndpoint(url);
             }
             else if (item == 'EXPIRE_FLG') {
                 dropObjs[`${item}`] = [
@@ -1805,7 +1823,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             this.gridData = process(this.gridResult, this.state);
             this.isLoading = false;
         });
-}
+    }
     clearSearchGrid() {
         this.isLoading = true;
         this.state.filter = {
@@ -1929,12 +1947,23 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                 this.curPricingTable = { OBJ_SET_TYPE_CD: this.in_Deal_Type };
                 this.dropdownFilterColumns = PTE_Config_Util.tenderDashboardDropColumns;
             }
-           await this.getGroupsAndTemplates();
+            //Skip PCT/MCT Failure flags
+            if (this.constants) {
+                const skipPCTFailure = this.constants.find((item) => item.CNST_NM === 'SKIP_PCT_FAILURE');
+                const skipMCTFailure = this.constants.find((item) => item.CNST_NM === 'SKIP_MCT_FAILURE');
+                if (skipPCTFailure && skipPCTFailure.CNST_VAL_TXT === '1') {
+                    this.skipPCTFailure = true;
+                }
+                if (skipMCTFailure && skipMCTFailure.CNST_VAL_TXT === '1') {
+                    this.skipMCTFailure = true;
+                }
+            }
+            await this.getGroupsAndTemplates();
             if (this.isInitialLoad) {
                 if (Object.keys(this.dropdownResponses).length == 0) {
                     this.dropdownResponses = await this.getAllDrowdownValues();
                 }
-            } 
+            }
             this.selectedTab = this.groups[0].name;
             this.filterColumnbyGroup(this.selectedTab);
             if (this.in_Search_Text && this.in_Search_Text != null && this.in_Search_Text != '' && this.in_Search_Text != 'PS') {
@@ -1948,7 +1977,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                 const psid=this.route.snapshot.paramMap.get('PSID');
                 const ptid=this.route.snapshot.paramMap.get('PTID');
                 const dealid=this.route.snapshot.paramMap.get('DealID');
-                  //it will update the url on page reload persist the selected state
+                //it will update the url on page reload persist the selected state
                 const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
                 this.router.navigateByUrl(urlTree+'?loadtype=DealEditor' );
             }
@@ -2029,6 +2058,141 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
 
     private set gridResult(data: any[]) {
         this._gridResult.next(data);
-    } 
+    }
 
+    //START: Skip PCT/MCT Failure
+    showSkipPCTMCTFailureColumn() {
+        const USER_ROLE = (<any>window).usrRole;
+        if (USER_ROLE === "DA" && (this.skipPCTFailure || this.skipMCTFailure)) {
+            const skipEnabledItems = [];
+            forEach(this.in_Search_Results, (result) => {
+                skipEnabledItems.push(this.shouldShowSkipIcon(result));
+            })
+            //Check any TRUE value present in the array if yes return TRUE else FALSE
+            return skipEnabledItems.includes(true);
+        }
+        return false;
+    }
+
+    getPCTMCTSkipLabel(fromIcon) {
+        const skip = (fromIcon == "successMessage") ? "Skipped" : (fromIcon == "greyIconTitle") ? "Click to Skip" : "Skip";
+        if (this.skipPCTFailure && this.skipMCTFailure) {
+            return `${skip} PCT/MCT Failure`;
+        }
+        if (this.skipPCTFailure) {
+            return `${skip} PCT Failure`;
+        }
+        if (this.skipMCTFailure) {
+            return `${skip} MCT Failure`;
+        }
+        return "";
+    }
+
+    showPCTMCTSkipIcon = (ps) => {
+        const USER_ROLE = (<any>window).usrRole;
+        if (USER_ROLE === "DA") {
+            return this.shouldShowSkipIcon(ps);
+        }
+        return false;
+    }
+
+    removeSkipPCTMCTFailureColumnFromWipTemplate(colIdx = undefined) {
+        if (this.in_Is_Tender_Dashboard) {
+            if (!this.showSkipPCTMCTFailureColumn()) {
+                if (colIdx) {
+                    this.wipTemplate.columns.splice(colIdx, 1);
+                } else {
+                    colIdx = this.wipTemplate.columns.findIndex(col => col.field == 'IS_PCT_MCT_FAILURE_SKIPPED');
+                    if (colIdx !== -1) {
+                        this.wipTemplate.columns.splice(colIdx, 1);
+                    }
+                }
+            } else {
+                if (colIdx) {
+                    const title = this.getPCTMCTSkipLabel(undefined);
+                    this.wipTemplate.columns[colIdx].title = title;
+                }
+            }
+        } else {
+            colIdx = this.wipTemplate.columns.findIndex(col => col.field == 'IS_PCT_MCT_FAILURE_SKIPPED');
+            if (colIdx !== -1) {
+                this.wipTemplate.columns.splice(colIdx, 1);
+            }
+        }        
+    }
+
+    shouldShowSkipIcon(ps) {
+        if (ps.PS_WF_STG_CD !== "Submitted" && ps.PS_WF_STG_CD !== "Approved" && ps.PS_WF_STG_CD !== "Offer" && ps.PS_WF_STG_CD !== "Won") {
+            return false;
+        }
+        // Normalize statuses to uppercase for safety
+        const pctSkip = this.skipPCTFailure;
+        const mctSkip = this.skipMCTFailure;
+        const pctStatus = ps?.COST_TEST_RESULT?.toUpperCase();
+        const mctStatus = ps?.MEETCOMP_TEST_RESULT?.toUpperCase();
+
+        // Case 1: Both skips are FALSE
+        if (!pctSkip && !mctSkip) {
+            return false; // Icon Skip = N
+        }
+
+        // Case 2: PCT Skip = TRUE, MCT Skip = FALSE
+        if (pctSkip && !mctSkip) {
+            return pctStatus === "FAIL";
+        }
+
+        // Case 3: PCT Skip = FALSE, MCT Skip = TRUE
+        if (!pctSkip && mctSkip) {
+            return mctStatus === "FAIL";
+        }
+
+        // Case 4: Both skips are TRUE
+        if (pctSkip && mctSkip) {
+            if (pctStatus === "PASS" && mctStatus === "PASS") {
+                return false;
+            } else if (pctStatus === "FAIL" || mctStatus === "FAIL") {
+                return true;
+            }
+        }
+
+        // Fallback
+        return false;
+    }
+
+    async onSkippingPCTMCTFailure(ps) {
+        const USER_ROLE = (<any>window).usrRole;
+        if (USER_ROLE === "DA") {
+            const pctMctFailureSkipInputObj = [{ ObjId: ps.DC_ID, ObjType: 5 }];
+            const confirmationMsg = `Click 'Yes' to ${this.getPCTMCTSkipLabel(undefined)}?`;
+            const confirmationModalName = this.getPCTMCTSkipLabel(undefined);
+            const successMessage = this.getPCTMCTSkipLabel("successMessage");
+            const DIALOG_REF = this.dialog.open(confirmationModalComponent, {
+                height: 'auto',
+                width: '600px',
+                data: { confirmationMessage: confirmationMsg, confirmationModalName: confirmationModalName }
+            });
+            await DIALOG_REF.afterClosed().toPromise().then(async (result) => {
+                //If user clicks on 'Yes'
+                if (result) {
+                    //Skip PCT/MCT Failure
+                    this.isLoading = true;
+                    this.setBusy("Skip PCT/MCT Failure", `${confirmationModalName} is in progress.`, "Info", true);
+                    this.contractManagerSvc.updateSkipPCTMCTFailureFlag(pctMctFailureSkipInputObj).toPromise()
+                        .then((response: boolean) => {// response is boolean
+                            this.isLoading = false;
+                            this.setBusy("", "", "", false);
+                            if (response) {
+                                this.loggerService.success(successMessage);
+                                this.refreshGridData.emit({ wipIds: [ps['DC_ID']] });
+                            } else {
+                                this.loggerService.error(`Unable to ${confirmationModalName}`, "Error", 500);
+                            }
+                        }).catch((error) => {
+                            this.loggerService.error(`Unable to ${confirmationModalName}`, error, error.statusText);
+                        })
+                }
+            });
+        }
+    }
+    //END: Skip PCT/MCT Failure
 }

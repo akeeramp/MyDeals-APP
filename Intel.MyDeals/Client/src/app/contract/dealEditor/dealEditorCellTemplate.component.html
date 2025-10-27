@@ -17,7 +17,7 @@
 
 <!----------------------------------------------------------------------------------------------------------------------------------uiControlWrapper(in_DataItem, in_Field_Name)---->
 
-<div *ngIf="in_Template.includes('gridUtils.uiControlWrapper')" class="dealCell" [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
+<div *ngIf="in_Template.includes('gridUtils.uiControlWrapper') && in_Field_Name != 'IS_PCT_MCT_FAILURE_SKIPPED'" class="dealCell" [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
     <div *ngIf="in_DataItem['PAYOUT_BASED_ON'] != undefined && in_DataItem['PAYOUT_BASED_ON'] == 'Billings' && (in_Field_Name == 'REBATE_BILLING_START' || in_Field_Name == 'REBATE_BILLING_END')">
         <div class="err-bit" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
         <div class="uiControlDiv vert-center"></div>
@@ -253,6 +253,15 @@
     <div class='uiControlDiv isReadOnlyCell'>
         <div class='vert-center'>
             <i class='valid-icon iConFont validf_{{in_DataItem.PASSED_VALIDATION}}' [ngClass]="in_DataItem.PASSED_VALIDATION === undefined && in_DataItem.PASSED_VALIDATION === '' ? 'intelicon-protection-solid' : in_DataItem.PASSED_VALIDATION == 'Complete' ? 'intelicon-protection-checked-verified-solid' : 'intelicon-alert-solid'" title='{{uiValidationErrorDetail(in_DataItem)}}'></i>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'IS_PCT_MCT_FAILURE_SKIPPED'" id="{{in_Field_Name + '_' + in_DataItem['DC_ID']}}" class="dealCell">
+    <div class='dealCell text-center uiControlDiv isReadOnlyCell' *ngIf="showPCTMCTSkipIcon(in_DataItem)">
+        <div class='vert-center'>
+            <i 
+                class="valid-icon iConFont bigIcon {{IsPCTMCTSkipped(in_DataItem.IS_PCT_MCT_FAILURE_SKIPPED) ? 'intelicon-protection-checked-verified-solid validf_Complete' : 'intelicon-information-solid validf_Valid'}}"
+                title="{{ !IsPCTMCTSkipped(in_DataItem.IS_PCT_MCT_FAILURE_SKIPPED) && getPCTMCTSkipLabel('greyIconTitle')}}"></i>
         </div>
     </div>
 </div>
@@ -511,6 +520,6 @@
         && in_Field_Name !== 'SUBKIT_REBATE_BUNDLE_DISCOUNT' && in_Field_Name !== 'BACKEND_REBATE' && in_Field_Name !== 'TOTAL_DSCNT_PR_LN'
         && in_Field_Name !== 'CAP_KIT' && in_Field_Name !== 'YCS2_KIT' && in_Field_Name !== 'KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE' && in_Field_Name !== 'SUBKIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'
         && in_Field_Name !== 'MEETCOMP_TEST_RESULT' && in_Field_Name !== 'COST_TEST_RESULT' && in_Field_Name !== 'CAP_INFO'
-        && in_Field_Name !== 'YCS2_INFO' && in_Field_Name !== 'MISSING_CAP_COST_INFO' && in_Field_Name !== 'tender_actions'" [innerHTML]="in_Template|sanitizeHtml"
+        && in_Field_Name !== 'YCS2_INFO' && in_Field_Name !== 'MISSING_CAP_COST_INFO' && in_Field_Name !== 'IS_PCT_MCT_FAILURE_SKIPPED' && in_Field_Name !== 'tender_actions'" [innerHTML]="in_Template|sanitizeHtml"
      class="uiControlDiv wrap readOnlyCell dealCell">
 </div>

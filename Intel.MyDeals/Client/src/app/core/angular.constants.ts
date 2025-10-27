@@ -135,6 +135,9 @@ export const opGridTemplate = {
             "PASSED_VALIDATION": {
                 "Groups": ["Deal Info"]
             },
+            "IS_PCT_MCT_FAILURE_SKIPPED": {
+                "Groups": ["Deal Info"]
+            },
             "MEETCOMP_TEST_RESULT": {
                 "Groups": ["Deal Info"]
             },
@@ -920,6 +923,9 @@ export const opGridTemplate = {
             "PASSED_VALIDATION": {
                 "Groups": ["Deal Info"]
             },
+            "IS_PCT_MCT_FAILURE_SKIPPED": {
+                "Groups": ["Deal Info"]
+            },
             "MEETCOMP_TEST_RESULT": {
                 "Groups": ["Deal Info"]
             },
@@ -1558,7 +1564,7 @@ export const opGridTemplate = {
     },
     "requiredForTender": ["VOLUME", "PAYABLE_QUANTITY", "END_CUSTOMER_RETAIL"],
     "hideForTender": ["DEAL_SOLD_TO_ID", "EXPIRE_YCS2", "DC_PARENT_ID"],
-    "hideForNonTender": ["EXCLUDE_AUTOMATION", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "QUOTE_LN_ID", "PAYABLE_QUANTITY"],
+    "hideForNonTender": ["EXCLUDE_AUTOMATION", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "QUOTE_LN_ID", "PAYABLE_QUANTITY", "IS_PCT_MCT_FAILURE_SKIPPED"],
     "hideForStandardDealEditor": ["EXCLUDE_AUTOMATION", "tender_actions", "GEO_APPROVED_BY", "DIV_APPROVED_BY", "CNTRCT_OBJ_SID"],
 };
 

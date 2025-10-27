@@ -3206,7 +3206,7 @@ namespace Intel.MyDeals.DataLibrary
                 //UiType = "IntegerTextBox",
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_DEAL_ID')#"
             });
-            
+
             /*items.Add(new UiTemplateContainerItem  // WIP All Types
             {
                 Id = 9999,
@@ -3219,7 +3219,21 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiCrDbPercWrapper(data)#",
                 ExcelTemplate = "#=gridUtils.uiCrDbPercExcelWrapper(data)#"
             });*/
-           
+
+            items.Add(new UiTemplateContainerItem  // WIP All Types
+            {
+                Id = 3651,
+                AtrbCd = AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                Width = 150,
+                IsFilterable = false,
+                IsReadOnly = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'IS_PCT_MCT_FAILURE_SKIPPED')#",
+                ExcelTemplate = "#=IS_PCT_MCT_FAILURE_SKIPPED#"
+            });
+
             items.Add(new UiTemplateContainerItem  // WIP All Types
             {
                 Id = 3651,

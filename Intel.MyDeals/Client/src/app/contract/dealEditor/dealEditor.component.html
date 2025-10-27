@@ -277,7 +277,8 @@
                         </ng-template>
                         <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
                             <deal-editor-cell class="extraSpace-colFix" [IsExpiredDealHighlighted]="IsExpiredDealHighlighted" [NumberOfDaysToExpireDeal]="NumberOfDaysToExpireDeal" [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data" [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard"
-                                              [in_DataSet]="gridResult" (iconUpdate)="updateSaveIcon($event)" (refresh_Contract_Data)="refreshContract($event)" (reLoad)="reloadFn($event)" (removeDeletedRow)="removeDeletedRowData($event)"></deal-editor-cell>
+                                              [in_DataSet]="gridResult" (iconUpdate)="updateSaveIcon($event)" (refresh_Contract_Data)="refreshContract($event)" (reLoad)="reloadFn($event)" (removeDeletedRow)="removeDeletedRowData($event)"
+                                              [getPCTMCTSkipIconDisplayFlag]="showPCTMCTSkipIcon" [getPCTMCTSkipFailureLabel]="getPCTMCTSkipLabel" [shouldShowSkipIcon]="shouldShowSkipIcon" (_onSkippingPCTMCTFailure)="onSkippingPCTMCTFailure($event)" [skipPCTFailure]="skipPCTFailure" [skipMCTFailure]="skipMCTFailure"></deal-editor-cell>
                         </ng-template>
                         <ng-template kendoGridEditTemplate let-dataItem="dataItem">
                             <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses" [in_DataSet]="gridResult" [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard" (invalidField)="setInvalidField($event)" (bidActionsUpdated)="bidActionUpdated($event)"></deal-editor-edit>

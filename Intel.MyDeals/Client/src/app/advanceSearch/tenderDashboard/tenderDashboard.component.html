@@ -25,7 +25,7 @@
 
     <div *ngIf="searchResults.length > 0 || entireDataDeleted" [ngClass]="{'tender-db-styles':showSearchFilters==false}" class="tender-de-custom" style="margin-top: -25px;">
         <deal-editor class="tender_de_admin" [in_Deal_Type]="dealType" [filterData]="filterData" [in_Is_Tender_Dashboard]="true" [ruleData]="ruleData" [in_Search_Results]="searchResults" [in_Search_Count]="searchCount" [in_Search_Text]="searchText" [UItemplate]="templates" (invokeSearchDatasource)="invokeSearchDatasource($event)" (invokeSearchData)="invokeSearchData($event)"
-                        (bidActionsUpdated)="bidActionsUpdated($event)" (tenderCopyDeals)="tenderCopyDeals($event)" (floatActionsUpdated)="floatActionsUpdated($event)" (runPCTMCT)="runPCTMCT($event)" (emailData)="openEmail($event)" (refreshGridData)="refreshGridData($event)" (removeDeletedRow)="removeDeletedRow($event)">
+                        (bidActionsUpdated)="bidActionsUpdated($event)" (tenderCopyDeals)="tenderCopyDeals($event)" (floatActionsUpdated)="floatActionsUpdated($event)" (runPCTMCT)="runPCTMCT($event)" (emailData)="openEmail($event)" (refreshGridData)="refreshGridData($event)" (removeDeletedRow)="removeDeletedRow($event)" [constants]="constants">
         </deal-editor>
     </div>
 </div>

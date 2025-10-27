@@ -344,7 +344,7 @@ namespace Intel.MyDeals.BusinessLogic
             return returnedProducts;
         }
 
-        private void EnterMeetCompData(int strategyId, int dealId, int prdId, string usrInputProd, string myPrdCat, string myDealPrdType, int custId, TenderTransferRootObject workRecordDataFields, int currentRec)
+        private void EnterMeetCompData(int strategyId, int dealId, int prdId, string usrInputProd, string myPrdCat, string myDealPrdType, int custId, TenderTransferRootObject workRecordDataFields, int currentRec, string isPCTMCTFailureSkipped)
         {
             // We only take the first instance of values as per Mahesh ([0] below)
             string competitorProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].competitorProduct.Name;
@@ -436,14 +436,37 @@ namespace Intel.MyDeals.BusinessLogic
             }
             else
             {
+                // Check for PCT/MCT failure skip constant value
+                var pctSkipEnabled = false;
+                var mctSkipEnabled = false;
+                if(isPCTMCTFailureSkipped == "1")
+                {
+                    var _constantLookupDataLib = new ConstantLookupDataLib();
+                    var adminConstants = _constantLookupDataLib.GetAdminConstants();
+
+                    // Check for PCT results if we are DA and approving from Submitted
+                    var enabledPctFailure = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_PCT_FAILURE" && c.CNST_VAL_TXT == "1");
+                    if (enabledPctFailure != null) pctSkipEnabled = true;
+
+                    // Check for PCT/MCT results if we are DA and approving from Submitted
+                    var enabledMctFailure = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_MCT_FAILURE" && c.CNST_VAL_TXT == "1");
+                    if (enabledMctFailure != null) mctSkipEnabled = true;
+                }
+
                 if (pctResults.Any(m => m.MEETCOMP_TEST_RESULT == "Fail"))
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(730, "Unable to push to next stage. Work with your DA to review PCT/MCT", "Meet Comp Test FAILED"));
+                    if(!(pctSkipEnabled && isPCTMCTFailureSkipped == "1")) // Skipping mct failure message due to isPCTMCTFailureSkipped flag is enabled
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(730, "Unable to push to next stage. Work with your DA to review PCT/MCT", "Meet Comp Test FAILED"));
+                    }
                 }
 
                 if (pctResults.Any(m => m.COST_TEST_RESULT == "Fail"))
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(730, "Unable to push to next stage. Work with your DA to review PCT/MCT", "Price Cost Test FAILED"));
+                    if (!(mctSkipEnabled && isPCTMCTFailureSkipped == "1")) // Skipping pct failure message due to isPCTMCTFailureSkipped flag is enabled
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(730, "Unable to push to next stage. Work with your DA to review PCT/MCT", "Price Cost Test FAILED"));
+                    }
                 }
             }
         }
@@ -1224,10 +1247,11 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 workRecordDataFields.recordDetails.quote.UnifiedEndCustomer = primedCustName;
             }
-
+            // Get IsPCTMCTFailureSkipped value
+            string isPCTMCTFailureSkipped = myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElementValue(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED);
             // Update the Meet Comp data now.
             EnterMeetCompData(contPsId, wipDealId, myPrdMbrSid, productLookupObj.MydlPdctName, myPrdCat, myDealPrdType, custId,
-                workRecordDataFields, currentRec);
+                workRecordDataFields, currentRec, isPCTMCTFailureSkipped);
 
             // TODO: POTENTIALLY PLACE APRV_AUDIT CALL HERE
             return wipDealId;
@@ -2162,7 +2186,9 @@ namespace Intel.MyDeals.BusinessLogic
                 //To do meet comp DEAL_PRD_TYPE info is needed, As we dont have DEAL_PRD_TYPE data saved in mydeals data, To get the that value below line of code is used
                 //for NIC,PMem,SSD >> PRD_CAT_NM(PRODUCT_CATEGORIES) and DEAL_PRD_TYPE are same and for server type products, deal prd type is  CPU
                 string myDealPrdType = (prdCat.ToLower() == "dt" || prdCat.ToLower() == "mb" || prdCat.ToLower() == "svrws") ? "CPU" : prdCat;
-                EnterMeetCompData(psId, dealId, prdMbrSid, MydlPdctName, prdCat, myDealPrdType, custId, workRecordDataFields, recordId);
+                // Get IsPCTMCTFailureSkipped value
+                string isPCTMCTFailureSkipped = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED);
+                EnterMeetCompData(psId, dealId, prdMbrSid, MydlPdctName, prdCat, myDealPrdType, custId, workRecordDataFields, recordId, isPCTMCTFailureSkipped);
                 //gather return fields and post back to json record (things like stage and approved by fields)
 
                 string psWfStage = saveResponse.ContainsKey(OpDataElementType.PRC_ST) ?
