@@ -443,9 +443,9 @@ namespace Intel.MyDeals.BusinessLogic
                             string isPCTMCTFailureSkipped = dealDc.GetDataElementValue(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED);
                             if (isPCTMCTFailureSkipped != null && isPCTMCTFailureSkipped == "1")
                             {
+                                dealDc.SetDataElementValue(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED, "0");
                                 dealDc.AddTimelineComment("PCT/MCT failure skip flag cleared due to Pricing Strategy revision.");
                             }
-                            dealDc.SetDataElementValue(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED, "0");
                         }
                     }
                 }

@@ -257,11 +257,11 @@
     </div>
 </div>
 <div *ngIf="in_Field_Name == 'IS_PCT_MCT_FAILURE_SKIPPED'" id="{{in_Field_Name + '_' + in_DataItem['DC_ID']}}" class="dealCell">
-    <div class='dealCell text-center uiControlDiv isReadOnlyCell' *ngIf="showPCTMCTSkipIcon(in_DataItem)">
+    <div class='dealCell text-center uiControlDiv isReadOnlyCell' *ngIf="showPCTMCTSkipIcon(in_DataItem)" [style.cursor]="!IsPCTMCTSkipped(in_DataItem.IS_PCT_MCT_FAILURE_SKIPPED) ? 'pointer' : 'default'">
         <div class='vert-center'>
             <i 
                 class="valid-icon iConFont bigIcon {{IsPCTMCTSkipped(in_DataItem.IS_PCT_MCT_FAILURE_SKIPPED) ? 'intelicon-protection-checked-verified-solid validf_Complete' : 'intelicon-information-solid validf_Valid'}}"
-                title="{{ !IsPCTMCTSkipped(in_DataItem.IS_PCT_MCT_FAILURE_SKIPPED) && getPCTMCTSkipLabel('greyIconTitle')}}"></i>
+                title="{{ !IsPCTMCTSkipped(in_DataItem.IS_PCT_MCT_FAILURE_SKIPPED) ? getPCTMCTSkipLabel('greyIconTitle') : '' }}"></i>
         </div>
     </div>
 </div>
