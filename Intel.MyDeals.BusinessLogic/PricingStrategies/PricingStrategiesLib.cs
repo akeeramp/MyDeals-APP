@@ -440,10 +440,10 @@ namespace Intel.MyDeals.BusinessLogic
                         foreach (OpDataElement de in deals)
                         {
                             OpDataCollector dealDc = myDealsData[OpDataElementType.WIP_DEAL].Data[de.DcID];
-                            string isPCTMCTFailureSkipped = dealDc.GetDataElementValue(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED);
-                            if (isPCTMCTFailureSkipped != null && isPCTMCTFailureSkipped == "1")
+                            IOpDataElement isPCTMCTFailureSkipOpDataElement = dealDc.GetDataElement(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED);
+                            if (isPCTMCTFailureSkipOpDataElement != null && isPCTMCTFailureSkipOpDataElement.AtrbValue.ToString() == "1")
                             {
-                                dealDc.SetDataElementValue(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED, "0");
+                                isPCTMCTFailureSkipOpDataElement.SetAtrbValue("0");
                                 dealDc.AddTimelineComment("PCT/MCT failure skip flag cleared due to Pricing Strategy revision.");
                             }
                         }
