@@ -35,7 +35,7 @@ namespace Intel.MyDeals.DataLibrary
                 Take = -1,
                 Skip = 0,
                 FthCnt = false,
-                ChkRestFlg = !(roleTypeCd == "SA" && !isDev)
+                ChkRestFlg = true // !(roleTypeCd == "SA" && !isDev) removing this logic as when we are doing a cache recycle as SA only the restricted data is populating the cache and throwing error --TWC3179-7326: Getdropdowns cache issue fix(commit)
             };
             List<BasicDropdown> ret = ExecuteManageBasicDropdownSP(data).Items;
             return ret;
