@@ -177,15 +177,23 @@
                     <div *ngIf="column.field == 'RATE_VAL' || column.field == 'ECAP_PRICE_VAL' || (column.field == 'CAP_VAL' && dataItem.CAP_VAL != 'No CAP' ) ||column.field == 'TOTAL_DOLLAR_AMOUNT'">
                         <span>{{dataItem[column.field] | currency:'USD' : 'symbol':'1.2-2' }}</span>
                     </div>
-                    <div *ngIf="(column.field == 'END_VOL_VAL' || column.field == 'STRT_VOL_VAL' || column.field == 'VOLUME' || column.field == 'PAYABLE_QUANTITY')">
+                    <div *ngIf="(column.field == 'STRT_VOL_VAL' || column.field == 'VOLUME' || column.field == 'PAYABLE_QUANTITY')">
                         <span>{{dataItem[column.field] | number}}</span>
+                    </div>
+                    <div *ngIf="(column.field == 'END_VOL_VAL')">
+                        <span *ngIf="(dataItem[column.field].toLowerCase() == 'unlimited'); else elseBlock">
+                            {{dataItem[column.field]}}
+                        </span>
+                        <ng-template #elseBlock>
+                            <span>{{dataItem[column.field]  | number}}</span>
+                        </ng-template>
                     </div>
                 </div>
                 <ng-template #elseCond>
                     <span>
                         {{dataItem[column.field]}}
-                    </span>
-                </ng-template>
+                            </span>
+</ng-template>
             </ng-template>
         </kendo-grid-column>
         <ng-template kendoGridNoRecordsTemplate>
