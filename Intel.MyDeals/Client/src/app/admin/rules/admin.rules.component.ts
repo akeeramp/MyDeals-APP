@@ -401,6 +401,21 @@ export class adminRulesComponent implements PendingChangesGuard, OnDestroy{
 
     public onExcelExport(e: ExcelExportEvent): void {
         e.workbook.sheets[0].title = "Users Export";
+        //clean up html tags for Rule Description column when exporting data to Excel.
+        const rows = e.workbook.sheets[0].rows;
+        if (!rows) return;
+        rows.forEach((row: any) => {
+            row.cells?.forEach((cell: any) => {
+                if (cell.value && typeof cell.value === 'string') {
+                    cell.value = cell.value
+                        .replace(/<\/?span[^>]*>/g, '')
+                        .replace(/<br\/>/g, ', ');
+                    cell.wrap = true;
+                    cell.vAlign = 'top';
+                    cell.hAlign = 'left';
+                }
+            });
+        });
     }
 
     public allData(): ExcelExportData {
