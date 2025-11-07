@@ -80,13 +80,13 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                 new MyOpRule
-                {
-                    Title="Readonly for Submitted Deals",
-                    ActionRule = MyDcActions.ReadonlySubmittedFields,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL,OpDataElementType.PRC_TBL_ROW },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly }
-                },
+                // new MyOpRule
+                //{
+                //    Title="Readonly for Submitted Deals",
+                //    ActionRule = MyDcActions.ReadonlySubmittedFields,
+                //    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL,OpDataElementType.PRC_TBL_ROW },
+                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly }
+                //},
 
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER and the value has been populated
                 {

@@ -640,7 +640,7 @@ export class PTE_Load_Util {
     static getLookBackPeriod(data) {
         return DE_Load_Util.getLookBackPeriod(data);
     }
-    static disableCells(hotTable: Handsontable, row: number, col: number, prop: any, columnConfig: Array<Handsontable.ColumnSettings>, curPricingTable: any, isTenderContract: boolean, hybridstat: any,wipDealData:any) {
+    static disableCells(hotTable: Handsontable, row: number, col: number, prop: any, columnConfig: Array<Handsontable.ColumnSettings>, curPricingTable: any, isTenderContract: boolean, hybridstat: any) {
         //logic for making by default all the cell except PTR_USER_PRD readonly
         const cellProperties = {};
         if (((<any>window).usrRole != 'GA' && (<any>window).usrRole != 'FSE') || curPricingTable.PS_WF_STG_CD == 'Submitted' || ((<any>window).usrRole == 'FSE' && curPricingTable.PS_WF_STG_CD != 'Draft' && curPricingTable.PS_WF_STG_CD != '')) {
@@ -747,17 +747,17 @@ export class PTE_Load_Util {
             }
         }
 
-        if (!(hotTable.getDataAtRowProp(row, 'DC_ID') == undefined || hotTable.getDataAtRowProp(row, 'DC_ID') == null || hotTable.getDataAtRowProp(row, 'DC_ID') == '')) {
-            var dcid = hotTable.getDataAtRowProp(row, 'DC_ID');
-          if(wipDealData!=undefined && wipDealData!=null ){
-            var isExist = wipDealData.filter(x => (x.GEO_APPROVED_BY != null && x.GEO_APPROVED_BY != '') && x.DC_PARENT_ID == dcid).length;
-            if (isExist > 0) {
-                if ((prop == 'PERIOD_PROFILE' || prop == 'PAYOUT_BASED_ON')) {
-                    cellProperties['readOnly'] = true;
-                }
-            }
-          }
-        }
+        //if (!(hotTable.getDataAtRowProp(row, 'DC_ID') == undefined || hotTable.getDataAtRowProp(row, 'DC_ID') == null || hotTable.getDataAtRowProp(row, 'DC_ID') == '')) {
+        //    var dcid = hotTable.getDataAtRowProp(row, 'DC_ID');
+        //  if(wipDealData!=undefined && wipDealData!=null ){
+        //    var isExist = wipDealData.filter(x => (x.GEO_APPROVED_BY != null && x.GEO_APPROVED_BY != '') && x.DC_PARENT_ID == dcid).length;
+        //    if (isExist > 0) {
+        //        if ((prop == 'PERIOD_PROFILE' || prop == 'PAYOUT_BASED_ON')) {
+        //            cellProperties['readOnly'] = true;
+        //        }
+        //    }
+        //  }
+        //}
 
         
         return cellProperties;

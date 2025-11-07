@@ -1194,20 +1194,20 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void ReadonlySubmittedFields(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
+        //public static void ReadonlySubmittedFields(params object[] args)
+        //{
+        //    MyOpRuleCore r = new MyOpRuleCore(args);
+        //    if (!r.IsValid) return;
 
-            string geoApproved = r.Dc.GetDataElementValue(AttributeCodes.GEO_APPROVED_BY); 
-            IOpDataElement periodProfile = r.Dc.GetDataElement(AttributeCodes.PERIOD_PROFILE);
-            IOpDataElement payoutBasedOn = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
-            if (geoApproved!=null && geoApproved !="")
-             {
-                    periodProfile.IsReadOnly= true;
-                    payoutBasedOn.IsReadOnly= true;
-             }
-        }
+        //    string geoApproved = r.Dc.GetDataElementValue(AttributeCodes.GEO_APPROVED_BY); 
+        //    IOpDataElement periodProfile = r.Dc.GetDataElement(AttributeCodes.PERIOD_PROFILE);
+        //    IOpDataElement payoutBasedOn = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
+        //    if (geoApproved!=null && geoApproved !="")
+        //     {
+        //            periodProfile.IsReadOnly= true;
+        //            payoutBasedOn.IsReadOnly= true;
+        //     }
+        //}
         public static void ShowExpireYCS2(params object[] args)
         {
             // DE28754 - Expire YCS2 Should be Editable for Front End Active Deals only.
