@@ -504,7 +504,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
                         this.loadCount = true;
                         this.loadUiDropdown();
                         //check if the value is existing or not while clicking on savehandler
-                        if (response.CHK_VALUE == 1) {
+                        if (response != null && response.CHK_VALUE == 1) {
                             this.loggerService.warn("Unable to update as deal with this value is existing", "Warning");
                         }
                         else {
