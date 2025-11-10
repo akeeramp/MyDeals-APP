@@ -20,6 +20,7 @@ export class performanceBarsComponent {
         data: any[]
     };
     
+    public customClass = '';
     public executionMsValue: any = 0;
     public chartData =[];
     public totalExecutionTime: number =0;
@@ -179,6 +180,9 @@ export class performanceBarsComponent {
             data: this.getChartData(this.marks[0])
         };
         this.perfDataValue = data;
+        if(data.data.length != 0 && this.type == 'Contract_Manager') {
+            this.customClass = 'performanceBarShowDetails'
+        }
         let totTimes = {};
         let uid = GridUtil.generateUUID();
         let logData = [];

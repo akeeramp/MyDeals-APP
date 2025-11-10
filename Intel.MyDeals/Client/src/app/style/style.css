@@ -3033,3 +3033,11 @@ kendo-grid-date-filter-menu kendo-grid-date-filter-menu-input kendo-datepicker.k
 [id^="kendo-popup"] .k-calendar-container .k-calendar-navigation {
     display: none;
 }
+
+.performBarValues .performanceBarFour {
+    display: none!important;
+}
+
+.performBarValues .performanceBarFour.performanceBarShowDetails {
+    display: block!important;
+}
