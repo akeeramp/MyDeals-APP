@@ -147,13 +147,12 @@ try {
           else{
             $pw = convertto-securestring -AsPlainText -Force -String "$PWD";
             $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "$USN",$pw;
-            if ($SERVER -ne 'DR' -and $SERVER -ne 'PROD1' -and $SERVER -ne 'PROD2') {
-                & Invoke-Command -computername $result.DEPLOY_SERVER -credential $cred -ScriptBlock { param($pool)
-                    Restart-WebAppPool -Name  $pool
-                } -Argumentlist $pool
-            } else {
-                Write-Host "Skipping IIS restart for environment: $SERVER"
-            } 
+            # Execute App pool recycle for all environments
+            Write-Host "Executing IIS restart for environment: $SERVER"
+            & Invoke-Command -computername $result.DEPLOY_SERVER -credential $cred -ScriptBlock { param($pool)
+                Restart-WebAppPool -Name  $pool
+            } -Argumentlist $pool 
+            Write-Host "IIS restart done on: $SERVER"
           }
             #  if($SERVER -eq 'DAY1') {
             #     Remove-Item "D:\WebSites\MyDealsDay1\Client\*" -Force -Recurse;
