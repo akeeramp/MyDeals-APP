@@ -105,16 +105,19 @@ export class PowerBISearchComponent implements OnInit {
             })
     }
     downloadUCMReportData() {
-        this.loggerSvc.warn("Please wait downloading inprogress", "");
+        const loadingToastId = this.loggerSvc.warnPersistent("Please wait downloading in progress", "");
         this.reportingSvc.GetUCMReportData().pipe(takeUntil(this.destroy$))
-            .subscribe((response: any) => {
+            .subscribe(async (response: any) => {
                 if (response) {
-                    GridUtil.dsToExcelGetUCMReportData(this.GetGetUCMReportDataColumn, response, "UCMReport");
+                    await GridUtil.dsToExcelGetUCMReportData(this.GetGetUCMReportDataColumn, response, "UCMReport");
+                    this.loggerSvc.dismissLogger(loadingToastId);
                     this.loggerSvc.success("Successfully downloaded the report data");
                 } else {
+                    this.loggerSvc.dismissLogger(loadingToastId);
                     this.loggerSvc.error("Unable to Download Report Data", "");
                 }
             }, (error) => {
+                this.loggerSvc.dismissLogger(loadingToastId);
                 this.loggerSvc.error("Unable to Download Report Data", error);
             })
     }

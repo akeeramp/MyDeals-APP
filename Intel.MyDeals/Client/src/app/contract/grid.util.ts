@@ -875,7 +875,7 @@ export class GridUtil {
         return finalMsg;
     }
 
-    static dsToExcelGetUCMReportData(data, response, fileName) {
+    static dsToExcelGetUCMReportData(data, response, fileName):Promise<void>{
         const rows = [{ cells: [] }];
         const colWidths = [];
         for (var t = 0; t < data.length; t++) {
@@ -923,8 +923,8 @@ export class GridUtil {
         const workbook = new Workbook({
             sheets: sheets
         });
-        workbook.toDataURL().then((dataUrl: string) => {
-            saveAs(dataUrl, fileName);
+        return workbook.toDataURL().then((dataUrl: string) => {
+        saveAs(dataUrl, fileName);
         });
     }
     static dsToExcelProductDetailsReport(data, response, fileName) {

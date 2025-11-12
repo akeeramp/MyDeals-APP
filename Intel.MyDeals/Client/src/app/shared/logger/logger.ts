@@ -1,4 +1,4 @@
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService, ActiveToast } from 'ngx-toastr';
 import { Injectable } from "@angular/core";
 
 @Injectable({
@@ -42,6 +42,16 @@ export class logger {
             positionClass: 'toast-bottom-right'
         });
     }
-
-
+    warnPersistent(message: string, title: string): ActiveToast<any> {
+        return this.toastr.warning(message, title, {
+            closeButton: true,
+            disableTimeOut: true,
+            positionClass: 'toast-bottom-right'
+        });
+    }
+    dismissLogger(toast: ActiveToast<any>): void {
+        if (toast && toast.toastId) {
+            this.toastr.remove(toast.toastId);
+        }
+    }
 }
