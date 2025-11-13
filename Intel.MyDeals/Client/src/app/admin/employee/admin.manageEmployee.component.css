@@ -88,3 +88,8 @@
 kendo-grid.ManageKendoGrid {
     height: calc(100vh - 250px) !important;
 }
+
+.red-cross-icon-usr-acnt-admin{
+    font-size: 26px;
+    color: #fc02029e;
+}

@@ -20,6 +20,8 @@ export interface ManageUsersInfo {
 	USR_GEOS: string;
 	USR_ROLE: string;
 	USR_VERTS: string;
+	EMAIL_ADDR: string;
+	SUPPLIER_DSC: string;
 	[key: string]: unknown;
 }
 

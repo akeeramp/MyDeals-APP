@@ -76,21 +76,23 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
             value: "all",
         }
     ];
-    private excelColumns = {
-        "EMP_WWID": "WWID",
-        "FULL_NAME": "Name",
-        "USR_ROLE": "Roles",
-        "USR_GEOS": "Geos",
-        "USR_CUST": "Customers",
-        "USR_VERTS": "Verticals",
-        "ACTV_IND": "Active",
-        "IS_SUPER": "Super",
-        "IS_DEVELOPER": "Developer",
-        "IS_TESTER": "Tester",
-        "LST_MOD_BY": "Last Mod By",
-        "LST_MOD_DT": "Last Mod Date",
-        "NOTES": "Notes",
-    }
+    private excelColumns = [
+        { field: "EMP_WWID", title: "WWID" , width: 150 },
+        { field: "FULL_NAME", title: "Name" , width: 200 },
+        { field: "EMAIL_ADDR", title: "Email Address" , width: 280 },
+        { field: "USR_ROLE", title: "Roles" , width: 150 },
+        { field: "USR_GEOS", title: "Geos" , width: 150 },
+        { field: "USR_CUST", title: "Customers" , width: 150 },
+        { field: "USR_VERTS", title: "Verticals" , width: 150},
+        { field: "SUPPLIER_DSC", title: "Supplier Description", width: 250 },
+        { field: "ACTV_IND", title: "Active" , width: 120},
+        { field: "IS_SUPER", title: "Super", width: 120 },
+        { field: "IS_DEVELOPER", title: "Developer", width: 120 },
+        { field: "IS_TESTER", title: "Tester" , width: 120},
+        { field: "LST_MOD_BY", title: "Last Mod By", width: 150 },
+        { field: "LST_MOD_DT", title: "Last Mod Date" , width: 150},
+        { field: "NOTES", title: "Notes" , width: 150}
+    ];
 
     returnZero(): number {
         return 0

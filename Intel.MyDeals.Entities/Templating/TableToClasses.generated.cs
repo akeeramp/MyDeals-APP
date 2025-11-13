@@ -7035,9 +7035,9 @@ namespace Intel.MyDeals.Entities
     ///<summary>
     /// Class created via template - Do Not Modify!
     /// To modify this code, re-execute the template, or extend as partial.
-    /// on MHTIPPIN-MOBL1
-    /// by mhtippin
-    /// at 10/17/2023 3:47:59 PM
+    /// on AGGARWA2-MOBL
+    /// by aggarwa2
+    /// at 11/12/2025 3:19:42 PM
     ///</summary>
 
     [DataContract]
@@ -7046,6 +7046,10 @@ namespace Intel.MyDeals.Entities
 
         [DataMember]
         public System.Boolean ACTV_IND { set; get; }
+
+
+        [DataMember]
+        public System.String EMAIL_ADDR { set; get; }
 
 
         [DataMember]
@@ -7085,6 +7089,10 @@ namespace Intel.MyDeals.Entities
 
 
         [DataMember]
+        public System.String SUPPLIER_DSC { set; get; }
+
+
+        [DataMember]
         public System.String USR_CUST { set; get; }
 
 
@@ -7107,6 +7115,7 @@ namespace Intel.MyDeals.Entities
 
         var ret = new List<ManageUsersInfo>();
         int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+        int IDX_EMAIL_ADDR = DB.GetReaderOrdinal(rdr, "EMAIL_ADDR");
         int IDX_EMP_WWID = DB.GetReaderOrdinal(rdr, "EMP_WWID");
         int IDX_FRST_NM = DB.GetReaderOrdinal(rdr, "FRST_NM");
         int IDX_IS_DEVELOPER = DB.GetReaderOrdinal(rdr, "IS_DEVELOPER");
@@ -7116,6 +7125,7 @@ namespace Intel.MyDeals.Entities
         int IDX_LST_MOD_DT = DB.GetReaderOrdinal(rdr, "LST_MOD_DT");
         int IDX_LST_NM = DB.GetReaderOrdinal(rdr, "LST_NM");
         int IDX_MI = DB.GetReaderOrdinal(rdr, "MI");
+        int IDX_SUPPLIER_DSC = DB.GetReaderOrdinal(rdr, "SUPPLIER_DSC");
         int IDX_USR_CUST = DB.GetReaderOrdinal(rdr, "USR_CUST");
         int IDX_USR_GEOS = DB.GetReaderOrdinal(rdr, "USR_GEOS");
         int IDX_USR_ROLE = DB.GetReaderOrdinal(rdr, "USR_ROLE");
@@ -7124,6 +7134,7 @@ namespace Intel.MyDeals.Entities
         while (rdr.Read()){
         ret.Add(new ManageUsersInfo {
         ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+        EMAIL_ADDR = (IDX_EMAIL_ADDR < 0 || rdr.IsDBNull(IDX_EMAIL_ADDR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EMAIL_ADDR),
         EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EMP_WWID),
         FRST_NM = (IDX_FRST_NM < 0 || rdr.IsDBNull(IDX_FRST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRST_NM),
         IS_DEVELOPER = (IDX_IS_DEVELOPER < 0 || rdr.IsDBNull(IDX_IS_DEVELOPER)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_DEVELOPER),
@@ -7133,6 +7144,7 @@ namespace Intel.MyDeals.Entities
         LST_MOD_DT = (IDX_LST_MOD_DT < 0 || rdr.IsDBNull(IDX_LST_MOD_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_LST_MOD_DT),
         LST_NM = (IDX_LST_NM < 0 || rdr.IsDBNull(IDX_LST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LST_NM),
         MI = (IDX_MI < 0 || rdr.IsDBNull(IDX_MI)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MI),
+        SUPPLIER_DSC = (IDX_SUPPLIER_DSC < 0 || rdr.IsDBNull(IDX_SUPPLIER_DSC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SUPPLIER_DSC),
         USR_CUST = (IDX_USR_CUST < 0 || rdr.IsDBNull(IDX_USR_CUST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_CUST),
         USR_GEOS = (IDX_USR_GEOS < 0 || rdr.IsDBNull(IDX_USR_GEOS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_GEOS),
         USR_ROLE = (IDX_USR_ROLE < 0 || rdr.IsDBNull(IDX_USR_ROLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_ROLE),
@@ -7144,6 +7156,7 @@ namespace Intel.MyDeals.Entities
         */
 
     } // End of class ManageUsersInfo
+
 
     ///<summary>
     /// Class created via template - Do Not Modify!

@@ -411,6 +411,8 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_USR_GEOS = DB.GetReaderOrdinal(rdr, "USR_GEOS");
                     int IDX_USR_ROLE = DB.GetReaderOrdinal(rdr, "USR_ROLE");
                     int IDX_USR_VERTS = DB.GetReaderOrdinal(rdr, "USR_VERTS");
+                    int IDX_EMAIL_ADDR = DB.GetReaderOrdinal(rdr, "EMAIL_ADDR");
+                    int IDX_SUPPLIER_DSC = DB.GetReaderOrdinal(rdr, "SUPPLIER_DSC");
 
                     while (rdr.Read())
                     {
@@ -429,7 +431,9 @@ namespace Intel.MyDeals.DataLibrary
                             USR_CUST = (IDX_USR_CUST < 0 || rdr.IsDBNull(IDX_USR_CUST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_CUST),
                             USR_GEOS = (IDX_USR_GEOS < 0 || rdr.IsDBNull(IDX_USR_GEOS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_GEOS),
                             USR_ROLE = (IDX_USR_ROLE < 0 || rdr.IsDBNull(IDX_USR_ROLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_ROLE),
-                            USR_VERTS = (IDX_USR_VERTS < 0 || rdr.IsDBNull(IDX_USR_VERTS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_VERTS)
+                            USR_VERTS = (IDX_USR_VERTS < 0 || rdr.IsDBNull(IDX_USR_VERTS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_VERTS),
+                            EMAIL_ADDR = (IDX_EMAIL_ADDR < 0 || rdr.IsDBNull(IDX_EMAIL_ADDR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EMAIL_ADDR),
+                            SUPPLIER_DSC = (IDX_SUPPLIER_DSC < 0 || rdr.IsDBNull(IDX_SUPPLIER_DSC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SUPPLIER_DSC)
                         });
                     } // while
                 }

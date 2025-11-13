@@ -31,6 +31,8 @@
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="FULL_NAME" title="Name" width="100px">
             </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="EMAIL_ADDR" title="Email" width="100px">
+            </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="USR_ROLE" title="Roles" width="100px"
                                [editable]="false">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
@@ -60,11 +62,15 @@
                     <div [innerHTML]="dataItem.VERT_CONTENT" *ngIf="dataItem.VERT_CLICKABLE==false"></div>
                 </ng-template>
             </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="SUPPLIER_DSC" title="Supplier Description" width="100px">
+            </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Active" width="100px"
                                editor="boolean" filter="boolean" class="alignCenterManageEmployee">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <i *ngIf="dataItem.ACTV_IND"
-                       class='intelicon-passed-completed-solid filter-col'></i>
+                    class='intelicon-passed-completed-solid filter-col'></i>
+                    <i *ngIf="!dataItem.ACTV_IND"
+                    class='fa fa-times-circle red-cross-icon-usr-acnt-admin'></i>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="IS_SUPER" title="Super" width="100px"
@@ -93,8 +99,8 @@
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="LST_MOD_DT" title="Last Mod Date"
                                width="100px" [filterable]="false" class="alignCenterManageEmployee"></kendo-grid-column>
             <kendo-grid-excel fileName="MyDealsEmployees.xlsx" [fetchData]="allData">
-                <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
-                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                <kendo-excelexport-column *ngFor="let item of excelColumns" field="{{item.field}}"
+                                          title="{{item.title}}" [width]="item.width" [cellOptions]="cellOptions"
                                           [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
             </kendo-grid-excel>
             <ng-template kendoPagerTemplate>
