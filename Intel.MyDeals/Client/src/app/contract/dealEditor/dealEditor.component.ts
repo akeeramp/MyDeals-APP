@@ -179,6 +179,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
     private filteringData: any[] = [];
     public skipPCTFailure: boolean = false;
     public skipMCTFailure: boolean = false;
+    public skipPCTandMCTLabel = "Failure or Incomplete";
 
     filterChange(filter: any): void {
         this.state.filter = filter;
@@ -695,7 +696,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
             else if (args.column.field == 'MISSING_CAP_COST_INFO') {
                 this.openMissingCapCostInfo(args.dataItem);
             }
-            else if (args.column.field == 'IS_PCT_MCT_FAILURE_SKIPPED' && (<any>window).usrRole === "DA" && args.dataItem['IS_PCT_MCT_FAILURE_SKIPPED'] === "0") {
+            else if (args.column.field == 'IS_PCT_MCT_FAILURE_SKIPPED' && this.showPCTMCTSkipIcon(args.dataItem) && args.dataItem['IS_PCT_MCT_FAILURE_SKIPPED'] === "0") {
                 this.onSkippingPCTMCTFailure(args.dataItem);
             }
             this.isLoading = false;
@@ -1958,6 +1959,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                     this.skipMCTFailure = true;
                 }
             }
+            this.getFailureAndIncompleteLabel();
             await this.getGroupsAndTemplates();
             if (this.isInitialLoad) {
                 if (Object.keys(this.dropdownResponses).length == 0) {
@@ -2077,13 +2079,13 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
     getPCTMCTSkipLabel(fromIcon) {
         const skip = (fromIcon == "successMessage") ? "Skipped" : (fromIcon == "greyIconTitle") ? "Click to Skip" : "Skip";
         if (this.skipPCTFailure && this.skipMCTFailure) {
-            return `${skip} PCT/MCT Failure`;
+            return `${skip} PCT/MCT ${this.skipPCTandMCTLabel}`;
         }
         if (this.skipPCTFailure) {
-            return `${skip} PCT Failure`;
+            return `${skip} PCT ${this.skipPCTandMCTLabel}`;
         }
         if (this.skipMCTFailure) {
-            return `${skip} MCT Failure`;
+            return `${skip} MCT ${this.skipPCTandMCTLabel}`;
         }
         return "";
     }
@@ -2108,10 +2110,36 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                     }
                 }
             } else {
-                if (colIdx) {
-                    const title = this.getPCTMCTSkipLabel(undefined);
-                    this.wipTemplate.columns[colIdx].title = title;
+                // Add the column if it does not exist
+                colIdx = this.wipTemplate.columns.findIndex(col => col.field == 'IS_PCT_MCT_FAILURE_SKIPPED');
+                if (colIdx == -1) {
+                    this.wipTemplate.columns.push({
+                        "field": "IS_PCT_MCT_FAILURE_SKIPPED",
+                        "title": "Is PCT/MCT Failure Skipped",
+                        "width": 150,
+                        "template": "#=gridUtils.uiControlWrapper(data, 'IS_PCT_MCT_FAILURE_SKIPPED')#",
+                        "excelTemplate": "#=IS_PCT_MCT_FAILURE_SKIPPED#",
+                        "bypassExport": false,
+                        "hidden": false,
+                        "uiType": "CheckBox",
+                        "isDimKey": false,
+                        "isRequired": false,
+                        "sortable": true,
+                        "filterable": false,
+                        "mjrMnrChg": "MINOR",
+                        "lookupUrl": "",
+                        "lookupText": "",
+                        "lookupValue": "",
+                        "locked": false,
+                        "lockable": false
+                    });
                 }
+                //Update the title in case the skip labels have changed
+                colIdx = (colIdx == -1) ? this.wipTemplate.columns.findIndex(col => col.field == 'IS_PCT_MCT_FAILURE_SKIPPED') : colIdx;
+                const title = this.getPCTMCTSkipLabel(undefined);
+                this.wipTemplate.columns[colIdx].title = title;
+                // After adding IS_PCT_MCT_FAILURE_SKIPPED column, updating DE grid
+                PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD, this.in_Is_Tender_Dashboard);
             }
         } else {
             colIdx = this.wipTemplate.columns.findIndex(col => col.field == 'IS_PCT_MCT_FAILURE_SKIPPED');
@@ -2138,19 +2166,19 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
 
         // Case 2: PCT Skip = TRUE, MCT Skip = FALSE
         if (pctSkip && !mctSkip) {
-            return pctStatus === "FAIL";
+            return pctStatus === "FAIL" || pctStatus === "INCOMPLETE";;
         }
 
         // Case 3: PCT Skip = FALSE, MCT Skip = TRUE
         if (!pctSkip && mctSkip) {
-            return mctStatus === "FAIL";
+            return mctStatus === "FAIL" || mctStatus === "INCOMPLETE";
         }
 
         // Case 4: Both skips are TRUE
         if (pctSkip && mctSkip) {
             if (pctStatus === "PASS" && mctStatus === "PASS") {
                 return false;
-            } else if (pctStatus === "FAIL" || mctStatus === "FAIL") {
+            } else if (pctStatus === "FAIL" || mctStatus === "FAIL" || pctStatus === "INCOMPLETE" || mctStatus === "INCOMPLETE") {
                 return true;
             }
         }
@@ -2159,12 +2187,58 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         return false;
     }
 
+    getModelNameAndDesc(ps, fromIcon = false) {
+        const pctSkip = this.skipPCTFailure;
+        const mctSkip = this.skipMCTFailure;
+        const pctStatus = ps?.COST_TEST_RESULT?.toUpperCase();
+        const mctStatus = ps?.MEETCOMP_TEST_RESULT?.toUpperCase();
+        let modelNameAndDesc = this.getPCTMCTSkipLabel(undefined);
+        if (pctSkip || mctSkip) {
+            if (pctSkip && mctSkip) {
+                if (pctStatus == "FAIL" && mctStatus == "FAIL") {
+                    modelNameAndDesc = "Skip PCT and MCT Failure";
+                }
+                else if (pctStatus == "INCOMPLETE" && mctStatus == "INCOMPLETE") {
+                    modelNameAndDesc = "Skip PCT and MCT Incomplete";
+                }
+                else if (pctStatus == "FAIL" && mctStatus == "INCOMPLETE") {
+                    modelNameAndDesc = "Skip PCT Failure and MCT Incomplete";
+                }
+                else if (pctStatus == "INCOMPLETE" && mctStatus == "FAIL") {
+                    modelNameAndDesc = "Skip PCT Incomplete and MCT Failure";
+                }
+                else if (pctStatus == "INCOMPLETE") {
+                    modelNameAndDesc = "Skip PCT Incomplete";
+                }
+                else if (mctStatus == "INCOMPLETE") {
+                    modelNameAndDesc = "Skip MCT Incomplete";
+                }
+                else if (pctStatus == "FAIL") {
+                    modelNameAndDesc = "Skip PCT Failure";
+                }
+                else if (mctStatus == "FAIL") {
+                    modelNameAndDesc = "Skip MCT Failure";
+                }
+                else {
+                    modelNameAndDesc = "Skip PCT and MCT Failure";
+                }
+            }
+            else if (pctSkip) {
+                modelNameAndDesc = (pctStatus == "FAIL") ? "Skip PCT Failure" : "Skip PCT Incomplete"
+            }
+            else if (mctSkip) {
+                modelNameAndDesc = (mctStatus == "FAIL") ? "Skip MCT Failure" : "Skip MCT Incomplete"
+            }
+        }
+        return fromIcon ? `Click to ${modelNameAndDesc}` : modelNameAndDesc;
+    }
+
     async onSkippingPCTMCTFailure(ps) {
         const USER_ROLE = (<any>window).usrRole;
         if (USER_ROLE === "DA") {
             const pctMctFailureSkipInputObj = [{ ObjId: ps.DC_ID, ObjType: 5 }];
-            const confirmationMsg = `Click 'Yes' to ${this.getPCTMCTSkipLabel(undefined)}?`;
-            const confirmationModalName = this.getPCTMCTSkipLabel(undefined);
+            const confirmationMsg = `Click 'Yes' to ${this.getModelNameAndDesc(ps)}?`;
+            const confirmationModalName = this.getModelNameAndDesc(ps);
             const successMessage = this.getPCTMCTSkipLabel("successMessage");
             const DIALOG_REF = this.dialog.open(confirmationModalComponent, {
                 height: 'auto',
@@ -2176,7 +2250,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                 if (result) {
                     //Skip PCT/MCT Failure
                     this.isLoading = true;
-                    this.setBusy("Skip PCT/MCT Failure", `${confirmationModalName} is in progress.`, "Info", true);
+                    this.setBusy("Skip PCT/MCT Failure or Incomplete", `${confirmationModalName} is in progress.`, "Info", true);
                     this.contractManagerSvc.updateSkipPCTMCTFailureFlag(pctMctFailureSkipInputObj).toPromise()
                         .then((response: boolean) => {// response is boolean
                             this.isLoading = false;
@@ -2192,6 +2266,28 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                         })
                 }
             });
+        }
+    }
+
+    getFailureAndIncompleteLabel() {
+        const failItems = [];
+        const incompleteItems = [];
+        forEach(this.in_Search_Results, (ps) => {
+            const pctStatus = ps?.COST_TEST_RESULT?.toUpperCase();
+            const mctStatus = ps?.MEETCOMP_TEST_RESULT?.toUpperCase();
+            if (pctStatus === "FAIL" || mctStatus === "FAIL") {
+                failItems.push(true);
+            }
+            if (pctStatus === "INCOMPLETE" || mctStatus === "INCOMPLETE") {
+                incompleteItems.push(true);
+            }
+        })
+        if (failItems.length > 0 && incompleteItems.length > 0) {
+            this.skipPCTandMCTLabel = "Failure or Incomplete";
+        } else if (failItems.length > 0) {
+            this.skipPCTandMCTLabel = "Failure";
+        } else if (incompleteItems.length > 0) {
+            this.skipPCTandMCTLabel = "Incomplete";
         }
     }
     //END: Skip PCT/MCT Failure

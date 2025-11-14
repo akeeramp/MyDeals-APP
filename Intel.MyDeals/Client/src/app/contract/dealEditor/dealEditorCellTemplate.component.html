@@ -261,7 +261,7 @@
         <div class='vert-center'>
             <i 
                 class="valid-icon iConFont bigIcon {{IsPCTMCTSkipped(in_DataItem.IS_PCT_MCT_FAILURE_SKIPPED) ? 'intelicon-protection-checked-verified-solid validf_Complete' : 'intelicon-information-solid validf_Valid'}}"
-                title="{{ !IsPCTMCTSkipped(in_DataItem.IS_PCT_MCT_FAILURE_SKIPPED) ? getPCTMCTSkipLabel('greyIconTitle') : '' }}"></i>
+                title="{{ !IsPCTMCTSkipped(in_DataItem.IS_PCT_MCT_FAILURE_SKIPPED) ? _getModelNameAndDesc(in_DataItem) : '' }}"></i>
         </div>
     </div>
 </div>

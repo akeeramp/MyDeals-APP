@@ -218,11 +218,15 @@ namespace Intel.MyDeals.BusinessLogic
                     continue;
                 }
 
-                //Skipping PCT/MCT Failure for DA based on Constant Value and PS Level IS_PCT_MCT_FAILURE_SKIPPED Flag (Acceptance to Skip PCT/MCT Failure)
+                //Skipping PCT/MCT Failure and Incomplete for DA based on Constant Value and PS Level IS_PCT_MCT_FAILURE_SKIPPED Flag (Acceptance to Skip PCT/MCT Failure)
                 if (role == RoleTypes.DA && PSLevelPCTMCTFailureSkipFlag != null && PSLevelPCTMCTFailureSkipFlag == "1" && (submittedFailTests.Contains(meetCompInDB) || submittedFailTests.Contains(costTestInDB)))
                 {
                     var _constantLookupDataLib = new ConstantLookupDataLib();
                     var adminConstants = _constantLookupDataLib.GetAdminConstants();
+
+                    // Store original values for logging later
+                    var _costTestInDB = costTestInDB;
+                    var _meetCompInDB = meetCompInDB;
 
                     // Check for PCT results if we are DA and approving from Submitted
                     var enablePctRun = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_PCT_FAILURE" && c.CNST_VAL_TXT == "1");
@@ -235,11 +239,28 @@ namespace Intel.MyDeals.BusinessLogic
                     // Log timeline and system comments if we skipped PCT or MCT based on Constant Value
                     if (costTestInDB == "skipPCT" || meetCompInDB == "skipMCT")
                     {
-                        var timelineMsg = costTestInDB == "skipPCT" && meetCompInDB == "skipMCT"
-                            ? "Cost Test and Meet Comp Test failure skipped based on Constant Value setting for DA role."
-                            : costTestInDB == "skipPCT"
+                        var timelineMsg = "";
+                        if (costTestInDB == "skipPCT" && meetCompInDB == "skipMCT")
+                        {
+                            timelineMsg = (_costTestInDB == "InComplete" && _meetCompInDB == "InComplete")
+                                    ? "Cost Test and Meet Comp Test incomplete skipped based on Constant Value setting for DA role."
+                                    : (_costTestInDB == "InComplete" && _meetCompInDB == "Fail")
+                                        ? "Cost Test incomplete and Meet Comp Test failure skipped based on Constant Value setting for DA role."
+                                        : (_costTestInDB == "Fail" && _meetCompInDB == "InComplete")
+                                            ? "Cost Test failure and Meet Comp Test incomplete skipped based on Constant Value setting for DA role."
+                                            : "Cost Test and Meet Comp Test failure skipped based on Constant Value setting for DA role.";
+                        }
+                        else if(costTestInDB == "skipPCT")
+                        {
+                            timelineMsg = _costTestInDB == "Fail"
                                 ? "Cost Test failure skipped based on Constant Value setting for DA role."
-                                : "Meet Comp Test failure skipped based on Constant Value setting for DA role.";
+                                : "Cost Test incomplete skipped based on Constant Value setting for DA role.";
+                        } else
+                        {
+                            timelineMsg = _meetCompInDB == "Fail"
+                                ? "Meet Comp Test failure skipped based on Constant Value setting for DA role"
+                                : "Meet Comp Test incomplete skipped based on Constant Value setting for DA role";
+                        }
                         dc.AddTimelineComment(timelineMsg);
                     }
                 }

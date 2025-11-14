@@ -132,6 +132,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     public constants: any[] = [];
     public skipPCTFailure = false;
     public skipMCTFailure = false;
+    public skipPCTandMCTLabel = "Failure or Incomplete";
     // Allowed extensions for the attachments field
     myRestrictions: FileRestrictions = {
         allowedExtensions: ["doc", "xls", "txt", "bmp", "jpg", "pdf", "ppt", "zip", "xlsx", "docx", "pptx", "odt", "ods", "ott", "sxw", "sxc", "png", "7z", "xps"],
@@ -965,6 +966,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
             if(!this.csLoading) this.isLoading = false;
             this.filteredData = this.contractData?.PRC_ST;
             this.verifyCustAccptReadOnly();
+            this.getFailureAndIncompleteLabel();
             if (!this.isRunning) this.showData = true;
             this.checkpricegrpcode();
         }
@@ -1497,13 +1499,13 @@ export class contractManagerComponent implements OnInit, OnDestroy {
     getPCTMCTSkipLabel(fromIcon) {
         const skip = (fromIcon == "successMessage") ? "Skipped" : (fromIcon == "greyIconTitle") ? "Click to Skip" : "Skip";
         if (this.skipPCTFailure && this.skipMCTFailure) {
-            return `${skip} PCT/MCT Failure`;
+            return `${skip} PCT/MCT ${this.skipPCTandMCTLabel}`;
         }
         if (this.skipPCTFailure) {
-            return `${skip} PCT Failure`;
+            return `${skip} PCT ${this.skipPCTandMCTLabel}`;
         }
         if (this.skipMCTFailure) {
-            return `${skip} MCT Failure`;
+            return `${skip} MCT ${this.skipPCTandMCTLabel}`;
         }
         return "";
     }
@@ -1533,19 +1535,19 @@ export class contractManagerComponent implements OnInit, OnDestroy {
 
         // Case 2: PCT Skip = TRUE, MCT Skip = FALSE
         if (pctSkip && !mctSkip) {
-            return pctStatus === "FAIL";
+            return pctStatus === "FAIL" || pctStatus === "INCOMPLETE";
         }
 
         // Case 3: PCT Skip = FALSE, MCT Skip = TRUE
         if (!pctSkip && mctSkip) {
-            return mctStatus === "FAIL";
+            return mctStatus === "FAIL" || mctStatus === "INCOMPLETE";
         }
 
         // Case 4: Both skips are TRUE
         if (pctSkip && mctSkip) {
             if (pctStatus === "PASS" && mctStatus === "PASS") {
                 return false;
-            } else if (pctStatus === "FAIL" || mctStatus === "FAIL") {
+            } else if (pctStatus === "FAIL" || mctStatus === "FAIL" || pctStatus === "INCOMPLETE" || mctStatus === "INCOMPLETE") {
                 return true;
             }
         }
@@ -1566,12 +1568,58 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         this.setBusy("", "", "", false);
     }
 
+    getModelNameAndDesc(ps, fromIcon = false) {
+        const pctSkip = this.skipPCTFailure;
+        const mctSkip = this.skipMCTFailure;
+        const pctStatus = ps?.COST_TEST_RESULT?.toUpperCase();
+        const mctStatus = ps?.MEETCOMP_TEST_RESULT?.toUpperCase();
+        let modelNameAndDesc = this.getPCTMCTSkipLabel(undefined);
+        if (pctSkip || mctSkip) {
+            if (pctSkip && mctSkip) {
+                if (pctStatus == "FAIL" && mctStatus == "FAIL") {
+                    modelNameAndDesc = "Skip PCT and MCT Failure";
+                }
+                else if (pctStatus == "INCOMPLETE" && mctStatus == "INCOMPLETE") {
+                    modelNameAndDesc = "Skip PCT and MCT Incomplete";
+                }
+                else if (pctStatus == "FAIL" && mctStatus == "INCOMPLETE") {
+                    modelNameAndDesc = "Skip PCT Failure and MCT Incomplete";
+                }
+                else if (pctStatus == "INCOMPLETE" && mctStatus == "FAIL") {
+                    modelNameAndDesc = "Skip PCT Incomplete and MCT Failure";
+                }
+                else if (pctStatus == "INCOMPLETE") {
+                    modelNameAndDesc = "Skip PCT Incomplete";
+                }
+                else if (mctStatus == "INCOMPLETE") {
+                    modelNameAndDesc = "Skip MCT Incomplete";
+                }
+                else if (pctStatus == "FAIL") {
+                    modelNameAndDesc = "Skip PCT Failure";
+                }
+                else if (mctStatus == "FAIL") {
+                    modelNameAndDesc = "Skip MCT Failure";
+                }
+                else {
+                    modelNameAndDesc = "Skip PCT and MCT Failure";
+                }
+            }
+            else if (pctSkip) {
+                modelNameAndDesc = (pctStatus == "FAIL") ? "Skip PCT Failure" : "Skip PCT Incomplete"
+            }
+            else if (mctSkip) {
+                modelNameAndDesc = (mctStatus == "FAIL") ? "Skip MCT Failure" : "Skip MCT Incomplete"
+            }
+        }
+        return fromIcon ? `Click to ${modelNameAndDesc}` : modelNameAndDesc;
+    }
+
     async onSkippingPCTMCTFailure(e, ps) {
         const USER_ROLE = (<any>window).usrRole;
         if (USER_ROLE === "DA") {
             const pctMctFailureSkipInputObj: DynamicObj[] = [{ ObjId: ps.DC_ID, ObjType: 2 }];
-            const confirmationMsg = `Click 'Yes' to ${this.getPCTMCTSkipLabel(undefined)}?`;
-            const confirmationModalName = this.getPCTMCTSkipLabel(undefined);
+            const confirmationMsg = `Click 'Yes' to ${this.getModelNameAndDesc(ps)}?`;
+            const confirmationModalName = this.getModelNameAndDesc(ps);
             const successMessage = this.getPCTMCTSkipLabel("successMessage");
             const DIALOG_REF = this.dialog.open(confirmationModalComponent, {
                 height: 'auto',
@@ -1602,6 +1650,28 @@ export class contractManagerComponent implements OnInit, OnDestroy {
                     e.preventDefault();
                 }
             });
+        }
+    }
+
+    getFailureAndIncompleteLabel() {
+        const failItems = [];
+        const incompleteItems = [];
+        forEach(this.filteredData, (ps) => {
+            const pctStatus = ps?.COST_TEST_RESULT?.toUpperCase();
+            const mctStatus = ps?.MEETCOMP_TEST_RESULT?.toUpperCase();
+            if (pctStatus === "FAIL" || mctStatus === "FAIL") {
+                failItems.push(true);
+            }
+            if (pctStatus === "INCOMPLETE" || mctStatus === "INCOMPLETE") {
+                incompleteItems.push(true);
+            }
+        })
+        if (failItems.length > 0 && incompleteItems.length > 0) {
+            this.skipPCTandMCTLabel = "Failure or Incomplete";
+        } else if (failItems.length > 0) {
+            this.skipPCTandMCTLabel = "Failure";
+        } else if (incompleteItems.length > 0) {
+            this.skipPCTandMCTLabel = "Incomplete";
         }
     }
 }

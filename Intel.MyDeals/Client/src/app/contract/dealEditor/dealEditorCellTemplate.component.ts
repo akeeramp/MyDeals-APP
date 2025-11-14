@@ -45,9 +45,11 @@ export class dealEditorCellTemplateComponent {
     @Input() NumberOfDaysToExpireDeal: number;
     @Input() skipPCTFailure: boolean = false;
     @Input() skipMCTFailure: boolean = false;
+    @Input() skipPCTandMCTLabel: string = '';
     @Input() getPCTMCTSkipFailureLabel!: (arg) => boolean;
     @Input() getPCTMCTSkipIconDisplayFlag!: (arg) => string;
     @Input() shouldShowSkipIcon!: (arg) => boolean;
+    @Input() getModelNameAndDesc!: (arg1, arg2) => string;
 
     @Output() iconUpdate: EventEmitter<any> = new EventEmitter<any>();
     @Output() refresh_Contract_Data: EventEmitter<any> = new EventEmitter<any>();
@@ -456,5 +458,13 @@ export class dealEditorCellTemplateComponent {
             return result;
         }
         return false;
+    }
+
+    _getModelNameAndDesc(dataItem) {
+        if (this.getModelNameAndDesc) {
+            const result = this.getModelNameAndDesc(dataItem, true);
+            return result;
+        }
+        return 'Click to Skip PCT/MCT Failure';
     }
 }

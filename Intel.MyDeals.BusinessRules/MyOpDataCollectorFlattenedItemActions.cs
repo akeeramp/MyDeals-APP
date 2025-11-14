@@ -20,6 +20,7 @@ namespace Intel.MyDeals.BusinessRules
         public static string PCTAndMCTFailMsg = "Pricing Strategy did not pass Price Cost Test and Meet Comp Test.";
         public static string PCTFailMsg = "Pricing Strategy did not pass Price Cost Test.";
         public static string MCTFailMsg = "Pricing Strategy did not pass Meet Comp Test.";
+        public static string CAPMissingMsg = "CAP missing from at least one of the deals in this Pricing Strategy.";
         public static void ApplyActionsAndSettings(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -202,7 +203,7 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 }
 
-                //Skipping PCT/MCT for DA based on Constant Value
+                //Skipping PCT/MCT Failure and Incomplete for DA based on Constant Value
                 string IS_PCT_MCT_FAILURE_SKIPPED = r.Dc.GetDataElementValue(AttributeCodes.IS_PCT_MCT_FAILURE_SKIPPED);
                 if (role == RoleTypes.DA && r.Dc.DcType == "PRC_ST" && action == "Approve"
                     && !objsetActionItem.Actions["Approve"] && IS_PCT_MCT_FAILURE_SKIPPED == "1")
@@ -214,25 +215,40 @@ namespace Intel.MyDeals.BusinessRules
                     var actionReasonStr = objsetActionItem.ActionReasons["Approve"];
 
                     // Check if skipping PCT or MCT is enabled in constants
-                    var enablePctRun = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_PCT_FAILURE" && c.CNST_VAL_TXT == "1" && pct == "Fail");
+                    var enablePctRun = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_PCT_FAILURE" && c.CNST_VAL_TXT == "1" && (pct == "Fail" || pct == "InComplete"));
                     if (enablePctRun != null)
                     {
                         skipPCT = true;
-                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "PCT failure is skipped.", true, false);
+                        var message = pct == "InComplete" ? "PCT incomplete is skipped." : "PCT failure is skipped.";
+                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, message, true, false);
                     };
 
-                    var enableMctRun = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_MCT_FAILURE" && c.CNST_VAL_TXT == "1" && mct == "Fail");
+                    var enableMctRun = adminConstants.FirstOrDefault(c => c.CNST_NM == "SKIP_MCT_FAILURE" && c.CNST_VAL_TXT == "1" && (mct == "Fail" || mct == "InComplete"));
                     if (enableMctRun != null)
                     {
                         skipMCT = true;
-                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "MCT failure is skipped.", false, true);
+                        var message = (pct == "InComplete") ? "MCT incomplete is skipped." : "MCT failure is skipped.";
+                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, message, false, true);
                     };
 
                     // If both are skipped, or one is skipped and the other did not fail, allow Approve
                     if (skipPCT && skipMCT)
                     {
+                        var message = "Both PCT and MCT failures are skipped.";
+                        if (pct == "InComplete" && mct == "InComplete")
+                        {
+                            message = "Both PCT and MCT incompletes are skipped.";
+                        }
+                        else if (pct == "InComplete" && mct == "Fail")
+                        {
+                            message = "PCT incomplete and MCT failure are skipped.";
+                        }
+                        else if (pct == "Fail" && mct == "InComplete")
+                        {
+                            message = "PCT failure and MCT incomplete are skipped.";
+                        }
                         objsetActionItem.Actions["Approve"] = true;
-                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, "Both PCT and MCT failures are skipped.", true, true);
+                        objsetActionItem.ActionReasons["Approve"] = GetPopUpMessage(actionReasonStr, message, true, true);
                     }
                     else if (skipPCT && !skipMCT && !mctFailed)
                     {
@@ -285,7 +301,7 @@ namespace Intel.MyDeals.BusinessRules
                     str += "\n" + newStr;
                 }
             }
-            else if (str.Contains(PCTFailMsg) || str.Contains(MCTFailMsg))
+            else if (str.Contains(PCTFailMsg) || str.Contains(MCTFailMsg) || str.Contains(CAPMissingMsg))
             {
                 int newlineIndex = str.IndexOf('\n');
                 if (newlineIndex != -1)

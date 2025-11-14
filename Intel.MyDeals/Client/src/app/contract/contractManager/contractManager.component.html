@@ -210,8 +210,8 @@
                             Complex Stacking
                         </div>
                     </td>
-                    <td style="width: 150px; text-align: center;" *ngIf="showPCTMCTSkipLabel()">
-                        <div title='Is complex stacking reviewed.'>
+                    <td style="line-height: 1.1em; width: 150px; text-align: center;" *ngIf="showPCTMCTSkipLabel()">
+                        <div>
                             {{getPCTMCTSkipLabel()}}
                         </div>
                     </td>
@@ -305,7 +305,7 @@
                                         <i class="intelicon-protection-checked-verified-solid bigIcon validf_Complete"></i>
                                     </ng-template>
                                     <ng-template #non_pctmctskip_content>
-                                        <i (click)="onSkippingPCTMCTFailure($event, ps)" style="cursor: pointer" class="intelicon-information-solid bigIcon validf_Valid" title="{{getPCTMCTSkipLabel('greyIconTitle')}}"></i>
+                                        <i (click)="onSkippingPCTMCTFailure($event, ps)" style="cursor: pointer" class="intelicon-information-solid bigIcon validf_Valid" title="{{getModelNameAndDesc(ps, true)}}"></i>
                                     </ng-template>
                                 </div>                                
                             </td>
