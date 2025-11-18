@@ -185,6 +185,7 @@
     <Compile Include="OpUserStack.cs" />
     <Compile Include="OpUserTokenParameters.cs" />
     <Compile Include="PassedValidation.cs" />
+    <Compile Include="PctMctFailureException.cs" />
     <Compile Include="PctOverrideReason.cs" />
     <Compile Include="ProdMapping.cs" />
     <Compile Include="ProdMappings.cs" />

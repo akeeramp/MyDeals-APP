@@ -143,8 +143,13 @@ export class HeaderComponent {
     }
 
     isAdminMeetCompMenuItemEnabled(): boolean {
+        const allowedUserRole = ['Legal'];
+        return (this.isDeveloper() || allowedUserRole.includes(this.getUserRole()));
+    }
+
+    isAdminPctMctFailReportEnabled(): boolean {
         const allowedUserRole = ['DA', 'Legal'];    // All SA users allowed
-        return (this.isRealSA() || this.isDeveloper() || allowedUserRole.includes(this.getUserRole()) || (this.getUserRole() == 'GA' && this.isSuper()));
+        return (this.isRealSA() || this.isDeveloper() || allowedUserRole.includes(this.getUserRole()));
     }
 
     isSdmUser(): boolean {

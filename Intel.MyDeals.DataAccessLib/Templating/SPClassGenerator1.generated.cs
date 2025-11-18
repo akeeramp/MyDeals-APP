@@ -14451,6 +14451,42 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
+        /// ID: 1440372546
+        /// Modified: 11/10/2025 04:14:49
+        /// Parameters: 2
+        ///</summary>
+        public partial class PR_MYDL_RPT_PCT_MCT_EXCEPTIONS : SP
+        {
+            public PR_MYDL_RPT_PCT_MCT_EXCEPTIONS()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_RPT_PCT_MCT_EXCEPTIONS]";
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 in_start_yrqtr
+            {
+                set { SetParmeter("in_start_yrqtr", value); }
+                get { return (Int32)GetParameter("in_start_yrqtr"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Int32 in_end_yrqtr
+            {
+                set { SetParmeter("in_end_yrqtr", value); }
+                get { return (Int32)GetParameter("in_end_yrqtr"); }
+            }
+        }
+
+        ///<summary>
         /// ID: 820250027
         /// Modified: 11/7/2019 8:19:38 PM
         /// Parameters: 5

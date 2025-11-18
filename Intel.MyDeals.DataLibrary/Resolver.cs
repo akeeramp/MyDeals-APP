@@ -1,5 +1,7 @@
 ﻿using Intel.MyDeals.DependencyResolver;
 using Intel.MyDeals.IDataLibraries;
+using Intel.MyDeals.IDataLibraries.PctMctFailure;
+using Intel.MyDeals.DataLibrary.PctMctFailure;
 using Intel.MyDeals.IDataLibrary;
 using System.ComponentModel.Composition;
 
@@ -59,6 +61,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IDealUnificationDataLib, DealUnificationDataLib>();
             registerService.RegisterType<IJobAlertDataLib, JobAlertDataLib>();
             registerService.RegisterType<IEnvironmentsDataLib, EnvironmentsDataLib>();
+            registerService.RegisterType<IPctMctFailureDataLib, PctMctFailureDataLib>();
             registerService.RegisterType<IPricingTableExceptionDataLib, PricingTableExceptionDataLib>();
 
             registerService.RegisterType<ILogArchivalDataLib, LogArchivalDataLib>();

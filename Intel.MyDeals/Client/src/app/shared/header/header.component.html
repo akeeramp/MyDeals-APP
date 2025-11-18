@@ -224,6 +224,10 @@
                         <li *ngIf="isAdminMeetCompMenuItemEnabled()">
                             <a href="Admin#/meetComp">Meet Comp</a>
                         </li>
+                        
+                        <li *ngIf="isAdminPctMctFailReportEnabled()">
+                            <a href="Admin#/pctMctFailureReport">PCT/MCT Failure Report</a>
+                        </li>
 
                         <li class="dropdown-submenu" *ngIf="isRealSA() || isDeveloper()">
                             <a tabindex="-1">Products</a>

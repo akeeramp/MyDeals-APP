@@ -70,6 +70,7 @@ import { DealUnificationReportComponent } from '../admin/dealUnificationReport/d
 import { userRolePermissionComponent } from '../admin/userRolePermission/admin.userRolePermission.component';
 import { reprocessUCDModalComponent } from '../admin/unifiedDealRecon/admin.UCDReprocessModal.component';
 import { PctExceptionReportComponent } from '../admin/pctExceptionReport/admin.pctExceptionReport.component';
+import { PctMctExceptionReportComponent } from "../admin/pctMctExceptionReport/admin.pctMctExceptionReport.component";
 
 import { EnvironmentsComponent } from "../../app/admin/environmentDetails/admin.environments.component";
 
@@ -149,5 +150,6 @@ export const AdminComponents =[
     EnvironmentsComponent,
     DealUnificationReportComponent,
     userRolePermissionComponent,
-    PctExceptionReportComponent
+    PctExceptionReportComponent,
+    PctMctExceptionReportComponent
 ]

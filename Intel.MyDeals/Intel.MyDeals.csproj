@@ -18,7 +18,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-	<IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
@@ -289,6 +289,7 @@
     <Compile Include="Controllers\API\JobAlertController.cs" />
     <Compile Include="Controllers\API\LogArchivalController.cs" />
     <Compile Include="Controllers\API\MuleServiceController.cs" />
+    <Compile Include="Controllers\API\PctMctFailureController.cs" />
     <Compile Include="Controllers\API\PricingTableExceptionController.cs" />
     <Compile Include="Controllers\API\PrimeCustomersController.cs" />
     <Compile Include="Controllers\API\PushDealstoVistexController.cs" />
@@ -383,10 +384,15 @@
     <TypeScriptCompile Include="Client\src\appModules\shared\searchFilter.module.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.service.ts" />
+    <Content Include="Client\src\app\admin\pctMctExceptionReport\admin.pctMctExceptionReport.component.ts" />
+    <Content Include="Client\src\app\admin\pctMctExceptionReport\admin.pctMctExceptionReport.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\pctMctExceptionReport\PctMctExceptionReportComponent.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\products\admin.products.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.UCDReprocessModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.service.ts" />
+    <Content Include="Client\src\app\admin\pctMctExceptionReport\admin.pctMctExceptionReport.component.css" />
+    <Content Include="Client\src\app\admin\pctMctExceptionReport\admin.pctMctExceptionReport.component.html" />
     <Content Include="Client\src\app\admin\pctExceptionReport\admin.pctExceptionReport.component.ts" />
     <Content Include="Client\src\app\admin\pctExceptionReport\admin.pctExceptionReport.service.ts" />
     <Content Include="Client\Images\032.gif" />
@@ -452,12 +458,12 @@
     <Content Include="Client\Images\docs\nUnit_check.png" />
     <Content Include="Client\Images\docs\nUnit_gitHub.png" />
     <Content Include="Client\Images\docs\allChecks-passed.png" />
-	<Content Include="Client\Images\docs\downtime.png" />
-	<Content Include="Client\Images\docs\dynatrace-dashboard.png" />
-	<Content Include="Client\Images\docs\pricing-table-sample.png" />
-	<Content Include="Client\Images\docs\semgrep-dashboard.png" />
-	<Content Include="Client\Images\docs\semgrep-workflow.png" />
-	<Content Include="Client\Images\docs\uipath-workflow.png" />
+    <Content Include="Client\Images\docs\downtime.png" />
+    <Content Include="Client\Images\docs\dynatrace-dashboard.png" />
+    <Content Include="Client\Images\docs\pricing-table-sample.png" />
+    <Content Include="Client\Images\docs\semgrep-dashboard.png" />
+    <Content Include="Client\Images\docs\semgrep-workflow.png" />
+    <Content Include="Client\Images\docs\uipath-workflow.png" />
     <Content Include="Client\Images\docs\spectralScanResult.png" />
     <Content Include="Client\Images\docs\DBLogs.png" />
     <Content Include="Client\Images\docs\Business-rules.png" />
@@ -940,8 +946,8 @@
     <Content Include="Client\src\app\contract\contractManager\emailModal\emailModal.component.html" />
     <Content Include="Client\src\app\contract\contractManager\messageBoard\messageBoard.component.css" />
     <Content Include="Client\src\app\contract\contractManager\messageBoard\messageBoard.component.html" />
-	<Content Include="Client\src\app\contract\contractManager\confirmationModal\confirmationModal.component.html" />
-	<Content Include="Client\src\app\contract\contractManager\confirmationModal\confirmationModal.component.css" />
+    <Content Include="Client\src\app\contract\contractManager\confirmationModal\confirmationModal.component.html" />
+    <Content Include="Client\src\app\contract\contractManager\confirmationModal\confirmationModal.component.css" />
     <Content Include="Client\src\app\contract\dealEditor\dealEditor.component.css" />
     <Content Include="Client\src\app\contract\dealEditor\dealEditor.component.html" />
     <Content Include="Client\src\app\contract\contractManager\contractManager.component.css" />

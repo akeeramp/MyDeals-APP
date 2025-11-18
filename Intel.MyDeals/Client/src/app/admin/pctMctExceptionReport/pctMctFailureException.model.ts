@@ -1,0 +1,41 @@
+// Interface matching the PctMctFailureException entity from Intel.MyDeals.Entities
+export interface PctMctFailureException {
+    Contract_ID: number;
+    Deal_ID: number;
+    Deal_Type: string;
+    Deal_Stage: string;
+    Deal_Start_Date: Date;
+    Deal_End_Date: Date;
+    Forcast_Alt_Id: string;
+    Deal_Product_Processor_Number: string;
+    Product_Bucket: string;
+    Market_Segment: string;
+    Geo: string;
+    Payout_Based_On: string;
+    Program_Payment: string;
+    Cost_Type: string;
+    Rebate_Type: string;
+    Group_type: string;
+    CAP: number;
+    MAX_RPU: number;
+    YCS2: number;
+    ECAP_Price: number;
+    Retail_Pull_Dollar: number;
+    Product_Cost: number;
+    Lowest_Net_Price: number;
+    Price_Cost_Test_Result: string;
+    Meet_Comp_Price: number;
+    Avrrage_Net_Price: number;
+    Meet_Comp_Test_Result: string;
+    Division_Approver: string;
+    Division_Approved_Date: string;
+    Geo_Approver: string;
+    Geo_Approved_Date: string;
+    Deal_Created_By: string;
+    Deal_Created_Date: Date;
+    Customer: string;
+    Ceiling_Volume: string;
+    PCT_MCT_Skip: string;
+    PCT_MCT_Skip_Date: string;
+    PCT_MCT_Skip_User: string;
+}
