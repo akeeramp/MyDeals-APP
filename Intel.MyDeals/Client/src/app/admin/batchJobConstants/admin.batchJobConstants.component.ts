@@ -41,6 +41,9 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
     public allData = true;
     public addData = false;
     public rowForm = false;
+    public enableBtn = true;
+    public editAccess = false;
+    public isChecked = false;
     public childGridResult: any;
     public childGridData: any;
     public arrayStepData: any = [];
@@ -386,6 +389,9 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
     refreshGrid() {
         this.isLoading = true;
         this.getAllBatchJobConstants();
+        this.isChecked = false;
+        this.editAccess = false;
+        this.enableBtn = true;
     }
 
     timeZone(time) {
@@ -667,6 +673,54 @@ export class batchJobConstantsComponent implements OnInit, OnDestroy {
                 this.loggerSvc.error(errMsg, "Error");
                 this.isLoading = false;
             })
+    }
+
+    //checkboxes to allow active/inactive all the batches at a time
+    checkeditems(item) {
+        this.isDirty = true;
+        item.IS_SELECTED = !item.IS_SELECTED;
+        this.editAccess = this.gridResult.some(row => row.IS_SELECTED);
+        // Set enableBtn to false if any item is checked, true otherwise
+        this.enableBtn = !this.gridResult.some(row => row.IS_SELECTED);
+    }
+
+    allBatchesSelected = false;
+    selectAllBatchesChange(e): void {
+        this.isDirty = true;
+        const checked = e.target.checked;
+        this.allBatchesSelected = checked;
+        this.isChecked = true;
+        for (let i = 0; i < this.gridResult.length; i++) {
+            this.gridResult[i].IS_SELECTED = checked;
+        }
+        this.editAccess = this.gridResult.some(row => row.IS_SELECTED);
+        // Set enableBtn to false if any item is checked, true otherwise
+        this.enableBtn = !this.gridResult.some(row => row.IS_SELECTED);
+    }
+
+    enableDisableJob(isActive: boolean) {
+        // Set ACTV_IND to true/false for all selected items and update each
+        this.gridData.data.forEach((row) => {
+            if (row.IS_SELECTED) {
+                row.ACTV_IND = isActive;
+                this.batchJobCnstSrvc.updateBatchJobConstants(row, 'UPDATE').pipe(takeUntil(this.destroy$)).subscribe(() => {
+                    this.loggerSvc.success(
+                        isActive
+                            ? "Batch Job Constants Data Enabled successfully"
+                            : "Batch Job Constants Data Disabled successfully"
+                    );
+                    this.refreshGrid();
+                }, (error) => {
+                    const errMsg = error.error
+                        ? error.error
+                        : isActive
+                            ? "Unable to Enable Batch Job Constants Data"
+                            : "Unable to Disable Batch Job Constants Data";
+                    this.loggerSvc.error(errMsg, "Error");
+                    this.isLoading = false;
+                });
+            }
+        });
     }
 
     getDays(days) {

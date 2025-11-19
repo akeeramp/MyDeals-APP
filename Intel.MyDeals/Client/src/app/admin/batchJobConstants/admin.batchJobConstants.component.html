@@ -14,16 +14,38 @@
                         <button kendoGridAddCommand class="k-button addButton">
                             <span class="k-icon k-i-plus-outline k-icon-md" style="font-size:24px;"></span>Add New Record
                         </button>
+                        <button [disabled]="enableBtn" (click)="enableDisableJob(true)" class="k-button k-button-icontext batchJobConstantsBtn">
+                            Enable
+                        </button>
+                        <button [disabled]="enableBtn" (click)="enableDisableJob(false)" class="k-button k-button-icontext batchJobConstantsBtn">
+                            Disable
+                        </button>
                         <kendo-grid-spacer></kendo-grid-spacer>
 
                         <button (click)="refreshGrid()" class="k-button clearButton">
                             <span class="k-icon k-i-reload k-icon-md"></span>Refresh
                         </button>
                     </ng-template>
+                    <kendo-grid-column [headerClass]="{ 'text-center remove-filter': true }" field="IS_SELECTED" title="selectAll" width="80">
+                        <ng-template kendoGridHeaderTemplate let-dataItem>
+                            <div class='batchJobgridheader'>
+                                Select All<br />
+                                <input style="zoom: 1.2;"
+                                       type="checkbox"
+                                       title="selectAll" width="100" [(ngModel)]="isChecked"
+                                       (change)="selectAllBatchesChange($event)" />
+                            </div>
+                        </ng-template>
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <input style="zoom: 1.2; margin-left: 10px;"
+                                   type="checkbox" (click)="checkeditems(dataItem)"
+                                   [checked]="dataItem.IS_SELECTED" />
+                        </ng-template>
+                    </kendo-grid-column>
                     <kendo-grid-command-column title="Command" [width]="50">
                         <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem>
-                            <button id="command-icon" class="k-command-icon" (click)="editBatchJobData(dataItem,1)">
-                                <span class="k-icon k-i-edit k-icon-sm delete-space edited-icon-color"></span>
+                            <button [disabled]="editAccess" id="command-icon" class="k-command-icon" (click)="editBatchJobData(dataItem,1)">
+                                <span [ngClass]="{'editDisabled': editAccess == true}" class="k-icon k-i-edit k-icon-sm delete-space edited-icon-color"></span>
                             </button>
                         </ng-template>
                     </kendo-grid-command-column>
