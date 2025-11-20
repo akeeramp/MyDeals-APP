@@ -1063,15 +1063,17 @@ export class ProductCorrectorComponent implements OnDestroy{
         for (let r = 0; r < this.numIssueRows; r++) {
             const key = this.issueRowKeys[r];
 
-            if (!!this.ProductCorrectorData.ValidProducts[key]) {
-                var prodKeys = this.curRowIncProd.map(x => x.name);
-                var validProdKeys = Object.keys(this.ProductCorrectorData.ValidProducts[key]);
+            // Duplicate products are not removing for all the selected products in the product corrector return value
 
-                var allKeysValid = prodKeys.every(p => validProdKeys.includes(p));
-                if (!allKeysValid) {
-                    continue;
-                }
-            }
+            // if (!!this.ProductCorrectorData.ValidProducts[key]) {
+            //     var prodKeys = this.curRowIncProd.map(x => x.name);
+            //     var validProdKeys = Object.keys(this.ProductCorrectorData.ValidProducts[key]);
+
+            //     var allKeysValid = prodKeys.every(p => validProdKeys.includes(p));
+            //     if (!allKeysValid) {
+            //         continue;
+            //     }
+            // }
             let invalidCopy = [];
             if (!!this.ProductCorrectorData.InValidProducts[key] && this.ProductCorrectorData.InValidProducts[key].length === 0) {
                 delete this.ProductCorrectorData.InValidProducts[key];
