@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div *ngIf="allData" class="">
                 <kendo-grid class="grid-sizefix tt-grids kAlignHeaders" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
-                            [groupable]="true" [group]="state.group" filterable="menu" (add)="editBatchJobData(dataItem,0)" [data]="gridData" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)">
+                            [resizable]="true" [groupable]="true" [group]="state.group" filterable="menu" (add)="editBatchJobData(dataItem,0)" [data]="gridData" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)">
                     <ng-template kendoGridToolbarTemplate>
                         <button kendoGridAddCommand class="k-button addButton">
                             <span class="k-icon k-i-plus-outline k-icon-md" style="font-size:24px;"></span>Add New Record
