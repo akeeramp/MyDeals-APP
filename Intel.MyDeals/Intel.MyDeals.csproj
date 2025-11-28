@@ -1739,7 +1739,9 @@
     <Content Include="egg\mb\Scripts\jquery-2.2.0.min.js" />
     <Content Include="egg\mb\Scripts\testlevels.js" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\fontawesome-webfont.svg" />
+	<Content Include="favicon.svg" />
+	<Content Include="Images\logo-intel.png" />
+	<Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\Intelicon.svg" />
     <Content Include="Global.asax" />
     <Content Include="Images\032.gif" />
