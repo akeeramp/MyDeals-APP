@@ -153,6 +153,16 @@
                                                    [(ngModel)]="dataItem.selectedValues"
                                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'name')"></kendo-multiselect>
                             </div>
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && dataItem.field == 'CHG_EMP_NAME'">
+                                <kendo-multiselect [disabled]="i==0"
+                                                   class="multi_kendo_style"
+                                                   [data]="dataItem.dropDown"
+                                                   textField="NAME"
+                                                   valueField="EMP_WWID"
+                                                   [autoClose]="false"
+                                                   [(ngModel)]="dataItem.selectedValues"
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'name')"></kendo-multiselect>
+                            </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'PCSR_NBR' || dataItem.field == 'OP_CD' || dataItem.field == 'DIV_NM' || dataItem.field == 'FMLY_NM' || dataItem.field == 'PRD_CAT_NM')">
                                 <kendo-multiselect [disabled]="i==0"
                                                    class="multi_kendo_style"

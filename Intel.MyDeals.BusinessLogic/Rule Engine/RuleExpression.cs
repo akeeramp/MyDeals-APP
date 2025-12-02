@@ -101,10 +101,12 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                     x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", GetFromDictionary(y, x.field, dicCustomerName, dicEmployeeName).Replace("'", "''"), "'"))), ")");
                     
                     string strSqlCriteria = string.Format("{0} {1} {2}", x.field, x.@operator, x.value.Trim());
+                    /*
                     if (x.field == "CRE_EMP_NAME")
                     {
                         strSqlCriteria += " OR " + string.Format("{0} {1} {2}", "CHG_EMP_NAME", x.@operator, x.value.Trim());                                                
                     }
+                    */
                     lstSqlCriteria.Add(strSqlCriteria);
                     lstDescription.Add(string.Format("<span class=\"rule_attr_desc\">{0}</span><span class=\"rule_operator_desc\"> {1} </span><span class=\"rule_value_desc\">{2}</span>", dicAttributes.ContainsKey(x.field) ? dicAttributes[x.field] : "NA", x.@operator, x.value.Trim()));
                 });
@@ -185,6 +187,11 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                             strRtn = dicEmployeeName.ContainsKey(Convert.ToInt32(iKey)) ? dicEmployeeName[Convert.ToInt32(iKey)] : strValue;
                         }
                         break;
+                    case "CHG_EMP_NAME":
+                        {
+                            strRtn = dicEmployeeName.ContainsKey(Convert.ToInt32(iKey)) ? dicEmployeeName[Convert.ToInt32(iKey)] : strValue;
+                        }
+                        break;
                 }
             }
             return strRtn;
@@ -194,6 +201,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
         {
             Dictionary<string, string> dicAttr = new Dictionary<string, string>();
             dicAttr.Add("CRE_EMP_NAME", "Created by name");
+            dicAttr.Add("CHG_EMP_NAME", "Modified by name");
             dicAttr.Add("WIP_DEAL_OBJ_SID", "Deal #");
             dicAttr.Add("OBJ_SET_TYPE_CD", "Deal Type");
             dicAttr.Add("CUST_NM", "Customer");

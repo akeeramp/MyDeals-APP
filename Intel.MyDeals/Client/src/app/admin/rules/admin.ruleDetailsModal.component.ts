@@ -227,7 +227,7 @@ export class RuleDetailsModalComponent {
                     row.values.forEach((item) => {
                         selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.DROP_DOWN === item)[0])
                     })
-                } else if (selectedField.field == 'CRE_EMP_NAME') {
+                } else if (selectedField.field == 'CRE_EMP_NAME' || selectedField.field == 'CHG_EMP_NAME') {
                     row.values.forEach((item) => {
                         const currentSelectedValue = this.dropdownresponses[selectedField.field].filter(x => x.EMP_WWID === parseInt(item))[0];
                         if (currentSelectedValue) {

@@ -177,7 +177,16 @@ export class ruleDetailsModalConfig {
     public static attributeSettings = [
         {
             field: "CRE_EMP_NAME",
-            title: "Created/Modified By Name",
+            title: "Created By Name",
+            type: "list",
+            width: 150.0,
+            lookupText: "NAME",
+            lookupValue: "EMP_WWID",
+            lookupUrl: "/api/Employees/GetUsrProfileRoleByRoleCd/" + ruleDetailsModalConfig.allowedRoleForCreatedBy.join()
+        },
+        {
+            field: "CHG_EMP_NAME",
+            title: "Modified By Name",
             type: "list",
             width: 150.0,
             lookupText: "NAME",
