@@ -384,6 +384,9 @@
     <TypeScriptCompile Include="Client\src\appModules\shared\searchFilter.module.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchJobConstants\admin.batchJobConstants.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\databaseCustomAccessConfig\admin.databaseCustomAccessConfig.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\databaseCustomAccessConfig\admin.databaseCustomAccessConfig.model.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\databaseCustomAccessConfig\admin.databaseCustomAccessConfig.service.ts" />
     <Content Include="Client\src\app\admin\pctMctExceptionReport\admin.pctMctExceptionReport.component.ts" />
     <Content Include="Client\src\app\admin\pctMctExceptionReport\admin.pctMctExceptionReport.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\pctMctExceptionReport\PctMctExceptionReportComponent.ts" />
@@ -391,6 +394,8 @@
     <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.UCDReprocessModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.service.ts" />
+    <Content Include="Client\src\app\admin\databaseCustomAccessConfig\admin.databaseCustomAccessConfig.component.css" />
+    <Content Include="Client\src\app\admin\databaseCustomAccessConfig\admin.databaseCustomAccessConfig.component.html" />
     <Content Include="Client\src\app\admin\pctMctExceptionReport\admin.pctMctExceptionReport.component.css" />
     <Content Include="Client\src\app\admin\pctMctExceptionReport\admin.pctMctExceptionReport.component.html" />
     <Content Include="Client\src\app\admin\pctExceptionReport\admin.pctExceptionReport.component.ts" />

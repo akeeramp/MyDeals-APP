@@ -12,5 +12,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<BatchJobConstants> SetBatchJobConstants(string mode, BatchJobConstants batchJobConstants);
         List<BatchJobStepConstants> SetBatchJobStepConstants(string mode, int batchSid, string batchJobConstants);
+        CustomAccessValues GetDBCustomAccess(string mode, List<DBAccessEnv> DBAccessTable);
     }
 }

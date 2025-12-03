@@ -1,0 +1,7 @@
+﻿@import '/Client/src/app/admin/kendo_grid.css';
+@import '/Client/src/app/admin/CustomerVendors/admin.customerVendors.component.css';
+.error {
+    color: red;
+    font-size: 13px; 
+    margin-top: 4px;
+}

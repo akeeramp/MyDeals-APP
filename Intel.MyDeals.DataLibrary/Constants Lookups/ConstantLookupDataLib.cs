@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Intel.MyDeals.DataAccessLib;
+﻿using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
-using Intel.Opaque.DBAccess;
-using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
+using Intel.MyDeals.Entities.TableTypeParameters;
 using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;
+using Intel.Opaque.DBAccess;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -320,6 +321,73 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
             return ret;
+        }
+
+        public CustomAccessValues GetDBCustomAccess(string mode, List<DBAccessEnv> DBAccessTable)
+        {
+            var ret = new List<DBCustomAccessValues>();
+            var listStr = new List<System.String>();
+
+            try
+            {
+                // Make datatable
+                t_DB_CD_ACCESS dt = new t_DB_CD_ACCESS();
+
+                for (int i = 0; i < DBAccessTable.Count; i++)
+                {
+                    DBAccessTable[i].CRE_EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID;
+
+                    dt.AddRow(DBAccessTable[i]);
+                }
+
+                var cmd = new Procs.dbo.PR_MYDL_UI_MYDL_DB_CD_ACCESS
+                {
+                    MODE = mode,
+                    t_DB_CD_ACCESS = dt,
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_ENVT = DB.GetReaderOrdinal(rdr, "ENVT");
+                    int IDX_DATABASEUSERNAME = DB.GetReaderOrdinal(rdr, "DATABASEUSERNAME");
+                    int IDX_ACCESS_JSON = DB.GetReaderOrdinal(rdr, "ACCESS_JSON");
+                    int IDX_ERR_TXT = DB.GetReaderOrdinal(rdr, "ERR_TXT");
+                    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+                    int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+                    int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
+                    int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+                    int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new DBCustomAccessValues
+                        {
+                            ENVT = (IDX_ENVT < 0 || rdr.IsDBNull(IDX_ENVT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ENVT),
+                            DATABASEUSERNAME = (IDX_DATABASEUSERNAME < 0 || rdr.IsDBNull(IDX_DATABASEUSERNAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DATABASEUSERNAME),
+                            ACCESS_JSON = (IDX_ACCESS_JSON < 0 || rdr.IsDBNull(IDX_ACCESS_JSON)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ACCESS_JSON),
+                            ERR_TXT = (IDX_ERR_TXT < 0 || rdr.IsDBNull(IDX_ERR_TXT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ERR_TXT),
+                            ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+                            CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+                            CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
+                            CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+                            CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID)
+                        });
+                    }
+                    rdr.NextResult();
+                    int IDX_DB_ENVT_NM = DB.GetReaderOrdinal(rdr, "DB_ENVT_NM");
+                    while (rdr.Read())
+                    {
+                        listStr.Add((IDX_DB_ENVT_NM < 0 || rdr.IsDBNull(IDX_DB_ENVT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DB_ENVT_NM));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw OpMsgQueue.CreateFault(ex);
+            }
+
+            // Fix: Wrap the list in a DBCustomAccessValueList instance
+            return new CustomAccessValues { dbCustomAccessValues = ret, ENVT_NM_LIST = listStr };
         }
 
         #endregion Constants Admin

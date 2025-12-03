@@ -1,13 +1,14 @@
-﻿using Intel.MyDeals.Entities;
+﻿using Intel.MyDeals.BusinessLogic;
+using Intel.MyDeals.Entities;
 using Intel.MyDeals.Helpers;
 using Intel.MyDeals.IBusinessLogic;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using WebApi.OutputCache.V2;
 
@@ -125,5 +126,30 @@ namespace Intel.MyDeals.Controllers.API
                 });
             }
         }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/AdminConstants/v1/GetDBCustomAccess")]
+        public CustomAccessValues GetDBCustomAccess(string mode, JArray jsonDataArray)
+        {
+            List<DBAccessEnv> jsonData = new List<DBAccessEnv>();
+
+            if (jsonDataArray != null && jsonDataArray.Count > 0)
+            {
+                // Convert JArray to List<DBAccessEnv>
+                jsonData = jsonDataArray.ToObject<List<DBAccessEnv>>();
+            }
+
+            if (String.IsNullOrEmpty(mode) || mode == "" || (jsonDataArray == null && mode.ToUpper() == "UPDATE"))
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("Unable to process")
+                });
+
+            // Assuming you want to return the result of a business logic call, similar to other methods.
+            return SafeExecutor(() => _constantsLookupsLib.GetDBCustomAccess(mode, jsonData), "Unable to get DB Custom Access");
+        }
+
+
     }
 }

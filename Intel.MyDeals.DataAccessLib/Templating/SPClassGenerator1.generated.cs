@@ -8455,6 +8455,45 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
         }
 
+
+        ///<summary>
+        /// ID: 1965250056
+        /// Modified: 11/12/2018 
+        /// Parameters: 2
+        ///</summary>
+        public partial class PR_MYDL_UI_MYDL_DB_CD_ACCESS : SP
+        {
+            public PR_MYDL_UI_MYDL_DB_CD_ACCESS()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_UI_MYDL_DB_CD_ACCESS]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(200)
+            /// Mode: IN
+            /// Max Length: 200
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 10, false)]
+            public String MODE
+            {
+                set { SetParmeter("MODE", value); }
+                get { return (String)GetParameter("MODE"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar(200)
+            /// Mode: IN
+            /// Max Length: 200
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public SqlTableValueParameterBase t_DB_CD_ACCESS
+            {
+                set { SetParmeter("t_DB_CD_ACCESS", value); }
+                get { return (SqlTableValueParameterBase)GetParameter("t_DB_CD_ACCESS"); }
+            }
+        }
+
         ///<summary>
         /// ID: 1965250056
         /// Modified: 7/13/2018 1:54:32 AM

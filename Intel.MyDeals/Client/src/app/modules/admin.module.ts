@@ -73,6 +73,7 @@ import { PctExceptionReportComponent } from '../admin/pctExceptionReport/admin.p
 import { PctMctExceptionReportComponent } from "../admin/pctMctExceptionReport/admin.pctMctExceptionReport.component";
 
 import { EnvironmentsComponent } from "../../app/admin/environmentDetails/admin.environments.component";
+import { databaseCustomAccessConfigComponent } from '../admin/databaseCustomAccessConfig/admin.databaseCustomAccessConfig.component';
 
 export const AdminComponents =[
     EmployeeComponent,
@@ -151,5 +152,7 @@ export const AdminComponents =[
     DealUnificationReportComponent,
     userRolePermissionComponent,
     PctExceptionReportComponent,
+    databaseCustomAccessConfigComponent,
+
     PctMctExceptionReportComponent
 ]

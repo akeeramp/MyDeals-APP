@@ -3041,3 +3041,9 @@ kendo-grid-date-filter-menu kendo-grid-date-filter-menu-input kendo-datepicker.k
 .performBarValues .performanceBarFour.performanceBarShowDetails {
     display: block!important;
 }
+.mat-slide-toggle.configsToggle.mat-checked .mat-slide-toggle-bar {
+    background-color: #00aeef !important;
+}
+.mat-slide-toggle.configsToggle.mat-checked.toggle-button-custom .mat-slide-toggle-thumb {
+    margin-left: 4px !important;
+}

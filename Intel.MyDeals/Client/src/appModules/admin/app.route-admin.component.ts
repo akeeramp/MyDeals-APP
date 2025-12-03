@@ -55,6 +55,7 @@ import { EnvironmentsComponent } from "../../app/admin/environmentDetails/admin.
 
 import { userRolePermissionComponent } from "../../app/admin/userRolePermission/admin.userRolePermission.component";
 import { PctExceptionReportComponent } from "../../app/admin/pctExceptionReport/admin.pctExceptionReport.component";
+import { databaseCustomAccessConfigComponent } from "../../app/admin/databaseCustomAccessConfig/admin.databaseCustomAccessConfig.component";
 import { PctMctExceptionReportComponent } from "../../app/admin/pctMctExceptionReport/admin.pctMctExceptionReport.component";
 
 //added for security check
@@ -112,6 +113,7 @@ export const routesAdmin: Routes = [
     { path: 'expireYcs2', component: ExpireYcs2Component, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard]},
     { path: 'DealUnificationReport', component: DealUnificationReportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'environments', component: EnvironmentsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard], canDeactivate: [PendingChangesGuard] },
+    { path: 'databaseCustomAccessConfig', component: databaseCustomAccessConfigComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
 
     { path: 'DealUnificationReport', component: DealUnificationReportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'userRolePermission', component: userRolePermissionComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },

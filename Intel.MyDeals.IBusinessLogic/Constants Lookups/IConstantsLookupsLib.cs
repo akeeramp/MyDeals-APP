@@ -28,5 +28,7 @@ namespace Intel.MyDeals.IBusinessLogic
         List<BatchJobConstants> UpdateBatchJobConstants(string mode, BatchJobConstants batchJobConstants);
 
         List<BatchJobStepConstants> UpdateBatchJobStepConstants(string mode, int batchSid, string batchJobConstants);
+
+        CustomAccessValues GetDBCustomAccess(string mode, List<DBAccessEnv> DBAccessTable);
     }
 }

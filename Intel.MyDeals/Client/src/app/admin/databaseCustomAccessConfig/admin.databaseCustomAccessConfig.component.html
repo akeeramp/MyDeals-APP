@@ -1,0 +1,169 @@
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-md-12" style="padding-left: 30px; padding-top: 24px">
+        <h3 class="header-bottomsizereduce">Database Custom Access Config</h3>
+    </div>
+</div>
+<div class="row" style="display: contents;">
+    <div class="col-md-12 kendo-grid-buttons table-left-rightsizefix">
+        <kendo-grid class="grid-heightsize customerVendorsTable kAlignHeaders" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                    [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+                    [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
+                    filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
+                    (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)"
+                    (remove)="removeHandler($event)" [columnMenu]="true" (excelExport)="onExcelExport($event)">
+            <ng-template kendoGridToolbarTemplate>
+                <button kendoGridAddCommand class="k-button addButton">
+                    <span class="k-icon k-i-plus-outline k-icon-md"></span>Add New Record
+                </button><button (click)="clearFilter()" class="k-button clearButton">
+                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
+                </button>
+                <button (click)="updateAllAccess(gridData)"
+                        class="k-button clearButton">
+                    <span class="k-icon k-icon-md k-i-file-add"></span>Update All Access
+                </button>
+                <kendo-grid-spacer></kendo-grid-spacer>
+                <button type="button" kendoGridExcelCommand>
+                    <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+                </button>
+                <button (click)="refreshGrid()"
+                        class="k-button clearButton">
+                    <span class="k-icon k-i-reload k-icon-md"></span>Refresh
+                </button>
+            </ng-template>
+            <kendo-grid-command-column title="" width="100" [headerClass]="{'headerClass':true}" [columnMenu]="false">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-isNew="isNew">
+                    <button id="command-icon-first" class="k-command-icon">
+                        <span class="k-icon k-i-play k-icon-sm edited-icon-color" title="Refresh"
+                              (click)="refresh(dataItem)"></span>
+                    </button>
+                    <button id="command-icon-first" kendoGridEditCommand>
+                        <span class="k-icon k-i-edit k-icon-sm delete-editorspaceremove edited-icon-color"></span>
+                    </button>
+                    <button kendoGridRemoveCommand id="command-icon-first" class="k-button">
+                        <span class="k-icon k-i-delete k-icon-sm edited-icon-color"></span>
+                    </button>
+                    <button id="command-icon-first" kendoGridSaveCommand [disabled]="formGroup?.invalid">
+                        <span class="k-icon k-i-check k-icon-sm"></span>
+                    </button>
+                    <button id="command-icon-first" kendoGridCancelCommand>
+                        <span class="k-icon k-i-cancel-outline k-icon-sm remove-canceloutline"></span>
+                    </button>
+                </ng-template>
+            </kendo-grid-command-column>
+            <kendo-grid-column field="ENVT" title="Environment" width="100" [headerClass]="{'headerClass':true}"
+                               [editable]="isCnstNmEditable">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                             let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                    <kendo-multiselect [formControl]="formGroup.get('ENVT')" [data]="envtNmList" [valuePrimitive]="true"></kendo-multiselect>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="DATABASEUSERNAME" title="Database Username" width="180" [headerClass]="{'headerClass':true}" [editable]="isDbUsrNmEditable">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                             let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                    <kendo-textbox [formControl]="formGroup.get('DATABASEUSERNAME')"></kendo-textbox>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="ACCESS_JSON" title="Access JSON" width="180" [headerClass]="{'headerClass':true}">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                             let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                    <kendo-textbox [formControl]="formGroup.get('ACCESS_JSON')"></kendo-textbox>
+                    <div *ngIf="formGroup.get('ACCESS_JSON').hasError('invalidJson') && formGroup.get('ACCESS_JSON').touched" class="error">
+                        Access JSON must be a valid JSON string.
+                    </div>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="ERR_TXT" title="Error Text" width="100" [headerClass]="{'headerClass':true}" [editable]="isErrTxtEditable">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                             let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                    <kendo-textbox [formControl]="formGroup.get('ERR_TXT')"></kendo-textbox>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="ACTV_IND" title="Active" editor="boolean" width="100" filter="boolean"
+                               [headerClass]="{'headerClass':true}">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <div class="text-center">
+                        <mat-slide-toggle class="toggle-button-custom configsToggle" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
+                    </div>
+                </ng-template>
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                    <div class="text-center">
+                        <mat-slide-toggle class="toggle-button-custom configsToggle" [color]="color" [checked]="dataItem.ACTV_IND"
+                                          [formControl]="formGroup.get('ACTV_IND')"></mat-slide-toggle>
+                    </div>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="CRE_DTM" title="Created DateTime" [width]="120" [headerClass]="{'headerClass':true}"
+                               [editable]="false">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                             let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                    <kendo-textbox [formControl]="formGroup.get('CRE_DTM')"></kendo-textbox>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="CRE_EMP_WWID" title="Created By WWID" width="100" [headerClass]="{'headerClass':true}" [editable]="false">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                             let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                    <kendo-textbox [formControl]="formGroup.get('CRE_EMP_WWID')"></kendo-textbox>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="CHG_DTM" title="Last Modified DateTime" [width]="120" [headerClass]="{'headerClass':true}"
+                               [editable]="false">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                             let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                    <kendo-textbox [formControl]="formGroup.get('CHG_DTM')"></kendo-textbox>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="CHG_EMP_WWID" title="Changed By WWID" width="100" [headerClass]="{'headerClass':true}" [editable]="false">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                             let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                    <kendo-textbox [formControl]="formGroup.get('CHG_EMP_WWID')"></kendo-textbox>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-excel fileName="MyDealsConstants.xlsx" [fetchData]="allData">
+                <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
+                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                                          [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
+            </kendo-grid-excel>
+        </kendo-grid>
+        <kendo-dialog *ngIf="isDialogVisible" (close)="close()" [width]="600" class="cons-delete-ppup">
+            <h2 class="cons-header-popup">Delete Confirmation</h2>
+            <p class="cons-body-popup">Are you sure you would like to Delete this Configs? </p>
+            <kendo-dialog-actions class="cons-button-style">
+                <button class="cons-button-cancel" kendoButton (click)="close()">Cancel </button>
+                <button class="cons-button-delete" kendoButton (click)="deleteRecord()">Delete Config</button>
+            </kendo-dialog-actions>
+        </kendo-dialog>
+    </div>
+</div>

@@ -138,6 +138,11 @@ namespace Intel.MyDeals.BusinessLogic
             return _constantLookupDataLib.SetBatchJobStepConstants(mode, batchSid, batchJobConstants);
         }
 
+        public CustomAccessValues GetDBCustomAccess(string mode, List<DBAccessEnv> DBAccessTable)
+        {
+            return _constantLookupDataLib.GetDBCustomAccess(mode, DBAccessTable);
+        }
+
         #endregion Constants Admin
     }
 }

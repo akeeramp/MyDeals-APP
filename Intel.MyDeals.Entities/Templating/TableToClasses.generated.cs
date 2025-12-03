@@ -6691,7 +6691,84 @@ namespace Intel.MyDeals.Entities
 
     } // End of class User Role Permission
 
-        
+    // 
+    [DataContract]
+    public partial class DBCustomAccessValues
+    {
+        [DataMember]
+        public System.String ENVT { set; get; }
+
+
+        [DataMember]
+        public System.String DATABASEUSERNAME { set; get; }
+
+
+        [DataMember]
+        public System.String ACCESS_JSON { set; get; }
+
+
+        [DataMember]
+        public System.String ERR_TXT { set; get; }
+
+
+        [DataMember]
+        public System.Boolean ACTV_IND { set; get; }
+
+
+        [DataMember]
+        public System.DateTime CRE_DTM { set; get; }
+
+
+        [DataMember]
+        public System.Int32 CRE_EMP_WWID { set; get; }
+
+
+        [DataMember]
+        public System.DateTime CHG_DTM { set; get; }
+
+        [DataMember]
+        public System.Int32 CHG_EMP_WWID { set; get; }
+    }    
+
+    [DataContract]
+    public partial class DBAccessEnv
+    {
+        [DataMember]
+        public System.String ENVT { set; get; }
+
+
+        [DataMember]
+        public System.String DATABASEUSERNAME { set; get; }
+
+
+        [DataMember]
+        public System.String ACCESS_JSON { set; get; }
+
+
+        [DataMember]
+        public System.String ERR_TXT { set; get; }
+
+
+        [DataMember]
+        public System.Boolean ACTV_IND { set; get; }
+
+
+        [DataMember]
+        public System.DateTime? CRE_DTM { set; get; }
+
+
+        [DataMember]
+        public System.Int32 CRE_EMP_WWID { set; get; }
+
+
+        [DataMember]
+        public System.DateTime? CHG_DTM { set; get; }
+
+        [DataMember]
+        public System.Int32 CHG_EMP_WWID { set; get; }
+    }
+
+
     [DataContract]
     public partial class PostUserRolePermission
     {

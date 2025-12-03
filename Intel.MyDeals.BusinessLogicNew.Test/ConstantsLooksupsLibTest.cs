@@ -211,6 +211,16 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             Assert.IsNotNull(res);
         }
 
+        [Test]
+        public void GetDBCustomAccess_ShouldReturnNotNull()
+        {
+            var mockData = GetDBCustomAccess_mockData();
+            // Fix: Provide both required parameters for GetDBCustomAccess
+            var mockDBAccessEnv = new List<DBAccessEnv>(); // You may need to initialize properties as needed
+            mockConstantLookupDataLib.Setup(x => x.GetDBCustomAccess(It.IsAny<string>(), It.IsAny<List<DBAccessEnv>>())).Returns(mockData);
+            var result = new ConstantsLookupsLib(mockConstantLookupDataLib.Object, mockDataCollectionsDataLib.Object, mockNotificationsLib.Object).GetDBCustomAccess("test env", mockDBAccessEnv);
+            Assert.IsNotNull(result);
+        }
 
 
         private List<AdminConstant> GetConstantsByNameMockData()
@@ -329,6 +339,32 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             };
             batchJobConstants.Add(mockData);
             return batchJobConstants;
+        }
+
+        private CustomAccessValues GetDBCustomAccess_mockData()
+        {
+            var mockDbCustomAccessValue = new DBCustomAccessValues
+            {
+                ENVT = "test 1",
+                DATABASEUSERNAME = "test 1",
+                ACCESS_JSON = "{\"1\": {\"DB\": [\"MYDEALS\"],\"GRANT/REVOKE\": [\"GRANT\"],\"ACTION\": [\"SELECT\",\"EXECUTE\"],\"OBJECT\": [\"\"]}}",
+                ERR_TXT = "",
+                ACTV_IND = false,
+                CRE_DTM = DateTime.Parse("11/14/2025 7:2:36.847"),
+                CRE_EMP_WWID = 12159910,
+                CHG_DTM = DateTime.Parse("11/14/2025 7:2:36.847"),
+                CHG_EMP_WWID = 12159910
+            };
+
+            List<string> envt_nm_list_mock_data = new List<string> { "CIAR", "CONS", "DAY1" };
+
+            var dbAccessData = new CustomAccessValues
+            {
+                dbCustomAccessValues = new List<DBCustomAccessValues> { mockDbCustomAccessValue },
+                ENVT_NM_LIST = envt_nm_list_mock_data
+            };
+
+            return dbAccessData;
         }
     }
 }
