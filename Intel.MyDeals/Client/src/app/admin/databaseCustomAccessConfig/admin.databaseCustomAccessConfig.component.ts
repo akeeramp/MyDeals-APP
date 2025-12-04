@@ -322,7 +322,7 @@ export class databaseCustomAccessConfigComponent implements OnInit, OnDestroy {
     }
 
     async checkPageAccess() {
-        const response = await this.constantsService.getConstantsByName("SSIS_CNST_EMP_ID").toPromise().catch(error => {
+        const response = await this.constantsService.getConstantsByName("UI_ACCESS_MYDL_DB_CD_ACCESS_CONFIG").toPromise().catch(error => {
             this.loggerSvc.error("Unable to fetch Employee Id", error, error.statusText);
         });
 
