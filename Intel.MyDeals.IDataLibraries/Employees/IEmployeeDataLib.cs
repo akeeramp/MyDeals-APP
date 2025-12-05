@@ -8,5 +8,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<UsrProfileRole> GetUsrProfileRole();
 
         EmployeeUsrRolePermissionDetails GetUserRolePermissionsByFilter(UserRolePermissionFilter data);
+
+        List<EmpHistoryData> GetEmployeeHistory(int wwid);
     }
 }

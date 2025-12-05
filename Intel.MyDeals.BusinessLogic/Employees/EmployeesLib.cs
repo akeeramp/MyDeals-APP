@@ -4,12 +4,25 @@ using Intel.MyDeals.BusinessLogic.Employees;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.BusinessLogic
 {
     public class EmployeesLib : IEmployeesLib
     {
+        private readonly IEmployeeDataLib _employeeDataLib;
+
+        public EmployeesLib()
+        {
+            _employeeDataLib = new EmployeeDataLib();
+        }
+
+        public EmployeesLib(IEmployeeDataLib employeeDataLib)
+        {
+            _employeeDataLib = employeeDataLib;
+        }
+
         public UserSetting GetUserSettings(OpUserToken opUserToken)
         {
             return new EmployeeDataLib().GetUserSettings(opUserToken);
@@ -109,6 +122,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             new EmployeeDataLib().SetManageUserVerticalData(data);
             return new OpMsg("Verticals have been saved");
+        }
+
+        public List<EmpHistoryData> GetEmployeeHistory(int id)
+        {
+            return _employeeDataLib.GetEmployeeHistory(id).ToList();
         }
 
     }

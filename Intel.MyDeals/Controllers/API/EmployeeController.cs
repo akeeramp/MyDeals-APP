@@ -43,5 +43,15 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _employeeLib.GetUsrProfileRoleByRoleCode(lstRoles), "Unable to get User Profiles");
         }
 
+        [AntiForgeryValidate]
+        [Authorize]
+        [Route("GetEmployeeHistory/{wwid}")]
+        [HttpGet]
+        public List<EmpHistoryData> GetEmployeeHistory(int wwid)
+        {
+            return SafeExecutor(() => _employeeLib.GetEmployeeHistory(wwid)
+                , $"Unable to get EmployeeHistory");
+        }
+
     }
 }

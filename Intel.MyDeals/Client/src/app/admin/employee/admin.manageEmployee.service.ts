@@ -1,7 +1,7 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient, } from '@angular/common/http';
 import { Observable } from "rxjs";
-import { DynamicObj, EmployeeCustomers, ManageUsersInfo, Product } from "./admin.employee.model";
+import { DynamicObj, EmployeeCustomers, ManageUsersInfo, Product,EmpHistory } from "./admin.employee.model";
 import { Cust_Div_Map } from "../customer/admin.customer.model";
 
 @Injectable({
@@ -47,5 +47,10 @@ export class manageEmployeeService {
     public getProductCategoriesWithAll(): Observable<Product[]> {
         const apiUrl: string = "api/Products/" + 'GetProductCategoriesWithAll';
         return this.httpClient.get<Product[]>(apiUrl);
+    }
+
+    public getEmployeeHistory(empWwid: number): Observable<EmpHistory[]> {
+        const apiUrl = "api/Employees/" + 'GetEmployeeHistory/';
+        return this.httpClient.get<EmpHistory[]>(apiUrl + empWwid);
     }
 }

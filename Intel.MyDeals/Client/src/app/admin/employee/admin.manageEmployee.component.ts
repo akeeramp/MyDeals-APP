@@ -12,7 +12,7 @@ import { Observable } from "rxjs";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { DynamicObj, ManageUsersInfo, Product } from "./admin.employee.model";
+import { DynamicObj, EmpHistory, ManageUsersInfo, Product } from "./admin.employee.model";
 import { Cust_Div_Map } from "../customer/admin.customer.model";
 
 @Component({
@@ -36,6 +36,12 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
     private isLoading = true;
     public gridData: GridDataResult;
     private gridResult: Array<ManageUsersInfo>;
+    private gridHistResult: Array<EmpHistory>;
+    public gridHistData: GridDataResult;
+    private isEmpHistVisible = false;
+    private windowTop = 80; windowLeft = 250; windowWidth = 1300; windowHeight = 550; windowMinWidth = 200; windowMinHeight = 200;
+    private selectedEmpName;
+    private selectedEmpWwid;
     public state: State = {
         skip: 0,
         take: 25,
@@ -96,6 +102,10 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
 
     returnZero(): number {
         return 0
+    }
+
+    empHistWindowClose() {
+        this.isEmpHistVisible = false;
     }
 
     dataStateChange(state: DataStateChangeEvent): void {
@@ -318,6 +328,27 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
 
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
+    }
+
+    openEmployeeHistory(dataItem: any): void {
+        this.selectedEmpWwid = dataItem.EMP_WWID;
+        this.selectedEmpName = dataItem.FULL_NAME;
+        this.isEmpHistVisible = false;
+        this.isLoading = true;
+        const histState: State = {
+            skip: 0,
+            take: 25
+        };
+        this.manageEmployeeSvc.getEmployeeHistory(this.selectedEmpWwid).pipe(takeUntil(this.destroy$)).subscribe((result: Array<EmpHistory>) => {
+            this.gridHistResult = result;
+            this.gridHistData = process(this.gridHistResult, histState);
+            this.isEmpHistVisible = true;
+            this.isLoading = false;
+        },(err)=> {
+            this.loggerSvc.error("Unable to get Employee History", err, err.statusText);
+            this.isLoading = false;
+        });
+        
     }
 
     ngOnInit(): void { 

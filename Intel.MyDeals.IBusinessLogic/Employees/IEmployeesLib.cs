@@ -12,5 +12,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<ManageUsersInfo> GetManageUserData(int wwid);
         EmployeeUsrRolePermissionDetails GetUserRolePermissionsByFilter(UserRolePermissionFilter data);
+
+        List<EmpHistoryData> GetEmployeeHistory(int wwid);
     }
 }

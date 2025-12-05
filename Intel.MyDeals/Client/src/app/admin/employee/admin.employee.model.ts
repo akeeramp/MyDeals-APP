@@ -83,3 +83,11 @@ export interface EmployeeCustomers {
 export interface DynamicObj {
 	[key: string]: any
 }
+
+export interface EmpHistory {
+	ACTV_IND: boolean;
+	CHG_DTM: string;
+	CHG_CMNTS: string;
+	EFF_FR_DTM: string;
+	EFF_TO_DTM: string;
+}

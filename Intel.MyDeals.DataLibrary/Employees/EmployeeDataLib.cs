@@ -511,5 +511,47 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        public List<EmpHistoryData> GetEmployeeHistory(int wwid)
+        {
+            List<EmpHistoryData> rtn = new List<EmpHistoryData>();
+
+            var cmd = new Procs.dbo.PR_GET_EMP_HIST()
+            {
+                emp_wwid = wwid
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //TABLE 1
+                    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+                    int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+                    int IDX_CHG_CMNTS = DB.GetReaderOrdinal(rdr, "CHG_CMNTS");
+                    int IDX_EFF_FR_DTM = DB.GetReaderOrdinal(rdr, "EFF_FR_DTM");
+                    int IDX_EFF_TO_DTM = DB.GetReaderOrdinal(rdr, "EFF_TO_DTM");
+
+                    while (rdr.Read())
+                    {
+                        rtn.Add(new EmpHistoryData
+                        {
+                            ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+                            CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+                            CHG_CMNTS = (IDX_CHG_CMNTS < 0 || rdr.IsDBNull(IDX_CHG_CMNTS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHG_CMNTS),
+                            EFF_FR_DTM = (IDX_EFF_FR_DTM < 0 || rdr.IsDBNull(IDX_EFF_FR_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_EFF_FR_DTM),
+                            EFF_TO_DTM = (IDX_EFF_TO_DTM < 0 || rdr.IsDBNull(IDX_EFF_TO_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_EFF_TO_DTM)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return rtn;
+        }
+
     }
 }

@@ -10,6 +10,12 @@
     cursor: pointer
 }
 
+.emp-hist-clickable {
+    padding: 0 4px !important;
+    color: #0071C5 !important;
+    cursor: pointer !important;
+}
+
 .filter-col {
     font-size: 26px;
     color: #C4D600

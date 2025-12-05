@@ -44,6 +44,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<ITimelineDataLib, TimelineDataLib>();
             registerService.RegisterType<IMeetCompDataLib, MeetCompDataLib>();
             registerService.RegisterType<IUserPreferencesDataLib, UserPreferencesDataLib>();
+            registerService.RegisterType<IEmployeeDataLib, EmployeeDataLib>();
             registerService.RegisterType<IQuoteLetterDataLib, QuoteLetterDataLib>();
             registerService.RegisterType<IJmsDataLib, JmsDataLib>();
             registerService.RegisterType<INotificationsDataLib, NotificationsDataLib>();

@@ -28,6 +28,9 @@
                 </button>
             </ng-template>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="EMP_WWID" title="WWID" width="100px">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div (click)='openEmployeeHistory(dataItem)' class="emp-hist-clickable">{{dataItem.EMP_WWID}}</div>
+                </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="FULL_NAME" title="Name" width="100px">
             </kendo-grid-column>
@@ -127,3 +130,40 @@
         </div>
     </div>
 </div>
+
+<kendo-window *ngIf="isEmpHistVisible" title="Employee History" (close)="empHistWindowClose()" [height]="windowHeight"
+     [width]="windowWidth" [top]="windowTop" [left]="windowLeft">
+    <div class="row">
+        <div class="col-md-12 head-right-shift">
+            <h4 style=" padding-left: 15px;" class="bottom-s-remove">{{selectedEmpName}} | WWID: {{selectedEmpWwid}}</h4>
+        </div>
+    </div>
+    <div class="row" style="display: contents;">
+        <div class="col-md-12 kendo-grid-buttons admin-table-header bottom-s-remove"
+            style="padding-left: 15px !important; padding-right: 15px !important;">
+            <kendo-grid class="KendoCustomerMapping kAlignHeaders" [data]="gridHistData" [loading]="isHistLoading" style="height: 90% !important;" [resizable]="true">
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Is Active" width="100px"
+                               editor="boolean" filter="boolean" class="alignCenterManageEmployee" [editable]="false">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <i *ngIf="dataItem.ACTV_IND"
+                    class='intelicon-passed-completed-solid filter-col'></i>
+                    <i *ngIf="!dataItem.ACTV_IND"
+                    class='fa fa-times-circle red-cross-icon-usr-acnt-admin'></i>
+                </ng-template>
+            </kendo-grid-column>
+                <kendo-grid-column field="CHG_DTM" title="Change Date" width="200" [headerClass]="{'headerClass':true}"
+                    [editable]="false">
+                </kendo-grid-column>
+                <kendo-grid-column field="CHG_CMNTS" title="Change Comments" width="400" [headerClass]="{'headerClass':true}"
+                    [editable]="false">
+                </kendo-grid-column>
+                <kendo-grid-column field="EFF_FR_DTM" title="Effective From Date" width="200" [headerClass]="{'headerClass':true}"
+                    [editable]="false">
+                </kendo-grid-column>
+                <kendo-grid-column field="EFF_TO_DTM" title="Effective Till Date" width="200" [headerClass]="{'headerClass':true}"
+                    [editable]="false">
+                </kendo-grid-column> 
+            </kendo-grid>
+        </div>
+    </div>
+</kendo-window>

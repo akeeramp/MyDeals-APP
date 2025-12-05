@@ -21173,5 +21173,30 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
         }
 
+        ///<summary>
+		/// ID: 1947518367
+		/// Modified: 12/2/2025 9:26:21 PM
+		/// Parameters: 1
+		///</summary>
+		public partial class PR_GET_EMP_HIST : SP
+        {
+            public PR_GET_EMP_HIST()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_GET_EMP_HIST]";
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 emp_wwid
+            {
+                set { SetParmeter("emp_wwid", value); }
+                get { return (Int32)GetParameter("emp_wwid"); }
+            }
+        }
+
     }
 }
