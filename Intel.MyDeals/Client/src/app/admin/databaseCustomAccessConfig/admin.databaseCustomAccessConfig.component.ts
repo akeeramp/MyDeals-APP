@@ -200,6 +200,7 @@ export class databaseCustomAccessConfigComponent implements OnInit, OnDestroy {
         refreshData.push(rowData);
         this.DatabaseCustomAccessConfigSvc.dbCustomAccess(refreshData, 'REFRESH').pipe(takeUntil(this.destroy$))
             .subscribe(() => {
+                this.loadConfigs();
                 this.loggerSvc.success("Refresh completed");
             }, (error) => {
                 this.loggerSvc.error('Unable to refresh configs', error.statusText);
@@ -208,6 +209,7 @@ export class databaseCustomAccessConfigComponent implements OnInit, OnDestroy {
     updateAllAccess(rowData: any) {
         this.DatabaseCustomAccessConfigSvc.dbCustomAccess(rowData.data, 'REFRESHALL').pipe(takeUntil(this.destroy$))
             .subscribe(() => {
+                this.loadConfigs();
                 this.loggerSvc.success("Update all access completed");
             }, (error) => {
                 this.loggerSvc.error('Unable to update all access', error.statusText);

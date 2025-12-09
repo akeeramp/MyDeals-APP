@@ -7,7 +7,7 @@
 <div class="row" style="display: contents;">
     <div class="col-md-12 kendo-grid-buttons table-left-rightsizefix">
         <kendo-grid class="grid-heightsize customerVendorsTable kAlignHeaders" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                    [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+                    [sort]="state.sort" [filter]="state.filter" [sortable]="true" [resizable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                     filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
                     (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)"
@@ -59,7 +59,7 @@
                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-multiselect [formControl]="formGroup.get('ENVT')" [data]="envtNmList" [valuePrimitive]="true"></kendo-multiselect>
+                    <kendo-multiselect [formControl]="formGroup.get('ENVT')" [data]="envtNmList" [valuePrimitive]="true" [autoClose]="false"></kendo-multiselect>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="DATABASEUSERNAME" title="Database Username" width="180" [headerClass]="{'headerClass':true}" [editable]="isDbUsrNmEditable">
