@@ -64,8 +64,8 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IEnvironmentsDataLib, EnvironmentsDataLib>();
             registerService.RegisterType<IPctMctFailureDataLib, PctMctFailureDataLib>();
             registerService.RegisterType<IPricingTableExceptionDataLib, PricingTableExceptionDataLib>();
-
             registerService.RegisterType<ILogArchivalDataLib, LogArchivalDataLib>();
+            registerService.RegisterType<IDealExpireStatusDataLib, DealExpireStatusDataLib>();
         }
     }
 }

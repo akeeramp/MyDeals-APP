@@ -21198,5 +21198,30 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             }
         }
 
+
+        ///<summary>
+        /// ID: 1244895852
+        /// Modified: 11/24/2025 9:32:17 AM
+        /// Parameters: 1
+        ///</summary>
+        public partial class PR_MYDL_CHK_INACTV_DEALS : SP
+        {
+            public PR_MYDL_CHK_INACTV_DEALS()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_CHK_INACTV_DEALS]";
+            }
+
+            ///<summary>
+            /// DataType: Int32
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 in_obj_sids
+            {
+                set { SetParmeter("in_obj_sids", value); }
+                get { return (Int32)GetParameter("in_obj_sids"); }
+            }
+        }
     }
 }

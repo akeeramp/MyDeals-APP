@@ -577,8 +577,13 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
 
 	//Log Archival
-	var ds = dbobjects.ExecuteDataSet("dbo.PR_MANAGE_LOG_ARCHIVAL_ACTNS");
+	ds = dbobjects.ExecuteDataSet("dbo.PR_MANAGE_LOG_ARCHIVAL_ACTNS");
 	ds.Tables[0].TableName = "LogArchival";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
+
+	//get deal expire status
+	ds = dbobjects.ExecuteDataSet("DECLARE @ids type_int_list; INSERT INTO @ids VALUES (3508147); exec dbo.PR_MYDL_CHK_INACTV_DEALS @ids");
+	ds.Tables[0].TableName = "InActvDeals";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
 
 	PopIndent();

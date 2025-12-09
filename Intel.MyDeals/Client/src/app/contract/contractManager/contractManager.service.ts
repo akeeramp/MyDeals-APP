@@ -13,6 +13,7 @@ export class contractManagerservice {
     public apiBaseUrl = "/api/Dashboard/GetWipSummary/";
     public apiBaseCostTestUrl = "/api/CostTest/v1/";
     public apiBaseContractUrl = "/api/Contracts/v1/";
+    public apiBaseContractManagerUrl = "/api/ContractManager/";
     public apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
     public apiBasePricingTableUrl = "/api/PricingTables/v1/";
     private readonly API_URL_FILE_ATTACHMENTS = "/api/FileAttachments/";
@@ -74,5 +75,10 @@ export class contractManagerservice {
     updateSkipPCTMCTFailureFlag(inputData: DynamicObj[]): Observable<any> {
         const apiUrl: string = this.apiBasePricingStrategyUrl + 'UpdateSkipPCTMCTFailureFlag';
         return this.httpClient.post(apiUrl, inputData);
+    }
+
+    GetDealExpireStatus(ctrctId: number): Observable<any> {
+        const apiUrl: string = `${this.apiBaseContractManagerUrl}GetDealExpireStatus`;
+        return this.httpClient.post(apiUrl, { ContractID: ctrctId });
     }
 }

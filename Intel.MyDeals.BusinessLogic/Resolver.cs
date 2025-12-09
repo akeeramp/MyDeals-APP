@@ -74,6 +74,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<ILogArchivalLib, LogArchivalLib>();
             registerService.RegisterType<IPctMctFailureLib, PctMctFailureLib>();
             registerService.RegisterType<IPricingTableExceptionLib, PricingTableExceptionLib>();
+            registerService.RegisterType<IDealExpireStatusLib, DealExpireStatusLib>();
         }
     }
 }

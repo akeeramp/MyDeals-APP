@@ -693,7 +693,12 @@ export class contractManagerComponent implements OnInit, OnDestroy {
 
     actionTooltip(actn, tooltipMsgObj) {
         if (actn == 'Approve' && tooltipMsgObj.ComplexStacking) {
-            return tooltipMsgObj[actn] ? tooltipMsgObj[actn] + '\n' + tooltipMsgObj.ComplexStacking : tooltipMsgObj.ComplexStacking;
+            tooltipMsgObj[actn] = tooltipMsgObj[actn] ? tooltipMsgObj[actn] + '\n' + tooltipMsgObj.ComplexStacking : tooltipMsgObj.ComplexStacking;
+            delete tooltipMsgObj.ComplexStacking;
+        }
+        if (actn == 'Approve' && tooltipMsgObj.expireStatus) {
+            tooltipMsgObj[actn] = tooltipMsgObj[actn] ? tooltipMsgObj[actn] + '\n' + tooltipMsgObj.expireStatus : tooltipMsgObj.expireStatus;
+            delete tooltipMsgObj.expireStatus;
         }
         return tooltipMsgObj[actn];
     }
@@ -939,39 +944,52 @@ export class contractManagerComponent implements OnInit, OnDestroy {
         this.canActionIcon = true;
     }
     async loadContractDetails(){
-        this.contractData = {};        
-        let response: any = await this.contractManagerSvc.readContract(this.contractId).toPromise().catch((error) => {
-            this.loggerSvc.error('Get Upper Contract service', error);
-        });
-        if (response && response.length > 0) {
-            this.contractData = response[0];
-            this.calcNeedToRunStatus();
+        this.contractData = {};   
+        try {
+            const [ContractData, ExpireStatus]: any[] = await Promise.all([
+                this.contractManagerSvc.readContract(this.contractId).toPromise(),
+                this.contractManagerSvc.GetDealExpireStatus(this.contractId).toPromise() // For finding any expired requested or submitted deals are presnt in the Pricing stratergy
+            ]);
 
-            this.refreshedContractData.emit({ contractData: this.contractData });
-            this.refreshCheckBoxData();
-            this.contractId = this.contractData.DC_ID;
-            this.lastRun = this.contractData.LAST_COST_TEST_RUN;
-            this.contractData?.PRC_ST.map((x, i) => {
-                //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
-                this.isPSExpanded[i] = false;
-                if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
-            })
-            if (this.contractData.CUST_ACCPT === "Pending") {
-                this.isPending = true;
-                this.isToggle = true;
-            } else if (this.contractData.CUST_ACCPT === "Accepted") {
-                this.isPending = false;
-                this.isToggle = false;
+            if (ContractData?.length > 0 && ExpireStatus?.length > 0) {
+                this.contractData = ContractData[0];
+                this.calcNeedToRunStatus();
+
+                this.refreshedContractData.emit({ contractData: this.contractData });
+                this.refreshCheckBoxData();
+                this.contractId = this.contractData.DC_ID;
+                this.lastRun = this.contractData.LAST_COST_TEST_RUN;
+                this.contractData?.PRC_ST.map((x, i) => {
+                    //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
+                    this.isPSExpanded[i] = false;
+                    if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
+                    //identifying PS with expired deals which are not active and not in hold
+                    const foundObject = ExpireStatus.find(obj => obj.PS_OBJ_SID === x.DC_ID);
+                    if (foundObject) {
+                        x["expireStatus"] = foundObject.OVERALL_STATUS == "PASS" ? false : true;
+                        x._actionReasons["expireStatus"] = "Pricing Startergy Contains Draft(Requested/Submitted) Expired Deals.";
+                    }
+                })
+                if (this.contractData.CUST_ACCPT === "Pending") {
+                    this.isPending = true;
+                    this.isToggle = true;
+                } else if (this.contractData.CUST_ACCPT === "Accepted") {
+                    this.isPending = false;
+                    this.isToggle = false;
+                }
+                if (!this.csLoading) this.isLoading = false;
+                this.filteredData = this.contractData?.PRC_ST;
+                this.verifyCustAccptReadOnly();
+                this.getFailureAndIncompleteLabel();
+                if (!this.isRunning) this.showData = true;
+                this.checkpricegrpcode();
             }
-            if(!this.csLoading) this.isLoading = false;
-            this.filteredData = this.contractData?.PRC_ST;
-            this.verifyCustAccptReadOnly();
-            this.getFailureAndIncompleteLabel();
-            if (!this.isRunning) this.showData = true;
-            this.checkpricegrpcode();
-        }
-        else {
-            this.loggerSvc.error('No records found', 'Error');
+            else {
+                this.loggerSvc.error('No records found', 'Error');
+            }
+
+        } catch (error) {
+            this.loggerSvc.error("Get Upper Contract service.", error);
         }
     }
     openPTEeditor(value){

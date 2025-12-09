@@ -62,6 +62,7 @@
     <Compile Include="DataFix\IDataFixDataLib.cs" />
     <Compile Include="DataQuality\IDataQualityDataLib.cs" />
     <Compile Include="DbAuditTools\IDbAuditToolsDataLib.cs" />
+    <Compile Include="DealExpireStatus\IDealExpireStatusDataLib.cs" />
     <Compile Include="DealMassUpdate\IDealMassUpdateDataLib.cs" />
     <Compile Include="DealUnification\IDealUnificationDataLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerDataLib.cs" />

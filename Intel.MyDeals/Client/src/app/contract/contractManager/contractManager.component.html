@@ -263,7 +263,7 @@
                             </td>
                             <td style="width: 60px; text-align: center;" *ngIf="canEdit" class="approveChkBox">
                                 <div *ngIf="canAction('Approve', ps, true) && canActionIcon && hasVertical(ps) && !(ps._actions.Approve==true && ps.WF_STG_CD=='Approved')" [ngbTooltip]="actionTooltip('Approve', ps._actionReasons)" placement="right" [hidden]="!(ps.WF_STG_CD !=='Pending')">
-                                    <input type="checkbox" name="radGrp{{ps.DC_ID}}" [ngClass]="{'disabled': !canAction('Approve', ps, false)}" [(ngModel)]="apprvCheck[ps.DC_ID]" [disabled]="!canAction('Approve', ps, false)" class="with-font psCheck psCheck-Approve"
+                                    <input type="checkbox" name="radGrp{{ps.DC_ID}}" [ngClass]="{'disabled': !canAction('Approve', ps, false) || ps.expireStatus}" [(ngModel)]="apprvCheck[ps.DC_ID]" [disabled]="!canAction('Approve', ps, false) || ps.expireStatus" class="with-font psCheck psCheck-Approve"
                                            id="rad_approve_{{ps.DC_ID}}" kendoCheckBox (click)="onCheckboxChange('approveCheckBox',$event,ps)" /><label for="rad_approve_{{ps.DC_ID}}"></label>
                                 </div>
                             </td>

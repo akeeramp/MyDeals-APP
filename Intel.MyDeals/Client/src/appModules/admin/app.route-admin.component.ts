@@ -50,14 +50,11 @@ import { dbAuditToolsComponent } from "../../app/admin/dbAuditTools/admin.dbAudi
 import { QuoteLetterRegenerationComponent } from "../../app/admin/quoteLetter/admin.quoteLetterRegeneration.component";
 import { ExpireYcs2Component } from "../../app/admin/expireYcs2/admin.expireYcs2.component";
 import { DealUnificationReportComponent } from "../../app/admin/dealUnificationReport/dealUnificationReport.component";
-
 import { EnvironmentsComponent } from "../../app/admin/environmentDetails/admin.environments.component";
-
 import { userRolePermissionComponent } from "../../app/admin/userRolePermission/admin.userRolePermission.component";
 import { PctExceptionReportComponent } from "../../app/admin/pctExceptionReport/admin.pctExceptionReport.component";
 import { databaseCustomAccessConfigComponent } from "../../app/admin/databaseCustomAccessConfig/admin.databaseCustomAccessConfig.component";
 import { PctMctExceptionReportComponent } from "../../app/admin/pctMctExceptionReport/admin.pctMctExceptionReport.component";
-
 //added for security check
 import { SecurityResolver } from "../../app/shared/security.resolve";
 
@@ -114,7 +111,6 @@ export const routesAdmin: Routes = [
     { path: 'DealUnificationReport', component: DealUnificationReportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'environments', component: EnvironmentsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard], canDeactivate: [PendingChangesGuard] },
     { path: 'databaseCustomAccessConfig', component: databaseCustomAccessConfigComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
-
     { path: 'DealUnificationReport', component: DealUnificationReportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'userRolePermission', component: userRolePermissionComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'pctExceptionReport', component: PctExceptionReportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },

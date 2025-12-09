@@ -12173,4 +12173,46 @@ namespace Intel.MyDeals.Entities
 
     } // End of class PctException
 
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on SOC-PF44P4RN
+    /// by akannamb
+    /// at 11/24/2025 12:16:04 PM
+    ///</summary>
+
+    [DataContract]
+    public partial class InActvDeals
+    {
+
+        [DataMember]
+        public System.String OVERALL_STATUS { set; get; }
+
+
+        [DataMember]
+        public Nullable<System.Int32> PS_OBJ_SID { set; get; }
+
+
+        /*
+        private static List<InActvDeals> InActvDealsFromReader(SqlDataReader rdr){
+        // This helper method is template generated.
+        // Refer to that template for details to modify this code.
+
+        var ret = new List<InActvDeals>();
+        int IDX_OVERALL_STATUS = DB.GetReaderOrdinal(rdr, "OVERALL_STATUS");
+        int IDX_PS_OBJ_SID = DB.GetReaderOrdinal(rdr, "PS_OBJ_SID");
+
+        while (rdr.Read()){
+        ret.Add(new InActvDeals {
+        OVERALL_STATUS = (IDX_OVERALL_STATUS < 0 || rdr.IsDBNull(IDX_OVERALL_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVERALL_STATUS),
+        PS_OBJ_SID = (IDX_PS_OBJ_SID < 0 || rdr.IsDBNull(IDX_PS_OBJ_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_PS_OBJ_SID)
+        });
+        } // while
+        return ret;
+        }
+        */
+
+    } // End of class InActvDeals///<summary>
+    
+
 }

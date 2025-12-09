@@ -276,6 +276,7 @@
     <Compile Include="Controllers\API\AsyncProcTriggerController.cs" />
     <Compile Include="Controllers\API\BulkPriceUpdatesController.cs" />
     <Compile Include="Controllers\API\ConsumptionCountryController.cs" />
+    <Compile Include="Controllers\API\ContractManagerController.cs" />
     <Compile Include="Controllers\API\CustomerVendorsController.cs" />
     <Compile Include="Controllers\API\DataFixController.cs" />
     <Compile Include="Controllers\API\DbAuditToolsController.cs" />

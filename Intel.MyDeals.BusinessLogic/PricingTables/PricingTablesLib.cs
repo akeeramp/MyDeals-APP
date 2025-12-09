@@ -49,7 +49,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (OpDataElementType opDataElementType in myDealsData.Keys)
             {
-                if(opDataElementType == OpDataElementType.WIP_DEAL)
+                if (opDataElementType == OpDataElementType.WIP_DEAL)
                     data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedInActDictList(opDataElementType, ObjSetPivotMode.Nested, true);
             }
             if (customerVendorData != null && customerVendorData.Count > 0)

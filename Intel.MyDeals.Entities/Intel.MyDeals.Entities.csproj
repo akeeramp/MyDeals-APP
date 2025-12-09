@@ -81,6 +81,7 @@
     <Compile Include="AsyncProcTrigger.cs" />
     <Compile Include="AtrbSaveItem.cs" />
     <Compile Include="AttributeCollection.cs" />
+    <Compile Include="DealExpIn.cs" />
     <Compile Include="DropdownDetails.cs" />
     <Compile Include="DropdownFilters.cs" />
     <Compile Include="EmpHistoryData.cs" />
