@@ -47,6 +47,7 @@ export class RuleDetailsModalComponent {
     public dropdownresponses: any;
     public criteria: any;
     public submitRule: any;
+    public isDuplicatePopup: boolean = false;
 
     constructor(public dialogRef: MatDialogRef<RuleDetailsModalComponent>,
                 @Inject(MAT_DIALOG_DATA) public data, 
@@ -806,6 +807,14 @@ export class RuleDetailsModalComponent {
             }
         });
     }
+    onDialogClose() {
+        if (this.isDuplicatePopup) {
+            this.isAlertVal = false;
+            this.isDuplicatePopup = false;
+            return;
+        }
+        this.closeAlertVal('cancel');
+    }
 
     async closeAlertVal(str?) {
         this.isAlertVal = false;
@@ -886,7 +895,8 @@ export class RuleDetailsModalComponent {
                 this.isAlertText = strAlertMessage
 
             } else {
-                this.criteria = this.Rules.Criteria
+                //this.criteria = this.Rules.Criteria
+                this.criteria = JSON.parse(JSON.stringify(this.Rules.Criteria));
                 this.criteria.forEach((item) => {
                     delete item.dropDown;
                     delete item.opvalues;
@@ -930,7 +940,8 @@ export class RuleDetailsModalComponent {
                     this.setBusy('', '', '', false);
                     this.isAlertVal = true;
                     this.submitRule = false;
-                    this.isAlertText = "<b>Below" + (duplicateListXml.length == 1 ? "attribute" : "attributes") + " cannot be duplicate, This will be merged into single attribute. Would you like to continue?</br></br></b>" + duplicateListXml.join("</br>");
+                    this.isDuplicatePopup = true;
+                    this.isAlertText = "<b>Below" + (duplicateListXml.length == 1 ? " attribute" : " attributes") + " cannot be duplicate, This will be merged into single attribute. Would you like to continue?</br></br></b>" + duplicateListXml.join("</br>");
                 }
             }
         }
