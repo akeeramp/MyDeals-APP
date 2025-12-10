@@ -154,6 +154,7 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
         const excelState: State = {};
         Object.assign(excelState, this.state)
         excelState.take = this.gridResult.length;
+        excelState.skip = 0;
 
         const result: ExcelExportData = {
             data: process(this.gridResult, excelState).data,
