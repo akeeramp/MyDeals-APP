@@ -237,10 +237,11 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
                 this.errorMsg = "Please Select Valid Settlement Partner ID.";
                 retCond = true;
             }
-            if (indexOf(this.distinctCountry, model.CTRY_CD) == -1) {
-                this.errorMsg = "Please Select Valid Country Code";
-                retCond = true;
-            }
+            // Removing this validation - Settlement partner country code will be always valid
+            // if (indexOf(this.distinctCountry, model.CTRY_CD) == -1) {
+            //     this.errorMsg = "Please Select Valid Country Code";
+            //     retCond = true;
+            // }
             if (indexOf(this.distinctCust, model.CUST_NM) == -1) {
                 this.errorMsg = "Please Select Valid Customer Name";
                 retCond = true;
