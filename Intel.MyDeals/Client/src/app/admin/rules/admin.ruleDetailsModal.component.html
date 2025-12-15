@@ -242,7 +242,7 @@
                 </div>
             </div>
         </div>
-        <kendo-dialog *ngIf="isAlertVal" class="price-rule-popup" (close)="onDialogClose()" [closable]="true" title=" ">
+        <kendo-dialog *ngIf="isAlertVal" class="price-rule-popup" (close)="onDialogClose()" title=" ">
             <h2 *ngIf="submitRule">Saving confirmation</h2>
             <p class="text-price-style" [innerHtml]="isAlertText"></p>
             <kendo-dialog-actions *ngIf="isOk" (click)="closeAlertVal()" class="price-rule-dialog-sty">
