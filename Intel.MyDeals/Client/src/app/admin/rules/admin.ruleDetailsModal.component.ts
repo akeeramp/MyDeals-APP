@@ -224,7 +224,10 @@ export class RuleDetailsModalComponent {
                     row.values.forEach((item) => {
                         selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.value === item)[0])
                     })
-                } else if (selectedField.field == "PAYOUT_BASED_ON" || selectedField.field == "MRKT_SEG" || selectedField.field == "SERVER_DEAL_TYPE") {
+                } else if (selectedField.field == "PAYOUT_BASED_ON") {
+                    selectedValues = this.dropdownresponses[selectedField.field].filter(x => x.DROP_DOWN === row.value)[0]; //map the selectedDropdown object to selectedvalues
+                }
+                else if ( selectedField.field == "MRKT_SEG" || selectedField.field == "SERVER_DEAL_TYPE") {
                     row.values.forEach((item) => {
                         selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.DROP_DOWN === item)[0])
                     })
@@ -328,8 +331,12 @@ export class RuleDetailsModalComponent {
             this.Rules.Criteria[idx].value = dataItem.value
         } else if (selector == 'datePicker') {
             this.Rules.Criteria[idx].value = dataItem.value;
-        } else {
-            this.Rules.Criteria[idx].value = data
+        } else if (dataItem.type === 'singleselect_ext' && dataItem.dropDown) {
+            this.Rules.Criteria[idx].value = data.DROP_DOWN; //specific to payout_based_on rule
+            this.Rules.Criteria[idx].selectedValues = data; 
+        }
+        else {
+            this.Rules.Criteria[idx].value = data;
             this.Rules.Criteria[idx].selectedValues = data;
         }
     }
@@ -510,8 +517,7 @@ export class RuleDetailsModalComponent {
                 })
             }
         } else {
-            const dropdownValue = (dataItem.field == "PAYOUT_BASED_ON") ? (this.dropdownresponses[dataItem.field]).map(e => e.DROP_DOWN) : this.dropdownresponses[dataItem.field];
-
+            const dropdownValue =  this.dropdownresponses[dataItem.field]; //for PAYOUT_BASED_ON and other fields
             Object.assign(this.Rules.Criteria[index], {
                 dropDown: dropdownValue
             });

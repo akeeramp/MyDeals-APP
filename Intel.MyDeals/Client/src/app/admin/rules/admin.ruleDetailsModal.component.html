@@ -181,7 +181,7 @@
                                                    [(ngModel)]="dataItem.selectedValues"
                                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'value')"></kendo-multiselect>
                             </div>
-                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'PAYOUT_BASED_ON' || dataItem.field == 'MRKT_SEG' || dataItem.field == 'SERVER_DEAL_TYPE')">
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && ( dataItem.field == 'MRKT_SEG' || dataItem.field == 'SERVER_DEAL_TYPE')">
                                 <kendo-multiselect [disabled]="i==0"
                                                    class="multi_kendo_style"
                                                    [data]="dataItem.dropDown"
@@ -201,12 +201,20 @@
                                                    [(ngModel)]="dataItem.selectedValues"
                                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'custName')"></kendo-multiselect>
                             </div>
-                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'singleselect' || dataItem.type == 'singleselect_ext' || dataItem.type == 'singleselect_read_only'">
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'singleselect' || dataItem.type == 'singleselect_read_only'">
                                 <kendo-combobox [disabled]="i==0"
                                                 class="ecap-combo-style"
                                                 [data]="dataItem.dropDown"
                                                 [(ngModel)]="dataItem.selectedValues"
                                                 (valueChange)="dataChange(i, dataItem, 'combobox', $event)"></kendo-combobox>
+                            </div>
+                            <div class="divTableCell rows-list-style" *ngIf=" dataItem.type == 'singleselect_ext' && dataItem.field == 'PAYOUT_BASED_ON'">
+                                <kendo-combobox class="ecap-combo-style"
+                                                textField ="DROP_DOWN"
+                                                valueField ="DROP_DOWN"
+                                                [data]="dataItem.dropDown"
+                                                [(ngModel)]="dataItem.selectedValues"
+                                                (valueChange)="$event && dataChange(i, dataItem, 'combobox', $event)"></kendo-combobox> <!--Specific to payout_based_on rule-->
                             </div>
                         </div>
                     </div>
