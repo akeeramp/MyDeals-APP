@@ -184,7 +184,10 @@ export class adminlegalExceptionComponent implements PendingChangesGuard, OnDest
                 this.adminlegalExceptionSrv.createLegalException(returnVal).pipe(takeUntil(this.destroy$))
                     .subscribe((result: any) => {
                     this.isDirty=false; 
-                   this.changedateformat(result);
+                    this.changedateformat(result);
+                    if (result.DEALS_USED_IN_EXCPT == null) {
+                        result.DEALS_USED_IN_EXCPT = '';
+                     }
                     this.gridResult.push(result);
                     this.gridData = process(this.gridResult, this.state);
                     this.loggersvc.success('Legal Exception added.');
@@ -216,8 +219,11 @@ export class adminlegalExceptionComponent implements PendingChangesGuard, OnDest
 
 
                 if (returnVal != undefined && returnVal != "close") {
+                    this.savedateformate(returnVal);
                     this.adminlegalExceptionSrv.updateLegalException(returnVal).pipe(takeUntil(this.destroy$))
                         .subscribe((result: Array<any>) => {
+                          this.changedateformat(result);
+                          this.refreshGrid();
                         this.loggersvc.success("Legal Exception was successfully updated.");
                     }, (error) => {
                         this.loggersvc.error('Unable to update Legal exception.', error);
