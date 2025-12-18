@@ -469,7 +469,7 @@
                                                         <span *ngIf="dataItem.YCS2_PRC_IRBT !== undefined && dataItem.YCS2_PRC_IRBT['20___0'] !== undefined && dataItem.YCS2_PRC_IRBT['20___0'] !== 'No YCS2'; else elseBlock">{{dataItem.YCS2_PRC_IRBT['20___0'] | currency}}</span>
                                                         <ng-template #elseBlock>
                                                             <span>
-                                                                {{dataItem.YCS2_PRC_IRBT['20___0']}}
+                                                                {{dataItem?.YCS2_PRC_IRBT?.['20___0']}}
                                                             </span>
                                                         </ng-template>
                                                     </ng-template>
@@ -479,7 +479,7 @@
                                                         <span *ngIf="dataItem.YCS2_PRC_IRBT !== undefined && dataItem.YCS2_PRC_IRBT['20_____1'] !== undefined && dataItem.YCS2_PRC_IRBT['20_____1'] !== 'No YCS2'; else elseBlock">{{dataItem.YCS2_PRC_IRBT['20_____1'] | currency}}</span>
                                                         <ng-template #elseBlock>
                                                             <span>
-                                                                {{dataItem.YCS2_PRC_IRBT['20_____1']}}
+                                                                {{dataItem?.YCS2_PRC_IRBT?.['20_____1']}}
                                                             </span>
                                                         </ng-template>
                                                     </ng-template>
