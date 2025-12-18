@@ -36,7 +36,7 @@ export class dealToolsComponent implements OnDestroy {
     @Input() in_Is_Tender_Dashboard: boolean = false;//this will passed as true if its used in Tender Dashboard Screen
     @Input() gridResult: any = '';
     @Input() IsExpiredDealHighlighted: boolean = false;
-    @Input() NumberOfDaysToExpireDeal: number;
+    @Input() NumberOfDaysToExpireDeal: number = 90;
     @Output() iconSaveUpdate: EventEmitter<any> = new EventEmitter<any>();
     @Output() refreshContract: EventEmitter<any> = new EventEmitter<any>();
     @Output() reloadFn = new EventEmitter<any>();
