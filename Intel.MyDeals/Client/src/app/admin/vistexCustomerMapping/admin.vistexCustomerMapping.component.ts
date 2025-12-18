@@ -1,6 +1,7 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { vistexCustomerMappingService } from "./admin.vistexCustomerMapping.service";
 import { Component, ViewChild, OnDestroy } from "@angular/core";
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { Vistex_Cust_Map } from "./admin.vistexCustomerMapping.model";
 import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, GridComponent, CancelEvent, SaveEvent, EditEvent } from "@progress/kendo-angular-grid";
@@ -52,6 +53,10 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
     public SettlementPartnerData = [];
     public PeriodProfileData = [];
     public SelectedConsumptionReportedGeos = "";
+    @ViewChild('tooltipTrigger') tooltipTrigger: NgbTooltip;
+    selectedValue: any = null;
+    showValidationError: boolean = false;
+    validationMessage: string = '';
 
     public state: State = {
         skip: 0,
@@ -204,7 +209,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
             VISTEX_CUST_FLAG: new FormControl({ value: dataItem.VISTEX_CUST_FLAG, disabled: true }),
             DFLT_DOUBLE_CONSUMPTION: new FormControl(dataItem.DFLT_DOUBLE_CONSUMPTION, Validators.required),
             DFLT_ENFORCE_PAYABLE_QUANTITY: new FormControl(dataItem.DFLT_ENFORCE_PAYABLE_QUANTITY),
-            DFLT_PERD_PRFL: new FormControl(dataItem.DFLT_PERD_PRFL),
+            DFLT_PERD_PRFL: new FormControl(dataItem.DFLT_PERD_PRFL, Validators.required),
             DFLT_TNDR_AR_SETL_LVL: new FormControl(dataItem.DFLT_TNDR_AR_SETL_LVL),
             DFLT_AR_SETL_LVL: new FormControl(dataItem.DFLT_AR_SETL_LVL),
             DFLT_CUST_RPT_GEO: new FormControl(dataItem.DFLT_CUST_RPT_GEO),
@@ -219,6 +224,44 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
         this.editedRowIndex = rowIndex;
         sender.editRow(rowIndex, this.formGroup);
     }
+
+    onValueChange(value: any): void {
+        this.selectedValue = value;
+        this.validateCombobox()
+    }
+
+    validateCombobox(): void {
+        if (this.isValueEmpty(this.selectedValue)) {
+            this.showValidationError = true;
+            this.validationMessage = 'Period Profile cannot be empty.';
+            this.showTooltip();
+        } else {
+            this.hideValidationError();
+        }
+    }
+
+    private isValueEmpty(value: any): boolean {
+        return value === null || value === undefined || value === '';
+    }
+
+    private showTooltip(): void {
+        if (this.tooltipTrigger) {
+            this.tooltipTrigger.open();
+        }
+    }
+
+    private hideTooltip(): void {
+        if (this.tooltipTrigger) {
+            this.tooltipTrigger.close();
+        }
+    }
+
+    private hideValidationError(): void {
+        this.showValidationError = false;
+        this.validationMessage = '';
+        this.hideTooltip();
+    }
+
 
     cancelHandler({ sender, rowIndex }: CancelEvent): void {
         this.closeEditor(sender, rowIndex);

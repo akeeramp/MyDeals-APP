@@ -101,7 +101,11 @@
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-combobox #profileDropDown [data]="PeriodProfileData" [placeholder]="'Select default period profile..'"
-                                    [formControl]="formGroup.get('DFLT_PERD_PRFL')" [allowCustom]="allowCustom"></kendo-combobox>
+                                    [formControl]="formGroup.get('DFLT_PERD_PRFL')" [allowCustom]="allowCustom"
+                                    #tooltipTrigger="ngbTooltip" [ngClass]="{'is-invalid': showValidationError}"
+                                    (valueChange)="onValueChange($event)" (blur)="validateCombobox()"
+                                    [ngbTooltip]="validationMessage" [placement]="'top'"
+                                    [triggers]="'manual'" [container]="'body'" [autoClose]="false"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="DFLT_TNDR_AR_SETL_LVL" title="Tenders Settlement Level" width="230"

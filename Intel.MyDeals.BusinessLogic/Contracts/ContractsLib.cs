@@ -410,6 +410,8 @@ namespace Intel.MyDeals.BusinessLogic
                     ptr.SetDataElementsValue(AttributeCodes.SALESFORCE_ID, ""); // copied items can't be from IQR source
                     ptr.SetDataElementsValue(AttributeCodes.SYS_COMMENTS, ""); // Blank IQR comments
                 }
+                //copy tender folio - set default Period Profile value to "YEARLY"
+                ptr.SetDataElementsValue(AttributeCodes.PERIOD_PROFILE, "Yearly");
 
                 // Set important values within all DEs now
                 foreach (OpDataElement de in ptr.DataElements)

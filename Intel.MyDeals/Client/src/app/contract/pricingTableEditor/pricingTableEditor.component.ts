@@ -470,7 +470,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
     private isPRDPaste = false;
     isDirty = false;
     private readonly destroy$ = new Subject();
-    //private wipDealData :any;
+    private wipDealData :any;
     // To get the selected row and col for product selector
     private multiRowDelete: Array<any> = [];
     // Handsontable Variables basic hottable structure
@@ -770,15 +770,41 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             this.loggerService.error('Something went wrong.', 'error');
             console.error('PricingTableEditorComponent::readPricingTable::readTemplates:: service::', err);
         });
-        //if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
-        //    this.wipDealData = response.WIP_DEAL;
-        //}
+        if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
+           this.wipDealData = response.WIP_DEAL;
+        }
         if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
             // The thing about Tender contract, they can be created from a copy which will NOT create WIP deals and
             // Cleans out the PTR_SYS_PRD value forcing a product reconciliation because the customer might have changed.
             //  So... we need a check to see if the value on load is blank and if so... set the dirty flag
             this.dirtyItems = response.PRC_TBL_ROW.find(x => x.warningMessages.length > 0) ? true : false;
             Tender_Util.getTenderDetails(response.PRC_TBL_ROW, this.isTenderContract);
+            //copy contract - copy defalut period profile value in customer mapping
+            if (!this.isTenderContract) {
+                // Period Profile has different blanking rules
+                const excludedRebateTypes = ['MDF ACTIVITY', 'MDF ACCRUAL', 'NRE ACCRUAL', 'CO-MARKETING ACCRUAL', 'CO-ENGINEERING ACCRUAL', 'CO-SELLING ACCRUAL'];
+                //set default period profile value to PRC_TBL_ROW while copy contract
+                response.PRC_TBL_ROW.forEach((obj: any, index: number) => {
+                    if (obj['PERIOD_PROFILE'] == '' && response.PRC_TBL_ROW[index]['OBJ_SET_TYPE_CD'] !== 'LUMP_SUM' && response.PRC_TBL_ROW[index]['OBJ_SET_TYPE_CD'] !== 'REV_TIER' &&
+                        !excludedRebateTypes.includes(obj['REBATE_TYPE']) && response.PRC_TBL_ROW[index]['PROGRAM_PAYMENT'] != 'Backend') {
+                        //set cust mapping default period profile value to Pricing Table Row while copy contract
+                        response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] = this.contractData.Customer.DFLT_PERD_PRFL;
+                        delete obj._behaviors.isError.PERIOD_PROFILE
+                        if (this.contractData.PRC_ST) {
+                            this.contractData.PRC_ST.forEach((psObj: any, psIndex: number) => {
+                                //set default period profile value to Pricing Table while copy pricing stratergy
+                                if (psObj.PRC_TBL) {
+                                    psObj.PRC_TBL.forEach((ptObj: any, ptIndex: number) => {
+                                        if (ptObj.DC_ID == this.in_Pt_Id && this.contractData.PRC_ST[psIndex].PRC_TBL[ptIndex]['PERIOD_PROFILE'] == '') {
+                                            this.contractData.PRC_ST[psIndex].PRC_TBL[ptIndex]['PERIOD_PROFILE'] = this.contractData.Customer.DFLT_PERD_PRFL;
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            }
             this.pricingTableDet = response.PRC_TBL_ROW;
             if (response.PRC_TBL_ROW.length > 0 && response.WIP_DEAL.length == 0)
                 this.dirty = true;
@@ -857,7 +883,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                             return { 'readOnly': true };
                         }
                     }
-                    return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable, this.isTenderContract, this.curPricingStrategy.IS_HYBRID_PRC_STRAT);
+                    //send values to PTE_Load_Util file to disable period profile value post submit/redeal
+                    return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable, this.isTenderContract, this.curPricingStrategy.IS_HYBRID_PRC_STRAT,this.wipDealData);
                 },
                 cell: this.cellComments,
                 readOnlyCellClassName: 'readonly-cell',

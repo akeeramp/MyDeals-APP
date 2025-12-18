@@ -307,7 +307,7 @@ export class AutoFillComponent implements OnDestroy {
                     }
                     if (this.autofillData.DEFAULT.PERIOD_PROFILE.value !== "Yearly") {
                         this.autofillData.DEFAULT.PERIOD_PROFILE.value = "Yearly";
-                    }
+                    }                    
                 }
                 if (((this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value != null && this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value !== "") ||
                     (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value != null && this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value !== "")) &&
@@ -458,7 +458,7 @@ export class AutoFillComponent implements OnDestroy {
             this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value = "";
             this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value = "";
             return true;
-        }
+        }        
         else {
             return false;
         }

@@ -51,7 +51,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.FLEX_ROW_TYPE,
                                 AttributeCodes.RESET_VOLS_ON_PERIOD,
                                 AttributeCodes.CONSUMPTION_TYPE,
-                                AttributeCodes.CONTRACT_TYPE
+                                AttributeCodes.CONTRACT_TYPE,
+                                AttributeCodes.PERIOD_PROFILE
                             }
                         }
                     }
@@ -80,13 +81,13 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                // new MyOpRule
-                //{
-                //    Title="Readonly for Submitted Deals",
-                //    ActionRule = MyDcActions.ReadonlySubmittedFields,
-                //    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL,OpDataElementType.PRC_TBL_ROW },
-                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly }
-                //},
+                 new MyOpRule
+                {
+                    Title="Readonly for Submitted Deals",
+                    ActionRule = MyDcActions.ReadonlySubmittedFields,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL,OpDataElementType.PRC_TBL_ROW },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly }
+                },
 
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER and the value has been populated
                 {
@@ -681,7 +682,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.IS_RPL,
                                 AttributeCodes.PRIMED_CUST_ID,
                                 AttributeCodes.PRIMED_CUST_NM,
-                                AttributeCodes.FLEX_ROW_TYPE
+                                AttributeCodes.FLEX_ROW_TYPE                                
                             }
                         }
                     }
