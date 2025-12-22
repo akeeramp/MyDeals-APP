@@ -12,6 +12,7 @@ import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactiva
 import { Observable } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: 'constants',
@@ -19,7 +20,9 @@ import { takeUntil } from "rxjs/operators";
     styleUrls: ['Client/src/app/admin/constants/admin.constants.component.css']
 })
 export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
-    constructor(private constantsSvc: constantsService, private loggerSvc: logger) {
+    constructor(private constantsSvc: constantsService, private loggerSvc: logger,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
 
@@ -88,15 +91,7 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     clearFilter(): void {

@@ -10,6 +10,7 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: 'admin-data-fix',
@@ -18,7 +19,9 @@ import { takeUntil } from "rxjs/operators";
 })
 export class adminDataFixComponent implements PendingChangesGuard, OnDestroy {
     constructor(private dataFixSvc: dataFixService, 
-        private loggerSvc: logger) {
+        private loggerSvc: logger,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
@@ -79,15 +82,7 @@ export class adminDataFixComponent implements PendingChangesGuard, OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     loadDataFix() {

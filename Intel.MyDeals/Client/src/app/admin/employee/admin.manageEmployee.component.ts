@@ -14,6 +14,7 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { DynamicObj, EmpHistory, ManageUsersInfo, Product } from "./admin.employee.model";
 import { Cust_Div_Map } from "../customer/admin.customer.model";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: 'manage-employee',
@@ -24,7 +25,7 @@ import { Cust_Div_Map } from "../customer/admin.customer.model";
 
 export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
 
-    constructor(private manageEmployeeSvc: manageEmployeeService, private loggerSvc: logger, private sanitizer: DomSanitizer, protected dialog: MatDialog) {
+    constructor(private manageEmployeeSvc: manageEmployeeService, private loggerSvc: logger, private sanitizer: DomSanitizer, protected dialog: MatDialog, private excelExportService: ExcelExportService) {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
@@ -148,16 +149,7 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-        excelState.skip = 0;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     openEmployeeCustomers(dataItem: ManageUsersInfo): void {

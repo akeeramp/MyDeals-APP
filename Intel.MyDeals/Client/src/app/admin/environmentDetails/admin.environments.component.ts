@@ -12,6 +12,7 @@ import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactiva
 import { Observable } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: 'environments',
@@ -19,7 +20,9 @@ import { takeUntil } from "rxjs/operators";
     styleUrls: ['Client/src/app/admin/environmentDetails/admin.environments.component.css']
 })
 export class EnvironmentsComponent implements PendingChangesGuard, OnDestroy {
-    constructor(private environmentsSvc: AdminEnvironmentsService, private loggerSvc: logger) {
+    constructor(private environmentsSvc: AdminEnvironmentsService, private loggerSvc: logger,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
         this.svrallData = this.svrallData.bind(this);
     }
@@ -136,15 +139,7 @@ export class EnvironmentsComponent implements PendingChangesGuard, OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
 

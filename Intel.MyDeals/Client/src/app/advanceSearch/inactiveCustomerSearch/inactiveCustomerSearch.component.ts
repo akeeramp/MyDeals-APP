@@ -11,6 +11,7 @@ import { GridUtil } from '../../contract/grid.util';
 import { ExcelExportComponent } from '@progress/kendo-angular-excel-export';
 import { InActiveCustomerService } from "./inactiveCustomerSearch.service";
 import * as _ from 'underscore';
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: 'inactivecustomer-search-angular',
@@ -23,7 +24,8 @@ export class InActiveCustomerSearchComponent implements OnDestroy {
     constructor(protected globalSearchService: globalSearchResultsService,
         private loggerService: logger,
         private templatesSvc: TemplatesService,
-        private inactSvc: InActiveCustomerService
+        private inactSvc: InActiveCustomerService,
+        private excelExportService: ExcelExportService
     ) {
         this.allData = this.allData.bind(this);
         this.data$ = this.inactSvc.dataSubject
@@ -167,13 +169,7 @@ export class InActiveCustomerSearchComponent implements OnDestroy {
     }
     
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
     
     onOpTypeChange(opType: string) {

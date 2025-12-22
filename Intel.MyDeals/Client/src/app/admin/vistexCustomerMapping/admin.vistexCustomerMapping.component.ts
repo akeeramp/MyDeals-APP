@@ -14,6 +14,7 @@ import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { UiDropdownResponseItem } from "../dropdowns/admin.dropdowns.model";
 import { Cust_Map } from "../CustomerVendors/admin.customerVendors.model";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: 'admin-vistex-customer-mapping',
@@ -21,7 +22,9 @@ import { Cust_Map } from "../CustomerVendors/admin.customerVendors.model";
     styleUrls: ['Client/src/app/admin/vistexcustomermapping/admin.vistexCustomerMapping.component.css']
 })
 export class adminVistexCustomerMappingComponent implements PendingChangesGuard, OnDestroy {
-    constructor(private customerMapSvc: vistexCustomerMappingService, private loggerSvc: logger) {
+    constructor(private customerMapSvc: vistexCustomerMappingService, private loggerSvc: logger,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
     @ViewChild("profileDropDown") private profileDdl;
@@ -102,15 +105,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard,
     }
 
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        Object.assign(excelState, this.state);
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     clearFilter(): void {

@@ -8,7 +8,7 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: "admin-deal-types",
@@ -16,7 +16,7 @@ import { takeUntil } from "rxjs/operators";
     styleUrls: ['Client/src/app/admin/dealTypes/admin.dealTypes.component.css']
 })
 export class adminDealTypesComponent implements OnDestroy {
-    constructor(private dealTypesSvc: dealTypesService) {
+    constructor(private dealTypesSvc: dealTypesService, private excelExportService: ExcelExportService) {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
@@ -66,15 +66,7 @@ export class adminDealTypesComponent implements OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     clearFilter() {

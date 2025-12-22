@@ -19,6 +19,7 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Observable } from "rxjs";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: "rule-owner",
@@ -27,7 +28,9 @@ import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactiva
 })
 
 export class RuleOwnerComponent implements PendingChangesGuard {
-    constructor(private ruleOwnerSvc: ruleOwnerService, private loggerSvc: logger, private constantsSvc: constantsService) {
+    constructor(private ruleOwnerSvc: ruleOwnerService, private loggerSvc: logger, private constantsSvc: constantsService,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
 
@@ -92,15 +95,7 @@ export class RuleOwnerComponent implements PendingChangesGuard {
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     clearFilter() {

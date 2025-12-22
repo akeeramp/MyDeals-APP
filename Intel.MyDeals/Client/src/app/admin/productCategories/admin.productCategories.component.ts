@@ -19,6 +19,7 @@ import { ExcelColumnsConfig } from "../ExcelColumnsconfig.util";
 import { GridUtil } from "../../contract/grid.util";
 import { filter } from "@progress/kendo-angular-editor/util";
 import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: 'admin-product-categories',
@@ -26,7 +27,9 @@ import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
     styleUrls: ['Client/src/app/admin/productCategories/admin.productCategories.component.css']
 })
 export class adminProductCategoriesComponent implements PendingChangesGuard, OnDestroy {
-    constructor(private productCategorySvc: productCategoryService, public datepipe: DatePipe, private loggerSvc: logger) {
+    constructor(private productCategorySvc: productCategoryService, public datepipe: DatePipe, private loggerSvc: logger,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
     private readonly destroy$ = new Subject<void>();
@@ -95,21 +98,7 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
     }
 
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        let newstate = {
-            take: 25,
-            skip: 0,
-            sort: this.state.sort,
-            group: this.state.group
-        }
-        Object.assign(excelState, newstate)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
     clearFilter() {
         this.state.skip = 0;

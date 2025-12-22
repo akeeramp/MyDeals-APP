@@ -9,6 +9,7 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { MomentService } from "../../../shared/moment/moment.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { ExcelExportService } from "../../../shared/services/excelExport.service";
 
 @Component({
     selector: "deal-timeline-modal",
@@ -21,7 +22,9 @@ export class dealTimelineComponent implements OnDestroy {
                 private loggerSvc: logger,
                 public dialogRef: MatDialogRef<dealTimelineComponent>,
                 @Inject(MAT_DIALOG_DATA) public data,
-                private momentService: MomentService) {
+                private momentService: MomentService,
+                private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
     private dcId = this.data.item.objSid;
@@ -88,13 +91,7 @@ export class dealTimelineComponent implements OnDestroy {
         e.workbook.sheets[0].title = "Deal " + this.data.dataItem.DC_ID + " Timeline Export.xlsx";
     }
     public allData(): ExcelExportData {
-        const excelState: any = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
     isExpandable() {
         if (this.isExpand) {

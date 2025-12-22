@@ -7,6 +7,7 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: 'admin-dataquality',
@@ -14,7 +15,9 @@ import { takeUntil } from "rxjs/operators";
     styleUrls: ['Client/src/app/admin/dataQuality/admin.dataQuality.component.css']
 })
 export class admindataQualityComponent implements OnDestroy {
-    constructor(private dataQualitySvc: dataQualityService, private loggerSvc: logger) {
+    constructor(private dataQualitySvc: dataQualityService, private loggerSvc: logger,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
@@ -58,15 +61,7 @@ export class admindataQualityComponent implements OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     loadDataQualityUseCases() {

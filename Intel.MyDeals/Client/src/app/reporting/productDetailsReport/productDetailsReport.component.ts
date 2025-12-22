@@ -21,6 +21,7 @@ import { ProductDetailsReportService } from './productDetailsReport.service';
 import { GridUtil } from '../../contract/grid.util';
 import { Router } from '@angular/router';
 import { constantsService } from '../../admin/constants/admin.constants.service';
+import { ExcelExportService } from '../../shared/services/excelExport.service';
 
 @Component({
     selector: 'product-details-report',
@@ -34,7 +35,9 @@ export class ProductDetailsReportComponent implements OnDestroy {
         private loggerService: logger,
         popoverConfig: NgbPopoverConfig,
         private momentService: MomentService,
-        private constantsSvc: constantsService, private router: Router) {
+        private constantsSvc: constantsService, private router: Router,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
 
     }
@@ -348,21 +351,7 @@ export class ProductDetailsReportComponent implements OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        let newstate = {
-            take: 25,
-            skip: 0,
-            sort: this.state.sort,
-            group: this.state.group
-        }
-        Object.assign(excelState, newstate)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     exportToExcel() {

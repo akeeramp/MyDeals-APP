@@ -30,10 +30,10 @@ import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { UnPrimeAtrbs, UnPrimeDeals } from "../PrimeCustomers/admin.primeCustomers.model";
 import { reprocessUCDModalComponent } from "./admin.UCDReprocessModal.component";
-
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { GridUtil } from "../../contract/grid.util";
 import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: "admin-unified-dealrecon",
@@ -42,7 +42,9 @@ import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
 })
 export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDestroy {
 
-    constructor(private unifiedDealReconSvc: unifiedDealReconService, private loggerSvc: logger, protected dialog: MatDialog) {
+    constructor(private unifiedDealReconSvc: unifiedDealReconService, private loggerSvc: logger, protected dialog: MatDialog,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
@@ -165,15 +167,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDe
     }
 
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     loadDealReconciliation(): void {

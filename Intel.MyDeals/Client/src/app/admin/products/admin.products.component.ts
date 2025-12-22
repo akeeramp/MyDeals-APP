@@ -12,6 +12,7 @@ import { Products } from "./admin.products.model";
 import { GridUtil } from "../../contract/grid.util";
 import { ExcelColumnsConfig } from "../ExcelColumnsconfig.util";
 import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: 'admin-products',
@@ -19,7 +20,9 @@ import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
     styleUrls: ['Client/src/app/admin/products/admin.products.component.css']
 })
 export class adminProductsComponent implements OnDestroy {
-    constructor(private productsSvc: productsService, private loggerSvc: logger) {
+    constructor(private productsSvc: productsService, private loggerSvc: logger,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
@@ -58,15 +61,7 @@ export class adminProductsComponent implements OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: any = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     loadProducts() {

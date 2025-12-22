@@ -16,6 +16,7 @@ import { DynamicObj } from "../employee/admin.employee.model";
 import { FilterExpressBuilder } from "../../shared/util/filterExpressBuilder";
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { GridUtil } from "../../contract/grid.util";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: 'admin-prime-customers',
@@ -24,7 +25,9 @@ import { GridUtil } from "../../contract/grid.util";
 })
 export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDestroy {
 
-    constructor(private primeCustSvc: primeCustomerService, private loggerSvc: logger) {
+    constructor(private primeCustSvc: primeCustomerService, private loggerSvc: logger,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
@@ -100,15 +103,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
         e.workbook.sheets[0].title = "Users Export";
     }
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     loadPrimeCustomer(): void {

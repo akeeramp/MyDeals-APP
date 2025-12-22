@@ -14,6 +14,7 @@ import { Observable } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { DynamicObj } from "../employee/admin.employee.model";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: 'admin-fun-fact',
@@ -21,7 +22,9 @@ import { DynamicObj } from "../employee/admin.employee.model";
     styleUrls: ['Client/src/app/admin/funFact/admin.funFact.component.css']
 })
 export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
-    constructor(private funFactSvc: funFactService, private loggerSvc: logger) {
+    constructor(private funFactSvc: funFactService, private loggerSvc: logger,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
@@ -95,15 +98,7 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     insertUpdateOperation(rowIndex: number, isNew: boolean, fun_facts: Funfact_Map): void {

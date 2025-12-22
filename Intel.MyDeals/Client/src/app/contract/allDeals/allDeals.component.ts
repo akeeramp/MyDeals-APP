@@ -16,6 +16,7 @@ import { PTE_Common_Util } from "../PTEUtils/PTE_Common_util";
 import { MomentService } from "../../shared/moment/moment.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: "all-deals",
@@ -29,7 +30,9 @@ export class allDealsComponent implements OnDestroy {
                 private loggerSvc: logger,
                 private lnavSvc: lnavService,
                 protected dialog: MatDialog,
-                private momentService: MomentService) {
+                private momentService: MomentService,
+                private excelExportService: ExcelExportService
+            ) {
         this.allData = this.allData.bind(this);
     }
     @Input() contractData: any;
@@ -293,14 +296,9 @@ export class allDealsComponent implements OnDestroy {
         e.workbook.sheets[0].title = "Sheet 1";
     }
     public allData(): ExcelExportData {
-        const excelState: any = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
+
     distinctPrimitive(fieldName: string) {
         return distinct(this.gridResult, fieldName).map(item => {
             if (fieldName == 'WF_STG_CD') {

@@ -7,6 +7,7 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: "missing-cap",
@@ -15,7 +16,9 @@ import { takeUntil } from "rxjs/operators";
 })
 
 export class missingCAPComponent implements OnDestroy{
-    constructor(private missingCapSvc: missingCAPService, private loggerSvc: logger) {
+    constructor(private missingCapSvc: missingCAPService, private loggerSvc: logger,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
     @Input() contractData: any;
@@ -116,14 +119,9 @@ export class missingCAPComponent implements OnDestroy{
         e.workbook.sheets[0].title = "Sheet 1";
     }
     public allData(): ExcelExportData {
-        const excelState: any = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
+
     distinctPrimitive(fieldName: string) {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }

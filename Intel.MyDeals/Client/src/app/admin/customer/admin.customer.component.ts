@@ -9,6 +9,7 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { Cust_Div_Map } from "./admin.customer.model";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: "admin-customer",
@@ -17,7 +18,9 @@ import { Cust_Div_Map } from "./admin.customer.model";
 })
 
 export class adminCustomerComponent implements OnDestroy {
-    constructor(private customerSvc: customerService, private loggerSvc: logger) {
+    constructor(private customerSvc: customerService, private loggerSvc: logger,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
@@ -65,16 +68,8 @@ export class adminCustomerComponent implements OnDestroy {
         e.workbook.sheets[0].title = "Users Export";
     }
 
-    public allData(): ExcelExportData {
-        const excelState: State = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+    public allData(): ExcelExportData {   
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     loadCustomer(): void {

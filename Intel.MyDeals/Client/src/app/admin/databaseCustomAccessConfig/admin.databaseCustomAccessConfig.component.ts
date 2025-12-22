@@ -13,6 +13,7 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { logger } from "../../shared/logger/logger";
 import { DatePipe } from "@angular/common";
+import { ExcelExportService } from "../../shared/services/excelExport.service";
 
 @Component({
     selector: 'databaseCustomAccessConfig',
@@ -25,7 +26,9 @@ export class databaseCustomAccessConfigComponent implements OnInit, OnDestroy {
         private DatabaseCustomAccessConfigSvc: DatabaseCustomAccessConfigService,
         public datepipe: DatePipe,
         private constantsService: constantsService,
-        private loggerSvc: logger) {
+        private loggerSvc: logger,
+        private excelExportService: ExcelExportService
+    ) {
         this.allData = this.allData.bind(this);
     }
     //RXJS subject for takeuntil
@@ -88,15 +91,7 @@ export class databaseCustomAccessConfigComponent implements OnInit, OnDestroy {
         e.workbook.sheets[0].title = "Users Export";
     }
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        Object.assign(excelState, this.state)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     clearFilter(): void {

@@ -19,6 +19,7 @@ import { ExcelExportData } from '@progress/kendo-angular-excel-export';
 import { ExcelColumnsConfig } from '../../admin/ExcelColumnsconfig.util';
 import { GridUtil } from '../grid.util';
 import { Button } from '@progress/kendo-angular-buttons';
+import { ExcelExportService } from '../../shared/services/excelExport.service';
 
 @Component({
     selector: 'product-details-report',
@@ -31,9 +32,9 @@ export class ProductDetailsReportComponent implements OnDestroy {
     constructor(private prodSelService: ProductDetailsReportService,
         private loggerService: logger,
         popoverConfig: NgbPopoverConfig,
-        private momentService: MomentService) {
+        private momentService: MomentService,
+        private excelExportService: ExcelExportService) {
         this.allData = this.allData.bind(this);
-
     }
 
     private custDataReport: any;
@@ -313,21 +314,7 @@ export class ProductDetailsReportComponent implements OnDestroy {
     }
 
     public allData(): ExcelExportData {
-        const excelState: State = {};
-        let newstate = {
-            take: 25,
-            skip: 0,
-            sort: this.state.sort,
-            group: this.state.group
-        }
-        Object.assign(excelState, newstate)
-        excelState.take = this.gridResult.length;
-
-        const result: ExcelExportData = {
-            data: process(this.gridResult, excelState).data,
-        };
-
-        return result;
+        return this.excelExportService.allData(this.state, this.gridResult);
     }
 
     exportToExcel() {
