@@ -29,10 +29,7 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
     }
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject<void>();
-    isDirty = false;
-    private Roles: Array<string> = ["CBA", "DA", "Finance", "FSE", "GA", "Legal", "RA", "SA", "MyDeals SA", "Net ASP SA", "Rebate Forecast SA", "WRAP SA"];
-    private Geos: Array<string> = ["APAC", "ASMO", "EMEA", "IJKK", "PRC", "Worldwide"];
-
+    isDirty = false;    
     private isLoading = true;
     public gridData: GridDataResult;
     private gridResult: Array<ManageUsersInfo>;
