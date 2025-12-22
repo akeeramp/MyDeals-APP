@@ -1,0 +1,23 @@
+name: Verify Test Case Attachment
+on:
+  pull_request:
+    branches: [development, RC_*]
+jobs:
+  verify_TestCase_Attachment:
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui')
+    runs-on: [self-hosted, mydeals-prd-automation]
+    steps:
+      - name: Checkout Directory
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify TestCase Attachment
+        shell: pwsh
+        run: |
+          $Branch = "${{ github.head_ref }}"
+          Write-Host "Branch: $Branch"
+          $commitMessage = git log "origin/$Branch" -1 --pretty=format:"%s"
+          Write-Host "Commit Message:'$commitMessage'"
+          $twcid = [regex]::Match($commitMessage, "TWC\d+-\d+").Value
+          Write-Host "Story ID:'$twcid'"
+          ./scripts/verify_testCase_attachment.ps1 -TWCID $twcid
