@@ -33,8 +33,8 @@
                 </ng-template>
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <kendo-grid-numeric-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [format]="'########'" [extra]="false">
-                    </kendo-grid-numeric-filter-menu>
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                    </kendo-grid-string-filter-menu>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="FULL_NAME" title="Name" width="100px">
