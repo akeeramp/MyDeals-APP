@@ -20,6 +20,12 @@ on:
         options:
           - 'yes'
           - 'no'
+      Current_Release_Tag:
+        description: 'Current Release version in Jira'
+        required: true
+      Update_Release_Tag:
+        description: 'Release version to be Updated'
+        required: true
 env:
   NUGET_PATH: C:\NuGet\nuget.exe
   MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe
@@ -152,7 +158,47 @@ jobs:
        - name:  Deploy Client App 
          run: |
            C:\Abhilash\deploy_env.ps1 'DeployENV' '${{ vars.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
-  
+
+  Triggering-JiraTagUpdate:    
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes' && github.event.inputs.ENV == 'DR')
+    runs-on: [self-hosted, mydeals-runner01]
+    needs: Deploy_Latest
+    continue-on-error: true
+    steps:
+      - name: Trigger JIRA Update Release Tag Solution
+        shell: pwsh
+        run: |
+          $repositoryOwner = "intel-innersource" # owner of the target repository
+          $repositoryName = "applications.web.mydeals.release-checklist" # name of the target repository
+          $workflowFileName = "updateJiraTag.yml" # name of the workflow file
+          $accessToken = "${{ secrets.CICD_ACCESSTOKEN }}" # Use the secret from GitHub Actions
+
+          # Define the API endpoint
+          $apiUrl = "https://api.github.com/repos/$repositoryOwner/$repositoryName/actions/workflows/$workflowFileName/dispatches"
+
+          # Define the payload
+          $payload = @{
+              ref = "master" # Branch to run the workflow on
+              inputs = @{
+                "Current_Release_Tag" = "${{ github.event.inputs.Current_Release_Tag }}"
+                "Update_Release_Tag" = "${{ github.event.inputs.Update_Release_Tag }}"
+                "JiraAction" = "Update"
+              }
+          } | ConvertTo-Json -Depth 2
+
+          # Create the headers
+          $headers = @{
+              "Authorization" = "Bearer $accessToken"
+              "Accept" = "application/vnd.github+json"
+              "Content-Type" = "application/json"
+          }
+
+          # Send the request
+          $response = Invoke-RestMethod -Uri $apiUrl -Method Post -Headers $headers -Body $payload
+
+          # Output the response (for debugging purposes)
+          $response
+
   RunSquawker-Regular:
     name: Run Squawker 
     runs-on: ["innersource.prod.amr.dind"]
