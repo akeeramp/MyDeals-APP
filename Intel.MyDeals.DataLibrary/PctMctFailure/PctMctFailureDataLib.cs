@@ -11,20 +11,21 @@ namespace Intel.MyDeals.DataLibrary.PctMctFailure
 {
     public class PctMctFailureDataLib : IPctMctFailureDataLib
     {
-        public List<PctMctFailureException> GetFailedPctMctResults(int startYearQuarter, int endYearQuarter)
+        public List<PctMctFailureException> GetFailedPctMctResults(int startYearQuarter, int endYearQuarter, bool includeCurrentResult)
         {
             var ret = new List<PctMctFailureException>();
             var cmd = new Procs.dbo.PR_MYDL_RPT_PCT_MCT_EXCEPTIONS
             {
                 in_start_yrqtr = startYearQuarter,
-                in_end_yrqtr = endYearQuarter
+                in_end_yrqtr = endYearQuarter,
+                current_rslt = includeCurrentResult ? 1 : 0
             };
 
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
-                    int IDX_Avrrage_Net_Price = DB.GetReaderOrdinal(rdr, "Avrrage Net Price");
+                    int IDX_Average_Net_Price = DB.GetReaderOrdinal(rdr, "Average Net Price");
                     int IDX_CAP = DB.GetReaderOrdinal(rdr, "CAP");
                     int IDX_Ceiling_Volume = DB.GetReaderOrdinal(rdr, "Ceiling Volume");
                     int IDX_Contract_ID = DB.GetReaderOrdinal(rdr, "Contract ID");
@@ -62,12 +63,21 @@ namespace Intel.MyDeals.DataLibrary.PctMctFailure
                     int IDX_PCT_MCT_Skip = DB.GetReaderOrdinal(rdr, "pct_mct_skp");
                     int IDX_PCT_MCT_Skip_Date = DB.GetReaderOrdinal(rdr, "skp_date");
                     int IDX_PCT_MCT_Skip_User = DB.GetReaderOrdinal(rdr, "skp_by_user");
+                    int IDX_Current_Product_Cost = DB.GetReaderOrdinal(rdr, "Current Product Cost");
+                    int IDX_Current_CAP = DB.GetReaderOrdinal(rdr, "Current CAP");
+                    int IDX_Current_YCS2 = DB.GetReaderOrdinal(rdr, "Current YCS2");
+                    int IDX_Current_MAX_RPU = DB.GetReaderOrdinal(rdr, "Current MAX_RPU");
+                    int IDX_Current_Lowest_Net_Price = DB.GetReaderOrdinal(rdr, "Current Lowest Net Price");
+                    int IDX_Current_Price_Cost_Test_Result = DB.GetReaderOrdinal(rdr, "Current Price Cost Test Result");
+                    int IDX_Current_Average_Net_Price = DB.GetReaderOrdinal(rdr, "Current Average Net Price");
+                    int IDX_Current_Meet_Comp_Test_Result = DB.GetReaderOrdinal(rdr, "Current Meet Comp Test Result");
+
 
                     while (rdr.Read())
                     {
                         ret.Add(new PctMctFailureException
                         {
-                            Avrrage_Net_Price = (IDX_Avrrage_Net_Price < 0 || rdr.IsDBNull(IDX_Avrrage_Net_Price)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_Avrrage_Net_Price),
+                            Average_Net_Price = (IDX_Average_Net_Price < 0 || rdr.IsDBNull(IDX_Average_Net_Price)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_Average_Net_Price),
                             CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_CAP),
                             Ceiling_Volume = (IDX_Ceiling_Volume < 0 || rdr.IsDBNull(IDX_Ceiling_Volume)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Ceiling_Volume),
                             Contract_ID = (IDX_Contract_ID < 0 || rdr.IsDBNull(IDX_Contract_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Contract_ID),
@@ -104,7 +114,15 @@ namespace Intel.MyDeals.DataLibrary.PctMctFailure
                             YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_YCS2),
                             PCT_MCT_Skip = (IDX_PCT_MCT_Skip < 0 || rdr.IsDBNull(IDX_PCT_MCT_Skip)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCT_MCT_Skip),
                             PCT_MCT_Skip_Date = (IDX_PCT_MCT_Skip_Date < 0 || rdr.IsDBNull(IDX_PCT_MCT_Skip_Date)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCT_MCT_Skip_Date),
-                            PCT_MCT_Skip_User = (IDX_PCT_MCT_Skip_User < 0 || rdr.IsDBNull(IDX_PCT_MCT_Skip_User)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCT_MCT_Skip_User)
+                            PCT_MCT_Skip_User = (IDX_PCT_MCT_Skip_User < 0 || rdr.IsDBNull(IDX_PCT_MCT_Skip_User)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCT_MCT_Skip_User),
+                            Current_Product_Cost = (IDX_Current_Product_Cost < 0 || rdr.IsDBNull(IDX_Current_Product_Cost)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_Current_Product_Cost),
+                            Current_CAP = (IDX_Current_CAP < 0 || rdr.IsDBNull(IDX_Current_CAP)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_Current_CAP),
+                            Current_YCS2 = (IDX_Current_YCS2 < 0 || rdr.IsDBNull(IDX_Current_YCS2)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_Current_YCS2),
+                            Current_MAX_RPU = (IDX_Current_MAX_RPU < 0 || rdr.IsDBNull(IDX_Current_MAX_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_Current_MAX_RPU),
+                            Current_Lowest_Net_Price = (IDX_Current_Lowest_Net_Price < 0 || rdr.IsDBNull(IDX_Current_Lowest_Net_Price)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_Current_Lowest_Net_Price),
+                            Current_Price_Cost_Test_Result = (IDX_Current_Price_Cost_Test_Result < 0 || rdr.IsDBNull(IDX_Current_Price_Cost_Test_Result)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Current_Price_Cost_Test_Result),
+                            Current_Average_Net_Price = (IDX_Current_Average_Net_Price < 0 || rdr.IsDBNull(IDX_Current_Average_Net_Price)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_Current_Average_Net_Price),
+                            Current_Meet_Comp_Test_Result = (IDX_Current_Meet_Comp_Test_Result < 0 || rdr.IsDBNull(IDX_Current_Meet_Comp_Test_Result)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Current_Meet_Comp_Test_Result)
                         });
                     }
                 }

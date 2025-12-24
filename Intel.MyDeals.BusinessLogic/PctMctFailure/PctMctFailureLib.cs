@@ -14,9 +14,9 @@ namespace Intel.MyDeals.BusinessLogic.PctMctFailure
             _pctMctFailureDataLib = pctMctFailureDataLib;
         }
 
-        public List<PctMctFailureException> GetFailedPctMctResults(int startYearQuarter, int endYearQuarter)
+        public List<PctMctFailureException> GetFailedPctMctResults(int startYearQuarter, int endYearQuarter, bool includeCurrentResult)
         {
-            return _pctMctFailureDataLib.GetFailedPctMctResults(startYearQuarter, endYearQuarter);
+            return _pctMctFailureDataLib.GetFailedPctMctResults(startYearQuarter, endYearQuarter, includeCurrentResult);
         }
     }
 }

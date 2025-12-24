@@ -5,6 +5,7 @@ import { utils, writeFileXLSX, WritingOptions } from "xlsx";
 
 import { logger } from "../../shared/logger/logger";
 import { PctMctExceptionReportService } from "./admin.pctMctExceptionReport.service";
+import { constantsService } from "../constants/admin.constants.service";
 import { MomentService } from "../../shared/moment/moment.service";
 import { PctMctFailureException } from "./pctMctFailureException.model";
 
@@ -23,6 +24,7 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
     private currentReportResults: Array<PctMctFailureException> = undefined;
 
     constructor(private pctMctExceptionReportService: PctMctExceptionReportService,
+                private constantsService: constantsService,
                 private loggerService: logger,
                 private momentService: MomentService,
                 private changeDetectorRef: ChangeDetectorRef) { }
@@ -33,6 +35,10 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
     private startQuarterValue = 1;
     private endYearValue = this.CUR_YEAR;
     private endQuarterValue = 1;
+    private includeCurrentResult = false;
+    private hasAccess = false;
+    private validWWID: string;
+    private executePCTMCT = false;
     private calculatedQuarters: string = '';
     private isYearQuarterSelectionInvalid = false;
 
@@ -61,14 +67,38 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
             if (this.endQuarterValue < this.startQuarterValue) {
                 this.calculatedQuarters = 'The END quarter cannot be before the START quarter';
                 this.isYearQuarterSelectionInvalid = true;
+            } else if (this.endQuarterValue != this.startQuarterValue && this.includeCurrentResult) {
+                this.calculatedQuarters = 'To get current PCT/MCT result select only one quarter';
+                this.isYearQuarterSelectionInvalid = true;
             } else {
                 this.calculatedQuarters = this.calculateQuarters(this.startYearValue, this.startQuarterValue, this.endYearValue, this.endQuarterValue);
                 this.isYearQuarterSelectionInvalid = false;
             }
+        } else if (this.endYearValue != this.startYearValue && this.includeCurrentResult) {
+            this.calculatedQuarters = 'To get current PCT/MCT result select only one quarter';
+            this.isYearQuarterSelectionInvalid = true;
         } else {
             this.calculatedQuarters = this.calculateQuarters(this.startYearValue, this.startQuarterValue, this.endYearValue, this.endQuarterValue);
             this.isYearQuarterSelectionInvalid = false;
         }
+    }
+
+    getUserRole(): string {
+        return (<any>window).usrRole;
+    }
+
+    async checkAccess() {
+        const response = await this.constantsService.getConstantsByName("RERUN_PCT_MCT_RPT_CNST_EMP_ID").toPromise().catch(error => {
+            this.loggerService.error("Unable to fetch Employee Id", error, error.statusText);
+        });
+        if (response) {
+            const allowedUserRole = ['Legal'];
+            this.validWWID = response.CNST_VAL_TXT === "NA" ? "" : response.CNST_VAL_TXT;
+            this.hasAccess = this.validWWID.indexOf((<any>window).usrDupWwid) > -1;
+            if (this.hasAccess || allowedUserRole.includes(this.getUserRole())) {
+                this.executePCTMCT = true;
+            }
+        } 
     }
 
     private hasExecuteRun: boolean = false;
@@ -78,12 +108,28 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
         this.changeDetectorRef.detectChanges();
 
         const START_YEAR_QUARTER: string = `${ this.startYearValue }0${ this.startQuarterValue }`;
-        const END_YEAR_QUARTER: string = `${ this.endYearValue }0${ this.endQuarterValue }`;
+        const END_YEAR_QUARTER: string = `${this.endYearValue}0${this.endQuarterValue}`;
 
-        this.pctMctExceptionReportService.GetPctMctFailureData(START_YEAR_QUARTER, END_YEAR_QUARTER)
+        this.pctMctExceptionReportService.GetPctMctFailureData(START_YEAR_QUARTER, END_YEAR_QUARTER, this.includeCurrentResult)
             .pipe(takeUntil(this.destroy$))
             .subscribe((result: Array<PctMctFailureException>) => {
-                this.currentReportResults = result;
+                if (this.includeCurrentResult) {
+                    this.currentReportResults = result;
+                } else {
+                    this.currentReportResults = result.map(item => {
+                        const filteredItem = { ...item };
+                        delete filteredItem.Current_Product_Cost;
+                        delete filteredItem.Current_CAP;
+                        delete filteredItem.Current_YCS2;
+                        delete filteredItem.Current_MAX_RPU;
+                        delete filteredItem.Current_Lowest_Net_Price;
+                        delete filteredItem.Current_Price_Cost_Test_Result;
+                        delete filteredItem.Current_Average_Net_Price;
+                        delete filteredItem.Current_Meet_Comp_Test_Result;
+                        return filteredItem;
+                    });
+                    console.log(this.currentReportResults); 
+                }
                 this.exportDataToExcel();
 
                 setTimeout(() => {
@@ -95,6 +141,17 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
             });
+    }
+
+    validateQtr(e) {
+        const tmp = e.target.checked;
+        console.log(tmp)
+        if (tmp && this.calculatedQuarters.split(',').length > 1) {
+            this.calculatedQuarters = 'To get current PCT/MCT result select only one quarter';
+            this.isYearQuarterSelectionInvalid = true;
+        } else {
+            this.updateSelectedQuarters();
+        }
     }
 
     private get generateReportFilename(): string {
@@ -113,9 +170,14 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
                                                         .replace(/"Division_Approved_Date":null/g, `"Division_Approved_Date":""`)
                                                         .replace(/""/g, `""`)
                                                         .replace(/null/g, `"#NULL!"`));
+           
+            const SORTED_HEADER = ['Contract_ID', 'Deal_ID', 'Deal_Type', 'Deal_Stage', 'Deal_Start_Date', 'Deal_End_Date', 'Forcast_Alt_Id', 'Deal_Product_Processor_Number', 'Product_Bucket', 'Market_Segment', 'Geo', 'Payout_Based_On', 'Program_Payment', 'Cost_Type', 'Rebate_Type', 'Group_type', 'CAP', 'MAX_RPU', 'YCS2', 'ECAP_Price', 'Retail_Pull_Dollar', 'Product_Cost', 'Lowest_Net_Price', 'Price_Cost_Test_Result', 'Meet_Comp_Price', 'Average_Net_Price', 'Meet_Comp_Test_Result', 'Division_Approver', 'Division_Approved_Date', 'Geo_Approver', 'Geo_Approved_Date', 'Deal_Created_By', 'Deal_Created_Date', 'Customer', 'Ceiling_Volume', 'PCT_MCT_Skip', 'PCT_MCT_Skip_Date', 'PCT_MCT_Skip_User'];
+            const FINAL_HEADER_TEXT = ['Contract_ID', 'Deal_ID', 'Deal_Type', 'Deal_Stage', 'Deal_Start_Date', 'Deal_End_Date', 'Forcast_Alt_Id', 'Deal_Product_Processor_Number', 'Product_Bucket', 'Market_Segment', 'Geo', 'Payout_Based_On', 'Program_Payment', 'Cost_Type', 'Rebate_Type', 'Group_type', 'CAP', 'MAX_RPU', 'YCS2', 'ECAP_Price', 'Retail_Pull_Dollar', 'Product_Cost', 'Lowest_Net_Price', 'Price_Cost_Test_Result', 'Meet_Comp_Price', 'Average_Net_Price', 'Meet_Comp_Test_Result', 'Division_Approver', 'Division_Approved_Date', 'Geo_Approver', 'Geo_Approved_Date', 'Deal_Created_By', 'Deal_Created_Date', 'Customer', 'Ceiling_Volume', 'PCT_MCT_Skip', 'PCT_MCT_Skip_Date', 'PCT_MCT_Skip_User'];
 
-            const SORTED_HEADER = ['Contract_ID', 'Deal_ID', 'Deal_Type', 'Deal_Stage', 'Deal_Start_Date', 'Deal_End_Date', 'Forcast_Alt_Id', 'Deal_Product_Processor_Number', 'Product_Bucket', 'Market_Segment', 'Geo', 'Payout_Based_On', 'Program_Payment', 'Cost_Type', 'Rebate_Type', 'Group_type', 'CAP', 'MAX_RPU', 'YCS2', 'ECAP_Price', 'Retail_Pull_Dollar', 'Product_Cost', 'Lowest_Net_Price', 'Price_Cost_Test_Result', 'Meet_Comp_Price', 'Avrrage_Net_Price', 'Meet_Comp_Test_Result', 'Division_Approver', 'Division_Approved_Date', 'Geo_Approver', 'Geo_Approved_Date', 'Deal_Created_By', 'Deal_Created_Date', 'Customer', 'Ceiling_Volume', 'PCT_MCT_Skip', 'PCT_MCT_Skip_Date','PCT_MCT_Skip_User'];
-            const FINAL_HEADER_TEXT = ['Contract_ID', 'Deal_ID', 'Deal_Type', 'Deal_Stage', 'Deal_Start_Date', 'Deal_End_Date', 'Forcast_Alt_Id', 'Deal_Product_Processor_Number', 'Product_Bucket', 'Market_Segment', 'Geo', 'Payout_Based_On', 'Program_Payment', 'Cost_Type', 'Rebate_Type', 'Group_type', 'CAP', 'MAX_RPU', 'YCS2', 'ECAP_Price', 'Retail_Pull_Dollar', 'Product_Cost', 'Lowest_Net_Price', 'Price_Cost_Test_Result', 'Meet_Comp_Price', 'Avrrage_Net_Price', 'Meet_Comp_Test_Result', 'Division_Approver', 'Division_Approved_Date', 'Geo_Approver', 'Geo_Approved_Date', 'Deal_Created_By', 'Deal_Created_Date', 'Customer', 'Ceiling_Volume', 'PCT_MCT_Skip', 'PCT_MCT_Skip_Date', 'PCT_MCT_Skip_User'];
+            if (this.includeCurrentResult) {
+                SORTED_HEADER.push('Current_Product_Cost', 'Current_CAP', 'Current_YCS2', 'Current_MAX_RPU', 'Current_Lowest_Net_Price', 'Current_Price_Cost_Test_Result', 'Current_Average_Net_Price', 'Current_Meet_Comp_Test_Result');
+                FINAL_HEADER_TEXT.push('Current_Product_Cost', 'Current_CAP', 'Current_YCS2', 'Current_MAX_RPU', 'Current_Lowest_Net_Price', 'Current_Price_Cost_Test_Result', 'Current_Average_Net_Price', 'Current_Meet_Comp_Test_Result');
+            }
             //const COLUMN_WIDTHS = [{ wch: 10 },{ wch: 20 },{ wch: 16 },{ wch: 14 },{ wch: 28 },{ wch: 12 },{ wch: 14 },{ wch: 12 },{ wch: 16 },{ wch: 14 },{ wch: 10 },{ wch: 16 },{ wch: 12 },{ wch: 30 },{ wch: 16 },{ wch: 20 },{ wch: 16 },{ wch: 20 },{ wch: 16 },{ wch: 16 },{ wch: 16 },{ wch: 16 }];
 
             const SHEET = utils.aoa_to_sheet([[]]);
@@ -135,6 +197,7 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.checkAccess();
         this.updateSelectedQuarters();
     }
 

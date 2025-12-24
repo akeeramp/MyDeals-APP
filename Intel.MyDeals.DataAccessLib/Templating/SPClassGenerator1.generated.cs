@@ -14523,6 +14523,17 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
                 set { SetParmeter("in_end_yrqtr", value); }
                 get { return (Int32)GetParameter("in_end_yrqtr"); }
             }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Int32 current_rslt
+            {
+                set { SetParmeter("current_rslt", value); }
+                get { return (Int32)GetParameter("current_rslt"); }
+            }
         }
 
         ///<summary>

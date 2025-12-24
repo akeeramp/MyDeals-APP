@@ -30,3 +30,8 @@ kendo-grid td {
 .k-grid {
     height: calc(100vh - 450px) !important;
 }
+
+.includeCurrentCheckBox {
+    padding-top: 2px;
+    margin-bottom: 4px;
+}

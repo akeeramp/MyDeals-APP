@@ -80,7 +80,7 @@ namespace Intel.MyDeals.Entities
         public System.Decimal Meet_Comp_Price { set; get; }
 
         [DataMember]
-        public System.Decimal Avrrage_Net_Price { set; get; }
+        public System.Decimal Average_Net_Price { set; get; }
 
         [DataMember]
         public System.String Meet_Comp_Test_Result { set; get; }
@@ -117,5 +117,29 @@ namespace Intel.MyDeals.Entities
 
         [DataMember]
         public System.String PCT_MCT_Skip_User { set; get; }
+
+        [DataMember]
+        public System.Decimal Current_Product_Cost { set; get; }
+
+        [DataMember]
+        public System.Decimal Current_CAP { set; get; }
+
+        [DataMember]
+        public System.Decimal Current_YCS2 { set; get; }
+
+        [DataMember]
+        public System.Decimal Current_MAX_RPU { set; get; }
+
+        [DataMember]
+        public System.Decimal Current_Lowest_Net_Price { set; get; }
+
+        [DataMember]
+        public System.String Current_Price_Cost_Test_Result { set; get; }
+
+        [DataMember]
+        public System.Decimal Current_Average_Net_Price { set; get; }
+
+        [DataMember]
+        public System.String Current_Meet_Comp_Test_Result { set; get; }
     }
 }

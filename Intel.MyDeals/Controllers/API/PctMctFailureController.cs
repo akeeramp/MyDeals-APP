@@ -17,9 +17,9 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetPctMctFailedData")]
         [HttpGet]
-        public List<PctMctFailureException> GetPctMctFailedData(int startYearQuarter, int endYearQuarter)
+        public List<PctMctFailureException> GetPctMctFailedData(int startYearQuarter, int endYearQuarter, bool includeCurrentResult)
         {
-            return SafeExecutor(() => _pctMctFailureLib.GetFailedPctMctResults(startYearQuarter, endYearQuarter),
+            return SafeExecutor(() => _pctMctFailureLib.GetFailedPctMctResults(startYearQuarter, endYearQuarter, includeCurrentResult),
                 $"Unable to Get PCT/MCT Failed Data");
         }
     }

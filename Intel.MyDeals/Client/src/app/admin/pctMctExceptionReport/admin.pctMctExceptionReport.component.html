@@ -44,9 +44,19 @@
                 </div>
             </div>
         </div>
+        <div class="row" style="padding-top: 25px;" *ngIf="executePCTMCT" >
+            <div class="col-md-12">
+                <div class="col-md-2 inputMessage">
+                    Include Current PCT/MCT Result:
+                </div>
+                <div class="col-md-4">
+                    <p class="includeCurrentCheckBox"><input type="checkbox" class="checkbox-align" name="includeCurrentResult" id="includeCurrentResult" [(ngModel)]="includeCurrentResult" (change)="validateQtr($event)"></p>
+                </div>
+            </div>
+        </div>
         <div class="row" style="padding-top: 25px;">
             <div class="col-md-2 inputMessage" style="padding-left: 30px;">
-                <button type="button" class="k-button execute-button" (click)="executeReportLookup()" [disabled]="isYearQuarterSelectionInvalid && !isLoading">Download</button>
+                <button type="button" class="k-button execute-button" (click)="executeReportLookup()" [disabled]="isYearQuarterSelectionInvalid || isLoading">Download</button>
             </div>
         </div>
         <div class="row" style="padding-top: 25px;">

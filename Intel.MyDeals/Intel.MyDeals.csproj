@@ -390,7 +390,6 @@
     <TypeScriptCompile Include="Client\src\app\admin\databaseCustomAccessConfig\admin.databaseCustomAccessConfig.service.ts" />
     <Content Include="Client\src\app\admin\pctMctExceptionReport\admin.pctMctExceptionReport.component.ts" />
     <Content Include="Client\src\app\admin\pctMctExceptionReport\admin.pctMctExceptionReport.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\admin\pctMctExceptionReport\PctMctExceptionReportComponent.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\products\admin.products.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.UCDReprocessModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\userRolePermission\admin.userRolePermission.component.ts" />
@@ -1745,9 +1744,9 @@
     <Content Include="egg\mb\Scripts\jquery-2.2.0.min.js" />
     <Content Include="egg\mb\Scripts\testlevels.js" />
     <Content Include="favicon.ico" />
-	<Content Include="favicon.svg" />
-	<Content Include="Images\logo-intel.png" />
-	<Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="favicon.svg" />
+    <Content Include="Images\logo-intel.png" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\Intelicon.svg" />
     <Content Include="Global.asax" />
     <Content Include="Images\032.gif" />

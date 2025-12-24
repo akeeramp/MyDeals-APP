@@ -25,7 +25,7 @@ export interface PctMctFailureException {
     Lowest_Net_Price: number;
     Price_Cost_Test_Result: string;
     Meet_Comp_Price: number;
-    Avrrage_Net_Price: number;
+    Average_Net_Price: number;
     Meet_Comp_Test_Result: string;
     Division_Approver: string;
     Division_Approved_Date: string;
@@ -38,4 +38,12 @@ export interface PctMctFailureException {
     PCT_MCT_Skip: string;
     PCT_MCT_Skip_Date: string;
     PCT_MCT_Skip_User: string;
+    Current_Product_Cost: number;
+    Current_CAP: number;
+    Current_YCS2: number;
+    Current_MAX_RPU: number;
+    Current_Lowest_Net_Price: number;
+    Current_Price_Cost_Test_Result: string;
+    Current_Average_Net_Price: number;
+    Current_Meet_Comp_Test_Result: string;
 }

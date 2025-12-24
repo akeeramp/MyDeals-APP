@@ -5,6 +5,6 @@ namespace Intel.MyDeals.IDataLibraries.PctMctFailure
 {
     public interface IPctMctFailureDataLib
     {
-        List<PctMctFailureException> GetFailedPctMctResults(int startYearQuarter, int endYearQuarter);
+        List<PctMctFailureException> GetFailedPctMctResults(int startYearQuarter, int endYearQuarter, bool includeCurrentResult);
     }
 }

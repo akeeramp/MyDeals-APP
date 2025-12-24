@@ -12,8 +12,8 @@ export class PctMctExceptionReportService {
 
     constructor(private httpClient: HttpClient) { }
 
-    public GetPctMctFailureData(startYearQuarter: string | number, endYearQuarter: string | number): Observable<PctMctFailureException[]> {
-        const REQUEST_URL = `${this.API_URL }/GetPctMctFailedData?startYearQuarter=${ startYearQuarter }&endYearQuarter=${ endYearQuarter }`;
+    public GetPctMctFailureData(startYearQuarter: string | number, endYearQuarter: string | number, includeCurrentResult: boolean): Observable<PctMctFailureException[]> {
+        const REQUEST_URL = `${this.API_URL}/GetPctMctFailedData?startYearQuarter=${startYearQuarter}&endYearQuarter=${endYearQuarter}&includeCurrentResult=${includeCurrentResult}`;
         return this.httpClient.get<PctMctFailureException[]>(REQUEST_URL);
     }
 

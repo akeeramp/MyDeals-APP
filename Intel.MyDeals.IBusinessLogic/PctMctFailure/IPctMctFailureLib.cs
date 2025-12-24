@@ -9,6 +9,6 @@ namespace Intel.MyDeals.IBusinessLogic.PctMctFailure
 {
     public interface IPctMctFailureLib
     {
-        List<PctMctFailureException> GetFailedPctMctResults(int startYearQuarter, int endYearQuarter);
+        List<PctMctFailureException> GetFailedPctMctResults(int startYearQuarter, int endYearQuarter, bool includeCurrentResult);
     }
 }
