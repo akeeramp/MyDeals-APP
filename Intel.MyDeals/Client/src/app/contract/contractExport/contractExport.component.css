@@ -110,7 +110,7 @@ table.extract {
         font-family: "Intel Clear";
         font-weight: 600;
         font-style: normal;
-        padding: 0 4px;
+        padding: 0 10px;
         background-color: #eeeeee;
         color: #0071C5
     }
@@ -119,8 +119,9 @@ table.extract {
         font-family: "Intel Clear";
         font-weight: 200;
         font-style: normal;
-        padding: 0 4px;
-        border-top: 1px solid #eeeeee
+        padding: 0 10px;
+        border-top: 1px solid #eeeeee;
+        white-space: pre-wrap;
     }
 
 .timeDate div.content {
