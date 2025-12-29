@@ -13,10 +13,11 @@ jobs:
           fetch-depth: 0
       - name: Verify TestCase Attachment
         shell: pwsh
+        env:
+          BRANCH: ${{ github.head_ref }}
         run: |
-          $Branch = "${{ github.head_ref }}"
-          Write-Host "Branch: $Branch"
-          $commitMessage = git log "origin/$Branch" -1 --pretty=format:"%s"
+          Write-Host "Branch: $env:BRANCH"
+          $commitMessage = git log "origin/$env:BRANCH" -1 --pretty=format:"%s"
           Write-Host "Commit Message:'$commitMessage'"
           $twcid = [regex]::Match($commitMessage, "TWC\d+-\d+").Value
           Write-Host "Story ID:'$twcid'"

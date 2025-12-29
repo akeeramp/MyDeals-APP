@@ -166,6 +166,9 @@ jobs:
     continue-on-error: true
     steps:
       - name: Trigger JIRA Update Release Tag Solution
+        env:
+          CURRENT_RELEASE_TAG: ${{ github.event.inputs.Current_Release_Tag }}
+          UPDATE_RELEASE_TAG: ${{ github.event.inputs.Update_Release_Tag }}
         shell: pwsh
         run: |
           $repositoryOwner = "intel-innersource" # owner of the target repository
@@ -180,8 +183,8 @@ jobs:
           $payload = @{
               ref = "master" # Branch to run the workflow on
               inputs = @{
-                "Current_Release_Tag" = "${{ github.event.inputs.Current_Release_Tag }}"
-                "Update_Release_Tag" = "${{ github.event.inputs.Update_Release_Tag }}"
+                "Current_Release_Tag" = "$env:CURRENT_RELEASE_TAG"
+                "Update_Release_Tag" = "$env:UPDATE_RELEASE_TAG"
                 "JiraAction" = "Update"
               }
           } | ConvertTo-Json -Depth 2
