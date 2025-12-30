@@ -788,7 +788,11 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     if (obj['PERIOD_PROFILE'] == '' && response.PRC_TBL_ROW[index]['OBJ_SET_TYPE_CD'] !== 'LUMP_SUM' && response.PRC_TBL_ROW[index]['OBJ_SET_TYPE_CD'] !== 'REV_TIER' &&
                         !excludedRebateTypes.includes(obj['REBATE_TYPE']) && response.PRC_TBL_ROW[index]['PROGRAM_PAYMENT'] != 'Backend') {
                         //set cust mapping default period profile value to Pricing Table Row while copy contract
-                        response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] = this.contractData.Customer.DFLT_PERD_PRFL;
+                        if(response.PRC_TBL_ROW[index]['PROGRAM_PAYMENT'] == 'Frontend YCS2' || response.PRC_TBL_ROW[index]['PROGRAM_PAYMENT'] == "Frontend XOA3") {
+                            response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] = ''
+                        } else {
+                            response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] = this.contractData.Customer.DFLT_PERD_PRFL;
+                        }
                         delete obj._behaviors.isError.PERIOD_PROFILE
                         if (this.contractData.PRC_ST) {
                             this.contractData.PRC_ST.forEach((psObj: any, psIndex: number) => {
