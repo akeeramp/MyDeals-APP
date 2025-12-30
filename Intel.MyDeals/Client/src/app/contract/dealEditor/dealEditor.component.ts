@@ -213,9 +213,9 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
 
     columnOptionsFilter() {
         if (this.columnSearchFilter == '')
-            return this.wipTemplate.columns;
+            return this.wipTemplate.columns.filter(x => x.title !== 'END_CUST_OBJ');
         else
-            return this.wipTemplate.columns.filter(x => x.title && x.title.toLowerCase().includes(this.columnSearchFilter.toLowerCase()));
+            return this.wipTemplate.columns.filter(x => x.title && x.title.toLowerCase().includes(this.columnSearchFilter.toLowerCase()) && x.title !== 'END_CUST_OBJ');
     }
 
     distinctPrimitive(): any {
