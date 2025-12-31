@@ -521,6 +521,24 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Deal description does not contain special characters (Strip them out)",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.RestrictCharacters,
+                            Where = de => de.AtrbCdIn(new List<string> {
+                                AttributeCodes.DEAL_DESC
+                            })
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
                     Title="User Set Re-Deal cannot be before Previous Re-deal Date",
                     ActionRule = MyDcActions.RedealNoEarlierThenPrevious,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
