@@ -194,6 +194,10 @@ namespace Intel.MyDeals.BusinessRules
                             : "Complex Stacking must be reviewed.";
                         }
                     }
+                    else if (role == RoleTypes.FSE)
+                    {
+                        objsetActionItem.Actions[action] = true;
+                    }
                     else
                     {
                         objsetActionItem.Actions[action] = false;
