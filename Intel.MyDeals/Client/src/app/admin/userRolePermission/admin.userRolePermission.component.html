@@ -59,6 +59,7 @@
                             [groupable]="true"
                             [group]="state.group"
                             filterable="menu"
+                            [resizable]="true"
                             (excelExport)="onExcelExport($event)">
                     <ng-template kendoGridToolbarTemplate>
                         <button (click)="clearFilter()" class="k-button clearButton">
@@ -97,6 +98,11 @@
                         </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="DatabaseUserName" title="Database User Name">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <span [title]="dataItem.DatabaseUserName">
+                                {{ dataItem.DatabaseUserName }}
+                            </span>
+                        </ng-template>
                         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                             <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
                                 <kendo-filter-contains-operator></kendo-filter-contains-operator>
