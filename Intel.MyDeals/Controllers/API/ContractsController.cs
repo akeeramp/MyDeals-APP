@@ -311,8 +311,11 @@ namespace Intel.MyDeals.Controllers.API
                         if (item.Count > 1 && item["SETTLEMENT_PARTNER"] != null && item["SETTLEMENT_PARTNER"].ToString() != string.Empty)
                         {
                             var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
-                            supplierName = supplierName + " - " + item["SETTLEMENT_PARTNER"].ToString();
-                            item["SETTLEMENT_PARTNER"] = supplierName;
+                            if (supplierName != null && supplierName != string.Empty)
+                            {
+                                supplierName = supplierName + " - " + item["SETTLEMENT_PARTNER"].ToString();
+                                item["SETTLEMENT_PARTNER"] = supplierName;
+                            }
                         }
                     }
                 }
@@ -324,8 +327,11 @@ namespace Intel.MyDeals.Controllers.API
                         if (item.Count > 1 && item["SETTLEMENT_PARTNER"] != null && item["SETTLEMENT_PARTNER"].ToString() != string.Empty)
                         {
                             var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
-                            supplierName = supplierName + " - " + item["SETTLEMENT_PARTNER"].ToString();
-                            item["SETTLEMENT_PARTNER"] = supplierName;
+                            if (supplierName != null && supplierName != string.Empty)
+                            {
+                                supplierName = supplierName + " - " + item["SETTLEMENT_PARTNER"].ToString();
+                                item["SETTLEMENT_PARTNER"] = supplierName;
+                            }
                         }
                     }
                 }
