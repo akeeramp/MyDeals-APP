@@ -41,6 +41,7 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
     private executePCTMCT = false;
     private calculatedQuarters: string = '';
     private isYearQuarterSelectionInvalid = false;
+    private isDeveloperFlag = (<any>window).isDeveloper;
 
     private calculateQuarters(startYear: number, startQuarter: number, endYear: number, endQuarter: number): string {
         let builtResponse: string = '';
@@ -88,17 +89,21 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
     }
 
     async checkAccess() {
-        const response = await this.constantsService.getConstantsByName("RERUN_PCT_MCT_RPT_CNST_EMP_ID").toPromise().catch(error => {
-            this.loggerService.error("Unable to fetch Employee Id", error, error.statusText);
-        });
-        if (response) {
-            const allowedUserRole = ['Legal'];
-            this.validWWID = response.CNST_VAL_TXT === "NA" ? "" : response.CNST_VAL_TXT;
-            this.hasAccess = this.validWWID.indexOf((<any>window).usrDupWwid) > -1;
-            if (this.hasAccess || allowedUserRole.includes(this.getUserRole())) {
-                this.executePCTMCT = true;
-            }
-        } 
+        const allowedUserRole = ['Legal'];
+        if (allowedUserRole.includes(this.getUserRole()) || this.isDeveloperFlag) {
+            this.executePCTMCT = true;
+        } else {
+            const response = await this.constantsService.getConstantsByName("RERUN_PCT_MCT_RPT_CNST_EMP_ID").toPromise().catch(error => {
+                this.loggerService.error("Unable to fetch Employee Id", error, error.statusText);
+            });
+            if (response) {
+                this.validWWID = response.CNST_VAL_TXT === "NA" ? "" : response.CNST_VAL_TXT;
+                this.hasAccess = this.validWWID.indexOf((<any>window).usrDupWwid) > -1;
+                if (this.hasAccess) {
+                    this.executePCTMCT = true;
+                }
+            } 
+        }
     }
 
     private hasExecuteRun: boolean = false;
@@ -128,7 +133,6 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
                         delete filteredItem.Current_Meet_Comp_Test_Result;
                         return filteredItem;
                     });
-                    console.log(this.currentReportResults); 
                 }
                 this.exportDataToExcel();
 
@@ -145,7 +149,6 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
 
     validateQtr(e) {
         const tmp = e.target.checked;
-        console.log(tmp)
         if (tmp && this.calculatedQuarters.split(',').length > 1) {
             this.calculatedQuarters = 'To get current PCT/MCT result select only one quarter';
             this.isYearQuarterSelectionInvalid = true;
