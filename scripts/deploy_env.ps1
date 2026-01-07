@@ -64,7 +64,7 @@ try {
         $config=$result.config
       & robocopy C:\mydeals_latest_angular  $result.DEPLOY_PATH /e /MT /copyall /secfix ;
       #Updating the apigee values - Starts here
- 	    $weconfigpath = 'output/_PublishedWebsites/Intel.MyDeals/EnvConfig/'+$config +'/Web.Config';
+ 	    $weconfigpath = 'C:\mydeals_latest_angular\EnvConfig\'+$config +'\Web.Config';
 	    $doc = (Get-Content $weconfigpath) -as [Xml];
   	    $root = $doc.get_DocumentElement();
 	    $appSettingNodes = $root.appSettings.SelectNodes("add");
