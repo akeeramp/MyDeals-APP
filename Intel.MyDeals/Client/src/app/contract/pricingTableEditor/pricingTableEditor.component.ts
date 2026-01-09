@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Observable, Subject, forkJoin } from 'rxjs';
 import { distinct } from '@progress/kendo-data-query';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-
+import { takeUntil } from "rxjs/operators";
 import { logger } from '../../shared/logger/logger';
 import { PricingTableEditorService } from './pricingTableEditor.service'
 import { lnavService } from '../lnav/lnav.service';
@@ -468,6 +468,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
     private lastEditedKitName: any;
     private prdPastObj: any = [];
     private isPRDPaste = false;
+    private customerMapping : any = [];
     isDirty = false;
     private readonly destroy$ = new Subject();
     private wipDealData :any;
@@ -807,6 +808,34 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                             });
                         }
                     }
+                    else {
+                        if(response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] == '') {
+                            response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] = this.contractData.Customer.DFLT_PERD_PRFL;
+                            delete obj._behaviors.isError.PERIOD_PROFILE
+                            if (this.contractData.PRC_ST) {
+                                this.contractData.PRC_ST.forEach((psObj: any, psIndex: number) => {
+                                    //set default period profile value to Pricing Table while copy pricing stratergy
+                                    if (psObj.PRC_TBL) {
+                                        psObj.PRC_TBL.forEach((ptObj: any, ptIndex: number) => {
+                                            if (ptObj.DC_ID == this.in_Pt_Id && this.contractData.PRC_ST[psIndex].PRC_TBL[ptIndex]['PERIOD_PROFILE'] == '') {
+                                                this.contractData.PRC_ST[psIndex].PRC_TBL[ptIndex]['PERIOD_PROFILE'] = this.contractData.Customer.DFLT_PERD_PRFL;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    //Updating period profile against customer mapping
+                    if(response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] != '' && response.PRC_TBL_ROW[index]._behaviors.isReadOnly.PERIOD_PROFILE != true) {
+                        let bool = this.customerMapping.includes(response.PRC_TBL_ROW[index]['PERIOD_PROFILE']);
+                        if(!bool) {
+                            obj._behaviors.isError.PERIOD_PROFILE = true;
+                            obj._behaviors.validMsg.PERIOD_PROFILE = 'Period Profile: Invalid period profile value.\n';
+                            obj.warningMessages.push('Period Profile: Invalid period profile value.\n');
+                        }
+                    }
+
                 });
             }
             this.pricingTableDet = response.PRC_TBL_ROW;
@@ -2384,6 +2413,13 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 this.contractData["CUST_ACCNT_DIV"] = divisonArray.join("/");
             }
         }
+        this.contractDetailsService.getDropdownsWithCustomerId('PERIOD_PROFILE',this.contractData.Customer.CUST_DIV_SID).pipe(takeUntil(this.destroy$)).subscribe((result:any) => {
+            this.customerMapping = result.map(item => {
+                return item['DROP_DOWN']
+            })
+        }, (error) => {
+            this.loggerService.error("Unable to get Customers.", error, error.statusText);
+        });
     }
 
     ngAfterViewInit() {
