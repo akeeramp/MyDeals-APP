@@ -269,7 +269,7 @@
                     </div>
                     <div *ngIf="productsLoaded">
                         <kendo-grid [data]="productsgridData" [resizable]="true"
-                                    [sort]="state.sort" class="micro-grid product_details_scroll" style="height: 140px">
+                                    [sort]="state.sort" class="micro-grid product_details_scroll" style="height: 160px">
                             
                             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="160" field="HIER_VAL_NM" title="Product">
                             </kendo-grid-column>
@@ -355,8 +355,10 @@
                     <div *ngIf="timelineLoaded">
                         <kendo-grid [data]="timelinegridData" [resizable]="true"
                                     [sort]="state.sort" [sortable]="true"  (dataStateChange)="datateplateStateChange($event)" class="micro-grid" style="height: 140px">
-                             <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATRB_VAL" title="Comment Detail">
-                            
+                            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATRB_VAL" title="Comment Detail">
+                                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                    <div [innerHTML]="dataItem.ATRB_VAL"></div>
+                                </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="35" field="user" title="Changed By">
                                 <ng-template kendoGridHeaderTemplate>

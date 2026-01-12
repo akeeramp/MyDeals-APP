@@ -91,7 +91,15 @@ export class dealTimelineComponent implements OnDestroy {
         e.workbook.sheets[0].title = "Deal " + this.data.dataItem.DC_ID + " Timeline Export.xlsx";
     }
     public allData(): ExcelExportData {
-        return this.excelExportService.allData(this.state, this.gridResult);
+        const excelData = this.gridResult.map(item => {
+            const excelItem = { ...item };
+            if (excelItem.ATRB_VAL) {
+                excelItem.ATRB_VAL = excelItem.ATRB_VAL.replace(/<br\s*\/?>/gi, '\n');
+            }
+            return excelItem;
+        });
+
+        return this.excelExportService.allData(this.state, excelData);
     }
     isExpandable() {
         if (this.isExpand) {
