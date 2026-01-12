@@ -50,7 +50,10 @@
                     Include Current PCT/MCT Result:
                 </div>
                 <div class="col-md-4">
-                    <p class="includeCurrentCheckBox"><input type="checkbox" class="checkbox-align" name="includeCurrentResult" id="includeCurrentResult" [(ngModel)]="includeCurrentResult" (change)="validateQtr($event)"></p>
+                    <p class="includeCurrentCheckBox">
+                        <input type="checkbox" class="checkbox-align" [disabled]="batchInProgress" name="includeCurrentResult" id="includeCurrentResult" [(ngModel)]="includeCurrentResult" (change)="validateQtr($event)">
+                        <label *ngIf="batchInProgress" class="text-danger">Batch jobs are running, please try again later. Meanwhile you can download report without PCT/MCT run check</label>
+                    </p>
                 </div>
             </div>
         </div>

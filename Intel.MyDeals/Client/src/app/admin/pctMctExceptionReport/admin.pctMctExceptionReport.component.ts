@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { Observable, Subject, of } from "rxjs";
+import { takeUntil, map, catchError } from "rxjs/operators";
 import { utils, writeFileXLSX, WritingOptions } from "xlsx";
-
+import { pingService } from '../../core/core.shared.service';
 import { logger } from "../../shared/logger/logger";
 import { PctMctExceptionReportService } from "./admin.pctMctExceptionReport.service";
 import { constantsService } from "../constants/admin.constants.service";
@@ -20,12 +20,13 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
     private readonly CUR_YEAR = new Date().getFullYear();
     private readonly MIN_YEAR = this.CUR_YEAR - 5;
     private readonly MAX_YEAR = this.CUR_YEAR + 5;
-
+    public batchInProgress = false;
     private currentReportResults: Array<PctMctFailureException> = undefined;
-
+    private readonly bDestroy$ = new Subject<void>();
     constructor(private pctMctExceptionReportService: PctMctExceptionReportService,
                 private constantsService: constantsService,
                 private loggerService: logger,
+                private pingSvc: pingService,
                 private momentService: MomentService,
                 private changeDetectorRef: ChangeDetectorRef) { }
 
@@ -115,36 +116,46 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
         const START_YEAR_QUARTER: string = `${ this.startYearValue }0${ this.startQuarterValue }`;
         const END_YEAR_QUARTER: string = `${this.endYearValue}0${this.endQuarterValue}`;
 
-        this.pctMctExceptionReportService.GetPctMctFailureData(START_YEAR_QUARTER, END_YEAR_QUARTER, this.includeCurrentResult)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<PctMctFailureException>) => {
-                if (this.includeCurrentResult) {
-                    this.currentReportResults = result;
-                } else {
-                    this.currentReportResults = result.map(item => {
-                        const filteredItem = { ...item };
-                        delete filteredItem.Current_Product_Cost;
-                        delete filteredItem.Current_CAP;
-                        delete filteredItem.Current_YCS2;
-                        delete filteredItem.Current_MAX_RPU;
-                        delete filteredItem.Current_Lowest_Net_Price;
-                        delete filteredItem.Current_Price_Cost_Test_Result;
-                        delete filteredItem.Current_Average_Net_Price;
-                        delete filteredItem.Current_Meet_Comp_Test_Result;
-                        return filteredItem;
-                    });
-                }
-                this.exportDataToExcel();
-
-                setTimeout(() => {
-                    this.isLoading = false;
-                    this.changeDetectorRef.detectChanges();
-                }, 250);
-            }, (error) => {
-                this.loggerService.error('PCT/MCT Exception Service', error);
+        this.checkBatch().subscribe(batchStatus => {
+            if (batchStatus && this.includeCurrentResult) {
+                this.includeCurrentResult = false;
+                this.batchInProgress = true;
+                this.loggerService.error('Batch jobs are running, please try again later. Meanwhile you can download report without PCT/MCT run check', "PCT/MCT Exception");
                 this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
-            });
+            } else {
+                this.pctMctExceptionReportService.GetPctMctFailureData(START_YEAR_QUARTER, END_YEAR_QUARTER, this.includeCurrentResult)
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe((result: Array<PctMctFailureException>) => {
+                        if (this.includeCurrentResult) {
+                            this.currentReportResults = result;
+                        } else {
+                            this.currentReportResults = result.map(item => {
+                                const filteredItem = { ...item };
+                                delete filteredItem.Current_Product_Cost;
+                                delete filteredItem.Current_CAP;
+                                delete filteredItem.Current_YCS2;
+                                delete filteredItem.Current_MAX_RPU;
+                                delete filteredItem.Current_Lowest_Net_Price;
+                                delete filteredItem.Current_Price_Cost_Test_Result;
+                                delete filteredItem.Current_Average_Net_Price;
+                                delete filteredItem.Current_Meet_Comp_Test_Result;
+                                return filteredItem;
+                            });
+                        }
+                        this.exportDataToExcel();
+
+                        setTimeout(() => {
+                            this.isLoading = false;
+                            this.changeDetectorRef.detectChanges();
+                        }, 250);
+                    }, (error) => {
+                        this.loggerService.error('PCT/MCT Exception Service', error);
+                        this.isLoading = false;
+                        this.changeDetectorRef.detectChanges();
+                    });
+            }
+        });
     }
 
     validateQtr(e) {
@@ -199,7 +210,28 @@ export class PctMctExceptionReportComponent implements OnInit, OnDestroy {
         }
     }
 
+    checkBatch(): Observable<boolean> {
+        return this.pingSvc.getBatchStatus().pipe(
+            takeUntil(this.bDestroy$),
+            map(output => {
+                return output.CNST_VAL_TXT !== undefined &&
+                    output.CNST_VAL_TXT.toUpperCase() !== "COMPLETED";
+            }),
+            catchError((err) => {
+                this.loggerService.error("checkBatch Error", "Error", err);
+                return of(false);
+            })
+        );
+    }
+
     ngOnInit(): void {
+        this.checkBatch().subscribe(batchStatus => {
+            if (batchStatus) {
+                this.batchInProgress = true;
+            } else {
+                this.batchInProgress = false;
+            }
+        });
         this.checkAccess();
         this.updateSelectedQuarters();
     }
