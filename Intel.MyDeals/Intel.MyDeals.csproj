@@ -584,6 +584,9 @@
     <Content Include="Client\src\app\admin\pctExceptionReport\admin.pctExceptionReport.component.css" />
     <Content Include="Client\src\app\admin\pctExceptionReport\admin.pctExceptionReport.component.html" />
     <Content Include="Client\src\app\style\reporting.css" />
+    <Content Include="Images\docs\cron-iislog-temp-cleanup-iis.png" />
+    <Content Include="Images\docs\cron-iislog-temp-cleanup-inetpub.png" />
+    <Content Include="Images\docs\cron-iislog-temp-cleanup-nas.png" />
     <Content Include="Images\docs\PS1.png" />
     <Content Include="Images\docs\createContract.png" />
     <Content Include="Client\Images\docs\projController.png" />

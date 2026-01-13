@@ -1028,6 +1028,14 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
                     { text: "Managing data from a procedure with cache", url: '#dataFromProcWithCache' , bool: 'dataFromProcWithCache'},
                     { text: "Managing data from an api with cache output", url: '#dataFromApiWithCache' , bool: 'dataFromApiWithCache'},
                 ]
+            },
+            {
+                text: "Cron/Windows Jobs",
+                url: '#dataFromCronWinJob',
+                bool: 'dataFromCronWinJob',
+                items: [
+                    { text: "IISLogs TempFolder Cleanup", url: '#dataFromCronWinJob', bool: 'dataFromCronWinJob' },
+                ]
             }
         ];
     }

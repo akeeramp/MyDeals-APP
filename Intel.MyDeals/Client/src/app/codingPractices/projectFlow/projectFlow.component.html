@@ -1416,6 +1416,44 @@
 
                 <br /><br /><br />
             </div>
+            <div id="dataFromCronWinJob">
+                <h1><img src="/Images/docs/icon-app-layer.png" height="60" />Cron/Windows Jobs
+                </h1>
+                <p>
+                    Cron/Windows job "IISLogs_TempFolder_Cleanup" is responsible for periodically cleaning IIS
+                    Logs(transferring to NAS/Shared location) and Temp folders(delete) on all the App Servers to reclaim
+                    disk space and improve system performance.
+                </p>
+
+                <div class="stepByStep">
+                    <i class="intelicon-task"></i>Step by Step
+                </div>
+                <ol>
+                    <li>
+                        Check the following screenshot. The CIN hosting is pointing to 2.<br />
+                        <img src="/Images/docs/cron-iislog-temp-cleanup-iis.png" />
+                        <br /><br /><br />
+                    </li>
+                    <li>
+                        Therefore, the IIS logs will
+                        be saved in <b>C:\inetpub\logs\LogFiles\W3SVC2</b><br />
+                        <img src="/Images/docs/cron-iislog-temp-cleanup-inetpub.png" style="margin: 10px 0;" />
+                        <br /><br /><br />
+                    </li>
+                    <li>
+                        After IISLogs_TempFolder_Cleanup job run, all the log files will be moved to the shared location
+                        except current day's file.<br />
+                        <img src="/Images/docs/cron-iislog-temp-cleanup-nas.png" style="margin: 10px 0;" />
+                        <br /><br />
+                        <h3 style="margin-top: 30px; font-family: 'Intel Clear' !important;">KT
+                            docs and links</h3>
+                        <b><a href="https://intel.sharepoint.com/:p:/r/sites/MyDealsTeam/Shared%20Documents/General/Cron%20Job%20Docs/MyDeals%20Cron_Windows_Job%20App%20Server%20Cleanup.pptx?d=wd4cd5c4b394a49418f1d665bdca614af&csf=1&web=1&e=CjkQ80"
+                                target="_blank" class="btn-ttl-coding">Click here</a> to view more details about
+                            IISLogs_TempFolder_Cleanup job</b>
+                    </li>
+                </ol>
+                <br /><br /><br />
+            </div>
         </div>
     </div>
 
