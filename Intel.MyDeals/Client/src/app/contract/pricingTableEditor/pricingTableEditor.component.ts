@@ -9,7 +9,7 @@ import { distinct } from '@progress/kendo-data-query';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntil } from "rxjs/operators";
 import { logger } from '../../shared/logger/logger';
-import { PricingTableEditorService } from './pricingTableEditor.service'
+import { PricingTableEditorService } from './pricingTableEditor.service';
 import { lnavService } from '../lnav/lnav.service';
 import { productSelectorService } from '../../shared/services/productSelector.service';
 import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service'
@@ -319,9 +319,11 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                                                 if (!this.instance.isEmptyRow(i)) {
                                                     let ptRows = [];
                                                     ptRows.push({ row: i, prop: this.field, old: this.instance.getDataAtRowProp(i, this.field), new: result?.toString() });
-                                                    if (this.instance.getDataAtRowProp(i, 'PERIOD_PROFILE') == '' && this.instance.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == '') {
-                                                        PTE_CellChange_Util.checkfn(ptRows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable)
-                                                    }
+                                                    // Removing this validation because of Period profile logic changes and it's facing issue settlement level
+                                                    // if (this.instance.getDataAtRowProp(i, 'PERIOD_PROFILE') == '' && this.instance.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == '') {
+                                                    //     PTE_CellChange_Util.checkfn(ptRows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable)
+                                                    // }
+                                                    PTE_CellChange_Util.checkfn(ptRows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable)
                                                 } else {
                                                     break;
                                                 }
@@ -341,6 +343,19 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                                         }
 
                                         if (this.field == 'RESET_VOLS_ON_PERIOD' && this.instance.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.instance.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE') == '') {
+                                            for (let i = 0; i < ptRowCount; i++) {
+                                                if (!this.instance.isEmptyRow(i)) {
+                                                    let ptrows = [];
+                                                    ptrows.push({ row: i, prop: this.field, old: this.instance.getDataAtRowProp(i, this.field), new: result?.toString() });
+                                                    PTE_CellChange_Util.checkfn(ptrows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable)
+                                                } else {
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        // Adding new validation for RESET_VOLS_ON_PERIOD field when period profile is not empty and AR_SETTLEMENT_LVL is empty
+                                        if (this.field == 'RESET_VOLS_ON_PERIOD' && this.instance.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.instance.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE') != '') {
                                             for (let i = 0; i < ptRowCount; i++) {
                                                 if (!this.instance.isEmptyRow(i)) {
                                                     let ptrows = [];
@@ -1453,6 +1468,11 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             }
 
             //this is only while loading we need , need to modify as progress
+            let defalutPerProBoolean = this.customerMapping.includes(this.curPricingTable.PERIOD_PROFILE);
+            if(!defalutPerProBoolean) {
+                this.curPricingTable.PERIOD_PROFILE = this.contractData.Customer.DFLT_PERD_PRFL;
+            }
+
             PTR = PTE_Load_Util.pivotData(PTR, this.isTenderContract, this.curPricingTable, this.kitDimAtrbs);
             this.generateHandsonTable(PTR);
             this.isLoading = false;
@@ -2282,6 +2302,13 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             this.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
             this.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
             this.newPricingTable["OBJ_SET_TYPE_CD"] = pt.OBJ_SET_TYPE_CD;
+            
+            let defalutPerProBoolean = this.customerMapping.includes(pt.PERIOD_PROFILE);
+            if(!defalutPerProBoolean) {
+                pt.PERIOD_PROFILE = this.contractData.Customer.DFLT_PERD_PRFL;
+                this.newPricingTable["_defaultAtrbs"]['PERIOD_PROFILE'].value = this.contractData.Customer.DFLT_PERD_PRFL;
+            }
+            
             this.newPricingTable["_defaultAtrbs"] = lnavUtil.updateNPTDefaultValues(pt, ptTemplate.defaultAtrbs, customer);
         }
     }
