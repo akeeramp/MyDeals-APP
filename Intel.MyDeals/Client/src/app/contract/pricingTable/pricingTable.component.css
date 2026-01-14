@@ -184,3 +184,17 @@
 kendo-dialog-actions.noData-kendo-dialog.k-dialog-buttongroup.k-actions.k-actions-stretched {
     padding: 0 !important;
 }
+
+/* Ensure embargo dialog appears on top */
+#embargoCountryWarning {
+    z-index: 999999 !important;
+    position: fixed !important;
+}
+
+::ng-deep #embargoCountryWarning .k-dialog {
+    z-index: 999999 !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+}

@@ -28,6 +28,7 @@ export class multiSelectModalComponent implements OnDestroy {
     private mrktSeg = "MRKT_SEG";
     private filterableFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_COUNTRY_REGION", "CONSUMPTION_SYS_CONFIG", "DFLT_CUST_RPT_GEO", "DEAL_SOLD_TO_ID"];
     private selectedChildCount: number;
+    private embValidationMsg = 'Intel is currently unable to approve deals for the following Consumption Countries/Regions. Please verify the agreement.';
     private multiSelectPopUpModal: any;
     private nonCorpMarketSeg: any;
     private colName: any;
@@ -51,6 +52,7 @@ export class multiSelectModalComponent implements OnDestroy {
     private multiSelectMkgArr: Array<string> = [];
     private multiSelectMkgArrChange: Array<string> = [];
     private marketSeglist: any = [];
+    private countries: any;
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject<void>();
 
@@ -124,6 +126,15 @@ export class multiSelectModalComponent implements OnDestroy {
         }, error => {
             this.loggerSvc.error('dealEditorComponent::readMultiSelectModal::getDropDownResult:: service', error);
             this.isLoading = false;
+        });
+    }
+
+    getCountry() {
+        this.pteService.readDropdownEndpoint(this.modalData.items.countryLookUpUrl).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+            if (response != null && response != undefined)
+                this.countries = response;
+        }, error => {
+            this.loggerSvc.error('multiSelectModalComponent::readCountry::readDropdownEndpoint:: service', error);
         });
     }
 
@@ -319,6 +330,35 @@ export class multiSelectModalComponent implements OnDestroy {
     }
     onSave(): void {
         if (this.colName == "CONSUMPTION_COUNTRY_REGION") {
+            let embargoCountries: any[] = [];
+            let hasEmbargoCountry = false;
+                
+            // First, validate for embargo countries
+            each(this.checkedKeys, (key) => {
+                const countryExists = this.multiSelectData.some(region =>
+                    region.items && region.items.some(country => country.DROP_DOWN === key));               
+                if (countryExists) {
+                    const embargoResult = this.checkEmbargo(key);
+                    if (embargoResult) {
+                        hasEmbargoCountry = true;
+                        embargoCountries.push(key);
+                    }
+                }
+            });
+
+            if (hasEmbargoCountry) {
+                const embargoCountryNames = embargoCountries.join(', ');
+
+                // Close modal and pass error data to parent
+                this.dialogRef.close({
+                    success: false,
+                    error: true,
+                    errorType: 'embargo',
+                    errorMessage: this.embValidationMsg,
+                    embargoCountries: embargoCountryNames
+                });
+                return;
+            }
             let index = 0;
             each(this.checkedKeys, (key) => {
                 const dataExists = this.multiSelectData.filter(x => x.DROP_DOWN == key).length > 0;
@@ -346,10 +386,19 @@ export class multiSelectModalComponent implements OnDestroy {
             this.dialogRef.close(this.checkedKeys.toString());
     }
 
+    checkEmbargo(country) {
+        if (this.countries != null) {
+            var countryVal = this.countries.filter(x => x.CTRY_NM == country);
+            if (countryVal != undefined && countryVal != null && countryVal.length > 0 && countryVal[0].CTRY_XPORT_CTRL_CD == 'EC') {
+                return countryVal;
+            }        
+        }
+    }
+
     ngOnInit() {
         if (this.modalData && this.modalData.items && this.modalData.items.label) {
             this.disTitle = `Select ${this.modalData.items.label}`;
-        }
+        }        
         this.multiSelectPopUpModal = this.modalData.items;
         this.colName = this.modalData.colName;
         this.placeholderText = "Click to Select...";
@@ -420,13 +469,14 @@ export class multiSelectModalComponent implements OnDestroy {
                 if (key.items != undefined && key.items != null && key.items.length > 0) {
                     this.parentKeys.push(key.DROP_DOWN);
                 }
-            });
+            });     
             this.isLoading = false;
         }
         else {
             this.checkedKeys = (this.modalData.cellCurrValues !== null && this.modalData.cellCurrValues.length > 0) ? this.modalData.cellCurrValues : [];
             this.getModalData();
-        }
+        }       
+        this.getCountry();
         this.key = this.multiSelectPopUpModal.opLookupText;
     }
 

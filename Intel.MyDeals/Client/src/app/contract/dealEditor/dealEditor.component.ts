@@ -89,6 +89,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
     @Output() refreshGridData = new EventEmitter();
     @Output() removeDeletedRow = new EventEmitter();
     @Output() loadPTEditor = new EventEmitter();
+    @Output() embargoError = new EventEmitter();
 
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject<void>();
@@ -911,6 +912,7 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
                 items: {
                     'label': column.title,
                     'opLookupUrl': url,
+                    'countryLookUpUrl': "/api/PrimeCustomers/GetCountries",
                     'opLookupText': column.lookupText,
                     'opLookupValue': column.lookupValue,
                     'enableSelectAll': this.enableSelectAll,
@@ -922,6 +924,10 @@ export class dealEditorComponent implements OnInit, OnDestroy, OnChanges {
         });
         dialogRef.afterClosed().subscribe((returnVal) => {
             if (returnVal != undefined && returnVal != null) {
+                if (returnVal.error && returnVal.errorType === 'embargo') {
+                    this.embargoError.emit(`${returnVal.errorMessage}: ${returnVal.embargoCountries}`);
+                    return;
+                }
                 this.updateModalDataItem(dataItem, column.field, returnVal);
             }
         });

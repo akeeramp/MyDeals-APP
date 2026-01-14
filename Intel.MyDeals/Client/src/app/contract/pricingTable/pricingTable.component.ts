@@ -71,6 +71,10 @@ export class pricingTableComponent implements OnDestroy  {
     public loadtype="";
     public selectNavMenu: any;
     public NumberOfDaysToExpireDeal: number;
+    private isEmbWarning: boolean = false;
+    private embErrorMessage: string = '';
+    private embValMessage: string = '';
+    private embCountries: string = '';
 
     private isDirty=false;
     private readonly destroy$ = new Subject<void>();
@@ -465,6 +469,25 @@ export class pricingTableComponent implements OnDestroy  {
                 this.loggerSvc.error("Unable to get constants by name", "Error", err);
             });
     }
+
+    handleEmbargoError(errorMessage: string) {
+        const parts = errorMessage.split(':');
+        const validationMsg = parts[0]?.trim() || '';
+        const embCountries = parts.length > 1 ? parts[1]?.trim() : '';
+        this.showEmbargoWarning(validationMsg, embCountries);
+    }
+
+    showEmbargoWarning(validationMsg: string, embCountries: string) {
+        this.embValMessage = validationMsg;
+        this.embCountries = embCountries;
+        this.isEmbWarning = true;
+    }
+
+    closeEmbargoWarning() {
+        this.isEmbWarning = false;
+        this.embErrorMessage = '';
+    }
+
     ngOnInit() {
         try {
             document.title = "Contract - My Deals"; 
