@@ -56,6 +56,9 @@ export class TenderManagerComponent implements OnInit, AfterViewInit {
     public gotoPD = "";
     public pt_passed_validation: boolean;
     public compMissingFlag: any;
+    private isEmbWarning: boolean = false;
+    private embMainMessage: string = '';
+    private embCountries: string = '';
     private searchText: any = "";
     private ispricingTableDPASSED_VALIDATION='valid_Complete';
     isredirect = false;
@@ -469,6 +472,26 @@ export class TenderManagerComponent implements OnInit, AfterViewInit {
         this.isSpinnerLoading = false;
         this.loggerSvc.success("Successfully deleted Contract.", "Delete successful");
         window.location.href = '/Dashboard#/portal';
+    }
+
+    handleEmbargoError(errorMessage: string) {
+        const parts = errorMessage.split(':');
+        const validationMsg = parts[0]?.trim() || '';
+        const embCountries = parts.length > 1 ? parts[1]?.trim() : '';
+
+        this.showEmbargoWarning(validationMsg, embCountries);
+    }
+
+    showEmbargoWarning(validationMsg: string, embCountries: string) {
+        this.embMainMessage = validationMsg;
+        this.embCountries = embCountries;
+        this.isEmbWarning = true;
+    }
+
+    closeEmbargoWarning() {
+        this.isEmbWarning = false;
+        this.embMainMessage = '';
+        this.embCountries = '';
     }
 
     ngOnInit() {

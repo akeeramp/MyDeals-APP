@@ -134,7 +134,7 @@
         <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" (warn)="isWarning" (tmDirec)="redirectingFn($event)"></pricing-table-editor>
     </div>
     <div *ngIf="selectedTab == 'DE'" class="col-md-12 loaderDE loading-dealer-editors" style="border: 2px solid #bcbcbc;">
-        <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (perfComp)="perfCompFn($event)" (contractDataRefresh)="contractDataRefresh($event)" (addPerfTimes)="addPerfTimes($event)" (tmDirec)="redirectingFn($event)"></deal-editor>
+        <deal-editor [in_Cid]="c_Id" (embargoError)="handleEmbargoError($event)" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (perfComp)="perfCompFn($event)" (contractDataRefresh)="contractDataRefresh($event)" (addPerfTimes)="addPerfTimes($event)" (tmDirec)="redirectingFn($event)"></deal-editor>
     </div>
     <div *ngIf="selectedTab == 'MC'" class="col-md-12 loaderMeet meet-comp-tenders" style="border: 2px solid #bcbcbc;">
         <meet-comp-contract class="tender-meet-comp-width" [objSid]="contractData.DC_ID" [isTender]="contractData.IS_TENDER" [isAdhoc]="'1'" [objTypeId]="'1'" [cId]="c_Id" [pageNm]="'WIDGET'" (tmDirec)="redirectingFn($event)" (contractRefresh)="refreshContract($event)"></meet-comp-contract>
@@ -150,3 +150,12 @@
         </kendo-dialog-actions>
     </kendo-dialog>
 </div>
+<kendo-dialog *ngIf="isEmbWarning" id="embargoCountryWarning">
+    <div style="margin: 30px; text-align: center;">
+        <p style="margin: 0;">{{embMainMessage}}</p>
+        <p style="margin: 10px 0 0 0; font-size: 0.8em; font-weight: bold;">{{embCountries}}</p>
+    </div>
+    <kendo-dialog-actions>
+        <button class='k-button' (click)="closeEmbargoWarning()">OK</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
