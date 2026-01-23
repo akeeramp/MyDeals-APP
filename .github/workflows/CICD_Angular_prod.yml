@@ -113,11 +113,13 @@ jobs:
 
       - name: Trigger Jmeter Performance Test
         shell: pwsh
+        env:
+          ACCESS_TOKEN: ${{ secrets.CICD_ACCESSTOKEN }}
         run: |
           $repositoryOwner = "intel-innersource" # owner of the target repository
           $repositoryName = "applications.web.mydeals.performance-testing" # name of the target repository
           $workflowFileName = "TriggerJmeterSanityTest.yml" # name of the workflow file
-          $accessToken = "${{ secrets.CICD_ACCESSTOKEN }}" # Use the secret from GitHub Actions
+          $accessToken = "$env:ACCESS_TOKEN" # Use the secret from GitHub Actions
 
           # Define the API endpoint
           $apiUrl = "https://api.github.com/repos/$repositoryOwner/$repositoryName/actions/workflows/$workflowFileName/dispatches"
@@ -169,12 +171,13 @@ jobs:
         env:
           CURRENT_RELEASE_TAG: ${{ github.event.inputs.Current_Release_Tag }}
           UPDATE_RELEASE_TAG: ${{ github.event.inputs.Update_Release_Tag }}
+          ACCESS_TOKEN: ${{ secrets.CICD_ACCESSTOKEN }}
         shell: pwsh
         run: |
           $repositoryOwner = "intel-innersource" # owner of the target repository
           $repositoryName = "applications.web.mydeals.release-checklist" # name of the target repository
           $workflowFileName = "updateJiraTag.yml" # name of the workflow file
-          $accessToken = "${{ secrets.CICD_ACCESSTOKEN }}" # Use the secret from GitHub Actions
+          $accessToken = "$env:ACCESS_TOKEN"  # Use the environment variable for the secret
 
           # Define the API endpoint
           $apiUrl = "https://api.github.com/repos/$repositoryOwner/$repositoryName/actions/workflows/$workflowFileName/dispatches"
