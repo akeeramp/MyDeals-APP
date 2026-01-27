@@ -825,7 +825,15 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     }
                     else {
                         if(response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] == '') {
-                            response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] = this.contractData.Customer.DFLT_PERD_PRFL;
+
+                            // For few rebate types PERIOD_PROFILE should remain blank even in copy contract scenario
+                            let rebateTypeBoolean =  this.getExcludeRebateType(this.curPricingTable.REBATE_TYPE);
+                            if(rebateTypeBoolean) {
+                                response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] = '';
+                            } else {
+                                response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] = this.contractData.Customer.DFLT_PERD_PRFL;
+                            }
+
                             delete obj._behaviors.isError.PERIOD_PROFILE
                             if (this.contractData.PRC_ST) {
                                 this.contractData.PRC_ST.forEach((psObj: any, psIndex: number) => {
@@ -863,6 +871,12 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             this.enableDeTab.emit({ isEnableDeTab: false, enableDeTabInfmIcon: false });
             return [];
         }
+    }
+
+    getExcludeRebateType(rebateType) {
+        const excludedRebateTypes = ['MDF ACTIVITY', 'MDF ACCRUAL', 'NRE ACCRUAL', 'CO-MARKETING ACCRUAL', 'CO-ENGINEERING ACCRUAL', 'CO-SELLING ACCRUAL'];
+        // returning boolean value if rebate type is in excluded list
+        return excludedRebateTypes.includes(rebateType)
     }
 
     getMergeCellsOnDelete() {
@@ -1467,9 +1481,12 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 this.VendorDropDownResult = this.dropdownResponses["SETTLEMENT_PARTNER"];
             }
 
+            // For few rebate types period profile should be blank
+            let rebateTypeBoolean =  this.getExcludeRebateType(this.curPricingTable.REBATE_TYPE);
+
             //this is only while loading we need , need to modify as progress
             let defalutPerProBoolean = this.customerMapping.includes(this.curPricingTable.PERIOD_PROFILE);
-            if(!defalutPerProBoolean) {
+            if(!defalutPerProBoolean && !rebateTypeBoolean) {
                 this.curPricingTable.PERIOD_PROFILE = this.contractData.Customer.DFLT_PERD_PRFL;
             }
 
