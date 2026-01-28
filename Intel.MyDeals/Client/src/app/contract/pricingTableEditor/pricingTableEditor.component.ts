@@ -827,7 +827,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                         if(response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] == '') {
 
                             // For few rebate types PERIOD_PROFILE should remain blank even in copy contract scenario
-                            let rebateTypeBoolean =  this.getExcludeRebateType(this.curPricingTable.REBATE_TYPE);
+                            let rebateTypeBoolean =  this.getExcludeRebateType(response.PRC_TBL_ROW[index]['REBATE_TYPE']);
                             if(rebateTypeBoolean) {
                                 response.PRC_TBL_ROW[index]['PERIOD_PROFILE'] = '';
                             } else {
