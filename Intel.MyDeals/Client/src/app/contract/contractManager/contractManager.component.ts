@@ -967,7 +967,7 @@ export class contractManagerComponent implements OnInit, OnDestroy {
                     const foundObject = ExpireStatus.find(obj => obj.PS_OBJ_SID === x.DC_ID);
                     if (foundObject) {
                         x["expireStatus"] = foundObject.OVERALL_STATUS == "PASS" ? false : true;
-                        if (x.expireStatus) x._actionReasons["expireStatus"] = "Pricing Startergy Contains Draft/Requested/Submitted Expired Deals.";
+                        if (x.expireStatus) x._actionReasons["expireStatus"] = "Pricing strategy contains Draft/Requested/Submitted expired deals, Please keep them on hold to proceed further.";
                     }
                 })
                 if (this.contractData.CUST_ACCPT === "Pending") {
