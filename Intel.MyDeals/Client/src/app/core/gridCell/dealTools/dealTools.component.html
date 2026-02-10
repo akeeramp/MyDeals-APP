@@ -47,7 +47,7 @@
                 <i class='intelicon-discussion-outlined' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to add a comment" *ngIf="!openNotesDialog" (click)="openNotes()"></i>
             </div>
             <div class='fl md-icon' *ngIf="!!dataItem.NOTES && dataItem.NOTES !== ''">
-                <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="dataItem.NOTES" *ngIf="!openNotesDialog" (click)="openNotes()"></i>
+                <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" [title]="dataItem.NOTES" *ngIf="!openNotesDialog" (click)="openNotes()"></i>
             </div>
             <kendo-dialog class="toolsartho-css" *ngIf="openNotesDialog" (close)="closeDialogs()" [width]="500" [height]="350">
                 <div class="notesContent">
