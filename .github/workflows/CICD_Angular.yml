@@ -36,6 +36,11 @@ jobs:
            $configPath = "${{ github.workspace }}/Intel.MyDeals/Client/src/app/shared/config/handsontable.licenseKey.config.ts"
            (Get-Content -Path $configPath -Raw) -replace 'non-commercial-and-evaluation', $licenseKey | Set-Content -Path $configPath
          shell: pwsh
+       - name: Clean NPM Cache
+         run: |
+           npm cache clean --force
+           npm cache verify
+         shell: pwsh
        - name: NPM Install 
          run: |
            ./scripts/build_env.ps1 'NPMInstall' 'path' '${{github.workspace}}'
