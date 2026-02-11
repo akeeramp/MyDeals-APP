@@ -879,12 +879,8 @@ namespace Intel.MyDeals.BusinessLogic
                                 List<UnPrimedDealLogs> result = new List<UnPrimedDealLogs>();
                                 result = _primeCustomerLib.UnPrimeDealsLogs(0, endCustomerObject);
                                 if (result != null && result.Count > 0)
-                                {
-                                    var PRIMED_CUST_ID = result.First(o => o.END_CUSTOMER_RETAIL == customer && o.PRIMED_CUST_CNTRY == endCustomerCountry)?.PRIMED_CUST_ID;
-                                    if (PRIMED_CUST_ID == null || PRIMED_CUST_ID == 0)
-                                    {
-                                        isLogUnPimedCustomerData = true;
-                                    }
+                                {                                   
+                                    isLogUnPimedCustomerData = true;
                                 }
 
                             }
