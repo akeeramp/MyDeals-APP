@@ -88,7 +88,7 @@ export class dealTimelineComponent implements OnDestroy {
         wrap: true
     };
     public onExcelExport(e: ExcelExportEvent): void {
-        e.workbook.sheets[0].title = "Deal " + this.data.dataItem.DC_ID + " Timeline Export.xlsx";
+        e.workbook.sheets[0].title = "Deal " + this.data.dataItem.DC_ID + " Timeline";
     }
     public allData(): ExcelExportData {
         const excelData = this.gridResult.map(item => {
