@@ -617,7 +617,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title = "Disabled Rebate Types from old Pricing Strategies should have a warning",
                     ActionRule = MyDcActions.ValidateRebateTypes,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString() },
+                    //InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate, MyRulesTrigger.OnSave }
                 },
 
