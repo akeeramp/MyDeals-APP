@@ -130,6 +130,8 @@ export class multiSelectModalComponent implements OnDestroy {
     }
 
     getCountry() {
+        if (!this.modalData?.items?.countryLookUpUrl ||
+           this.modalData.items.countryLookUpUrl.trim() === '') { return; }
         this.pteService.readDropdownEndpoint(this.modalData.items.countryLookUpUrl).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             if (response != null && response != undefined)
                 this.countries = response;
